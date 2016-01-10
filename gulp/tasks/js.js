@@ -254,8 +254,8 @@ module.exports = function( config )
 					// Pull in main translation file.
 					gulp.src( [ config.buildDir + '/tmp/translations/main.js' ] ),
 
-					// Now pull in the development file if we're running a development build.
-					gulp.src( [ (config.production && !config.spoofProduction ? '' : 'src/' + section + '/app-development.js') ] )
+					// Now pull in the development file if we're running a development environment build.
+					gulp.src( [ (config.developmentEnv ? 'src/' + section + '/app-development.js' : '') ] )
 				)
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'app.js' ) );

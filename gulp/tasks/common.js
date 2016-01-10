@@ -6,13 +6,14 @@ var shell = require( 'gulp-shell' );
 module.exports = function( config )
 {
 	config.production = argv.production || false;
-	config.spoofProduction = argv['spoof-production'] || false;
 	config.watching = false;
 	config.noSourcemaps = config.noSourcemaps || false;
 
-	if ( config.spoofProduction ) {
-		config.production = true;
-	}
+	// Whether or not the environment of angular should be production or development.
+	// Even when not doing prod builds we use the prod environment by default.
+	// This way it's easy for anyone to build without the GJ dev environment.
+	// You can pass this flag in to include the dev environment config for angular instead.
+	config.developmentEnv = argv.development || false;
 
 	if ( !config.sections ) {
 		config.sections = [];
@@ -20,7 +21,7 @@ module.exports = function( config )
 
 	config.sections.push( 'app' );
 
-	config.buildDir = config.production && !config.spoofProduction ? 'build/prod' : 'build/dev';
+	config.buildDir = config.production ? 'build/prod' : 'build/dev';
 	config.libDir = 'src/lib/';
 	config.gjLibDir = 'src/lib/gj-lib-client/';
 	config.bowerDir = 'src/bower-lib/';
