@@ -1,0 +1,111 @@
+.navbar
+	@extend .clearfix
+	height: 50px
+	background-color: $gray-darkest
+	display: flex
+
+	a
+		color: $gray-lighter
+
+.navbar-left
+	flex: 0 1 auto
+
+.navbar-center
+	flex: 1 1 auto
+
+.navbar-right
+	flex: 0 1 auto
+
+.navbar-items
+	@extend .list-unstyled
+
+.navbar-items
+.navbar-items > li
+	display: inline-block
+	margin-bottom: 0
+
+.navbar-items > li > a
+.navbar-item
+	display: inline-block
+	overflow: hidden
+	height: $shell-top-nav-height
+	padding: 15px 10px
+	line-height: 20px
+	user-select: none
+
+	> .notification-tag
+		position: absolute
+		top: 0
+		right: 0
+		line-height: 15px
+		text-align: center
+
+.navbar-separator
+	position: relative
+	display: inline-block
+	height: 24px
+	width: 1px
+	margin: 0 10px
+	vertical-align: top
+	top: ($shell-top-nav-height - @height) * 0.5
+	background-color: $gray-dark
+
+.navbar-avatar
+
+	// Gotta overide specificity
+	.navbar-items > li > &
+		padding: 10px
+		line-height: 30px
+		width: 30px + (@padding * 2)
+		height: @width
+
+	img
+		width: 30px
+		height: @width
+		display: inline-block
+		vertical-align: bottom
+
+.navbar-form
+	padding: 0
+	padding-right: 20px
+	width: 100%
+	height: $shell-top-nav-height
+	overflow: hidden
+
+	.form-control
+		placeholder( $gray-lighter )
+		border: 0
+		background-color: transparent
+		color: $white
+		width: 100%
+		height: $shell-top-nav-height
+
+/**
+ * Hover/active state underline.
+ */
+.navbar-items > li > a
+.navbar-item
+.navbar-form-control
+	position: relative
+
+	&::before
+		position: absolute
+		content: ''
+		right: 0
+		left: 0
+		bottom: 0
+		height: 3px
+		background-color: $gray
+		transform: translate( 0, 4px )
+		transition: transform 300ms $strong-ease-out, background-color 200ms linear
+
+	&:hover
+		&::before
+			transform: translate( 0, 0 )
+
+	&.active
+		&
+		&:hover
+			&::before
+				transform: translate( 0, 0 )
+				background-color: $gj-green

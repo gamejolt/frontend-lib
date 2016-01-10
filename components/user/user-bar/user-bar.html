@@ -1,0 +1,27 @@
+<nav class="user-bar navbar">
+	<div class="container">
+
+		<gj-site-selector site-selector-current="{{ site }}"></gj-site-selector>
+
+		<ul class="pull-right">
+			<li>
+				<a class="user-bar-user" ng-href="{{ userLink }}" ng-if="user">
+
+					<!--
+						We manually output the user-avatar HTML instead of using the directive
+						so that it updates when our user changes. The user-avatar directive does
+						one time binding since it needs to be fast.
+					-->
+					<span class="user-bar-avatar">
+						<img ng-src="{{ user.img_avatar }}" class="img-responsive" alt="Your Avatar">
+					</span>
+
+					<span class="user-bar-username">{{ user.username }}</span>
+
+				</a>
+			</li>
+		</ul>
+
+		<div class="links" ng-transclude></div>
+	</div>
+</nav>

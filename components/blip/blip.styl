@@ -1,0 +1,54 @@
+.blip
+	position: relative
+	top: 1px  // Needed to play nicely with i-buttons for some reason
+	display: inline-block
+	margin: 0 0 0 3px
+	padding: 0 5px
+	background: $gray-dark
+	color: $gray-light
+	font-family: $font-family-tiny
+	font-weight: bold
+	font-size: $font-size-tiny
+	line-height: 20px
+	min-width: 10px
+	text-align: center
+	vertical-align: baseline
+
+	&.filled
+		color: $gj-green
+
+	/**
+	 * Carets
+	 */
+	.blip-caret
+		caret( direction: left, color: $gray-dark, size: 3px )
+
+	&.no-caret
+		margin-left: 0
+
+		.blip-caret
+			display: none
+
+	/**
+	 * Big blips
+	 */
+	&.big
+		margin-top: 10px
+		vertical-align: baseline
+
+	/**
+	 * Light blips
+	 */
+	&.light
+		background: $gray-lighter
+		color: $gray-light
+
+		.blip-caret
+			border-right-color: $gray-lighter
+
+		&.filled
+			background: $gray-dark
+			color: $gj-green
+
+			.blip-caret
+				border-right-color: $gray-dark

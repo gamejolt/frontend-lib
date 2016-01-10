@@ -1,0 +1,14 @@
+<div class="modal-body">
+	<h2 class="modal-title">{{ ::modalCtrl.options.title }}</h2>
+	<p>{{ ::modalCtrl.options.message }}</p>
+</div>
+<div class="modal-footer">
+	<button class="i-button" ng-click="modalCtrl.ok()">
+		<span class="jolticon jolticon-check"></span>
+		{{ ::(modalCtrl.options.buttonType == 'ok' ? 'OK' : 'Yes') }}
+	</button>
+	<button class="i-button warning" ng-click="modalCtrl.cancel()">
+		<span class="jolticon jolticon-remove"></span>
+		{{ ::(modalCtrl.options.buttonType == 'ok' ? 'Cancel' : 'No') }}
+	</button>
+</div>

@@ -1,0 +1,70 @@
+<div class="site-selector" ng-class="{ 'site-selector-logo-visible': !ctrl.shouldHideLogo }">
+
+	<a class="navbar-item" ng-href="{{ ::ctrl.url }}" ng-switch="ctrl.currentSite" ng-if="!ctrl.shouldHideLogo">
+
+		<!-- Main -->
+		<span ng-switch-when="main">
+			<img ng-src="/lib/gj-lib-client/components/site-selector/game-jolt-logo.svg" alt="Game Jolt">
+		</span>
+
+		<!-- Jams -->
+		<span ng-switch-when="jams">
+			<img ng-src="/lib/gj-lib-client/components/site-selector/jolt.svg" alt="" style="margin-right: 6px;">
+			<img ng-src="/lib/gj-lib-client/components/site-selector/jams-logo.svg" alt="Game Jolt Jams">
+		</span>
+
+		<!-- Fireside -->
+		<span ng-switch-when="fireside">
+			<img ng-src="/lib/gj-lib-client/components/site-selector/jolt-fireside.png" width="155" style="margin-top: -8px; margin-bottom: -2px" alt="Fireside">
+		</span>
+
+		<!-- Developers -->
+		<span ng-switch-when="dev">
+			<img ng-src="/lib/gj-lib-client/components/site-selector/jolt.svg" alt="" style="margin-right: 6px;">
+			<img ng-src="/lib/gj-lib-client/components/site-selector/developers-logo.svg" alt="Game Jolt Developers">
+		</span>
+
+	</a>
+
+	<a class="navbar-item site-selector-more" gj-popover-trigger="site-selector" ng-class="{ active: ctrl.isPopoverActive }">
+		<span class="jolticon jolticon-chevron-down"></span>
+	</a>
+
+	<gj-popover class="site-selector-popover popover-dark"
+		popover-id="site-selector"
+		popover-append-to-body="true"
+		popover-position-by="position"
+		popover-on-focus="ctrl.isPopoverActive = true"
+		popover-on-blur="ctrl.isPopoverActive = false"
+		>
+
+		<div class="site-selector-list">
+
+			<!-- Site -->
+			<a class="site-selector-list-item" ng-href="{{ ::Environment.baseUrl }}" ng-if="::ctrl.currentSite != 'main'" title="Game Jolt - Free Indie Games">
+				<img ng-src="/lib/gj-lib-client/components/site-selector/game-jolt-logo.svg" alt="Game Jolt">
+			</a>
+
+			<!-- Fireside -->
+			<a class="site-selector-list-item" ng-href="{{ ::Environment.firesideBaseUrl }}" ng-if="::ctrl.currentSite != 'fireside'" title="Fireside - Indie gaming opinions, news, and reviews">
+				<img ng-src="/lib/gj-lib-client/components/site-selector/jolt-fireside.png" width="155" style="margin-top: -8px; margin-bottom: -2px" alt="Fireside">
+			</a>
+
+			<!-- Jams -->
+			<a class="site-selector-list-item" ng-href="{{ ::Environment.jamsBaseUrl }}" ng-if="::ctrl.currentSite != 'jams'" title="Game Jolt Jams">
+				<img ng-src="/lib/gj-lib-client/components/site-selector/jolt.svg" alt="" style="margin-right: 6px;">
+				<img ng-src="/lib/gj-lib-client/components/site-selector/jams-logo.svg" alt="Game Jolt Jams">
+			</a>
+
+			<!-- Developers -->
+			<!-- Hidden for now. -->
+			<!-- <a class="site-selector-list-item" ng-href="{{ ::Environment.devBaseUrl }}" ng-if="::ctrl.currentSite != 'dev'">
+				<img ng-src="/lib/gj-lib-client/components/site-selector/jolt.svg" alt="" style="margin-right: 6px;">
+				<img ng-src="/lib/gj-lib-client/components/site-selector/developers-logo.svg" alt="Game Jolt Developers">
+			</a> -->
+
+		</div>
+
+	</gj-popover>
+
+</div>

@@ -1,0 +1,1 @@
+angular.module( 'gj.Jam.Page', [ 'gj.Model', 'gj.Jam' ] );

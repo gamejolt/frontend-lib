@@ -1,0 +1,1 @@
+angular.module( 'gj.Jam.ContentBlock', [ 'gj.Model' ] );

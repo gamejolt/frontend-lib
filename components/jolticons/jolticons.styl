@@ -1,0 +1,55 @@
+$jolticon-version = 14
+$jolticon-size = 16px
+
+@font-face
+	font-family: 'jolticon'
+	src: url('https://b6d3e9q9.ssl.hwcdn.net/img/icons/build/' + $jolticon-version + '/jolticons.eot')
+	src: url('https://b6d3e9q9.ssl.hwcdn.net/img/icons/build/' + $jolticon-version + '/jolticons.eot?#iefix') format('embedded-opentype'), url('https://b6d3e9q9.ssl.hwcdn.net/img/icons/build/' + $jolticon-version + '/jolticons.woff') format('woff'), url('https://b6d3e9q9.ssl.hwcdn.net/img/icons/build/' + $jolticon-version + '/jolticons.ttf') format('truetype'), url('https://b6d3e9q9.ssl.hwcdn.net/img/icons/build/' + $jolticon-version + '/jolticons.svg#jolticon') format('svg')
+	font-weight: normal
+	font-style: normal
+
+.jolticon
+	display: inline-block
+	margin: 0 2px
+	font-family: 'jolticon'
+	speak: none
+	font-style: normal
+	font-weight: normal
+	font-variant: normal
+	text-transform: none
+	line-height: 1
+
+	// -webkit-font-smoothing: none
+	// -moz-osx-font-smoothing: none
+	// text-rendering: geometricPrecision
+
+	font-size: $jolticon-size
+	cursor: default
+
+.jolticon.middle
+	vertical-align: middle
+
+a .jolticon
+	cursor: pointer
+
+.jolticon.big
+.jolticon-2x
+	margin: 0 4px
+	font-size: $jolticon-size * 2
+
+.jolticon-3x
+	margin: 0 6px
+	font-size: $jolticon-size * 3
+
+.jolticon-4x
+	margin: 0 8px
+	font-size: $jolticon-size * 4
+
+.jolticon.inactive
+	color: #999
+
+.jolticon.active
+	color: $gj-blue
+
+.jolticon.warning
+	color: $gj-pink !important

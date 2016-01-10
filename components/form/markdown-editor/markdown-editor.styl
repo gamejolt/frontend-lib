@@ -1,0 +1,39 @@
+.form-markdown-editor
+
+	> nav
+		@extend .clearfix
+		margin-bottom: 0
+
+		> ul
+			float: left
+
+	// For when we can't show the codemirror widget...
+	// We try to match the styling for codemirror.
+	> textarea
+		width: 100%
+		height: 200px
+		padding: 6px 12px
+
+.form-markdown-editor-helptext
+	float: right
+	padding-top: 10px
+	padding-bottom: 10px
+	font-size: $font-size-tiny
+
+	// We show a big markdown icon, so we have to remove the extra padding.
+	@media $media-xs
+		padding-top: 0
+		padding-bottom: 0
+
+	.jolticon
+		vertical-align: top
+		padding-right: 3px
+
+.form-markdown-editor-helplink
+	display: inline-block
+
+	@media $media-sm-up
+		margin-left: 15px
+
+.form-markdown-editor-preview
+	border: 1px solid $input-border

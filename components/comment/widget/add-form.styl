@@ -1,0 +1,89 @@
+.comment-widget-add-form
+	position: relative
+
+	> form
+		margin-left: 100px
+
+	.form-group
+		margin-bottom: $line-height-computed
+
+.comment-widget-add-form-user
+	position: absolute
+	top: 0
+	left: 0
+	width: 100px - ($grid-gutter-width / 2)
+
+// When the form is in the comment list for a reply.
+.comment-widget-comments
+
+	.comment-widget-add-form
+		margin-top: $line-height-computed
+
+		> form
+			margin-left: 200px
+
+	.comment-widget-add-form-user
+		left: 100px
+
+@media $media-xs
+
+	.comment-widget-add-form-user
+		display: none
+
+	.comment-widget-add-form > form
+		margin-left: 0
+
+	// Mobile replying.
+	.comment-widget-comments .comment-widget-add-form > form
+		margin-left: 0
+		border-left: 3px solid $gray-lighter
+		padding-left: ($grid-gutter-width-xs / 2)
+
+/**
+ * The codemirror theme for comments.
+ */
+
+.CodeMirror.cm-s-gj-comment
+	background: $body-bg
+	color: $text-color
+
+	// Make it have the same styling as a comment.
+	font-family: $font-family-base
+	font-size: $font-size-base
+	line-height: $line-height-base
+
+	div.CodeMirror-selected
+		background: $gray-lighter !important
+
+	.CodeMirror-gutters
+		background: $gray-lightest
+		border-right: 0px
+
+	.CodeMirror-linenumber
+		font-family: $font-family-monospace
+		color: $gray-light
+
+	.CodeMirror-cursor
+		border-left: 1px solid $gray !important
+
+	// Links URLs.
+	span.cm-string
+		color: inherit
+		font-family: $font-family-monospace
+
+	// Blockquotes.
+	span.cm-quote
+		font-style: italic
+
+	// Image alt tags.
+	span.cm-tag
+		color: $gray-light
+
+	// Linked text.
+	// Will get underlined automatically.
+	span.cm-link
+		color: inherit
+
+	// HRs
+	span.cm-hr
+		color: $gray-light

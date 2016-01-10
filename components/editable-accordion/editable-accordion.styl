@@ -1,0 +1,208 @@
+gj-editable-accordion
+gj-editable-accordion-item
+gj-editable-accordion-add
+	display: block
+
+.editable-accordion-separator
+	margin-top: $line-height-computed
+	margin-bottom: $line-height-computed
+	height: 3px
+	border: 0
+	background: $gray-lighter
+
+.editable-accordion-item
+.editable-accordion-item-edit
+.editable-accordion-button
+.editable-accordion-item-add
+	@extend .clearfix
+	margin-bottom: $line-height-computed
+
+// Animate in and out.
+.editable-accordion-item-container
+	@extend .anim-fade-enter-right, .stagger-enter
+	@extend .anim-fade-leave-enlarge
+
+.editable-accordion-item
+	@extend .fill-darker
+	position: relative
+	padding: 10px
+	padding-left: 40px  // For the open/close chevron.
+	color: $white
+	cursor: pointer
+	user-select: none
+
+	// Full bleed the container on mobile.
+	@media $media-xs
+		margin-left: -($grid-gutter-width-xs /2)
+		margin-right: -($grid-gutter-width-xs /2)
+
+	// Not expandable doesn't show chevron and also isn't clickable.
+	&.not-expandable
+		padding-left: 10px
+		cursor: default
+		user-select: text
+
+		> .chevron
+			display: none
+
+	&.has-drag-handle
+		padding-right: 40px
+
+		// Since we full-bleed on mobile, if it has a drag handle, then we don't want to full bleed the right.
+		// This makes it easier to grab the drag handle since it's away from the edge a bit.
+		@media $media-xs
+			margin-right: 0
+
+	// Inactive pages.
+	// Gray them out a bit.
+	.editable-accordion-item-container.inactive &
+		@extend .fill-light
+		color: $gray-dark
+
+	> .chevron
+		position: absolute
+		left: 0
+		top: 11px
+		width: 40px
+		text-align: center
+
+		 > .jolticon
+			cursor: inherit
+
+	> .drag-handle
+		position: absolute
+		right: 0
+		top: 0
+		bottom: 0
+		width: 20px
+		cursor: move
+		background-color: $gray-dark
+		user-select: none
+
+		> .jolticon
+			position: absolute
+			top: 50%
+			left: 0
+			margin-top: -8px
+			cursor: inherit
+			color: $white
+
+gj-editable-accordion-item-heading
+	display: block
+
+.editable-accordion-item-heading
+
+	.controls
+		float: right
+
+		> .i-button
+			vertical-align: text-top
+
+	.tags-inline
+		display: inline-block
+		margin-left: 5px
+
+		> .tag
+			vertical-align: text-bottom
+
+	.stats
+		float: right
+		margin-left: 15px
+		text-align: right
+
+.editable-accordion-item-heading-title
+	margin: 0
+
+.editable-accordion-item-heading-description
+	@extend .text-muted
+	font-size: $font-size-small
+
+	.editable-accordion-item-container.inactive &
+		color: $gray-dark
+
+.editable-accordion-item-heading-title
+.editable-accordion-item-heading-description
+	margin-bottom: 5px
+
+/**
+ * Add/Edit Stuff
+ */
+.editable-accordion-item-edit
+.editable-accordion-item-add
+	position: relative
+	margin-top: -17px
+
+	form:last-child
+		margin-bottom: 0
+
+	// Full bleed the container on mobile.
+	@media $media-xs
+		margin-left: -($grid-gutter-width-xs /2)
+		margin-right: -($grid-gutter-width-xs /2)
+
+.editable-accordion-item-edit-well
+.editable-accordion-item-add-well
+	margin-bottom: 0
+
+.editable-accordion-item-add
+.editable-accordion-item-edit
+
+	&:before
+		caret( color: $gray-lightest, direction: 'up', size: 10px )
+		opacity: 0
+		pointer-events: none
+		transition: opacity 400ms
+
+	&.active:before
+		opacity: 1
+
+/**
+ * Forms
+ */
+.editable-accordion-item-edit
+.editable-accordion-item-add
+	form
+		@extend .fill-white
+		@extend .well
+
+/**
+ * Editing
+ */
+.editable-accordion-item-edit
+
+	form
+		margin-top: $line-height-computed
+
+		&.visibility
+
+			.help-block
+				margin-bottom: 0
+
+
+/**
+ * Adding
+ */
+.editable-accordion-button
+	user-select: none
+
+	// Make room for the icon so it appears more centered when expanded.
+	padding-right: 15px + (32px * 0.5) !important
+
+/**
+ * This is the placeholder that may get shown while dragging.
+ * It's kind of crazy, but allows it to be the correct size with the right amount of spacing below.
+ */
+.editable-accordion .angular-ui-tree-placeholder
+	position: relative
+	display: block
+	border: none
+
+	&:before
+		content: ''
+		display: block
+		position: absolute
+		top: 0
+		right: 0
+		bottom: $line-height-computed
+		left: 0
+		border: 2px dashed $gray

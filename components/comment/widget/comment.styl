@@ -1,0 +1,159 @@
+$comment-gutter-size = 100px
+$comment-gutter-size-xs = 40px
+
+.comment-widget-comment
+	@extend .clearfix
+
+	&.comment-widget-comment-highlighted
+		border-right: 5px solid $gj-blue
+		padding-right: ($grid-gutter-width-xs / 2)
+
+		// On mobile we basically bleed the right edge so the border goes right up against the
+		// side of the screen.
+		margin-right: -(@padding-right)
+
+		@media $media-sm-up
+			padding-right: ($grid-gutter-width / 2)
+			margin-right: 0
+
+	// We use this helper class to attach to the ng-repeated divs to animate the comments into place.
+	&-animate
+		@extend .anim-fade-in, .no-animate-leave, .no-animate-xs
+
+	&-avatar
+		width: $comment-gutter-size - ($grid-gutter-width / 2)
+		float: left
+
+	&-body
+		margin-left: $comment-gutter-size
+
+	&-title
+		@extend .h5
+		margin-top: 0
+		margin-bottom: $font-size-base * 0.5
+		font-weight: bold
+
+		a
+			color: $text-color
+
+			&:hover
+				text-decoration: underline
+
+	&-time
+		display: inline-block
+		margin-left: 5px
+		font-family: $font-family-tiny
+		color: $gray-light
+		font-size: $font-size-tiny
+		font-weight: normal
+		vertical-align: middle
+
+	&-owner
+		margin-left: 5px
+		margin-top: -2px
+
+	&-voting
+		user-select: none
+
+	&-meta
+		font-size: $font-size-small
+
+		.jolticon
+			vertical-align: text-bottom
+
+		// I hate aligning. This seems to work...
+		.i-button
+			margin-top: 1px
+			vertical-align: middle
+
+		a
+			color: $gray  // Override default link color
+
+			// This gives the link button things a better click area.
+			// Normally you can't click on the space between the icon and text, but
+			// this ensures the whole area is a click target.
+			display: inline-block
+
+			&:hover
+				text-decoration: underline
+
+			&.following > .jolticon
+				color: $gj-pink
+
+		.comment-widget-comment-voting:hover
+			text-decoration: none
+
+	.hidden-text-expander
+		margin-bottom: $font-size-base
+
+	/**
+	 * Child Comments
+	 * Needs some extra padding on the left.
+	 */
+	&-is-child
+		margin-top: $line-height-computed * 2
+
+		.comment-widget-comment-avatar
+			width: $comment-gutter-size - ($grid-gutter-width / 2)
+			margin-left: $comment-gutter-size
+			float: left
+
+		.comment-widget-comment-body
+			margin-left: ($comment-gutter-size * 2)
+
+	/**
+	 * Mobile styling
+	 */
+	@media $media-xs
+
+		&-is-child
+			border-left: 3px solid $gray-lightest
+			padding-left: ($grid-gutter-width-xs / 2)
+
+		&-avatar
+			&
+			.comment-widget-comment-is-child &
+				width: $comment-gutter-size-xs
+				margin-left: 0
+
+		&-body
+			&
+			.comment-widget-comment-is-child &
+				margin-left: 0
+
+		&-title
+			&
+			.comment-widget-comment-is-child
+				margin-left: $comment-gutter-size-xs + ($grid-gutter-width-xs / 2)
+				line-height: 1.3
+
+				> a
+					text-overflow()
+					display: inline-block
+
+		&-time
+			display: block
+			margin-left: 0
+
+		&-content
+			clear: both
+			margin-top: $line-height-computed
+
+	/**
+	 * Markdown styling for comments
+	 */
+	&-content
+
+		// Remove empty P tags.
+		p:empty
+			display: none
+
+		// Responsive images.
+		img
+			@extend .img-responsive
+
+		// Make all headings just look like bold text.
+		h1, h2, h3, h4, h5, h6
+			font-weight: bold
+			font-size: $font-size-base
+			margin: $font-size-base 0

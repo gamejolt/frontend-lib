@@ -1,0 +1,74 @@
+<div class="game-package-card fill-darker soundtrack-package-card">
+
+	<div class="row">
+
+		<div class="game-package-card-body col-sm-9">
+
+			<h4 class="game-package-card-title">
+				Game Soundtrack
+				<span class="jolticon jolticon-musical-note-double big pull-right text-muted"></span>
+			</h4>
+
+			<div class="game-package-card-description">
+
+				<gj-fade-collapse
+					fade-collapse-height="250"
+					fade-collapse-is-open="ctrl.isShowingSoundtrack"
+					fade-collapse-is-required="ctrl.canToggleSoundtrack"
+					>
+
+					<div class="game-package-card-meta">
+						{{ ctrl.songs.length | number }} songs
+					</div>
+
+					<gj-audio-playlist
+						audio-playlist-songs="::ctrl.songs"
+						audio-playlist-is-playing="ctrl.isPlaying"
+						>
+					</gj-audio-playlist>
+
+				</gj-fade-collapse>
+
+			</div>
+
+			<a class="hidden-text-expander"
+				ng-if="ctrl.canToggleSoundtrack"
+				ng-click="ctrl.isShowingSoundtrack = !ctrl.isShowingSoundtrack"
+				gj-track-event="game-soundtrack-card:show-all-songs"
+				></a>
+
+			<div class="game-package-card-buttons">
+				<a class="i-button big"
+					ng-class="{ block: Screen.isXs }"
+					ng-click="ctrl.download()"
+					gj-track-event="game-soundtrack-card:download"
+					>
+
+					<span class="jolticon jolticon-download"></span>
+					Download
+					<span class="jolticon-addon jolticon jolticon-musical-note-double"></span>
+				</a>
+			</div>
+
+		</div>
+
+		<div class="col-sm-3 hidden-xs">
+			<div class="game-package-card-thumb"
+				ng-style="{ 'background-image': 'url(\'' + ctrl.game.img_thumbnail + '\')' }">
+
+				<a class="play-button-overlay play-button-overlay-small hidden-xs"
+					ng-class="{ active: ctrl.isPlaying }"
+					ng-click="ctrl.isPlaying = !ctrl.isPlaying"
+					gj-track-event="game-soundtrack-card:play:cover-art"
+					>
+
+					<span class="jolticon"
+						ng-class="!ctrl.isPlaying ? 'jolticon-play' : 'jolticon-stop'"></span>
+				</a>
+
+			</div>
+		</div>
+
+	</div>
+
+</div>

@@ -1,0 +1,1 @@
+angular.module( 'gj.Fireside.Post.Tag', [ 'gj.Model', 'gj.Fireside.Post' ] );

@@ -1,0 +1,40 @@
+/**
+ * Audio Playlist Player
+ */
+.audio-playlist-player
+	@extend .clearfix
+	margin-bottom: $line-height-computed
+
+	&-play
+		float: left
+
+	&-title
+		font-weight: bold
+
+	&-playtime
+		font-size: $font-size-small
+		margin-left: 10px
+
+	&-track-info
+		margin-left: 55px
+
+	.audio-scrubber
+		margin-top: 10px
+		margin-left: 55px
+
+/**
+ * Audio Playlist
+ */
+.audio-playlist
+	@extend .list-unstyled
+
+	&-number
+		display: inline-block
+		min-width: 25px
+		margin-right: 5px
+		font-size: $font-size-small
+		text-align: right
+
+	> li.active
+		.audio-playlist-song-title
+			font-weight: bold

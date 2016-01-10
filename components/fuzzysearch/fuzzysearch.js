@@ -1,0 +1,1 @@
+angular.module( 'gj.Fuzzysearch', [] );

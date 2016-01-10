@@ -1,0 +1,65 @@
+$gj-font-lib ?= '/lib/gj-lib-client/components/fonts/';
+
+font-url( font-url, variant )
+	src: url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.eot' )
+	src: url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.eot#iefix' ) format('embedded-opentype'),
+	url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.woff2' ) format('woff2'),
+	url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.woff' ) format('woff'),
+	url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.ttf' ) format('truetype');
+
+/**
+ * Open Sans
+ */
+@font-face
+	font-family: 'Open Sans'
+	font-url( 'open-sans', 'regular' )
+	font-weight: normal
+	font-style: normal
+
+@font-face
+	font-family: 'Open Sans'
+	font-url( 'open-sans', 'light' )
+	font-weight: 300
+	font-style: normal
+
+@font-face
+	font-family: 'Open Sans'
+	font-url( 'open-sans', 'bold' )
+	font-weight: 700
+	font-style: normal
+
+/**
+ * Lato
+ */
+@font-face
+	font-family: 'Lato'
+	font-url( 'lato', 'regular' )
+	font-weight: normal
+	font-style: normal
+
+@font-face
+	font-family: 'Lato'
+	font-url( 'lato', 'regular-italic' )
+	font-weight: normal
+	font-style: italic
+
+@font-face
+	font-family: 'Lato'
+	font-url( 'lato', 'bold' )
+	font-weight: 700
+	font-style: normal
+
+@font-face
+	font-family: 'Lato'
+	font-url( 'lato', 'bold-italic' )
+	font-weight: 700
+	font-style: italic
+
+/**
+ * Inconsolata
+ */
+@font-face
+	font-family: 'Inconsolata'
+	font-url( 'inconsolata', 'regular' )
+	font-weight: normal
+	font-style: normal

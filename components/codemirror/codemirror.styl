@@ -1,0 +1,66 @@
+// Style it out like a form control.
+.CodeMirror
+	height: auto  // Will make it auto-expand
+	padding: $padding-base-vertical $padding-base-horizontal
+	border: 1px solid $input-border
+	transition border-color ease-in-out .15s
+
+	pre.CodeMirror-placeholder
+		color: $text-muted
+
+.CodeMirror-focused
+	border-color: $input-border-focus
+	outline: 0
+
+/**
+ * Default theme.
+ */
+.CodeMirror
+	background: $body-bg
+	color: $text-color
+
+	// Make it have the same styling as normal text on the page.
+	font-family: $font-family-base
+	font-size: $font-size-base
+	line-height: $line-height-base
+
+	div.CodeMirror-selected
+		background: $gray-lighter !important
+
+	.CodeMirror-gutters
+		background: $gray-lightest
+		border-right: 0px
+
+	.CodeMirror-linenumber
+		font-family: $font-family-monospace
+		color: $gray-light
+
+	.CodeMirror-cursor
+		border-left: 1px solid $gray !important
+
+	// Headers.
+	span.cm-header
+		color: inherit
+
+	// Links URLs.
+	span.cm-string
+		color: inherit
+		font-family: $font-family-monospace
+
+	// Blockquotes.
+	span.cm-quote
+		font-style: italic
+		color: inherit
+
+	// Image alt tags.
+	span.cm-tag
+		color: $gray-light
+
+	// Linked text.
+	// Will get underlined automatically.
+	span.cm-link
+		color: inherit
+
+	// HRs
+	span.cm-hr
+		color: $gray-light

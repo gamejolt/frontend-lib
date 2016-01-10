@@ -1,0 +1,39 @@
+.tag
+	display: inline-block
+	padding: 1px 4px 2px
+	font-family: $font-family-tiny
+	font-size: $font-size-tiny
+	font-weight: normal
+	vertical-align: middle
+	white-space: nowrap
+	color: $gray
+	background-color: $gray-lighter
+	line-height: 16px  // Same size as a jolticon.
+
+	&:empty
+		display: none
+
+	.jolticon
+		vertical-align: bottom
+		margin: 0
+
+	&.big
+		padding-left: 8px
+		padding-right: @padding-left
+		font-size: $font-size-large
+		line-height: 16px * 2
+
+		.jolticon
+			vertical-align: baseline
+
+.tag-active
+	background-color: $gj-dark-green
+	color: $gj-green
+
+.tag-pink
+	background-color: $gj-pink
+	color: $white
+
+.tag-blue
+	background-color: $gj-blue
+	color: $gray-darker

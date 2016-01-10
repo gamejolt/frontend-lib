@@ -1,0 +1,145 @@
+$zindex-growls ?= 1200
+$growl-spacing = 10px
+$growl-width = 375px
+
+.growl-container
+	position: fixed
+	bottom: $growl-spacing
+	left: 0
+	right: 0
+	z-index: $zindex-growls
+
+	@media $media-sm-up
+		right: auto
+		width: $growl-width
+
+.growl
+	position: relative
+
+.growl-close
+	position: absolute
+	display: block
+	top: 0
+	right: 0
+	width: 40px
+	height: @width
+	line-height: @height
+	color: $white
+	text-align: center
+	z-index: 2
+
+	&:hover
+		color: $gj-pink
+		background-color: $gray-darkest
+
+.growl-inner
+	padding: 25px 35px
+	margin-top: $growl-spacing
+	color: $white
+	user-select: none
+	will-change: background-color, opacity, transform
+
+	// Transition on mouse out, fade it back in to full opacity.
+	transition: background-color 750ms
+
+	&:hover
+		// Immediately switch to slightly transparent on hover.
+		// We set the background color alpha in the different message types below.
+		transition: none
+
+	h4
+		margin: 0
+		font-weight: 300
+
+	p
+		margin-bottom: 9px
+		font-size: $font-size-small
+
+	a
+		color: $white
+		text-decoration: underline
+
+	.i-button
+		text-decoration: none
+
+		&
+		&:hover
+			background-color: $gray-dark !important
+
+	.progress
+		margin-bottom: 9px
+
+	p:last-child
+	.progress:last-child
+		margin-bottom: 0
+
+/**
+ * Clickable growl.
+ */
+.growl-clickable
+	&:hover
+		cursor: pointer
+
+/**
+ * Growl icons.
+ */
+.growl-icon
+	float: left
+	width: 45px
+	height: 45px
+
+	> img
+		display: block
+
+.growl-has-icon .growl-content
+	margin-left: 60px
+
+/**
+ * Sticky growl.
+ */
+.growl-sticky
+.growl-pinned
+	border-right: 5px solid $gray-darker
+	border-left: 5px solid $gray-darker
+
+	@media $media-sm-up
+		border-left: none
+
+/**
+ * Success growl.
+ */
+.growl-type-success
+	.growl-inner
+		background-color: $gj-dark-green
+
+		h4
+			color: $gj-green
+
+		&:hover
+			background-color: rgba( $gj-dark-green, 0.85 )
+
+/**
+ * Error growl.
+ */
+.growl-type-error
+	.growl-inner
+		background-color: $gj-pink
+
+		h4
+			color: $gj-green
+
+		&:hover
+			background-color: rgba( $gj-pink, 0.85 )
+
+/**
+ * Info growl.
+ */
+.growl-type-info
+	.growl-inner
+		background-color: $gray-darker
+
+		h4
+			color: $gj-green
+
+		&:hover
+			background-color: rgba( $gray-darker, 0.85 )

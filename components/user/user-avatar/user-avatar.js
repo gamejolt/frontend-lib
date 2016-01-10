@@ -1,0 +1,1 @@
+angular.module( 'gj.User.UserAvatar', [ 'gj.User' ] );

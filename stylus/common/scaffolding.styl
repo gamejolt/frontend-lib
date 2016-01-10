@@ -1,0 +1,108 @@
+@require 'fonts.styl'
+
+[ng\\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
+	display: none !important
+
+// https://github.com/ftlabs/fastclick#when-it-isnt-needed
+// http://msdn.microsoft.com/en-us/library/ie/hh772044(v=vs.85).aspx
+a
+input
+button
+[ng-click]
+	touch-action: manipulation
+
+a
+	// Force pointer.
+	// With angular a lot of times we don't have hrefs.
+	cursor: pointer
+
+	&:hover
+	&:focus
+		text-decoration: none
+
+.link-muted
+	color: $text-muted
+
+.link-unstyled
+	color: inherit
+
+	&:hover
+	&:focus
+		text-decoration: underline
+
+.link-help
+	color: $text-muted
+	border-bottom: 1px dotted $gray
+
+	&:hover
+	&:focus
+		border-bottom: 0
+		text-decoration: underline
+
+.link-block
+	display: block
+
+.position-root
+	position: relative
+
+// Force ui-views to be block-level elements.
+ui-view
+	display: block
+
+/**
+ * Scrollable
+ */
+scrollable()
+	overflow-y: auto
+	overflow-x: hidden
+	-webkit-overflow-scrolling: touch
+	will-change: scroll-position
+
+	// http://msdn.microsoft.com/en-us/library/windows/apps/hh441298.aspx
+	-ms-overflow-style: -ms-autohiding-scrollbar
+
+scrollable-x()
+	overflow-y: hidden
+	overflow-x: auto
+	-webkit-overflow-scrolling: touch
+	will-change: scroll-position
+
+	// http://msdn.microsoft.com/en-us/library/windows/apps/hh441298.aspx
+	-ms-overflow-style: -ms-autohiding-scrollbar
+
+.scrollable
+	scrollable()
+
+.scrollable-x
+	scrollable-x()
+
+/**
+ * Full Bleeds
+ */
+.full-bleed
+	margin-left: -($grid-gutter-width / 2)
+	margin-right: @margin-left
+
+@media $media-xs
+	.full-bleed-xs
+		margin-left: -($grid-gutter-width-xs / 2)
+		margin-right: @margin-left
+
+@media $media-sm
+	.full-bleed-sm
+		margin-left: -($grid-gutter-width / 2)
+		margin-right: @margin-left
+
+
+/**
+ * Sans margin
+ */
+.sans-margin.sans-margin
+	margin-top: 0
+	margin-bottom: 0
+
+.sans-margin-bottom.sans-margin-bottom
+	margin-bottom: 0
+
+.sans-margin-top.sans-margin-top
+	margin-top: 0

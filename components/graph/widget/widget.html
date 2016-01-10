@@ -1,0 +1,14 @@
+<gj-loading ng-if="ctrl.isLoading" loading-big></gj-loading>
+
+<div oc-lazy-load="{ files: [ '/app/modules/graphs.js' ] }">
+	<div ng-if="!ctrl.isLoading">
+		<gj-graph dataset="ctrl.graphData.graph"></gj-graph>
+		<div ng-if="!ctrl.hideTable">
+			<gj-graph-table
+				graph-table-data="ctrl.graphData.tableData"
+				graph-table-totals="ctrl.graphData.tableTotals"
+				>
+			</gj-graph-table>
+		</div>
+	</div>
+</div>

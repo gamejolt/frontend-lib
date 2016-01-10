@@ -1,0 +1,29 @@
+.breadcrumb
+	ul
+		@extend .list-unstyled, .clearfix
+		font-family: $font-family-heading
+
+		> li
+			float: left
+			padding: 0
+
+			> a
+			> span
+				display: inline-block
+				color: $gray-dark
+
+				&.active
+					color: $black
+					font-weight: bold
+
+	&-tag
+		display: block
+		color: $text-muted
+		font-family: $font-family
+		font-size: $font-size-tiny
+		text-transform: lowercase
+		font-weight: normal
+
+	&-separator
+		color: $gray-light
+		margin: 0 12px 0 8px

@@ -1,0 +1,193 @@
+angular.module( 'gj.Game' ).factory( 'Game', function( Model, Environment, User, MediaItem, $state )
+{
+	function Game( data )
+	{
+		if ( data ) {
+			angular.extend( this, data );
+
+			if ( data.developer && angular.isObject( data.developer ) ) {
+				this.developer = new User( data.developer );
+			}
+
+			if ( data.thumbnail_media_item && angular.isObject( data.thumbnail_media_item ) ) {
+				this.thumbnail_media_item = new MediaItem( data.thumbnail_media_item );
+			}
+
+			if ( data.header_media_item && angular.isObject( data.header_media_item ) ) {
+				this.header_media_item = new MediaItem( data.header_media_item );
+			}
+		}
+
+		this.is_published = false;
+		if ( this.status == Game.STATUS_VISIBLE ) {
+			this.is_published = true;
+		}
+	}
+
+	Game.STATUS_HIDDEN = 0;
+	Game.STATUS_VISIBLE = 1;
+	Game.STATUS_REMOVED = 2;
+
+	Game.DEVELOPMENT_STATUS_FINISHED = 1;
+	Game.DEVELOPMENT_STATUS_WIP = 2;
+	Game.DEVELOPMENT_STATUS_CANCELED = 3;
+
+	Game.prototype.getSref = function( page, includeParams )
+	{
+		var sref = '';
+
+		if ( page == 'dashboard' ) {
+			sref = 'dashboard.developer.games.manage.game.overview';
+		}
+		else if ( page == 'edit' ) {
+			sref = 'dashboard.developer.games.manage.game.edit';
+		}
+		else {
+			sref = 'discover.games.view.overview';
+		}
+
+		if ( includeParams ) {
+			sref += '( ' + angular.toJson( this.getSrefParams( page ) ) + ' )'
+		}
+
+		return sref;
+	};
+
+	Game.prototype.getSrefParams = function( page )
+	{
+		if ( [ 'dashboard', 'edit' ].indexOf( page ) !== -1 ) {
+			return { id: this.id };
+		}
+
+		return {
+			id: this.id,
+			category: this.category_slug,
+			slug: this.slug
+		};
+	};
+
+	Game.prototype.getUrl = function( page )
+	{
+		if ( page == 'soundtrack' ) {
+			return '/games/' + this.slug + '/' + this.id + '/download/soundtrack';
+		}
+
+		return $state.href( this.getSref( page ), this.getSrefParams( page ) );
+	};
+
+	Game.prototype.hasDesktopSupport = function()
+	{
+		var compat = this.compatibility;
+		return compat.os_windows
+			|| compat.os_windows_64
+			|| compat.os_mac
+			|| compat.os_mac_64
+			|| compat.os_linux
+			|| compat.os_linux_64
+			;
+	};
+
+	Game.prototype.hasBrowserSupport = function()
+	{
+		var compat = this.compatibility;
+		return compat.type_html
+			|| compat.type_flash
+			|| compat.type_unity
+			|| compat.type_applet
+			|| compat.type_silverlight
+			;
+	};
+
+	/**
+	 * Helper function to check if the resource passed in has support for the
+	 * os/arch passed in.
+	 */
+	Game.checkDeviceSupport = function( obj, os, arch )
+	{
+		if ( obj[ 'os_' + os ] ) {
+			return true;
+		}
+
+		// If they are on 64bit, then we can check for 64bit only support as well.
+		// If there is no arch (web site context) then we allow 64bit builds as well.
+		if ( (!arch || arch == '64') && obj[ 'os_' + os + '_64' ] ) {
+			return true;
+		}
+
+		return false;
+	};
+
+	Game.prototype.canInstall = function( os, arch )
+	{
+		// Obviously can't install if no desktop build.
+		if ( !this.hasDesktopSupport() ) {
+			return false;
+		}
+
+		return Game.checkDeviceSupport( this.compatibility, os, arch );
+	};
+
+	Game.pluckInstallableBuilds = function( packages, os, arch )
+	{
+		var pluckedBuilds = [];
+
+		packages.forEach( function( _package )
+		{
+			_package._builds.forEach( function( build )
+			{
+				if ( Game.checkDeviceSupport( build, os, arch ) ) {
+					pluckedBuilds.push( build );
+				}
+			} );
+		} );
+
+		return pluckedBuilds;
+	};
+
+	Game.prototype.$save = function()
+	{
+		if ( this.id ) {
+			return this.$_save( '/web/dash/developer/games/save/' + this.id, 'game' );
+		}
+		else {
+			return this.$_save( '/web/dash/developer/games/save', 'game' );
+		}
+	};
+
+	Game.prototype.$saveMaturity = function()
+	{
+		return this.$_save( '/web/dash/developer/games/maturity/save/' + this.id, 'game' );
+	};
+
+	Game.prototype.$saveThumbnail = function()
+	{
+		return this.$_save( '/web/dash/developer/games/thumbnail/save/' + this.id, 'game', { file: this.file, allowComplexData: [ 'crop' ] } );
+	};
+
+	Game.prototype.$saveHeader = function()
+	{
+		return this.$_save( '/web/dash/developer/games/header/save/' + this.id, 'game', { file: this.file } );
+	};
+
+	Game.prototype.$clearHeader = function()
+	{
+		return this.$_save( '/web/dash/developer/games/header/clear/' + this.id, 'game' );
+	};
+
+	Game.prototype.$setStatus = function( status )
+	{
+		return this.$_save( '/web/dash/developer/games/set-status/' + this.id + '/' + status, 'game' );
+	};
+
+	Game.prototype.$saveSettings = function()
+	{
+		return this.$_save( '/web/dash/developer/games/settings/save/' + this.id, 'game' );
+	};
+
+	Game.prototype.$remove = function( status )
+	{
+		return this.$_remove( '/web/dash/developer/games/remove/' + this.id );
+	};
+
+	return Model.create( Game );
+} );

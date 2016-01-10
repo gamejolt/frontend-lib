@@ -1,0 +1,30 @@
+<div class="comment-widget-add-form">
+
+	<div class="comment-widget-add-form-user">
+		<div gj-user-avatar="user"></div>
+	</div>
+
+	<form gj-form="formModel" name="commentAddForm">
+
+		<form-group class="no-animate" name="comment" label="Leave a Comment" hide-label="true">
+
+			<div form-markdown-editor
+				preview-class="comment-widget-comment-content"
+				codemirror-options="{ theme: 'gj-comment', placeholder: 'Leave a comment...' }"
+				markdown-preview-url="/comments/preview"
+				markdown-mode="comments"
+				>
+			</div>
+
+			<control-errors label="comment"></control-errors>
+
+		</form-group>
+
+		<button class="i-button" ng-disabled="commentAddForm.$invalid" ng-click="onSubmit()">
+			<span class="jolticon jolticon-add"></span>
+			Add Comment
+		</button>
+
+	</form>
+
+</div>

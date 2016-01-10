@@ -1,0 +1,8 @@
+<a ng-if="::user" class="user-avatar" href="{{ ::href }}" title="{{ ::user.display_name }}">
+	<img ng-src="{{ ::user.img_avatar }}" class="img-responsive" alt="">
+	<div class="avatar-name" ng-if="::avatarShowName">{{ ::user.display_name }}</div>
+</a>
+
+<span ng-if="::!user" class="user-avatar" title="Guest">
+	<img src="/lib/gj-lib-client/components/user/user-avatar/guest.png" class="img-responsive" alt="Guest">
+</span>

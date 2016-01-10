@@ -1,0 +1,29 @@
+.audio-scrubber-timebar
+	position: relative
+
+.audio-scrubber-timebar-unfilled
+	position: absolute
+	width: 100%
+	top: 50%
+	margin-top: -2px
+	height: 5px
+	background-color: $gray-dark
+
+.audio-scrubber-timebar-filled
+	position: absolute
+	top: 0
+	left: 0
+	bottom: 0
+	right: 0
+	background-color: $gj-blue
+
+.audio-scrubber-timebar-handle
+	position: absolute
+	width: 13px
+	height: @width
+	top: 50%
+	margin-top: -(@width / 2)
+	margin-right: -(@width / 2)
+	background-color: $gray-lighter
+	border-radius: 50%
+	z-index: 11

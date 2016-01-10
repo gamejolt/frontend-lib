@@ -1,0 +1,147 @@
+$modal-backdrop-opacity = 0.7
+$modal-padding = ($grid-gutter-width / 2)
+$modal-padding-xs = ($grid-gutter-width-xs / 2)
+
+// Kill scroll on body.
+.modal-open
+	overflow: hidden
+
+// Modal background
+.modal-backdrop
+	position: fixed
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	z-index: ($zindex-modal-background - 10)
+	background-color: $modal-backdrop-bg
+	transition: opacity 300ms
+
+	// Fade for backdrop
+	&.fade
+	&.minimize.minimize
+		opacity: 0
+
+	&.in
+		opacity: $modal-backdrop-opacity
+
+// Container that the modal scrolls within
+.modal
+	display: none
+	overflow: auto
+	overflow-y: scroll
+	position: fixed
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	z-index: $zindex-modal
+	-webkit-overflow-scrolling: touch
+
+	// Prevent Chrome on Windows from adding a focus outline. For details, see
+	// https://github.com/twbs/bootstrap/pull/10951.
+	outline: 0
+
+	// Tells angular that we want to animate for this long, basically.
+	transition-duration: 300ms
+
+	&.fade
+	&.minimize.minimize
+
+		.modal-dialog
+			opacity: 0
+			transition: opacity 300ms
+
+		.modal-content
+			transform: scale3d( 0.8, 0.8, 0.8 )
+			transition: transform 300ms $strong-ease-out
+
+	&.in
+
+		.modal-dialog
+			opacity: 1
+
+		.modal-content
+			transform: none
+
+// Shell div to position the modal with bottom padding
+.modal-dialog
+	position: relative
+	margin-top: 100px
+	width: 100%
+	background-color: $modal-content-bg
+	border-top: 3px solid $gj-blue
+	border-bottom: @border-top
+
+// Actual modal
+.modal-content
+	position: relative
+	background-clip: padding-box
+	outline: none // Remove focus outline from opened modal
+
+// Modal header
+// Top section of the modal w/ title and dismiss
+.modal-header
+	padding: $modal-padding-xs
+	padding-bottom: 0
+	min-height: ($modal-title-padding + $modal-title-line-height)
+
+// Title text within header
+.modal-title
+	margin-top: 0
+
+// Modal body
+// Where all modal content resides (sibling of .modal-header and .modal-footer)
+.modal-body
+	position: relative
+	padding: $modal-padding-xs
+
+// Footer (for actions)
+.modal-footer
+	@extend .clearfix // clear it in case folks use .pull-* classes on buttons
+	padding: $modal-padding-xs
+	padding-top: 0
+	text-align: right // right align buttons
+
+.modal-dark
+	.modal-dialog
+		@extend .fill-darkest
+		border-color: $gray-light
+
+.modal-dialog.modal-lg
+	margin-top: $grid-gutter-width
+
+	> .modal-content
+		width: 100%
+
+@media $media-sm-up
+
+	.modal-header
+		padding: $modal-padding
+		padding-bottom: 0
+
+	.modal-body
+		padding: $modal-padding
+
+	.modal-footer
+		padding: $modal-padding
+		padding-top: 0
+
+	.modal-sm > .modal-content
+		margin: 0 auto
+		width: 500px
+
+@media $media-md-up
+
+	.modal-dialog
+		margin: 30px auto
+		margin-top: 100px
+
+	.modal-content
+		width: $container-md
+		margin: 0 auto
+
+.modal-header-controls
+	@extend .clearfix
+	padding: 0 $modal-padding-xs
+	text-align: right

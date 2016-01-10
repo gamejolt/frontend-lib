@@ -1,0 +1,26 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th></th>
+			<th ng-repeat="label in ctrl.labels" class="text-right">
+				{{ ::label }}
+			</th>
+		</tr>
+	</thead>
+	<tfoot ng-if="ctrl.tableTotals">
+		<tr>
+			<th>All Time</th>
+			<td ng-repeat="total in ctrl.tableTotals" class="text-right">
+				{{ ::total | number }}
+			</td>
+		</tr>
+	</tfoot>
+	<tbody>
+		<tr ng-repeat="row in ctrl.tableData">
+			<th>{{ ::row.time | date }}</th>
+			<td ng-repeat="label in ctrl.labels" class="text-right">
+				{{ ::row[ label ] | number }}
+			</td>
+		</tr>
+	</tbody>
+</table>

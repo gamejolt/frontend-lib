@@ -1,0 +1,24 @@
+<ul class="pager" ng-class="{ reverse: ctrl.reverseButtons }">
+	<li class="previous" ng-if="ctrl.hasPrevious">
+		<a
+			ui-sref="{{ $state.current.name }}( { {{ ctrl.queryParam || 'page' }}: ctrl.prevPage } )"
+			ui-sref-opts="{ inherit: true }"
+			gj-no-auto-scroll
+			ng-click="ctrl.onPageClick( $event, ctrl.prevPage )"
+			>
+			{{ (ctrl.previousText || '&laquo; Previous') }}
+		</a>
+		<span ng-if="!ctrl.hasPrevious">{{ (ctrl.previousText || '&laquo; Previous') }}</span>
+	</li>
+	<li class="next" ng-if="ctrl.hasNext">
+		<a
+			ui-sref="{{ $state.current.name }}( { {{ ctrl.queryParam || 'page' }}: ctrl.nextPage } )"
+			ui-sref-opts="{ inherit: true }"
+			gj-no-auto-scroll
+			ng-click="ctrl.onPageClick( $event, ctrl.nextPage )"
+			>
+			{{ (ctrl.nextText || 'Next &raquo;') }}
+		</a>
+		<span ng-if="!ctrl.hasNext">{{ (ctrl.nextText || 'Next &raquo;') }}</span>
+	</li>
+</ul>

@@ -1,0 +1,141 @@
+/* jquery.Jcrop.css v0.9.12 - MIT License */
+/*
+	The outer-most container in a typical Jcrop instance
+	If you are having difficulty with formatting related to styles
+	on a parent element, place any fixes here or in a like selector
+
+	You can also style this element if you want to add a border, etc
+	A better method for styling can be seen below with .jcrop-light
+	(Add a class to the holder and style elements for that extended class)
+*/
+.jcrop-holder
+	direction: ltr
+	text-align: left
+
+	// There was a random radio button showing up...
+	// https://github.com/tapmodo/Jcrop/issues/20
+	.jcrop-keymgr
+		opacity: 0
+
+/* Selection Border */
+.jcrop-vline,
+.jcrop-hline
+	background: #ffffff
+	font-size: 0
+	position: absolute
+
+.jcrop-vline
+	height: 100%
+	width: 1px !important
+
+.jcrop-vline.right
+	right: 0
+
+.jcrop-hline
+	height: 1px !important
+	width: 100%
+
+.jcrop-hline.bottom
+	bottom: 0
+
+/* Invisible click targets */
+.jcrop-tracker
+	height: 100%
+	width: 100%
+	/* "turn off" link highlight */
+	-webkit-tap-highlight-color: transparent
+	/* disable callout, image save panel */
+	-webkit-touch-callout: none
+	/* disable cut copy paste */
+	-webkit-user-select: none
+
+/* Selection Handles */
+.jcrop-handle
+	background-color: #333333
+	border: 1px #eeeeee solid
+	width: 15px
+	height: 15px
+	font-size: 1px
+
+.jcrop-handle
+
+	&.ord-n
+		left: 50%
+		margin-left: -(15px / 2)
+		margin-top: -(15px / 2)
+		top: 0
+
+	&.ord-s
+		bottom: 0
+		left: 50%
+		margin-bottom: -(15px / 2)
+		margin-left: -(15px / 2)
+
+	&.ord-e
+		margin-right: -(15px / 2)
+		margin-top: -(15px / 2)
+		right: 0
+		top: 50%
+
+	&.ord-w
+		left: 0
+		margin-left: -(15px / 2)
+		margin-top: -(15px / 2)
+		top: 50%
+
+	&.ord-nw
+		left: 0
+		margin-left: -(15px / 2)
+		margin-top: -(15px / 2)
+		top: 0
+
+	&.ord-ne
+		margin-right: -(15px / 2)
+		margin-top: -(15px / 2)
+		right: 0
+		top: 0
+
+	&.ord-se
+		bottom: 0
+		margin-bottom: -(15px / 2)
+		margin-right: -(15px / 2)
+		right: 0
+
+	&.ord-sw
+		bottom: 0
+		left: 0
+		margin-bottom: -(15px / 2)
+		margin-left: -(15px / 2)
+
+/* Dragbars */
+.jcrop-dragbar
+
+	&.ord-n
+	&.ord-s
+		height: 15px
+		width: 100%
+
+	&.ord-e
+	&.ord-w
+		height: 100%
+		width: 15px
+
+	&.ord-n
+		margin-top: -(15px / 2)
+
+	&.ord-s
+		bottom: 0
+		margin-bottom: -(15px / 2)
+
+	&.ord-e
+		margin-right: -(15px / 2)
+		right: 0
+
+	&.ord-w
+		margin-left: -(15px / 2)
+
+/* Fix for twitter bootstrap et al. */
+.jcrop-holder img,
+img.jcrop-preview
+	max-width: none
+

@@ -1,0 +1,10 @@
+<iframe id="online-game-frame"
+	nwdisable nwfaketop
+	ng-if="ctrl.src"
+	type="text/html"
+	frameborder="0"
+	scrolling="no"
+	allowfullscreen
+	width="{{ ctrl.embedWidth }}"
+	height="{{ ctrl.embedHeight }}"
+	ng-src="{{ ctrl.src }}"></iframe>

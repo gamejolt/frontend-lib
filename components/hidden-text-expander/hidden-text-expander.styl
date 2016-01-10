@@ -1,0 +1,23 @@
+.hidden-text-expander
+	display: block
+	vertical-align: middle
+	height: 20px
+	width: 40px
+	line-height: 13px
+	font-size: 12px
+	font-weight: bold
+	color: $gray !important
+	background-color: $gray-lighter
+	text-decoration: none
+	user-select: none
+	text-align: center
+
+	&.inline
+		display: inline-block
+
+	&:after
+		content: '...'
+
+	&:hover
+		color: $white !important
+		background-color: $gray-light

@@ -1,0 +1,24 @@
+.user-avatar
+	display: block
+	position: relative
+
+	img
+		@extend .img-responsive
+
+	.avatar-circle &
+	&.avatar-circle
+		img
+			@extend .img-circle
+
+	.avatar-name
+		text-overflow()
+		position: absolute
+		bottom: 0
+		left: 0
+		right: 0
+		background: #000
+		background-color: rgba( 0, 0, 0, 0.5 )
+		color: $gray-lightest
+		font-weight: bold
+		font-size: $font-size-tiny
+		padding: 3px 5px

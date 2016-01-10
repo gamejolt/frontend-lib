@@ -1,0 +1,66 @@
+<div class="form-markdown-editor">
+
+	<nav class="platform-list inline">
+		<ul ng-if="!ctrl.isPreviewDisabled">
+			<li>
+				<a ng-class="{ active: ctrl.currentTab == 'edit' }" ng-click="ctrl.currentTab = 'edit'; ctrl.onTabChanged()">
+					Write
+				</a>
+			</li>
+			<li ng-if="ctrl.hasContent()">
+				<a ng-class="{ active: ctrl.currentTab == 'preview' }" ng-click="ctrl.currentTab = 'preview'; ctrl.onTabChanged()">
+					Preview
+				</a>
+			</li>
+		</ul>
+		<div class="form-markdown-editor-helptext" ng-if="::(ctrl.shouldShowMarkdownHelp || ctrl.shouldShowWidgetHelp)">
+			<span ng-if="::ctrl.shouldShowMarkdownHelp" class="form-markdown-editor-helplink">
+				<a href="{{ ::Environment.helpBaseUrl }}/{{ ::ctrl.markdownHelpUrl }}" target="_blank">
+					<span class="hidden-xs jolticon jolticon-markdown"></span>
+					<span class="hidden-sm hidden-md hidden-lg jolticon jolticon-markdown big"></span>
+					<span class="hidden-xs">Use Markdown to Edit</span>
+				</a>
+			</span>
+			<span ng-if="::ctrl.shouldShowWidgetHelp" class="form-markdown-editor-helplink">
+				<a ng-href="{{ ::Environment.helpBaseUrl }}/widgets-{{ ::ctrl.markdownMode }}" target="_blank">
+					<span class="hidden-xs jolticon jolticon-plug"></span>
+					<span class="hidden-sm hidden-md hidden-lg jolticon jolticon-plug big"></span>
+					<span class="hidden-xs">Available Widgets</span>
+				</a>
+			</span>
+		</div>
+	</nav>
+
+	<!--
+		We set "form-markdown-editor-control" on this element.
+		That directive is what will add the ui-codemirror element on it and will also
+		attach a name for working with an ng-model for error reporting.
+	-->
+	<div
+		ng-if="!Screen.isXs"
+		form-markdown-editor-control="codemirror"
+		ui-codemirror-opts="ctrl.codemirrorOptions"
+		ng-show="ctrl.currentTab == 'edit'"
+		ng-required="ctrl.formGroup.isRequired">
+	</div>
+
+	<!--
+		We use textarea instead for mobile.
+	-->
+	<textarea
+		ng-if="Screen.isXs"
+		form-markdown-editor-control="textarea"
+		ng-show="ctrl.currentTab == 'edit'"
+		ng-required="ctrl.formGroup.isRequired"
+		ng-attr-placeholder="{{ ctrl.codemirrorOptions.placeholder || '' }}"
+		></textarea>
+
+	<!--
+		When previewing editor content.
+	-->
+	<div class="well form-markdown-editor-preview"
+		ng-class="ctrl.previewClass"
+		ng-if="ctrl.currentTab == 'preview'"
+		ng-bind-html="ctrl.previewContent"></div>
+
+</div>

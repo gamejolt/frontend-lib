@@ -1,0 +1,51 @@
+.game-package-card
+	padding: 15px
+	margin-bottom: $line-height-computed
+
+	// Package thumbs are optional.
+	&-thumb
+		position: relative
+		background-repeat: no-repeat
+		background-position: center center
+		background-size: cover
+		height: 0
+		padding-bottom: 100%
+
+	&-title
+		margin-top: 0
+		margin-bottom: 5px
+		font-weight: 300
+
+		@media $media-xs
+			font-size: $font-size-base
+			font-weight: bold
+
+	&-meta
+		@extend .text-muted
+		margin-bottom: $font-size-base
+
+		> .jolticon
+			vertical-align: middle
+
+	&-version
+	&-date
+		font-size: $font-size-tiny
+
+	&-description
+		clear: both
+		color: $gray-lighter
+		font-size: $font-size-small
+
+	& .hidden-text-expander
+		margin-bottom: $line-height-computed
+
+	.alert
+		// Less padding than normal.
+		padding-top: $font-size-base
+		padding-bottom: $font-size-base
+
+		.jolticon
+			vertical-align: text-bottom
+
+	.alert-info
+		@extend .fill-dark

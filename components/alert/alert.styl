@@ -1,0 +1,51 @@
+$alert-padding = ($grid-gutter-width / 2)
+
+.alert
+	padding: $alert-padding
+	margin-bottom: $line-height-computed
+	font-size: $font-size-small
+
+	@media $media-xs
+		padding: ($grid-gutter-width-xs / 2)
+
+	h4
+		margin-top: 0
+		color: inherit
+
+	p
+	ul
+		margin-bottom: 0
+
+	p + p
+		margin-top: 5px
+
+	// We add spacing to the top proportionate to the amount of spacing that would
+	// usually be above the top of text.
+	.i-button
+		margin-top: 5px + ($line-height-computed - $font-size-base)
+
+.alert-info
+	@extend .fill-lightest
+
+.fill-lightest .alert-info
+	@extend .fill-lighter
+
+.alert-warning
+	@extend .fill-pink
+
+.alert-success
+	@extend .fill-dark-green
+
+.alert-actions
+	position: relative
+	margin: -($alert-padding)
+	margin-top: $alert-padding
+	padding: $alert-padding
+	background-color: $gray-dark
+
+	&::before
+		content: ''
+		caret( $gray-dark, direction: 'up', size: 5px )
+
+	> .i-button
+		margin-top: 0

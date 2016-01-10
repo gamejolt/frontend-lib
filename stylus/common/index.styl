@@ -1,0 +1,88 @@
+// This allows us to exclude certain common components by
+// setting these variables to true before including this file.
+$gj-exclude-common-normalize ?= false
+$gj-exclude-common-scaffolding ?= false
+$gj-exclude-common-type ?= false
+$gj-exclude-common-code ?= false
+$gj-exclude-common-grid ?= false
+$gj-exclude-common-forms ?= false
+$gj-exclude-common-input-groups ?= false
+$gj-exclude-common-tables ?= false
+$gj-exclude-common-utilities ?= false
+$gj-exclude-common-responsive-utilities ?= false
+$gj-exclude-common-fills ?= false
+
+// Enable overriding of where certain folders live.
+$gj-bower-lib-folder ?= '../../../../bower-lib'
+$gj-app-styles-folder ?= '../../../../app'
+
+// Our common functions.
+@import './functions'
+
+// Normalize
+if ( !$gj-exclude-common-normalize )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/normalize'
+
+// Set up our global variables.
+@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/variables'
+@import './variables'
+@import $gj-app-styles-folder + '/styles/variables'
+
+// Bootstrap core
+@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/mixins'
+
+if ( !$gj-exclude-common-scaffolding )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/scaffolding'
+
+if ( !$gj-exclude-common-type )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/type'
+
+if ( !$gj-exclude-common-code )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/code'
+
+if ( !$gj-exclude-common-grid )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/grid'
+
+if ( !$gj-exclude-common-forms )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/forms'
+
+// Bootstrap components
+if ( !$gj-exclude-common-input-groups )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/input-groups'
+
+if ( !$gj-exclude-common-tables )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/tables'
+
+// Bootstrap utilities
+if ( !$gj-exclude-common-utilities )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/utilities'
+
+if ( !$gj-exclude-common-responsive-utilities )
+	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/responsive-utilities'
+
+// ----------------------------------------
+
+// Our common components.
+@import '../animation'
+@import './mixins'
+
+if ( !$gj-exclude-common-scaffolding )
+	@import './scaffolding'
+
+if ( !$gj-exclude-common-type )
+	@import './type'
+
+if ( !$gj-exclude-common-utilities )
+	@import './utilities'
+
+if ( !$gj-exclude-common-grid )
+	@import './grid'
+
+if ( !$gj-exclude-common-fills )
+	@import './fills'
+
+if ( !$gj-exclude-common-forms )
+	@import './forms'
+
+if ( !$gj-exclude-common-tables )
+	@import './tables'

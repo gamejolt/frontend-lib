@@ -1,0 +1,20 @@
+<div
+	ng-class="::{ 'growl-clickable': message.onclick, 'growl-has-icon': message.icon }"
+	ng-mouseover="onMouseover()"
+	ng-mouseout="onMouseout()"
+	ng-click="onClick( $event )"
+	>
+	<a class="growl-close" ng-click="remove( $event )">
+		<span class="jolticon jolticon-remove"></span>
+	</a>
+
+	<div class="growl-inner" gj-growl-message-templated="::!!message.scope">
+		<div class="growl-icon" ng-if="::message.icon">
+			<img class="img-responsive" ng-src="{{ ::message.icon }}" alt="">
+		</div>
+		<div class="growl-content">
+			<h4 ng-show="::message.title">{{ ::message.title }}</h4>
+			<p>{{ ::message.message }}</p>
+		</div>
+	</div>
+</div>

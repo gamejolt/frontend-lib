@@ -1,0 +1,104 @@
+<div ng-if="!ctrl.hasLoaded && !ctrl.hasError">
+	<h2 class="section-header">Comments</h2>
+	<gj-loading></gj-loading>
+</div>
+
+<div ng-if="ctrl.hasError">
+	<h2 class="section-header">Comments</h2>
+	<div class="alert alert-warning">Couldn't fetch comments for game.</div>
+</div>
+
+<div ng-if="ctrl.hasLoaded && !ctrl.hasError">
+	<h2 class="section-header">
+		<ng-pluralize
+			count="ctrl.commentsCount"
+			when="{ '0': 'No Comments Yet', 'one': '1 Comment', 'other': '{{ ctrl.commentsCount | number }} Comments' }">
+		</ng-pluralize>
+	</h2>
+
+	<div ng-if="!ctrl.commentsCount">
+		<p>
+			<em>Let us know your thoughts and be the first to comment!</em>
+		</p>
+		<br>
+	</div>
+
+	<!-- Comment Add Form -->
+	<div ng-if="App.user">
+		<gj-comment-widget-add-form
+			comment-resource="{{ ctrl.resource }}"
+			comment-resource-id="ctrl.resourceId"
+			gj-form-submit-handler="ctrl.onCommentAdd( formModel, false )"
+			>
+		</gj-comment-widget-add-form>
+	</div>
+
+	<div ng-if="!App.user">
+		<p>You must be <a ng-href="{{ ::ctrl.loginUrl }}" gj-track-event="comment-widget:login">logged in</a> to Game Jolt to post a comment.</p>
+	</div>
+
+	<hr>
+
+	<div class="text-center">
+		<gj-pagination
+			id="comment-pagination"
+			ng-if="ctrl.perPage && ctrl.parentCount"
+			items-per-page="ctrl.perPage"
+			total-items="ctrl.parentCount"
+			current-page="ctrl.currentPage"
+			query-param="comment_page"
+			on-page-change="ctrl.onPageChange( $event, $page )"
+			>
+		</gj-pagination>
+	</div>
+
+	<!-- Comments List -->
+	<div class="comment-widget-comments">
+		<div class="comment-widget-thread comment-widget-comment-animate"
+			ng-repeat="comment in ctrl.comments track by comment.id"
+			>
+
+			<!-- Comment -->
+			<div gj-comment-widget-comment="comment"></div>
+
+			<!-- Child Comments -->
+			<div ng-if="ctrl.childComments[ comment.id ]">
+
+				<div class="comment-widget-comment-animate"
+					ng-repeat="childComment in ctrl.childComments[ comment.id ] track by childComment.id"
+					gj-comment-widget-comment="childComment"
+					comment-is-child="true"
+					>
+				</div>
+
+			</div>
+
+			<!--
+				Don't include the form in the DOM until we need it.
+				When the if is triggered, the scroll-when will trigger and we'll scroll to
+				the reply box.
+			-->
+			<div ng-if="ctrl.replyingTo == comment.id" gj-scroll-when>
+				<gj-comment-widget-add-form
+					comment-resource="{{ ctrl.resource }}"
+					comment-resource-id="ctrl.resourceId"
+					comment-parent-id="comment.id"
+					gj-form-submit-handler="ctrl.onCommentAdd( formModel, true )"
+					>
+				</gj-comment-widget-add-form>
+			</div>
+		</div>
+	</div>
+
+	<div class="text-center">
+		<gj-pagination
+			ng-if="ctrl.perPage && ctrl.parentCount"
+			items-per-page="ctrl.perPage"
+			total-items="ctrl.parentCount"
+			current-page="ctrl.currentPage"
+			query-param="comment_page"
+			on-page-change="ctrl.onPageChange( $event, $page, true )"
+			>
+		</gj-pagination>
+	</div>
+</div>

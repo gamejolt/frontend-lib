@@ -1,0 +1,63 @@
+$toggle-switch-width = 100px
+
+.toggle-switch
+	display: block
+	overflow: hidden
+	width: $toggle-switch-width
+	height: $input-height-base
+	line-height: $line-height-base
+	border: 1px solid $input-border
+	vertical-align: top
+	transition: border-color ease-in-out 300ms
+	text-align: left
+	cursor: pointer
+	user-select: none
+	outline: none
+	white-space: nowrap
+
+	&-dragging
+		cursor: grabbing
+
+	&-inner
+		display: inline-block
+		width: 150%
+		height: 100%
+		transform: translate3d( -(100% / 3), 0, 0 )
+		transition: transform $strong-ease-out 300ms
+
+		.toggle-switch-checked &
+			transform: translate3d( 0, 0, 0 )
+
+		.toggle-switch-dragging &
+			transition: none
+
+	&-on
+	&-off
+	&-knob
+		display: inline-block
+		float: left
+		width: (100% / 3)
+		height: 100%
+		line-height: $input-height-base - 2px
+		font-size: $font-size-small
+		text-align: center
+		vertical-align: top
+
+	&-on
+		color: $gj-green
+		background-color: $gj-dark-green
+
+	&-off
+		color: $gray-light
+		background-color: $gray-lighter
+
+	&-knob
+		background-color: $gray-lightest
+
+	&:focus
+		border-color: $input-border-focus
+
+	&[disabled]
+		opacity: 0.5
+		border-color: $input-border
+		cursor: not-allowed !important

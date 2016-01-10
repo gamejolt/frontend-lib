@@ -1,0 +1,19 @@
+<div class="ad-video">
+	<h3 class="sans-margin">View ad. Be upset. Keep us running.</h3>
+	<p class="text-muted">This ad supports the developer! Hang tight, your {{ ctrl.resourceLabel }} will begin in {{ ctrl.timeRemaining | time }}...</p>
+
+	<div class="ad-video-player">
+		<div class="ad-video-player-play-overlay" ng-if="!ctrl.isAdPlaying" ng-click="ctrl.toggle()">
+			<div class="play-button-overlay">
+				<span class="jolticon jolticon-play"></span>
+			</div>
+		</div>
+		<gj-loading loading-big="true" class="loading-centered"></gj-loading>
+		<div class="ad-video-player-embed">
+			<video class="ad-video-player-embed-video">
+				<source src="/lib/gj-lib-client/components/ad/video/blank-video.mp4"></source>
+			</video>
+		</div>
+		<div class="ad-video-player-ad-container"></div>
+	</div>
+</div>

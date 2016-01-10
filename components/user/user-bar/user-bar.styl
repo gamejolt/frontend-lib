@@ -1,0 +1,29 @@
+.user-bar
+	$avatar-size = 40px
+	$avatar-size-xs = 30px
+
+	@media $media-xs
+		.container
+			padding-left: 0
+			padding-right: 0
+
+	&-user
+		padding-top: 10px !important
+		padding-bottom: 10px !important
+
+	&-avatar
+		display: inline-block
+
+		img
+			display: inline-block
+			width: $avatar-size-xs
+
+			@media $media-sm-up
+				width: $avatar-size
+
+	&-username
+		display: inline-block
+		margin-left: 10px
+
+		@media $media-mobile
+			display: none

@@ -1,0 +1,1 @@
+angular.module( 'gj.Jam.Stream', [ 'gj.Model', 'gj.Jam' ] );

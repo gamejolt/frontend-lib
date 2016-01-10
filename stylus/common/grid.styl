@@ -1,0 +1,30 @@
+.col-centered
+	float: none !important
+	margin: 0 auto
+
+@media $media-xs
+
+	// Make the container spacing on the sides smaller for small phones
+	.container
+	.container-fluid
+		padding-left: ($grid-gutter-width-xs / 2)
+		padding-right: ($grid-gutter-width-xs / 2)
+
+	// Smaller gutters for grid.
+	.row
+		margin-left: -($grid-gutter-width-xs / 2)
+		margin-right: -($grid-gutter-width-xs / 2)
+
+	// Horizontal form groups behave like rows.
+	.form-horizontal .form-group
+		margin-left: -($grid-gutter-width-xs / 2)
+		margin-right: -($grid-gutter-width-xs / 2)
+
+	$xs-col-properties {
+		padding-left: ($grid-gutter-width-xs / 2)
+		padding-right: ($grid-gutter-width-xs / 2)
+	}
+
+	for i in 1..$grid-columns
+		.col-xs-{i}, .col-sm-{i}, .col-md-{i}, .col-lg-{i}
+			@extend $xs-col-properties

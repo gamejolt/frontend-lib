@@ -1,0 +1,1 @@
+angular.module( 'gj.Jam.Organizer', [ 'gj.Model', 'gj.Jam' ] );

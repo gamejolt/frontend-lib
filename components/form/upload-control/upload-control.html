@@ -1,0 +1,44 @@
+<div class="form-upload-control"
+	ng-file-drop-available="dropSupported = true"
+	ng-class="{ 'form-upload-control-drop-target': dropSupported }"
+	ng-file-drag-over-class="form-upload-control-drop-active"
+	ng-file-drop="onFileSelect( $files )">
+
+	<input type="file" ng-file-select="onFileSelect( $files )" ng-show="!ngModel.$viewValue.length" accept="{{ accept }}">
+
+	<div class="form-upload-control-files" ng-show="ngModel.$viewValue.length && !progress">
+		<ul class="list-unstyled">
+
+			<li ng-repeat="file in ngModel.$viewValue">
+				<span class="form-upload-control-file-name">{{file.name}}</span>
+				<a class="i-button" ng-class="{ 'block big': Screen.isXs }" ng-click="clearFiles()">
+					<span class="jolticon jolticon-remove"></span>
+					Clear File
+				</a>
+			</li>
+
+		</ul>
+	</div>
+
+	<div class="progress" ng-if="progress !== false">
+		<div class="progress-bar" role="progressbar" ng-attr-aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: progress + '%' }">
+			<!-- TODO Remove this when upload queue system is in place -->
+			<span ng-if="progress < 99">
+				{{progress}}%
+			</span>
+			<span ng-if="progress >= 99">
+				Processing...
+			</span>
+		</div>
+	</div>
+
+	<!-- TODO Remove this when upload queue system is in place -->
+	<div ng-if="progress >= 99">
+		<br>
+		<div class="alert alert-info">
+			<p>
+				Upload complete! Please wait while we process your file. This may take a few minutes, so don't close or refresh the page.
+			</p>
+		</div>
+	</div>
+</div>

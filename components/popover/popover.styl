@@ -1,0 +1,136 @@
+$popover-border-color = $gray-light
+$popover-bg-color = $gray-lightest
+$popover-bg-color-dark = $gray-darkest
+$popover-arrow-size = 8px
+$popover-size = 400px
+$popover-spacing = 5px
+
+.popover
+	position: absolute
+	top: 0
+	left: 0
+	z-index: $zindex-popover
+	display: none
+	max-width: $popover-size
+	text-align: left // Reset given new insertion method
+	background-color: $popover-bg-color
+	background-clip: padding-box
+	border: 2px solid $popover-border-color
+	box-shadow 5px 5px 10px rgba( 0, 0, 0, 0.1 )
+
+	// Overrides for proper insertion
+	white-space: normal
+
+	// Mainly for testing.
+	// It just shows the popover in the page with no fanciness of hide/show.
+	&-in-place
+		position: relative
+		display: block
+		z-index: 1
+
+		.popover-content
+			max-height: none
+
+	&.active-add
+		@extend .anim-fade-in-up
+
+		// Make it a bit faster than normal on enter.
+		// This way they can interact with it sooner.
+		animation-duration: 250ms
+
+	&.active-remove
+		@extend .anim-fade-out-shrink
+		display: block  // Force it visible while removing.
+
+	// When active show it visible.
+	&.active
+		display: block
+
+	// Offset the popover to account for the popover arrow
+	&.top
+		margin-top: -3px
+		& > .arrow
+			caret( $popover-border-color, 'down', $popover-arrow-size )
+
+	&.right
+		margin-left: 3px
+		& > .arrow
+			caret( $popover-border-color, 'left', $popover-arrow-size )
+
+	&.bottom
+		margin-top: 3px
+		& > .arrow
+			caret( $popover-border-color, 'up', $popover-arrow-size )
+
+	&.left
+		margin-left: -3px
+		& > .arrow
+			caret( $popover-border-color, 'right', $popover-arrow-size )
+
+.popover-dark
+	@extend .fill-darkest
+	border: 0
+	background-color: $popover-bg-color-dark
+	padding: 2px
+
+	&.top > .arrow
+		caret( $popover-bg-color-dark, 'down', $popover-arrow-size )
+
+	&.right > .arrow
+		caret( $popover-bg-color-dark, 'left', $popover-arrow-size )
+
+	&.bottom > .arrow
+		caret( $popover-bg-color-dark, 'up', $popover-arrow-size )
+
+	&.left > .arrow
+		caret( $popover-bg-color-dark, 'right', $popover-arrow-size )
+
+.popover-no-collapse
+	@media $media-sm-up
+		width: $popover-size
+
+.popover-content
+	@extend .scrollable
+	max-height: 360px
+	min-width: 200px
+
+	> nav.pills > ul
+	> .i-button
+		margin-bottom: $popover-spacing
+
+	> nav.platform-list
+		margin-bottom: 0
+		margin-top: $popover-spacing * 2
+
+	.alert
+		margin-bottom: 0
+
+.popover-heading
+	margin: $popover-spacing
+	white-space: nowrap
+	font-weight: bold
+
+/**
+ * Mobile
+ */
+@media $media-xs
+
+	// Shade the body when we open the popover.
+	// We only show the backdrop on XS displays.
+	.popover-backdrop
+		position: fixed
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		background-color: #000
+		opacity: 0.6
+		z-index: 10
+
+	// Force it so that it takes up the width of the container.
+	.popover
+		border-left: 0
+		border-right: 0
+		left: 0 !important
+		right: 0 !important
+		max-width: none !important

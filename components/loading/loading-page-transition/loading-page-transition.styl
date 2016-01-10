@@ -1,0 +1,11 @@
+$loading-page-transition-opacity = 0.7
+$loading-page-transition-fade-in = 1.5s  // Slowly fade out while loading.
+$loading-page-transition-fade-out = 400ms  // Fade in faster than it faded out.
+
+.loading-page-transition
+	opacity: 1
+	transition: opacity $loading-page-transition-fade-out
+
+.loading-page-transitioning
+	opacity: $loading-page-transition-opacity
+	transition: opacity $loading-page-transition-fade-in

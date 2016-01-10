@@ -1,0 +1,24 @@
+.table
+	tr[ng-click]:hover td
+		background-color: $gray-lightest
+		cursor: pointer
+
+// Draggable table handles.
+td
+th
+	&.drag-handle
+		vertical-align: middle !important
+		background-color: $gray-lighter
+		cursor: move
+		user-select: none
+
+		> .jolticon
+			cursor: inherit
+			color: $black
+
+// Bootstrap's styling for tables requires the HTML structure to look like: .table > tbody > tr
+// When ui-tree creates the drag element it does so without the `tbody` element.
+// We need to basically copy the tbody styling onto the main table so it gets styled correctly when dragging.
+.angular-ui-tree-drag.table
+	@extend .table > tbody
+

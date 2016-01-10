@@ -1,0 +1,203 @@
+$i-button-size = 20px
+$i-button-icon-size = 16px
+$i-button-size-big = $input-height-base
+
+.i-button
+	display: inline-block
+	text-transform: uppercase
+	font-family: $font-family-tiny
+	font-size: $font-size-tiny
+	height: $i-button-size
+	padding: 0 4px
+	background-color: $gray
+	color: $white !important
+	line-height: $i-button-size
+	vertical-align: baseline
+	cursor: pointer
+	border: 0
+	outline: 0
+	white-space: nowrap
+	text-decoration: none !important
+	user-select: none
+
+	&:hover
+		text-decoration: none
+		cursor: pointer
+
+	&.disabled
+	&[disabled]
+	fieldset[disabled] &
+		box-shadow: none
+
+		&
+		.jolticon
+			cursor: not-allowed
+			cursor: not-allowed
+
+		&
+		&:hover
+			color: $gray-light !important
+			background-color: $gray !important
+
+	.jolticon
+		cursor: pointer
+		vertical-align: top
+		line-height: $i-button-size
+		color: $gj-green !important
+
+		// Jolticons normally have some horizontal spacing around them.
+		// i-buttons have horizontal padding, so remove the left margin
+		// from any jolticons so there's no space.
+		margin-left: 0
+
+	&.warning .jolticon
+		color: $gj-pink !important
+
+	.jolticon-addon
+		margin-left: 5px
+		color: $gray-light !important
+
+	small
+		font-weight: normal
+		font-size: $font-size-tiny
+		color: $gray-lighter
+
+	/**
+	 * Big i-buttons
+	 */
+	&.big
+		padding: 0 15px
+		height: $i-button-size-big
+		font-family: $font-family-heading
+		line-height: $i-button-size-big
+		font-size: 13px
+		font-weight: bold
+
+		.jolticon
+			margin: 0 7px 0 0
+			line-height: $i-button-size-big
+
+		.jolticon-addon
+			margin: 0
+			margin-left: 5px
+			color: $gray-light !important
+
+	/**
+	 * Sparse i-buttons
+	 */
+	&.sparse
+		padding-left: (($i-button-size - $i-button-icon-size) / 2)
+		padding-right: @padding-left
+
+		.jolticon
+			margin-left: 0
+			margin-right: 0
+
+		// Big and sparse.
+		&.big
+			padding-left: (($i-button-size-big - $i-button-icon-size) / 2)
+			padding-right: @padding-left
+
+	/**
+	 * Light i-buttons
+	 */
+	&.light
+		background-color: $gray-lighter
+
+		.jolticon
+			color: $gray !important
+
+		&.disabled
+		&[disabled]
+		fieldset[disabled] &
+			background-color: $gray-lightest !important
+
+			&
+			.jolticon
+				color: $gray-lighter !important
+
+	/**
+	 * Transparent i-buttons
+	 */
+	&.trans
+		background-color: transparent
+
+		.jolticon
+			color: $gray !important
+
+	/**
+	 * Block i-buttons
+	 */
+	&.block
+		display: block
+		width: 100%
+		text-align: center
+
+	&.block + &.block
+		margin-top: 5px
+
+	/**
+	 * Hovers/active states
+	 * Keep it last so that the other types of i-buttons can override.
+	 */
+	&:hover
+	&.active
+		background-color: $gj-dark-green !important
+		color: $gj-green !important
+
+		.jolticon
+		small
+			color: $gj-green !important
+
+/**
+ * Form button styling.
+ */
+
+input[type="submit"].i-button
+input[type="reset"].i-button
+input[type="button"].i-button
+button.i-button
+
+	// Make them the same size as inputs.
+	height: $input-height-base
+	line-height: $input-height-base
+	padding: 0 15px 0 15px
+
+	// Same font as .big buttons.
+	font-family: $font-family-heading
+	font-size: 13px
+	font-weight: bold
+
+	// Make sure the jolticon is spaced out nicer
+	// as well as being the correct color.
+	.jolticon
+		margin: 0 7px 0 0
+		cursor: pointer
+		line-height: $input-height-base
+
+	&:focus
+		@extend .i-button.active
+
+	&.disabled
+	&[disabled]
+	fieldset[disabled] &
+		&
+		.jolticon
+			color: $gray-light !important
+
+	&.sparse
+		line-height: $i-button-size
+		height: @line-height
+
+		.jolticon
+			line-height: $i-button-size
+
+	&.sparse.big
+		height: $input-height-base
+		line-height: $input-height-base
+
+		padding-left: (($input-height-base - $i-button-icon-size) / 2)
+		padding-right: @padding-left
+
+		.jolticon
+			line-height: $input-height-base

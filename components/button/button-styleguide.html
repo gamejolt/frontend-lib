@@ -1,0 +1,291 @@
+<section class="section" id="styleguide-button">
+	<h1 class="section-header">Buttons</h1>
+
+	<h3>Regular</h3>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<h3>Outline</h3>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<h3>Without Icons</h3>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" ng-class="::btnClass">
+				Save Game
+			</a>
+		</span>
+	</div>
+	<br>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" ng-class="::btnClass">
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<h3>Button Classes</h3>
+	<p>You can use these on various tags that you may want to style as buttons.</p>
+
+	<div>
+		<a class="btn btn-outline">
+			<span class="jolticon jolticon-chevron-right"></span>
+			A Tag
+		</a>
+		<button class="btn btn-success-outline">
+			<span class="jolticon jolticon-chevron-right"></span>
+			Button Tag
+		</button>
+		<input type="submit" class="btn btn-primary-outline" value="Input Tag as Submit">
+		<input type="button" class="btn btn-danger-outline" value="Input Tag as Button">
+	</div>
+
+	<h3>Dark Variant</h3>
+	<p>You can also force the dark variant for use on dark backgrounds. This only affects outline buttons.</p>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn btn-dark-variant" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<h3>Overlay Variant</h3>
+	<p>Similar to dark variant, but shades in the background color a bit. Useful for overlaying images.</p>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn btn-overlay-variant" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<h3>In Fills</h3>
+	<p>Darker fills will automatically get the dark variant styling.</p>
+
+	<div class="well fill-dark">
+
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<p>Lighter fills will keep the default styling.</p>
+
+	<div class="well fill-lighter">
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<div class="well fill-lighter">
+		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" ng-class="btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<h3>Active State</h3>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn active" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+	<br>
+
+	<p>Active states for outline buttons look the same as normal buttons.</p>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn active" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+	<br>
+
+	<p>In daker fills they will look different, though...</p>
+
+	<div class="well fill-dark">
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn active" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+	<h3>Sparse</h3>
+	<p>Can be used for icon-only buttons.</p>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn btn-sparse" ng-class="::btnClass">
+				<span class="jolticon jolticon-ellipsis-h"></span>
+			</a>
+		</span>
+	</div>
+	<br>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn btn-sparse" ng-class="::btnClass">
+				<span class="jolticon jolticon-ellipsis-h"></span>
+			</a>
+		</span>
+	</div>
+
+	<h3>Inner Styling</h3>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" ng-class="::btnClass">
+				<span class="jolticon jolticon-download"></span>
+				Download
+				<small>12MB</small>
+				<span class="jolticon jolticon-linux jolticon-addon"></span>
+			</a>
+		</span>
+	</div>
+	<br>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" ng-class="::btnClass">
+				<span class="jolticon jolticon-download"></span>
+				Download
+				<small>12MB</small>
+				<span class="jolticon jolticon-linux jolticon-addon"></span>
+			</a>
+		</span>
+	</div>
+	<br>
+
+	<div class="well fill-dark">
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" ng-class="::btnClass">
+				<span class="jolticon jolticon-download"></span>
+				Download
+				<small>12MB</small>
+				<span class="jolticon jolticon-linux jolticon-addon"></span>
+			</a>
+		</span>
+	</div>
+
+	<h3>Block Buttons</h3>
+
+	<div>
+		<a class="btn btn-block">
+			<span class="jolticon jolticon-chevron-right"></span>
+			Block Button
+		</a>
+		<a class="btn btn-block btn-outline">
+			<span class="jolticon jolticon-chevron-right"></span>
+			Block Outline Button
+		</a>
+	</div>
+
+	<h3>Button Sizing</h3>
+
+	<div>
+		<a class="btn btn-sm btn-block">
+			<span class="jolticon jolticon-chevron-right"></span>
+			.btn-sm
+		</a>
+		<br>
+		<a class="btn btn-sm">
+			<span class="jolticon jolticon-chevron-right"></span>
+			.btn-sm
+		</a>
+		<a class="btn btn-sm btn-sparse">
+			<span class="jolticon jolticon-chevron-right"></span>
+		</a>
+		<a class="btn btn-sm btn-outline">
+			<span class="jolticon jolticon-chevron-right"></span>
+			.btn-sm
+		</a>
+		<a class="btn btn-sm btn-outline btn-sparse">
+			<span class="jolticon jolticon-chevron-right"></span>
+		</a>
+	</div>
+	<br>
+
+	<div>
+		<a class="btn btn-lg btn-block">
+			<span class="jolticon jolticon-chevron-right"></span>
+			.btn-lg
+		</a>
+		<br>
+		<a class="btn btn-lg">
+			<span class="jolticon jolticon-chevron-right"></span>
+			.btn-lg
+		</a>
+		<a class="btn btn-lg btn-sparse">
+			<span class="jolticon jolticon-chevron-right"></span>
+		</a>
+		<a class="btn btn-lg btn-outline">
+			<span class="jolticon jolticon-chevron-right"></span>
+			.btn-lg
+		</a>
+		<a class="btn btn-lg btn-outline btn-sparse">
+			<span class="jolticon jolticon-chevron-right"></span>
+		</a>
+	</div>
+
+	<h3>Disabled State</h3>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn disabled" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+	<br>
+
+	<div>
+		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn disabled" ng-class="::btnClass">
+				<span class="jolticon jolticon-chevron-right"></span>
+				Save Game
+			</a>
+		</span>
+	</div>
+
+</section>

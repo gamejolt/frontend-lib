@@ -1,0 +1,121 @@
+<section class="section" id="styleguide-progress-bar">
+
+	<h1 class="section-header">Progress Bars</h1>
+
+	<div class="progress">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<p><code>.progress-darker</code></p>
+
+	<div class="progress progress-darker">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<p><code>.progress-danger</code></p>
+
+	<div class="progress progress-danger">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<p><code>.progress-success</code></p>
+
+	<div class="progress progress-success">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<h3>Thin</h3>
+
+	<div class="progress progress-thin">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-thin progress-darker">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-thin progress-danger">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-thin progress-success">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<h3>Content Inside</h3>
+	<p>You can put content inside progress bars.</p>
+
+	<div class="progress">
+		<div class="progress-bar" style="width: 30%">30%</div>
+	</div>
+
+	<div class="progress progress-darker">
+		<div class="progress-bar" style="width: 30%">30%</div>
+	</div>
+
+	<div class="progress progress-danger">
+		<div class="progress-bar" style="width: 30%">30%</div>
+	</div>
+
+	<div class="progress progress-success">
+		<div class="progress-bar" style="width: 30%">30%</div>
+	</div>
+
+	<h3>Animated Progress</h3>
+	<p>Progress bars will automatically animate as they fill up.</p>
+
+	<div class="progress" ng-init="progress = 0">
+		<div class="progress-bar" ng-style="{ width: progress + '%' }">{{ progress }}%</div>
+	</div>
+
+	<button class="btn btn-outline" ng-click="progress = progress + 10 > 100 ? 0 : progress + 10">
+		Increase Progress
+	</button>
+
+	<h3>Striped</h3>
+	<p>Currently doesn't look so great on Firefox. Should use thin versions in most places.</p>
+
+	<div class="progress progress-striped">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-striped progress-darker">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-striped progress-danger">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-striped progress-success">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-striped progress-thin">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-striped progress-thin progress-darker">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-striped progress-thin progress-danger">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<div class="progress progress-striped progress-thin progress-success">
+		<div class="progress-bar" style="width: 30%"></div>
+	</div>
+
+	<h3>Animated Stripes</h3>
+	<p>You can add an <code>.active</code> class to animate stripes and indicate an indeterminate state.</p>
+
+	<div class="progress progress-striped active">
+		<div class="progress-bar" style="width: 100%"></div>
+	</div>
+
+	<div class="progress progress-thin progress-striped active">
+		<div class="progress-bar" style="width: 100%"></div>
+	</div>
+
+</section>

@@ -1,0 +1,76 @@
+$progress-bg = $gray-lightest
+$progress-bar-bg = $gj-blue
+$progress-bar-color = $gray-dark
+
+$progress-darker-bg = $gray-darker
+
+$progress-danger-bg = $gray-darker
+$progress-bar-danger-bg = $gj-pink
+$progress-bar-danger-color = $white
+
+$progress-green-bg = $gray-darker
+$progress-bar-green-bg = $gj-green
+$progress-bar-green-color = $gray
+
+@keyframes progress-bar-stripes
+	from
+		background-position: 40px 0
+	to
+		background-position: 0 0
+
+.progress
+	overflow: hidden
+	height: $line-height-computed
+	margin-bottom: $line-height-computed
+	background-color: $progress-bg
+
+.progress-bar
+	float: left
+	width: 0%
+	height: 100%
+	font-size: $font-size-small
+	line-height: $line-height-computed
+	color: $progress-bar-color
+	text-align: center
+	background-color: $progress-bar-bg
+	transition: width 600ms ease
+
+.progress-bar + .progress-bar
+	border-left: 1px solid $progress-bg
+
+.progress-darker
+	background-color: $progress-darker-bg
+
+	.progress-bar
+		border-color: $progress-darker-bg
+
+.progress-danger
+	background-color: $progress-danger-bg
+
+	.progress-bar
+		background-color: $progress-bar-danger-bg
+		color: $progress-bar-danger-color
+		border-color: $progress-danger-bg
+
+.progress-success
+.progress-green  // Deprecated class.
+	background-color: $progress-green-bg
+
+	.progress-bar
+		background-color: $progress-bar-green-bg
+		color: $progress-bar-green-color
+		border-color: $progress-green-bg
+
+.progress-thin
+	&
+	.progress-bar
+		height: 5px
+
+.progress-striped .progress-bar
+.progress-bar.progress-striped
+	background-image: linear-gradient( 45deg, $gray 25%, transparent 25%, transparent 50%, $gray 50%, $gray 75%, transparent 75%, transparent )
+	background-size: 40px 40px
+
+.progress.active .progress-bar
+.progress-bar.active
+	animation: progress-bar-stripes 2s linear infinite

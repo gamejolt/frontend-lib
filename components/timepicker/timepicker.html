@@ -1,0 +1,26 @@
+<table class="timepicker">
+	<tbody>
+		<tr class="text-center">
+			<td><a ng-click="incrementHours()" class="timepicker-link"><span class="jolticon jolticon-chevron-up big"></span></a></td>
+			<td>&nbsp;</td>
+			<td><a ng-click="incrementMinutes()" class="timepicker-link"><span class="jolticon jolticon-chevron-up big"></span></a></td>
+			<td ng-show="showMeridian"></td>
+		</tr>
+		<tr>
+			<td style="width: 50px;" class="form-group no-animate">
+				<input type="text" ng-model="hours" ng-change="updateHours()" class="form-control text-center" ng-class="{ 'ng-invalid': invalidHours }" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2">
+			</td>
+			<td>:</td>
+			<td style="width: 50px;" class="form-group no-animate">
+				<input type="text" ng-model="minutes" ng-change="updateMinutes()" class="form-control text-center" ng-class="{ 'ng-invalid': invalidMinutes }" ng-readonly="readonlyInput" maxlength="2">
+			</td>
+			<td ng-show="showMeridian"><button type="button" class="timepicker-btn text-center" ng-click="toggleMeridian()">{{meridian}}</button></td>
+		</tr>
+		<tr class="text-center">
+			<td><a ng-click="decrementHours()" class="timepicker-link"><span class="jolticon jolticon-chevron-down big"></span></a></td>
+			<td>&nbsp;</td>
+			<td><a ng-click="decrementMinutes()" class="timepicker-link"><span class="jolticon jolticon-chevron-down big"></span></a></td>
+			<td ng-show="showMeridian"></td>
+		</tr>
+	</tbody>
+</table>

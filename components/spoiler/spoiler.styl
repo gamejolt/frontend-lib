@@ -1,0 +1,72 @@
+.spoiler
+	$fade-in-time = 0.7s
+	$fade-in-delay = 0.3s
+	$fade-out-time = 0.3s
+	$easing = ease-in
+
+	position: relative
+	transition: color $fade-out-time $easing
+	color: $gray-lightest
+	background-color: $gray-lightest
+	font-size: $font-size-base
+	border-left: 0
+
+	&::before
+		content: 'Spoiler'
+		position: absolute
+		top: 2px
+		right: 5px
+		font-size: $font-size-tiny
+		text-transform: uppercase
+		color: $text-muted
+
+	a
+		color: $gray-lightest
+		transition: color $fade-out-time $easing
+
+	img
+	.emoji
+		opacity: 0
+		transition: opacity $fade-out-time $easing
+
+	code
+	pre
+		color: $gray-lightest
+		background-color: $gray-lightest
+		border: 0
+		transition: color $fade-out-time $easing, background-color $fade-out-time $easing
+
+	&:hover
+		color: $text-color
+		transition-duration: $fade-in-time
+		transition-delay: $fade-in-delay
+
+		a
+			color: $link-color
+			transition-duration: $fade-in-time
+			transition-delay: $fade-in-delay
+
+			&:hover
+				transition: none
+				color: $link-hover-color
+
+		// Gotta make it a bit darker than usual.
+		code
+			color: $gray-darker
+			background-color: $gray-lighter
+			transition-duration: $fade-in-time
+			transition-delay: $fade-in-delay
+
+		pre
+			&
+			& code
+				color: $pre-color
+				background-color: $pre-bg
+				transition-duration: $fade-in-time
+				transition-delay: $fade-in-delay
+
+		img
+		.emoji
+			opacity: 1
+			transition-duration: $fade-in-time
+			transition-delay: $fade-in-delay

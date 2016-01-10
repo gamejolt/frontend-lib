@@ -1,0 +1,27 @@
+<div class="modal-header-controls">
+	<button class="i-button" ng-click="modalCtrl.minimize()" ng-if="modalCtrl.canMinimize">
+		<span class="jolticon jolticon-minimize"></span>
+		Minimize
+	</button>
+	<button class="i-button warning" ng-click="modalCtrl.close()">
+		<span class="jolticon jolticon-remove"></span>
+		Close
+	</button>
+</div>
+
+<div class="modal-body">
+
+	<gj-ad-video
+		ng-if="!modalCtrl.adShown"
+		ad-resource="Game"
+		ad-resource-id="modalCtrl.build.game_id"
+		event-tracking-label="Pre-Roll - Browser"
+		on-ad-shown="modalCtrl.onAdShown()">
+	</gj-ad-video>
+
+	<div gj-game-play-modal-embed
+		ng-if="modalCtrl.adShown"
+		gj-build="modalCtrl.build">
+	</div>
+
+</div>
