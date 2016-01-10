@@ -155,7 +155,9 @@ angular.module( 'gj.Payload' ).service( 'Payload', function( App, Environment, $
 				}
 
 				// Payload's version is different than our version?
-				if ( !options.ignorePayloadVersion ) {
+				// We ignore completely if we're in the client.
+				// We don't want the client refreshing when an update to site is pushed out.
+				if ( !options.ignorePayloadVersion && !Environment.isClient ) {
 					if ( data.ver != App.ver ) {
 
 						// If we didn't have a version, then it's the first payload.
