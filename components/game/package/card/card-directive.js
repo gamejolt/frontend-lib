@@ -177,13 +177,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 						support.forEach( function( _os )
 						{
 							indexedBuilds[ _os ] = build;
-
-							// Skip 64-bit builds for the global support icons.
-							if ( this.supportInfo[ _os ].arch == '64' ) {
-								return;
-							}
-
-							this.support.push( _os );
+							this.support.push( this.supportInfo[ _os ].icon );
 						}, this );
 					}
 				}, this );
