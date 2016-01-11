@@ -137,12 +137,17 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 
 	Notification.prototype.go = function()
 	{
-		// Form posts need to open in new window for now.
+		// Forum posts need to open in new window for now.
 		if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
-			$window.open( this.url );
+			if ( Environment.isClient ) {
+				require( 'nw.gui' ).Shell.openExternal( this.url );
+			}
+			else {
+				$window.open( this.url );
+			}
 		}
 		else if ( this.url ) {
-			$location.url( this.url );
+			$location.url( this.url.replace( '#!', '' ) );
 		}
 		// Comments need to fetch the URL first.
 		else if ( this.type == Notification.TYPE_COMMENT_ADD || this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
@@ -151,13 +156,18 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 				{
 					// If we're going to a URL within this domain, then we want to strip off the domain stuff
 					// and go to the URL. Otherwise we need to do a full-page change to the domain/url.
-					var search = $location.protocol() + '://' + $location.host();
+					var search = Environment.baseUrl;
 					if ( url.search( search ) === 0 ) {
 						url = url.replace( search, '' );
 						$location.url( url );
 					}
 					else {
-						$window.location = url;
+						if ( Environment.isClient ) {
+							require( 'nw.gui' ).Shell.openExternal( url );
+						}
+						else {
+							$window.location = url;
+						}
 					}
 				} )
 				.catch( function()
