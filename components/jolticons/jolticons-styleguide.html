@@ -1,9 +1,9 @@
 <section class="section" id="styleguide-jolticons">
-	
+
 	<h1 class="section-header">Jolticons</h1>
-	
+
 	<p>Add a jolticon by making a <code>span</code> element with a <code>.jolticon</code> class and the identifier of your choice.</p>
-	
+
 	<div class="row">
 		<div class="col-xs-2 text-center"
 			ng-repeat="jolticon in [
@@ -158,11 +158,11 @@
 				'add',
 				'active'
 			]">
-			<p gj-tooltip="'.jolticon-' + jolticon">
+			<p tooltip=".jolticon-{{ jolticon }}">
 				<span class="jolticon jolticon-{{ jolticon }} big"></span>
 			</p>
 		</div>
-		
+
 	</div>
-	
+
 </section>

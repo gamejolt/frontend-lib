@@ -36,7 +36,7 @@
 			-->
 			<a class="comment-widget-comment-voting"
 				ng-if="::canVote"
-				gj-tooltip="votingTooltip"
+				gj-tooltip="{{ votingTooltip }}"
 				ng-click="onVoteClick()"
 				gj-track-event="comment-widget:vote-click"
 				>
@@ -58,7 +58,7 @@
 			<span class="blip light no-caret"
 				ng-if="::!canVote"
 				ng-class="{ filled: comment.votes || comment.votes != '0' }"
-				gj-tooltip="votingTooltip"
+				gj-tooltip="{{ votingTooltip }}"
 				gj-track-event="comment-widget:vote-click-notallowed"
 				>
 
@@ -83,13 +83,22 @@
 				<span class="dot-separator"></span>
 
 				<a
+					ng-if="!ctrl.subscriptions[ comment.id ]"
 					ng-click="onFollowClick()"
-					gj-tooltip="ctrl.subscriptions[ comment.id ] ? null : 'Get notifications when people post new replies to this thread.'"
-					ng-class="{ following: ctrl.subscriptions[ comment.id ] }"
+					gj-tooltip="Get notifications when people post new replies to this thread."
 					gj-track-event="comment-widget:follow-click"
 					>
-					<span class="jolticon" ng-class="ctrl.subscriptions[ comment.id ] ? 'jolticon-subscribed' : 'jolticon-subscribe'"></span>
-					{{ ctrl.subscriptions[ comment.id ] ? 'Stop Following' : 'Follow Thread' }}
+					<span class="jolticon jolticon-subscribe"></span>
+					Follow Thread
+				</a>
+
+				<a class="following"
+					ng-if="ctrl.subscriptions[ comment.id ]"
+					ng-click="onFollowClick()"
+					gj-track-event="comment-widget:follow-click"
+					>
+					<span class="jolticon jolticon-subscribed"></span>
+					Stop Following
 				</a>
 			</span>
 

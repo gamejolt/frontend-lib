@@ -1,3 +1,6 @@
+- gj-translate now takes an interpolated attr instead of a parsed one:
+  "string {{ var }}" instead of "'string' + var"
+
 - Upgrade
 	"gulp-stylus": "2.0.5",
     "stylus": "0.53.0",

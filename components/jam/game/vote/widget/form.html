@@ -11,7 +11,7 @@
 		<div class="form-group" ng-repeat="category in votingCategories track by category.id">
 			<label class="col-sm-4 control-label">
 				{{ ::category.name }}
-				<span ng-if="::category.description" class="muted-help jolticon jolticon-help-circle" gj-tooltip="category.description"></span>
+				<span ng-if="::category.description" class="muted-help jolticon jolticon-help-circle" tooltip="{{ category.description }}"></span>
 			</label>
 			<div class="col-sm-8">
 				<label class="radio-inline" ng-class="{ active: !formModel.votes[category.id] }">
