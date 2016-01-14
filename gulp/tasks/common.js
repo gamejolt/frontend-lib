@@ -21,7 +21,8 @@ module.exports = function( config )
 
 	config.sections.push( 'app' );
 
-	config.buildDir = config.production ? 'build/prod' : 'build/dev';
+	config.buildBaseDir = process.env.BUILD_DIR || './';
+	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
 	config.libDir = 'src/lib/';
 	config.gjLibDir = 'src/lib/gj-lib-client/';
 	config.bowerDir = 'src/bower-lib/';

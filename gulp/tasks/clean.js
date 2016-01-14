@@ -7,13 +7,13 @@ module.exports = function( config )
 	gulp.task( 'clean:pre', function()
 	{
 		return gulp.src( config.buildDir, { read: false } )
-			.pipe( plugins.clean() );
+			.pipe( plugins.clean( { force: true } ) );
 	} );
 
 	// Clean out the tmp direction post build.
 	gulp.task( 'clean:post', function()
 	{
 		return gulp.src( config.buildDir + '/tmp', { read: false } )
-			.pipe( plugins.clean() );
+			.pipe( plugins.clean( { force: true } ) );
 	} );
 };
