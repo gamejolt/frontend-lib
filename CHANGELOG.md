@@ -1,4 +1,4 @@
-- gj-translate now takes an interpolated attr instead of a parsed one:
+- gj-tooltip now takes an interpolated attr instead of a parsed one:
   "string {{ var }}" instead of "'string' + var"
 
 - Upgrade
