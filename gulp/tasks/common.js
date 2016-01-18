@@ -15,9 +15,8 @@ module.exports = function( config )
 	// You can pass this flag in to include the dev environment config for angular instead.
 	config.developmentEnv = argv.development || false;
 
-	if ( !config.sections ) {
-		config.sections = [];
-	}
+	config.sections = config.sections || [];
+	config.translationSections = config.translationSections || [];
 
 	config.sections.push( 'app' );
 
@@ -33,6 +32,7 @@ module.exports = function( config )
 	require( './fonts.js' )( config );
 	require( './markdown.js' )( config );
 	require( './images.js' )( config );
+	require( './translations.js' )( config );
 	require( './inject.js' )( config );
 	require( './clean.js' )( config );
 	require( './watch.js' )( config );
@@ -56,7 +56,7 @@ module.exports = function( config )
 
 	gulp.task( 'default', function( callback )
 	{
-		return sequence( 'clean:pre', 'pre', [ 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ], 'inject', 'post', 'clean:post', callback );
+		return sequence( 'clean:pre', 'pre', [ 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ], 'translations:compile', 'inject', 'post', 'clean:post', callback );
 	} );
 
 	gulp.task( 'update-lib', shell.task( [

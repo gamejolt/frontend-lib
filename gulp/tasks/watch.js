@@ -44,10 +44,6 @@ module.exports = function( config )
 			config.gjLibDir + 'components/**/*.html',  // For any compiled templates, like angular-ui-bootstrap.
 		];
 
-		if ( config.translations ) {
-			jsPaths.push( 'src/lib/' + config.translations + '/**/*.toml' );
-		}
-
 		gulp.watch(
 			jsPaths,
 			[ 'js' ]

@@ -6,11 +6,6 @@ var path = require( 'path' );
 
 module.exports = function( config )
 {
-	function escapeForRegExp( str )
-	{
-		return str.replace( /[-\/\\^$*+?.()|[\]{}]/g, '\\$&' );
-	}
-
 	gulp.task( 'inject', function()
 	{
 		if ( config.production && !config.noInject ) {

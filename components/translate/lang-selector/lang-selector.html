@@ -1,0 +1,3 @@
+<select class="translate-lang-selector form-control" ng-model="ctrl.lang" ng-change="ctrl.onLangChange( ctrl.lang )">
+	<option ng-repeat="lang in ctrl.langs | orderBy:'label'" value="{{ lang.code }}">{{ lang.label }}</option>
+</select>
