@@ -195,7 +195,7 @@ module.exports = function( config )
 	{
 		sectionTasks.push( 'js:' + section );
 
-		gulp.task( 'js:' + section, [ 'html2js:' + section + ':components', 'js:translations:app' ], function()
+		gulp.task( 'js:' + section, [ 'html2js:' + section + ':components' ], function()
 		{
 			// We don't include any app files that are being built into a separate module.
 			var excludeApp = [];
@@ -250,9 +250,6 @@ module.exports = function( config )
 
 					// Pull in component template files if they were built.
 					gulp.src( [ config.buildDir + '/tmp/' + section + '-component-templates/**/*.html.js' ] ),
-
-					// Pull in main translation file.
-					gulp.src( [ config.buildDir + '/tmp/translations/main.js' ] ),
 
 					// Now pull in the development file if we're running a development environment build.
 					gulp.src( [ (config.developmentEnv ? 'src/' + section + '/app-development.js' : '') ] )
@@ -415,51 +412,5 @@ module.exports = function( config )
 					}
 	} );
 
-	/**
-	 * This one sets up a config block to include the app's main translation file.
-	 * It should be included by the app.js compiler.
-	 */
-	gulp.task( 'js:translations:app', function()
-	{
-		if ( config.translations ) {
-			return gulp.src( [
-					'src/lib/' + config.translations + '/en/main.toml',
-				] )
-				.pipe( plugins.newer( config.buildDir + '/tmp/translations/main.js' ) )
-				.pipe( plugins.toml() )
-				.pipe( plugins.wrapper( {
-					header: 'angular.module( "App" ).config( [ "$translatePartialLoaderProvider", function( a ) { a.setPart( "en", "main", ',
-					footer: ').addPart( "main" ); } ] );',
-				} ) )
-				.pipe( plugins.rename( 'main.js' ) )
-				.pipe( plugins.size( { gzip: true, title: 'js:translation:main' } ) )
-				.pipe( gulp.dest( config.buildDir + '/tmp/translations' ) )
-				.pipe( plugins.connect.reload() );
-		}
-	} );
-
-	/**
-	 * This creates individual .json files for translating modules.
-	 */
-	gulp.task( 'js:translations:modules', function()
-	{
-		if ( config.translations ) {
-			return gulp.src( [
-					'src/lib/' + config.translations + '/**/*.toml',
-					'!src/lib/' + config.translations + '/**/main.toml',
-				] )
-				.pipe( plugins.newer( {
-					dest: config.buildDir + '/app/translations',
-					ext: '.json'
-				} ) )
-				.pipe( plugins.toml() )
-				.pipe( plugins.size( { gzip: true, title: 'js:translation:modules', showFiles: true } ) )
-				.pipe( gulp.dest( config.buildDir + '/app/translations' ) )
-				.pipe( plugins.connect.reload() );
-		}
-	} );
-
-	gulp.task( 'js:translations', [ 'js:translations:modules' ] );
-
-	gulp.task( 'js', [ 'js:vendor', 'js:translations', 'js:sections', 'js:modules', 'js:node:app' ] );
+	gulp.task( 'js', [ 'js:vendor', 'js:sections', 'js:modules', 'js:node:app' ] );
 };

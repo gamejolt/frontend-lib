@@ -1,83 +1,69 @@
-angular.module( 'gj.Translate' ).service( 'Translate', function( $q, $translate, $injector, $window )
+angular.module( 'gj.Translate' ).provider( 'Translate', function()
 {
-	// Do it through injector so no circular reference.
-	var App = $injector.get( 'App' );
+	var provider = this;
+	var languageUrls = {};
+	var LANG_STORAGE_KEY = 'lang';
 
-	/**
-	 * TODO: Check to see if this eventually loads in too much data? If .then() doesn't GC the old handlers.
-	 */
-	var _promise = $q.when();
-
-	/**
-	 * Adds partial parts to the translate service.
-	 */
-	this.addParts = function()
+	provider.addLanguageUrls = function( urls )
 	{
-		var $translatePartialLoader = $injector.get( '$translatePartialLoader' );
-		angular.forEach( arguments, function( translationKey )
-		{
-			$translatePartialLoader.addPart( translationKey );
-		} );
-		_promise = $translate.refresh();
-		return _promise;
+		languageUrls = urls;
 	};
 
-	/**
-	 * Convenience method to set the page title from a translation label.
-	 */
-	this.pageTitle = function( label, params )
+	this.$get = function( $q, $injector, $window, gettextCatalog )
 	{
-		_promise.then( function()
-		{
-			$translate( label, params ).then( function( title )
-			{
-				App.title = title;
-			} );
-		} );
-	};
+		var Translate = {};
 
-	/**
-	 * Returns a random message for a particular translation label.
-	 */
-	this.randomMessage = function( label )
-	{
-		return _promise.then( function()
-		{
-			return $translate( label + '_count' ).then( function( count )
-			{
-				count = parseInt( count, 10 );
-				var messageIndex = $window._.random( 1, count );
-				return label + '_' + messageIndex;
-			} );
-		} );
-	};
+		var sections = [];
+		var loaded = {};
 
-	/**
-	 * Convenience method to send a Growl based on a translation label.
-	 * Note that it can't do the more complicated stuff, but should be fine for
-	 * most Growl usages.
-	 */
-	this.growl = function( type, label, params )
-	{
-		_promise.then( function()
-		{
-			$translate( [ label + '_growl', label + '_growl_title' ], params ).then( function( messages )
-			{
-				// Title is optional.
-				var title = undefined;
-				if ( messages[ label + '_growl_title' ] != label + '_growl_title' ) {
-					title = messages[ label + '_growl_title' ];
-				}
+		Translate.lang = localStorage.getItem( LANG_STORAGE_KEY ) || 'en_US';
 
-				$injector.get( 'Growls' ).add(
-					type,
-					{
-						title: title,
-						message: messages[ label + '_growl' ],
-						sticky: params && params._sticky ? true : false,
-					}
-				);
+		gettextCatalog.setCurrentLanguage( Translate.lang );
+
+		Translate.loadSection = function( section, lang )
+		{
+			lang = lang || Translate.lang;
+
+			if ( !languageUrls[ section ] ) {
+				throw new Error( 'Tried loading invalid section for translations.' );
+			}
+
+			if ( !languageUrls[ section ][ lang ] ) {
+				throw new Error( 'Tried loading invalid language for translations.' );
+			}
+
+			if ( sections.indexOf( section ) === -1 ) {
+				sections.push( section )
+			}
+
+			// Only load each section once per language.
+			if ( loaded[ lang + section ] ) {
+				return $q.resolve();
+			}
+
+			loaded[ lang + section ] = true;
+
+			return gettextCatalog.loadRemote( languageUrls[ section ][ lang ] );
+		};
+
+		Translate.setLanguage = function( lang )
+		{
+			localStorage.setItem( LANG_STORAGE_KEY, lang );
+			Translate.lang = lang;
+
+			// Gotta change all our current sections loaded in to the new language before
+			// we can set it in the UI.
+			var loadSections = sections.map( function( section )
+			{
+				return Translate.loadSection( section, lang );
 			} );
-		} );
+
+			return $q.all( loadSections ).then( function()
+			{
+				gettextCatalog.setCurrentLanguage( lang );
+			} );
+		};
+
+		return Translate;
 	};
 } );
