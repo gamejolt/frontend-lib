@@ -1,4 +1,4 @@
-angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $log, $window, $location, $document, $timeout, App, Environment )
+angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $log, $window, $location, $document, $timeout, $q, App, Environment )
 {
 	var _this = this;
 	this.extraTrackers = [];
@@ -47,120 +47,172 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 		return true;
 	}
 
+	// We use this to make sure that any callbacks will be called within 1s if analytics
+	// is being unresponsive.
+	function wrapTimeout( callback )
+	{
+		var called = false;
+		$window.setTimeout( callback, 1000 );
+
+		return function()
+		{
+			if ( called ) {
+				return;
+			}
+			called = true;
+			callback();
+		}
+	}
+
+
 	this.trackPageview = function( path, tracker )
 	{
-		var method = 'send';
-
-		if ( !_shouldTrack() ) {
-			console.log( 'Skip tracking page view since not a normal user.' );
-			return;
-		}
-
-		// Did they pass in a tracker other than the default?
-		if ( angular.isDefined( tracker ) ) {
-
-			// Normalize.
-			var normalizedTracker = tracker.replace( /[\-_:]/g, '' );
-
-			// Prefix the method with the tracker.
-			method = normalizedTracker + '.' + method;
-
-			// If we haven't added this tracker yet in GA, let's do so.
-			if ( _.indexOf( _this.extraTrackers, tracker ) === -1 ) {
-
-				// Save that we have this tracker set.
-				_this.extraTrackers.push( tracker );
-
-				// Now add it in GA.
-				if ( Environment.env == 'development' ) {
-					console.log( 'Create new tracker: ' + tracker );
-				}
-				else {
-					$window.ga( 'create', tracker, 'auto', { name: normalizedTracker } );
-				}
-			}
-		}
-		else {
-			tracker = '';
-		}
-
-		// Gotta make sure the system has a chance to compile the title into the page.
-		$timeout( function()
+		return $q( function( resolve, reject )
 		{
-			_ensureUserId();
+			var method = 'send';
 
-			// If no path passed in, then pull it from the location.
-			if ( !path ) {
-				path = $location.url();
+			if ( !_shouldTrack() ) {
+				console.log( 'Skip tracking page view since not a normal user.' );
+				resolve();
+				return;
 			}
 
-			// Pull the title.
-			var title = $document[0].title;
+			// Did they pass in a tracker other than the default?
+			if ( angular.isDefined( tracker ) ) {
 
-			var options = {
-				page: path,
-				title: title,
-			};
+				// Normalize.
+				var normalizedTracker = tracker.replace( /[\-_:]/g, '' );
 
-			// Now track the page view.
-			if ( Environment.env == 'development' ) {
-				console.log( 'Track page view: tracker(' + tracker + ') | ' + JSON.stringify( options ) );
+				// Prefix the method with the tracker.
+				method = normalizedTracker + '.' + method;
+
+				// If we haven't added this tracker yet in GA, let's do so.
+				if ( _.indexOf( _this.extraTrackers, tracker ) === -1 ) {
+
+					// Save that we have this tracker set.
+					_this.extraTrackers.push( tracker );
+
+					// Now add it in GA.
+					if ( Environment.env == 'development' ) {
+						console.log( 'Create new tracker: ' + tracker );
+					}
+					else {
+						$window.ga( 'create', tracker, 'auto', { name: normalizedTracker } );
+					}
+				}
 			}
 			else {
-				$window.ga( method, 'pageview', options );
+				tracker = '';
 			}
 
-			// If they have an additional page tracker attached, then track the page view for that tracker as well.
-			if ( !tracker && _additionalPageTracker ) {
-				_this.trackPageview( null, _additionalPageTracker );
-			}
+			// Gotta make sure the system has a chance to compile the title into the page.
+			$timeout( function()
+			{
+				_ensureUserId();
+
+				// If no path passed in, then pull it from the location.
+				if ( !path ) {
+					path = $location.url();
+				}
+
+				// Pull the title.
+				var title = $document[0].title;
+
+				var options = {
+					page: path,
+					title: title,
+				};
+
+				// Now track the page view.
+				if ( Environment.env == 'development' ) {
+					console.log( 'Track page view: tracker(' + tracker + ') | ' + JSON.stringify( options ) );
+					resolve();
+				}
+				else {
+					$window.ga( method, 'pageview', angular.extend( {}, options, {
+						hitCallback: wrapTimeout( resolve ),
+					} ) );
+				}
+
+				// If they have an additional page tracker attached, then track the page view for that tracker as well.
+				if ( !tracker && _additionalPageTracker ) {
+					_this.trackPageview( null, _additionalPageTracker );
+				}
+			} );
 		} );
 	};
 
 	this.trackEvent = function( category, action, label, value )
 	{
-		if ( !_shouldTrack() ) {
-			console.log( 'Skip tracking event since not a normal user.' );
-			return;
-		}
+		return $q( function( resolve, reject )
+		{
+			if ( !_shouldTrack() ) {
+				console.log( 'Skip tracking event since not a normal user.' );
+				resolve();
+				return;
+			}
 
-		_ensureUserId();
+			_ensureUserId();
 
-		var options = {
-			nonInteraction: 1,
-		};
+			var options = {
+				nonInteraction: 1,
+				hitCallback: wrapTimeout( resolve ),
+			};
 
-		if ( Environment.env == 'development' ) {
-			console.log( 'Track event: ' + category + ':' + (action || '-') + ':' + (label || '-') + ':' + (value || '-') + ' | ' + JSON.stringify( options ) );
-		}
-		else {
-			$window.ga( 'send', 'event', category, action, label, value, options );
-		}
+			if ( Environment.env == 'development' ) {
+				console.log( 'Track event: ' + category + ':' + (action || '-') + ':' + (label || '-') + ':' + (value || '-') );
+				resolve();
+			}
+			else {
+				$window.ga( 'send', 'event', category, action, label, value, options );
+			}
+		} );
 	};
 
 	this.trackSocial = function( network, action, target )
 	{
-		if ( !_shouldTrack() ) {
-			console.log( 'Skip tracking social event since not a normal user.' );
-			return;
-		}
+		return $q( function( resolve, reject )
+		{
+			if ( !_shouldTrack() ) {
+				console.log( 'Skip tracking social event since not a normal user.' );
+				resolve();
+				return;
+			}
 
-		_ensureUserId();
+			_ensureUserId();
 
-		if ( Environment.env == 'development' ) {
-			console.log( 'Track social event: ' + network + ':' + action + ':' + target );
-		}
-		else {
-			$window.ga( 'send', 'social', network, action, target );
-		}
+			if ( Environment.env == 'development' ) {
+				console.log( 'Track social event: ' + network + ':' + action + ':' + target );
+				resolve();
+			}
+			else {
+				$window.ga( 'send', 'social', network, action, target, {
+					hitCallback: wrapTimeout( resolve ),
+				} );
+			}
+		} );
 	};
 
 	this.trackTiming = function( category, timingVar, value, label )
 	{
-		$log.info( 'Timing (' + category + (label ? ':' + label : '') + ') ' + timingVar + ' = ' + value );
-		if ( Environment.env == 'production' ) {
-			$window.ga( 'send', 'timing', category, timingVar, value, label );
-		}
+		return $q( function( resolve, reject )
+		{
+			if ( !_shouldTrack() ) {
+				console.log( 'Skip tracking timing event since not a normal user.' );
+				resolve();
+				return;
+			}
+
+			$log.info( 'Timing (' + category + (label ? ':' + label : '') + ') ' + timingVar + ' = ' + value );
+			if ( Environment.env == 'production' ) {
+				$window.ga( 'send', 'timing', category, timingVar, value, label, {
+					hitCallback: wrapTimeout( resolve ),
+				} );
+			}
+			else {
+				resolve();
+			}
+		} );
 	};
 
 	this.setCurrentExperiment = function( experiment, variation )
