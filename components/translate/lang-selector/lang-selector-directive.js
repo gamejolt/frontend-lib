@@ -1,4 +1,4 @@
-angular.module( 'gj.Translate.LangSelector' ).directive( 'gjTranslateLangSelector', function( Translate )
+angular.module( 'gj.Translate.LangSelector' ).directive( 'gjTranslateLangSelector', function( Analytics, Translate )
 {
 	return {
 		restrict: 'E',
@@ -70,12 +70,15 @@ angular.module( 'gj.Translate.LangSelector' ).directive( 'gjTranslateLangSelecto
 			this.lang = Translate.lang;
 			this.onLangChange = function( newLang )
 			{
-				// We don't wait for the promise to resolve before firing the event.
-				// This way they can reload the window without any language flicker.
-				Translate.setLanguage( newLang );
-				if ( _this.onLangChangeEvent ) {
-					_this.onLangChangeEvent();
-				}
+				Analytics.trackEvent( 'translations', 'change', newLang ).then( function()
+				{
+					// We don't wait for the promise to resolve before firing the event.
+					// This way they can reload the window without any language flicker.
+					Translate.setLanguage( newLang );
+					if ( _this.onLangChangeEvent ) {
+						_this.onLangChangeEvent();
+					}
+				} );
 			};
 		}
 	};
