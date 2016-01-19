@@ -25,24 +25,6 @@ module.exports = function( config )
 				{
 					return config.staticCdn + rev;
 				},
-
-				// The below is because one of the stupidest things ever...
-				// It looks for files without extensions and replaces.
-				// This means 'app' will be replaced for an 'app.js' file...
-				// More info: https://github.com/smysnk/gulp-rev-all/issues/106
-				annotator: function( contents, path )
-				{
-					var fragments = [ { 'contents': contents } ];
-					return fragments;
-				},
-				replacer: function( fragment, replaceRegExp, newReference, referencedFile )
-				{
-					// If the original had .js, force the reference to have .js too...
-					if ( referencedFile.revFilenameExtOriginal === '.js' && !newReference.match( /\.js$/ ) ) {
-						return;
-					}
-					fragment.contents = fragment.contents.replace( replaceRegExp, '$1' + newReference + '$3$4' );
-				},
 			};
 
 			var revAll = new plugins.revAll( options );

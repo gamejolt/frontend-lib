@@ -1,3 +1,6 @@
+- Use our fork of gulp-rev-all.
+  gamejolt/gulp-rev-all#master
+
 - gj-tooltip now takes an interpolated attr instead of a parsed one:
   "string {{ var }}" instead of "'string' + var"
 
