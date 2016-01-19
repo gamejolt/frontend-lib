@@ -17,7 +17,15 @@ module.exports = function( options )
 			var lang = Object.keys( parsed )[0];
 
 			for ( var i in parsed[ lang ] ) {
-				parsed[ lang ][ i ] = sanitize( parsed[ lang ][ i ] );
+
+				if ( Array.isArray( parsed[ lang ][ i ] ) ) {
+					for ( var n in parsed[ lang ][ i ] ) {
+						parsed[ lang ][ i ][ n ] = sanitize( parsed[ lang ][ i ][ n ] );
+					}
+				}
+				else {
+					parsed[ lang ][ i ] = sanitize( parsed[ lang ][ i ] );
+				}
 			}
 
 			file.contents = new Buffer( JSON.stringify( parsed ), 'utf-8' );
