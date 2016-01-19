@@ -54,6 +54,10 @@ angular.module( 'gj.Translate.LangSelector' ).directive( 'gjTranslateLangSelecto
 					label: 'Türkçe',
 				},
 				{
+					code: 'pt',
+					label: 'Português (Portugal)',
+				},
+				{
 					code: 'pt_BR',
 					label: 'Português (Brasil)',
 				},
@@ -64,7 +68,23 @@ angular.module( 'gj.Translate.LangSelector' ).directive( 'gjTranslateLangSelecto
 				{
 					code: 'nb',
 					label: 'Norsk (bokmål)',
-				}
+				},
+				{
+					code: 'el',
+					label: 'Ελληνικά',
+				},
+				{
+					code: 'ms',
+					label: 'Bahasa Melayu',
+				},
+				{
+					code: 'pl',
+					label: 'Polski',
+				},
+				{
+					code: 'uk',
+					label: 'Українська',
+				},
 			];
 
 			this.lang = Translate.lang;
