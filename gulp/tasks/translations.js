@@ -3,6 +3,7 @@ var plugins = require( 'gulp-load-plugins' )();
 var sequence = require( 'run-sequence' );
 var renameLangs = require( '../plugins/gulp-rename-langs.js' );
 var splitTranslations = require( '../plugins/gulp-split-translations.js' );
+var sanitizeTranslations = require( '../plugins/gulp-sanitize-translations.js' );
 
 module.exports = function( config )
 {
@@ -21,6 +22,7 @@ module.exports = function( config )
 			} ) )
 			// Works around a difference in poeditor and angular-gettext: en-us -> en_US.
 			.pipe( renameLangs() )
+			.pipe( sanitizeTranslations() )
 			.pipe( splitTranslations( config.translationSections ) )
 			.pipe( gulp.dest( config.buildDir + '/translations' ) );
 	} );
