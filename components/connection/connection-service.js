@@ -2,15 +2,19 @@ angular.module( 'gj.Connection' ).service( 'Connection', function( $rootScope, $
 {
 	var _this = this;
 
-	var hasRequestFailure = false;
 	var reconnectChecker = null;
 
 	// This attribute isn't perfect.
 	// The browser will set this when they are absolutely disconnected to the internet through their
-	// network card, but it won't catch things like their router saying their connected even though
+	// network card, but it won't catch things like their router saying they're connected even though
 	// it has no connection.
 	// We have to do our own request checking for that.
-	this.isOnline = $window.navigator.onLine;
+	this.isDeviceOffline = !$window.navigator.onLine;
+	this.hasRequestFailure = false;
+	this.isOnline = !this.isDeviceOffline && !this.hasRequestFailure;
+
+	// Convenience var to make it easier to hide things offline just in client.
+	this.isClientOffline = Environment.isClient && !this.isOnline;
 
 	// For easier testing.
 	if ( Environment.env == 'development' && $injector.has( 'hotkeys' ) ) {
@@ -19,7 +23,8 @@ angular.module( 'gj.Connection' ).service( 'Connection', function( $rootScope, $
 			description: 'Toggle offline mode.',
 			callback: function()
 			{
-				_this.isOnline = !_this.isOnline;
+				_this.isDeviceOffline = !_this.isDeviceOffline;
+				refreshIsOnline();
 			}
 		} );
 	}
@@ -31,42 +36,53 @@ angular.module( 'gj.Connection' ).service( 'Connection', function( $rootScope, $
 	this.setRequestFailure = function( failed )
 	{
 		// Do nothing if we're not switch states.
-		if ( hasRequestFailure == failed ) {
+		if ( this.hasRequestFailure == failed ) {
 			return;
 		}
 
 		// If we went into request failure mode let's start checking for a reconnection.
 		if ( failed ) {
-			hasRequestFailure = true;
-			refreshIsOnline();
 			setupReconnectChecker();
 		}
 
-		// If we are trying to switch back into success mode and we have a reconnecter
-		// let's try to force a recheck right away.
-		// We don't automatically go into a "good" state.
-		// We want to make sure that we're good to go through the reconnector.
+		// If we got a successful request, go back into a good request state right away.
 		if ( !failed && reconnectChecker ) {
-			reconnectChecker.check();
+			reconnectChecker.finish();
 		}
 	};
 
 	function setupReconnectChecker()
 	{
+		// We don't want to set that we have a request failure until we do a first check that fails.
 		// When we come back online, we just want to set that we no longer have a request failure.
-		reconnectChecker = new Connection_Reconnect( function()
-		{
-			// We are connected back to the server.
-			// Let's set that we're good to go.
-			reconnectChecker = null;
-			hasRequestFailure = false;
-			refreshIsOnline();
+		reconnectChecker = new Connection_Reconnect(
+			function()
+			{
+				// If we were marked as no request failure, let's put us in that mode.
+				if ( !_this.hasRequestFailure ) {
+					_this.hasRequestFailure = true;
+					refreshIsOnline();
+				}
+			},
+			function()
+			{
+				// We are connected back to the server.
+				// Let's set that we're good to go.
+				reconnectChecker = null;
 
-			// We have to reload the current state.
-			// This way they get the new view of information again.
-			// This COULD cause issues with things changing on the page, but I'm not sure of a better way...
-			$state.reload();
-		} );
+				// Only toggle back to no failure if we were set as having a failure.
+				// This ensures we don't reload the page if we don't have to.
+				if ( _this.hasRequestFailure ) {
+					_this.hasRequestFailure = false;
+					refreshIsOnline();
+
+					// We have to reload the current state.
+					// This way they get the new view of information again.
+					// This COULD cause issues with things changing on the page, but I'm not sure of a better way...
+					$state.reload();
+				}
+			}
+		);
 	}
 
 	$rootScope.$on( 'Payload.responseError', function( event, response )
@@ -89,6 +105,7 @@ angular.module( 'gj.Connection' ).service( 'Connection', function( $rootScope, $
 	 */
 	$document.on( 'online', function()
 	{
+		_this.isDeviceOffline = false;
 		refreshIsOnline();
 
 		// While connection was offline, we may have tried making a request that failed.
@@ -100,6 +117,7 @@ angular.module( 'gj.Connection' ).service( 'Connection', function( $rootScope, $
 
 	$document.on( 'offline', function()
 	{
+		_this.isDeviceOffline = true;
 		refreshIsOnline();
 	} );
 
@@ -110,11 +128,13 @@ angular.module( 'gj.Connection' ).service( 'Connection', function( $rootScope, $
 	 */
 	function refreshIsOnline()
 	{
-		if ( hasRequestFailure || !$window.navigator.onLine ) {
+		if ( _this.hasRequestFailure || _this.isDeviceOffline ) {
 			_this.isOnline = false;
 		}
 		else {
 			_this.isOnline = true;
 		}
+
+		_this.isClientOffline = Environment.isClient && !_this.isOnline;
 	}
 } );
