@@ -5,7 +5,9 @@
 
 	&-translate-btn
 		margin-bottom: $line-height-computed * 2
-		margin-left: 100px
+
+		@media $media-sm-up
+			margin-left: 100px
 
 	&-translating &-comments
 		opacity: 0.5
