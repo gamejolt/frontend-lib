@@ -181,10 +181,10 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 
 			this.getTranslationLabel = function( lang )
 			{
-				if ( lang == 'en_US' ) {
+				if ( lang == 'en_US' || lang == 'en' ) {
 					return 'English';
 				}
-				else if ( lang == 'pt_BR' ) {
+				else if ( lang == 'pt_BR' || lang == 'pt' ) {
 					return 'Português';
 				}
 
