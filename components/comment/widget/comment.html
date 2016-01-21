@@ -9,10 +9,15 @@
 	<div class="comment-widget-comment-body">
 
 		<div class="comment-widget-comment-title">
-			<span ng-if="::isOwner" class="comment-widget-comment-owner tag visible-xs pull-right">Owner</span>
-			<a ng-href="{{::profileUrl}}">{{::comment.user.display_name}}</a>
+			<span ng-if="::isOwner" class="comment-widget-comment-owner tag visible-xs pull-right"
+				translate
+				translate-comment="This signifies the owner of what the comment is posted on. For example, if this is a comment by the game's developer."
+				>
+				Owner
+			</span>
+			<a ng-href="{{ ::profileUrl }}">{{ ::comment.user.display_name }}</a>
 			<span class="comment-widget-comment-time" am-time-ago="comment.posted_on"></span>
-			<span ng-if="::isOwner" class="comment-widget-comment-owner tag hidden-xs">Owner</span>
+			<span ng-if="::isOwner" class="comment-widget-comment-owner tag hidden-xs" translate>Owner</span>
 		</div>
 
 		<gj-fade-collapse
@@ -20,7 +25,10 @@
 			fade-collapse-is-open="commentState.showFullComment"
 			fade-collapse-is-required="commentState.canToggleComment"
 			>
-			<div class="comment-widget-comment-content" ng-bind-html="::comment.comment_compiled"></div>
+			<div class="comment-widget-comment-content"
+				ng-bind-html="ctrl.isShowingTranslations && ctrl.translations[ comment.id ].content ? ctrl.translations[ comment.id ].content : comment.comment_compiled"
+				>
+			</div>
 		</gj-fade-collapse>
 
 		<a class="hidden-text-expander"
@@ -74,7 +82,7 @@
 
 				<a ng-click="onReplyClick()" gj-track-event="comment-widget:reply-click">
 					<span class="jolticon jolticon-reply"></span>
-					Reply
+					<span translate>Reply</span>
 				</a>
 
 			</span>
@@ -85,11 +93,11 @@
 				<a
 					ng-if="!ctrl.subscriptions[ comment.id ]"
 					ng-click="onFollowClick()"
-					gj-tooltip="Get notifications when people post new replies to this thread."
+					gj-tooltip="{{ 'Get notifications when people post new replies to this thread.' | translate }}"
 					gj-track-event="comment-widget:follow-click"
 					>
 					<span class="jolticon jolticon-subscribe"></span>
-					Follow Thread
+					<span translate>Follow Thread</span>
 				</a>
 
 				<a class="following"
@@ -98,7 +106,7 @@
 					gj-track-event="comment-widget:follow-click"
 					>
 					<span class="jolticon jolticon-subscribed"></span>
-					Stop Following
+					<span translate>Stop Following</span>
 				</a>
 			</span>
 

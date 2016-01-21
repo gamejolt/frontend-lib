@@ -17,8 +17,84 @@ angular.module( 'gj.Translate' ).provider( 'Translate', function()
 		var loaded = {};
 
 		Translate.lang = localStorage.getItem( LANG_STORAGE_KEY ) || 'en_US';
-
 		gettextCatalog.setCurrentLanguage( Translate.lang );
+
+		Translate.langs = this.langs = [
+			{
+				code: 'en',
+				label: 'English (UK)',
+			},
+			{
+				code: 'en_US',
+				label: 'English (US)',
+			},
+			{
+				code: 'nl',
+				label: 'Nederlands',
+			},
+			{
+				code: 'ro',
+				label: 'Română',
+			},
+			{
+				code: 'de',
+				label: 'Deutsch',
+			},
+			{
+				code: 'es',
+				label: 'Español',
+			},
+			{
+				code: 'fr',
+				label: 'Français',
+			},
+			{
+				code: 'ru',
+				label: 'Русский',
+			},
+			{
+				code: 'sv',
+				label: 'Svenska',
+			},
+			{
+				code: 'tr',
+				label: 'Türkçe',
+			},
+			{
+				code: 'pt',
+				label: 'Português (Portugal)',
+			},
+			{
+				code: 'pt_BR',
+				label: 'Português (Brasil)',
+			},
+			{
+				code: 'fi',
+				label: 'Suomi',
+			},
+			{
+				code: 'nb',
+				label: 'Norsk (bokmål)',
+			},
+			{
+				code: 'el',
+				label: 'Ελληνικά',
+			},
+			{
+				code: 'ms',
+				label: 'Bahasa Melayu',
+			},
+			{
+				code: 'pl',
+				label: 'Polski',
+			},
+			{
+				code: 'uk',
+				label: 'Українська',
+			},
+		];
+
+		Translate.langsByCode = _.indexBy( Translate.langs, 'code' );
 
 		Translate.loadSection = function( section, lang )
 		{

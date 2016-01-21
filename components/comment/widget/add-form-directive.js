@@ -1,4 +1,4 @@
-angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetAddForm', function( App, Form, Comment )
+angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetAddForm', function( App, Form, Comment, gettextCatalog )
 {
 	var form = new Form( {
 		model: 'Comment',
@@ -14,6 +14,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetAddForm', funct
 
 	form.onInit = function( scope )
 	{
+		scope.commentPlaceholder = gettextCatalog.getString( 'Leave a comment...' );
 		scope.user = App.user;
 
 		scope.formModel.comment = '';

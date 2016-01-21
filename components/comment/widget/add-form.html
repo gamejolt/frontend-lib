@@ -6,11 +6,11 @@
 
 	<form gj-form="formModel" name="commentAddForm">
 
-		<form-group class="no-animate" name="comment" label="Leave a Comment" hide-label="true">
+		<form-group class="no-animate" name="comment" label="{{ 'Leave a Comment' | translate }}" hide-label="true">
 
 			<div form-markdown-editor
 				preview-class="comment-widget-comment-content"
-				codemirror-options="{ theme: 'gj-comment', placeholder: 'Leave a comment...' }"
+				codemirror-options="{ theme: 'gj-comment', placeholder: commentPlaceholder }"
 				markdown-preview-url="/comments/preview"
 				markdown-mode="comments"
 				>
@@ -20,9 +20,9 @@
 
 		</form-group>
 
-		<button class="i-button" ng-disabled="commentAddForm.$invalid" ng-click="onSubmit()">
+		<button class="btn" ng-disabled="commentAddForm.$invalid" ng-click="onSubmit()">
 			<span class="jolticon jolticon-add"></span>
-			Add Comment
+			<span translate>Add Comment</span>
 		</button>
 
 	</form>

@@ -1,4 +1,4 @@
-angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', function( $parse, App, Environment, Comment_Vote, Subscription, Growls )
+angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', function( $parse, App, Environment, Comment_Vote, Subscription, Growls, gettextCatalog )
 {
 	return {
 		require: '^gjCommentWidget',
@@ -56,27 +56,23 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 
 					if ( voteCount <= 0 ) {
 						if ( scope.canVote ) {
-							scope.votingTooltip = 'Give this comment some love!';
+							/// Tooltip for comment voting when no one has liked a comment yet.
+							scope.votingTooltip = gettextCatalog.getString( 'Give this comment some love!' );
 						}
 					}
-					else if ( voteCount == 1 ) {
-						if ( userHasVoted ) {
-							scope.votingTooltip = 'You like this comment.';
+					else if ( userHasVoted ) {
+						if ( voteCount == 1 ) {
+							/// Tooltip for comment voting when you like a comment and no one else has liked it yet.
+							gettextCatalog.getString( 'You like this comment' );
 						}
 						else {
-							scope.votingTooltip = 'One person likes this comment.';
+							/// Tooltip for comment voting when you and other people like it.
+							scope.votingTooltip = gettextCatalog.getPlural( (voteCount - 1), 'You and another person like this comment.', 'You and {{ $count | number }} people like this comment.', {} );
 						}
-					}
-					else if ( voteCount == 2 && userHasVoted ) {
-						scope.votingTooltip = 'You and another person like this comment.';
 					}
 					else {
-						if ( userHasVoted ) {
-							scope.votingTooltip = 'You and ' + (voteCount - 1) + ' people like this comment.';
-						}
-						else {
-							scope.votingTooltip = voteCount + ' people like this comment!';
-						}
+						/// Tooltip for comment voting when you haven't liked it yet, but other people do.
+						scope.votingTooltip = gettextCatalog.getPlural( voteCount, 'One person likes this comment.', '{{ $count | number }} people like this comment.', {} );
 					}
 				} );
 
@@ -104,7 +100,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 								scope.ctrl.userVotes[ scope.comment.id ] = newVote;
 								++scope.comment.votes;
 								scope.isVotePending = false;
-								Growls.add( 'success', 'You\'ve just upvoted this comment. This lets us know the quality of comments and helps keep the site fresh.' );
+								Growls.add( 'success', gettextCatalog.getString( 'You\'ve just upvoted this comment. This lets us know the quality of comments and helps keep the site fresh.' ) );
 							} );
 					}
 					// If removing a vote.

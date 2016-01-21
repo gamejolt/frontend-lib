@@ -8,84 +8,11 @@ angular.module( 'gj.Translate.LangSelector' ).directive( 'gjTranslateLangSelecto
 		},
 		bindToController: true,
 		controllerAs: 'ctrl',
-		controller: function()
+		controller: function( $scope )
 		{
 			var _this = this;
 
-			this.langs = [
-				{
-					code: 'en',
-					label: 'English (UK)',
-				},
-				{
-					code: 'en_US',
-					label: 'English (US)',
-				},
-				{
-					code: 'nl',
-					label: 'Nederlands',
-				},
-				{
-					code: 'ro',
-					label: 'Română',
-				},
-				{
-					code: 'de',
-					label: 'Deutsch',
-				},
-				{
-					code: 'es',
-					label: 'Español',
-				},
-				{
-					code: 'fr',
-					label: 'Français',
-				},
-				{
-					code: 'ru',
-					label: 'Русский',
-				},
-				{
-					code: 'sv',
-					label: 'Svenska',
-				},
-				{
-					code: 'tr',
-					label: 'Türkçe',
-				},
-				{
-					code: 'pt',
-					label: 'Português (Portugal)',
-				},
-				{
-					code: 'pt_BR',
-					label: 'Português (Brasil)',
-				},
-				{
-					code: 'fi',
-					label: 'Suomi',
-				},
-				{
-					code: 'nb',
-					label: 'Norsk (bokmål)',
-				},
-				{
-					code: 'el',
-					label: 'Ελληνικά',
-				},
-				{
-					code: 'ms',
-					label: 'Bahasa Melayu',
-				},
-				{
-					code: 'pl',
-					label: 'Polski',
-				},
-				{
-					code: 'uk',
-					label: 'Українська',
-				},
-			];
+			$scope.Translate = Translate;
 
 			this.lang = Translate.lang;
 			this.onLangChange = function( newLang )

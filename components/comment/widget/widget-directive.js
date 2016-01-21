@@ -10,10 +10,12 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 			currentPage: '=?currentPage',
 		},
 		controllerAs: 'ctrl',
-		controller: function( $scope, $state, $window, $location, $timeout, $injector, App, Comment, Comment_Vote, Subscription, User, Growls, Environment, Scroll )
+		controller: function( $scope, $state, $window, $location, $timeout, $injector, $sce, App, Comment, Comment_Vote, Subscription, User, Growls, Environment, Scroll,
+			Api, Translation, Translate )
 		{
 			var _this = this;
 			$scope.App = App;
+			$scope.Translate = Translate;
 
 			// Not required.
 			var Analytics = null;
@@ -33,6 +35,12 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 			this.numPages = 0;  // The pagination widget will set this.
 			this.replyingTo = undefined;
 			this.highlightedComment = null;
+
+			this.allowTranslate = false;
+			this.isTranslating = false;
+			this.isShowingTranslations = false;
+			this.translationsLoaded = false;
+			this.translations = {};
 
 			this.userVotes = {};
 			this.subscriptions = {};
@@ -95,6 +103,94 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 				}
 			};
 
+			this.toggleTranslate = function()
+			{
+				// If we already loaded translations, just toggle back and forth.
+				if ( this.translationsLoaded ) {
+					this.isShowingTranslations = !this.isShowingTranslations;
+					return;
+				}
+
+				// If they try translating again while one is already in process, skip it.
+				if ( this.isTranslating ) {
+					return;
+				}
+
+				this.isTranslating = true;
+
+				var commentIds = _.pluck( this.gatherTranslatable(), 'id' );
+				Api.sendRequest( '/comments/translate', { lang: Translate.lang, resources: commentIds }, { sanitizeComplexData: false, detach: true } )
+					.then( function( response )
+					{
+						// This may happen if they changed the page while translating.
+						// In that case, skip doing anything.
+						if ( !_this.isTranslating ) {
+							return;
+						}
+
+						var translations = Translation.populate( response.translations );
+
+						// This way when the translation puts in "style" tags that it will carry into the HTML.
+						_this.translations = _.indexBy( translations.map( function( item )
+						{
+							item.content = $sce.trustAsHtml( item.content );
+							return item;
+						} ), 'resource_id' );
+
+						_this.isTranslating = false;
+						_this.isShowingTranslations = true;
+						_this.translationsLoaded = true;
+					} )
+					.catch( function()
+					{
+						_this.translations = {};
+						_this.isTranslating = false;
+						_this.isShowingTranslations = true;
+						_this.translationsLoaded = true;
+					} );
+			};
+
+			this.gatherTranslatable = function()
+			{
+				var comments = _this.comments;
+				comments = comments.concat( _( _this.childComments ).values().flatten().value() );
+
+				var translationCode = this.getTranslationCode( Translate.lang );
+				var translatable = comments.filter( function( comment )
+				{
+					if ( comment.lang && comment.lang != translationCode ) {
+						return true;
+					}
+					return false;
+				} );
+
+				return translatable;
+			};
+
+			this.getTranslationCode = function( lang )
+			{
+				if ( lang == 'en_US' ) {
+					return 'en';
+				}
+				else if ( lang == 'pt_BR' ) {
+					return 'pt';
+				}
+
+				return lang;
+			};
+
+			this.getTranslationLabel = function( lang )
+			{
+				if ( lang == 'en_US' ) {
+					return 'English';
+				}
+				else if ( lang == 'pt_BR' ) {
+					return 'Português';
+				}
+
+				return Translate.langsByCode[ lang ].label;
+			};
+
 			function refreshComments()
 			{
 				// Pull in new comments, huzzah!
@@ -132,6 +228,12 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 							var subscriptions = Subscription.populate( payload.subscriptions );
 							_this.subscriptions = _.indexBy( subscriptions, 'resource_id' );
 						}
+
+						_this.translations = {};
+						_this.isTranslating = false;
+						_this.isShowingTranslations = false;
+						_this.translationsLoaded = false;
+						_this.allowTranslate = _this.gatherTranslatable().length;
 					} )
 					.catch( function( payload )
 					{

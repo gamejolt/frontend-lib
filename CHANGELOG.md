@@ -1,3 +1,5 @@
+- Include gettext as well as Translate even if you don't use translations.
+
 - Use our fork of gulp-rev-all.
   gamejolt/gulp-rev-all#master
 
