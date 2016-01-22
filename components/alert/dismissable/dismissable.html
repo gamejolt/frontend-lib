@@ -1,0 +1,8 @@
+<div gj-expand-when="ctrl.shouldShow">
+	<div class="alert" ng-class="'alert-' + ctrl.alertType">
+		<a class="alert-dismiss" ng-click="ctrl.dismiss()">
+			<span class="jolticon jolticon-remove"></span>
+		</a>
+		<div ng-transclude></div>
+	</div>
+</div>

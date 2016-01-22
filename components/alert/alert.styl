@@ -1,12 +1,14 @@
 $alert-padding = ($grid-gutter-width / 2)
+$alert-padding-xs = ($grid-gutter-width-xs / 2)
 
 .alert
-	padding: $alert-padding
+	position: relative
+	padding: $alert-padding-xs
 	margin-bottom: $line-height-computed
 	font-size: $font-size-small
 
-	@media $media-xs
-		padding: ($grid-gutter-width-xs / 2)
+	@media $media-sm-up
+		padding: $alert-padding
 
 	h4
 		margin-top: 0
@@ -23,6 +25,15 @@ $alert-padding = ($grid-gutter-width / 2)
 	// usually be above the top of text.
 	.i-button
 		margin-top: 5px + ($line-height-computed - $font-size-base)
+
+.alert-dismiss
+	position: absolute
+	top: $alert-padding-xs
+	right: $alert-padding-xs
+
+	@media $media-sm-up
+		top: $alert-padding
+		right: $alert-padding
 
 .alert-info
 	@extend .fill-lightest
