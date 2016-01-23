@@ -92,6 +92,10 @@ angular.module( 'gj.Translate' ).provider( 'Translate', function()
 				code: 'uk',
 				label: 'Українська',
 			},
+			{
+				code: 'it',
+				label: 'Italiano',
+			},
 		];
 
 		Translate.langsByCode = _.indexBy( Translate.langs, 'code' );
