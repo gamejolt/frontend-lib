@@ -22,7 +22,7 @@ module.exports = function( config )
 	{
 		var src = config.sections.map( function( section )
 		{
-			return 'src/' + section + '/**/*.{png,jpg,jpeg,gif,ico}';
+			return 'src/' + section + '/**/*.{bmp,png,jpg,jpeg,gif,ico}';
 		} );
 
 		return gulp.src( src, { base: 'src' } )
