@@ -9,9 +9,19 @@ angular.module( 'gj.Progress.Poller' ).directive( 'gjProgressPoller', function()
 			var poller = null;
 			var url = null;
 			var onComplete = null;
+			var onError = null;
+			var pollInterval = POLL_INTERVAL;
 
 			if ( $attrs.progressPollerOnComplete ) {
 				onComplete = $parse( $attrs.progressPollerOnComplete );
+			}
+
+			if ( $attrs.progressPollerOnError ) {
+				onError = $parse( $attrs.progressPollerOnError );
+			}
+
+			if ( $attrs.progressPollerInterval ) {
+				pollInterval = $parse( $attrs.progressPollerInterval )( $scope );
 			}
 
 			$attrs.$observe( 'gjProgressPoller', function( _url )
@@ -19,7 +29,6 @@ angular.module( 'gj.Progress.Poller' ).directive( 'gjProgressPoller', function()
 				url = _url;
 			} );
 
-			// New build gets a progress poller.
 			poller = $interval( function()
 			{
 				if ( !url ) {
@@ -29,10 +38,15 @@ angular.module( 'gj.Progress.Poller' ).directive( 'gjProgressPoller', function()
 				Api.sendRequest( url, null, { detach: true } )
 					.then( function( response )
 					{
-						if ( response.status == 'complete' ) {
+						if ( response.status == 'complete' || response.status == 'error' ) {
 
-							if ( onComplete ) {
+							if ( response.status == 'complete' && onComplete ) {
 								onComplete( $scope, {
+									'$response': response,
+								} );
+							}
+							else if ( response.status == 'error' && onError ) {
+								onError( $scope, {
 									'$response': response,
 								} );
 							}
@@ -40,8 +54,16 @@ angular.module( 'gj.Progress.Poller' ).directive( 'gjProgressPoller', function()
 							$interval.cancel( poller );
 							poller = null;
 						}
+					} )
+					.catch( function( response )
+					{
+						if ( onError ) {
+							onError( $scope, {
+								'$response': response,
+							} );
+						}
 					} );
-			}, POLL_INTERVAL );
+			}, pollInterval );
 
 			$scope.$on( '$destroy', function()
 			{
