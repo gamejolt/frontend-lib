@@ -144,6 +144,27 @@ angular.module( 'gj.Game' ).factory( 'Game', function( Model, Environment, User,
 		return pluckedBuilds;
 	};
 
+	Game.chooseBestBuild = function( builds, os, arch )
+	{
+		var build, search;
+
+		if ( arch == '64' ) {
+			search = {};
+			search[ 'os_' + os + '_64' ] = true;
+			if ( build = _.find( builds, search ) ) {
+				return build;
+			}
+		}
+
+		search = {};
+		search[ 'os_' + os ] = true;
+		if ( build = _.find( builds, search ) ) {
+			return build;
+		}
+
+		return builds[0];
+	};
+
 	Game.prototype.$save = function()
 	{
 		if ( this.id ) {
