@@ -1,9 +1,14 @@
-angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', function( $window, $q, Api, App, Growls )
+angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', function( $window, $q, $state, Environment, Api, App, Growls )
 {
 	var _this = this;
 
 	this.login = function( provider )
 	{
+		// Client flow is a bit different...
+		if ( Environment.isClient ) {
+			return this.loginClient( provider );
+		}
+
 		// Force POST.
 		return Api.sendRequest( '/web/auth/' + provider, {} ).then( function( response )
 		{
@@ -11,8 +16,28 @@ angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', funct
 		} );
 	};
 
+	this.loginClient = function( provider )
+	{
+		// Force POST.
+		return Api.sendRequest( '/web/auth/' + provider + '?client', {} ).then( function( response )
+		{
+			// Gotta open a browser window for them to complete the sign up/login.
+			var gui = require( 'nw.gui' );
+			gui.Shell.openExternal( response.redirectLocation );
+
+			// Now redirect them to the page that will continuously check if they are authed yet.
+			// We pass in the request token returned since this is what tells us our oauth state.
+			$state.go( 'auth.linked-account.poll', { token: response.token } );
+		} );
+	};
+
 	this.link = function( provider )
 	{
+		// Client flow is a bit different...
+		if ( Environment.isClient ) {
+			return this.linkClient( provider );
+		}
+
 		// Force POST.
 		return Api.sendRequest( '/web/dash/linked-accounts/link/' + provider, {} ).then( function( response )
 		{
@@ -20,13 +45,30 @@ angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', funct
 		} );
 	};
 
+	this.linkClient = function( provider )
+	{
+		// Force POST.
+		return Api.sendRequest( '/web/dash/linked-accounts/link/' + provider + '?client', {} ).then( function( response )
+		{
+			// Gotta open a browser window for them to complete the sign up/login.
+			var gui = require( 'nw.gui' );
+			gui.Shell.openExternal( response.redirectLocation );
+
+			// Now redirect them to the page that will continuously check if they are linked yet.
+			// We pass in the request token returned since this is what tells us our oauth state.
+			$state.go( 'dashboard.account.linked-accounts.linking', { token: response.token } );
+		} );
+	};
+
 	this.unlink = function( provider )
 	{
+		var providerUpper;
+
 		if ( provider == 'twitter' ) {
-			var providerUpper = 'Twitter';
+			providerUpper = 'Twitter';
 		}
 		else if ( provider == 'facebook' ) {
-			var providerUpper = 'Facebook';
+			providerUpper = 'Facebook';
 		}
 
 		return App.user.$unlinkAccount( provider ).then( function( response )
