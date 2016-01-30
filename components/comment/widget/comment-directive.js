@@ -1,4 +1,4 @@
-angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', function( $parse, App, Environment, Comment_Vote, Subscription, Growls, gettextCatalog )
+angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', function( $parse, App, Environment, Comment_Vote, Subscription, Growls, Report_Modal, gettextCatalog )
 {
 	return {
 		require: '^gjCommentWidget',
@@ -142,6 +142,11 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 								scope.isFollowPending = false;
 							} );
 					}
+				};
+
+				scope.report = function( comment )
+				{
+					Report_Modal.show( comment );
 				};
 			},
 		}

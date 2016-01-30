@@ -110,7 +110,38 @@
 				</a>
 			</span>
 
+			<span ng-if="::App.user && (App.user.id != comment.user || App.user.permissionLevel > 3)">
+				<span class="dot-separator"></span>
+
+				<a
+					gj-tooltip="{{ 'More Options' | translate }}"
+					gj-popover-trigger="comment-more-options-{{ ::comment.id }}"
+					>
+					<span class="jolticon jolticon-ellipsis-h"></span>
+				</a>
+			</span>
+
 		</div>
+
+		<gj-popover popover-id="comment-more-options-{{ ::comment.id }}">
+			<div class="list-group list-group-dark">
+				<a class="list-group-item has-icon"
+					ng-if="::App.user.id != comment.user"
+					ng-click="report( comment )"
+					>
+					<span class="jolticon jolticon-notice warning"></span>
+					<span translate>Report Comment</span>
+				</a>
+				<a class="list-group-item has-icon"
+					ng-if="::App.user.permission_level > 3"
+					ng-href="{{ ::Environment.baseUrl }}/moderate/comments/remove/{{ ::comment.id }}"
+					target="_blank"
+					>
+					<span class="jolticon jolticon-remove warning"></span>
+					Remove Comment
+				</a>
+			</div>
+		</gj-popover>
 
 	</div>
 

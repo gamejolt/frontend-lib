@@ -1,0 +1,19 @@
+<div class="modal-body">
+	<h2 class="modal-title" ng-if="modalCtrl.type == 'comment'" translate>Report Comment</h2>
+	<h2 class="modal-title" ng-if="modalCtrl.type == 'game'" translate>Report Game</h2>
+	<h2 class="modal-title" ng-if="modalCtrl.type == 'user'" translate>Report User</h2>
+
+	<gj-form-report
+		report-type="{{ modalCtrl.type }}"
+		report-resource="modalCtrl.resource"
+		gj-form-submit-handler="modalCtrl.onSubmitted()"
+		>
+	</gj-form-report>
+</div>
+
+<div class="modal-footer">
+	<button class="i-button warning" ng-click="modalCtrl.close()">
+		<span class="jolticon jolticon-remove"></span>
+		<span translate>Close</span>
+	</button>
+</div>

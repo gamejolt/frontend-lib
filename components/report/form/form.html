@@ -1,0 +1,90 @@
+<form gj-form="formModel" name="reportForm">
+
+	<form-group class="no-animate" name="reason" label="{{ 'Why are you reporting this?' | translate }}">
+		<div class="radio" ng-if="type == 'game' || type == 'comment'">
+			<label>
+				<input form-control="radio" value="spam">
+				<span translate translate-comment="Reporting reason.">It is spam or unwanted commercial content</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'game'">
+			<label>
+				<input form-control="radio" value="abuse">
+				<span translate translate-comment="Reporting reason.">Incorrect maturity rating for the content in the game</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'game'">
+			<label>
+				<input form-control="radio" value="stolen">
+				<span translate translate-comment="Reporting reason.">Game does not belong to this developer</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'game'">
+			<label>
+				<input form-control="radio" value="not-game">
+				<span translate translate-comment="Reporting reason.">Not a game</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'game'">
+			<label>
+				<input form-control="radio" value="no-info">
+				<span translate translate-comment="Reporting reason.">No information on game page (no screenshots, sparse description, placeholder page, etc.)</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'game'">
+			<label>
+				<input form-control="radio" value="external-link">
+				<span translate translate-comment="Reporting reason.">External link to play the game (not uploaded on site)</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'comment'">
+			<label>
+				<input form-control="radio" value="abuse">
+				<span translate translate-comment="Reporting reason.">It is hate speech or contains graphic content</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'comment'">
+			<label>
+				<input form-control="radio" value="explicit">
+				<span translate translate-comment="Reporting reason.">It is pornographic or contains sexually explicit material</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'comment'">
+			<label>
+				<input form-control="radio" value="harassment">
+				<span translate translate-comment="Reporting reason.">It is harassment or bullying</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'comment'">
+			<label>
+				<input form-control="radio" value="spoiler">
+				<span translate translate-comment="Reporting reason.">It contains spoilers and doesn't use spoiler tags (<code>&gt!</code>)</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'user'">
+			<label>
+				<input form-control="radio" value="spam">
+				<span translate translate-comment="Reporting reason.">Spammer</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'user'">
+			<label>
+				<input form-control="radio" value="vote-manip">
+				<span translate translate-comment="Reporting reason.">Uprating / downrating</span>
+			</label>
+		</div>
+		<div class="radio" ng-if="type == 'user'">
+			<label>
+				<input form-control="radio" value="explicit">
+				<span translate translate-comment="Reporting reason.">Profile or username contains explicit or sensitive material</span>
+			</label>
+		</div>
+		<control-errors></control-errors>
+	</form-group>
+
+	<button class="btn" ng-disabled="reportForm.$invalid" ng-click="onSubmit()">
+		<span class="jolticon jolticon-add"></span>
+		<span translate>Send Report</span>
+	</button>
+
+</form>
