@@ -110,7 +110,7 @@
 				</a>
 			</span>
 
-			<span ng-if="::App.user && (App.user.id != comment.user || App.user.permissionLevel > 3)">
+			<span ng-if="::App.user && (App.user.id != comment.user || App.user.permissionLevel >= 3)">
 				<span class="dot-separator"></span>
 
 				<a
