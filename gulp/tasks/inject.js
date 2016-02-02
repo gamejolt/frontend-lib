@@ -11,7 +11,6 @@ module.exports = function( config )
 		if ( config.production && !config.noInject ) {
 
 			var options = {
-				debug: true,
 				dontRenameFile: [
 					// Examples: /index.html, /chat.html
 					// Not: /app/views/something.html
