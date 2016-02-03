@@ -137,7 +137,7 @@
 			<span translate>Report Comment</span>
 		</a>
 		<a class="list-group-item has-icon"
-			ng-if="::App.user.permission_level > 3"
+			ng-if="::App.user.permission_level >= 3"
 			ng-href="{{ ::Environment.baseUrl }}/moderate/comments/remove/{{ ::comment.id }}"
 			target="_blank"
 			>
