@@ -54,7 +54,8 @@ module.exports = function( config )
 			[
 				'src/**/*.html',
 			],
-			[ 'html' ]
+			// Gotta do JS too since components/views might need to compile HTML into template cache.
+			[ 'html', 'js' ]
 		);
 
 		// Images.

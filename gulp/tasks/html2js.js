@@ -95,37 +95,36 @@ module.exports = function( config )
 	{
 		gulp.task( 'html2js:' + section + ':components', function()
 		{
-			// Only do this if we're building for production.
-			if ( config.production ) {
-
-				// We don't include any section folders that are being built into a separate module.
-				var excludeApp = [];
-				if ( config.modules ) {
-					_.forEach( config.modules, function( moduleDefinition )
-					{
-						if ( moduleDefinition.components ) {
-							moduleDefinition.components.forEach( function( component )
-							{
-								excludeApp.push( '!src/' + section + '/components/' + component + '/**/*.html' );
-							} );
-						}
-					} );
-				}
-
-				return gulp.src( _.union( [
-						'src/' + section + '/components/**/*.html',
-
-						// No form templates.
-						'!src/' + section + '/components/forms/**/*.html',
-
-					], excludeApp ) )
-					.pipe( plugins.ngHtml2js( {
-						moduleName: 'App',
-						prefix: '/' + section + '/components/'
-					} ) )
-					.pipe( plugins.rename( { extname: '.html.js' } ) )
-					.pipe( gulp.dest( config.buildDir + '/tmp/' + section + '-component-templates/' ) );
+			// We don't include any section folders that are being built into a separate module.
+			var excludeApp = [];
+			if ( config.modules ) {
+				_.forEach( config.modules, function( moduleDefinition )
+				{
+					if ( moduleDefinition.components ) {
+						moduleDefinition.components.forEach( function( component )
+						{
+							excludeApp.push( '!src/' + section + '/components/' + component + '/**/*.html' );
+						} );
+					}
+				} );
 			}
+
+			return gulp.src( _.union( [
+					'src/' + section + '/components/**/*.html',
+
+					// No form templates.
+					'!src/' + section + '/components/forms/**/*.html',
+
+					// Include partials.
+					'src/' + section + '/views/**/_*.html',
+
+				], excludeApp ), { base: 'src' } )
+				.pipe( plugins.ngHtml2js( {
+					moduleName: 'App',
+					prefix: '/',
+				} ) )
+				.pipe( plugins.rename( { extname: '.html.js' } ) )
+				.pipe( gulp.dest( config.buildDir + '/tmp/' + section + '-component-templates/' ) );
 		} );
 	} );
 
@@ -151,17 +150,13 @@ module.exports = function( config )
 
 				gulp.task( taskName, function()
 				{
-					// Only do this if we're building for production.
-					if ( config.production ) {
-
-						return gulp.src( [ 'src/app/components/' + component + '/**/*.html' ] )
-							.pipe( plugins.ngHtml2js( {
-								moduleName: moduleDefinition.module,
-								prefix: '/app/components/' + component + '/'
-							} ) )
-							.pipe( plugins.rename( { extname: '.html.js' } ) )
-							.pipe( gulp.dest( config.buildDir + '/tmp/module-templates/' + component ) );
-					}
+					return gulp.src( [ 'src/app/components/' + component + '/**/*.html' ] )
+						.pipe( plugins.ngHtml2js( {
+							moduleName: moduleDefinition.module,
+							prefix: '/app/components/' + component + '/'
+						} ) )
+						.pipe( plugins.rename( { extname: '.html.js' } ) )
+						.pipe( gulp.dest( config.buildDir + '/tmp/module-templates/' + component ) );
 				} );
 			} );
 		} );
