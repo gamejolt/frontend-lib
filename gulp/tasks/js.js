@@ -6,7 +6,6 @@ var streamqueue = require( 'streamqueue' );
 var fs = require( 'fs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
-var lazyStates = require( '../plugins/gulp-lazy-states.js' );
 
 module.exports = function( config )
 {
@@ -115,6 +114,31 @@ module.exports = function( config )
 	}
 
 	/**
+	 * We inject the template contents in angular stuff when templateUrl is found.
+	 * This is the function to filter out matches we don't want to do so for.
+	 */
+	function filterTemplateUrlMatches( match )
+	{
+		// Basically:
+		//   /*/views/
+		//   /*/components/forms/
+		return !/^\/[^\/]*\/views\//.test( match )
+			&& !/^\/[^\/]*\/components\/forms\//.test( match )
+			;
+	}
+
+	var minimizeOptions = {
+		empty: true,                      // KEEP empty attributes
+		cdata: true,                      // KEEP CDATA from scripts
+		comments: true,                   // KEEP comments
+		ssi: true,                        // KEEP Server Side Includes
+		conditionals: true,               // KEEP conditional internet explorer comments
+		spare: true,                      // KEEP redundant attributes
+		quotes: true,                     // KEEP arbitrary quotes
+		loose: true,                      // KEEP one whitespace
+	};
+
+	/**
 	 * Build out the vendor JS.
 	 */
 	gulp.task( 'js:vendor', vendorCommonDepends, function()
@@ -195,7 +219,7 @@ module.exports = function( config )
 	{
 		sectionTasks.push( 'js:' + section );
 
-		gulp.task( 'js:' + section, [ 'html2js:' + section + ':components' ], function()
+		gulp.task( 'js:' + section, [ 'html2js:' + section + ':partials' ], function()
 		{
 			// We don't include any app files that are being built into a separate module.
 			var excludeApp = [];
@@ -241,18 +265,18 @@ module.exports = function( config )
 					gulp.src( _.union( [
 						'src/' + section + '/**/*.js',
 						'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
-					], excludeApp ) ),
+					], excludeApp ), { base: 'src' } ),
 
 					// Then pull in the actual components.
 					gulp.src( _.union( [
 						'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
-					], excludeApp ) ),
+					], excludeApp ), { base: 'src' } ),
 
-					// Pull in component template files if they were built.
-					gulp.src( [ config.buildDir + '/tmp/' + section + '-component-templates/**/*.html.js' ] ),
+					// Pull in template partials if there are any.
+					gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ),
 
 					// Now pull in the development file if we're running a development environment build.
-					gulp.src( [ (config.developmentEnv ? 'src/' + section + '/app-development.js' : '') ] )
+					gulp.src( [ (config.developmentEnv ? 'src/' + section + '/app-development.js' : '') ], { base: 'src' } )
 				)
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'app.js' ) );
@@ -267,6 +291,11 @@ module.exports = function( config )
 
 			stream = stream
 				.pipe( injectModules( config ) )
+				.pipe( plugins.angularEmbedTemplates( {
+					minimize: minimizeOptions,
+					skipErrors: true,
+					filter: filterTemplateUrlMatches,
+				} ) )
 				.pipe( config.production ? plugins.ngAnnotate() : gutil.noop() )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
@@ -292,7 +321,7 @@ module.exports = function( config )
 		_.forEach( config.modules, function( moduleDefinition, outputFilename )
 		{
 			// Create the gulp task to build this module.
-			gulp.task( 'js:module:' + outputFilename, [ 'html2js:modules' ], function()
+			gulp.task( 'js:module:' + outputFilename, function()
 			{
 				var files = [];
 				if ( moduleDefinition.bower ) {
@@ -342,14 +371,12 @@ module.exports = function( config )
 						args.push( gulp.src( [
 							'src/app/components/' + component + '/**/*.js',
 							'!src/app/components/' + component + '/**/*-{service,controller,directive,filter,model,production,development,node}.js',
-						] ) );
+						], { base: 'src' } ) );
 
 						// Then pull in the actual components.
-						// We pull in any html2js files in here as well.
 						args.push( gulp.src( [
 							'src/app/components/' + component + '/**/*-{service,controller,directive,filter,model}.js',
-							config.buildDir + '/tmp/module-templates/' + component + '/**/*.html.js',
-						] ) );
+						], { base: 'src' } ) );
 					} );
 				}
 
@@ -361,12 +388,12 @@ module.exports = function( config )
 						args.push( gulp.src( [
 							'src/app/views/' + view + '/**/*.js',
 							'!src/app/views/' + view + '/**/*-{service,controller,directive,filter,model,production,development,node}.js',
-						] ) );
+						], { base: 'src' } ) );
 
 						// Then pull in the actual views.
 						args.push( gulp.src( [
 							'src/app/views/' + view + '/**/*-{service,controller,directive,filter,model}.js'
-						] ) );
+						], { base: 'src' } ) );
 					} );
 				}
 
@@ -376,7 +403,11 @@ module.exports = function( config )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 					.pipe( plugins.concat( outputFilename ) )
 					.pipe( injectModules( config ) )
-					// .pipe( lazyStates( { outputFile: config.buildDir + '/app/modules/' + outputFilename + 'on' } ) )  // `on` makes `js` + `on`. =]
+					.pipe( plugins.angularEmbedTemplates( {
+						minimize: minimizeOptions,
+						skipErrors: true,
+						filter: filterTemplateUrlMatches,
+					} ) )
 					.pipe( config.production ? plugins.ngAnnotate() : gutil.noop() )
 					.pipe( config.production ? plugins.uglify() : gutil.noop() )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {

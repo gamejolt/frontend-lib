@@ -1,3 +1,6 @@
+- Include gulp-angular-embed-templates.
+  "gulp-angular-embed-templates": "gamejolt/gulp-angular-embed-templates#filter-matches"
+
 - Include gettext as well as Translate even if you don't use translations.
 
 - Use our fork of gulp-rev-all.
