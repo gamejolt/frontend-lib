@@ -12,9 +12,9 @@ module.exports = function( config )
 
 			var options = {
 				dontRenameFile: [
-					// Examples: /index.html, /chat.html
+					// Examples: /index.html, /chat.html, index.html
 					// Not: /app/views/something.html
-					/^\/[^\/]*\.html$/ig,
+					/^\/?[^\/]*\.html$/ig,
 
 					// Other common things that have to be static filenames.
 					/^\/robots\.txt$/,
