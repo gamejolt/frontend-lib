@@ -124,6 +124,7 @@ module.exports = function( config )
 		//   /*/components/forms/
 		return !/^\/[^\/]*\/views\//.test( match )
 			&& !/^\/[^\/]*\/components\/forms\//.test( match )
+			&& !/^\/lib\//.test( match )
 			;
 	}
 
