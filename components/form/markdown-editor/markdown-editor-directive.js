@@ -47,6 +47,10 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 				this.shouldShowWidgetHelp = true;
 			}
 
+			if ( this.markdownMode == 'forums' ) {
+				this.shouldShowWidgetHelp = true;
+			}
+
 			if ( angular.isDefined( this.userCodemirrorOptions ) && angular.isObject( this.userCodemirrorOptions ) ) {
 				angular.extend( this.codemirrorOptions, this.userCodemirrorOptions );
 			}
