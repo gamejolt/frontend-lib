@@ -207,7 +207,7 @@ module.exports = function( config )
 				} ) )
 				.pipe( plugins.size( { gzip: true, title: 'js:vendor' } ) )
 				.pipe( gulp.dest( config.buildDir + '/app' ) )
-				.pipe( plugins.connect.reload() )
+				;
 		}
 	} );
 
@@ -291,19 +291,19 @@ module.exports = function( config )
 
 			stream = stream
 				.pipe( injectModules( config ) )
+				.pipe( plugins.ngAnnotate() )
 				.pipe( plugins.angularEmbedTemplates( {
 					minimize: minimizeOptions,
 					skipErrors: true,
 					filter: filterTemplateUrlMatches,
 				} ) )
-				.pipe( config.production ? plugins.ngAnnotate() : gutil.noop() )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
 					sourceRoot: '/../../src/' + section + '/',
 				} ) )
 				.pipe( plugins.size( { gzip: true, title: 'js:' + section } ) )
 				.pipe( gulp.dest( config.buildDir + '/' + section ) )
-				.pipe( plugins.connect.reload() );
+				;
 
 			return stream;
 		} );
@@ -403,19 +403,19 @@ module.exports = function( config )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 					.pipe( plugins.concat( outputFilename ) )
 					.pipe( injectModules( config ) )
+					.pipe( plugins.ngAnnotate() )
 					.pipe( plugins.angularEmbedTemplates( {
 						minimize: minimizeOptions,
 						skipErrors: true,
 						filter: filterTemplateUrlMatches,
 					} ) )
-					.pipe( config.production ? plugins.ngAnnotate() : gutil.noop() )
 					.pipe( config.production ? plugins.uglify() : gutil.noop() )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
 						sourceRoot: '/../../src/app/modules/',
 					} ) )
 					.pipe( plugins.size( { gzip: true, title: 'js:module:' + outputFilename } ) )
 					.pipe( gulp.dest( config.buildDir + '/app/modules' ) )
-					.pipe( plugins.connect.reload() )
+					;
 
 				return stream;
 			} );

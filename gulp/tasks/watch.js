@@ -38,25 +38,28 @@ module.exports = function( config )
 			[ 'styles' ]
 		);
 
-		// JavaScript.
+		// JavaScript AND html.
 		var jsPaths = [
 			'src/**/*.js',
-			config.gjLibDir + 'components/**/*.html',  // For any compiled templates, like angular-ui-bootstrap.
+
+			// Templates compile into JS for components.
+			'src/**/*.html',
 		];
 
 		gulp.watch(
 			jsPaths,
-			[ 'js' ]
+			[ 'html:js:reload' ]
 		);
 
-		// HTML.
-		gulp.watch(
-			[
-				'src/**/*.html',
-			],
-			// Gotta do JS too since components/views might need to compile HTML into template cache.
-			[ 'html', 'js' ]
-		);
+		gulp.task( 'reload:js', function()
+		{
+			gulp.src( jsPaths, { read: false } ).pipe( plugins.connect.reload() );
+		} );
+
+		gulp.task( 'html:js:reload', function( cb )
+		{
+			return sequence( 'html', 'js', 'reload:js', cb );
+		} );
 
 		// Images.
 		gulp.watch(

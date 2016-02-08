@@ -29,9 +29,7 @@ module.exports = function( config )
 			}
 		}
 
-		stream = stream
-			.pipe( gulp.dest( config.buildDir ) )
-			.pipe( plugins.connect.reload() );
+		stream = stream.pipe( gulp.dest( config.buildDir ) );
 
 		return stream;
 	} );
