@@ -1,4 +1,4 @@
-angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( Model, User )
+angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( Model, User, Notification )
 {
 	function Forum_Post( data )
 	{
@@ -15,6 +15,10 @@ angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( Model, User )
 
 			if ( data.modified_by_user ) {
 				this.modified_by_user = new User( data.modified_by_user );
+			}
+
+			if ( data.notification ) {
+				this.notification = new Notification( data.notification );
 			}
 		}
 	}
