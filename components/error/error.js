@@ -9,7 +9,7 @@ angular.module( 'gj.Error', [] ).config( function( $stateProvider, $urlRouterPro
 	.forEach( function( code )
 	{
 		$stateProvider.state( 'error-' + code, {
-			templateUrl: '/lib/gj-lib-client/components/error/error-' + code + '.html'
+			templateUrl: /*!*/ '/lib/gj-lib-client/components/error/error-' + code + '.html'
 		} );
 	} );
 

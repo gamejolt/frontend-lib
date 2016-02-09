@@ -117,13 +117,13 @@ module.exports = function( config )
 	 * We inject the template contents in angular stuff when templateUrl is found.
 	 * This is the function to filter out matches we don't want to do so for.
 	 */
-	function filterTemplateUrlMatches( match )
+	function skipTemplateUrlMatches( templatePath )
 	{
 		// Basically:
 		//   /*/views/
 		//   /*/components/forms/
-		return !/^\/[^\/]*\/views\//.test( match )
-			&& !/^\/[^\/]*\/components\/forms\//.test( match )
+		return /^\/[^\/]*\/views\//.test( templatePath )
+			|| /^\/[^\/]*\/components\/forms\//.test( templatePath )
 			;
 	}
 
@@ -294,8 +294,7 @@ module.exports = function( config )
 				.pipe( plugins.ngAnnotate() )
 				.pipe( plugins.angularEmbedTemplates( {
 					minimize: minimizeOptions,
-					skipErrors: true,
-					filter: filterTemplateUrlMatches,
+					skipTemplates: skipTemplateUrlMatches,
 				} ) )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
@@ -406,8 +405,7 @@ module.exports = function( config )
 					.pipe( plugins.ngAnnotate() )
 					.pipe( plugins.angularEmbedTemplates( {
 						minimize: minimizeOptions,
-						skipErrors: true,
-						filter: filterTemplateUrlMatches,
+						skipTemplates: skipTemplateUrlMatches,
 					} ) )
 					.pipe( config.production ? plugins.uglify() : gutil.noop() )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {

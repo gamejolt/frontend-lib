@@ -1,5 +1,5 @@
 - Include gulp-angular-embed-templates.
-  "gulp-angular-embed-templates": "gamejolt/gulp-angular-embed-templates#filter-matches"
+  "gulp-angular-embed-templates": "^2.1.0"
 
 - Include gettext as well as Translate even if you don't use translations.
 

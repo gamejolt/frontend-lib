@@ -45,7 +45,7 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 		else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
 			this.action_model = new ($injector.get( 'Forum_Post' ))( data.action_model );
 			this.action_label = 'New Forum Post';
-			this.url = Environment.baseUrl + this.action_model.url;  // Opens in old site.
+			this.url = undefined;
 			this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
 			this.is_user_based = true;
 		}
@@ -137,43 +137,45 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 
 	Notification.prototype.go = function()
 	{
-		// Forum posts need to open in new window for now.
-		if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
-			if ( Environment.isClient ) {
-				require( 'nw.gui' ).Shell.openExternal( this.url );
-			}
-			else {
-				$window.open( this.url );
-			}
-		}
-		else if ( this.url ) {
+		if ( this.url ) {
 			$location.url( this.url.replace( '#!', '' ) );
 		}
-		// Comments need to fetch the URL first.
-		else if ( this.type == Notification.TYPE_COMMENT_ADD || this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
-			$injector.get( 'Comment' ).getCommentUrl( this.action_id )
-				.then( function( url )
-				{
-					// If we're going to a URL within this domain, then we want to strip off the domain stuff
-					// and go to the URL. Otherwise we need to do a full-page change to the domain/url.
-					var search = Environment.baseUrl;
-					if ( url.search( search ) === 0 ) {
-						url = url.replace( search, '' );
-						$location.url( url );
+		// Need to fetch the URL first.
+		else if (
+			this.type == Notification.TYPE_COMMENT_ADD
+			|| this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER
+			|| this.type == Notification.TYPE_FORUM_POST_ADD
+		) {
+			var promise = null;
+			if ( this.type == Notification.TYPE_COMMENT_ADD || this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
+				promise = $injector.get( 'Comment' ).getCommentUrl( this.action_id );
+			}
+			else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
+				promise = $injector.get( 'Forum_Post' ).getPostUrl( this.action_id );
+			}
+
+			promise.then( function( url )
+			{
+				// If we're going to a URL within this domain, then we want to strip off the domain stuff
+				// and go to the URL. Otherwise we need to do a full-page change to the domain/url.
+				var search = Environment.baseUrl;
+				if ( url.search( search ) === 0 ) {
+					url = url.replace( search, '' );
+					$location.url( url );
+				}
+				else {
+					if ( Environment.isClient ) {
+						require( 'nw.gui' ).Shell.openExternal( url );
 					}
 					else {
-						if ( Environment.isClient ) {
-							require( 'nw.gui' ).Shell.openExternal( url );
-						}
-						else {
-							$window.location = url;
-						}
+						$window.location = url;
 					}
-				} )
-				.catch( function()
-				{
-					$injector.get( 'Growls' ).error( 'Could not go to comment.' );
-				} );
+				}
+			} )
+			.catch( function()
+			{
+				$injector.get( 'Growls' ).error( 'Could not go to comment.' );
+			} );
 		}
 		else {
 			throw new Error( 'No URL to go to for notification.' );
