@@ -12,6 +12,10 @@ angular.module( 'gj.Forum.Topic' ).factory( 'Forum_Topic', function( Api, Model,
 			if ( data.main_post ) {
 				this.main_post = new Forum_Post( data.main_post );
 			}
+
+			if ( data.latest_post ) {
+				this.latest_post = new Forum_Post( data.latest_post );
+			}
 		}
 	}
 
