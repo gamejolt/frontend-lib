@@ -1,4 +1,4 @@
-angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( Model, User, Notification )
+angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( Environment, Model, User, Notification )
 {
 	function Forum_Post( data )
 	{
@@ -26,6 +26,11 @@ angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( Model, User, 
 	Forum_Post.STATUS_ACTIVE = 'active';
 	Forum_Post.STATUS_SPAM = 'spam';
 	Forum_Post.STATUS_REMOVED = 'removed';
+
+	Forum_Post.prototype.getPermalink = function()
+	{
+		return Environment.baseUrl + '/x/permalink/forum-post/' + this.id;
+	};
 
 	Forum_Post.prototype.$save = function()
 	{
