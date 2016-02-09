@@ -1,4 +1,4 @@
-angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( Environment, Model, User, Notification )
+angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( $q, Api, Environment, Model, User, Notification )
 {
 	function Forum_Post( data )
 	{
@@ -30,6 +30,18 @@ angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( Environment, 
 	Forum_Post.prototype.getPermalink = function()
 	{
 		return Environment.baseUrl + '/x/permalink/forum-post/' + this.id;
+	};
+
+	Forum_Post.getPostUrl = function( postId )
+	{
+		return Api.sendRequest( '/web/forums/posts/get-post-url/' + postId, null, { detach: true } ).then( function( response )
+		{
+			if ( !response || response.error ) {
+				return $q.reject( response.error );
+			}
+
+			return response.url;
+		} );
 	};
 
 	Forum_Post.prototype.$save = function()
