@@ -15,8 +15,7 @@ angular.module( 'gj.Report.Form' ).directive( 'gjFormReport', function( $q, App,
 	form.onSubmit = function( scope )
 	{
 		var data = {
-			// Uppercase first letter.
-			resourceName: scope.type.charAt( 0 ).toUpperCase() + scope.type.slice( 1 ),
+			resourceName: scope.type,
 			resourceId: scope.resource.id,
 			reason: scope.formModel.reason,
 		};

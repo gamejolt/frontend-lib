@@ -1,7 +1,9 @@
 <div class="modal-body">
-	<h2 class="modal-title" ng-if="modalCtrl.type == 'comment'" translate>Report Comment</h2>
-	<h2 class="modal-title" ng-if="modalCtrl.type == 'game'" translate>Report Game</h2>
-	<h2 class="modal-title" ng-if="modalCtrl.type == 'user'" translate>Report User</h2>
+	<h2 class="modal-title" ng-if="modalCtrl.type == 'Comment'" translate>Report Comment</h2>
+	<h2 class="modal-title" ng-if="modalCtrl.type == 'Game'" translate>Report Game</h2>
+	<h2 class="modal-title" ng-if="modalCtrl.type == 'User'" translate>Report User</h2>
+	<h2 class="modal-title" ng-if="modalCtrl.type == 'Forum_Topic'" translate>Report Topic</h2>
+	<h2 class="modal-title" ng-if="modalCtrl.type == 'Forum_Post'" translate>Report Post</h2>
 
 	<gj-form-report
 		report-type="{{ modalCtrl.type }}"
