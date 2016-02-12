@@ -1,3 +1,7 @@
+- Change any markdown-widget components to use "editor-class" attribute to pass in a class for textarea.
+- Remove Codemirror
+- Include "angular-elastic": "2.5.1" in bower
+
 - Include gulp-angular-embed-templates.
   "gulp-angular-embed-templates": "^2.1.0"
 

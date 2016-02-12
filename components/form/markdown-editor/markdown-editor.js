@@ -1,1 +1,1 @@
-angular.module( 'gj.Form.MarkdownEditor', [ 'gj.Form', 'gj.Api' ] );
+angular.module( 'gj.Form.MarkdownEditor', [ 'monospaced.elastic', 'gj.Form', 'gj.Api' ] );

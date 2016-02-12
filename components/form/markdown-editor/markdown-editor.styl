@@ -7,33 +7,44 @@
 		> ul
 			float: left
 
-	// For when we can't show the codemirror widget...
-	// We try to match the styling for codemirror.
-	> textarea
+	textarea
 		width: 100%
-		height: 200px
-		padding: 6px 12px
+		padding: ($grid-gutter-width / 2)
 
-.form-markdown-editor-helptext
-	float: right
-	padding-top: 10px
-	padding-bottom: 10px
-	font-size: $font-size-tiny
+		@media $media-xs
+			padding: ($grid-gutter-width-xs / 2)
 
-	// We show a big markdown icon, so we have to remove the extra padding.
-	@media $media-xs
-		padding-top: 0
-		padding-bottom: 0
+	&-helptext
+		float: right
+		padding-top: 10px
+		padding-bottom: 10px
+		font-size: $font-size-tiny
 
-	.jolticon
-		vertical-align: top
-		padding-right: 3px
+		// We show a big markdown icon, so we have to remove the extra padding.
+		@media $media-xs
+			padding-top: 0
+			padding-bottom: 0
 
-.form-markdown-editor-helplink
-	display: inline-block
+		.jolticon
+			vertical-align: top
+			padding-right: 3px
 
-	@media $media-sm-up
-		margin-left: 15px
+	&-helplink
+		display: inline-block
 
-.form-markdown-editor-preview
-	border: 1px solid $input-border
+		@media $media-sm-up
+			margin-left: 15px
+
+	&-preview
+		border: 1px solid $input-border
+
+	// Handle this with CSS so that it's immediate in the view when toggling modes.
+	textarea
+	&-preview
+		display: none
+
+	&.is-editing textarea
+		display: block
+
+	&.is-previewing .form-markdown-editor-preview
+		display: block

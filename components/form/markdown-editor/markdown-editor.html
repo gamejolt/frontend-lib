@@ -1,4 +1,6 @@
-<div class="form-markdown-editor">
+<div class="form-markdown-editor"
+	ng-class="{ 'is-editing': ctrl.currentTab == 'edit', 'is-previewing': ctrl.currentTab == 'preview' }"
+	>
 
 	<nav class="platform-list inline">
 		<ul ng-if="!ctrl.isPreviewDisabled">
@@ -31,28 +33,15 @@
 		</div>
 	</nav>
 
-	<!--
-		We set "form-markdown-editor-control" on this element.
-		That directive is what will add the ui-codemirror element on it and will also
-		attach a name for working with an ng-model for error reporting.
-	-->
-	<div
-		ng-if="!Screen.isXs"
-		form-markdown-editor-control="codemirror"
-		ui-codemirror-opts="ctrl.codemirrorOptions"
-		ng-show="ctrl.currentTab == 'edit'"
-		ng-required="ctrl.formGroup.isRequired">
-	</div>
-
-	<!--
-		We use textarea instead for mobile.
-	-->
 	<textarea
-		ng-if="Screen.isXs"
+		class="form-control"
 		form-markdown-editor-control="textarea"
+		ng-class="ctrl.editorClass"
 		ng-show="ctrl.currentTab == 'edit'"
 		ng-required="ctrl.formGroup.isRequired"
-		ng-attr-placeholder="{{ ctrl.codemirrorOptions.placeholder || '' }}"
+		ng-attr-placeholder="{{ ctrl.placeholder || '' }}"
+		msd-elastic
+		rows="1"
 		></textarea>
 
 	<!--

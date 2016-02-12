@@ -4,15 +4,13 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 		require: [ 'formMarkdownEditor', '^gjForm', '^formGroup' ],
 		scope: {
 			previewClass: '@',
-			userCodemirrorOptions: '=codemirrorOptions',
+			editorClass: '@?',
+			placeholder: '@?',
 			markdownPreviewUrl: '@',
 			markdownMode: '@?',
 			isPreviewDisabled: '=?disablePreview',
 		},
 		templateUrl: '/lib/gj-lib-client/components/form/markdown-editor/markdown-editor.html',
-
-		// Gotta run before the codemirror directive links so that we can pass in correct options.
-		// Controller is run before pre-link, so should be fine.
 		bindToController: true,
 		controllerAs: 'ctrl',
 		controller: function( $scope )
@@ -21,11 +19,6 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			$scope.Environment = Environment;
 
 			this.currentTab = 'edit';
-
-			this.codemirrorOptions = {
-				lineWrapping: true,
-				mode: 'gfm'
-			};
 
 			if ( !this.markdownMode ) {
 				this.markdownMode = 'markdown';
@@ -49,10 +42,6 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 
 			if ( this.markdownMode == 'forums' ) {
 				this.shouldShowWidgetHelp = true;
-			}
-
-			if ( angular.isDefined( this.userCodemirrorOptions ) && angular.isObject( this.userCodemirrorOptions ) ) {
-				angular.extend( this.codemirrorOptions, this.userCodemirrorOptions );
 			}
 		},
 		link: function( scope, element, attrs, controllers )
@@ -96,6 +85,18 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			{
 				return !!scope.$parent[ gjForm.formModel ][ formGroup.name ];
 			};
+
+			// We watch for when content changes and when it does we make sure
+			// we're in "edit" mode.
+			scope.$watch( function()
+			{
+				return scope.$parent[ gjForm.formModel ][ formGroup.name ];
+			},
+			function( content )
+			{
+				_this.previewContent = '';
+				_this.currentTab = 'edit';
+			} );
 		}
 	};
 } )
@@ -116,15 +117,8 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 				var gjForm = controllers[0] || undefined;
 				var formGroup = controllers[1] || undefined;
 
-				var type = attrs.formMarkdownEditorControl;
-
 				// Remove this directive so that we don't go in an infinite loop.
 				element.removeAttr( 'form-markdown-editor-control' );
-
-				// Make it a ui-codemirror element?
-				if ( type == 'codemirror' ) {
-					element.attr( 'ui-codemirror', 'ui-codemirror' );
-				}
 
 				// Set the ID/name from the form group data.
 				element.attr( 'name', formGroup.name );
