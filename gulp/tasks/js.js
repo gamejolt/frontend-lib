@@ -233,10 +233,11 @@ module.exports = function( config )
 						} );
 					}
 
+					// We pull in the state definitions, but exclude any controllers, directives, etc.
 					if ( moduleDefinition.views ) {
 						moduleDefinition.views.forEach( function( view )
 						{
-							excludeApp.push( '!src/' + section + '/views/' + view + '/**/*.js' );
+							excludeApp.push( '!src/' + section + '/views/' + view + '/**/*-{service,controller,directive,filter,model}.js' );
 						} );
 					}
 
@@ -383,15 +384,11 @@ module.exports = function( config )
 				if ( moduleDefinition.views ) {
 					moduleDefinition.views.forEach( function( view )
 					{
-						// Pull in modules definitions only first.
+						// We don't pull in state or module definitions (files without a suffx).
+						// This way the states will all be available for routing, but controllers and what not
+						// can be lazy loaded in.
 						args.push( gulp.src( [
-							'src/app/views/' + view + '/**/*.js',
-							'!src/app/views/' + view + '/**/*-{service,controller,directive,filter,model,production,development,node}.js',
-						], { base: 'src' } ) );
-
-						// Then pull in the actual views.
-						args.push( gulp.src( [
-							'src/app/views/' + view + '/**/*-{service,controller,directive,filter,model}.js'
+							'src/app/views/' + view + '/**/*-{service,controller,directive,filter,model}.js',
 						], { base: 'src' } ) );
 					} );
 				}
