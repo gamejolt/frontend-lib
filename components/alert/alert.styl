@@ -24,7 +24,11 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 	// We add spacing to the top proportionate to the amount of spacing that would
 	// usually be above the top of text.
 	.i-button
+	.btn
 		margin-top: 5px + ($line-height-computed - $font-size-base)
+
+	.jolticon
+		@extend .jolticon.middle
 
 .alert-dismiss
 	position: absolute
