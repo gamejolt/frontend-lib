@@ -1,4 +1,4 @@
-angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( $q, Api, Environment, Model, User, Notification )
+angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( $q, $injector, Api, Environment, Model, User, Notification )
 {
 	function Forum_Post( data )
 	{
@@ -19,6 +19,11 @@ angular.module( 'gj.Forum.Post' ).factory( 'Forum_Post', function( $q, Api, Envi
 
 			if ( data.notification ) {
 				this.notification = new Notification( data.notification );
+			}
+
+			if ( data.topic ) {
+				var Forum_Topic = $injector.get( 'Forum_Topic' );
+				this.topic = new Forum_Topic( data.topic );
 			}
 		}
 	}
