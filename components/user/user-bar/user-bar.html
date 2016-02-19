@@ -1,27 +1,33 @@
-<nav class="user-bar navbar">
-	<div class="container">
+<div class="container">
+	<nav class="user-bar navbar">
 
-		<gj-site-selector site-selector-current="{{ site }}"></gj-site-selector>
+		<div class="navbar-left">
+			<gj-site-selector site-selector-current="{{ site }}"></gj-site-selector>
+		</div>
 
-		<ul class="pull-right">
-			<li>
-				<a class="user-bar-user" ng-href="{{ userLink }}" ng-if="user">
+		<div class="navbar-center">
+			<div class="links" ng-transclude></div>
+		</div>
 
-					<!--
-						We manually output the user-avatar HTML instead of using the directive
-						so that it updates when our user changes. The user-avatar directive does
-						one time binding since it needs to be fast.
-					-->
-					<span class="user-bar-avatar">
-						<img ng-src="{{ user.img_avatar }}" class="img-responsive" alt="Your Avatar">
-					</span>
+		<div class="navbar-right">
+			<ul class="navbar-items">
+				<li>
+					<a class="user-bar-user" ng-href="{{ userLink }}" ng-if="user">
 
-					<span class="user-bar-username">{{ user.username }}</span>
+						<!--
+							We manually output the user-avatar HTML instead of using the directive
+							so that it updates when our user changes. The user-avatar directive does
+							one time binding since it needs to be fast.
+						-->
+						<span class="user-bar-avatar">
+							<img ng-src="{{ user.img_avatar }}" class="img-responsive" alt="Your Avatar">
+						</span>
 
-				</a>
-			</li>
-		</ul>
+						<span class="user-bar-username">{{ user.username }}</span>
 
-		<div class="links" ng-transclude></div>
-	</div>
-</nav>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</div>

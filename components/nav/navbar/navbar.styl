@@ -1,6 +1,8 @@
+$navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
+
 .navbar
 	@extend .clearfix
-	height: 50px
+	height: $navbar-height
 	background-color: $gray-darkest
 	display: flex
 
@@ -28,7 +30,7 @@
 .navbar-item
 	display: inline-block
 	overflow: hidden
-	height: $shell-top-nav-height
+	height: $navbar-height
 	padding: 15px 10px
 	line-height: 20px
 	user-select: none
@@ -47,7 +49,7 @@
 	width: 1px
 	margin: 0 10px
 	vertical-align: top
-	top: ($shell-top-nav-height - @height) * 0.5
+	top: ($navbar-height - @height) * 0.5
 	background-color: $gray-dark
 
 .navbar-avatar
@@ -69,7 +71,7 @@
 	padding: 0
 	padding-right: 20px
 	width: 100%
-	height: $shell-top-nav-height
+	height: $navbar-height
 	overflow: hidden
 
 	.form-control
@@ -78,7 +80,7 @@
 		background-color: transparent
 		color: $white
 		width: 100%
-		height: $shell-top-nav-height
+		height: $navbar-height
 
 /**
  * Hover/active state underline.
