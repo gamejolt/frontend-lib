@@ -198,7 +198,7 @@ module.exports = function( config )
 
 		if ( files.length ) {
 			return gulp.src( files )
-				.pipe( plugins.newer( config.buildDir + '/app/vendor.js' ) )
+				// .pipe( plugins.newer( config.buildDir + '/app/vendor.js' ) )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'vendor.js' ) )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
@@ -395,7 +395,7 @@ module.exports = function( config )
 
 				// Call it with the arguments we've built up.
 				var stream = streamqueue.apply( streamqueue, args )
-					.pipe( plugins.newer( config.buildDir + '/app/modules/' + outputFilename ) )
+					// .pipe( plugins.newer( config.buildDir + '/app/modules/' + outputFilename ) )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 					.pipe( plugins.concat( outputFilename ) )
 					.pipe( injectModules( config ) )

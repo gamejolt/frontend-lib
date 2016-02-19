@@ -20,7 +20,7 @@ module.exports = function( config )
 
 		// Only copy what has changed since last time.
 		var stream = gulp.src( src, { base: 'src' } )
-			.pipe( plugins.newer( config.buildDir ) );
+			// .pipe( plugins.newer( config.buildDir ) );
 
 		// Add in any injections here that may be configured.
 		if ( config.injections ) {
