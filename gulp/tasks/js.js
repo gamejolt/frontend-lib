@@ -360,7 +360,7 @@ module.exports = function( config )
 				args.push( { objectMode: true } );
 
 				if ( files.length ) {
-					args.push( gulp.src( files ) );
+					args.push( gulp.src( files, { base: 'src' } ) );
 				}
 
 				// Component files?
