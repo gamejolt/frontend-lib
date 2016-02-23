@@ -26,6 +26,7 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, Model, Environmen
 		if ( this.status == Game.STATUS_VISIBLE ) {
 			this.is_published = true;
 		}
+		Registry.store( 'Game', this );
 	}
 
 	Game.STATUS_HIDDEN = 0;
