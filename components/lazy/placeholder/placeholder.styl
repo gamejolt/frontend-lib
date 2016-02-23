@@ -18,3 +18,10 @@
 
 	&-h4
 		height: $font-size-h4 !important
+
+// For immediate transition between visibility of elements.
+.lazy-placeholder-resolving > ng-transclude > :not(.lazy-placeholder)
+	display: none
+
+.lazy-placeholder-resolved > ng-transclude > .lazy-placeholder
+	display: none
