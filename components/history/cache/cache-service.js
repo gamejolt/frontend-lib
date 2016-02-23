@@ -35,15 +35,12 @@ angular.module( 'gj.History.Cache' )
 		}
 
 		// We only pull from cache if they're in a historical state.
-		console.log( History.inHistorical, _currentState );
 		if ( History.inHistorical && _currentState.data[ name ] ) {
-			console.log( 'cache hit' );
 			return $q.resolve( _currentState.data[ name ] );
 		}
 
 		return promise.then( function( data )
 		{
-			console.log( 'cache miss' );
 			_currentState.data[ name ] = data;
 			return data;
 		} );
@@ -74,7 +71,6 @@ angular.module( 'gj.History.Cache' )
 		_.remove( _states, { url: _currentState.url } );
 
 		// Push to end.
-		console.log( 'added new state', _currentState );
 		_states.push( _currentState );
 		_currentState = null;
 
