@@ -1,5 +1,9 @@
-angular.module( 'gj.Game' ).factory( 'Game', function( Model, Environment, User, MediaItem, $state )
+angular.module( 'gj.Game' ).factory( 'Game', function( $state, Model, Environment, User, MediaItem, Registry )
 {
+	Registry.setConfig( 'Game', {
+		maxItems: 50,
+	} );
+
 	function Game( data )
 	{
 		if ( data ) {
