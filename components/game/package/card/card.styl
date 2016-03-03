@@ -1,4 +1,5 @@
 .game-package-card
+	@extend .full-bleed-xs
 	padding: 15px
 	margin-bottom: $line-height-computed
 
@@ -49,3 +50,93 @@
 
 	.alert-info
 		@extend .fill-dark
+
+	&-pricing
+		@extend .fill-gray
+		float: right
+		margin-top: -(15px + 4px)
+		margin-left: 15px
+		padding: 10px
+		text-align: center
+
+		&-amount
+			font-weight: bold
+			font-size: $font-size-h4
+			color: $white
+
+		&-currency
+			color: $gray-lighter
+
+		&-decimal
+			font-size: $font-size-small
+
+		&-tag
+			color: $white
+			font-size: $font-size-tiny
+			font-weight: bold
+			text-transform: uppercase
+
+			&.muted
+				color: $gray-lighter
+
+	.payment-well-expander
+		margin-left: -15px
+		margin-right: -15px
+
+		&:last-child.is-expanded
+			margin-bottom: -15px
+
+			.payment-well
+				margin-bottom: 0
+				margin-top: $line-height-computed
+				border-bottom: 0
+
+	.payment-well
+		@extend .fill-dark
+		color: $white
+		padding: 15px
+		margin-bottom: $line-height-computed
+		border-top: 1px dashed $gray-light
+		border-bottom: 1px dashed $gray-light
+
+		p:last-child
+			margin-bottom: 0
+
+		hr
+			border-color: $gray
+			margin-bottom: $font-size-base
+
+		&-label
+			display: block
+			margin-bottom: $font-size-base
+
+			@media $media-sm-up
+				display: inline-block
+				width: 150px
+
+		&-amount-input
+			position: relative
+			display: inline-block
+
+			input
+				display: inline-block
+				width: 100px
+				margin-right: 10px
+				padding-left: 25px
+
+			&-currency
+				position: absolute
+				content: '$'
+				top: 5px
+				left: 10px
+				color: $black
+
+	&-payment-what-link
+		display: block
+		margin: $font-size-base 0
+		text-align: center
+		font-size: $font-size-small
+
+		@media $media-sm-up
+			float: right
+			display: inline-block

@@ -1,5 +1,16 @@
 <div class="game-package-card fill-darker">
 
+	<div class="game-package-card-pricing">
+		<span class="game-package-card-pricing-amount">
+			<span class="game-package-card-pricing-currency">$</span>10<span class="game-package-card-pricing-decimal">.00</span>
+		</span>
+		<br><span class="game-package-card-pricing-tag muted">or more</span>
+		<!--<span class="game-package-card-pricing-tag">name your price</span>-->
+		<!--<span class="game-package-card-pricing-amount">
+			FREE
+		</span>-->
+	</div>
+
 	<div class="game-package-card-body">
 
 		<h4 class="game-package-card-title">
@@ -75,6 +86,55 @@
 			gj-track-event="game-package-card:show-full-description"
 			></a>
 
+		<div gj-expand-when="ctrl.isPaymentOpen" class="payment-well-expander">
+			<div class="payment-well">
+
+				<p>
+					The developer has set the price of this game to <strong>$10</strong>, but you are able to support them by giving more.
+				</p>
+
+				<p>
+					<strong class="payment-well-label">Name your price:</strong>
+					<!--<button class="btn btn-outline">
+						$1
+					</button>
+					<button class="btn btn-outline">
+						$5
+					</button>
+					<button class="btn btn-outline">
+						$10
+					</button>
+					<button class="btn btn-outline">
+						$20
+					</button>
+					<span style="display: inline-block; margin-left: 15px">(<a class="link-muted">custom amount</a>)</span>-->
+					<span class="payment-well-amount-input">
+						<span class="payment-well-amount-input-currency">$</span>
+						<input type="text" class="form-control" gj-focus-when>
+					</span>
+					<span class="text-muted">($10 or more)</span>
+				</p>
+
+				<p>
+					<strong class="payment-well-label">Checkout with:</strong>
+					<a class="btn btn-outline" href="/checkout" target="_self">
+						<span class="jolticon jolticon-credit-card"></span>
+						Card
+					</a>
+					<button class="btn btn-outline">
+						PayPal
+					</button>
+				</p>
+
+				<hr>
+
+				<span class="jolticon jolticon-chevron-right middle"></span>
+				<a class="link-unstyled small">
+					No thanks, take to me to the download.
+				</a>
+			</div>
+		</div>
+
 		<!--
 			The buttons are so different for client that we put them in a child component.
 			They will only be available on WTTF since they're pushed in the client component there.'
@@ -83,7 +143,7 @@
 			<gj-client-package-card-options></gj-client-package-card-options>
 		</div>
 
-		<div class="game-package-card-buttons" ng-if="::!Environment.isClient">
+		<div class="game-package-card-buttons" ng-if="::false && !Environment.isClient">
 
 			<button class="btn btn-primary-outline"
 				ng-if="::ctrl.browserBuild"
@@ -96,10 +156,11 @@
 				<span class="jolticon-addon jolticon" ng-class="::'jolticon-' + ctrl.showcasedBrowserIcon"></span>
 			</button>
 
+				<!--ng-click="ctrl.buildClick( ctrl.downloadableBuild )"-->
 			<button class="btn btn-success-outline"
 				ng-if="::ctrl.downloadableBuild"
-				ng-click="ctrl.buildClick( ctrl.downloadableBuild )"
 				ng-class="{ 'btn-block': Screen.isXs }"
+				ng-click="ctrl.isPaymentOpen = true"
 				>
 
 				<span class="jolticon jolticon-download"></span>
@@ -161,6 +222,38 @@
 				</div>
 			</gj-popover>
 
+		</div>
+
+		<button class="btn btn-success-outline"
+			ng-class="{ 'btn-block': Screen.isXs }"
+			ng-click="ctrl.isPaymentOpen = !ctrl.isPaymentOpen"
+			>
+
+			<span class="jolticon jolticon-heart"></span>
+			Buy Now
+		</button>
+
+		<span class="game-package-card-payment-what-link" ng-if="!ctrl.isWhatOpen">
+			(<a class="link-help" ng-click="ctrl.isWhatOpen = true">What do you get?</a>)
+		</span>
+
+		<div gj-expand-when="ctrl.isWhatOpen" class="payment-well-expander">
+			<div class="payment-well">
+
+				<div ng-repeat="build in ctrl.builds">
+					<!--<span ng-class="::'jolticon jolticon-' + extraBuild.icon"></span>-->
+
+					{{ ::build.primary_file.filename }}
+					<!--<small ng-if="extraBuild.arch == '64'">64-bit</small>-->
+
+					<small class="text-muted">({{ build.primary_file.filesize | filesize }})</small>
+				</div>
+
+				<br>
+
+				<small>And really warm feelings for supporting an indie developer!</small>
+
+			</div>
 		</div>
 
 	</div>
