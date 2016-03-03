@@ -3,7 +3,7 @@
 	<div class="game-package-card-body">
 
 		<h4 class="game-package-card-title">
-			{{ ::(ctrl.package.title || ctrl.game.title) }}
+			{{ (ctrl.package.title || ctrl.game.title) }}
 		</h4>
 
 		<div class="game-package-card-meta">
@@ -57,14 +57,14 @@
 			<span class="game-package-card-date" am-time-ago="::ctrl.showcasedRelease.published_on"></span>
 		</div>
 
-		<div class="game-package-card-description" ng-if="::ctrl.package.description">
+		<div class="game-package-card-description" ng-if="ctrl.package.description">
 			<gj-fade-collapse
 				fade-collapse-height="100"
 				fade-collapse-is-open="ctrl.showFullDescription"
 				fade-collapse-is-required="ctrl.canToggleDescription"
 				>
 
-				<p ng-bind-html="::ctrl.package.description | linky"></p>
+				<p ng-bind-html="ctrl.package.description | linky"></p>
 
 			</gj-fade-collapse>
 		</div>
