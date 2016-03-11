@@ -4,10 +4,6 @@ angular.module( 'gj.Game.Release' ).factory( 'Game_Release', function( Api, Mode
 	{
 		if ( data ) {
 			angular.extend( this, data );
-
-			if ( data.republished_release ) {
-				this.republished_release = new Game_Release( data.republished_release );
-			}
 		}
 	}
 
