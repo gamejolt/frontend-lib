@@ -61,7 +61,7 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout )
 			// On submit of the form, just funnel off to the form's onSubmit function.
 			scope.onSubmit = function()
 			{
-				_this._onSubmit( scope );
+				return _this._onSubmit( scope );
 			};
 		};
 	}
@@ -146,7 +146,7 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout )
 			} );
 		}
 
-		scope.formState.progress.then( function()
+		return scope.formState.progress.then( function()
 		{
 			// Send the new model back into the submit handler.
 			if ( angular.isDefined( scope.submitHandler ) ) {

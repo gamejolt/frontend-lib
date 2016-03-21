@@ -31,6 +31,7 @@ angular.module( 'gj.Game.Build' ).factory( 'Game_Build', function( Api, Model, G
 	Game_Build.STATUS_ACTIVE = 'active';
 	Game_Build.STATUS_REMOVED = 'removed';
 
+	Game_Build.ERROR_MISSING_FIELDS = 'missing-fields';
 	Game_Build.ERROR_LAUNCH_OPTIONS = 'launch-options';
 
 	Game_Build.browserTypes = [

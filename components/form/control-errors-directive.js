@@ -25,7 +25,8 @@ angular.module( 'gj.Form' ).directive( 'controlErrors', function( $filter, $time
 		templateUrl: '/lib/gj-lib-client/components/form/control-errors.html',
 		bindToController: {
 			labelInput: '@label',
-			position: '@'
+			position: '@',
+			ignoreDirty: '=',
 		},
 		scope: {},
 		controllerAs: 'ctrl',

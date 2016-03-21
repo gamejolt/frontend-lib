@@ -31,6 +31,8 @@ angular.module( 'gj.Form' ).directive( 'formGroup', function( $interpolate, $par
 			this.label = undefined;
 			this.isRequired = true;
 			this.hideLabel = false;
+			this.labelClass = '';
+			this.labelClasses = [];
 
 			this.validationData = {};
 
@@ -103,11 +105,39 @@ angular.module( 'gj.Form' ).directive( 'formGroup', function( $interpolate, $par
 			{
 				if ( val ) {
 					formGroupCtrl.hideLabel = true;
+					// formGroupCtrl.labelClasses.push( 'sr-only' );
 				}
 				else {
 					formGroupCtrl.hideLabel = false;
+					// _.remove( formGroupCtrl.labelClasses, 'sr-only' );
 				}
+				updateLabelClass();
 			} );
+
+			// <!--ng-class="{ 'sr-only': formGroupCtrl.hideLabel }"-->
+
+
+			if ( angular.isDefined( attrs.labelClass ) ) {
+
+				attrs.$observe( 'labelClass', function( val )
+				{
+					formGroupCtrl.labelClasses = val.split( ' ' );
+					updateLabelClass();
+				} );
+			}
+
+			function updateLabelClass()
+			{
+				var classes = [];
+				if ( formGroupCtrl.hideLabel ) {
+					classes.push( 'sr-only' );
+				}
+
+				classes = classes.concat( formGroupCtrl.labelClasses );
+				classes = _.uniq( classes );
+
+				formGroupCtrl.labelClass = classes.join( ' ' );
+			}
 		}
 	};
 } );

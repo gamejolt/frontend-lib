@@ -29,6 +29,10 @@ angular.module( 'gj.ExpandWhen' ).directive( 'gjExpandWhen', function( $timeout,
 					scope.isTranscluded = shouldExpand;
 					scope.isCollapsed = !shouldExpand;
 					primed = true;
+
+					if ( !scope.isCollapsed ) {
+						element[0].classList.add( 'is-expanded' );
+					}
 				}
 
 				/**
@@ -69,6 +73,7 @@ angular.module( 'gj.ExpandWhen' ).directive( 'gjExpandWhen', function( $timeout,
 						{
 							timeoutPromise = null;
 							scope.isCollapsed = false;
+							element[0].classList.add( 'is-expanded' );
 						}, 100 );
 					}
 					else {
@@ -89,6 +94,7 @@ angular.module( 'gj.ExpandWhen' ).directive( 'gjExpandWhen', function( $timeout,
 
 							// Start the collapsing animation.
 							scope.isCollapsed = true;
+							element[0].classList.remove( 'is-expanded' );
 
 							// Collapse uses a transition to time the collapsing and then watches for the transition end event.
 							// We'll do the same so that we can be sure to clean up the inner HTML right after the collapser
