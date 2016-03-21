@@ -46,15 +46,16 @@
 
 			<span class="dot-separator" ng-if="ctrl.support.length"></span>
 
-			<span class="game-package-card-version">
-				Version:
-				<strong ng-if="ctrl.showcasedRelease">{{ ctrl.showcasedRelease.version_number }}</strong>
-				<em ng-if="!ctrl.showcasedRelease">(none yet)</em>
+			<span ng-if="ctrl.showcasedRelease">
+				<span class="game-package-card-version">
+					Version:
+					<strong>{{ ctrl.showcasedRelease.version_number }}</strong>
+				</span>
+
+				<span class="dot-separator"></span>
+
+				<span class="game-package-card-date" am-time-ago="ctrl.showcasedRelease.published_on"></span>
 			</span>
-
-			<span class="dot-separator"></span>
-
-			<span class="game-package-card-date" am-time-ago="::ctrl.showcasedRelease.published_on"></span>
 		</div>
 
 		<div class="game-package-card-description" ng-if="ctrl.package.description">
@@ -74,6 +75,10 @@
 			ng-click="ctrl.showFullDescription = !ctrl.showFullDescription"
 			gj-track-event="game-package-card:show-full-description"
 			></a>
+
+		<div class="alert alert-warning" ng-if="!ctrl.showcasedRelease">
+			No published releases yet.
+		</div>
 
 		<!--
 			The buttons are so different for client that we put them in a child component.
