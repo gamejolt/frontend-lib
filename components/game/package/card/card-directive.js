@@ -1,5 +1,5 @@
 angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', function(
-	$window, $timeout, $state, $injector, Screen, Growls, Game, Game_Build, Game_PlayModal, Device, Environment, HistoryTick, Analytics, Popover )
+	$timeout, $injector, Screen, Game, Game_Build, Game_PlayModal, Game_Downloader, Device, Environment, Analytics )
 {
 	/**
 	 * Sort must start at 1 so that we can put their prefered OS as sort 0 later on.
@@ -306,63 +306,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			{
 				Analytics.trackEvent( 'game-package-card', 'download', 'download' );
 
-				// Bundle-only games can only live in a person's library, or as a key.
-				// So if it's bundle-only, or if a key was passed in, go direct.
-				if ( this.game.bundle_only || this.key ) {
-
-					// If already waiting on a download, don't do anything.
-					if ( downloadPromise ) {
-						return;
-					}
-
-					// If they click away from the page before the download starts, then cancel the download redirect.
-					var shouldTransition = true;
-					var downloadUrl = null;
-					var downloadPromise = build.getDownloadUrl( { key: this.key } )
-						.then( function( response )
-						{
-							downloadUrl = response.downloadUrl;
-
-							// Be sure to log the build download.
-							return HistoryTick.sendBeacon( 'game-build', build.id );
-						} )
-						.then( function()
-						{
-							if ( shouldTransition ) {
-								$window.location = downloadUrl;
-							}
-							downloadPromise = null;
-						} );
-
-					$scope.$on( '$stateChangeStart', function()
-					{
-						shouldTransition = false;
-					} );
-				}
-				// Client needs to download externally.
-				else if ( Environment.isClient ) {
-					var gui = require( 'nw.gui' );
-					gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.build', { slug: this.game.slug, id: this.game.id, buildId: build.id } ) );
-					Popover.hideAll();
-				}
-				else {
-					$state.go( 'discover.games.view.download.build', { slug: this.game.slug, id: this.game.id, buildId: build.id } );
-				}
+				Game_Downloader.download( this.game, build, {
+					key: this.key,
+				} );
 			};
 
 			this.showBrowserModal = function( build )
 			{
 				Analytics.trackEvent( 'game-package-card', 'download', 'play' );
 
-				// TODO: This only goes to game page. We need to direct to a URL that would open the correct build in a modal.
-				if ( Environment.isClient && build.type != Game_Build.TYPE_HTML ) {
-					var gui = require( 'nw.gui' );
-					gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.overview', { slug: this.game.slug, id: this.game.id } ) );
-					Popover.hideAll();
-				}
-				else {
-					Game_PlayModal.show( this.game, build );
-				}
+				Game_PlayModal.show( this.game, build );
 			};
 		}
 	};
