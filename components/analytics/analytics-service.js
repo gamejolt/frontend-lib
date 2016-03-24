@@ -4,6 +4,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 	this.extraTrackers = [];
 
 	var _additionalPageTracker = null;
+	var _recordedPageView = true;
 
 	this.SOCIAL_NETWORK_FB = 'facebook';
 	this.SOCIAL_NETWORK_TWITTER = 'twitter';
@@ -20,6 +21,23 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 	// Allow file:// and app:// protocols for Client or App.
 	// https://discuss.atom.io/t/google-analytics-in-atom-shell/14109/7
 	$window.ga( 'set', 'checkProtocolTask', null );
+
+	$rootScope.$on( '$stateChangeStart', function( event )
+	{
+		_recordedPageView = false;
+	} );
+
+	$rootScope.$on( '$stateChangeSuccess', function( event, current )
+	{
+		// If we are redirecting to a new page, don't track the route.
+		// This happens (for example) when there is a trailing slash at the end of the URL.
+		if ( current && (current.$$route || current).redirectTo ) {
+			return;
+		}
+
+		// Track the page view.
+		_this.trackPageview();
+	} );
 
 	function _ensureUserId()
 	{
@@ -68,83 +86,85 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 		}
 	}
 
-
-	this.trackPageview = function( path, tracker )
+	this.trackPageview = function( path )
 	{
-		return $q( function( resolve, reject )
+		// Gotta make sure the system has a chance to compile the title into the page.
+		$timeout( function()
 		{
-			var method = 'send';
-
-			if ( !_shouldTrack() ) {
-				console.log( 'Skip tracking page view since not a normal user.' );
-				resolve();
-				return;
-			}
-
-			// Did they pass in a tracker other than the default?
-			if ( angular.isDefined( tracker ) ) {
-
-				// Normalize.
-				var normalizedTracker = tracker.replace( /[\-_:]/g, '' );
-
-				// Prefix the method with the tracker.
-				method = normalizedTracker + '.' + method;
-
-				// If we haven't added this tracker yet in GA, let's do so.
-				if ( _.indexOf( _this.extraTrackers, tracker ) === -1 ) {
-
-					// Save that we have this tracker set.
-					_this.extraTrackers.push( tracker );
-
-					// Now add it in GA.
-					if ( Environment.env == 'development' ) {
-						console.log( 'Create new tracker: ' + tracker );
-					}
-					else {
-						$window.ga( 'create', tracker, 'auto', { name: normalizedTracker } );
-					}
-				}
-			}
-			else {
-				tracker = '';
-			}
-
-			// Gotta make sure the system has a chance to compile the title into the page.
-			$timeout( function()
-			{
-				_ensureUserId();
-
-				// If no path passed in, then pull it from the location.
-				if ( !path ) {
-					path = $location.url();
-				}
-
-				// Pull the title.
-				var title = $document[0].title;
-
-				var options = {
-					page: path,
-					title: title,
-				};
-
-				// Now track the page view.
-				if ( Environment.env == 'development' ) {
-					console.log( 'Track page view: tracker(' + tracker + ') | ' + JSON.stringify( options ) );
-					resolve();
-				}
-				else {
-					$window.ga( method, 'pageview', angular.extend( {}, options, {
-						hitCallback: wrapTimeout( resolve ),
-					} ) );
-				}
-
-				// If they have an additional page tracker attached, then track the page view for that tracker as well.
-				if ( !tracker && _additionalPageTracker ) {
-					_this.trackPageview( null, _additionalPageTracker );
-				}
-			} );
+			_trackPageview( path );
 		} );
 	};
+
+	function _trackPageview( path, tracker )
+	{
+		if ( !_shouldTrack() ) {
+			console.log( 'Skip tracking page view since not a normal user.' );
+			return;
+		}
+
+		var method = 'send';
+
+		// Did they pass in a tracker other than the default?
+		if ( tracker ) {
+
+			// Normalize.
+			var normalizedTracker = tracker.replace( /[\-_:]/g, '' );
+
+			// Prefix the method with the tracker.
+			method = normalizedTracker + '.' + method;
+
+			// If we haven't added this tracker yet in GA, let's do so.
+			if ( _.indexOf( _this.extraTrackers, tracker ) === -1 ) {
+
+				// Save that we have this tracker set.
+				_this.extraTrackers.push( tracker );
+
+				// Now add it in GA.
+				if ( Environment.env == 'development' ) {
+					console.log( 'Create new tracker: ' + tracker );
+				}
+				else {
+					$window.ga( 'create', tracker, 'auto', { name: normalizedTracker } );
+				}
+			}
+		}
+		else {
+			tracker = '';
+		}
+
+		_ensureUserId();
+
+		// If no path passed in, then pull it from the location.
+		if ( !path ) {
+			path = $location.url();
+		}
+
+		// Pull the title.
+		var title = $document[0].title;
+
+		var options = {
+			page: path,
+			title: title,
+		};
+
+		// Now track the page view.
+		if ( Environment.env == 'development' ) {
+			console.log( 'Track page view: tracker(' + tracker + ') | ' + JSON.stringify( options ) );
+		}
+		else {
+			$window.ga( method, 'pageview', angular.extend( {}, options ) );
+		}
+
+		// If they have an additional page tracker attached, then track the page view for that tracker as well.
+		if ( !tracker && _additionalPageTracker ) {
+			_trackPageview( null, _additionalPageTracker );
+		}
+
+		// Since this is the primary (not an additional tracker) set that we've recorded the page view.
+		if ( !tracker ) {
+			_recordedPageView = true;
+		}
+	}
 
 	this.trackEvent = function( category, action, label, value )
 	{
@@ -254,5 +274,11 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 			}
 			_additionalPageTracker = null;
 		} );
+
+		// If we have already recorded the page view and we're adding the tracker, record the current page.
+		// This ensures that if we add it in lazily it'll still record correctly.
+		if ( _recordedPageView ) {
+			_trackPageview( null, trackingId );
+		}
 	};
 } );
