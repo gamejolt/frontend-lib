@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $q, $modal, Growls, HistoryTick )
+angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $q, $modal, $state, Growls, HistoryTick, Environment, Popover, Analytics )
 {
 	var _this = this;
 
@@ -6,6 +6,22 @@ angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $q, $
 
 	this.show = function( _game, _build )
 	{
+		Analytics.trackEvent( 'game-play', 'play' );
+
+		// TODO: This only goes to game page. We need to direct to a URL that would open the correct build in a modal.
+		if ( Environment.isClient && _build.type != Game_Build.TYPE_HTML ) {
+			var gui = require( 'nw.gui' );
+			gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.overview', {
+				slug: _game.slug,
+				id: _game.id,
+			} ) );
+
+			// If they clicked into this through a popover.
+			Popover.hideAll();
+
+			return $q.resolve();
+		}
+
 		if ( this.hasModal ) {
 			Growls.error( 'You already have a browser game open. You can only have one running at a time.', 'Oh no!' );
 			return $q.reject();

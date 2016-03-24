@@ -161,6 +161,23 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, Model, Environmen
 		return pluckedBuilds;
 	};
 
+	Game.pluckBrowserBuilds = function( packages )
+	{
+		var pluckedBuilds = [];
+
+		packages.forEach( function( _package )
+		{
+			_package._builds.forEach( function( build )
+			{
+				if ( build.isBrowserBased() ) {
+					pluckedBuilds.push( build );
+				}
+			} );
+		} );
+
+		return pluckedBuilds;
+	};
+
 	Game.chooseBestBuild = function( builds, os, arch )
 	{
 		var build, search;
