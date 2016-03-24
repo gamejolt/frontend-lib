@@ -31,7 +31,12 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 	{
 		// If we are redirecting to a new page, don't track the route.
 		// This happens (for example) when there is a trailing slash at the end of the URL.
-		if ( current && (current.$$route || current).redirectTo ) {
+		if ( current && current.redirectTo ) {
+			return;
+		}
+
+		// If the state is set to not track the pageview, skip.
+		if ( current && current.skipTrackPageview ) {
 			return;
 		}
 
