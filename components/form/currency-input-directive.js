@@ -9,10 +9,6 @@ angular.module( 'gj.Form' ).directive( 'gjFormCurrencyInput', function( currency
 		{
 			ngModel.$validators.currency = function( modelVal, viewVal )
 			{
-				if ( !ngModel.$valid ) {
-					return true;
-				}
-
 				var val = modelVal || viewVal;
 				return ngModel.$isEmpty( val ) || CURRENCY_REGEXP.test( val );
 			};
