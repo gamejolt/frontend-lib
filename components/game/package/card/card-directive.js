@@ -1,5 +1,5 @@
 angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', function(
-	$timeout, $injector, Screen, Game, Game_Build, Game_PlayModal, Game_Downloader, Device, Environment, Analytics )
+	$timeout, $injector, Screen, Game, Game_Build, Game_PlayModal, Game_Downloader, Device, Environment, Analytics, currencyFilter )
 {
 	/**
 	 * Sort must start at 1 so that we can put their prefered OS as sort 0 later on.
@@ -154,6 +154,20 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			// If this game is in their installed games, this will populate.
 			this.installedBuild = null;
 
+			this.sellable = this.package._sellable;
+			this.isWhatOpen = false;
+			this.isPaymentOpen = false;
+			this.clickedBuild = null;
+
+			if ( this.sellable && angular.isArray( this.sellable.pricings ) ) {
+				this.pricing = this.sellable.pricings[0];
+			}
+
+			this.hasPaymentWell = false;
+			if ( this.sellable && !this.sellable.is_owned && (this.sellable.type == 'pwyw' || this.sellable.type == 'paid') ) {
+				this.hasPaymentWell = true;
+			}
+
 			if ( this.builds ) {
 
 				var os = Device.os();
@@ -294,6 +308,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 
 			this.buildClick = function( build )
 			{
+				// If this isn't a free game, then we want to slide the payment open.
+				// If it's pay what you want, when the payment is open and they click a build again, just take them to it.
+				if ( this.hasPaymentWell ) {
+					if ( !this.isPaymentOpen ) {
+						this.isPaymentOpen = true;
+						this.clickedBuild = build;
+						return;
+					}
+				}
+
 				if ( build.type == Game_Build.TYPE_DOWNLOADABLE ) {
 					this.download( build );
 				}
@@ -307,6 +331,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				Analytics.trackEvent( 'game-package-card', 'download', 'download' );
 
 				Game_Downloader.download( this.game, build, {
+					isOwned: this.sellable && this.sellable.is_owned,
 					key: this.key,
 				} );
 			};
@@ -315,7 +340,26 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			{
 				Analytics.trackEvent( 'game-package-card', 'download', 'play' );
 
-				Game_PlayModal.show( this.game, build );
+				Game_PlayModal.show( this.game, build, {
+					isOwned: this.sellable && this.sellable.is_owned,
+					key: this.key,
+				} );
+			};
+
+			this.integer = function()
+			{
+				return Math.floor( this.pricing.amount / 100 );
+			};
+
+			this.decimal = function()
+			{
+				var amount = this.pricing.amount;
+
+				amount %= 100;
+				if ( amount < 10 ) {
+					amount = amount + '0';
+				}
+				return '' + amount;
 			};
 		}
 	};

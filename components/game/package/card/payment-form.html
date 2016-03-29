@@ -1,0 +1,57 @@
+<form gj-form="formModel" name="paymentForm" class="form-horizontal game-package-card-payment-form">
+
+	<form-group name="price" label="Name your price:" label-class="col-sm-4" class="no-animate">
+		<div class="col-sm-8">
+
+			<!--<button class="btn btn-outline">
+				$1
+			</button>
+			<button class="btn btn-outline">
+				$5
+			</button>
+			<button class="btn btn-outline">
+				$10
+			</button>
+			<button class="btn btn-outline">
+				$20
+			</button>
+			<span style="display: inline-block; margin-left: 15px">(<a class="link-muted">custom amount</a>)</span>-->
+
+			<span class="game-package-card-payment-form-amount-input">
+				<span class="game-package-card-payment-form-amount-input-currency">$</span>
+				<input form-control="number"
+					gj-focus-when
+					gj-form-currency-input
+					step="1"
+					ng-min="::sellable.type == 'paid' ? pricing.amount / 100 : 1"
+					>
+			</span>
+
+			<span class="text-muted" ng-if="::pricing.type == 'paid'">
+				({{ ::pricing.amount | gjCurrency }} or more)
+			</span>
+
+			<control-errors label="price"></control-errors>
+		</div>
+	</form-group>
+
+	<div class="form-group no-animate">
+		<label class="col-sm-4 control-label">Checkout with:</label>
+		<div class="col-sm-8">
+			<button class="btn btn-outline"
+				ng-disabled="!paymentForm.$valid"
+				ng-click="checkoutCard()"
+				>
+				<span class="jolticon jolticon-credit-card"></span>
+				Card
+			</button>
+			<button class="btn btn-outline"
+				ng-disabled="!paymentForm.$valid"
+				ng-click="checkoutPaypal()"
+				>
+				PayPal
+			</button>
+		</div>
+	</div>
+
+</form>

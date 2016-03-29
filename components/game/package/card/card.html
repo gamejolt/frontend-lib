@@ -1,20 +1,48 @@
 <div class="game-package-card fill-darker">
 
-	<div class="game-package-card-pricing">
-		<span class="game-package-card-pricing-amount">
-			<span class="game-package-card-pricing-currency">$</span>10<span class="game-package-card-pricing-decimal">.00</span>
-		</span>
-		<br><span class="game-package-card-pricing-tag muted">or more</span>
-		<!--<span class="game-package-card-pricing-tag">name your price</span>-->
-		<!--<span class="game-package-card-pricing-amount">
-			FREE
-		</span>-->
+	<div class="game-package-card-pricing"
+		ng-class="::{ 'game-package-card-pricing-owned': ctrl.sellable.is_owned }"
+		>
+
+		<!-- If they owne the package -->
+		<div ng-if="::ctrl.sellable.is_owned">
+			<strong>
+				OWNED
+			</strong>
+		</div>
+
+		<!-- If they don't own the package yet. -->
+		<div ng-if="::!ctrl.sellable.is_owned" ng-switch="::ctrl.sellable.type">
+
+			<!-- Fixed Pricing -->
+			<div ng-switch-when="paid">
+				<strong class="game-package-card-pricing-amount">
+					{{ ::ctrl.integer() | currency:undefined:0 }}<span class="game-package-card-pricing-decimal">.{{ ::ctrl.decimal() }}</span>
+				</strong>
+				<br><span class="game-package-card-pricing-tag muted">or more</span>
+			</div>
+
+			<!-- Pay What You Want -->
+			<div ng-switch-when="pwyw">
+				<span class="game-package-card-pricing-tag">
+					name your price
+				</span>
+			</div>
+
+			<!-- Free/Default -->
+			<div ng-switch-default>
+				<strong class="game-package-card-pricing-amount">
+					FREE
+				</strong>
+			</div>
+		</div>
+
 	</div>
 
 	<div class="game-package-card-body">
 
 		<h4 class="game-package-card-title">
-			{{ (ctrl.package.title || ctrl.game.title) }}
+			{{ ::(ctrl.package.title || ctrl.game.title) }}
 		</h4>
 
 		<div class="game-package-card-meta">
@@ -57,207 +85,202 @@
 
 			<span class="dot-separator" ng-if="ctrl.support.length"></span>
 
-			<span ng-if="ctrl.showcasedRelease">
+			<span ng-if="::ctrl.showcasedRelease">
 				<span class="game-package-card-version">
 					Version:
-					<strong>{{ ctrl.showcasedRelease.version_number }}</strong>
+					<strong>{{ ::ctrl.showcasedRelease.version_number }}</strong>
 				</span>
 
 				<span class="dot-separator"></span>
 
-				<span class="game-package-card-date" am-time-ago="ctrl.showcasedRelease.published_on"></span>
+				<span class="game-package-card-date" am-time-ago="::ctrl.showcasedRelease.published_on"></span>
 			</span>
 		</div>
 
-		<div class="game-package-card-description" ng-if="ctrl.package.description">
+		<div class="game-package-card-description" ng-if="::ctrl.package.description">
 			<gj-fade-collapse
 				fade-collapse-height="100"
 				fade-collapse-is-open="ctrl.showFullDescription"
 				fade-collapse-is-required="ctrl.canToggleDescription"
 				>
 
-				<p ng-bind-html="ctrl.package.description | linky"></p>
+				<p ng-bind-html="::ctrl.package.description | linky"></p>
 
 			</gj-fade-collapse>
 		</div>
 
 		<a class="hidden-text-expander"
-			ng-if="ctrl.canToggleDescription"
+			ng-if="::ctrl.canToggleDescription"
 			ng-click="ctrl.showFullDescription = !ctrl.showFullDescription"
 			gj-track-event="game-package-card:show-full-description"
 			></a>
 
-		<div class="alert alert-warning" ng-if="!ctrl.showcasedRelease">
+		<div class="alert alert-warning" ng-if="::!ctrl.showcasedRelease">
 			No published releases yet.
 		</div>
 
-		<div gj-expand-when="ctrl.isPaymentOpen" class="payment-well-expander">
-			<div class="payment-well">
+		<div ng-if="ctrl.hasPaymentWell">
+			<div gj-expand-when="ctrl.isPaymentOpen" class="payment-well-expander">
+				<div class="payment-well">
 
-				<p>
-					The developer has set the price of this game to <strong>$10</strong>, but you are able to support them by giving more.
-				</p>
+					<p ng-if="::ctrl.sellable.type == 'pwyw'">
+						<span ng-if="::!ctrl.pricing.amount">Support this developer by paying what you're able.</span>
+						<span ng-if="::ctrl.pricing.amount">This developer suggests paying <strong>{{ ::ctrl.pricing.amount | gjCurrency }}</strong> for this package, but you're free to pay what you're able.</span>
+					</p>
 
-				<p>
-					<strong class="payment-well-label">Name your price:</strong>
-					<!--<button class="btn btn-outline">
-						$1
-					</button>
-					<button class="btn btn-outline">
-						$5
-					</button>
-					<button class="btn btn-outline">
-						$10
-					</button>
-					<button class="btn btn-outline">
-						$20
-					</button>
-					<span style="display: inline-block; margin-left: 15px">(<a class="link-muted">custom amount</a>)</span>-->
-					<span class="payment-well-amount-input">
-						<span class="payment-well-amount-input-currency">$</span>
-						<input type="text" class="form-control" gj-focus-when>
-					</span>
-					<span class="text-muted">($10 or more)</span>
-				</p>
+					<p ng-if="::ctrl.sellable.type == 'paid'">
+						The developer has set the price of this game to <strong>{{ ::ctrl.pricing.amount | gjCurrency }}</strong>, but you are able to support them by giving more.
+					</p>
 
-				<p>
-					<strong class="payment-well-label">Checkout with:</strong>
-					<a class="btn btn-outline" href="/checkout" target="_self">
-						<span class="jolticon jolticon-credit-card"></span>
-						Card
-					</a>
-					<button class="btn btn-outline">
-						PayPal
-					</button>
-				</p>
+					<hr>
 
-				<hr>
+					<gj-game-package-card-payment-form
+						package="::ctrl.package"
+						sellable="::ctrl.sellable"
+						pricing="::ctrl.pricing"
+						>
+					</gj-game-package-card-payment-form>
 
-				<span class="jolticon jolticon-chevron-right middle"></span>
-				<a class="link-unstyled small">
-					No thanks, take to me to the download.
-				</a>
+					<div ng-if="::ctrl.sellable.type == 'pwyw'">
+						<hr>
+						<span class="jolticon jolticon-chevron-right middle"></span>
+						<a class="link-unstyled small"
+							ng-click="ctrl.buildClick( ctrl.clickedBuild )"
+							>
+							No thanks, take to me to the download.
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<!--
-			The buttons are so different for client that we put them in a child component.
-			They will only be available on WTTF since they're pushed in the client component there.'
-		-->
-		<div class="game-package-card-buttons" ng-if="::Environment.isClient">
-			<gj-client-package-card-options></gj-client-package-card-options>
-		</div>
-
-		<div class="game-package-card-buttons" ng-if="::false && !Environment.isClient">
-
-			<button class="btn btn-primary-outline"
-				ng-if="::ctrl.browserBuild"
-				ng-click="ctrl.buildClick( ctrl.browserBuild )"
-				ng-class="{ 'btn-block': Screen.isXs }"
-				>
-
-				<span class="jolticon jolticon-play"></span>
-				Play
-				<span class="jolticon-addon jolticon" ng-class="::'jolticon-' + ctrl.showcasedBrowserIcon"></span>
-			</button>
-
-				<!--ng-click="ctrl.buildClick( ctrl.downloadableBuild )"-->
-			<button class="btn btn-success-outline"
-				ng-if="::ctrl.downloadableBuild"
-				ng-class="{ 'btn-block': Screen.isXs }"
-				ng-click="ctrl.isPaymentOpen = true"
-				>
-
-				<span class="jolticon jolticon-download"></span>
-				Download
-				<small ng-if="::ctrl.supportInfo[ ctrl.showcasedOs ].arch == '64'">64-bit</small>
-				<small>({{ ::ctrl.downloadableBuild.primary_file.filesize | filesize }})</small>
-				<span class="jolticon-addon jolticon" ng-class="::'jolticon-' + ctrl.showcasedOsIcon"></span>
-			</button>
+		<div class="game-package-card-buttons" ng-if="::ctrl.sellable.type != 'paid' || ctrl.sellable.is_owned">
 
 			<!--
-				If this package only has "Other" builds, then we make it look like a download
-				button with a [...] after.
-				If the package has normal builds too, then we just show it as a more options sparse button.
+				The buttons are so different for client that we put them in a child component.
+				They will only be available on WTTF since they're pushed in the client component there.'
 			-->
-			<button class="btn"
-				ng-if="::ctrl.extraBuilds.length"
-				ng-class="{ 'btn-success-outline': ctrl.otherOnly, 'btn-outline': !ctrl.otherOnly, 'btn-block': Screen.isXs }"
-				gj-popover-trigger="game-package-card-options-{{ ctrl.package.id }}"
-				gj-track-event="game-package-card:more-options"
-				>
-				<span class="jolticon jolticon-ellipsis-h"></span>
-				<span ng-if="::ctrl.otherOnly">
+			<div ng-if="::Environment.isClient">
+				<gj-client-package-card-options></gj-client-package-card-options>
+			</div>
+
+			<div ng-if="::!Environment.isClient">
+
+				<button class="btn btn-primary-outline"
+					ng-if="::ctrl.browserBuild"
+					ng-click="ctrl.buildClick( ctrl.browserBuild )"
+					ng-class="{ 'btn-block': Screen.isXs }"
+					>
+					<span class="jolticon jolticon-play"></span>
+					Play
+					<span class="jolticon-addon jolticon" ng-class="::'jolticon-' + ctrl.showcasedBrowserIcon"></span>
+				</button>
+
+					<!--ng-click="ctrl.buildClick( ctrl.downloadableBuild )"-->
+				<button class="btn btn-success-outline"
+					ng-if="::ctrl.downloadableBuild"
+					ng-class="{ 'btn-block': Screen.isXs }"
+					ng-click="ctrl.buildClick( ctrl.downloadableBuild )"
+					>
 					<span class="jolticon jolticon-download"></span>
-					<span>Download</span>
-					<span class="jolticon-addon jolticon jolticon-other-os"></span>
-				</span>
-				<span ng-if="::!ctrl.otherOnly">more</span>
-			</button>
+					Download
+					<small ng-if="::ctrl.supportInfo[ ctrl.showcasedOs ].arch == '64'">64-bit</small>
+					<small>({{ ::ctrl.downloadableBuild.primary_file.filesize | filesize }})</small>
+					<span class="jolticon-addon jolticon" ng-class="::'jolticon-' + ctrl.showcasedOsIcon"></span>
+				</button>
 
-			<gj-popover popover-id="game-package-card-options-{{ ctrl.package.id }}">
-				<div class="list-group nowrap">
+				<!--
+					If this package only has "Other" builds, then we make it look like a download
+					button with a [...] after.
+					If the package has normal builds too, then we just show it as a more options sparse button.
+				-->
+				<button class="btn"
+					ng-if="::ctrl.extraBuilds.length"
+					ng-class="{ 'btn-success-outline': ctrl.otherOnly, 'btn-outline': !ctrl.otherOnly, 'btn-block': Screen.isXs }"
+					gj-popover-trigger="game-package-card-options-{{ ::ctrl.package.id }}"
+					gj-track-event="game-package-card:more-options"
+					>
+					<span class="jolticon jolticon-ellipsis-h"></span>
+					<span ng-if="::ctrl.otherOnly">
+						<span class="jolticon jolticon-download"></span>
+						<span>Download</span>
+						<span class="jolticon-addon jolticon jolticon-other-os"></span>
+					</span>
+					<span ng-if="::!ctrl.otherOnly">more</span>
+				</button>
 
-					<a class="list-group-item has-icon"
-						ng-repeat="extraBuild in ::ctrl.extraBuilds track by extraBuild.icon + '-' + extraBuild.build.id"
-						ng-click="ctrl.buildClick( extraBuild.build )"
-						gj-track-event="game-package-card:more-options:click-option"
-						>
-						<span ng-class="::'jolticon jolticon-' + extraBuild.icon"></span>
+				<gj-popover popover-id="game-package-card-options-{{ ::ctrl.package.id }}">
+					<div class="list-group nowrap">
 
-						<!--
-							We show the filename if it's an "Other" build.
-						-->
-						<span ng-if="::!extraBuild.build.os_other">
-							{{ ::extraBuild.type == Game_Build.TYPE_DOWNLOADABLE ? 'Download' : 'Play' }}
-						</span>
-						<span ng-if="::extraBuild.build.os_other">{{ ::extraBuild.build.primary_file.filename }}</span>
+						<a class="list-group-item has-icon"
+							ng-repeat="extraBuild in ::ctrl.extraBuilds track by extraBuild.icon + '-' + extraBuild.build.id"
+							ng-click="ctrl.buildClick( extraBuild.build )"
+							gj-track-event="game-package-card:more-options:click-option"
+							>
+							<span ng-class="::'jolticon jolticon-' + extraBuild.icon"></span>
 
-						<small ng-if="::extraBuild.arch == '64'">64-bit</small>
+							<!--
+								We show the filename if it's an "Other" build.
+							-->
+							<span ng-if="::!extraBuild.build.os_other">
+								{{ ::extraBuild.type == Game_Build.TYPE_DOWNLOADABLE ? 'Download' : 'Play' }}
+							</span>
+							<span ng-if="::extraBuild.build.os_other">{{ ::extraBuild.build.primary_file.filename }}</span>
 
-						<small class="text-muted">({{ ::extraBuild.build.primary_file.filesize | filesize }})</small>
+							<small ng-if="::extraBuild.arch == '64'">64-bit</small>
 
-						<!--
-							If the version is different than the main release, then show it.
-						-->
-						<span class="tiny" ng-if="::extraBuild.build.game_release_id != ctrl.showcasedRelease.id">
-							<em>v{{ ::extraBuild.build._release.version_number }}</em>
-						</span>
-					</a>
-				</div>
-			</gj-popover>
+							<small class="text-muted">({{ ::extraBuild.build.primary_file.filesize | filesize }})</small>
 
+							<!--
+								If the version is different than the main release, then show it.
+							-->
+							<span class="tiny" ng-if="::extraBuild.build.game_release_id != ctrl.showcasedRelease.id">
+								<em>v{{ ::extraBuild.build._release.version_number }}</em>
+							</span>
+						</a>
+					</div>
+				</gj-popover>
+
+			</div>
 		</div>
 
-		<button class="btn btn-success-outline"
-			ng-class="{ 'btn-block': Screen.isXs }"
-			ng-click="ctrl.isPaymentOpen = !ctrl.isPaymentOpen"
-			>
+		<div ng-if="::ctrl.sellable.type == 'paid' && !ctrl.sellable.is_owned">
 
-			<span class="jolticon jolticon-heart"></span>
-			Buy Now
-		</button>
+			<!--
+				Remove this as soon as we open the payment area.
+			-->
+			<div class="clearfix">
+				<button class="btn btn-success-outline"
+					ng-if="!ctrl.isPaymentOpen"
+					ng-class="{ 'btn-block': Screen.isXs }"
+					ng-click="ctrl.isPaymentOpen = !ctrl.isPaymentOpen"
+					>
+					<span class="jolticon jolticon-heart"></span>
+					Buy Now
+				</button>
 
-		<span class="game-package-card-payment-what-link" ng-if="!ctrl.isWhatOpen">
-			(<a class="link-help" ng-click="ctrl.isWhatOpen = true">What do you get?</a>)
-		</span>
+				<span class="game-package-card-payment-what-link">
+					(<a class="link-help" ng-click="ctrl.isWhatOpen = !ctrl.isWhatOpen">What do you get?</a>)
+				</span>
+			</div>
 
-		<div gj-expand-when="ctrl.isWhatOpen" class="payment-well-expander">
-			<div class="payment-well">
+			<div gj-expand-when="ctrl.isWhatOpen" class="payment-well-expander payment-well-expander-files">
+				<div class="payment-well">
 
-				<div ng-repeat="build in ctrl.builds">
-					<!--<span ng-class="::'jolticon jolticon-' + extraBuild.icon"></span>-->
+					<div ng-repeat="build in ctrl.builds">
+						<!--<span ng-class="::'jolticon jolticon-' + extraBuild.icon"></span>-->
 
-					{{ ::build.primary_file.filename }}
-					<!--<small ng-if="extraBuild.arch == '64'">64-bit</small>-->
+						{{ ::build.primary_file.filename }}
+						<!--<small ng-if="extraBuild.arch == '64'">64-bit</small>-->
 
-					<small class="text-muted">({{ build.primary_file.filesize | filesize }})</small>
+						<small class="text-muted">({{ ::build.primary_file.filesize | filesize }})</small>
+					</div>
+
+					<br>
+
+					<small>And really warm feelings for supporting an indie developer!</small>
+
 				</div>
-
-				<br>
-
-				<small>And really warm feelings for supporting an indie developer!</small>
-
 			</div>
 		</div>
 

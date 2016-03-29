@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, Model, Game_Release, Game_Build, Game_Build_LaunchOption )
+angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, Model, Game_Release, Game_Build, Game_Build_LaunchOption, Sellable )
 {
 	function Game_Package( data )
 	{
@@ -24,16 +24,19 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 		packageData.releases = payload.releases ? Game_Release.populate( payload.releases ) : [];
 		packageData.builds = payload.builds ? Game_Build.populate( payload.builds ) : [];
 		packageData.launchOptions = payload.launchOptions ? Game_Build_LaunchOption.populate( payload.launchOptions ) : [];
+		packageData.sellables = payload.sellables ? Sellable.populate( payload.sellables ) : [];
 
 		// For convenient access in other methods.
 		var i;
 		var indexedPackages = _.indexBy( packageData.packages, 'id' );
 		var indexedReleases = _.indexBy( packageData.releases, 'id' );
+		var indexedSellables = _.indexBy( packageData.sellables, 'game_package_id' );
 
 		for ( i in packageData.packages ) {
 			var _package = packageData.packages[ i ];
 			_package._releases = _.where( packageData.releases, { game_package_id: _package.id } );
 			_package._builds = _.where( packageData.builds, { game_package_id: _package.id } );
+			_package._sellable = indexedSellables[ _package.id ];
 		}
 
 		for ( i in packageData.releases ) {

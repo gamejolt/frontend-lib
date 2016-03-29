@@ -11,11 +11,14 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 
 	this.download = function( game, build, options )
 	{
+		options = options || {};
+
 		Analytics.trackEvent( 'game-play', 'download' );
 
 		// Bundle-only games can only live in a person's library, or as a key.
 		// So if it's bundle-only, or if a key was passed in, go direct.
-		if ( game.bundle_only || (options && options.key) ) {
+		// Or, uh, if it is owned.
+		if ( game.bundle_only || options.key || options.isOwned ) {
 
 			// If already waiting on a download, don't do anything.
 			if ( downloadPromise ) {
@@ -25,7 +28,7 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 			// If they click away from the page before the download starts, then cancel the download redirect.
 			var shouldTransition = true;
 			var downloadUrl = null;
-			downloadPromise = build.getDownloadUrl( { key: (options && options.key ? options.key : null) } )
+			downloadPromise = build.getDownloadUrl( { key: (options.key || null) } )
 				.then( function( response )
 				{
 					downloadUrl = response.downloadUrl;
