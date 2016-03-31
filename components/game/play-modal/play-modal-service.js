@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $q, $modal, $state, Growls, HistoryTick, Environment, Popover, Analytics )
+angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $q, $modal, $state, Growls, HistoryTick, Environment, Popover, Analytics, Game_Build )
 {
 	var _this = this;
 
