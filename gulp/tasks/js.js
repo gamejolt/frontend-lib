@@ -277,7 +277,9 @@ module.exports = function( config )
 					gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ),
 
 					// Now pull in the development file if we're running a development environment build.
-					gulp.src( [ (config.developmentEnv ? 'src/' + section + '/app-development.js' : '') ], { base: 'src' } )
+					// We also pull in a development setting that imitates if production isn't specified explicitly.
+					gulp.src( [ (config.developmentEnv ? 'src/' + section + '/app-development.js' :
+								(config.production ? '' : 'src/' + section + '/app-development-for-production.js')) ], { base: 'src' } )
 				)
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'app.js' ) );
