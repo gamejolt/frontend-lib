@@ -26,6 +26,7 @@ angular.module( 'gj.Game.Build' ).factory( 'Game_Build', function( Api, Model, G
 	Game_Build.TYPE_SILVERLIGHT = 'silverlight';
 	Game_Build.TYPE_UNITY = 'unity';
 	Game_Build.TYPE_APPLET = 'applet';
+	Game_Build.TYPE_ROM = 'rom';
 
 	Game_Build.STATUS_ADDING = 'adding';
 	Game_Build.STATUS_ACTIVE = 'active';
@@ -41,6 +42,10 @@ angular.module( 'gj.Game.Build' ).factory( 'Game_Build', function( Api, Model, G
 		Game_Build.TYPE_UNITY,
 		Game_Build.TYPE_APPLET,
 	];
+
+	Game_Build.EMULATOR_GBA = 'gba';
+	Game_Build.EMULATOR_GBC = 'gbc';
+	Game_Build.EMULATOR_GB = 'gb';
 
 	Game_Build.prototype.isBrowserBased = function()
 	{
