@@ -68,6 +68,11 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			tooltip: 'Silverlight Web Playable',
 			sort: 54,
 		},
+		rom: {
+			icon: 'rom',
+			tooltip: 'ROM',
+			sort: 60,
+		},
 	};
 
 	function pluckOsSupport( build )
@@ -169,6 +174,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 						indexedBuilds[ build.type ] = build;
 						this.support.push( build.type );
 					}
+					else if ( build.type == Game_Build.TYPE_ROM ) {
+						indexedBuilds[ build.type ] = build;
+						this.support.push( build.type );
+					}
 					else if ( build.os_other ) {
 						otherBuilds.push( build );
 					}
@@ -223,7 +232,8 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				}, this );
 
 				// Do the same with browser type. Pick the default browser one to show.
-				[ 'html', 'flash', 'unity', 'applet', 'silverlight' ].every( function( type )
+				// We include ROMs in browser play.
+				[ 'html', 'flash', 'unity', 'applet', 'silverlight', 'rom' ].every( function( type )
 				{
 					if ( !indexedBuilds[ type ] ) {
 						return true;
@@ -297,7 +307,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				if ( build.type == Game_Build.TYPE_DOWNLOADABLE ) {
 					this.download( build );
 				}
-				else if ( build.isBrowserBased() ) {
+				else if ( build.isBrowserBased() || build.type == Game_Build.TYPE_ROM ) {
 					this.showBrowserModal( build );
 				}
 			};
