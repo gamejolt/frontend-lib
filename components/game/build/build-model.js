@@ -52,6 +52,11 @@ angular.module( 'gj.Game.Build' ).factory( 'Game_Build', function( Api, Model, G
 		return Game_Build.browserTypes.indexOf( this.type ) != -1;
 	};
 
+	Game_Build.prototype.isRom = function()
+	{
+		return this.type == Game_Build.TYPE_ROM;
+	};
+
 	Game_Build.prototype.hasError = function( error )
 	{
 		return this.errors && this.errors.indexOf( error ) !== -1;
