@@ -2,7 +2,7 @@ angular.module( 'gj.Debug.DebugBar' ).directive( 'gjDebugBar', function( Environ
 {
 	// Don't show debug bar in production.
 	// Return an empty linking function.
-	if ( Environment.env == 'production' ) {
+	if ( Environment.buildType == 'production' ) {
 		return angular.noop;
 	}
 

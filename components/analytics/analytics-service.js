@@ -47,7 +47,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 	function _ensureUserId()
 	{
 		if ( App.user && App.user.id ) {
-			if ( Environment.env == 'development' ) {
+			if ( Environment.buildType == 'development' ) {
 				console.log( 'Set tracking User ID: ' + App.user.id );
 			}
 			else {
@@ -55,7 +55,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 			}
 		}
 		else {
-			if ( Environment.env == 'development' ) {
+			if ( Environment.buildType == 'development' ) {
 				console.log( 'Unset tracking User ID.' );
 			}
 			else {
@@ -67,7 +67,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 	function _shouldTrack()
 	{
 		// If they're not a normal user, don't track.
-		if ( Environment.env == 'production' && App.user && App.user.permission_level > 0 ) {
+		if ( Environment.buildType == 'production' && App.user && App.user.permission_level > 0 ) {
 			return false;
 		}
 
@@ -125,7 +125,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 				_this.extraTrackers.push( tracker );
 
 				// Now add it in GA.
-				if ( Environment.env == 'development' ) {
+				if ( Environment.buildType == 'development' ) {
 					console.log( 'Create new tracker: ' + tracker );
 				}
 				else {
@@ -153,7 +153,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 		};
 
 		// Now track the page view.
-		if ( Environment.env == 'development' ) {
+		if ( Environment.buildType == 'development' ) {
 			console.log( 'Track page view: tracker(' + tracker + ') | ' + JSON.stringify( options ) );
 		}
 		else {
@@ -188,7 +188,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 				hitCallback: wrapTimeout( resolve ),
 			};
 
-			if ( Environment.env == 'development' ) {
+			if ( Environment.buildType == 'development' ) {
 				console.log( 'Track event: ' + category + ':' + (action || '-') + ':' + (label || '-') + ':' + (value || '-') );
 				resolve();
 			}
@@ -210,7 +210,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 
 			_ensureUserId();
 
-			if ( Environment.env == 'development' ) {
+			if ( Environment.buildType == 'development' ) {
 				console.log( 'Track social event: ' + network + ':' + action + ':' + target );
 				resolve();
 			}
@@ -233,7 +233,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 			}
 
 			$log.info( 'Timing (' + category + (label ? ':' + label : '') + ') ' + timingVar + ' = ' + value );
-			if ( Environment.env == 'production' ) {
+			if ( Environment.buildType == 'production' ) {
 				$window.ga( 'send', 'timing', category, timingVar, value, label, {
 					hitCallback: wrapTimeout( resolve ),
 				} );
@@ -256,7 +256,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 			return;
 		}
 
-		if ( Environment.env == 'development' ) {
+		if ( Environment.buildType == 'development' ) {
 			console.log( 'Set new experiment: ' + experiment + ' = ' + variation );
 		}
 		else {
@@ -267,14 +267,14 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 
 	this.attachAdditionalPageTracker = function( scope, trackingId )
 	{
-		if ( Environment.env == 'development' ) {
+		if ( Environment.buildType == 'development' ) {
 			console.log( 'Attached additional tracker: ' + trackingId );
 		}
 
 		_additionalPageTracker = trackingId;
 		scope.$on( '$destroy', function()
 		{
-			if ( Environment.env == 'development' ) {
+			if ( Environment.buildType == 'development' ) {
 				console.log( 'Detached additional tracker: ' + trackingId );
 			}
 			_additionalPageTracker = null;
