@@ -17,7 +17,7 @@ angular.module( 'gj.Connection' ).service( 'Connection', function( $rootScope, $
 	this.isClientOffline = Environment.isClient && !this.isOnline;
 
 	// For easier testing.
-	if ( Environment.env == 'development' && $injector.has( 'hotkeys' ) ) {
+	if ( Environment.buildType == 'development' && $injector.has( 'hotkeys' ) ) {
 		$injector.get( 'hotkeys' ).add( {
 			combo: 'o',
 			description: 'Toggle offline mode.',

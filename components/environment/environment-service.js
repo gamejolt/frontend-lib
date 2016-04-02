@@ -3,6 +3,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 	var provider = this;
 
 	provider.env = 'production';
+	provider.buildType = 'production';
 	provider.isClient = typeof global != 'undefined' && typeof process == 'object';
 	provider.isMobileApp = !!window.cordova;
 	provider.isSecure = window.location.protocol == 'https:';
@@ -14,6 +15,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 		var Environment = {};
 
 		Environment.env = provider.env;
+		Environment.buildType = provider.buildType;
 		Environment.isClient = provider.isClient;
 		Environment.isMobileApp = provider.isMobileApp;
 		Environment.isSecure = provider.isSecure;
