@@ -77,7 +77,7 @@ angular.module( 'gj.Ad.Video' ).directive( 'gjAdVideo', function()
 
 						var adsRequest = new $window.google.ima.AdsRequest();
 
-						if ( Environment.buildType == 'development' ) {
+						if ( Environment.env == 'development' ) {
 							adsRequest.adTagUrl = 'https://pubads.g.doubleclick.net/gampad/ads?' +
 								'sz=640x360&iu=/6062/iab_vast_samples/skippable&ciu_szs=300x250,728x90&' +
 								'impl=s&gdfp_req=1&env=vp&output=xml_vast2&unviewed_position_start=1&' +

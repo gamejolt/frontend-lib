@@ -137,7 +137,7 @@ angular.module( 'gj.Ad' ).directive( 'gjAd', function( $timeout, $window, $docum
 					googlePlaceholderElem.id = 'div-gpt-ad-' + scope.globalTagId + '-' + scope.adId;
 					adInnerElem.appendChild( googlePlaceholderElem );
 
-					if ( Environment.buildType == 'production' && !Environment.isClient ) {
+					if ( Environment.env == 'production' && !Environment.isClient ) {
 						_bootstrapAds();
 
 						var scriptElem = $document[0].createElement( 'script' );
