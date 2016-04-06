@@ -15,25 +15,25 @@
 				<!-- Reduce number of watches -->
 				<span ng-if="ctrl.localPackage.isInstalling()">
 					<span ng-if="!ctrl.localPackage.isPatchPaused()">
-						<span class="tag tag-blue" ng-if="ctrl.localPackage.isInstalling()">INSTALLING</span>
-						<span class="tag tag-pink" ng-if="ctrl.localPackage.didInstallFail()">INSTALL FAILED</span>
+						<span class="tag tag-blue" ng-if="ctrl.localPackage.isInstalling()" translate>INSTALLING</span>
+						<span class="tag tag-pink" ng-if="ctrl.localPackage.didInstallFail()" translate>INSTALL FAILED</span>
 					</span>
 					<span ng-if="ctrl.localPackage.isPatchPaused()">
-						<span class="tag">INSTALL PAUSED</span>
+						<span class="tag" translate>INSTALL PAUSED</span>
 					</span>
 				</span>
 				<span ng-if="ctrl.localPackage.isUpdating()">
 					<span ng-if="!ctrl.localPackage.isPatchPaused()">
-						<span class="tag tag-blue" ng-if="ctrl.localPackage.isUpdating()">UPDATING</span>
-						<span class="tag tag-pink" ng-if="ctrl.localPackage.didUpdateFail()">UPDATE FAILED</span>
+						<span class="tag tag-blue" ng-if="ctrl.localPackage.isUpdating()" translate>UPDATING</span>
+						<span class="tag tag-pink" ng-if="ctrl.localPackage.didUpdateFail()" translate>UPDATE FAILED</span>
 					</span>
 					<span ng-if="ctrl.localPackage.isPatchPaused()">
-						<span class="tag">UPDATE PAUSED</span>
+						<span class="tag" translate>UPDATE PAUSED</span>
 					</span>
 				</span>
-				<span class="tag tag-active" ng-if="ctrl.localPackage.isSettled() && !ctrl.localPackage.isRunning()">INSTALLED</span>
-				<span class="tag tag-active" ng-if="ctrl.localPackage.isRunning()">RUNNING</span>
-				<span class="tag" ng-if="ctrl.localPackage.isRemoving()">REMOVING</span>
+				<span class="tag tag-active" ng-if="ctrl.localPackage.isSettled() && !ctrl.localPackage.isRunning()" translate>INSTALLED</span>
+				<span class="tag tag-active" ng-if="ctrl.localPackage.isRunning()" translate>RUNNING</span>
+				<span class="tag" ng-if="ctrl.localPackage.isRemoving()" translate>REMOVING</span>
 				<span class="dot-separator"></span>
 			</span>
 
@@ -48,7 +48,7 @@
 
 			<span ng-if="ctrl.showcasedRelease">
 				<span class="game-package-card-version">
-					Version:
+					<span translate>Version:</span>
 					<strong>{{ ctrl.showcasedRelease.version_number }}</strong>
 				</span>
 
@@ -76,7 +76,7 @@
 			gj-track-event="game-package-card:show-full-description"
 			></a>
 
-		<div class="alert alert-warning" ng-if="!ctrl.showcasedRelease">
+		<div class="alert alert-warning" ng-if="!ctrl.showcasedRelease" translate>
 			No published releases yet.
 		</div>
 
@@ -97,7 +97,7 @@
 				>
 
 				<span class="jolticon jolticon-play"></span>
-				Play
+				<span translate>Play</span>
 				<span class="jolticon-addon jolticon" ng-class="::'jolticon-' + ctrl.showcasedBrowserIcon"></span>
 			</button>
 
@@ -108,8 +108,8 @@
 				>
 
 				<span class="jolticon jolticon-download"></span>
-				Download
-				<small ng-if="::ctrl.supportInfo[ ctrl.showcasedOs ].arch == '64'">64-bit</small>
+				<span translate>Download</span>
+				<small ng-if="::ctrl.supportInfo[ ctrl.showcasedOs ].arch == '64'" translate>64-bit</small>
 				<small>({{ ::ctrl.downloadableBuild.primary_file.filesize | filesize }})</small>
 				<span class="jolticon-addon jolticon" ng-class="::'jolticon-' + ctrl.showcasedOsIcon"></span>
 			</button>
@@ -128,10 +128,10 @@
 				<span class="jolticon jolticon-ellipsis-h"></span>
 				<span ng-if="::ctrl.otherOnly">
 					<span class="jolticon jolticon-download"></span>
-					<span>Download</span>
+					<span translate>Download</span>
 					<span class="jolticon-addon jolticon jolticon-other-os"></span>
 				</span>
-				<span ng-if="::!ctrl.otherOnly">more</span>
+				<span ng-if="::!ctrl.otherOnly" translate>more</span>
 			</button>
 
 			<gj-popover popover-id="game-package-card-options-{{ ctrl.package.id }}">
@@ -163,7 +163,7 @@
 							{{ ::extraBuild.build.primary_file.filename }}
 						</span>
 
-						<small ng-if="::extraBuild.arch == '64'">64-bit</small>
+						<small ng-if="::extraBuild.arch == '64'" translate>64-bit</small>
 
 						<small class="text-muted">({{ ::extraBuild.build.primary_file.filesize | filesize }})</small>
 

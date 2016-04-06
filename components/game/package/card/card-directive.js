@@ -7,70 +7,70 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 	var supportInfo = {
 		windows: {
 			icon: 'windows',
-			tooltip: 'Windows Support',
+			tooltip: gettextCatalog.getString( 'Windows Support' ),
 			sort: 10,
 		},
 		windows_64: {
 			icon: 'windows',
-			tooltip: 'Windows 64-bit Support',
+			tooltip: gettextCatalog.getString( 'Windows 64-bit Support' ),
 			arch: '64',
 			sort: 11,
 		},
 		mac: {
 			icon: 'mac',
-			tooltip: 'Mac Support',
+			tooltip: gettextCatalog.getString( 'Mac Support' ),
 			sort: 20,
 		},
 		mac_64: {
 			icon: 'mac',
-			tooltip: 'Mac 64-bit Support',
+			tooltip: gettextCatalog.getString( 'Mac 64-bit Support' ),
 			arch: '64',
 			sort: 21,
 		},
 		linux: {
 			icon: 'linux',
-			tooltip: 'Linux Support',
+			tooltip: gettextCatalog.getString( 'Linux Support' ),
 			sort: 30,
 		},
 		linux_64: {
 			icon: 'linux',
-			tooltip: 'Linux 64-bit Support',
+			tooltip: gettextCatalog.getString( 'Linux 64-bit Support' ),
 			arch: '64',
 			sort: 30,
 		},
 		other: {
 			icon: 'other-os',
-			tooltip: 'Downloadable File',
+			tooltip: gettextCatalog.getString( 'Downloadable File' ),
 			sort: 40,
 		},
 		html: {
 			icon: 'html5',
-			tooltip: 'Web Playable',
+			tooltip: gettextCatalog.getString( 'Web Playable' ),
 			sort: 50,
 		},
 		flash: {
 			icon: 'flash',
-			tooltip: 'Flash Web Playable',
+			tooltip: gettextCatalog.getString( 'Flash Web Playable' ),
 			sort: 51,
 		},
 		unity: {
 			icon: 'unity',
-			tooltip: 'Unity Web Playable',
+			tooltip: gettextCatalog.getString( 'Unity Web Playable' ),
 			sort: 52,
 		},
 		applet: {
 			icon: 'java',
-			tooltip: 'Java Applet Web Playable',
+			tooltip: gettextCatalog.getString( 'Java Applet Web Playable' ),
 			sort: 53,
 		},
 		silverlight: {
 			icon: 'silverlight',
-			tooltip: 'Silverlight Web Playable',
+			tooltip: gettextCatalog.getString( 'Silverlight Web Playable' ),
 			sort: 54,
 		},
 		rom: {
 			icon: 'rom',
-			tooltip: 'ROM',
+			tooltip: gettextCatalog.getString( 'ROM' ),
 			sort: 60,
 		},
 	};
