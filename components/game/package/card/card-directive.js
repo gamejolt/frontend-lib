@@ -1,5 +1,5 @@
 angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', function(
-	$timeout, $injector, Screen, Game, Game_Build, Game_PlayModal, Game_Downloader, Device, Environment, Analytics )
+	$timeout, $injector, gettextCatalog, Screen, Game, Game_Build, Game_PlayModal, Game_Downloader, Device, Environment, Analytics )
 {
 	/**
 	 * Sort must start at 1 so that we can put their prefered OS as sort 0 later on.
@@ -75,6 +75,11 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 		},
 	};
 
+	var emulatorInfo = {};
+	emulatorInfo[ Game_Build.EMULATOR_GB ] = gettextCatalog.getString( 'Game Boy' );
+	emulatorInfo[ Game_Build.EMULATOR_GBC ] = gettextCatalog.getString( 'Game Boy Color' );
+	emulatorInfo[ Game_Build.EMULATOR_GBA ] = gettextCatalog.getString( 'Game Boy Advance' );
+
 	function pluckOsSupport( build )
 	{
 		var support = [];
@@ -142,6 +147,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			this.showFullDescription = false;
 			this.canToggleDescription = undefined;
 
+			this.emulatorInfo = emulatorInfo;
 			this.supportInfo = angular.copy( supportInfo );
 			this.support = [];
 
@@ -177,6 +183,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 					else if ( build.type == Game_Build.TYPE_ROM ) {
 						indexedBuilds[ build.type ] = build;
 						this.support.push( build.type );
+						otherBuilds.push( build );
 					}
 					else if ( build.os_other ) {
 						otherBuilds.push( build );
@@ -279,11 +286,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				if ( otherBuilds.length ) {
 					otherBuilds.forEach( function( build )
 					{
+						var supportKey = 'other';
+						if ( build.type == Game_Build.TYPE_ROM ) {
+							supportKey = 'rom';
+						}
+
 						_this.extraBuilds.push( {
 							type: build.type,
-							icon: _this.supportInfo['other'].icon,
+							icon: _this.supportInfo[ supportKey ].icon,
 							build: build,
-							platform: 'other',
+							platform: supportKey,
 						} );
 					} );
 				}
@@ -302,12 +314,17 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				}
 			}
 
-			this.buildClick = function( build )
+			this.buildClick = function( build, fromExtraSection )
 			{
-				if ( build.type == Game_Build.TYPE_DOWNLOADABLE ) {
+				var operation = build.type == Game_Build.TYPE_DOWNLOADABLE ? 'download' : 'play';
+				if ( build.type == Game_Build.TYPE_ROM && fromExtraSection ) {
+					operation = 'download';
+				}
+
+				if ( operation == 'download' ) {
 					this.download( build );
 				}
-				else if ( build.isBrowserBased() || build.type == Game_Build.TYPE_ROM ) {
+				else if ( operation == 'play' ) {
 					this.showBrowserModal( build );
 				}
 			};

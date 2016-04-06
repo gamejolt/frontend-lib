@@ -139,7 +139,7 @@
 
 					<a class="list-group-item has-icon"
 						ng-repeat="extraBuild in ::ctrl.extraBuilds track by extraBuild.icon + '-' + extraBuild.build.id"
-						ng-click="ctrl.buildClick( extraBuild.build )"
+						ng-click="ctrl.buildClick( extraBuild.build, true )"
 						gj-track-event="game-package-card:more-options:click-option"
 						>
 						<span ng-class="::'jolticon jolticon-' + extraBuild.icon"></span>
@@ -147,10 +147,21 @@
 						<!--
 							We show the filename if it's an "Other" build.
 						-->
-						<span ng-if="::!extraBuild.build.os_other">
-							{{ ::extraBuild.type == Game_Build.TYPE_DOWNLOADABLE ? 'Download' : 'Play' }}
+						<span ng-if="::!extraBuild.build.os_other" ng-switch="::extraBuild.type">
+							<span ng-switch-when="downloadable" translate>
+								Download
+							</span>
+							<span ng-switch-when="rom" translate translate-scope="{ platform: ctrl.emulatorInfo[ extraBuild.build.emulator_type ] }" translate-comment="{{ platform }} will be the platform we are downloading for, such as Game Boy, NES, etc.">
+								Download {{ platform }} ROM
+							</span>
+							<span ng-switch-default translate>
+								Play
+							</span>
 						</span>
-						<span ng-if="::extraBuild.build.os_other">{{ ::extraBuild.build.primary_file.filename }}</span>
+
+						<span ng-if="::extraBuild.build.os_other">
+							{{ ::extraBuild.build.primary_file.filename }}
+						</span>
 
 						<small ng-if="::extraBuild.arch == '64'">64-bit</small>
 
