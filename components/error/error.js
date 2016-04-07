@@ -14,7 +14,7 @@ angular.module( 'gj.Error', [] ).config( function( $stateProvider, $urlRouterPro
 				init: function( $injector )
 				{
 					if ( $injector.has( 'Translate' ) ) {
-						return injector.get( 'Translate' ).loadSection( 'main' );
+						return $injector.get( 'Translate' ).loadSection( 'main' );
 					}
 				},
 			}
@@ -47,7 +47,7 @@ angular.module( 'gj.Error', [] ).config( function( $stateProvider, $urlRouterPro
 			init: function( $injector )
 			{
 				if ( $injector.has( 'Translate' ) ) {
-					return injector.get( 'Translate' ).loadSection( 'main' );
+					return $injector.get( 'Translate' ).loadSection( 'main' );
 				}
 			},
 		}
