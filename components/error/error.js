@@ -9,7 +9,15 @@ angular.module( 'gj.Error', [] ).config( function( $stateProvider, $urlRouterPro
 	.forEach( function( code )
 	{
 		$stateProvider.state( 'error-' + code, {
-			templateUrl: /*!*/ '/lib/gj-lib-client/components/error/error-' + code + '.html'
+			templateUrl: /*!*/ '/lib/gj-lib-client/components/error/error-' + code + '.html',
+			resolve: {
+				init: function( $injector )
+				{
+					if ( $injector.has( 'Translate' ) ) {
+						return $injector.get( 'Translate' ).loadSection( 'main' );
+					}
+				},
+			}
 		} );
 	} );
 
@@ -34,6 +42,14 @@ angular.module( 'gj.Error', [] ).config( function( $stateProvider, $urlRouterPro
 			{
 				$location.url( retryUrl );
 			};
+		},
+		resolve: {
+			init: function( $injector )
+			{
+				if ( $injector.has( 'Translate' ) ) {
+					return $injector.get( 'Translate' ).loadSection( 'main' );
+				}
+			},
 		}
 	} );
 
