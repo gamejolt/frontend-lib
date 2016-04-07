@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $q, $modal, $state, Growls, HistoryTick, Environment, Popover, Analytics )
+angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $rootScope, $document, $q, $state, $compile, $animate, $injector, Growls, HistoryTick, Environment, Popover, Analytics, Game_Build )
 {
 	var _this = this;
 
@@ -6,10 +6,27 @@ angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $q, $
 
 	this.show = function( _game, _build )
 	{
+		// Silly split test.
+		var splitKey = 'split:play-modal';
+		if ( !window.localStorage[ splitKey ] ) {
+			if ( Math.random() * 100 <= 50 ) {
+				window.localStorage[ splitKey ] = 'old';
+			}
+			else {
+				window.localStorage[ splitKey ] = 'new';
+			}
+		}
+
+		Analytics.trackEvent( 'game-play-modal-split', window.localStorage[ splitKey ] );
+		if ( window.localStorage[ splitKey ] == 'old' ) {
+			$injector.get( 'Game_PlayModalOld' ).show( _game, _build );
+			return;
+		}
+
 		Analytics.trackEvent( 'game-play', 'play' );
 
 		// TODO: This only goes to game page. We need to direct to a URL that would open the correct build in a modal.
-		if ( Environment.isClient && _build.type != Game_Build.TYPE_HTML ) {
+		if ( Environment.isClient && _build.type != Game_Build.TYPE_HTML && _build.type != Game_Build.TYPE_ROM ) {
 			var gui = require( 'nw.gui' );
 			gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.overview', {
 				slug: _game.slug,
@@ -30,33 +47,74 @@ angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $q, $
 		this.hasModal = true;
 		HistoryTick.sendBeacon( 'game-build', _build.id );
 
-		var modalInstance = $modal.open( {
+		var modalScope = $rootScope.$new( true );
+		modalScope.game = _game;
+		modalScope.build = _build;
+		modalScope.canMinimize = $injector.has( 'Minbar' );
+		modalScope.minimize = minimize;
+		modalScope.maximize = maximize;
+		modalScope.close = close;
 
-			// Don't want to allow it to close by pressing esc.
-			// We also want to show the backdrop, but don't allow closing the window by clicking it.
-			keyboard: false,
-			backdrop: 'static',
+		var modalElem = angular.element( '<gj-game-play-modal gj-game="game" gj-build="build" can-minimize="canMinimize" minimize="minimize()" maximize="maximize()" close="close()"></gj-game-play-modal>' );
+		modalElem = $compile( modalElem )( modalScope );
 
-			size: 'lg',
-			windowClass: 'modal-dark game-play-modal',
-			templateUrl: '/lib/gj-lib-client/components/game/play-modal/play-modal.html',
-			controller: 'Game_PlayModalCtrl',
-			controllerAs: 'modalCtrl',
-			resolve: {
-				game: function()
-				{
-					return _game;
-				},
-				build: function()
-				{
-					return _build;
-				}
-			}
-		} );
+		var body = $document.find( 'body' ).eq( 0 );
+		$animate.enter( modalElem, body );
+		body[0].classList.add( 'game-play-modal-open' );
 
-		return modalInstance.result.finally( function()
+		function minimize()
 		{
-			_this.hasModal = false;
-		} );
+			// if ( !this.canMinimize ) {
+			// 	throw new Error( 'Can not minimize game play modal because there is no minbar.' );
+			// }
+
+			// We basically animate it out but keep it in the DOM.
+			// This is so we don't lose the game when closing it.
+			body.removeClass( 'game-play-modal-open' );
+			modalElem[0].style.display = 'none';
+
+			// When this minbar item is clicked, it basically shows this modal again.
+			var Minbar = $injector.get( 'Minbar' );
+			var minbarItem = Minbar.add( {
+				title: this.game.title,
+				thumb: this.game.img_thumbnail,
+				isActive: true,  // Only one game open at a time, so make it active.
+				onClick: function()
+				{
+					// We remove the item from the minbar.
+					Minbar.remove( minbarItem );
+
+					// Then we show the modal again.
+					maximize();
+				}
+			} );
+		};
+
+		function maximize()
+		{
+			// Add everything back in!
+			body.addClass( 'game-play-modal-open' );
+			modalElem[0].style.display = 'block';
+		};
+
+		function close()
+		{
+			$animate.leave( modalElem ).then( function()
+			{
+				modalScope.$destroy();
+				modalScope = undefined;
+				modalElem = undefined;
+				body.removeClass( 'game-play-modal-open' );
+
+				_this.hasModal = false;
+			} );
+
+			// Show a rating growl when they close the game play modal.
+			// This will urge them to rate the game after playing it, but only if they haven't
+			// rated it yet.
+			if ( $injector.has( 'Game_RatingGrowl' ) ) {
+				$injector.get( 'Game_RatingGrowl' ).show( _game );
+			}
+		};
 	};
 } );

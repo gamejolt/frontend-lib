@@ -259,26 +259,34 @@ module.exports = function( config )
 				} );
 			}
 
-			var stream = streamqueue(
-					{ objectMode: true },
+			var queue = [
+				{ objectMode: true },
 
-					// Pull in modules definitions only first.
-					gulp.src( _.union( [
-						'src/' + section + '/**/*.js',
-						'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
-					], excludeApp ), { base: 'src' } ),
+				// Pull in modules definitions only first.
+				gulp.src( _.union( [
+					'src/' + section + '/**/*.js',
+					'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
+				], excludeApp ), { base: 'src' } ),
 
-					// Then pull in the actual components.
-					gulp.src( _.union( [
-						'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
-					], excludeApp ), { base: 'src' } ),
+				// Then pull in the actual components.
+				gulp.src( _.union( [
+					'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
+				], excludeApp ), { base: 'src' } ),
 
-					// Pull in template partials if there are any.
-					gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ),
+				// Pull in template partials if there are any.
+				gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ),
+			];
 
-					// Now pull in the development file if we're running a development environment build.
-					gulp.src( [ (config.developmentEnv ? 'src/' + section + '/app-development.js' : '') ], { base: 'src' } )
-				)
+			// Now pull in the development file if we're running a development environment build.
+			if ( config.developmentEnv ) {
+				queue.push( gulp.src( [ 'src/' + section + '/app-development.js' ], { base: 'src' } ) );
+			}
+			// We also pull in a development setting that imitates if production isn't specified explicitly.
+			else if ( !config.production ) {
+				queue.push( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
+			}
+
+			var stream = streamqueue.apply( streamqueue, queue )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'app.js' ) );
 

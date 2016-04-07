@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.PlayModal' ).controller( 'Game_PlayModalCtrl', function( $modalInstance, $document, $injector, $animate, $modalStack, game, build )
+angular.module( 'gj.Game.PlayModal' ).controller( 'Game_PlayModalOldCtrl', function( $modalInstance, $document, $injector, $animate, $modalStack, game, build )
 {
 	var _this = this;
 
