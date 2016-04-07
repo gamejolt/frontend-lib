@@ -17,6 +17,10 @@ $line-spacing-above-text = (($line-height-computed - $font-size-base) / 2)
 .input-group-addon
 	color: $gray
 
+	// Not sure why, but bootstrap styling wasn't doing input group addons well with sm forms.
+	.input-group-sm > &
+		line-height: 1
+
 .form-group.optional
 	.control-label:after
 		content: ' (optional)'

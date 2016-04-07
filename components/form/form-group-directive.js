@@ -105,17 +105,12 @@ angular.module( 'gj.Form' ).directive( 'formGroup', function( $interpolate, $par
 			{
 				if ( val ) {
 					formGroupCtrl.hideLabel = true;
-					// formGroupCtrl.labelClasses.push( 'sr-only' );
 				}
 				else {
 					formGroupCtrl.hideLabel = false;
-					// _.remove( formGroupCtrl.labelClasses, 'sr-only' );
 				}
 				updateLabelClass();
 			} );
-
-			// <!--ng-class="{ 'sr-only': formGroupCtrl.hideLabel }"-->
-
 
 			if ( angular.isDefined( attrs.labelClass ) ) {
 

@@ -1,5 +1,5 @@
 angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', function(
-	$window, $timeout, $state, $injector, Screen, Growls, Game, Game_Build, Game_PlayModal, Device, Environment, HistoryTick, Analytics, Popover )
+	$timeout, $injector, gettextCatalog, Screen, Game, Game_Build, Game_PlayModal, Game_Downloader, Device, Environment, Analytics )
 {
 	/**
 	 * Sort must start at 1 so that we can put their prefered OS as sort 0 later on.
@@ -7,68 +7,78 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 	var supportInfo = {
 		windows: {
 			icon: 'windows',
-			tooltip: 'Windows Support',
+			tooltip: gettextCatalog.getString( 'Windows Support' ),
 			sort: 10,
 		},
 		windows_64: {
 			icon: 'windows',
-			tooltip: 'Windows 64-bit Support',
+			tooltip: gettextCatalog.getString( 'Windows 64-bit Support' ),
 			arch: '64',
 			sort: 11,
 		},
 		mac: {
 			icon: 'mac',
-			tooltip: 'Mac Support',
+			tooltip: gettextCatalog.getString( 'Mac Support' ),
 			sort: 20,
 		},
 		mac_64: {
 			icon: 'mac',
-			tooltip: 'Mac 64-bit Support',
+			tooltip: gettextCatalog.getString( 'Mac 64-bit Support' ),
 			arch: '64',
 			sort: 21,
 		},
 		linux: {
 			icon: 'linux',
-			tooltip: 'Linux Support',
+			tooltip: gettextCatalog.getString( 'Linux Support' ),
 			sort: 30,
 		},
 		linux_64: {
 			icon: 'linux',
-			tooltip: 'Linux 64-bit Support',
+			tooltip: gettextCatalog.getString( 'Linux 64-bit Support' ),
 			arch: '64',
 			sort: 30,
 		},
 		other: {
 			icon: 'other-os',
-			tooltip: 'Downloadable File',
+			tooltip: gettextCatalog.getString( 'Downloadable File' ),
 			sort: 40,
 		},
 		html: {
 			icon: 'html5',
-			tooltip: 'Web Playable',
+			tooltip: gettextCatalog.getString( 'Web Playable' ),
 			sort: 50,
 		},
 		flash: {
 			icon: 'flash',
-			tooltip: 'Flash Web Playable',
+			tooltip: gettextCatalog.getString( 'Flash Web Playable' ),
 			sort: 51,
 		},
 		unity: {
 			icon: 'unity',
-			tooltip: 'Unity Web Playable',
+			tooltip: gettextCatalog.getString( 'Unity Web Playable' ),
 			sort: 52,
 		},
 		applet: {
 			icon: 'java',
-			tooltip: 'Java Applet Web Playable',
+			tooltip: gettextCatalog.getString( 'Java Applet Web Playable' ),
 			sort: 53,
 		},
 		silverlight: {
 			icon: 'silverlight',
-			tooltip: 'Silverlight Web Playable',
+			tooltip: gettextCatalog.getString( 'Silverlight Web Playable' ),
 			sort: 54,
 		},
+		rom: {
+			icon: 'rom',
+			tooltip: gettextCatalog.getString( 'ROM' ),
+			sort: 60,
+		},
 	};
+
+	var emulatorInfo = {};
+	emulatorInfo[ Game_Build.EMULATOR_GB ] = gettextCatalog.getString( 'Game Boy' );
+	emulatorInfo[ Game_Build.EMULATOR_GBC ] = gettextCatalog.getString( 'Game Boy Color' );
+	emulatorInfo[ Game_Build.EMULATOR_GBA ] = gettextCatalog.getString( 'Game Boy Advance' );
 
 	function pluckOsSupport( build )
 	{
@@ -137,6 +147,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			this.showFullDescription = false;
 			this.canToggleDescription = undefined;
 
+			this.emulatorInfo = emulatorInfo;
 			this.supportInfo = angular.copy( supportInfo );
 			this.support = [];
 
@@ -169,6 +180,11 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 						indexedBuilds[ build.type ] = build;
 						this.support.push( build.type );
 					}
+					else if ( build.type == Game_Build.TYPE_ROM ) {
+						indexedBuilds[ build.type ] = build;
+						this.support.push( build.type );
+						otherBuilds.push( build );
+					}
 					else if ( build.os_other ) {
 						otherBuilds.push( build );
 					}
@@ -199,7 +215,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				// we need to try to pick one to showcase as the default download. We put
 				// their detected OS first so that it tries to pick that one first.
 				// Arch is only detected in Client.
-				var checkDownloadables = [ 'windows', 'windows_64', 'mac', 'linux' ];
+				var checkDownloadables = [ 'windows', 'windows_64', 'mac', 'mac_64', 'linux', 'linux_64' ];
 
 				// This will put the 64 bit version as higher priority.
 				if ( arch == '64' ) {
@@ -223,7 +239,8 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				}, this );
 
 				// Do the same with browser type. Pick the default browser one to show.
-				[ 'html', 'flash', 'unity', 'applet', 'silverlight' ].every( function( type )
+				// We include ROMs in browser play.
+				[ 'html', 'flash', 'unity', 'applet', 'silverlight', 'rom' ].every( function( type )
 				{
 					if ( !indexedBuilds[ type ] ) {
 						return true;
@@ -269,11 +286,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				if ( otherBuilds.length ) {
 					otherBuilds.forEach( function( build )
 					{
+						var supportKey = 'other';
+						if ( build.type == Game_Build.TYPE_ROM ) {
+							supportKey = 'rom';
+						}
+
 						_this.extraBuilds.push( {
 							type: build.type,
-							icon: _this.supportInfo['other'].icon,
+							icon: _this.supportInfo[ supportKey ].icon,
 							build: build,
-							platform: 'other',
+							platform: supportKey,
 						} );
 					} );
 				}
@@ -292,12 +314,17 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				}
 			}
 
-			this.buildClick = function( build )
+			this.buildClick = function( build, fromExtraSection )
 			{
-				if ( build.type == Game_Build.TYPE_DOWNLOADABLE ) {
+				var operation = build.type == Game_Build.TYPE_DOWNLOADABLE ? 'download' : 'play';
+				if ( build.type == Game_Build.TYPE_ROM && fromExtraSection ) {
+					operation = 'download';
+				}
+
+				if ( operation == 'download' ) {
 					this.download( build );
 				}
-				else if ( build.isBrowserBased() ) {
+				else if ( operation == 'play' ) {
 					this.showBrowserModal( build );
 				}
 			};
@@ -306,63 +333,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			{
 				Analytics.trackEvent( 'game-package-card', 'download', 'download' );
 
-				// Bundle-only games can only live in a person's library, or as a key.
-				// So if it's bundle-only, or if a key was passed in, go direct.
-				if ( this.game.bundle_only || this.key ) {
-
-					// If already waiting on a download, don't do anything.
-					if ( downloadPromise ) {
-						return;
-					}
-
-					// If they click away from the page before the download starts, then cancel the download redirect.
-					var shouldTransition = true;
-					var downloadUrl = null;
-					var downloadPromise = build.getDownloadUrl( { key: this.key } )
-						.then( function( response )
-						{
-							downloadUrl = response.downloadUrl;
-
-							// Be sure to log the build download.
-							return HistoryTick.sendBeacon( 'game-build', build.id );
-						} )
-						.then( function()
-						{
-							if ( shouldTransition ) {
-								$window.location = downloadUrl;
-							}
-							downloadPromise = null;
-						} );
-
-					$scope.$on( '$stateChangeStart', function()
-					{
-						shouldTransition = false;
-					} );
-				}
-				// Client needs to download externally.
-				else if ( Environment.isClient ) {
-					var gui = require( 'nw.gui' );
-					gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.build', { slug: this.game.slug, id: this.game.id, buildId: build.id } ) );
-					Popover.hideAll();
-				}
-				else {
-					$state.go( 'discover.games.view.download.build', { slug: this.game.slug, id: this.game.id, buildId: build.id } );
-				}
+				Game_Downloader.download( this.game, build, {
+					key: this.key,
+				} );
 			};
 
 			this.showBrowserModal = function( build )
 			{
 				Analytics.trackEvent( 'game-package-card', 'download', 'play' );
 
-				// TODO: This only goes to game page. We need to direct to a URL that would open the correct build in a modal.
-				if ( Environment.isClient && build.type != Game_Build.TYPE_HTML ) {
-					var gui = require( 'nw.gui' );
-					gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.overview', { slug: this.game.slug, id: this.game.id } ) );
-					Popover.hideAll();
-				}
-				else {
-					Game_PlayModal.show( this.game, build );
-				}
+				Game_PlayModal.show( this.game, build );
 			};
 		}
 	};
