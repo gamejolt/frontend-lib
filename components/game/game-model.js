@@ -38,6 +38,15 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, Model, Environmen
 			}
 		}
 
+		// We don't want to show ads if this game has sellable items.
+		this._should_show_ads = true;
+		if ( !this.ads_enabled ) {
+			this._should_show_ads = false;
+		}
+		else if ( this.sellable && this.sellable.type != 'free' ) {
+			this._should_show_ads = false;
+		}
+
 		Registry.store( 'Game', this );
 	}
 

@@ -10,7 +10,7 @@ angular.module( 'gj.Game.PlayModal' ).controller( 'Game_PlayModalOldCtrl', funct
 	this.canMinimize = $injector.has( 'Minbar' );
 
 	// If the game has ads turned off, set it as "shown" initially.
-	this.adShown = !this.game.ads_enabled ? true : false;
+	this.adShown = !this.game._should_show_ads ? true : false;
 	this.onAdShown = function()
 	{
 		this.adShown = true;
