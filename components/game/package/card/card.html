@@ -273,7 +273,7 @@
 				</button>
 
 				<span class="game-package-card-payment-what-link">
-					(<a class="link-help" ng-click="ctrl.isWhatOpen = !ctrl.isWhatOpen">What do you get?</a>)
+					(<a class="link-help" ng-click="ctrl.isWhatOpen = !ctrl.isWhatOpen" translate>What do you get?</a>)
 				</span>
 			</div>
 
@@ -281,17 +281,24 @@
 				<div class="payment-well">
 
 					<div ng-repeat="build in ctrl.builds">
-						<!--<span ng-class="::'jolticon jolticon-' + extraBuild.icon"></span>-->
 
 						{{ ::build.primary_file.filename }}
-						<!--<small ng-if="extraBuild.arch == '64'">64-bit</small>-->
-
 						<small class="text-muted">({{ ::build.primary_file.filesize | filesize }})</small>
+
+						<span ng-repeat="os in ::[ 'windows', 'mac', 'linux', 'other' ]">
+							<span
+								ng-if="::build[ 'os_' + os ] || build[ 'os_' + os + '_64' ]"
+								ng-class="::'jolticon jolticon-' + ctrl.supportInfo[ os ].icon"
+								tooltip="{{ ::ctrl.supportInfo[ os ].tooltip }}"
+								>
+							</span>
+						</span>
+
 					</div>
 
 					<br>
 
-					<small>And really warm feelings for supporting an indie developer!</small>
+					<small translate>And really warm feelings for supporting an indie developer!</small>
 
 				</div>
 			</div>
