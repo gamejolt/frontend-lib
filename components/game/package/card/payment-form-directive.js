@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, Form, Environment, Api )
+angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Form, Environment, Api )
 {
 	var form = new Form( {
 		// model: 'Game_Package',
@@ -37,6 +37,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			pricing_id: scope.pricing.id,
 			amount: scope.price,
 		};
+
+		if ( !App.user ) {
+			data.email_address = scope.formModel.email_address;
+		}
 
 		return Api.sendRequest( '/web/checkout/setup-order', data )
 			.then( function( response )
