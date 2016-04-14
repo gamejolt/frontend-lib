@@ -35,7 +35,7 @@
 		</div>
 	</form-group>
 
-	<form-group name="email_address" label="Email Address:" label-class="col-sm-4" class="no-animate" ng-if="!App.user" >
+	<form-group name="email_address" label="Email Address:" label-class="col-sm-4" class="no-animate" ng-if="App.user == null" >
 		<div class="col-sm-8">
 			<input type='text' form-control>
 			<control-errors label="email_address"></control-errors>
