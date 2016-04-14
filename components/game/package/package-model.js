@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, Model, Game_Release, Game_Build, Game_Build_LaunchOption, Sellable )
+angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, App, Model, Game_Release, Game_Build, Game_Build_LaunchOption, Sellable )
 {
 	function Game_Package( data )
 	{
@@ -37,6 +37,11 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 			_package._releases = _.where( packageData.releases, { game_package_id: _package.id } );
 			_package._builds = _.where( packageData.builds, { game_package_id: _package.id } );
 			_package._sellable = indexedSellables[ _package.id ];
+
+			// If this is the developer of the game, then spoof that they own the game/package.
+			if ( payload.isGameOwner && _package._sellable ) {
+				_package._sellable.is_owned = true;
+			}
 		}
 
 		for ( i in packageData.releases ) {
