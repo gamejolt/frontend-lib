@@ -28,7 +28,7 @@ angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModalOld', function( $q
 		}
 
 		this.hasModal = true;
-		HistoryTick.sendBeacon( 'game-build', _build.id );
+		HistoryTick.sendBeacon( 'game-build', _build.id, { sourceResource: 'Game', sourceResourceId: _game.id } );
 
 		var modalInstance = $modal.open( {
 
