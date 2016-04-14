@@ -1,3 +1,6 @@
+- HistoryTick now requires Referrer.
+- HistoryTick now requires UA Parser and to be lazy loadable.
+
 - Change any markdown-widget components to use "editor-class" attribute to pass in a class for textarea.
 - Remove Codemirror
 - Include "angular-elastic": "2.5.1" in bower
