@@ -130,6 +130,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 		bindToController: {
 			game: '=game',
 			'package': '=gamePackage',
+			sellable: '=?sellable',
 			releases: '=gameReleases',
 			builds: '=gameBuilds',
 			key: '@?',
@@ -165,7 +166,6 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			// If this game is in their installed games, this will populate.
 			this.installedBuild = null;
 
-			this.sellable = this.package._sellable;
 			this.isWhatOpen = false;
 			this.isPaymentOpen = false;
 			this.clickedBuild = null;
