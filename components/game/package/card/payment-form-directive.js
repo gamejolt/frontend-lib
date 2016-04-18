@@ -1,7 +1,6 @@
 angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Form, Environment, Api )
 {
 	var form = new Form( {
-		// model: 'Game_Package',
 		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
 	} );
 
@@ -35,7 +34,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			payment_method: scope.formState.checkoutType,
 			sellable_id: scope.sellable.id,
 			pricing_id: scope.pricing.id,
-			amount: scope.price,
+			amount: scope.formModel.price * 100,
 		};
 
 		if ( !App.user ) {
