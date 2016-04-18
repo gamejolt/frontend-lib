@@ -8,6 +8,7 @@ angular.module( 'gj.Graph' ).directive( 'gjGraph', function( $window, Screen )
 		'#ccff00',
 		'#31d6ff',
 		'#ff3fac',
+		'#2f7f6f',
 	].map( function( color )
 	{
 		return {
@@ -125,14 +126,12 @@ angular.module( 'gj.Graph' ).directive( 'gjGraph', function( $window, Screen )
 							}
 
 							dataset.data.push( row[1] );
-							// dataset.data.push( Math.ceil( Math.random() * 100 ) );
 						}, this );
 
 						this.data.datasets.push( dataset );
 					}, _this );
 				}
 				else if ( _this.type == 'pie' || _this.type == 'doughnut' ) {
-
 					_this.data = _this.graphData.map( function( item, i )
 					{
 						return angular.extend( item, _this.ourColors[ i + 1 ] );
