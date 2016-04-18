@@ -24,6 +24,10 @@ angular.module( 'gj.Api' ).service( 'Api', function( $window, $http, $injector, 
 			// Will filter out functions, sub-objects and sub-arrays from sending to the server.
 			sanitizeComplexData: true,
 
+			// This should be an array of fields that you don't want to sanitize/filter in the POST data.
+			// Use it as a whitelist of fields to pass through.
+			allowComplexData: [],
+
 			// A detached request tries to be outside of the system so it doesn't affect normal usage.
 			// A shorthand for many options.
 			// - ignores loading bar
