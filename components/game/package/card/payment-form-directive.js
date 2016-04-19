@@ -28,8 +28,6 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 	form.onSubmit = function( scope )
 	{
-		scope.formState.checkoutType = 'cc-stripe';
-
 		var data = {
 			payment_method: scope.formState.checkoutType,
 			sellable_id: scope.sellable.id,
