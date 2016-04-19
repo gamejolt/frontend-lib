@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Form, Environment, Api )
+angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Form, Environment, Api, Geo )
 {
 	var form = new Form( {
 		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
@@ -11,8 +11,19 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 	form.onInit = function( scope )
 	{
 		scope.App = App;
-		scope.formModel.price = scope.pricing.amount ? scope.pricing.amount / 100 : null;
+
 		scope.formState.checkoutType = 'cc-stripe';
+		scope.formState.checkoutStep = 'primary';
+
+		scope.formModel.price = scope.pricing.amount ? scope.pricing.amount / 100 : null;
+		scope.formModel.country = 'US';
+
+		scope.collectAddress = function( checkoutType )
+		{
+			scope.formState.checkoutStep = 'address';
+			scope.formState.checkoutType = checkoutType;
+			scope.formState.countries = Geo.getCountries();
+		};
 
 		scope.checkoutCard = function()
 		{
@@ -25,6 +36,17 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			scope.formState.checkoutType = 'paypal';
 			scope.onSubmit();
 		};
+
+		scope.$watch( 'formModel.country', function( country )
+		{
+			scope.formState.regions = Geo.getRegions( country );
+			if ( scope.formState.regions ) {
+				scope.formModel.region = scope.formState.regions[0].code;  // Default to first.
+			}
+			else {
+				scope.formModel.region = '';
+			}
+		} );
 	};
 
 	form.onSubmit = function( scope )
@@ -34,6 +56,12 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			sellable_id: scope.sellable.id,
 			pricing_id: scope.pricing.id,
 			amount: scope.formModel.price * 100,
+
+			country: scope.formModel.country,
+			street1: scope.formModel.street1,
+			region: scope.formModel.region,
+			postcode: scope.formModel.postcode,
+			reside_in_country: scope.formModel.reside_in_country,
 		};
 
 		if ( !App.user ) {

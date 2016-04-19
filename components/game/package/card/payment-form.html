@@ -1,64 +1,136 @@
-<form gj-form="formModel" name="paymentForm" class="form-horizontal game-package-card-payment-form">
+<div ng-if="formState.checkoutStep == 'primary'">
+	<p ng-if="::sellable.type == 'pwyw'">
+		<span ng-if="::!pricing.amount">Support this developer by paying what you're able.</span>
+		<span ng-if="::pricing.amount">This developer suggests paying <strong>{{ ::pricing.amount | gjCurrency }}</strong> for this package, but you're free to pay what you're able.</span>
+	</p>
 
-	<form-group name="price" label="{{ 'Name your price:' | translate }}" label-class="col-sm-4" class="no-animate">
-		<div class="col-sm-8">
+	<p ng-if="::sellable.type == 'paid'">
+		The developer has set the price of this game to <strong>{{ ::pricing.amount | gjCurrency }}</strong>, but you are able to support them by giving more.
+	</p>
 
-			<!--<button class="btn btn-outline">
-				$1
-			</button>
-			<button class="btn btn-outline">
-				$5
-			</button>
-			<button class="btn btn-outline">
-				$10
-			</button>
-			<button class="btn btn-outline">
-				$20
-			</button>
-			<span style="display: inline-block; margin-left: 15px">(<a class="link-muted">custom amount</a>)</span>-->
+	<hr>
+</div>
 
-			<span class="game-package-card-payment-form-amount-input">
-				<span class="game-package-card-payment-form-amount-input-currency">$</span>
-				<input form-control="number"
-					gj-focus-when
-					gj-form-currency-input
-					step="1"
-					ng-min="::sellable.type == 'paid' ? pricing.amount / 100 : 1"
+<form gj-form="formModel" name="paymentForm" class="game-package-card-payment-form">
+
+	<div ng-if="formState.checkoutStep == 'primary'" class="form-horizontal">
+		<form-group name="price" label="{{ 'Name your price:' | translate }}" label-class="col-sm-4" class="no-animate">
+			<div class="col-sm-8">
+
+				<span class="game-package-card-payment-form-amount-input">
+					<span class="game-package-card-payment-form-amount-input-currency">$</span>
+					<input form-control="number"
+						gj-focus-when
+						gj-form-currency-input
+						step="1"
+						ng-min="::sellable.type == 'paid' ? pricing.amount / 100 : 1"
+						>
+				</span>
+
+				<span class="text-muted" ng-if="::pricing.type == 'paid'">
+					({{ ::pricing.amount | gjCurrency }} <span translate>or more</span>)
+				</span>
+
+				<control-errors label="{{ 'price' | translate }}"></control-errors>
+			</div>
+		</form-group>
+
+		<form-group name="email_address" label="{{ 'Email Address:' | translate }}" label-class="col-sm-4" class="no-animate" ng-if="!App.user">
+			<div class="col-sm-8">
+				<input type="text" form-control>
+				<control-errors label="{{ 'email address' | translate }}"></control-errors>
+			</div>
+		</form-group>
+
+		<div class="form-group no-animate">
+			<label class="col-sm-4 control-label" translate>Checkout with:</label>
+			<div class="col-sm-8">
+				<button class="btn btn-outline"
+					ng-disabled="!paymentForm.$valid"
+					ng-click="checkoutCard()"
 					>
-			</span>
-
-			<span class="text-muted" ng-if="::pricing.type == 'paid'">
-				({{ ::pricing.amount | gjCurrency }} <span translate>or more</span)
-			</span>
-
-			<control-errors label="{{ 'price' | translate }}"></control-errors>
+					<span class="jolticon jolticon-credit-card"></span>
+					<span translate>Card</span>
+				</button>
+				<button class="btn btn-outline"
+					ng-disabled="!paymentForm.$valid"
+					ng-click="collectAddress( 'paypal' )"
+					>
+					<span translate>PayPal</span>
+				</button>
+			</div>
 		</div>
-	</form-group>
+	</div>
 
-	<form-group name="email_address" label="{{ 'Email Address:' | translate }}" label-class="col-sm-4" class="no-animate" ng-if="!App.user">
-		<div class="col-sm-8">
-			<input type="text"" form-control>
-			<control-errors label="{{ 'email address' | translate }}"></control-errors>
+	<div ng-if="formState.checkoutStep == 'address'" class="anim-fade-in">
+
+		<p>
+			<span class="jolticon jolticon-info-circle"></span>
+			<span translate>The EU sucks and makes us collect billing addresses for all orders.</span>
+		</p>
+		<br>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<form-group name="country" label="{{ 'Country' | translate }}" class="no-animate">
+					<select form-control>
+						<option ng-repeat="country in ::formState.countries track by country.code" value="{{ ::country.code }}">
+							{{ country.name }}
+						</option>
+					</select>
+					<control-errors></control-errors>
+				</form-group>
+			</div>
 		</div>
-	</form-group>
 
-	<div class="form-group no-animate">
-		<label class="col-sm-4 control-label" translate>Checkout with:</label>
-		<div class="col-sm-8">
-			<button class="btn btn-outline"
-				ng-disabled="!paymentForm.$valid"
-				ng-click="checkoutCard()"
-				>
-				<span class="jolticon jolticon-credit-card"></span>
-				<span translate>Card</span>
-			</button>
-			<button class="btn btn-outline"
+		<form-group name="street1" label="{{ 'Street Address' | translate }}" class="no-animate">
+			<input type="text" form-control>
+			<control-errors></control-errors>
+		</form-group>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<form-group name="region" label="{{ 'State/Province/County' | translate }}" class="no-animate">
+
+					<input class="no-animate-leave" type="text" form-control ng-if="!formState.regions">
+
+					<select class="no-animate-leave" form-control ng-if="formState.regions">
+						<option ng-repeat="region in ::formState.regions track by region.code" value="{{ ::region.code }}">
+							{{ region.name }}
+						</option>
+					</select>
+
+					<control-errors></control-errors>
+				</form-group>
+			</div>
+			<div class="col-sm-6">
+				<form-group name="postcode" label="{{ 'Zip/Postal Code' | translate }}" class="no-animate">
+					<input type="text" form-control>
+					<control-errors></control-errors>
+				</form-group>
+			</div>
+		</div>
+
+		<form-group name="reside_in_country" hide-label="true" class="no-animate">
+			<div class="checkbox">
+				<label>
+					<input form-control="checkbox">
+					<span translate>I currently live in the country selected above</span>
+				</label>
+			</div>
+			<control-errors></control-errors>
+		</form-group>
+
+		<div class="form-group no-animate">
+			<button class="btn btn-success-outline"
 				ng-disabled="!paymentForm.$valid"
 				ng-click="checkoutPaypal()"
 				>
-				<span translate>PayPal</span>
+				<span class="jolticon jolticon-chevron-right"></span>
+				<span translate>Proceed to PayPal</span>
 			</button>
 		</div>
+
 	</div>
 
 </form>

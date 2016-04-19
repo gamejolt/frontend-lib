@@ -123,17 +123,6 @@
 			<div gj-expand-when="ctrl.isPaymentOpen" class="payment-well-expander">
 				<div class="payment-well">
 
-					<p ng-if="::ctrl.sellable.type == 'pwyw'">
-						<span ng-if="::!ctrl.pricing.amount">Support this developer by paying what you're able.</span>
-						<span ng-if="::ctrl.pricing.amount">This developer suggests paying <strong>{{ ::ctrl.pricing.amount | gjCurrency }}</strong> for this package, but you're free to pay what you're able.</span>
-					</p>
-
-					<p ng-if="::ctrl.sellable.type == 'paid'">
-						The developer has set the price of this game to <strong>{{ ::ctrl.pricing.amount | gjCurrency }}</strong>, but you are able to support them by giving more.
-					</p>
-
-					<hr>
-
 					<gj-game-package-card-payment-form
 						package="::ctrl.package"
 						sellable="::ctrl.sellable"
