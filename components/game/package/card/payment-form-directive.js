@@ -10,6 +10,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 	form.onInit = function( scope )
 	{
+		scope.App = App;
 		scope.formModel.price = scope.pricing.amount ? scope.pricing.amount / 100 : null;
 		scope.formState.checkoutType = 'cc-stripe';
 
