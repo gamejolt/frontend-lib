@@ -388,6 +388,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				}
 				return '' + amount;
 			};
+
+			this.onPackageBought = function()
+			{
+				this.isWhatOpen = false;
+				this.isPaymentOpen = false;
+				this.hasPaymentWell = false;
+
+				// TODO: This is a hack!
+				this.sellable.is_owned = true;
+			};
 		}
 	};
 } );

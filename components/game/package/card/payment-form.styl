@@ -1,4 +1,22 @@
 .game-package-card-payment-form
+	position: relative
+
+	.game-package-card-payment-form-spinner
+		@extend .no-animate-leave
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		content: ''
+		background-color: rgba( $gray-dark, 0.5 )
+		z-index: 2
+		display: flex
+		align-items: center
+		justify-content: center
+
+		.loading
+			color: $white
 
 	.form-group
 		margin-bottom: $font-size-base
@@ -24,3 +42,79 @@
 			left: 10px
 			color: $gray-light
 			z-index: 2
+
+	.saved-card
+	.saved-card-more
+		@extend .clearfix
+		display: inline-block
+		padding-left: 20px
+		padding-right: 20px
+		padding-top: 8px
+		padding-bottom: 8px
+		border: 2px solid $gray-light
+		height: 40px + (@padding-top * 2) + (2px * 2)
+		vertical-align: middle
+
+		&:hover
+			border-color: $white
+
+	a.saved-card
+		&
+		&:hover
+			color: $white
+
+	.saved-card-more
+		line-height: 40px
+		padding-left: 10px
+		padding-right: 10px
+
+		.jolticon
+			vertical-align: middle
+			color: $gj-green !important
+
+	.saved-card-label
+		color: $gray-lighter
+		font-size: $font-size-tiny
+		text-transform: uppercase
+
+	.saved-card-avatar
+		float: left
+		width: 40px
+
+	.saved-card-content
+		margin-left: 50px
+
+	.line-thru
+		display: block
+		position: relative
+		text-align: center
+		width: 100%
+
+		&::before
+		&::after
+			content: ''
+			position: absolute
+			top: 50%
+			margin-top: 1px
+			height: 1px
+			line-height: 1px
+			border-bottom: 1px solid rgba( $white, 0.2 )
+
+		&::before
+			left: 0
+			right: 50%
+			margin-right: 40px
+
+		&::after
+			left: 50%
+			right: 0
+			margin-left: 40px
+
+	.line-thru-left
+		text-align: left
+
+		&::before
+			display: none
+
+		&::after
+			left: 0

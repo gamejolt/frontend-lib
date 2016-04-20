@@ -1,18 +1,18 @@
 <div class="game-package-card fill-darker">
 
 	<div class="game-package-card-pricing"
-		ng-class="::{ 'game-package-card-pricing-owned': ctrl.sellable.is_owned }"
+		ng-class="{ 'game-package-card-pricing-owned': ctrl.sellable.is_owned }"
 		>
 
 		<!-- If they owne the package -->
-		<div ng-if="::ctrl.sellable.is_owned">
+		<div ng-if="ctrl.sellable.is_owned">
 			<strong>
 				OWNED
 			</strong>
 		</div>
 
 		<!-- If they don't own the package yet. -->
-		<div ng-if="::!ctrl.sellable.is_owned" ng-switch="::ctrl.sellable.type">
+		<div ng-if="!ctrl.sellable.is_owned" ng-switch="::ctrl.sellable.type">
 
 			<!-- Fixed Pricing -->
 			<div ng-switch-when="paid">
@@ -127,6 +127,7 @@
 						package="::ctrl.package"
 						sellable="::ctrl.sellable"
 						pricing="::ctrl.pricing"
+						on-bought="ctrl.onPackageBought()"
 						>
 					</gj-game-package-card-payment-form>
 
@@ -143,7 +144,7 @@
 			</div>
 		</div>
 
-		<div class="game-package-card-buttons" ng-if="::ctrl.sellable.type != 'paid' || ctrl.sellable.is_owned">
+		<div class="game-package-card-buttons" ng-if="ctrl.sellable.type != 'paid' || ctrl.sellable.is_owned">
 
 			<!--
 				The buttons are so different for client that we put them in a child component.
@@ -246,7 +247,7 @@
 
 		</div>
 
-		<div ng-if="::ctrl.sellable.type == 'paid' && !ctrl.sellable.is_owned">
+		<div ng-if="ctrl.sellable.type == 'paid' && !ctrl.sellable.is_owned">
 
 			<!--
 				Remove this as soon as we open the payment area.
