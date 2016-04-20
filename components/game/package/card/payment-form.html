@@ -37,7 +37,7 @@
 
 		<form-group name="email_address" label="{{ 'Email Address:' | translate }}" label-class="col-sm-4" class="no-animate" ng-if="!App.user">
 			<div class="col-sm-8">
-				<input type="text" form-control>
+				<input form-control="text">
 				<control-errors label="{{ 'email address' | translate }}"></control-errors>
 			</div>
 		</form-group>
@@ -84,7 +84,7 @@
 		</div>
 
 		<form-group name="street1" label="{{ 'Street Address' | translate }}" class="no-animate">
-			<input type="text" form-control>
+			<input form-control="text">
 			<control-errors></control-errors>
 		</form-group>
 
@@ -92,7 +92,7 @@
 			<div class="col-sm-6">
 				<form-group name="region" label="{{ 'State/Province/County' | translate }}" class="no-animate">
 
-					<input class="no-animate-leave" type="text" form-control ng-if="!formState.regions">
+					<input class="no-animate-leave" form-control="text" ng-if="!formState.regions">
 
 					<select class="no-animate-leave" form-control ng-if="formState.regions">
 						<option ng-repeat="region in ::formState.regions track by region.code" value="{{ ::region.code }}">
@@ -105,19 +105,17 @@
 			</div>
 			<div class="col-sm-6">
 				<form-group name="postcode" label="{{ 'Zip/Postal Code' | translate }}" class="no-animate">
-					<input type="text" form-control>
+					<input form-control="text">
 					<control-errors></control-errors>
 				</form-group>
 			</div>
 		</div>
 
 		<form-group name="reside_in_country" hide-label="true" class="no-animate">
-			<div class="checkbox">
-				<label>
-					<input form-control="checkbox">
-					<span translate>I currently live in the country selected above</span>
-				</label>
-			</div>
+			<label class="checkbox">
+				<input form-control="checkbox">
+				<span translate>I currently live in the country selected above</span>
+			</label>
 			<control-errors></control-errors>
 		</form-group>
 
