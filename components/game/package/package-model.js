@@ -39,7 +39,7 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 			_package._sellable = indexedSellables[ _package.id ];
 
 			// If this is the developer of the game, then spoof that they own the game/package.
-			if ( payload.isGameOwner && _package._sellable ) {
+			if ( _package.is_game_owner && _package._sellable ) {
 				_package._sellable.is_owned = true;
 			}
 		}
