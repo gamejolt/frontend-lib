@@ -24,6 +24,8 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		scope.formModel.country = 'US';
 
 		scope.cards = [];
+		scope.walletBalance = 0;
+		scope.walletVisible = false;
 
 		load();
 
@@ -84,6 +86,50 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 				} );
 		};
 
+		scope.useWallet = function()
+		{
+			scope.formState.shouldShowSpinner = true;
+
+			var data = {
+				payment_method: scope.formState.checkoutType,
+				sellable_id: scope.sellable.id,
+				pricing_id: scope.pricing.id,
+				amount: scope.formModel.price * 100,
+
+				country: scope.formModel.country,
+				street1: scope.formModel.street1,
+				region: scope.formModel.region,
+				postcode: scope.formModel.postcode,
+				reside_in_country: scope.formModel.reside_in_country,
+			};
+
+			return Api.sendRequest( '/web/checkout/setup-order', data )
+				.then( function( response )
+				{
+					return Api.sendRequest( '/web/checkout/charge/' + response.cart.id, { wallet: true } );
+				} )
+				.then( function()
+				{
+					scope.onBought( {} );
+				} )
+				.catch( function()
+				{
+					scope.formState.shouldShowSpinner = false;
+
+					// TODO: Finish this.
+					console.log( 'There was a problem.' );
+				} );
+		};
+
+		scope.priceChanged = function ( price )
+		{
+			price = price || scope.formModel.price;
+			scope.walletVisible = (scope.sellable.type == 'paid' && scope.walletBalance >= scope.pricing.amount) && scope.walletBalance >= price;
+			console.log('form model price changed ' + price);
+		}
+		scope.$watch( 'formModel.price', scope.priceChanged );
+		scope.priceChanged();
+
 		scope.$watch( 'formModel.country', function( country )
 		{
 			scope.formState.regions = Geo.getRegions( country );
@@ -97,12 +143,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		function load()
 		{
-			Api.sendRequest( '/web/checkout/cards', null, { detach: true } ).then( function( response )
+			Api.sendRequest( '/web/checkout/methods', null, { detach: true } ).then( function( response )
 			{
 				scope.formState.isLoaded = true;
 
 				if ( response && response.cards && response.cards.length ) {
 					scope.cards = response.cards;
+				}
+				if ( response && response.walletBalance && response.walletBalance > 0 ) {
+					scope.walletBalance = response.walletBalance;
+					scope.priceChanged();
 				}
 			} );
 		}

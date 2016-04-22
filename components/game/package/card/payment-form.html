@@ -105,6 +105,15 @@
 						>
 						<span translate>PayPal</span>
 					</button>
+					<button class="btn btn-outline"
+						ng-disabled="!paymentForm.$valid || !walletVisible"
+						ng-click="collectAddress( 'wallet' )"
+						ng-if="walletBalance > 0"
+						>
+						<span class="jolticon jolticon-gamejolt"></span>
+						<span translate>Wallet</span>
+					</button>
+
 				</div>
 			</div>
 		</div>
@@ -170,9 +179,18 @@
 				<button class="btn btn-success-outline"
 					ng-disabled="!paymentForm.$valid"
 					ng-click="checkoutPaypal()"
+					ng-if="formState.checkoutType=='paypal'"
 					>
 					<span class="jolticon jolticon-chevron-right"></span>
 					<span translate>Proceed to PayPal</span>
+				</button>
+				<button class="btn btn-success-outline"
+					ng-disabled="!paymentForm.$valid"
+					ng-click="useWallet()"
+					ng-if="formState.checkoutType=='wallet'"
+					>
+					<span class="jolticon jolticon-chevron-right"></span>
+					<span translate>Buy using Wallet</span>
 				</button>
 				<a class="pull-right small link-muted" ng-click="startOver()">
 					&laquo;
