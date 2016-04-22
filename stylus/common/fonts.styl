@@ -1,4 +1,10 @@
+$in-webpack ?= false
 $gj-font-lib ?= '/lib/gj-lib-client/components/fonts/';
+
+// When in webpack we need to do relative URL.
+if ( $in-webpack ) {
+	$gj-font-lib = '.' + $gj-font-lib
+}
 
 font-url( font-url, variant )
 	src: url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.eot' )
