@@ -1,25 +1,25 @@
-$button-line-height = 20px
-$button-padding-vertical = 8px
-$button-padding-horizontal = 20px
-$button-icon-size = 16px
-$button-icon-spacing-right = 5px
-$button-outline-border-size = 2px
+$button-line-height ?= 20px
+$button-padding-vertical ?= 8px
+$button-padding-horizontal ?= 20px
+$button-icon-size ?= 16px
+$button-icon-spacing-right ?= 5px
+$button-outline-border-size ?= 2px
 
-$button-sm-line-height = $button-icon-size
-$button-sm-padding-vertical = 3px
-$button-sm-padding-horizontal = 10px
-$button-sm-icon-spacing-right = 3px
-$button-sm-outline-border-size = 1px
-$button-sm-font-weight = normal
-$button-sm-font-size = $font-size-tiny
+$button-sm-line-height ?= $button-icon-size
+$button-sm-padding-vertical ?= 3px
+$button-sm-padding-horizontal ?= 10px
+$button-sm-icon-spacing-right ?= 3px
+$button-sm-outline-border-size ?= 1px
+$button-sm-font-weight ?= normal
+$button-sm-font-size ?= $font-size-tiny
 
-$button-lg-line-height = 20px
-$button-lg-padding-vertical = 18px
-$button-lg-padding-horizontal = 35px
-$button-lg-icon-spacing-right = 8px
-$button-lg-outline-border-size = 2px
-$button-lg-font-weight = bold
-$button-lg-font-size = $font-size-base
+$button-lg-line-height ?= 20px
+$button-lg-padding-vertical ?= 18px
+$button-lg-padding-horizontal ?= 35px
+$button-lg-icon-spacing-right ?= 8px
+$button-lg-outline-border-size ?= 2px
+$button-lg-font-weight ?= bold
+$button-lg-font-size ?= $font-size-base
 
 button-variant( background, color, icon-color, addon-color, outline-color, outline-addon-color, active-background, active-color )
 
@@ -120,7 +120,6 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 
 	.jolticon
 		cursor: pointer
-		vertical-align: text-top
 		line-height: $button-line-height
 		margin: 0 $button-icon-spacing-right 0 0
 
