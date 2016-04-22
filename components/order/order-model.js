@@ -1,4 +1,4 @@
-angular.module( 'gj.Order' ).factory( 'Order', function( Model, Order_Item )
+angular.module( 'gj.Order' ).factory( 'Order', function( Model, Order_Item, Order_Payment )
 {
 	function Order( data )
 	{
@@ -7,6 +7,13 @@ angular.module( 'gj.Order' ).factory( 'Order', function( Model, Order_Item )
 
 			if ( data.items ) {
 				this.items = Order_Item.populate( data.items );
+
+				// Whether or not the whole order is refunded (all items).
+				this._is_refunded = !_.find( this.items, { is_refunded: false } );
+			}
+
+			if ( data.payments ) {
+				this.payments = Order_Payment.populate( data.payments );
 			}
 		}
 	}
