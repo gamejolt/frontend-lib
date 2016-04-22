@@ -1,9 +1,13 @@
-angular.module( 'gj.Order.Payment' ).factory( 'Order_Payment', function( Model )
+angular.module( 'gj.Order.Payment' ).factory( 'Order_Payment', function( Model, Order_Payment_Refund )
 {
 	function Order_Payment( data )
 	{
 		if ( data ) {
 			angular.extend( this, data );
+
+			if ( data.refunds ) {
+				this.refunds = Order_Payment_Refund.populate( data.refunds );
+			}
 		}
 	}
 
