@@ -21,7 +21,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		scope.formState.checkoutStep = 'primary';
 
 		scope.formModel.price = scope.pricing.amount ? scope.pricing.amount / 100 : null;
-		scope.formModel.country = 'US';
+		scope.formModel.country = 'us';
 
 		scope.cards = [];
 		scope.walletBalance = 0;
