@@ -1,4 +1,4 @@
-angular.module( 'gj.Order' ).factory( 'Order', function( Model, Order_Item, Order_Payment )
+angular.module( 'gj.Order' ).factory( 'Order', function( Model, Order_Item, Order_Payment, Order_Address )
 {
 	function Order( data )
 	{
@@ -14,6 +14,12 @@ angular.module( 'gj.Order' ).factory( 'Order', function( Model, Order_Item, Orde
 
 			if ( data.payments ) {
 				this.payments = Order_Payment.populate( data.payments );
+			}
+
+			if ( data.addresses ) {
+				this.addresses = Order_Address.populate( data.addresses );
+				this.billing_address = _.find( this.addresses, { type: Order_Address.TYPE_BILLING } );
+				this.shipping_address = _.find( this.addresses, { type: Order_Address.TYPE_SHIPPING } );
 			}
 		}
 	}

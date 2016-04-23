@@ -1,4 +1,4 @@
-angular.module( 'gj.Order.Payment' ).factory( 'Order_Payment_Refund', function( Model )
+angular.module( 'gj.Order.Payment.Refund' ).factory( 'Order_Payment_Refund', function( Model )
 {
 	function Order_Payment_Refund( data )
 	{
