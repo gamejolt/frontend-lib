@@ -1,4 +1,4 @@
-angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout )
+angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 {
 	function Form( options )
 	{
@@ -142,6 +142,10 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout )
 		if ( this.onSubmit ) {
 			scope.formState.progress = this.onSubmit( scope ).then( function( _response )
 			{
+				if ( _response.success === false ) {
+					return $q.reject( _response );
+				}
+
 				response = _response;
 			} );
 		}
