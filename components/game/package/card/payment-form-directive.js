@@ -25,35 +25,74 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		scope.cards = [];
 		scope.walletBalance = 0;
-		scope.walletVisible = false;
+
+		scope.collectAddress = collectAddress;
+		scope.checkoutCard = checkoutCard;
+		scope.checkoutPaypal = checkoutPaypal;
+		scope.startOver = startOver;
+		scope.checkoutSavedCard = checkoutSavedCard;
+		scope.checkoutWallet = checkoutWallet;
+		scope.hasSufficientWalletFunds = hasSufficientWalletFunds;
 
 		load();
 
-		scope.collectAddress = function( checkoutType )
+		scope.$watch( 'formModel.country', function( country )
+		{
+			scope.formState.regions = Geo.getRegions( country );
+			if ( scope.formState.regions ) {
+				scope.formModel.region = scope.formState.regions[0].code;  // Default to first.
+			}
+			else {
+				scope.formModel.region = '';
+			}
+		} );
+
+		function load()
+		{
+			Api.sendRequest( '/web/checkout/methods', null, { detach: true } ).then( function( response )
+			{
+				scope.formState.isLoaded = true;
+
+				if ( response && response.cards && response.cards.length ) {
+					scope.cards = response.cards;
+				}
+
+				if ( response && response.walletBalance && response.walletBalance > 0 ) {
+					scope.walletBalance = response.walletBalance;
+				}
+			} );
+		}
+
+		function hasSufficientWalletFunds()
+		{
+			return (scope.sellable.type == 'paid' && scope.walletBalance >= scope.pricing.amount) && scope.walletBalance >= (scope.formModel.price * 100);
+		}
+
+		function collectAddress( checkoutType )
 		{
 			scope.formState.checkoutStep = 'address';
 			scope.formState.checkoutType = checkoutType;
 			scope.formState.countries = Geo.getCountries();
-		};
+		}
 
-		scope.checkoutCard = function()
+		function checkoutCard()
 		{
 			scope.formState.checkoutType = 'cc-stripe';
 			scope.onSubmit();
-		};
+		}
 
-		scope.checkoutPaypal = function()
+		function checkoutPaypal()
 		{
 			scope.formState.checkoutType = 'paypal';
 			scope.onSubmit();
-		};
+		}
 
-		scope.startOver = function()
+		function startOver()
 		{
 			scope.formState.checkoutStep = 'primary';
-		};
+		}
 
-		scope.useSavedCard = function( card )
+		function checkoutSavedCard( card )
 		{
 			scope.formState.shouldShowSpinner = true;
 
@@ -84,9 +123,9 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 					// TODO: Finish this.
 					console.log( 'There was a problem.' );
 				} );
-		};
+		}
 
-		scope.useWallet = function()
+		function checkoutWallet()
 		{
 			scope.formState.shouldShowSpinner = true;
 
@@ -100,7 +139,6 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 				street1: scope.formModel.street1,
 				region: scope.formModel.region,
 				postcode: scope.formModel.postcode,
-				reside_in_country: scope.formModel.reside_in_country,
 			};
 
 			return Api.sendRequest( '/web/checkout/setup-order', data )
@@ -119,42 +157,6 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 					// TODO: Finish this.
 					console.log( 'There was a problem.' );
 				} );
-		};
-
-		scope.priceChanged = function ( price )
-		{
-			price = price || scope.formModel.price;
-			scope.walletVisible = (scope.sellable.type == 'paid' && scope.walletBalance >= scope.pricing.amount) && scope.walletBalance >= price;
-			console.log('form model price changed ' + price);
-		}
-		scope.$watch( 'formModel.price', scope.priceChanged );
-		scope.priceChanged();
-
-		scope.$watch( 'formModel.country', function( country )
-		{
-			scope.formState.regions = Geo.getRegions( country );
-			if ( scope.formState.regions ) {
-				scope.formModel.region = scope.formState.regions[0].code;  // Default to first.
-			}
-			else {
-				scope.formModel.region = '';
-			}
-		} );
-
-		function load()
-		{
-			Api.sendRequest( '/web/checkout/methods', null, { detach: true } ).then( function( response )
-			{
-				scope.formState.isLoaded = true;
-
-				if ( response && response.cards && response.cards.length ) {
-					scope.cards = response.cards;
-				}
-				if ( response && response.walletBalance && response.walletBalance > 0 ) {
-					scope.walletBalance = response.walletBalance;
-					scope.priceChanged();
-				}
-			} );
 		}
 	};
 
@@ -170,7 +172,6 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			street1: scope.formModel.street1,
 			region: scope.formModel.region,
 			postcode: scope.formModel.postcode,
-			reside_in_country: scope.formModel.reside_in_country,
 		};
 
 		if ( !App.user ) {

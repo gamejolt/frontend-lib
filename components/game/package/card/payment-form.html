@@ -59,10 +59,40 @@
 				<label class="col-sm-4 control-label" translate>Checkout with:</label>
 				<div class="col-sm-8">
 
-					<div ng-if="cards.length">
+					<!--
+						If they have any wallet funds, we try let them checkout with their wallet.
+						If they don't have enough funds in their wallet for the order, we give 'em a message.
+					-->
+					<div ng-if="App.user && walletBalance > 0">
+						<div ng-if="hasSufficientWalletFunds()">
+							<a class="saved-card" ng-click="collectAddress( 'wallet' )">
+								<div class="saved-card-avatar">
+									<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
+								</div>
+								<div class="saved-card-content">
+									<div class="saved-card-label" translate>
+										Your Wallet
+									</div>
+									<span class="saved-card-number">
+										<span translate>Balance:</span>
+										{{ walletBalance / 100 | currency:'$' }}
+									</span>
+								</div>
+							</a>
 
+							<div class="line-thru line-thru-left">
+								<span translate>or</span>
+							</div>
+						</div>
+
+						<div ng-if="!hasSufficientWalletFunds()" class="alert alert-info" translate>
+							You do not have enough funds in your Wallet for this order.
+						</div>
+					</div>
+
+					<div ng-if="App.user && cards.length">
 						<div>
-							<a class="saved-card" ng-click="useSavedCard( cards[0] )">
+							<a class="saved-card" ng-click="checkoutSavedCard( cards[0] )">
 								<div class="saved-card-avatar">
 									<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
 								</div>
@@ -84,11 +114,9 @@
 							</a>
 						</div>
 
-						<br>
 						<div class="line-thru line-thru-left">
 							<span translate>or</span>
 						</div>
-						<br>
 					</div>
 
 					<button class="btn btn-outline"
@@ -99,19 +127,12 @@
 						<span ng-if="cards.length" translate>New Card</span>
 						<span ng-if="!cards.length" translate>Card</span>
 					</button>
+
 					<button class="btn btn-outline"
 						ng-disabled="!paymentForm.$valid"
 						ng-click="collectAddress( 'paypal' )"
 						>
 						<span translate>PayPal</span>
-					</button>
-					<button class="btn btn-outline"
-						ng-disabled="!paymentForm.$valid || !walletVisible"
-						ng-click="collectAddress( 'wallet' )"
-						ng-if="walletBalance > 0"
-						>
-						<span class="jolticon jolticon-gamejolt"></span>
-						<span translate>Wallet</span>
 					</button>
 
 				</div>
@@ -167,31 +188,25 @@
 				</div>
 			</div>
 
-			<form-group name="reside_in_country" hide-label="true" class="no-animate">
-				<label class="checkbox">
-					<input form-control="checkbox">
-					<span translate>I currently live in the country selected above</span>
-				</label>
-				<control-errors></control-errors>
-			</form-group>
-
 			<div class="form-group no-animate">
 				<button class="btn btn-success-outline"
 					ng-disabled="!paymentForm.$valid"
 					ng-click="checkoutPaypal()"
-					ng-if="formState.checkoutType=='paypal'"
+					ng-if="formState.checkoutType == 'paypal'"
 					>
 					<span class="jolticon jolticon-chevron-right"></span>
 					<span translate>Proceed to PayPal</span>
 				</button>
+
 				<button class="btn btn-success-outline"
 					ng-disabled="!paymentForm.$valid"
-					ng-click="useWallet()"
-					ng-if="formState.checkoutType=='wallet'"
+					ng-click="checkoutWallet()"
+					ng-if="formState.checkoutType == 'wallet'"
 					>
 					<span class="jolticon jolticon-chevron-right"></span>
-					<span translate>Buy using Wallet</span>
+					<span translate>Buy Using Wallet</span>
 				</button>
+
 				<a class="pull-right small link-muted" ng-click="startOver()">
 					&laquo;
 					<span translate>Go back</span>
