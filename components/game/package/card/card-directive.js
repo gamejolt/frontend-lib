@@ -229,7 +229,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				// we need to try to pick one to showcase as the default download. We put
 				// their detected OS first so that it tries to pick that one first.
 				// Arch is only detected in Client.
-				var checkDownloadables = [ 'windows', 'windows_64', 'mac', 'linux' ];
+				var checkDownloadables = [ 'windows', 'windows_64', 'mac', 'mac_64', 'linux', 'linux_64' ];
 
 				// This will put the 64 bit version as higher priority.
 				if ( arch == '64' ) {

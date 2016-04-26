@@ -1,9 +1,17 @@
+$in-webpack ?= false
+$gj-jolticon-lib ?= '/lib/gj-lib-client/components/jolticons/';
+
+// When in webpack we need to do relative URL.
+if ( $in-webpack ) {
+	$gj-jolticon-lib = '.' + $gj-jolticon-lib
+}
+
 $jolticon-size = 16px
 
 @font-face
 	font-family: 'jolticons'
-	src: url('/lib/gj-lib-client/components/jolticons/jolticons.eot')
-	src: url('/lib/gj-lib-client/components/jolticons/jolticons.eot?#iefix') format('embedded-opentype'), url('/lib/gj-lib-client/components/jolticons/jolticons.woff') format('woff'), url('/lib/gj-lib-client/components/jolticons/jolticons.ttf') format('truetype'), url('/lib/gj-lib-client/components/jolticons/jolticons.svg#jolticon') format('svg')
+	src: url( $gj-jolticon-lib + '/jolticons.eot' )
+	src: url( $gj-jolticon-lib + '/jolticons.eot?#iefix' ) format('embedded-opentype'), url( $gj-jolticon-lib + '/jolticons.woff' ) format('woff'), url( $gj-jolticon-lib + '/jolticons.ttf' ) format('truetype'), url( $gj-jolticon-lib + '/jolticons.svg#jolticon' ) format('svg')
 	font-weight: normal
 	font-style: normal
 

@@ -9,6 +9,13 @@ angular.module( 'gj.Payload' ).service( 'Payload', function( App, Environment, $
 	this.ERROR_HTTP_ERROR = 'payload-error';
 	this.ERROR_OFFLINE = 'payload-offline';
 
+	var httpErrors = [
+		400,
+		403,
+		404,
+		500,
+	];
+
 	var errorHandlers = [];
 
 	// We have to set up a watch on stateChangeErrors.
@@ -16,39 +23,7 @@ angular.module( 'gj.Payload' ).service( 'Payload', function( App, Environment, $
 	// This will force an update of the whole page to pull in the new version's code.
 	$rootScope.$on( '$stateChangeError', function( event, toState, toParams, fromState, fromParams, error )
 	{
-		// Only process if it's a payload error.
-		if ( !error || !error.type || error.type != 'payload' ) {
-			return;
-		}
-
-		// Handlers can return false to stop processing other handlers set up.
-		// They can `.preventDefault()` to not do the default handling below.
-		if ( errorHandlers.length ) {
-			for ( var i = 0; i < errorHandlers.length; ++i ) {
-				if ( errorHandlers[ i ]( event, toState, toParams, fromState, fromParams, error ) === false ) {
-					break;
-				}
-			}
-		}
-
-		if ( !event.defaultPrevented ) {
-			if ( error.error == _this.ERROR_NEW_VERSION ) {
-				$window.location.href = $state.href( toState, toParams, { absolute: true } );
-			}
-			else if ( error.error == _this.ERROR_NOT_LOGGED ) {
-				$window.location.href = Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent( $location.url() );
-			}
-			else if ( error.error == _this.ERROR_INVALID ) {
-				$state.go( 'error-500' );
-			}
-			else if ( error.error == _this.ERROR_HTTP_ERROR ) {
-				$state.go( 'error-' + (error.status || 500) );
-			}
-			else if ( error.error == _this.ERROR_OFFLINE ) {
-				var retryUrl = $state.href( toState, toParams );
-				$state.go( 'error-offline', { retryUrl: retryUrl } );
-			}
-		}
+		_this.handlePayloadError( event, toState, toParams, fromState, fromParams, error );
 	} );
 
 	function checkRedirect( response, deferred )
@@ -271,5 +246,57 @@ angular.module( 'gj.Payload' ).service( 'Payload', function( App, Environment, $
 	this.removeErrorHandler = function( handler )
 	{
 		_.pull( errorHandlers, handler );
+	};
+
+	this.handlePayloadError = function( event, toState, toParams, fromState, fromParams, error )
+	{
+		// If there is only one argument, it's the error object.
+		if ( arguments.length == 1 ) {
+			error = arguments[0];
+			event = {
+				defaultPrevented: false,
+				preventDefault: function()
+				{
+					event.defaultPrevented = true;
+				},
+			};
+
+			toState = $state.current;
+			toParams = $state.params;
+		}
+
+		// Only process if it's a payload error.
+		if ( !error || !error.type || error.type != 'payload' ) {
+			return;
+		}
+
+		// Handlers can return false to stop processing other handlers set up.
+		// They can `.preventDefault()` to not do the default handling below.
+		if ( errorHandlers.length ) {
+			for ( var i = 0; i < errorHandlers.length; ++i ) {
+				if ( errorHandlers[ i ]( event, toState, toParams, fromState, fromParams, error ) === false ) {
+					break;
+				}
+			}
+		}
+
+		if ( !event.defaultPrevented ) {
+			if ( error.error == _this.ERROR_NEW_VERSION ) {
+				$window.location.href = $state.href( toState, toParams, { absolute: true } );
+			}
+			else if ( error.error == _this.ERROR_NOT_LOGGED ) {
+				$window.location.href = Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent( $location.url() );
+			}
+			else if ( error.error == _this.ERROR_INVALID ) {
+				$state.go( 'error-500' );
+			}
+			else if ( error.error == _this.ERROR_HTTP_ERROR && (!error.status || httpErrors.indexOf( error.status ) != -1) ) {
+				$state.go( 'error-' + (error.status || 500) );
+			}
+			else {
+				var retryUrl = $state.href( toState, toParams );
+				$state.go( 'error-offline', { retryUrl: retryUrl } );
+			}
+		}
 	};
 } );
