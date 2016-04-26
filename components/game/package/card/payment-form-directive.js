@@ -24,6 +24,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		scope.formModel.country = 'us';
 
 		scope.cards = [];
+		scope.addresses = [];
 		scope.walletBalance = 0;
 
 		scope.collectAddress = collectAddress;
@@ -57,6 +58,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 					scope.cards = response.cards;
 				}
 
+				if ( response && response.billingAddresses && response.billingAddresses.length ) {
+					scope.addresses = response.billingAddresses;
+				}
+
 				if ( response && response.walletBalance && response.walletBalance > 0 ) {
 					scope.walletBalance = response.walletBalance;
 				}
@@ -70,6 +75,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		function collectAddress( checkoutType )
 		{
+			if ( scope.addresses.length ) {
+				if ( checkoutType == 'paypal' ) {
+					checkoutPaypal();
+					return;
+				}
+				else if ( checkoutType == 'wallet' ) {
+					checkoutWallet();
+					return;
+				}
+			}
 			scope.formState.checkoutStep = 'address';
 			scope.formState.checkoutType = checkoutType;
 			scope.formState.countries = Geo.getCountries();
@@ -141,6 +156,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 				postcode: scope.formModel.postcode,
 			};
 
+			if ( scope.addresses.length ) {
+				data.address_id = scope.addresses[0].id;
+			}
+
 			return Api.sendRequest( '/web/checkout/setup-order', data )
 				.then( function( response )
 				{
@@ -176,6 +195,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		if ( !App.user ) {
 			data.email_address = scope.formModel.email_address;
+		}
+
+		if ( scope.addresses.length ) {
+			data.address_id = scope.addresses[0].id;
 		}
 
 		return Api.sendRequest( '/web/checkout/setup-order', data )
