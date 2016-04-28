@@ -114,9 +114,32 @@
 										</span>
 									</div>
 								</a>
-								<a class="saved-card-more" gj-tooltip="{{ 'Select another card' | translate }}">
+
+								<a class="saved-card-more"
+									ng-if="cards.length > 1"
+									gj-tooltip="{{ 'Select another card' | translate }}"
+									gj-popover-trigger="payment-form-card-selector-{{ sellable.id }}"
+									>
 									<span class="jolticon jolticon-chevron-down"></span>
 								</a>
+
+								<gj-popover
+									ng-if="cards.length > 1"
+									popover-id="payment-form-card-selector-{{ sellable.id }}"
+									>
+									<div class="list-group list-group-dark">
+										<a class="list-group-item"
+											ng-click="checkoutSavedCard( cards )"
+											ng-repeat="card in cards track by card.id"
+											>
+											<span class="tag tag-active">
+												{{ ::card.brand }}
+											</span>
+											****
+											{{ ::card.last4 }}
+										</a>
+									</div>
+								</gj-popover>
 							</div>
 
 							<div class="line-thru line-thru-left">
