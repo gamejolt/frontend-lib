@@ -6,6 +6,7 @@ angular.module( 'gj.Graph' ).service( 'Graph', function()
 		graphData.graph = [];
 		graphData.tableData = [];
 		graphData.tableTotals = {};
+		graphData.colTotals = {};
 
 		data.forEach( function( row )
 		{
@@ -21,6 +22,7 @@ angular.module( 'gj.Graph' ).service( 'Graph', function()
 					} );
 
 					graphData.tableTotals[ k ] = row[ k ];
+					graphData.colTotals[ k ] = 0;
 				}
 
 				return;
@@ -42,6 +44,8 @@ angular.module( 'gj.Graph' ).service( 'Graph', function()
 					row.time * 1000,
 					parseInt( row[ k ], 10 ),
 				] );
+
+				graphData.colTotals[ k ] += parseInt( row[ k ], 10 );
 
 				++i;
 			}

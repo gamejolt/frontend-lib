@@ -45,7 +45,7 @@ angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $root
 		}
 
 		this.hasModal = true;
-		HistoryTick.sendBeacon( 'game-build', _build.id );
+		HistoryTick.sendBeacon( 'game-build', _build.id, { sourceResource: 'Game', sourceResourceId: _game.id } );
 
 		var modalScope = $rootScope.$new( true );
 		modalScope.game = _game;

@@ -31,7 +31,7 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 					downloadUrl = response.downloadUrl;
 
 					// Be sure to log the build download.
-					return HistoryTick.sendBeacon( 'game-build', build.id );
+					return HistoryTick.sendBeacon( 'game-build', build.id, { sourceResource: 'Game', sourceResourceId: game.id } );
 				} )
 				.then( function()
 				{

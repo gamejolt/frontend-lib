@@ -8,6 +8,7 @@ angular.module( 'gj.Graph' ).directive( 'gjGraph', function( $window, Screen )
 		'#ccff00',
 		'#31d6ff',
 		'#ff3fac',
+		'#2f7f6f',
 	].map( function( color )
 	{
 		return {
@@ -17,6 +18,9 @@ angular.module( 'gj.Graph' ).directive( 'gjGraph', function( $window, Screen )
 			pointStrokeColor: '#191919',
 			pointHighlightFill: '#fff',
 			pointHighlightStroke: '#fff',
+
+			color: color,
+			highlight: '#fff',
 		};
 	} );
 
@@ -52,44 +56,87 @@ angular.module( 'gj.Graph' ).directive( 'gjGraph', function( $window, Screen )
 		pointDotStrokeWidth: 2,
 
 		datasetStrokeWidth: 1,
+
+		segmentStrokeColor: '#191919',
 	};
 
 	return {
 		restrict: 'E',
-		template: '<div class="graph full-bleed-xs"><div class="chart-line"><canvas tc-chartjs-line chart-data="data" chart-options="chartOptions" chart-legend="legendBinding"></canvas></div><div tc-chartjs-legend chart-legend="legendBinding"></div></div>',
+		templateUrl: '/lib/gj-lib-client/components/graph/graph.html',
 		scope: {
 			graphData: '=dataset',
 		},
-		link: function( scope, element, attrs )
+		bindToController: true,
+		controllerAs: 'ctrl',
+		controller: function( $scope, $attrs )
 		{
-			scope.chartOptions = chartOptions;
-			scope.legendBinding = null;
+			var _this = this;
 
-			scope.data = {
-				labels: [],
-				datasets: [],
-			};
+			this.type = $attrs.type || 'line';
+			this.legendBinding = null;
+			this.shouldShowLegend = true;
+			this.chartOptions = angular.copy( chartOptions );
+			this.ourColors = angular.copy( globalColors );
+			this.isBackgroundVariant = false;
 
-			scope.graphData.forEach( function( series, i )
-			{
-				var dataset = {
-					label: series.label,
-					data: [],
+			// if ( angular.isDefined( $attrs.noAnimation ) ) {
+			// 	this.chartOptions.animation = false;
+			// }
+
+			if ( angular.isDefined( $attrs.backgroundVariant ) ) {
+				this.isBackgroundVariant = true;
+				this.shouldShowLegend = false;
+				this.chartOptions.showScale = false;
+				this.chartOptions.showTooltips = false;
+				this.chartOptions.pointDotRadius = 2;
+				this.chartOptions.pointDotStrokeWidth = 1;
+
+				this.ourColors[0] = {
+					fillColor: 'rgba( 0, 0, 0, 0.05 )',
+					strokeColor: '#eee',
+					pointColor: '#eee',
+					pointStrokeColor: '#fff',
+					pointHighlightFill: '#eee',
+					pointHighlightStroke: '#eee',
 				};
+			}
 
-				angular.extend( dataset, globalColors[i] );
+			$scope.$watch( 'ctrl.graphData', function()
+			{
+				if ( _this.type == 'line' ) {
 
-				series.data.forEach( function( row )
-				{
-					if ( i == 0 ) {
-						scope.data.labels.push( moment( row[0] ).format( 'MMM DD' ) );
-					}
+					_this.data = {
+						labels: [],
+						datasets: [],
+					};
 
-					dataset.data.push( row[1] );
-					// dataset.data.push( Math.ceil( Math.random() * 100 ) );
-				} );
+					_this.graphData.forEach( function( series, i )
+					{
+						var dataset = {
+							label: series.label,
+							data: [],
+						};
 
-				scope.data.datasets.push( dataset );
+						angular.extend( dataset, this.ourColors[i] );
+
+						series.data.forEach( function( row )
+						{
+							if ( i == 0 ) {
+								this.data.labels.push( moment( row[0] ).format( 'MMM DD' ) );
+							}
+
+							dataset.data.push( row[1] );
+						}, this );
+
+						this.data.datasets.push( dataset );
+					}, _this );
+				}
+				else if ( _this.type == 'pie' || _this.type == 'doughnut' ) {
+					_this.data = _this.graphData.map( function( item, i )
+					{
+						return angular.extend( item, _this.ourColors[ i + 1 ] );
+					} );
+				}
 			} );
 		}
 	};

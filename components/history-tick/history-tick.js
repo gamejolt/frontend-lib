@@ -1,1 +1,1 @@
-angular.module( 'gj.HistoryTick', [] );
+angular.module( 'gj.HistoryTick', [ 'gj.Referrer' ] );
