@@ -36,7 +36,7 @@
 							gj-focus-when
 							gj-form-currency-input
 							step="1"
-							ng-min="::sellable.type == 'paid' ? pricing.amount / 100 : 0.30"
+							ng-min="::sellable.type == 'paid' ? pricing.amount / 100 : 0.50"
 							>
 					</span>
 
@@ -46,7 +46,7 @@
 
 					<control-errors label="{{ 'price' | translate }}">
 						<control-error ng-if="sellable.type == 'pwyw'" when="min">
-							Because of payment processing fees, we are not able to sell this game for less than $0.30. You can click the link below to grab the download for free, though!
+							Because of payment processing fees, we are not able to sell this game for less than $0.50. You can click the link below to grab the download for free, though!
 						</control-error>
 					</control-errors>
 				</div>
