@@ -70,6 +70,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		function hasSufficientWalletFunds()
 		{
+			if ( !scope.formModel.price || scope.formModel.price <= 0 ) {
+				return true;
+			}
+
 			return scope.walletBalance >= scope.pricing.amount && scope.walletBalance >= (scope.formModel.price * 100);
 		}
 
