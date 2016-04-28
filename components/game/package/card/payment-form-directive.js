@@ -53,6 +53,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			Api.sendRequest( '/web/checkout/methods', null, { detach: true } ).then( function( response )
 			{
 				scope.formState.isLoaded = true;
+				scope.minOrderAmount = response.minOrderAmount || 50;
 
 				if ( response && response.cards && response.cards.length ) {
 					scope.cards = response.cards;
