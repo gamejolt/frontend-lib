@@ -70,7 +70,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		function hasSufficientWalletFunds()
 		{
-			return (scope.sellable.type == 'paid' && scope.walletBalance >= scope.pricing.amount) && scope.walletBalance >= (scope.formModel.price * 100);
+			return scope.walletBalance >= scope.pricing.amount && scope.walletBalance >= (scope.formModel.price * 100);
 		}
 
 		function collectAddress( checkoutType )

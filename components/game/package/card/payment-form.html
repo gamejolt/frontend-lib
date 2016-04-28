@@ -63,59 +63,61 @@
 						If they have any wallet funds, we try let them checkout with their wallet.
 						If they don't have enough funds in their wallet for the order, we give 'em a message.
 					-->
-					<div ng-if="App.user && walletBalance > 0">
-						<div ng-if="hasSufficientWalletFunds()">
-							<a class="saved-card" ng-click="collectAddress( 'wallet' )">
-								<div class="saved-card-avatar">
-									<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
-								</div>
-								<div class="saved-card-content">
-									<div class="saved-card-label" translate>
-										Your Wallet
+					<div gj-expand-when="paymentForm.$valid">
+						<div ng-if="App.user && walletBalance > 0">
+							<div ng-if="hasSufficientWalletFunds()">
+								<a class="saved-card" ng-click="collectAddress( 'wallet' )">
+									<div class="saved-card-avatar">
+										<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
 									</div>
-									<span class="saved-card-number">
-										<span translate>Balance:</span>
-										{{ walletBalance / 100 | currency:'$' }}
-									</span>
+									<div class="saved-card-content">
+										<div class="saved-card-label" translate>
+											Your Wallet
+										</div>
+										<span class="saved-card-number">
+											<span translate>Balance:</span>
+											{{ walletBalance / 100 | currency:'$' }}
+										</span>
+									</div>
+								</a>
+
+								<div class="line-thru line-thru-left">
+									<span translate>or</span>
 								</div>
-							</a>
+							</div>
+
+							<div ng-if="!hasSufficientWalletFunds()" class="alert alert-info" translate>
+								You do not have enough funds in your Wallet for this order.
+							</div>
+						</div>
+
+						<div ng-if="App.user && cards.length">
+							<div>
+								<a class="saved-card" ng-click="checkoutSavedCard( cards[0] )">
+									<div class="saved-card-avatar">
+										<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
+									</div>
+									<div class="saved-card-content">
+										<div class="saved-card-label" translate>
+											Saved Card
+										</div>
+										<span class="tag tag-active">
+											{{ ::cards[0].brand }}
+										</span>
+										<span class="saved-card-number">
+											****
+											{{ ::cards[0].last4 }}
+										</span>
+									</div>
+								</a>
+								<a class="saved-card-more" gj-tooltip="{{ 'Select another card' | translate }}">
+									<span class="jolticon jolticon-chevron-down"></span>
+								</a>
+							</div>
 
 							<div class="line-thru line-thru-left">
 								<span translate>or</span>
 							</div>
-						</div>
-
-						<div ng-if="!hasSufficientWalletFunds()" class="alert alert-info" translate>
-							You do not have enough funds in your Wallet for this order.
-						</div>
-					</div>
-
-					<div ng-if="App.user && cards.length">
-						<div>
-							<a class="saved-card" ng-click="checkoutSavedCard( cards[0] )">
-								<div class="saved-card-avatar">
-									<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
-								</div>
-								<div class="saved-card-content">
-									<div class="saved-card-label" translate>
-										Saved Card
-									</div>
-									<span class="tag tag-active">
-										{{ ::cards[0].brand }}
-									</span>
-									<span class="saved-card-number">
-										****
-										{{ ::cards[0].last4 }}
-									</span>
-								</div>
-							</a>
-							<a class="saved-card-more" gj-tooltip="{{ 'Select another card' | translate }}">
-								<span class="jolticon jolticon-chevron-down"></span>
-							</a>
-						</div>
-
-						<div class="line-thru line-thru-left">
-							<span translate>or</span>
 						</div>
 					</div>
 
