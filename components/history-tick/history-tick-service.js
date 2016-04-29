@@ -37,51 +37,48 @@ angular.module( 'gj.HistoryTick' ).service( 'HistoryTick', function( $document, 
 
 		return $q( function( resolve, reject )
 		{
-			$ocLazyLoad.load( '/app/modules/ua-parser.js' ).then( function()
+			var queryParams = [];
+
+			// Cache busting.
+			queryParams.push( 'cb=' + Date.now() );
+
+			// Device info.
+			queryParams.push( 'os=' + Device.os() );
+			var arch = Device.arch();
+			if ( arch ) {
+				queryParams.push( 'arch=' + arch );
+			}
+
+			// Source/referrer.
+			if ( options.sourceResource && options.sourceResourceId ) {
+				var source = _this.getSource( options.sourceResource, options.sourceResourceId );
+				if ( source ) {
+					queryParams.push( 'source=' + source );
+				}
+			}
+
+			// This is enough to send the beacon.
+			// No need to add it to the page.
+			var img = $document[0].createElement( 'img' );
+			img.width = 1;
+			img.height = 1;
+			img.src = Environment.apiHost + '/tick/' + type + '/' + resourceId + '?' + queryParams.join( '&' );
+
+			// Always resolve.
+			img.onload = img.onerror = function()
 			{
-				var queryParams = [];
+				img.onload = null;
+				img.onerror = null;
+				resolve();
+			};
 
-				// Cache busting.
-				queryParams.push( 'cb=' + Date.now() );
-
-				// Device info.
-				queryParams.push( 'os=' + Device.os() );
-				var arch = Device.arch();
-				if ( arch ) {
-					queryParams.push( 'arch=' + arch );
-				}
-
-				// Source/referrer.
-				if ( options.sourceResource && options.sourceResourceId ) {
-					var source = _this.getSource( options.sourceResource, options.sourceResourceId );
-					if ( source ) {
-						queryParams.push( 'source=' + source );
-					}
-				}
-
-				// This is enough to send the beacon.
-				// No need to add it to the page.
-				var img = $document[0].createElement( 'img' );
-				img.width = 1;
-				img.height = 1;
-				img.src = Environment.apiHost + '/tick/' + type + '/' + resourceId + '?' + queryParams.join( '&' );
-
-				// Always resolve.
-				img.onload = img.onerror = function()
-				{
-					img.onload = null;
-					img.onerror = null;
-					resolve();
-				};
-
-				if ( Environment.env == 'development' ) {
-					console.log( 'Tracking history tick.', {
-						type: type,
-						resourceId: resourceId,
-						queryString: queryParams.join( '&' ),
-					} );
-				}
-			} );
+			if ( Environment.env == 'development' ) {
+				console.log( 'Tracking history tick.', {
+					type: type,
+					resourceId: resourceId,
+					queryString: queryParams.join( '&' ),
+				} );
+			}
 		} );
 	};
 } );
