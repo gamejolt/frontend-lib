@@ -209,12 +209,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		return Api.sendRequest( '/web/checkout/setup-order', data )
 			.then( function( response )
 			{
-				if ( Environment.isClient ) {
-					require( 'nw.gui' ).Shell.openExternal( response.redirectUrl );
+				if ( response.success ) {
+					if ( Environment.isClient ) {
+						require( 'nw.gui' ).Shell.openExternal( response.redirectUrl );
+					}
+					else {
+						$window.location = response.redirectUrl;
+					}
 				}
-				else {
-					$window.location = response.redirectUrl;
-				}
+				
+				return response;
 			} );
 	};
 

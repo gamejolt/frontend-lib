@@ -20,12 +20,7 @@ angular.module( 'gj.Report.Form' ).directive( 'gjFormReport', function( $q, App,
 			reason: scope.formModel.reason,
 		};
 
-		return Api.sendRequest( '/web/report/submit', data ).then( function( response )
-		{
-			if ( !response.success ) {
-				return $q.reject( response );
-			}
-		} );
+		return Api.sendRequest( '/web/report/submit', data );
 	};
 
 	return form;
