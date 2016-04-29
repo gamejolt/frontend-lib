@@ -182,7 +182,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			if ( this.builds ) {
 
 				var os = Device.os();
-				var arch = Device.arch();  // Will only be set in client.
+				var arch = Device.arch();
 
 				// Indexes by the os/type of the build: [ { type: build } ]
 				// While looping we also gather all OS/browser support for this complete package.
@@ -228,7 +228,6 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				// Now that we have all the builds indexed by the platform they support
 				// we need to try to pick one to showcase as the default download. We put
 				// their detected OS first so that it tries to pick that one first.
-				// Arch is only detected in Client.
 				var checkDownloadables = [ 'windows', 'windows_64', 'mac', 'mac_64', 'linux', 'linux_64' ];
 
 				// This will put the 64 bit version as higher priority.
