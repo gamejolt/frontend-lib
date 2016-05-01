@@ -15,10 +15,22 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 
 		Analytics.trackEvent( 'game-play', 'download' );
 
+		// Client needs to download externally.
+		if ( Environment.isClient ) {
+			var gui = require( 'nw.gui' );
+			gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.build', {
+				slug: game.slug,
+				id: game.id,
+				buildId: build.id,
+			} ) );
+
+			// In case any popover was used to click the download.
+			Popover.hideAll();
+		}
 		// Bundle-only games can only live in a person's library, or as a key.
 		// So if it's bundle-only, or if a key was passed in, go direct.
 		// Or, uh, if it is owned.
-		if ( game.bundle_only || options.key || options.isOwned ) {
+		else if ( game.bundle_only || options.key || options.isOwned ) {
 
 			// If already waiting on a download, don't do anything.
 			if ( downloadPromise ) {
@@ -43,18 +55,6 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 					}
 					downloadPromise = null;
 				} );
-		}
-		// Client needs to download externally.
-		else if ( Environment.isClient ) {
-			var gui = require( 'nw.gui' );
-			gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.build', {
-				slug: game.slug,
-				id: game.id,
-				buildId: build.id,
-			} ) );
-
-			// In case any popover was used to click the download.
-			Popover.hideAll();
 		}
 		else {
 			$state.go( 'discover.games.view.download.build', {
