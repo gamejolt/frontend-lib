@@ -27,6 +27,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 
 			Environment.wttfBaseUrl = 'http://gamejolt.com';
 			Environment.authBaseUrl = 'https://gamejolt.com';
+			Environment.checkoutBaseUrl = 'https://gamejolt.com';
 
 			Environment.jamsBaseUrl = 'http://jams.gamejolt.com';
 			Environment.jamsIoBaseUrl = 'http://jams.gamejolt.io';
@@ -45,6 +46,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 
 			Environment.wttfBaseUrl = 'http://development.gamejolt.com';
 			Environment.authBaseUrl = 'http://development.gamejolt.com';
+			Environment.checkoutBaseUrl = 'http://development.gamejolt.com';
 
 			Environment.jamsBaseUrl = 'http://jams.development.gamejolt.com';
 			Environment.jamsIoBaseUrl = 'http://jams.development.gamejolt.io';
@@ -65,10 +67,12 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 			if ( window.location.href.search( /^app\:\/\/game\-jolt\-client\/package\// ) !== -1 ) {
 				Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#!';
 				Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#!';
+				Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#!';
 			}
 			else {
 				Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#!';
 				Environment.authBaseUrl = 'app://game-jolt-client/auth.html#!';
+				Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#!';
 			}
 		}
 

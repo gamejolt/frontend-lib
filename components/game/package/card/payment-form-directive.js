@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, gjCurrencyFilter )
+angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, Order_Payment, gjCurrencyFilter )
 {
 	var form = new Form( {
 		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
@@ -209,15 +209,25 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		return Api.sendRequest( '/web/checkout/setup-order', data )
 			.then( function( response )
 			{
-				if ( response.success ) {
+				if ( response.success !== false ) {
+
 					if ( Environment.isClient ) {
-						require( 'nw.gui' ).Shell.openExternal( response.redirectUrl );
+
+						// Our checkout can be done in client.
+						if ( data.payment_method == Order_Payment.METHOD_CC_STRIPE ) {
+							$window.location.href = Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
+						}
+						// Otherwise we have to open in browser.
+						else {
+							require( 'nw.gui' ).Shell.openExternal( response.redirectUrl );
+						}
 					}
+					// For site we have to replace the URL completely since we are switching to https.
 					else {
-						$window.location = response.redirectUrl;
+						$window.location.href = response.redirectUrl;
 					}
 				}
-				
+
 				return response;
 			} );
 	};
