@@ -8,6 +8,7 @@ angular.module( 'gj.User.UserBar' ).directive( 'gjUserBar', function( Environmen
 		scope: {
 			user: '=gjUserBar',
 			site: '@gjCurrentSite',
+			hideSiteSelector: '=',
 		},
 		link: function( scope )
 		{
