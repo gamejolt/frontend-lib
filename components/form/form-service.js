@@ -35,9 +35,10 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 		this.link.pre = function( scope )
 		{
 			scope.formState = {
-				isProcessing: false
+				isProcessing: false,
+				serverErrors: {},
 			};
-			scope.serverErrors = {};
+
 			scope.method = 'add';
 
 			// Add the model class onto the scope.
@@ -161,7 +162,7 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 			scope.formState.isProcessing = false;
 
 			// Make sure that serverErrors is reset on a successful submit, just in case.
-			scope.serverErrors = {};
+			scope.formState.serverErrors = {};
 
 			// After successful submit of the form, we broadcast the onSubmitted event.
 			// We will capture this in the gjForm directive to set the form to a pristine state.
@@ -179,7 +180,7 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 		{
 			// Store the server validation errors.
 			if ( response && response.errors ) {
-				scope.serverErrors = response.errors;
+				scope.formState.serverErrors = response.errors;
 			}
 
 			// Reset our processing state.

@@ -128,7 +128,7 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 				element.attr( 'ng-model', '$parent.$parent["' + gjForm.formModel + '"]["' + formGroup.name + '"]' );
 
 				// Server validation errors.
-				element.attr( 'gj-form-server-validation', 'serverErrors' );
+				element.attr( 'gj-form-server-validation', 'formState.serverErrors' );
 
 				// Recompile the element with the new attributes.
 				$compile( element )( scope );

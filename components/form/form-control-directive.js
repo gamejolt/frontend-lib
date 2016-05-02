@@ -62,7 +62,7 @@ angular.module( 'gj.Form' ).directive( 'formControl', function( $compile )
 			// Bind to our server errors variable if there is none set.
 			// Defaults to "serverErrors".
 			if ( !attrs.gjFormServerValidation ) {
-				element.attr( 'gj-form-server-validation', 'serverErrors' );
+				element.attr( 'gj-form-server-validation', 'formState.serverErrors' );
 			}
 
 			return {
