@@ -13,17 +13,17 @@ angular.module( 'gj.Form' ).directive( 'gjFormServerValidation', function()
 			 */
 			scope.$watchCollection( attr.gjFormServerValidation, function( serverResponse )
 			{
-				if ( angular.isDefined( serverResponse ) && serverResponse ) {
+				if ( serverResponse ) {
 					if ( angular.isDefined( attr.name ) && angular.isDefined( serverResponse[attr.name] ) ) {
 
 						// Set the 'server' key as invalid.
 						// This is a generic key saying that the server rejected the value.
 						ngModel.$setValidity( 'server', false );
 
-						// We set the view value to itself to set it as dirty.
+						// We set the model as dirty.
 						// This will force show the server error message since it thinks that it's invalid
 						// and the value has changed.
-						ngModel.$setViewValue( ngModel.$viewValue );
+						ngModel.$setDirty();
 					}
 				}
 			} );
