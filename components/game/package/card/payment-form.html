@@ -17,7 +17,7 @@
 
 <form gj-form="formModel" name="paymentForm" class="game-package-card-payment-form">
 
-	<div class="game-package-card-payment-form-spinner" ng-if="formState.shouldShowSpinner">
+	<div class="game-package-card-payment-form-spinner" ng-if="formState.isProcessing">
 		<gj-loading class="loading-centered" label="{{ 'Processing order. Gonna be rad!' | translate }}"></gj-loading>
 	</div>
 
@@ -27,7 +27,7 @@
 
 	<div ng-if="formState.isLoaded">
 		<div ng-if="formState.checkoutStep == 'primary'" class="anim-fade-in no-animate-leave" ng-class="{ 'form-horizontal': !Screen.isXs, row: Screen.isXs }">
-			<form-group name="price" label="{{ 'Name your price:' | translate }}" label-class="col-sm-4" class="no-animate">
+			<form-group name="amount" label="{{ 'Name your price:' | translate }}" label-class="col-sm-4" class="no-animate">
 				<div class="col-sm-8">
 
 					<span class="game-package-card-payment-form-amount-input">
@@ -40,8 +40,8 @@
 							>
 					</span>
 
-					<span class="text-muted" ng-if="::sellable.type == 'paid'" translate translate-scope="{ amount: gjCurrencyFilter( pricing.amount ) }">
-						({{ amount }} or more)
+					<span class="text-muted" ng-if="::sellable.type == 'paid'" translate translate-scope="{ price: gjCurrencyFilter( pricing.amount ) }">
+						({{ price }} or more)
 					</span>
 
 					<control-errors label="{{ 'price' | translate }}">

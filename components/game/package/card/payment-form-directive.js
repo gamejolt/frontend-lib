@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, Order_Payment, gjCurrencyFilter )
+angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, Order_Payment, Growls, gjCurrencyFilter, gettextCatalog )
 {
 	var form = new Form( {
 		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
@@ -16,11 +16,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		scope.gjCurrencyFilter = gjCurrencyFilter;
 
 		scope.formState.isLoaded = false;
-		scope.formState.isProcessing = false;
 		scope.formState.checkoutType = 'cc-stripe';
 		scope.formState.checkoutStep = 'primary';
 
-		scope.formModel.price = scope.pricing.amount ? scope.pricing.amount / 100 : null;
+		scope.formModel.amount = scope.pricing.amount ? scope.pricing.amount / 100 : null;
 		scope.formModel.country = 'us';
 
 		scope.cards = [];
@@ -50,32 +49,33 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		function load()
 		{
-			Api.sendRequest( '/web/checkout/methods', null, { detach: true } ).then( function( response )
-			{
-				scope.formState.isLoaded = true;
-				scope.minOrderAmount = response.minOrderAmount || 50;
+			Api.sendRequest( '/web/checkout/methods', null, { detach: true } )
+				.then( function( response )
+				{
+					scope.formState.isLoaded = true;
+					scope.minOrderAmount = response.minOrderAmount || 50;
 
-				if ( response && response.cards && response.cards.length ) {
-					scope.cards = response.cards;
-				}
+					if ( response && response.cards && response.cards.length ) {
+						scope.cards = response.cards;
+					}
 
-				if ( response && response.billingAddresses && response.billingAddresses.length ) {
-					scope.addresses = response.billingAddresses;
-				}
+					if ( response && response.billingAddresses && response.billingAddresses.length ) {
+						scope.addresses = response.billingAddresses;
+					}
 
-				if ( response && response.walletBalance && response.walletBalance > 0 ) {
-					scope.walletBalance = response.walletBalance;
-				}
-			} );
+					if ( response && response.walletBalance && response.walletBalance > 0 ) {
+						scope.walletBalance = response.walletBalance;
+					}
+				} );
 		}
 
 		function hasSufficientWalletFunds()
 		{
-			if ( !scope.formModel.price || scope.formModel.price <= 0 ) {
+			if ( !scope.formModel.amount || scope.formModel.amount <= 0 ) {
 				return true;
 			}
 
-			return scope.walletBalance >= scope.pricing.amount && scope.walletBalance >= (scope.formModel.price * 100);
+			return scope.walletBalance >= scope.pricing.amount && scope.walletBalance >= (scope.formModel.amount * 100);
 		}
 
 		function collectAddress( checkoutType )
@@ -90,6 +90,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 					return;
 				}
 			}
+
 			scope.formState.checkoutStep = 'address';
 			scope.formState.checkoutType = checkoutType;
 			scope.formState.countries = Geo.getCountries();
@@ -114,46 +115,23 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		function checkoutSavedCard( card )
 		{
-			scope.formState.shouldShowSpinner = true;
-
 			var data = {
 				payment_method: 'cc-stripe',
 				sellable_id: scope.sellable.id,
 				pricing_id: scope.pricing.id,
-				amount: scope.formModel.price * 100,
+				amount: scope.formModel.amount * 100,
 			};
 
-			return Api.sendRequest( '/web/checkout/setup-order', data )
-				.then( function( response )
-				{
-					var data = {
-						payment_source: card.id,
-					};
-
-					return Api.sendRequest( '/web/checkout/charge/' + response.cart.id, data );
-				} )
-				.then( function()
-				{
-					scope.onBought( {} );
-				} )
-				.catch( function()
-				{
-					scope.formState.shouldShowSpinner = false;
-
-					// TODO: Finish this.
-					console.log( 'There was a problem.' );
-				} );
+			return _doCheckout( data, { payment_source: card.id } );
 		}
 
 		function checkoutWallet()
 		{
-			scope.formState.shouldShowSpinner = true;
-
 			var data = {
 				payment_method: scope.formState.checkoutType,
 				sellable_id: scope.sellable.id,
 				pricing_id: scope.pricing.id,
-				amount: scope.formModel.price * 100,
+				amount: scope.formModel.amount * 100,
 
 				country: scope.formModel.country,
 				street1: scope.formModel.street1,
@@ -165,21 +143,44 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 				data.address_id = scope.addresses[0].id;
 			}
 
-			return Api.sendRequest( '/web/checkout/setup-order', data )
+			return _doCheckout( data, { wallet: true } );
+		}
+
+		/**
+		 * This is for checkouts outside the normal form submit flow.
+		 * We need to manually handle processing and errors.
+		 */
+		function _doCheckout( setupData, chargeData )
+		{
+			scope.formState.isProcessing = true;
+
+			return Api.sendRequest( '/web/checkout/setup-order', setupData )
 				.then( function( response )
 				{
-					return Api.sendRequest( '/web/checkout/charge/' + response.cart.id, { wallet: true } );
+					if ( response.success === false ) {
+						return $q.reject();
+					}
+
+					return Api.sendRequest( '/web/checkout/charge/' + response.cart.id, chargeData );
 				} )
-				.then( function()
+				.then( function( response )
 				{
+					if ( response.success === false ) {
+						return $q.reject();
+					}
+
+					// Notify that we've bought this package.
 					scope.onBought( {} );
 				} )
 				.catch( function()
 				{
-					scope.formState.shouldShowSpinner = false;
+					scope.formState.isProcessing = false;
 
-					// TODO: Finish this.
-					console.log( 'There was a problem.' );
+					// This should always succeed, so let's throw a generic message if it fails.
+					Growls.error( {
+						sticky: true,
+						message: gettextCatalog.getString( 'There was a problem processing your payment method.' ),
+					} );
 				} );
 		}
 	};
@@ -190,7 +191,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			payment_method: scope.formState.checkoutType,
 			sellable_id: scope.sellable.id,
 			pricing_id: scope.pricing.id,
-			amount: scope.formModel.price * 100,
+			amount: scope.formModel.amount * 100,
 
 			country: scope.formModel.country,
 			street1: scope.formModel.street1,
