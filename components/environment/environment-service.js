@@ -40,6 +40,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 			Environment.apiHost = 'https://gamejolt.com';
 			Environment.activityStreamHost = 'https://activity.gamejolt.com';
 			Environment.chatHost = 'https://chat.gamejolt.com';
+			Environment.widgetHost = 'https://gamejolt.com';
 		}
 		else if ( Environment.env == 'development' ) {
 			Environment.baseUrl = 'http://development.gamejolt.com';
@@ -59,6 +60,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 			Environment.apiHost = 'http://development.gamejolt.com';
 			Environment.activityStreamHost = 'http://activity.development.gamejolt.com';
 			Environment.chatHost = 'http://chat.development.gamejolt.com';
+			Environment.widgetHost = 'http://localhost:8081';
 		}
 
 		if ( Environment.isMobileApp || Environment.isClient ) {
