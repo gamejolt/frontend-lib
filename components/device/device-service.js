@@ -73,6 +73,40 @@ angular.module( 'gj.Device' ).service( 'Device', function( $window, Environment 
 		return this._result;
 	};
 
+	// Keep all these lowercase.
+	var OS_WINDOWS = [
+		'windows',
+		'windows phone',
+		'windows mobile',
+	];
+
+	var OS_MAC = [
+		'mac os',
+	];
+
+	var OS_LINUX = [
+		'linux',
+		'arch',
+		'centos',
+		'fedora',
+		'debian',
+		'gentoo',
+		'gnu',
+		'mageia',
+		'mandriva',
+		'mint',
+		'pclinuxos',
+		'redhat',
+		'slackware',
+		'suse',
+		'ubuntu',
+		'unix',
+		'vectorlinux',
+		'freebsd',
+		'netbsd',
+		'openbsd',
+	];
+
 	this.os = function()
 	{
 		if ( Environment.isClient ) {
@@ -96,14 +130,14 @@ angular.module( 'gj.Device' ).service( 'Device', function( $window, Environment 
 			var result = this._getResult();
 			var osName = result.os.name.toLowerCase();
 
-			if ( result.os.name == 'Linux' ) {
-				this._os = 'linux';
+			if ( OS_WINDOWS.indexOf( osName ) !== -1 ) {
+				this._os = 'windows';
 			}
-			else if ( result.os.name == 'Mac OS' ) {
+			else if ( OS_MAC.indexOf( osName ) !== -1 ) {
 				this._os = 'mac';
 			}
-			else if ( result.os.name == 'Windows' ) {
-				this._os = 'windows';
+			else if ( OS_LINUX.indexOf( osName ) !== -1 ) {
+				this._os = 'linux';
 			}
 			else {
 				this._os = 'other';
