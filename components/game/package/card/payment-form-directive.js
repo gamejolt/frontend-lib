@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, Order_Payment, Growls, gjCurrencyFilter, gettextCatalog )
+angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, Order_Payment, Growls, Device, HistoryTick, gjCurrencyFilter, gettextCatalog )
 {
 	var form = new Form( {
 		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
@@ -154,6 +154,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		{
 			scope.formState.isProcessing = true;
 
+			setupData['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
+			setupData['os'] = Device.os();
+			setupData['arch'] = Device.arch();
+
 			return Api.sendRequest( '/web/checkout/setup-order', setupData )
 				.then( function( response )
 				{
@@ -206,6 +210,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		if ( scope.addresses.length ) {
 			data.address_id = scope.addresses[0].id;
 		}
+
+		data['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
+		data['os'] = Device.os();
+		data['arch'] = Device.arch();
 
 		return Api.sendRequest( '/web/checkout/setup-order', data )
 			.then( function( response )
