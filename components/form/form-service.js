@@ -128,18 +128,6 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 		scope.formState.isProcessing = true;
 		scope.formState.progress = undefined;
 
-		if ( this.modelClass && this.saveMethod ) {
-			scope.formState.progress = scope.formModel[ this.saveMethod ]().then( function( _response )
-			{
-				response = _response;
-
-				// Copy it back to the base model.
-				if ( scope.baseModel ) {
-					angular.extend( scope.baseModel, scope.formModel );
-				}
-			} );
-		}
-
 		if ( this.onSubmit ) {
 			scope.formState.progress = this.onSubmit( scope ).then( function( _response )
 			{
@@ -148,6 +136,17 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 				}
 
 				response = _response;
+			} );
+		}
+		else if ( this.modelClass && this.saveMethod ) {
+			scope.formState.progress = scope.formModel[ this.saveMethod ]().then( function( _response )
+			{
+				response = _response;
+
+				// Copy it back to the base model.
+				if ( scope.baseModel ) {
+					angular.extend( scope.baseModel, scope.formModel );
+				}
 			} );
 		}
 
