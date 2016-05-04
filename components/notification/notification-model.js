@@ -89,6 +89,13 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 			this.jolticon = 'jolticon-blog-article';
 			this.is_game_based = true;
 		}
+		else if ( this.type == Notification.TYPE_SELLABLE_SELL ) {
+			this.action_model = new ($injector.get( 'Order_Item' ))( data.action_model );
+			this.action_label = 'Sale';
+			this.url = $state.href( 'dashboard.main.overview' );
+			this.jolticon = 'jolticon-heart';
+			this.is_user_based = true;
+		}
 	}
 
 	Notification.TYPE_COMMENT_ADD = 'comment-add';
@@ -99,6 +106,7 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 	Notification.TYPE_GAME_RATING_ADD = 'game-rating-add';
 	Notification.TYPE_GAME_FOLLOW = 'game-follow';
 	Notification.TYPE_GAME_NEWS_ADD = 'game-news-add';
+	Notification.TYPE_SELLABLE_SELL = 'sellable-sell';
 
 	Notification.fetchNotificationsFeed = function()
 	{
