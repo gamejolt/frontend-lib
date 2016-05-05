@@ -21,6 +21,8 @@ angular.module( 'gj.Order' ).factory( 'Order', function( Model, Order_Item, Orde
 				this.billing_address = _.find( this.addresses, { type: Order_Address.TYPE_BILLING } );
 				this.shipping_address = _.find( this.addresses, { type: Order_Address.TYPE_SHIPPING } );
 			}
+
+			this.total_amount = this.amount + this.tax_amount;
 		}
 	}
 
