@@ -70,7 +70,7 @@
 					<div gj-expand-when="paymentForm.$valid">
 						<div ng-if="App.user && walletBalance > 0">
 							<div ng-if="hasSufficientWalletFunds()">
-								<a class="saved-card" ng-click="collectAddress( 'wallet' )">
+								<a class="saved-card" ng-click="collectAddress( 'wallet' )" ng-class="{ disabled: formState.isLoadingMethods }">
 									<div class="saved-card-avatar">
 										<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
 									</div>
@@ -78,10 +78,15 @@
 										<div class="saved-card-label" translate>
 											Your Wallet
 										</div>
-										<span class="saved-card-number">
+										<div class="small">
 											<span translate>Balance:</span>
 											{{ walletBalance / 100 | currency:'$' }}
-										</span>
+
+											<span class="text-muted" ng-if="walletTax > 0">
+												+{{ walletTax / 100 | currency:'$' }}
+												<span translate>tax</span>
+											</span>
+										</div>
 									</div>
 								</a>
 
@@ -97,7 +102,7 @@
 
 						<div ng-if="App.user && cards.length">
 							<div>
-								<a class="saved-card" ng-click="checkoutSavedCard( cards[0] )">
+								<a class="saved-card" ng-click="checkoutSavedCard( cards[0] )" ng-class="{ disabled: formState.isLoadingMethods }">
 									<div class="saved-card-avatar">
 										<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
 									</div>
@@ -109,14 +114,19 @@
 											{{ ::cards[0].brand }}
 										</span>
 										<span class="saved-card-number">
-											****
+											**
 											{{ ::cards[0].last4 }}
 										</span>
+										<small class="text-muted" ng-if="cardsTax[ cards[0].id ].amount > 0">
+											+{{ cardsTax[ cards[0].id ].amount / 100 | currency:'$' }}
+											<span translate>tax</span>
+										</small>
 									</div>
 								</a>
 
 								<a class="saved-card-more"
 									ng-if="cards.length > 1"
+									ng-class="{ disabled: formState.isLoadingMethods }"
 									gj-tooltip="{{ 'Select another card' | translate }}"
 									gj-popover-trigger="payment-form-card-selector-{{ sellable.id }}"
 									>
@@ -126,6 +136,7 @@
 								<gj-popover
 									ng-if="cards.length > 1"
 									popover-id="payment-form-card-selector-{{ sellable.id }}"
+									popover-position-horizontal="left"
 									>
 									<div class="list-group list-group-dark">
 										<a class="list-group-item"
@@ -137,6 +148,10 @@
 											</span>
 											****
 											{{ ::card.last4 }}
+											<small class="text-muted" ng-if="cardsTax[ card.id ].amount > 0">
+												+{{ cardsTax[ card.id ].amount / 100 | currency:'$' }}
+												<span translate>tax</span>
+											</small>
 										</a>
 									</div>
 								</gj-popover>
@@ -170,11 +185,10 @@
 
 		<div ng-if="formState.checkoutStep == 'address'" class="anim-fade-in no-animate-leave">
 
-			<p>
+			<div class="alert alert-info">
 				<span class="jolticon jolticon-info-circle"></span>
 				<span translate>The EU sucks and makes us collect billing addresses for all orders. (ノಠ益ಠ)ノ彡┻━┻</span>
-			</p>
-			<br>
+			</div>
 
 			<div class="row">
 				<div class="col-sm-6">
@@ -198,7 +212,7 @@
 				<div class="col-sm-6">
 					<form-group name="region" label="{{ 'State/Province/County' | translate }}" class="no-animate">
 
-						<input class="no-animate-leave" form-control="text" ng-if="!formState.regions">
+						<input class="no-animate-leave" form-control="text" ng-if="!formState.regions" ng-model-options="{ updateOn: 'blur default', debounce: { blur: 0, default: 1000 } }">
 
 						<select class="no-animate-leave" form-control ng-if="formState.regions">
 							<option ng-repeat="region in ::formState.regions track by region.code" value="{{ ::region.code }}">
@@ -218,28 +232,50 @@
 			</div>
 
 			<div class="form-group no-animate">
-				<button class="btn btn-success-outline"
-					ng-disabled="!paymentForm.$valid"
-					ng-click="checkoutPaypal()"
-					ng-if="formState.checkoutType == 'paypal'"
-					>
-					<span class="jolticon jolticon-chevron-right"></span>
-					<span translate>Proceed to PayPal</span>
-				</button>
+				<div class="pull-right small">
+					<a class="link-muted" ng-click="startOver()">
+						&laquo;
+						<span translate>Go back</span>
+					</a>
+				</div>
 
-				<button class="btn btn-success-outline"
-					ng-disabled="!paymentForm.$valid"
-					ng-click="checkoutWallet()"
-					ng-if="formState.checkoutType == 'wallet'"
-					>
-					<span class="jolticon jolticon-chevron-right"></span>
-					<span translate>Buy Using Wallet</span>
-				</button>
+				<div ng-if="formState.checkoutType == 'paypal'">
+					<button class="btn btn-success-outline"
+						ng-disabled="!paymentForm.$valid"
+						ng-click="checkoutPaypal()"
+						>
+						<span class="jolticon jolticon-chevron-right"></span>
+						<span translate>Proceed to PayPal</span>
+					</button>
+				</div>
 
-				<a class="pull-right small link-muted" ng-click="startOver()">
-					&laquo;
-					<span translate>Go back</span>
-				</a>
+				<div ng-if="formState.checkoutType == 'wallet'">
+					<gj-loading
+						ng-if="!formState.calculatedAddressTax && paymentForm.$valid"
+						class="loading-centered"
+						label="Calculating tax..."
+						>
+					</gj-loading>
+
+					<p class="anim-fade-in no-animate-leave small" ng-if="formState.calculatedAddressTax && formState.addressTaxAmount > 0">
+						+{{ formState.addressTaxAmount / 100 | currency:'$' }}
+						<span translate>tax</span>
+						<span tooltip="{{ 'We are required to collect taxes on orders for certain regions.' | translate }}">
+							<span class="jolticon jolticon-help-circle text-muted"></span>
+						</span>
+					</p>
+
+					<button class="btn btn-success-outline"
+						ng-disabled="!paymentForm.$valid || !formState.calculatedAddressTax"
+						ng-click="checkoutWallet()"
+						>
+						<span class="jolticon jolticon-chevron-right"></span>
+						<span translate>Buy Using Wallet</span>
+						<small class="text-muted" ng-if="formState.calculatedAddressTax">
+							{{ formModel.amount + (formState.addressTaxAmount / 100) | currency:'$' }}
+						</small>
+					</button>
+				</div>
 			</div>
 
 		</div>

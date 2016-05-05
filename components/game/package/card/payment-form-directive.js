@@ -16,6 +16,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		scope.gjCurrencyFilter = gjCurrencyFilter;
 
 		scope.formState.isLoaded = false;
+		scope.formState.isLoadingMethods = true;
 		scope.formState.checkoutType = 'cc-stripe';
 		scope.formState.checkoutStep = 'primary';
 
@@ -23,8 +24,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		scope.formModel.country = 'us';
 
 		scope.cards = [];
+		scope.cardsTax = {}
 		scope.addresses = [];
 		scope.walletBalance = 0;
+		scope.walletTax = 0;
 
 		scope.collectAddress = collectAddress;
 		scope.checkoutCard = checkoutCard;
@@ -47,16 +50,31 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			}
 		} );
 
+		// Tax changes when amount changes.
+		// Gotta repull all methods to get new tax info.
+		var debouncedLoad = _.debounce( load, 1000 );
+		scope.$watch( 'formModel.amount', function( newVal, oldVal )
+		{
+			if ( newVal != oldVal ) {
+				scope.formState.isLoadingMethods = true;
+				debouncedLoad();
+			}
+		} );
+
+		scope.$watchGroup( [ 'formModel.country', 'formModel.region' ], getAddressTax );
+
 		function load()
 		{
-			Api.sendRequest( '/web/checkout/methods', null, { detach: true } )
+			Api.sendRequest( '/web/checkout/methods?amount=' + (scope.formModel.amount * 100), null, { detach: true } )
 				.then( function( response )
 				{
+					scope.formState.isLoadingMethods = false;
 					scope.formState.isLoaded = true;
 					scope.minOrderAmount = response.minOrderAmount || 50;
 
 					if ( response && response.cards && response.cards.length ) {
 						scope.cards = response.cards;
+						scope.cardsTax = _.indexBy( response.cardsTax, 'id' );
 					}
 
 					if ( response && response.billingAddresses && response.billingAddresses.length ) {
@@ -65,6 +83,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 					if ( response && response.walletBalance && response.walletBalance > 0 ) {
 						scope.walletBalance = response.walletBalance;
+						scope.walletTax = response.walletTax;
 					}
 				} );
 		}
@@ -94,6 +113,29 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			scope.formState.checkoutStep = 'address';
 			scope.formState.checkoutType = checkoutType;
 			scope.formState.countries = Geo.getCountries();
+			scope.formState.calculatedAddressTax = false;
+			scope.formState.addressTaxAmount = 0;
+		}
+
+		function getAddressTax()
+		{
+			scope.formState.calculatedAddressTax = false;
+			if ( !scope.formModel.country || !scope.formModel.region ) {
+				return;
+			}
+
+			var data = {
+				amount: scope.formModel.amount * 100,
+				country: scope.formModel.country,
+				region: scope.formModel.region,
+			};
+
+			return Api.sendRequest( '/web/checkout/taxes', data, { detach: true } )
+				.then( function( response )
+				{
+					scope.formState.calculatedAddressTax = true;
+					scope.formState.addressTaxAmount = response.amount;
+				} );
 		}
 
 		function checkoutCard()
@@ -128,19 +170,20 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		function checkoutWallet()
 		{
 			var data = {
-				payment_method: scope.formState.checkoutType,
+				payment_method: 'wallet',
 				sellable_id: scope.sellable.id,
 				pricing_id: scope.pricing.id,
 				amount: scope.formModel.amount * 100,
-
-				country: scope.formModel.country,
-				street1: scope.formModel.street1,
-				region: scope.formModel.region,
-				postcode: scope.formModel.postcode,
 			};
 
 			if ( scope.addresses.length ) {
 				data.address_id = scope.addresses[0].id;
+			}
+			else {
+				data.country = scope.formModel.country;
+				data.street1 = scope.formModel.street1;
+				data.region = scope.formModel.region;
+				data.postcode = scope.formModel.postcode;
 			}
 
 			return _doCheckout( data, { wallet: true } );
@@ -152,6 +195,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		 */
 		function _doCheckout( setupData, chargeData )
 		{
+			if ( scope.formState.isLoadingMethods || scope.formState.isProcessing ) {
+				return;
+			}
+
 			scope.formState.isProcessing = true;
 
 			setupData['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
