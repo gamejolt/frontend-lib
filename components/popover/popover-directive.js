@@ -27,6 +27,7 @@ angular.module( 'gj.Popover' ).directive( 'gjPopover', function( $q, $animate, $
 			onFocus: '&?popoverOnFocus',
 			onBlur: '&?popoverOnBlur',
 			hideOnStateChange: '=?popoverHideOnStateChange',
+			positionHorizontal: '@?popoverPositionHorizontal',
 		},
 		compile: function( element )
 		{
@@ -176,7 +177,7 @@ angular.module( 'gj.Popover' ).directive( 'gjPopover', function( $q, $animate, $
 			}
 
 			// Align to the right if the trigger is past the window mid line.
-			if ( triggerOffset.left > (Screen.windowWidth / 2) ) {
+			if ( _this.positionHorizontal == 'left' || triggerOffset.left > (Screen.windowWidth / 2) ) {
 				popoverElem.style.left = left - popoverWidth + triggerWidth + 'px';
 				popoverElem.style.top = top + triggerHeight + 'px';
 			}
