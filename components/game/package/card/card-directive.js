@@ -166,16 +166,22 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			// If this game is in their installed games, this will populate.
 			this.installedBuild = null;
 
+			this.isOwned = this.sellable && this.sellable.is_owned ? true : false;
 			this.isWhatOpen = false;
 			this.isPaymentOpen = false;
 			this.clickedBuild = null;
+
+			// If there is a key on the package, then we should show it as being "owned".
+			if ( this.key ) {
+				this.isOwned = true;
+			}
 
 			if ( this.sellable && angular.isArray( this.sellable.pricings ) ) {
 				this.pricing = this.sellable.pricings[0];
 			}
 
 			this.hasPaymentWell = false;
-			if ( this.sellable && !this.sellable.is_owned && (this.sellable.type == 'pwyw' || this.sellable.type == 'paid') ) {
+			if ( this.sellable && !this.isOwned && (this.sellable.type == 'pwyw' || this.sellable.type == 'paid') ) {
 				this.hasPaymentWell = true;
 			}
 
@@ -368,7 +374,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				Analytics.trackEvent( 'game-package-card', 'download', 'download' );
 
 				Game_Downloader.download( this.game, build, {
-					isOwned: this.sellable && this.sellable.is_owned,
+					isOwned: this.sellable && this.isOwned,
 					key: this.key,
 				} );
 			};
@@ -378,7 +384,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				Analytics.trackEvent( 'game-package-card', 'download', 'play' );
 
 				Game_PlayModal.show( this.game, build, {
-					isOwned: this.sellable && this.sellable.is_owned,
+					isOwned: this.sellable && this.isOwned,
 					key: this.key,
 				} );
 			};
@@ -404,9 +410,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				this.isWhatOpen = false;
 				this.isPaymentOpen = false;
 				this.hasPaymentWell = false;
-
-				// TODO: This is a hack!
-				this.sellable.is_owned = true;
+				this.isOwned = true;
 			};
 		}
 	};
