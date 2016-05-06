@@ -1,8 +1,10 @@
-angular.module( 'gj.Game' ).factory( 'Game', function( $state, Model, Environment, User, MediaItem, Registry )
+angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, Model, Environment, User, MediaItem )
 {
-	Registry.setConfig( 'Game', {
-		maxItems: 50,
-	} );
+	if ( $injector.has( 'Registry' ) ) {
+		$injector.get( 'Registry' ).setConfig( 'Game', {
+			maxItems: 50,
+		} );
+	}
 
 	function Game( data )
 	{
@@ -47,7 +49,9 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, Model, Environmen
 			this._should_show_ads = false;
 		}
 
-		Registry.store( 'Game', this );
+		if ( $injector.has( 'Registry' ) ) {
+			$injector.get( 'Registry' ).store( 'Game', this );
+		}
 	}
 
 	Game.STATUS_HIDDEN = 0;
