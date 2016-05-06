@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $rootScope, $window, $state, Environment, HistoryTick, Popover, Analytics )
+angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $rootScope, $window, $state, Environment, HistoryTick, Popover, Analytics, Growls, gettextCatalog )
 {
 	var downloadPromise;
 	var shouldTransition = false;
@@ -53,6 +53,11 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 					if ( shouldTransition ) {
 						$window.location = downloadUrl;
 					}
+					downloadPromise = null;
+				} )
+				.catch( function( e )
+				{
+					Growls.error( gettextCatalog.getString( 'Could not get download URL.' ) );
 					downloadPromise = null;
 				} );
 		}
