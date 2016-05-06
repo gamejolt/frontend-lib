@@ -57,6 +57,11 @@ angular.module( 'gj.HistoryTick' ).service( 'HistoryTick', function( $document, 
 				}
 			}
 
+			// Key.
+			if ( options.key ) {
+				queryParams.push( 'key=' + options.key );
+			}
+
 			// This is enough to send the beacon.
 			// No need to add it to the page.
 			var img = $document[0].createElement( 'img' );
