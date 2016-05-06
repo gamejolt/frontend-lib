@@ -1,4 +1,4 @@
-angular.module( 'gj.HistoryTick' ).service( 'HistoryTick', function( $document, $q, $ocLazyLoad, Environment, Referrer, Device )
+angular.module( 'gj.HistoryTick' ).service( 'HistoryTick', function( $document, $q, Environment, Referrer, Device )
 {
 	var _this = this;
 	var _sources = {};
