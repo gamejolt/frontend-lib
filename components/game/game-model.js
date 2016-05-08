@@ -1,4 +1,4 @@
-angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, Model, Environment, User, MediaItem )
+angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, Model, Environment, User, MediaItem )
 {
 	if ( $injector.has( 'Registry' ) ) {
 		$injector.get( 'Registry' ).setConfig( 'Game', {
@@ -47,6 +47,22 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, Model,
 		}
 		else if ( this.sellable && this.sellable.type != 'free' ) {
 			this._should_show_ads = false;
+		}
+
+		// Should show as owned for the dev of the game.
+		if (
+			this.sellable
+			&& this.sellable.type != 'free'
+			&& App.user
+			&& this.developer
+			&& App.user.id == this.developer.id
+		) {
+			this.sellable.is_owned = true;
+		}
+
+		this._can_buy_primary_sellable = false;
+		if ( this.sellable && this.sellable.type == 'paid' && !this.sellable.is_owned ) {
+			this._can_buy_primary_sellable = true;
 		}
 
 		if ( $injector.has( 'Registry' ) ) {
