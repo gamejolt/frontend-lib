@@ -163,6 +163,16 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, Model,
 
 		packages.forEach( function( _package )
 		{
+			// Don't include builds for packages that aren't bought yet.
+			// Can't install them if they can't be bought.
+			if (
+				_package._sellable
+				&& _package._sellable.type == 'paid'
+				&& !_package._sellable.is_owned
+			) {
+				return;
+			}
+
 			_package._builds.forEach( function( build )
 			{
 				if ( Game.checkDeviceSupport( build, os, arch ) ) {
