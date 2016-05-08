@@ -30,7 +30,7 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 		// Bundle-only games can only live in a person's library, or as a key.
 		// So if it's bundle-only, or if a key was passed in, go direct.
 		// Or, uh, if it is owned.
-		else if ( game.bundle_only || options.key || options.isOwned ) {
+		else if ( game.bundle_only || options.key || options.isOwned || (build._package._sellable && build._package._sellable.is_owned) ) {
 
 			// If already waiting on a download, don't do anything.
 			if ( downloadPromise ) {
