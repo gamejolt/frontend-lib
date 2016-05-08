@@ -11,6 +11,13 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 	Game_Package.STATUS_ACTIVE = 'active';
 	Game_Package.STATUS_REMOVED = 'removed';
 
+	Game_Package.prototype.shouldShowNamePrice = function()
+	{
+		return this._sellable
+			&& this._sellable.type == 'pwyw'
+			&& !this._sellable.is_owned;
+	};
+
 	Game_Package.$saveSort = function( gameId, packagesSort )
 	{
 		return Api.sendRequest( '/web/dash/developer/games/packages/save-sort/' + gameId, packagesSort );
