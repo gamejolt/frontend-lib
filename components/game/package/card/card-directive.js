@@ -346,30 +346,63 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 
 			this.buildClick = function( build, fromExtraSection )
 			{
-				// If this isn't a free game, then we want to slide the payment open.
-				// If it's pay what you want, when the payment is open and they click a build again, just take them to it.
-				if ( this.hasPaymentWell ) {
-					if ( !this.isPaymentOpen ) {
-						this.isPaymentOpen = true;
-						this.clickedBuild = build;
-						return;
-					}
+				// For client, if they clicked in the "options" section, then skip showing payment form.
+				// Just take them directly to site.
+				if ( Environment.isClient && fromExtraSection ) {
+					this._doBuildClick( build, fromExtraSection );
 				}
+				// This will show the payment form if we're supposed to.
+				else if ( this.showPayment( build ) ) {
+				}
+				// Otherwise direct to the build.
+				else {
+					this._doBuildClick( build, fromExtraSection );
+				}
+			};
 
+			this._doBuildClick = function( build, fromExtraSection )
+			{
 				var operation = build.type == Game_Build.TYPE_DOWNLOADABLE ? 'download' : 'play';
 				if ( build.type == Game_Build.TYPE_ROM && fromExtraSection ) {
 					operation = 'download';
 				}
 
 				if ( operation == 'download' ) {
-					this.download( build );
+					this._download( build );
 				}
 				else if ( operation == 'play' ) {
-					this.showBrowserModal( build );
+					this._showBrowserModal( build );
+				}
+			}
+
+			this.showPayment = function( build )
+			{
+				// If this isn't a free game, then we want to slide the payment open.
+				// If it's pay what you want, when the payment is open and they click a build again, just take them to it.
+				if ( this.hasPaymentWell ) {
+					if ( !this.isPaymentOpen ) {
+						this.isPaymentOpen = true;
+						this.clickedBuild = build;
+						return true;
+					}
+				}
+
+				return false;
+			};
+
+			this.skipPayment = function()
+			{
+				// When they skip a pwyw payment form, on client we need to start the install.
+				// On site we treat it like a normal build click.
+				if ( Environment.isClient ) {
+					this.startInstall( this.clickedBuild );
+				}
+				else {
+					this.buildClick( this.clickedBuild );
 				}
 			};
 
-			this.download = function( build )
+			this._download = function( build )
 			{
 				Analytics.trackEvent( 'game-package-card', 'download', 'download' );
 
@@ -379,7 +412,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				} );
 			};
 
-			this.showBrowserModal = function( build )
+			this._showBrowserModal = function( build )
 			{
 				Analytics.trackEvent( 'game-package-card', 'download', 'play' );
 

@@ -137,9 +137,10 @@
 						<hr>
 						<span class="jolticon jolticon-chevron-right middle"></span>
 						<a class="link-unstyled small"
-							ng-click="ctrl.buildClick( ctrl.clickedBuild )"
+							ng-click="ctrl.skipPayment()"
 							>
-							No thanks, take to me to the download.
+							<span ng-if="::!Environment.isClient" translate>No thanks, take to me to the download.</span>
+							<span ng-if="::Environment.isClient" translate>No thanks, just install it.</span>
 						</a>
 					</div>
 				</div>
