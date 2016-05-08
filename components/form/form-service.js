@@ -34,8 +34,12 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 
 		this.link.pre = function( scope )
 		{
+			// If they have reloaded on submit, we want to keep the showing success form state around.
+			var isShowingSuccess = scope.formState && scope.formState.isShowingSuccess ? true : false;
+
 			scope.formState = {
 				isProcessing: false,
+				isShowingSuccess: isShowingSuccess,
 				serverErrors: {},
 			};
 
