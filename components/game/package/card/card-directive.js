@@ -1,5 +1,5 @@
 angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', function(
-	$timeout, $injector, gettextCatalog, Screen, Game, Game_Build, Game_PlayModal, Game_Downloader, Device, Environment, Analytics, currencyFilter )
+	$timeout, $injector, gettextCatalog, Growls, Screen, Game, Game_Build, Game_PlayModal, Game_Downloader, Device, Environment, Analytics, currencyFilter )
 {
 	/**
 	 * Sort must start at 1 so that we can put their prefered OS as sort 0 later on.
@@ -444,6 +444,12 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				this.isPaymentOpen = false;
 				this.hasPaymentWell = false;
 				this.isOwned = true;
+
+				Growls.success( {
+					title: gettextCatalog.getString( 'Order Complete' ),
+					message: gettextCatalog.getString( 'Warm thanks from both {{ developer }} and the Game Jolt team.', { developer: this.game.developer.display_name } ),
+					sticky: true,
+				} );
 			};
 		}
 	};
