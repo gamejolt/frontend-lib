@@ -4,6 +4,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
 	} );
 
+	form.scope.game = '=';
 	form.scope.package = '=';
 	form.scope.sellable = '=';
 	form.scope.pricing = '=';

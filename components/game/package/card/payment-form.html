@@ -1,10 +1,10 @@
 <div ng-if="formState.checkoutStep == 'primary'">
 	<p ng-if="::sellable.type == 'pwyw'">
-		<span ng-if="::!pricing.amount" translate>
-			Support this developer by paying what you're able.
+		<span ng-if="::!pricing.amount" translate translate-scope="{ developer: game.developer.display_name }">
+			Show {{ developer }} some <span class="jolticon jolticon-heart"></span> by supporting them.
 		</span>
 		<span ng-if="::pricing.amount" translate translate-scope="{ amount: gjCurrencyFilter( pricing.amount ) }">
-			This developer suggests paying <strong>{{ amount }}</strong> for this package, but you're free to pay what you're able.
+			This developer suggests paying <strong>{{ amount }}</strong>, but you're able to pay what you want.
 		</span>
 	</p>
 
@@ -187,7 +187,7 @@
 
 			<div class="alert alert-info">
 				<span class="jolticon jolticon-info-circle"></span>
-				<span translate>The EU sucks and makes us collect billing addresses for all orders. (ノಠ益ಠ)ノ彡┻━┻</span>
+				<span translate>Because of international tax laws, we are required to collect this information.</span>
 			</div>
 
 			<div class="row">
