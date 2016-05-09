@@ -4,6 +4,8 @@
 
 	<p>Add a jolticon by making a <code>span</code> element with a <code>.jolticon</code> class and the identifier of your choice.</p>
 
+	<input type="text" class="input" style="width: 100%; margin-bottom: 1em; padding: 5px;" placeholder="Search for a Jolticon..." ng-model="jolticonFilter">
+
 	<div class="row">
 		<div class="col-xs-2 text-center"
 			ng-repeat="jolticon in [
@@ -166,7 +168,7 @@
 				'calendar-grid',
 				'credit-card',
 				'rom',
-			] | orderBy:jolticon">
+			] | orderBy:jolticon | filter:jolticonFilter">
 			<p tooltip=".jolticon-{{ jolticon }}">
 				<span class="jolticon jolticon-{{ jolticon }} big"></span>
 			</p>
