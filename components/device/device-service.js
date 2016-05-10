@@ -168,7 +168,7 @@ angular.module( 'gj.Device' ).service( 'Device', function( $window, Environment 
 
 		if ( angular.isUndefined( this._arch ) ) {
 			var result = this._getResult();
-			var arch = result.cpu.architecture.toLowerCase();
+			var arch = result.cpu && result.cpu.architecture ? result.cpu.architecture.toLowerCase() : null;
 
 			if ( ARCH_64.indexOf( arch ) !== -1 ) {
 				this._arch = '64';
