@@ -232,7 +232,11 @@
 			</div>
 
 			<div class="form-group no-animate">
-				<div class="pull-right small">
+
+				<!--
+					For some reason the tax amount goes on top of this. Gotta manually hoist it on top.
+				-->
+				<div class="pull-right small" style="position: relative; z-index: 1">
 					<a class="link-muted" ng-click="startOver()">
 						&laquo;
 						<span translate>Go back</span>
@@ -265,8 +269,12 @@
 						</span>
 					</p>
 
+					<div ng-if="!hasSufficientWalletFunds()" class="alert alert-info" translate>
+						You do not have enough funds in your Wallet for this order.
+					</div>
+
 					<button class="btn btn-success-outline"
-						ng-disabled="!paymentForm.$valid || !formState.calculatedAddressTax"
+						ng-disabled="!paymentForm.$valid || !formState.calculatedAddressTax || !hasSufficientWalletFunds()"
 						ng-click="checkoutWallet()"
 						>
 						<span class="jolticon jolticon-chevron-right"></span>

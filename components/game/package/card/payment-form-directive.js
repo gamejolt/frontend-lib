@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, Order_Payment, Growls, Device, HistoryTick, gjCurrencyFilter, gettextCatalog )
+angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, Sellable, Order_Payment, Growls, Device, HistoryTick, gjCurrencyFilter, gettextCatalog )
 {
 	var form = new Form( {
 		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
@@ -95,7 +95,23 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 				return true;
 			}
 
-			return scope.walletBalance >= scope.pricing.amount && scope.walletBalance >= (scope.formModel.amount * 100);
+			// When we're filling in the address, pull that tax.
+			// Otherwise, when we're on the main page, check the wallet tax amount for their saved address.
+			var taxAmount = scope.formState.checkoutStep == 'address' ? scope.formState.addressTaxAmount : scope.walletTax;
+			var sellableAmount = scope.pricing.amount;
+			var currentAmount = scope.formModel.amount * 100; // The formModel amount is a decimal.
+
+			// Paid games have to be more than the amount of the game base price.
+			if ( scope.sellable.type == Sellable.TYPE_PAID && scope.walletBalance < sellableAmount + taxAmount ) {
+				return false;
+			}
+
+			// All games have to be more than they've entered into the box.
+			if ( scope.walletBalance < currentAmount + taxAmount ) {
+				return false;
+			}
+
+			return true;
 		}
 
 		function collectAddress( checkoutType )
