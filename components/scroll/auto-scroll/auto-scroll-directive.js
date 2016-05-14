@@ -1,9 +1,9 @@
-angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q, $window, $document, $timeout, $parse, $position, AutoScroll, History, $state )
+angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q, $window, $document, $timeout, $parse, $position, AutoScroll, History, Scroll, $state )
 {
 	return {
 		link: function( scope, element, attrs )
 		{
-			var startWatcher, successWatcher, stateWatcher;
+			var startWatcher, successWatcher, stateWatcher, prevAnchor;
 
 			// If this element is the document body, then set the element to scroll to be the document.
 			// This is what the browser scrolls by default.
@@ -30,21 +30,29 @@ angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q
 						}, 0, false );
 					}
 					else {
-						var anchor = AutoScroll.anchor();
-						if ( anchor ) {
+						// When this is the document body, we need to pull the Scroll services offset top.
+						// This is the height of any fixed elements in the shell.
+						var scrollOffsetTop = 0;
+						if ( scrollElem[0] === $document[0] ) {
+							scrollOffsetTop = Scroll.offsetTop;
+						}
 
-							// We only scroll to the anchor if they're scrolled past it currently.
-							var offset = $position.offset( anchor );
-							if ( scrollElem.scrollTop() > offset.top ) {
-								scrollElem.scrollTop( offset.top );
+						$timeout( function()
+						{
+							var anchor = AutoScroll.anchor();
+							if ( anchor && anchor === prevAnchor ) {
+
+								// We only scroll to the anchor if they're scrolled past it currently.
+								var offset = $position.offset( anchor );
+								if ( scrollElem.scrollTop() > offset.top - scrollOffsetTop ) {
+									scrollElem.scrollTop( offset.top - scrollOffsetTop );
+								}
 							}
-						}
-						else {
-							$timeout( function()
-							{
+							else {
+
 								scrollElem.scrollTop( 0 );
-							}, 0, false );
-						}
+							}
+						}, 0, false );
 					}
 				}
 
@@ -56,6 +64,7 @@ angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q
 			{
 				startWatcher = scope.$on( '$stateChangeStart', function( $event )
 				{
+					prevAnchor = AutoScroll.anchor();
 					if ( arguments[1] ) {
 						AutoScroll.pushState( $state.href( arguments[3], arguments[4] ), scrollElem );
 					}
