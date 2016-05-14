@@ -145,9 +145,6 @@ angular.module( 'gj.Ad' ).directive( 'gjAd', function( $timeout, $window, $docum
 						scriptElem.text = "googletag.cmd.push(function() { googletag.display('div-gpt-ad-" + scope.globalTagId + "-" + scope.adId + "'); });";
 						googlePlaceholderElem.appendChild( scriptElem );
 					}
-					else {
-						googlePlaceholderElem.innerHTML = '<div class="ad-placeholder"></div>';
-					}
 				}
 			};
 		}

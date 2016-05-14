@@ -4,28 +4,24 @@
 	.ad-inner
 		margin: 0 auto
 
-		// So the height doesn't change after loading.
-		height: 90px
-
 		// Specifically to get Google Ads to center correctly.
 		> div > div
 			margin: 0 auto
 
-.ad-placeholder
-	display: inline-block
-	background-color: $gray-light
+.ad-inner
+	background-color: $gray-lightest
 
-	.ad-leaderboard &
-		width: 728px
-		height: 90px
+.ad-leaderboard .ad-inner
+	width: 728px
+	height: 90px
 
-	.ad-rectangle &
-		width: 300px
-		height: 250px
+.ad-rectangle .ad-inner
+	width: 300px
+	height: 250px
 
-	.ad-skyscraper &
-		width: 160px
-		height: 600px
+.ad-skyscraper .ad-inner
+	width: 160px
+	height: 600px
 
 .ad-section
 	@extend .section
