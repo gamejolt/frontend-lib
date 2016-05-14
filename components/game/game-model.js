@@ -24,6 +24,8 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 			}
 		}
 
+		this._has_cover = !!this.img_header;
+
 		this.is_published = false;
 		if ( this.status == Game.STATUS_VISIBLE ) {
 			this.is_published = true;
