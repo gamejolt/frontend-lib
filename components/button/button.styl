@@ -1,21 +1,21 @@
-$button-line-height ?= 20px
 $button-padding-vertical ?= 8px
 $button-padding-horizontal ?= 20px
+$button-line-height ?= 20px + ($button-padding-vertical * 2)
 $button-icon-size ?= 16px
 $button-icon-spacing-right ?= 5px
 $button-outline-border-size ?= 2px
 
-$button-sm-line-height ?= $button-icon-size
 $button-sm-padding-vertical ?= 3px
 $button-sm-padding-horizontal ?= 10px
+$button-sm-line-height ?= $button-icon-size + ($button-sm-padding-vertical * 2)
 $button-sm-icon-spacing-right ?= 3px
 $button-sm-outline-border-size ?= 1px
 $button-sm-font-weight ?= normal
 $button-sm-font-size ?= $font-size-tiny
 
-$button-lg-line-height ?= 20px
 $button-lg-padding-vertical ?= 18px
 $button-lg-padding-horizontal ?= 35px
+$button-lg-line-height ?= 20px + ($button-lg-padding-vertical * 2)
 $button-lg-icon-spacing-right ?= 8px
 $button-lg-outline-border-size ?= 2px
 $button-lg-font-weight ?= bold
@@ -100,7 +100,7 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 	font-size: $font-size-small
 	font-weight: bold
 	line-height: $button-line-height
-	padding: $button-padding-vertical $button-padding-horizontal
+	padding: 0 $button-padding-horizontal
 	vertical-align: middle
 	cursor: pointer
 	border: 0
@@ -121,7 +121,6 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 	.jolticon
 		cursor: pointer
 		vertical-align: middle
-		line-height: $button-line-height
 		margin: 0 $button-icon-spacing-right 0 0
 
 	.jolticon-addon
@@ -170,11 +169,13 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 .btn-danger-outline
 	border-width: $button-outline-border-size
 	border-style: solid
-	padding: ($button-padding-vertical - @border-width) ($button-padding-horizontal - @border-width)
+	line-height: ($button-line-height - (@border-width * 2))
+	padding-left: $button-padding-horizontal - @border-width
+	padding-right: @padding-left
 
 /**
- * Default
- */
+* Default
+*/
 .btn
 	button-variant( background: $gray, color: $white, icon-color: $gj-green, outline-color: $gray, active-background: $gray, active-color: $gj-green, addon-color: $gray-lighter, outline-addon-color: $gray-light )
 
@@ -257,19 +258,18 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 .btn-sparse
 
 	// We basically override the left/right padding to match the top and bottom.
-	padding-left: $button-padding-vertical
-	padding-right: $button-padding-vertical
+	padding-left: (($button-line-height - $button-icon-size) / 2)
+	padding-right: @padding-left
 
-	// We give a bit more spacing around the icon so that its width matches its line height.
 	.jolticon
-		margin: 0 3px
+		margin: 0 !important
 
 	&.btn-outline
 	&.btn-success-outline
 	&.btn-primary-outline
 	&.btn-danger-outline
-		padding-left: $button-padding-vertical - $button-outline-border-size
-		padding-right: $button-padding-vertical - $button-outline-border-size
+		padding-left: (($button-line-height - $button-icon-size) / 2) - $button-outline-border-size
+		padding-right: @padding-left
 
 /**
  * Button sizings
@@ -279,10 +279,9 @@ create-btn-size( size )
 	font-size: lookup( '$button-' + size + '-font-size' )
 	font-weight: lookup( '$button-' + size + '-font-weight' )
 	line-height: lookup( '$button-' + size + '-line-height' )
-	padding: lookup( '$button-' + size + '-padding-vertical' ) lookup( '$button-' + size + '-padding-horizontal' )
+	padding: 0 lookup( '$button-' + size + '-padding-horizontal' )
 
 	.jolticon
-		line-height: lookup( '$button-' + size + '-line-height' )
 		margin-right: lookup( '$button-' + size + '-icon-spacing-right' )
 
 	&.btn-outline
@@ -290,21 +289,20 @@ create-btn-size( size )
 	&.btn-primary-outline
 	&.btn-danger-outline
 		border-width: lookup( '$button-' + size + '-outline-border-size' )
-		padding: (lookup( '$button-' + size + '-padding-vertical' ) - @border-width) (lookup( '$button-' + size + '-padding-horizontal' ) - @border-width)
+		line-height: lookup( '$button-' + size + '-line-height' ) - (@border-width * 2)
+		padding-left: (lookup( '$button-' + size + '-padding-horizontal' ) - @border-width)
+		padding-right: @padding-left
 
 	&.btn-sparse
-		padding-left: lookup( '$button-' + size + '-padding-vertical' )
-		padding-right: lookup( '$button-' + size + '-padding-vertical' )
-
-		.jolticon
-			margin: 0 ((lookup( '$button-' + size + '-line-height' ) - $button-icon-size) / 2)
+		padding-left: ((lookup( '$button-' + size + '-line-height' ) - $button-icon-size) / 2)
+		padding-right: @padding-left
 
 		&.btn-outline
 		&.btn-success-outline
 		&.btn-primary-outline
 		&.btn-danger-outline
 			padding-left: lookup( '$button-' + size + '-padding-vertical' ) - lookup( '$button-' + size + '-outline-border-size' )
-			padding-right: lookup( '$button-' + size + '-padding-vertical' ) - lookup( '$button-' + size + '-outline-border-size' )
+			padding-right: @padding-left
 
 // The actual styles now.
 .btn-sm
