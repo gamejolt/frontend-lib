@@ -9,7 +9,10 @@ module.exports = function( config )
 {
 	gulp.task( 'translations:extract', function()
 	{
-		return gulp.src( 'src/**/*.{js,html}' )
+		return gulp.src( [
+			'src/**/*.{js,html}',
+			'!src/bower-lib/**/*',
+		] )
 			.pipe( plugins.angularGettext.extract( 'main.pot' ) )
 			.pipe( gulp.dest( 'build/translations' ) );
 	} );
