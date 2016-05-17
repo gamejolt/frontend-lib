@@ -82,11 +82,24 @@ angular.module( 'gj.Api' ).service( 'Api', function( $window, $http, $injector, 
 		else {
 			$upload = $injector.get( '$upload' );
 
+			// You can pass in an object of files if you want to upload multiple.
+			// Otherwise file should be the single file to upload.
+			// For multiple upload, the key should be the name of the form field, the value should be the file.
+			// Example: { file: file1, file_other: file2 }
+			if ( angular.isObject( options.file ) ) {
+				options.fileFormDataName = Object.keys( options.file );
+				options.file = _.flatten( _.values( options.file ) );
+			}
+			else {
+				options.fileFormDataName = 'file';
+			}
+
 			var requestPromise = $upload.upload( {
 				method: 'POST',
 				url: _this.apiHost + _this.apiPath + uri,
 				data: (sanitizedPostData || undefined),
 				file: options.file,
+				fileFormDataName: options.fileFormDataName,
 				withCredentials: options.withCredentials,
 				ignoreLoadingBar: true  // Force ignore in upload.
 			} );
