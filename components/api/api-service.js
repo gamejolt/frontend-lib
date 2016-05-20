@@ -86,7 +86,7 @@ angular.module( 'gj.Api' ).service( 'Api', function( $window, $http, $injector, 
 			// Otherwise file should be the single file to upload.
 			// For multiple upload, the key should be the name of the form field, the value should be the file.
 			// Example: { file: file1, file_other: file2 }
-			if ( angular.isObject( options.file ) ) {
+			if ( !angular.isArray( options.file ) ) {
 				options.fileFormDataName = Object.keys( options.file );
 				options.file = _.flatten( _.values( options.file ) );
 			}
