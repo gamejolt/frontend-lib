@@ -35,15 +35,9 @@ angular.module( 'gj.Payload' ).service( 'Payload', function( App, Environment, $
 		if ( response.data.redirect ) {
 
 			// Redirecting within the app.
-			$window.location.url = response.data.redirect;
+			$location.url( response.data.redirect );
 
-			// Reject the request.
-			deferred.reject( {
-				type: 'payload',
-				error: _this.ERROR_REDIRECT,
-				response: response.data,
-			} );
-
+			// Don't resolve so that the state doesn't show.
 			return true;
 		}
 
