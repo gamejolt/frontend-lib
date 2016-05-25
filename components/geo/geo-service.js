@@ -5,13 +5,13 @@ angular.module( 'gj.Geo' ).service( 'Geo', function( gettextCatalog )
 
 	this.getCountryName = function( code )
 	{
-		var country = _.find( this.getCountries(), { code: code } );
+		var country = _.find( this.getCountries(), { code: (code || '' ).toLowerCase() } );
 		return country ? country.name : '';
 	};
 
 	this.getRegionName = function( country, code )
 	{
-		var region = _.find( this.getRegions( country ), { code: code } );
+		var region = _.find( this.getRegions( country ), { code: (code || '' ).toLowerCase() } );
 		return region ? region.name : '';
 	};
 
