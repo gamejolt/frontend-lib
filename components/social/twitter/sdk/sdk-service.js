@@ -29,12 +29,12 @@ angular.module( 'gj.Social.Twitter.Sdk' ).service( 'Twitter_Sdk', function( $doc
 
 		if ( !isBootstrapped ) {
 			!function(d,s,id){
-				var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+				var js,fjs=d.getElementsByTagName(s)[0];
 				if(!d.getElementById(id)){
 					js=d.createElement(s);
 					js.id=id;
 					js.onload=setupEvents;
-					js.src=p+'://platform.twitter.com/widgets.js';
+					js.src='https://platform.twitter.com/widgets.js';
 					fjs.parentNode.insertBefore(js,fjs);
 				}
 			}(document, 'script', 'twitter-wjs');
