@@ -8,6 +8,7 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 		this.modelClass = undefined;
 		this.resetOnSubmit = angular.isDefined( options.resetOnSubmit ) ? options.resetOnSubmit : false;
 		this.saveMethod = '$save';
+		this.controllerAs = options.controllerAs || '$ctrl';
 
 		this.scope = {
 			formModel: '=?gjFormModel',

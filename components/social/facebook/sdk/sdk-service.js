@@ -36,7 +36,7 @@ angular.module( 'gj.Social.Facebook.Sdk' ).service( 'Facebook_Sdk', function( $d
 				js = d.createElement(s);
 				js.id = id;
 				js.onload = setupEvents;
-				js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=410666682312265";
+				js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=410666682312265";
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 		}
