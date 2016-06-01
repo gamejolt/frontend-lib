@@ -7,7 +7,5 @@ angular.module( 'gj.LinkedKey' ).factory( 'LinkedKey', function( Model )
 		}
 	}
 
-	LinkedKey.PROVIDER_STEAM = 'steam';
-
 	return Model.create( LinkedKey );
 } );
