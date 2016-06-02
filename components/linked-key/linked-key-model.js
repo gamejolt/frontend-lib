@@ -7,5 +7,10 @@ angular.module( 'gj.LinkedKey' ).factory( 'LinkedKey', function( Model )
 		}
 	}
 
+	LinkedKey.prototype.$remove = function( )
+	{
+		return this.$_remove( '/web/dash/developer/games/linked-keys/remove/' + this.id );
+	};
+
 	return Model.create( LinkedKey );
 } );
