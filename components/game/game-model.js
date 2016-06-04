@@ -72,6 +72,9 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 		}
 	}
 
+	Game.TYPE_GAME = 'game';
+	Game.TYPE_DEVLOG = 'devlog';
+
 	Game.STATUS_HIDDEN = 0;
 	Game.STATUS_VISIBLE = 1;
 	Game.STATUS_REMOVED = 2;
