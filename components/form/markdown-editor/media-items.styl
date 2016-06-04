@@ -1,0 +1,30 @@
+.form-markdown-editor-media-items
+
+	.form-group
+		margin-bottom: 0
+
+	&-list
+		white-space: nowrap
+
+.form-markdown-editor-media-item
+	float: none
+	display: inline-block
+	text-align: center
+	vertical-align: top
+
+	&-wrap
+		position: relative
+
+	.controls
+		display: none
+		position: absolute
+		top: 5px
+		right: 5px
+		z-index: 2
+
+	&:hover
+		img
+			opacity: 0.8
+
+		.controls
+			display: block
