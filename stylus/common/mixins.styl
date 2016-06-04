@@ -58,3 +58,36 @@ overlay-img()
 floating-img()
 	border: 1px solid rgba( 255, 255, 255, 0.10 )
 	box-shadow: 0 0 20px rgba( 0, 0, 0, 0.8 )
+
+$selection-color = #b4d5fe
+
+link-underlines( color, bg-color, bg-color-hover )
+
+	// Local mixin
+	_text-shadow-to-crop-underline( color )
+		text-shadow: .03em 0 color, -.03em 0 color, 0 .03em color, 0 -.03em color, .06em 0 color, -.06em 0 color, .09em 0 color, -.09em 0 color, .12em 0 color, -.12em 0 color, .15em 0 color, -.15em 0 color
+
+	_text-shadow-to-crop-underline( bg-color )
+	color: color
+	text-decoration: none
+	background-image: linear-gradient(bg-color, bg-color), linear-gradient(bg-color, bg-color), linear-gradient(color, color)
+	background-size: .05em 1px, .05em 1px, 1px 1px
+	background-repeat: no-repeat, no-repeat, repeat-x
+	background-position: 0% 90%, 100% 90%, 0% 90%
+
+	&::selection
+		_text-shadow-to-crop-underline( $selection-color )
+		background: $selection-color
+
+	&::-moz-selection
+		_text-shadow-to-crop-underline( $selection-color )
+		background: $selection-color
+
+	&:before, &:after, *, *:before, *:after
+		text-shadow: none
+
+	&:visited
+		color: color
+
+	&:hover
+		background-image: linear-gradient(bg-color, bg-color), linear-gradient(bg-color, bg-color), linear-gradient(bg-color-hover, bg-color-hover)
