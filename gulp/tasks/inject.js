@@ -20,6 +20,9 @@ module.exports = function( config )
 					/^\/robots\.txt$/,
 					/^\/crossdomain\.xml$/,
 				],
+				dontSearchFile: [
+					/.*\.pdf$/i,  // Don't want to rename any PDFs.
+				],
 				transformPath: function( rev, source, path )
 				{
 					return config.staticCdn + rev;
