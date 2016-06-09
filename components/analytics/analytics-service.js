@@ -18,7 +18,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 	// Force HTTPS tracking beacons.
 	$window.ga( 'set', 'forceSSL', true );
 
-	// Allow file:// and app:// protocols for Client or App.
+	// Allow file:// and chrome-extension:// protocols for Client or App.
 	// https://discuss.atom.io/t/google-analytics-in-atom-shell/14109/7
 	$window.ga( 'set', 'checkProtocolTask', null );
 

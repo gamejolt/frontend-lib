@@ -68,15 +68,15 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 		if ( Environment.isMobileApp || Environment.isClient ) {
 
 			// When it gets packaged up for production, the URL changes.
-			if ( window.location.href.search( /^app\:\/\/game\-jolt\-client\/package\// ) !== -1 ) {
-				Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#!';
-				Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#!';
-				Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#!';
+			if ( window.location.href.search( /^chrome-extension\:\/\/game\-jolt\-client\/package\// ) !== -1 ) {
+				Environment.wttfBaseUrl = 'chrome-extension://game-jolt-client/package/index.html#!';
+				Environment.authBaseUrl = 'chrome-extension://game-jolt-client/package/auth.html#!';
+				Environment.checkoutBaseUrl = 'chrome-extension://game-jolt-client/package/checkout.html#!';
 			}
 			else {
-				Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#!';
-				Environment.authBaseUrl = 'app://game-jolt-client/auth.html#!';
-				Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#!';
+				Environment.wttfBaseUrl = 'chrome-extension://game-jolt-client/index.html#!';
+				Environment.authBaseUrl = 'chrome-extension://game-jolt-client/auth.html#!';
+				Environment.checkoutBaseUrl = 'chrome-extension://game-jolt-client/checkout.html#!';
 			}
 		}
 
