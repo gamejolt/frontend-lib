@@ -17,8 +17,7 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 
 		// Client needs to download externally.
 		if ( Environment.isClient ) {
-			var gui = require( 'nw.gui' );
-			gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.build', {
+			nw.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.build', {
 				slug: game.slug,
 				id: game.id,
 				buildId: build.id,

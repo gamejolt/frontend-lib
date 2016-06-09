@@ -27,8 +27,7 @@ angular.module( 'gj.Game.PlayModal' ).service( 'Game_PlayModal', function( $root
 
 		// TODO: This only goes to game page. We need to direct to a URL that would open the correct build in a modal.
 		if ( Environment.isClient && _build.type != Game_Build.TYPE_HTML && _build.type != Game_Build.TYPE_ROM ) {
-			var gui = require( 'nw.gui' );
-			gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.overview', {
+			nw.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.overview', {
 				slug: _game.slug,
 				id: _game.id,
 			} ) );

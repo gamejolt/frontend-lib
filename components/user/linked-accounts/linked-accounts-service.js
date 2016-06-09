@@ -22,8 +22,7 @@ angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', funct
 		return Api.sendRequest( '/web/auth/' + provider + '?client', {} ).then( function( response )
 		{
 			// Gotta open a browser window for them to complete the sign up/login.
-			var gui = require( 'nw.gui' );
-			gui.Shell.openExternal( response.redirectLocation );
+			nw.Shell.openExternal( response.redirectLocation );
 
 			// Now redirect them to the page that will continuously check if they are authed yet.
 			// We pass in the request token returned since this is what tells us our oauth state.
@@ -51,8 +50,7 @@ angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', funct
 		return Api.sendRequest( '/web/dash/linked-accounts/link/' + provider + '?client', {} ).then( function( response )
 		{
 			// Gotta open a browser window for them to complete the sign up/login.
-			var gui = require( 'nw.gui' );
-			gui.Shell.openExternal( response.redirectLocation );
+			nw.Shell.openExternal( response.nw );
 
 			// Now redirect them to the page that will continuously check if they are linked yet.
 			// We pass in the request token returned since this is what tells us our oauth state.

@@ -30,8 +30,7 @@ angular.module( 'gj.Game.Soundtrack.Card' ).directive( 'gjGameSoundtrackCard', f
 			this.download = function()
 			{
 				if ( Environment.isClient ) {
-					var gui = require( 'nw.gui' );
-					gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.soundtrack', { slug: this.game.slug, id: this.game.id } ) );
+					nw.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.soundtrack', { slug: this.game.slug, id: this.game.id } ) );
 				}
 				else {
 					$state.go( 'discover.games.view.download.soundtrack', { slug: this.game.slug, id: this.game.id } );
