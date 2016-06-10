@@ -1,6 +1,6 @@
 angular.module( 'gj.Graph' ).service( 'Graph', function()
 {
-	this.createGraphData = function( data )
+	this.createGraphData = function( data, label )
 	{
 		var graphData = {};
 		graphData.graph = [];
@@ -15,14 +15,19 @@ angular.module( 'gj.Graph' ).service( 'Graph', function()
 					if ( k == 'time' ) {
 						continue;
 					}
+					if ( label && k == label ) {
+						continue;
+					}
+
+					var _label = label ? label : k;
 
 					graphData.graph.push( {
-						label: k,
+						label: _label,
 						data: [],
 					} );
 
-					graphData.tableTotals[ k ] = row[ k ];
-					graphData.colTotals[ k ] = 0;
+					graphData.tableTotals[ _label ] = row[ k ];
+					graphData.colTotals[ _label ] = 0;
 				}
 
 				return;
@@ -37,15 +42,19 @@ angular.module( 'gj.Graph' ).service( 'Graph', function()
 				if ( k == 'time' ) {
 					continue;
 				}
+				if ( label && k == label ) {
+					continue;
+				}
 
-				tableData[ k ] = row[ k ];
+				var _label = label ? label : k;
+				tableData[ _label ] = row[ k ];
 
 				graphData.graph[ i ].data.push( [
 					row.time * 1000,
 					parseInt( row[ k ], 10 ),
 				] );
 
-				graphData.colTotals[ k ] += parseInt( row[ k ], 10 );
+				graphData.colTotals[ _label ] += parseInt( row[ k ], 10 );
 
 				++i;
 			}
