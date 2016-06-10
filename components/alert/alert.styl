@@ -39,6 +39,10 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 		top: $alert-padding
 		right: $alert-padding
 
+// To be used with .alert-dismiss to give space to the right side.
+.alert-content
+	margin-right: 30px
+
 .alert-info
 	@extend .fill-lightest
 
@@ -63,4 +67,5 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 		caret( $gray-dark, direction: 'up', size: 5px )
 
 	> .i-button
+	> .btn
 		margin-top: 0

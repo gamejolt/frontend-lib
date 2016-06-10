@@ -24,6 +24,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 
 		if ( Environment.env == 'production' ) {
 			Environment.baseUrl = 'http://gamejolt.com';
+			Environment.secureBaseUrl = 'https://gamejolt.com';
 
 			Environment.wttfBaseUrl = 'http://gamejolt.com';
 			Environment.authBaseUrl = 'https://gamejolt.com';
@@ -44,6 +45,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 		}
 		else if ( Environment.env == 'development' ) {
 			Environment.baseUrl = 'http://development.gamejolt.com';
+			Environment.secureBaseUrl = 'http://development.gamejolt.com';
 
 			Environment.wttfBaseUrl = 'http://development.gamejolt.com';
 			Environment.authBaseUrl = 'http://development.gamejolt.com';

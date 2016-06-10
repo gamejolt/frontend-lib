@@ -11,7 +11,8 @@ angular.module( 'gj.Form' ).directive( 'gjFormSubmitButton', function( $animate 
 			scope.$watch( 'formState.isShowingSuccess', function( shouldShow )
 			{
 				if ( shouldShow ) {
-					$animate.enter( successElement, element );
+					var children = element.children();
+					$animate.enter( successElement, element, children[ children.length - 1 ] );
 				}
 				else {
 					$animate.leave( successElement );
