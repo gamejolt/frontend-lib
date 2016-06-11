@@ -5,29 +5,13 @@ var plugins = require( 'gulp-load-plugins' )();
 var streamqueue = require( 'streamqueue' );
 var mergeStream = require( 'merge-stream' );
 var fs = require( 'fs' );
+var path = require( 'path' );
 
 var rollupTypescript = require( 'rollup-plugin-typescript' );
-var rollupResolve = require( 'rollup-plugin-node-resolve' );
-var rollupCommonJs = require( 'rollup-plugin-commonjs' );
+// var rollupResolve = require( 'rollup-plugin-node-resolve' );
+// var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
-
-
-
-function RollupNG2( options )
-{
-	this.options = options;
-}
-
-var path = require( 'path' );
-RollupNG2.prototype.resolveId = function( id, from )
-{
-	if ( id.startsWith( 'rxjs/' ) ) {
-		return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
-	}
-};
-
-var rollupNG2 = function( config ){ return new RollupNG2( config ); };
 
 var rollupOptions = {
 	rollup: require( 'rollup' ),
@@ -35,18 +19,25 @@ var rollupOptions = {
 	format: 'iife',
 	plugins: [
 		rollupTypescript( {
-			// typescript: require( 'typescript' ),
+			typescript: require( 'typescript' ),
 		} ),
-		rollupNG2(),
-		rollupResolve( {
-			jsnext: true,
-			main: true,
-		} ),
-		rollupCommonJs( {
-			include: [
-				'node_modules/rxjs-es/node_modules/symbol-observable/**',
-			],
-		} ),
+		// {
+		// 	resolveId: function( id, from )
+		// 	{
+		// 		if ( id.startsWith( 'rxjs/' ) ) {
+		// 			return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
+		// 		}
+		// 	},
+		// },
+		// rollupResolve( {
+		// 	jsnext: true,
+		// 	main: true,
+		// } ),
+		// rollupCommonJs( {
+		// 	include: [
+		// 		'node_modules/rxjs-es/node_modules/symbol-observable/**',
+		// 	],
+		// } ),
 	],
 };
 
@@ -302,7 +293,7 @@ module.exports = function( config )
 				} );
 			}
 
-			var stream = streamqueue( { objectMode: true } );
+			var stream = new streamqueue( { objectMode: true } );
 
 			// Pull in modules definitions only first.
 			stream.queue( gulp.src( _.union( [
@@ -319,13 +310,13 @@ module.exports = function( config )
 			stream.queue( gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ) );
 
 			// Now pull in the development file if we're running a development environment build.
-			// if ( config.developmentEnv ) {
-			// 	stream.queue( gulp.src( [ 'src/' + section + '/app-development.js' ], { base: 'src' } ) );
-			// }
-			// // We also pull in a development setting that imitates if production isn't specified explicitly.
-			// else if ( !config.production ) {
-			// 	stream.queue( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
-			// }
+			if ( config.developmentEnv ) {
+				stream.queue( gulp.src( [ 'src/' + section + '/app-development.js' ], { base: 'src' } ) );
+			}
+			// We also pull in a development setting that imitates if production isn't specified explicitly.
+			else if ( !config.production ) {
+				stream.queue( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
+			}
 
 			var rollupStream = gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
 				.pipe( plugins.rollup( rollupOptions ) )
@@ -334,11 +325,6 @@ module.exports = function( config )
 			stream = mergeStream( stream.done(), rollupStream )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'app.js' ) )
-				.pipe( plugins.typescript( {
-					allowJs: true,
-					outFile: 'app.js',
-					target: 'es5',
-				} ) )
 				;
 
 			// Add in any injections here that may be configured.
@@ -352,10 +338,10 @@ module.exports = function( config )
 			stream = stream
 				.pipe( injectModules( config ) )
 				.pipe( plugins.ngAnnotate() )
-				// .pipe( plugins.angularEmbedTemplates( {
-				// 	minimize: minimizeOptions,
-				// 	skipTemplates: skipTemplateUrlMatches,
-				// } ) )
+				.pipe( plugins.angularEmbedTemplates( {
+					minimize: minimizeOptions,
+					skipTemplates: skipTemplateUrlMatches,
+				} ) )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
 					sourceRoot: '/../../src/' + section + '/',
@@ -415,7 +401,7 @@ module.exports = function( config )
 
 				gutil.log( 'Build module ' + outputFilename + ' with files: ' + gutil.colors.gray( JSON.stringify( files ) ) );
 
-				var stream = streamqueue( { objectMode: true } );
+				var stream = new streamqueue( { objectMode: true } );
 
 				if ( files.length ) {
 					stream.queue( gulp.src( files, { base: 'src' } ) );
