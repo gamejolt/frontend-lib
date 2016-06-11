@@ -3,9 +3,43 @@ var gulp = require( 'gulp' );
 var gutil = require( 'gulp-util' );
 var plugins = require( 'gulp-load-plugins' )();
 var streamqueue = require( 'streamqueue' );
+var mergeStream = require( 'merge-stream' );
 var fs = require( 'fs' );
+var path = require( 'path' );
+
+var rollupTypescript = require( 'rollup-plugin-typescript' );
+// var rollupResolve = require( 'rollup-plugin-node-resolve' );
+// var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
+
+var rollupOptions = {
+	rollup: require( 'rollup' ),
+	sourceMap: false,
+	format: 'iife',
+	plugins: [
+		rollupTypescript( {
+			typescript: require( 'typescript' ),
+		} ),
+		// {
+		// 	resolveId: function( id, from )
+		// 	{
+		// 		if ( id.startsWith( 'rxjs/' ) ) {
+		// 			return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
+		// 		}
+		// 	},
+		// },
+		// rollupResolve( {
+		// 	jsnext: true,
+		// 	main: true,
+		// } ),
+		// rollupCommonJs( {
+		// 	include: [
+		// 		'node_modules/rxjs-es/node_modules/symbol-observable/**',
+		// 	],
+		// } ),
+	],
+};
 
 module.exports = function( config )
 {
@@ -259,36 +293,39 @@ module.exports = function( config )
 				} );
 			}
 
-			var queue = [
-				{ objectMode: true },
+			var stream = new streamqueue( { objectMode: true } );
 
-				// Pull in modules definitions only first.
-				gulp.src( _.union( [
-					'src/' + section + '/**/*.js',
-					'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
-				], excludeApp ), { base: 'src' } ),
+			// Pull in modules definitions only first.
+			stream.queue( gulp.src( _.union( [
+				'src/' + section + '/**/*.js',
+				'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
+			], excludeApp ), { base: 'src' } ) );
 
-				// Then pull in the actual components.
-				gulp.src( _.union( [
-					'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
-				], excludeApp ), { base: 'src' } ),
+			// Then pull in the actual components.
+			stream.queue( gulp.src( _.union( [
+				'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
+			], excludeApp ), { base: 'src' } ) );
 
-				// Pull in template partials if there are any.
-				gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ),
-			];
+			// Pull in template partials if there are any.
+			stream.queue( gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ) );
 
 			// Now pull in the development file if we're running a development environment build.
 			if ( config.developmentEnv ) {
-				queue.push( gulp.src( [ 'src/' + section + '/app-development.js' ], { base: 'src' } ) );
+				stream.queue( gulp.src( [ 'src/' + section + '/app-development.js' ], { base: 'src' } ) );
 			}
 			// We also pull in a development setting that imitates if production isn't specified explicitly.
 			else if ( !config.production ) {
-				queue.push( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
+				stream.queue( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
 			}
 
-			var stream = streamqueue.apply( streamqueue, queue )
+			var rollupStream = gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
+				.pipe( plugins.rollup( rollupOptions ) )
+				;
+
+			stream = mergeStream( stream.done(), rollupStream )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
-				.pipe( plugins.concat( 'app.js' ) );
+				.pipe( plugins.concat( 'app.js' ) )
+				;
 
 			// Add in any injections here that may be configured.
 			// They should go in before further processing.
@@ -364,11 +401,10 @@ module.exports = function( config )
 
 				gutil.log( 'Build module ' + outputFilename + ' with files: ' + gutil.colors.gray( JSON.stringify( files ) ) );
 
-				var args = [];
-				args.push( { objectMode: true } );
+				var stream = new streamqueue( { objectMode: true } );
 
 				if ( files.length ) {
-					args.push( gulp.src( files, { base: 'src' } ) );
+					stream.queue( gulp.src( files, { base: 'src' } ) );
 				}
 
 				// Component files?
@@ -376,13 +412,13 @@ module.exports = function( config )
 					moduleDefinition.components.forEach( function( component )
 					{
 						// Pull in modules definitions only first.
-						args.push( gulp.src( [
+						stream.queue( gulp.src( [
 							'src/app/components/' + component + '/**/*.js',
 							'!src/app/components/' + component + '/**/*-{service,controller,directive,filter,model,production,development,node}.js',
 						], { base: 'src' } ) );
 
 						// Then pull in the actual components.
-						args.push( gulp.src( [
+						stream.queue( gulp.src( [
 							'src/app/components/' + component + '/**/*-{service,controller,directive,filter,model}.js',
 						], { base: 'src' } ) );
 					} );
@@ -395,14 +431,24 @@ module.exports = function( config )
 						// We don't pull in state or module definitions (files without a suffx).
 						// This way the states will all be available for routing, but controllers and what not
 						// can be lazy loaded in.
-						args.push( gulp.src( [
+						stream.queue( gulp.src( [
 							'src/app/views/' + view + '/**/*-{service,controller,directive,filter,model}.js',
 						], { base: 'src' } ) );
 					} );
 				}
 
+				if ( moduleDefinition.main ) {
+					var rollupStream = gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
+						.pipe( plugins.rollup( rollupOptions ) );
+
+					stream = mergeStream( stream.done(), rollupStream );
+				}
+				else {
+					stream = stream.done();
+				}
+
 				// Call it with the arguments we've built up.
-				var stream = streamqueue.apply( streamqueue, args )
+				stream = stream
 					// .pipe( plugins.newer( config.buildDir + '/app/modules/' + outputFilename ) )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 					.pipe( plugins.concat( outputFilename ) )

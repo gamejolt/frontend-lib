@@ -40,7 +40,7 @@ module.exports = function( config )
 
 		// JavaScript AND html.
 		var jsPaths = [
-			'src/**/*.js',
+			'src/**/*.{js,ts}',
 
 			// Templates compile into JS for components.
 			'src/**/*.html',
