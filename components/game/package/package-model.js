@@ -11,6 +11,9 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 	Game_Package.STATUS_ACTIVE = 'active';
 	Game_Package.STATUS_REMOVED = 'removed';
 
+	Game_Package.VISIBILITY_PRIVATE = 'private';
+	Game_Package.VISIBILITY_PUBLIC = 'public';
+
 	Game_Package.prototype.shouldShowNamePrice = function()
 	{
 		return this._sellable
