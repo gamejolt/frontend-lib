@@ -8,7 +8,7 @@ var fs = require( 'fs' );
 var path = require( 'path' );
 
 var rollupTypescript = require( 'rollup-plugin-typescript' );
-// var rollupResolve = require( 'rollup-plugin-node-resolve' );
+var rollupResolve = require( 'rollup-plugin-node-resolve' );
 // var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
@@ -29,10 +29,10 @@ var rollupOptions = {
 		// 		}
 		// 	},
 		// },
-		// rollupResolve( {
-		// 	jsnext: true,
-		// 	main: true,
-		// } ),
+		rollupResolve( {
+			jsnext: true,
+			main: true,
+		} ),
 		// rollupCommonJs( {
 		// 	include: [
 		// 		'node_modules/rxjs-es/node_modules/symbol-observable/**',
@@ -253,7 +253,16 @@ module.exports = function( config )
 	{
 		sectionTasks.push( 'js:' + section );
 
-		gulp.task( 'js:' + section, [ 'html2js:' + section + ':partials' ], function()
+		gulp.task( 'ts:' + section, function()
+		{
+			return rollupStream = gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
+				.pipe( plugins.rollup( rollupOptions ) )
+				.pipe( plugins.rename( section + '.js' ) )
+				.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+				;
+		} );
+
+		gulp.task( 'js:' + section, [ 'ts:' + section, 'html2js:' + section + ':partials' ], function()
 		{
 			// We don't include any app files that are being built into a separate module.
 			var excludeApp = [];
@@ -295,7 +304,10 @@ module.exports = function( config )
 
 			var stream = new streamqueue( { objectMode: true } );
 
-			// Pull in modules definitions only first.
+			// Gotta pull in TS/rollup file as the first thing.
+			stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + section + '.js' ], { base: 'src' } ) );
+
+			// Pull in modules definitions only before actual components..
 			stream.queue( gulp.src( _.union( [
 				'src/' + section + '/**/*.js',
 				'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
@@ -318,14 +330,9 @@ module.exports = function( config )
 				stream.queue( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
 			}
 
-			var rollupStream = gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
-				.pipe( plugins.rollup( rollupOptions ) )
-				;
-
-			stream = mergeStream( stream.done(), rollupStream )
+			var stream = stream.done()
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
-				.pipe( plugins.concat( 'app.js' ) )
-				;
+				.pipe( plugins.concat( 'app.js' ) );
 
 			// Add in any injections here that may be configured.
 			// They should go in before further processing.
@@ -341,6 +348,7 @@ module.exports = function( config )
 				.pipe( plugins.angularEmbedTemplates( {
 					minimize: minimizeOptions,
 					skipTemplates: skipTemplateUrlMatches,
+					skipErrors: true,
 				} ) )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
@@ -457,6 +465,7 @@ module.exports = function( config )
 					.pipe( plugins.angularEmbedTemplates( {
 						minimize: minimizeOptions,
 						skipTemplates: skipTemplateUrlMatches,
+						skipErrors: true,
 					} ) )
 					.pipe( config.production ? plugins.uglify() : gutil.noop() )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
