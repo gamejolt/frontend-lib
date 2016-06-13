@@ -1,0 +1,32 @@
+<div class="fireside-post-like-widget">
+	<a class="btn btn-outline btn-big"
+		ng-if="$ctrl.app.user && $ctrl.app.user.id != $ctrl.post.user.id"
+		ng-click="$ctrl.toggleLike()"
+		>
+		<span class="jolticon jolticon-heart" ng-show="!$ctrl.userLike"></span>
+		<span ng-show="!$ctrl.userLike" translate>Like This Article</span>
+
+		<span class="jolticon jolticon-remove" ng-show="$ctrl.userLike"></span>
+		<span ng-show="$ctrl.userLike" translate>Remove Like</span>
+	</a>
+
+	<div class="fireside-post-like-widget-likes avatar-circle"
+		ng-class="{ 'no-likes': !$ctrl.likes.length }"
+		>
+
+		<div class="fireside-post-like-widget-avatar anim-fade-enter-enlarge anim-fade-leave-enlarge"
+			ng-repeat="like in $ctrl.likes track by like.id"
+			gj-tooltip="like.user.display_name"
+			tooltip-placement="bottom"
+			>
+			<span gj-user-avatar="like.user"></span>
+			<span class="jolticon jolticon-heart"></span>
+		</div>
+
+		<div class="fireside-post-like-widget-avatar-more" ng-if="($ctrl.likesCount - $ctrl.likes.length) > 0">
+			<strong>{{ $ctrl.likesCount - $ctrl.likes.length }}</strong>
+			more
+		</div>
+
+	</div>
+</div>
