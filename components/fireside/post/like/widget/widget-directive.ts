@@ -9,9 +9,7 @@ import { Fireside_Post_Like } from './../like-model';
 export class WidgetComponent
 {
 	@Input( '<firesidePost' ) post: Fireside_Post;
-	@Input( '<' ) likes: Fireside_Post_Like[];
-	@Input( '<' ) likesCount: number;
-	@Input( '<' ) userLike: Fireside_Post_Like;
+	@Input( '<noAvatars' ) noAvatars: boolean;
 
 	constructor(
 		@Inject( 'App' ) private app,
@@ -23,24 +21,25 @@ export class WidgetComponent
 
 	toggleLike()
 	{
-		if ( !this.userLike ) {
+		if ( !this.post.user_like ) {
 			const newLike = new this.firesidePostLike( {
 				fireside_post_id: this.post.id
 			} );
 
 			newLike.$save().then( __ =>
 			{
-				this.likes.unshift( newLike );
-				this.userLike = newLike;
-				++this.likesCount;
+				this.post.likes.unshift( newLike );
+				this.post.user_like = newLike;
+				++this.post.like_count;
 			} );
 		}
 		else {
-			this.userLike.$remove().then( __ =>
+			console.log( this.post.user_like, Object.getOwnPropertyNames( this.post.user_like ) );
+			this.post.user_like.$remove().then( __ =>
 			{
-				_.remove( this.likes, { id: this.userLike.id } );
-				this.userLike = null;
-				--this.likesCount;
+				_.remove( this.post.likes, { id: this.post.user_like.id } );
+				this.post.user_like = null;
+				--this.post.like_count;
 			} );
 		}
 	}
