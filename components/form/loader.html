@@ -1,0 +1,9 @@
+<div>
+	<div ng-if="!$ctrl.isLoaded">
+		<gj-loading></gj-loading>
+	</div>
+
+	<div ng-if="$ctrl.isLoaded">
+		<div ng-transclude></div>
+	</div>
+</div>
