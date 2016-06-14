@@ -1,7 +1,7 @@
 import { Injectable } from 'ng-metadata/core';
-import { Model } from './../../../model/model';
+import { Model } from './../../../model/model-service';
 
-export function Fireside_Post_TagFactory( $state )
+export function Fireside_Post_TagFactory( $state, Model )
 {
 	return Model.create( Fireside_Post_Tag, {
 		$state,

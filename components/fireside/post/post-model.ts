@@ -1,5 +1,5 @@
 import { Injectable } from 'ng-metadata/core';
-import { Model } from './../../model/model';
+import { Model } from './../../model/model-service';
 import { Fireside_Post_Tag } from './tag/tag-model';
 
 export function Fireside_PostFactory( Environment, Model, Fireside_Post_Tag, MediaItem )

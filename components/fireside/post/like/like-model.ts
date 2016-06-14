@@ -1,7 +1,7 @@
 import { Injectable } from 'ng-metadata/core';
-import { Model } from './../../../model/model';
+import { Model } from './../../../model/model-service';
 
-export function Fireside_Post_LikeFactory( User )
+export function Fireside_Post_LikeFactory( User, Model )
 {
 	return Model.create( Fireside_Post_Like, {
 		User,
