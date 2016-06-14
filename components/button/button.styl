@@ -131,6 +131,16 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 		font-size: $font-size-tiny
 		vertical-align: middle
 
+	&-badge
+		float: right
+		display: inline-block
+		padding: 0 ($button-padding-horizontal / 2)
+		margin-left: ($button-padding-horizontal / 2) * 1.5
+		margin-right: -($button-padding-horizontal)
+		background-color: $black
+		color: $gj-green
+		font-size: $font-size-small
+
 /**
  * Disabled State
  */
@@ -173,11 +183,14 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 	padding-left: $button-padding-horizontal - @border-width
 	padding-right: @padding-left
 
+	.btn-badge
+		margin-right: -($button-padding-horizontal - $button-outline-border-size)
+
 /**
 * Default
 */
 .btn
-	button-variant( background: $gray, color: $white, icon-color: $gj-green, outline-color: $gray, active-background: $gray, active-color: $gj-green, addon-color: $gray-lighter, outline-addon-color: $gray-light )
+	button-variant( background: $black, color: $white, icon-color: $gj-green, outline-color: $black, active-background: $black, active-color: $gj-green, addon-color: $gray-lighter, outline-addon-color: $gray-light )
 
 .btn-success
 	button-variant( background: $gj-dark-green, color: $white, icon-color: $gj-green, outline-color: $gj-dark-green, active-background: $gj-dark-green, active-color: $gj-green, addon-color: $gray-lighter, outline-addon-color: $gray-light )
@@ -284,6 +297,12 @@ create-btn-size( size )
 	.jolticon
 		margin-right: lookup( '$button-' + size + '-icon-spacing-right' )
 
+	.btn-badge
+		padding: 0 (lookup( '$button-' + size + '-padding-horizontal' ) / 2)
+		margin-right: -(lookup( '$button-' + size + '-padding-horizontal' ))
+		margin-left: (lookup( '$button-' + size + '-padding-horizontal' ) / 2) * 1.5
+		font-size: lookup( '$button-' + size + '-font-size' )
+
 	&.btn-outline
 	&.btn-success-outline
 	&.btn-primary-outline
@@ -292,6 +311,9 @@ create-btn-size( size )
 		line-height: lookup( '$button-' + size + '-line-height' ) - (@border-width * 2)
 		padding-left: (lookup( '$button-' + size + '-padding-horizontal' ) - @border-width)
 		padding-right: @padding-left
+
+		.btn-badge
+			margin-right: -(lookup( '$button-' + size + '-padding-horizontal' ) - lookup( '$button-' + size + '-outline-border-size' ))
 
 	&.btn-sparse
 		padding-left: ((lookup( '$button-' + size + '-line-height' ) - $button-icon-size) / 2)
