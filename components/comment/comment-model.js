@@ -1,4 +1,4 @@
-angular.module( 'gj.Comment' ).factory( 'Comment', function( Model, Api, User )
+angular.module( 'gj.Comment' ).factory( 'Comment', function( Model, Api, User, Comment_Video )
 {
 	function Comment( data )
 	{
@@ -7,6 +7,10 @@ angular.module( 'gj.Comment' ).factory( 'Comment', function( Model, Api, User )
 
 			if ( data.user ) {
 				this.user = new User( data.user );
+			}
+
+			if ( data.videos ) {
+				this.videos = Comment_Video.populate( data.videos );
 			}
 		}
 	}

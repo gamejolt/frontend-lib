@@ -1,1 +1,1 @@
-angular.module( 'gj.Comment', [ 'gj.Model' ] );
+angular.module( 'gj.Comment', [ 'gj.Model', 'gj.Comment.Video' ] );
