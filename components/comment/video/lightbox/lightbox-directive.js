@@ -4,7 +4,7 @@ angular.module( 'gj.Comment.Video.Lightbox' ).component( 'gjCommentVideoLightbox
 		onClose: '&',
 	},
 	templateUrl: '/lib/gj-lib-client/components/comment/video/lightbox/lightbox.html',
-	controller: function( $scope, $timeout, $location, Environment, Screen, Comment, hotkeys )
+	controller: function( $scope, $timeout, $location, App, Environment, Screen, Comment, hotkeys )
 	{
 		var _this = this;
 		this.screen = Screen;
@@ -12,6 +12,21 @@ angular.module( 'gj.Comment.Video.Lightbox' ).component( 'gjCommentVideoLightbox
 		this.calcMaxDimensions = calcMaxDimensions;
 		this.toggleVote = toggleVote;
 		this.reply = reply;
+
+		// Can't vote on this comment if...
+		// they aren't logged in
+		// they wrote the comment
+		// the resource belongs to them (they will just upvote stuff that is nice)
+		this.canVote = true;
+		if ( !App.user ) {
+			this.canVote = false;
+		}
+		else if ( this.video.comment.user.id == App.user.id ) {
+			this.canVote = false;
+		}
+		else if ( this.video.game.developer.id == App.user.id ) {
+			this.canVote = false;
+		}
 
 		this.calcMaxDimensions();
 

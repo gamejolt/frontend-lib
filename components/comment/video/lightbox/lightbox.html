@@ -37,6 +37,7 @@
 
 		<div class="comment-video-lightbox-interaction-actions">
 			<a class="btn"
+				ng-if="::$ctrl.canVote"
 				ng-class="{
 					'btn-block': $ctrl.screen.isXs,
 					'btn-success active': !!$ctrl.video.comment.userVote,
