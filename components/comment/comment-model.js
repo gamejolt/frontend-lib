@@ -1,4 +1,4 @@
-angular.module( 'gj.Comment' ).factory( 'Comment', function( Model, Api, User, Comment_Video )
+angular.module( 'gj.Comment' ).factory( 'Comment', function( Model, Api, User, Comment_Video, Comment_Vote )
 {
 	function Comment( data )
 	{
@@ -11,6 +11,10 @@ angular.module( 'gj.Comment' ).factory( 'Comment', function( Model, Api, User, C
 
 			if ( data.videos ) {
 				this.videos = Comment_Video.populate( data.videos );
+			}
+
+			if ( data.userVote ) {
+				this.userVote = new Comment_Vote( data.userVote );
 			}
 		}
 	}
@@ -41,7 +45,7 @@ angular.module( 'gj.Comment' ).factory( 'Comment', function( Model, Api, User, C
 		} );
 	};
 
-	Comment.getCommentUrl = function( commentId)
+	Comment.getCommentUrl = function( commentId )
 	{
 		return Api.sendRequest( '/comments/get-comment-url/' + commentId, null, { detach: true } ).then( function( response )
 		{
@@ -56,6 +60,42 @@ angular.module( 'gj.Comment' ).factory( 'Comment', function( Model, Api, User, C
 	Comment.prototype.$save = function()
 	{
 		return this.$_save( '/comments/add/' + this.resource + '/' + this.resource_id, 'comment', { detach: true } );
+	};
+
+	Comment.prototype.$like = function()
+	{
+		if ( this.isVotePending ) {
+			return;
+		}
+		this.isVotePending = true;
+
+		var newVote = new Comment_Vote( { comment_id: this.id } );
+
+		var _this = this;
+		newVote.$save()
+			.then( function()
+			{
+				_this.userVote = newVote;
+				++_this.votes;
+				_this.isVotePending = false;
+			} );
+	};
+
+	Comment.prototype.$removeLike = function()
+	{
+		if ( !this.userVote || this.isVotePending ) {
+			return;
+		}
+		this.isVotePending = true;
+
+		var _this = this;
+		this.userVote.$remove()
+			.then( function()
+			{
+				_this.userVote = null;
+				--_this.votes;
+				_this.isVotePending = false;
+			} );
 	};
 
 	return Model.create( Comment );
