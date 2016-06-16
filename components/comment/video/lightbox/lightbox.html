@@ -46,7 +46,7 @@
 				ng-click="$ctrl.toggleVote()"
 				>
 				<span class="btn-badge hidden-xs" ng-if="$ctrl.video.comment.votes > 0">
-					{{ $ctrl.video.comment.votes | number  }}
+					{{ $ctrl.video.comment.votes | number }}
 				</span>
 				<span class="jolticon jolticon-thumbs-up"></span>
 				<span ng-if="!$ctrl.video.comment.userVote" translate>Like</span>
