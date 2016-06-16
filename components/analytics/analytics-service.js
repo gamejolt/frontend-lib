@@ -8,12 +8,15 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 
 	this.SOCIAL_NETWORK_FB = 'facebook';
 	this.SOCIAL_NETWORK_TWITTER = 'twitter';
+	this.SOCIAL_NETWORK_YOUTUBE = 'youtube';
 
 	this.SOCIAL_ACTION_LIKE = 'like';
 	this.SOCIAL_ACTION_SHARE = 'share';
 	this.SOCIAL_ACTION_SEND = 'send';
 	this.SOCIAL_ACTION_TWEET = 'tweet';
 	this.SOCIAL_ACTION_FOLLOW = 'follow';
+	this.SOCIAL_ACTION_SUBSCRIBE = 'subscribe';
+	this.SOCIAL_ACTION_UNSUBSCRIBE = 'unsubscribe';
 
 	// Force HTTPS tracking beacons.
 	$window.ga( 'set', 'forceSSL', true );
