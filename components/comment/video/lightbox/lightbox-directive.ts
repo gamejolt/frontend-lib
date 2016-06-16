@@ -1,5 +1,6 @@
 import { Component, Inject, Input, Output } from 'ng-metadata/core';
 import { App } from './../../../../../../app/app-service.ts';
+import { Screen } from './../../../screen/screen-service';
 import { Comment } from './../../comment-model';
 import { Comment_Video } from '../video-model';
 import template from './lightbox.html';
@@ -22,7 +23,7 @@ export class LightboxComponent
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'App' ) private app: App,
 		@Inject( 'Environment' ) private environment: any,
-		@Inject( 'Screen' ) private screen: any,
+		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'Comment' ) private comment: typeof Comment,
 		@Inject( 'hotkeys' ) private hotkeys: ng.hotkeys.HotkeysProvider
 	)
