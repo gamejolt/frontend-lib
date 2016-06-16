@@ -18,6 +18,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 				scope.commentState = {
 					canToggleComment: undefined,
 					showFullComment: true,
+					selectedVideo: undefined,
 				};
 
 				// Can't subscribe if...
@@ -141,6 +142,16 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 								delete scope.ctrl.subscriptions[ scope.comment.id ];
 								scope.isFollowPending = false;
 							} );
+					}
+				};
+
+				scope.selectVideo = function( video )
+				{
+					if ( scope.commentState.selectedVideo === video ) {
+						scope.commentState.selectedVideo = undefined;
+					}
+					else {
+						scope.commentState.selectedVideo = video;
 					}
 				};
 

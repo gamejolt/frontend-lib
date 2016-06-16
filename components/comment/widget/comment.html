@@ -37,6 +37,33 @@
 			gj-track-event="comment-widget:toggle-full-content"
 			></a>
 
+		<div class="comment-widget-comment-videos row scrollable-grid" ng-if="::comment.videos.length">
+			<gj-comment-video-thumbnail
+				class="col-xs-5 scrollable-grid-item"
+				ng-repeat="video in ::comment.videos track by video.id"
+				video="::video"
+				on-select="selectVideo( video )"
+				is-active="commentState.selectedVideo === video"
+				>
+			</gj-comment-video-thumbnail>
+			<gj-comment-video-thumbnail
+				class="col-xs-5 scrollable-grid-item"
+				ng-repeat="video in ::comment.videos track by video.id"
+				video="::video"
+				on-select="selectVideo( video )"
+				is-active="commentState.selectedVideo === video"
+				>
+			</gj-comment-video-thumbnail>
+			<gj-comment-video-thumbnail
+				class="col-xs-5 scrollable-grid-item"
+				ng-repeat="video in ::comment.videos track by video.id"
+				video="::video"
+				on-select="selectVideo( video )"
+				is-active="commentState.selectedVideo === video"
+				>
+			</gj-comment-video-thumbnail>
+		</div>
+
 		<div class="comment-widget-comment-meta">
 
 			<!--
