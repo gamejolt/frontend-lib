@@ -1,0 +1,38 @@
+<div>
+	<div class="comment-video-thumbnail">
+		<a class="comment-video-thumbnail-inner"
+			ng-click="$ctrl.isLightboxActive = true"
+			>
+			<!--ng-class="{ active: $ctrl.isActive }"
+			ng-click="$ctrl.onSelect()"-->
+			<div class="play-button-overlay play-button-overlay-small">
+				<span class="jolticon jolticon-play"></span>
+			</div>
+
+			<img class="img-responsive" ng-src="{{ ::$ctrl.video.img_thumbnail }}" alt="Video Comment">
+		</a>
+
+		<a class="comment-video-thumbnail-game"
+			ng-if="::$ctrl.showGame"
+			ui-sref="discover.games.view.overview( { slug: $ctrl.video.game.slug, id: $ctrl.video.game.id } )"
+			gj-tooltip="{{ ::$ctrl.video.game.title }}"
+			>
+			<img gj-img-responsive="{{ ::$ctrl.video.game.img_thumbnail }}" alt="">
+		</a>
+
+		<a class="comment-video-thumbnail-user"
+			ng-if="::$ctrl.showUser"
+			ui-sref="profile.overview( { slug: $ctrl.video.user.slug, id: $ctrl.video.user.id } )"
+			gj-tooltip="{{ ::$ctrl.video.user.display_name }}"
+			>
+			<img ng-src="{{ ::$ctrl.video.user.img_avatar }}" class="img-responsive" alt="">
+		</a>
+	</div>
+
+	<gj-comment-video-lightbox
+		ng-if="$ctrl.isLightboxActive"
+		video="::$ctrl.video"
+		on-close="$ctrl.isLightboxActive = false"
+		>
+	</gj-comment-video-lightbox>
+</div>

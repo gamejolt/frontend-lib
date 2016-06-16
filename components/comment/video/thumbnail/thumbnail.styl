@@ -1,0 +1,40 @@
+// Used for subtracting the bottom margin of thumbnails at the end of a grid.
+.comment-video-thumbnail-grid
+	margin-bottom: -($grid-gutter-width-xs)
+
+	@media $media-sm-up
+		margin-bottom: -($grid-gutter-width)
+
+.comment-video-thumbnail
+	position: relative
+	margin-bottom: $grid-gutter-width-xs
+
+	@media $media-sm-up
+		margin-bottom: $grid-gutter-width
+
+	&-inner
+		display: block
+
+	.play-button-overlay
+		display: none
+
+	&:hover
+		.play-button-overlay
+			display: block
+
+	&-game
+	&-user
+		display: block
+		position: absolute
+		bottom: 5px
+		border: 2px solid $white
+		background-color: $gray-darkest
+
+	&-game
+		left: 5px
+		width: 75px
+
+	&-user
+		right: 5px
+		width: 35px
+		height: 35px
