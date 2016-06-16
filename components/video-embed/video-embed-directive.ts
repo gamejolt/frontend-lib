@@ -1,4 +1,5 @@
 import { Component, Input, Inject, OnChanges, SimpleChanges } from 'ng-metadata/core';
+import { Ruler } from './../ruler/ruler-service';
 import template from './video-embed.html';
 
 const VIDEO_RATIO = 0.5625;  // 16:9
@@ -26,7 +27,7 @@ export class VideoEmbedComponent implements OnChanges
 		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( 'Screen' ) private screen: any,
-		@Inject( 'Ruler' ) private ruler: any
+		@Inject( 'Ruler' ) private ruler: Ruler
 	)
 	{
 		this.recalculateDimensions();
