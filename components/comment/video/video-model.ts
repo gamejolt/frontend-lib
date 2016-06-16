@@ -13,6 +13,11 @@ export function Comment_VideoFactory( Model, $injector, Game )
 @Injectable()
 export class Comment_Video extends Model
 {
+	provider: string;
+	provider_video_id: string;
+	img_thumbnail: string;
+	youtube_channel: string;
+
 	comment: Comment;
 	game: any;
 
@@ -21,9 +26,9 @@ export class Comment_Video extends Model
 
 	constructor( data?: any )
 	{
-		const comment: typeof Comment = Comment_Video.$injector.get( 'Comment' );
-
 		super( data );
+
+		const comment: typeof Comment = Comment_Video.$injector.get( 'Comment' );
 
 		if ( data && data.comment ) {
 			this.comment = new comment( data.comment );
