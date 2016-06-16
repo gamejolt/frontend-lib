@@ -22,10 +22,10 @@
 
 		<a class="comment-video-thumbnail-user"
 			ng-if="::$ctrl.showUser"
-			ui-sref="profile.overview( { slug: $ctrl.video.user.slug, id: $ctrl.video.user.id } )"
-			gj-tooltip="{{ ::$ctrl.video.user.display_name }}"
+			ui-sref="profile.overview( { slug: $ctrl.video.comment.user.slug, id: $ctrl.video.comment.user.id } )"
+			gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }}"
 			>
-			<img ng-src="{{ ::$ctrl.video.user.img_avatar }}" class="img-responsive" alt="">
+			<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">
 		</a>
 	</div>
 
