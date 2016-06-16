@@ -30,17 +30,100 @@ gj-comment-video-lightbox
 	background-color: rgba( 0, 0, 0, 0.85 )
 	user-select: none
 
-	&-controls
-		padding: 0 20px
-		line-height: 80px
-		text-align: right
-		text-transform: uppercase
-
 	&-content
 		position: absolute
-		top: $grid-gutter-width + 80px
 		left: 0
 		right: 0
+		bottom: 0
+		top: 150px
+
+		@media $media-sm-up
+			top: 100px
 
 		.video-embed iframe
 			margin: 0 auto
+
+	&-interaction
+		@extend .clearfix
+		padding: 20px
+
+		&-who
+		&-actions
+			position: relative
+			z-index: 2
+
+		.btn
+		.comment-video-lightbox-game
+		gj-social-youtube-subscribe
+			vertical-align: top
+
+		@media $media-xs
+			&-actions
+				position: absolute
+				bottom: 20px
+				left: 20px
+				right: 20px
+
+		@media $media-sm-up
+			&-who
+				float: left
+
+			&-actions
+				float: right
+
+	.separator
+		display: inline-block
+		vertical-align: top
+		width: 1px
+		height: 30px
+		margin: 0 15px
+		margin-top: 10px
+		background-color: $white
+		opacity: 0.3
+
+	&-game
+		@extend .clearfix
+		display: block
+		margin-bottom: $line-height-computed
+		text-align: left
+		color: $white
+		font-size: $font-size-small
+
+		@media $media-sm-up
+			display: inline-block
+
+		&:hover
+			color: $white
+			text-decoration: underline
+
+		> img
+			float: left
+			width: 75px
+			border: 1px solid $white
+
+			@media $media-sm-up
+				border-width: 2px
+
+		&-content
+			margin-left: 85px
+
+			&-title
+			&-dev
+				text-overflow()
+
+				@media $media-sm
+					max-width: 100px
+
+				@media $media-md-up
+					max-width: 200px
+
+	&-user
+		display: inline-block
+		width: 30px
+		margin-right: 10px
+		background-color: $gray-darkest
+		border: 1px solid $white
+
+		@media $media-sm-up
+			width: 50px
+			border-width: 2px
