@@ -1,0 +1,46 @@
+$zindex-comment-video-lightbox ?= 500
+
+gj-comment-video-lightbox
+	transition: opacity 300ms
+
+	&.ng-leave
+
+		// We want their pointer events to pass through so that they can interact with the page
+		// right away even while the overlay is animating out.
+		// This should make it less annoying for the user.
+		pointer-events: none
+
+		.comment-video-lightbox-content
+			transition: transform 250ms
+			transform: translateY( 0 )
+
+	&.ng-leave.ng-leave-active
+		opacity: 0
+
+		.comment-video-lightbox-content
+			transform: translateY( 200px )
+
+.comment-video-lightbox
+	position: fixed
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	z-index: $zindex-comment-video-lightbox
+	background-color: rgba( 0, 0, 0, 0.85 )
+	user-select: none
+
+	&-controls
+		padding: 0 20px
+		line-height: 80px
+		text-align: right
+		text-transform: uppercase
+
+	&-content
+		position: absolute
+		top: $grid-gutter-width + 80px
+		left: 0
+		right: 0
+
+		.video-embed iframe
+			margin: 0 auto

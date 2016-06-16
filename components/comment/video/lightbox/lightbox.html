@@ -1,0 +1,37 @@
+<div class="comment-video-lightbox">
+
+	<div class="comment-video-lightbox-controls">
+		<gj-social-youtube-subscribe
+			channel="{{ $ctrl.video.youtube_channel }}"
+			layout="full"
+			theme="dark"
+			>
+		</gj-social-youtube-subscribe>
+		<a class="btn btn-outline btn-overlay-variant" ng-click="$ctrl.onClose()">
+			<span class="btn-badge">
+				30
+			</span>
+			<span class="jolticon jolticon-thumbs-up"></span>
+			<span translate>Like Video Comment</span>
+		</a>
+
+		<a class="btn btn-outline btn-overlay-variant" ng-click="$ctrl.onClose()">
+			<span class="jolticon jolticon-remove"></span>
+			<span translate>Close</span>
+		</a>
+	</div>
+
+	<div class="comment-video-lightbox-content">
+
+		<gj-video-embed
+			video-provider="{{ $ctrl.video.provider }}"
+			video-id="$ctrl.video.provider_video_id"
+			max-video-width="$ctrl.maxWidth"
+			max-video-height="$ctrl.maxHeight"
+			>
+			<!--autoplay="true"-->
+		</gj-video-embed>
+
+	</div>
+
+</div>
