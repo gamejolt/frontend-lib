@@ -80,7 +80,7 @@
 					We make it a sparse i-button that's highlighted when they've voted on the comment,
 					otherwise it's just a simple clear icon.
 				-->
-				<span ng-class="{ 'i-button sparse active': ctrl.userVotes[comment.id] }">
+				<span ng-class="{ 'i-button sparse active': comment.userVote }">
 					<span class="jolticon jolticon-thumbs-up"></span>
 				</span>
 
