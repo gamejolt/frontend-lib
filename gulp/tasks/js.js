@@ -9,6 +9,7 @@ var path = require( 'path' );
 
 var rollupTypescript = require( 'rollup-plugin-typescript' );
 var rollupResolve = require( 'rollup-plugin-node-resolve' );
+var rollupString = require( 'rollup-plugin-string' );
 // var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
@@ -18,6 +19,9 @@ var rollupOptions = {
 	sourceMap: false,
 	format: 'iife',
 	plugins: [
+		rollupString( {
+			include: '**/*.html',
+		} ),
 		rollupTypescript( {
 			typescript: require( 'typescript' ),
 		} ),
