@@ -43,6 +43,8 @@ export class Model
 			angular.extend( this, newObj );
 		};
 
+		angular.extend( self.prototype, Model.prototype );
+
 		// This will allow you to inject angular services statically so that the models
 		// have access to those services.
 		if ( injections ) {
