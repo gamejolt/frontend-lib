@@ -171,7 +171,7 @@ export class Screen
 	{
 		const resizeHandlerOff = this.$rootScope.$on( 'Screen.onResize', () =>
 		{
-			this._onResize();
+			onResize();
 		} );
 
 		scope.$on( '$destroy', () =>
