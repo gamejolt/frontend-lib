@@ -13,10 +13,9 @@ export function Comment_VideoFactory( Model, $injector, Game )
 @Injectable()
 export class Comment_Video extends Model
 {
-	provider: string;
-	provider_video_id: string;
+	video_id: string;
+	channel_id: string;
 	img_thumbnail: string;
-	youtube_channel: string;
 
 	comment: Comment;
 	game: any;

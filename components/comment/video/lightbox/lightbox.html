@@ -29,7 +29,7 @@
 			</a>
 
 			<gj-social-youtube-subscribe
-				channel="{{ $ctrl.video.youtube_channel }}"
+				channel="{{ $ctrl.video.channel_id }}"
 				theme="dark"
 				>
 			</gj-social-youtube-subscribe>
@@ -74,8 +74,8 @@
 	<div class="comment-video-lightbox-content">
 
 		<gj-video-embed
-			video-provider="{{ $ctrl.video.provider }}"
-			video-id="$ctrl.video.provider_video_id"
+			video-provider="youtube"
+			video-id="$ctrl.video.video_id"
 			max-video-width="$ctrl.maxWidth"
 			max-video-height="$ctrl.maxHeight"
 			>
