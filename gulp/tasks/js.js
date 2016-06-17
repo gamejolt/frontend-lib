@@ -179,6 +179,24 @@ module.exports = function( config )
 	/**
 	 * Build out the vendor JS.
 	 */
+	gulp.task( 'js:vendor:rollup', function()
+	{
+		if ( !config.rollup || !config.rollup.vendor ) {
+			return;
+		}
+
+		var _rollupOptions = _.extend( {}, rollupOptions, {
+			moduleName: 'vendor',
+		} );
+
+		return gulp.src( 'src/vendor.ts', { read: false, base: 'src' } )
+			.pipe( plugins.rollup( _rollupOptions ) )
+			.pipe( plugins.rename( 'vendor.js' ) )
+			.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+			;
+	} );
+	vendorCommonDepends.push( 'js:vendor:rollup' );
+
 	gulp.task( 'js:vendor', vendorCommonDepends, function()
 	{
 		var excludeBower = [];
@@ -198,7 +216,9 @@ module.exports = function( config )
 			} );
 		}
 
-		var files = [];
+		var files = [
+			config.buildDir + '/tmp/rollup/vendor.js',
+		];
 		if ( bower.dependencies ) {
 
 			_.forEach( bower.dependencies, function( version, component )
@@ -259,8 +279,13 @@ module.exports = function( config )
 
 		gulp.task( 'ts:' + section, function()
 		{
-			return rollupStream = gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
-				.pipe( plugins.rollup( rollupOptions ) )
+			var _rollupOptions = _.extend( {}, rollupOptions, {
+				external: Object.keys( config.rollup.vendor ),
+				globals: config.rollup.vendor,
+			} );
+
+			return gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
+				.pipe( plugins.rollup( _rollupOptions ) )
 				.pipe( plugins.rename( section + '.js' ) )
 				.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
 				;
@@ -451,8 +476,13 @@ module.exports = function( config )
 				}
 
 				if ( moduleDefinition.main ) {
+					var _rollupOptions = _.extend( {}, rollupOptions, {
+						external: Object.keys( config.rollup.vendor ),
+						globals: config.rollup.vendor,
+					} );
+
 					var rollupStream = gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
-						.pipe( plugins.rollup( rollupOptions ) );
+						.pipe( plugins.rollup( _rollupOptions ) );
 
 					stream = mergeStream( stream.done(), rollupStream );
 				}
