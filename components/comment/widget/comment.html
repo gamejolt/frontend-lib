@@ -37,31 +37,28 @@
 			gj-track-event="comment-widget:toggle-full-content"
 			></a>
 
-		<div class="comment-widget-comment-videos row scrollable-grid" ng-if="::comment.videos.length">
-			<gj-comment-video-thumbnail
-				class="col-xs-5 scrollable-grid-item"
-				ng-repeat="video in ::comment.videos track by video.id"
-				video="::video"
-				on-select="selectVideo( video )"
-				is-active="commentState.selectedVideo === video"
+		<div class="comment-widget-comment-videos" ng-if="::comment.videos.length">
+			<div class="row">
+				<gj-comment-video-thumbnail
+					class="col-xs-6"
+					ng-repeat="video in comment.videos | limitTo:(commentState.showAllVideos ? 10 : 2) track by video.id"
+					video="::video"
+					>
+				</gj-comment-video-thumbnail>
+			</div>
+
+			<div class="comment-widget-comment-videos-more-link"
+				ng-if="comment.videos.length > 2 && !commentState.showAllVideos"
 				>
-			</gj-comment-video-thumbnail>
-			<gj-comment-video-thumbnail
-				class="col-xs-5 scrollable-grid-item"
-				ng-repeat="video in ::comment.videos track by video.id"
-				video="::video"
-				on-select="selectVideo( video )"
-				is-active="commentState.selectedVideo === video"
-				>
-			</gj-comment-video-thumbnail>
-			<gj-comment-video-thumbnail
-				class="col-xs-5 scrollable-grid-item"
-				ng-repeat="video in ::comment.videos track by video.id"
-				video="::video"
-				on-select="selectVideo( video )"
-				is-active="commentState.selectedVideo === video"
-				>
-			</gj-comment-video-thumbnail>
+				<a class="small link-muted"
+					ng-click="commentState.showAllVideos = true"
+					translate
+					translate-scope="::{ $count: comment.videos.length - 2 }"
+					>
+					+{{ $count }} more videos
+				</a>
+			</div>
+			<br>
 		</div>
 
 		<div class="comment-widget-comment-meta">
