@@ -10,44 +10,51 @@ var path = require( 'path' );
 var rollupTypescript = require( 'rollup-plugin-typescript' );
 var rollupResolve = require( 'rollup-plugin-node-resolve' );
 var rollupString = require( 'rollup-plugin-string' );
+var rollupReplace = require( 'rollup-plugin-replace' );
 // var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
 
-var rollupOptions = {
-	rollup: require( 'rollup' ),
-	sourceMap: false,
-	format: 'iife',
-	plugins: [
-		rollupString( {
-			include: '**/*.html',
-		} ),
-		rollupTypescript( {
-			typescript: require( 'typescript' ),
-		} ),
-		// {
-		// 	resolveId: function( id, from )
-		// 	{
-		// 		if ( id.startsWith( 'rxjs/' ) ) {
-		// 			return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
-		// 		}
-		// 	},
-		// },
-		rollupResolve( {
-			jsnext: true,
-			main: true,
-		} ),
-		// rollupCommonJs( {
-		// 	include: [
-		// 		'node_modules/rxjs-es/node_modules/symbol-observable/**',
-		// 	],
-		// } ),
-	],
-};
-
 module.exports = function( config )
 {
 	var baseDir = '../../../../../';
+
+	var rollupOptions = {
+		rollup: require( 'rollup' ),
+		sourceMap: false,
+		format: 'iife',
+		plugins: [
+			rollupReplace( {
+				values: {
+					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
+					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
+				},
+			} ),
+			rollupString( {
+				include: '**/*.html',
+			} ),
+			rollupTypescript( {
+				typescript: require( 'typescript' ),
+			} ),
+			// {
+			// 	resolveId: function( id, from )
+			// 	{
+			// 		if ( id.startsWith( 'rxjs/' ) ) {
+			// 			return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
+			// 		}
+			// 	},
+			// },
+			rollupResolve( {
+				jsnext: true,
+				main: true,
+			} ),
+			// rollupCommonJs( {
+			// 	include: [
+			// 		'node_modules/rxjs-es/node_modules/symbol-observable/**',
+			// 	],
+			// } ),
+		],
+	};
 
 	// This depends on html2js.
 	require( './html2js.js' )( config );
@@ -349,15 +356,6 @@ module.exports = function( config )
 
 			// Pull in template partials if there are any.
 			stream.queue( gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ) );
-
-			// Now pull in the development file if we're running a development environment build.
-			if ( config.developmentEnv ) {
-				stream.queue( gulp.src( [ 'src/' + section + '/app-development.js' ], { base: 'src' } ) );
-			}
-			// We also pull in a development setting that imitates if production isn't specified explicitly.
-			else if ( !config.production ) {
-				stream.queue( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
-			}
 
 			var stream = stream.done()
 				.pipe( plugins.newer( config.buildDir + '/' + section + '/app.js' ) )
