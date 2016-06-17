@@ -2,6 +2,7 @@
 	<div class="comment-video-thumbnail">
 		<a class="comment-video-thumbnail-inner"
 			ng-click="$ctrl.isLightboxActive = true"
+			gj-track-event="comment-video-thumbnail:click"
 			>
 			<!--ng-class="{ active: $ctrl.isActive }"
 			ng-click="$ctrl.onSelect()"-->
@@ -16,6 +17,7 @@
 			ng-if="::$ctrl.showGame"
 			ui-sref="discover.games.view.overview( { slug: $ctrl.video.game.slug, id: $ctrl.video.game.id } )"
 			gj-tooltip="{{ ::$ctrl.video.game.title }}"
+			gj-track-event="comment-video-thumbnail:game"
 			>
 			<img gj-img-responsive="{{ ::$ctrl.video.game.img_thumbnail }}" alt="">
 		</a>
@@ -24,6 +26,7 @@
 			ng-if="::$ctrl.showUser"
 			ui-sref="profile.overview( { slug: $ctrl.video.comment.user.slug, id: $ctrl.video.comment.user.id } )"
 			gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }}"
+			gj-track-event="comment-video-thumbnail:user"
 			>
 			<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">
 		</a>

@@ -5,6 +5,7 @@
 			<a class="comment-video-lightbox-game"
 				ui-sref="discover.games.view.overview( { slug: $ctrl.video.game.slug, id: $ctrl.video.game.id } )"
 				ng-click="$ctrl.onClose()"
+				gj-track-event="comment-video-lightbox:game"
 				>
 				<img gj-img-responsive="{{ ::$ctrl.video.game.img_thumbnail }}" alt="">
 				<div class="comment-video-lightbox-game-content">
@@ -25,6 +26,7 @@
 				gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }}"
 				tooltip-placement="bottom"
 				ng-click="$ctrl.onClose()"
+				gj-track-event="comment-video-lightbox:user"
 				>
 				<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">
 			</a>
@@ -45,6 +47,7 @@
 					'btn-outline btn-overlay-variant': !$ctrl.video.comment.userVote,
 				}"
 				ng-click="$ctrl.toggleVote()"
+				gj-track-event="comment-video-lightbox:change-like"
 				>
 				<span class="btn-badge hidden-xs" ng-if="$ctrl.video.comment.votes > 0">
 					{{ $ctrl.video.comment.votes | number }}
@@ -57,6 +60,7 @@
 			<a class="btn btn-outline btn-overlay-variant"
 				ng-class="{ 'btn-block': $ctrl.screen.isXs }"
 				ng-click="$ctrl.reply()"
+				gj-track-event="comment-video-lightbox:reply"
 				>
 				<span class="jolticon jolticon-reply"></span>
 				<span translate>Reply</span>

@@ -54,6 +54,7 @@
 					ng-click="commentState.showAllVideos = true"
 					translate
 					translate-scope="::{ $count: comment.videos.length - 2 }"
+					gj-track-event="comment-widget:more-videos"
 					>
 					+{{ $count }} more videos
 				</a>
