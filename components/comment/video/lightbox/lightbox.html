@@ -24,6 +24,7 @@
 				ui-sref="profile.overview( { slug: $ctrl.video.comment.user.slug, id: $ctrl.video.comment.user.id } )"
 				gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }}"
 				tooltip-placement="bottom"
+				ng-click="$ctrl.onClose()"
 				>
 				<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">
 			</a>
