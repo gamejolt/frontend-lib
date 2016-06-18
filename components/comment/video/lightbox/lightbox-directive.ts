@@ -1,6 +1,7 @@
 import { Component, Inject, Input, Output } from 'ng-metadata/core';
 import { App } from './../../../../../../app/app-service.ts';
 import { Screen } from './../../../screen/screen-service';
+import { HistoryTick } from './../../../history-tick/history-tick-service';
 import { Comment } from './../../comment-model';
 import { Comment_Video } from '../video-model';
 import template from './lightbox.html';
@@ -21,14 +22,15 @@ export class LightboxComponent
 	constructor(
 		@Inject( '$scope' ) private $scope: any,
 		@Inject( '$location' ) private $location: ng.ILocationService,
+		@Inject( 'hotkeys' ) private hotkeys: ng.hotkeys.HotkeysProvider,
 		@Inject( 'App' ) private app: App,
 		@Inject( 'Environment' ) private environment: any,
 		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'Comment' ) private comment: typeof Comment,
-		@Inject( 'hotkeys' ) private hotkeys: ng.hotkeys.HotkeysProvider
+		@Inject( 'HistoryTick' ) private historyTick: HistoryTick
 	)
 	{
-		this.screen = screen;
+		this.historyTick.sendBeacon( 'comment-video', this.video.id );
 
 		// Can't vote on this comment if...
 		// they aren't logged in
