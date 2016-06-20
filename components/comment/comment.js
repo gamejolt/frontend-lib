@@ -1,1 +1,0 @@
-angular.module( 'gj.Comment', [ 'gj.Model' ] );

@@ -9,7 +9,6 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 			{
 				scope.comment = $parse( attrs.gjCommentWidgetComment )( scope );
 				scope.isChild = $parse( attrs.commentIsChild )( scope );
-				scope.isVotePending = false;
 				scope.isFollowPending = false;
 
 				scope.profileUrl = Environment.wttfBaseUrl + scope.comment.user.url;
@@ -18,6 +17,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 				scope.commentState = {
 					canToggleComment: undefined,
 					showFullComment: true,
+					selectedVideo: undefined,
 				};
 
 				// Can't subscribe if...
@@ -52,7 +52,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 
 				scope.$watch( 'comment.votes', function( voteCount )
 				{
-					var userHasVoted = scope.ctrl.userVotes[ scope.comment.id ];
+					var userHasVoted = !!scope.comment.user_vote;
 
 					if ( voteCount <= 0 ) {
 						if ( scope.canVote ) {
@@ -83,36 +83,13 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 
 				scope.onVoteClick = function()
 				{
-					if ( scope.isVotePending ) {
-						return;
-					}
-
-					scope.isVotePending = true;
-
 					// If adding a vote.
-					if ( !scope.ctrl.userVotes[ scope.comment.id ] ) {
-
-						var newVote = new Comment_Vote( { comment_id: scope.comment.id } );
-
-						newVote.$save()
-							.then( function()
-							{
-								scope.ctrl.userVotes[ scope.comment.id ] = newVote;
-								++scope.comment.votes;
-								scope.isVotePending = false;
-								Growls.add( 'success', gettextCatalog.getString( 'You\'ve just upvoted this comment. This lets us know the quality of comments and helps keep the site fresh.' ) );
-							} );
+					if ( !scope.comment.user_vote ) {
+						scope.comment.$like();
 					}
 					// If removing a vote.
 					else {
-
-						scope.ctrl.userVotes[ scope.comment.id ].$remove()
-							.then( function()
-							{
-								delete scope.ctrl.userVotes[ scope.comment.id ];
-								--scope.comment.votes;
-								scope.isVotePending = false;
-							} );
+						scope.comment.$removeLike();
 					}
 				};
 
@@ -141,6 +118,16 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 								delete scope.ctrl.subscriptions[ scope.comment.id ];
 								scope.isFollowPending = false;
 							} );
+					}
+				};
+
+				scope.selectVideo = function( video )
+				{
+					if ( scope.commentState.selectedVideo === video ) {
+						scope.commentState.selectedVideo = undefined;
+					}
+					else {
+						scope.commentState.selectedVideo = video;
 					}
 				};
 
