@@ -1,4 +1,4 @@
-import { Component, Inject, Input, Output } from 'ng-metadata/core';
+import { Component, Inject, Input, Output, OnInit } from 'ng-metadata/core';
 import { App } from './../../../../../../app/app-service.ts';
 import { Screen } from './../../../screen/screen-service';
 import { HistoryTick } from './../../../history-tick/history-tick-service';
@@ -10,7 +10,7 @@ import template from './lightbox.html';
 	selector: 'gj-comment-video-lightbox',
 	template,
 })
-export class LightboxComponent
+export class LightboxComponent implements OnInit
 {
 	@Input( '<' ) video: Comment_Video;
 	@Output() onClose: Function;
@@ -20,7 +20,10 @@ export class LightboxComponent
 	maxWidth: number;
 
 	constructor(
-		@Inject( '$scope' ) private $scope: any,
+		@Inject( '$element' ) private $element: ng.IRootElementService,
+		@Inject( '$scope' ) private $scope: ng.IScope,
+		@Inject( '$document' ) private $document: ng.IDocumentService,
+		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'hotkeys' ) private hotkeys: ng.hotkeys.HotkeysProvider,
 		@Inject( 'App' ) private app: App,
@@ -64,6 +67,20 @@ export class LightboxComponent
 					$event.preventDefault();
 				},
 			} );
+	}
+
+	ngOnInit()
+	{
+		// Move it to the body.
+		// This should fix the z-indexing and put it on top of the whole shell.
+		this.$document[0].body.appendChild( this.$element[0] );
+
+		// Since we're on the body now, we have to remember to manually remove the element
+		// when the scope is destroyed.
+		this.$scope.$on( '$destroy', () =>
+		{
+			this.$animate.leave( this.$element );
+		} );
 	}
 
 	calcMaxDimensions()
