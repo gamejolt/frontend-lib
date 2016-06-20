@@ -52,7 +52,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 
 				scope.$watch( 'comment.votes', function( voteCount )
 				{
-					var userHasVoted = !!scope.comment.userVote;
+					var userHasVoted = !!scope.comment.user_vote;
 
 					if ( voteCount <= 0 ) {
 						if ( scope.canVote ) {
@@ -84,7 +84,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 				scope.onVoteClick = function()
 				{
 					// If adding a vote.
-					if ( !scope.comment.userVote ) {
+					if ( !scope.comment.user_vote ) {
 						scope.comment.$like();
 					}
 					// If removing a vote.

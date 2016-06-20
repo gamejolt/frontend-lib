@@ -43,8 +43,8 @@
 				ng-if="::$ctrl.canVote"
 				ng-class="{
 					'btn-block': $ctrl.screen.isXs,
-					'btn-success active': !!$ctrl.video.comment.userVote,
-					'btn-outline btn-overlay-variant': !$ctrl.video.comment.userVote,
+					'btn-success active': !!$ctrl.video.comment.user_vote,
+					'btn-outline btn-overlay-variant': !$ctrl.video.comment.user_vote,
 				}"
 				ng-click="$ctrl.toggleVote()"
 				gj-track-event="comment-video-lightbox:change-like"
@@ -53,8 +53,8 @@
 					{{ $ctrl.video.comment.votes | number }}
 				</span>
 				<span class="jolticon jolticon-thumbs-up"></span>
-				<span ng-if="!$ctrl.video.comment.userVote" translate>Like</span>
-				<span ng-if="!!$ctrl.video.comment.userVote" translate>Liked!</span>
+				<span ng-if="!$ctrl.video.comment.user_vote" translate>Like</span>
+				<span ng-if="!!$ctrl.video.comment.user_vote" translate>Liked!</span>
 			</a>
 
 			<a class="btn btn-outline btn-overlay-variant"

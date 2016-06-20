@@ -81,7 +81,7 @@ export class LightboxComponent
 	toggleVote()
 	{
 		// If adding a vote.
-		if ( !this.video.comment.userVote ) {
+		if ( !this.video.comment.user_vote ) {
 			this.video.comment.$like();
 		}
 		// If removing a vote.

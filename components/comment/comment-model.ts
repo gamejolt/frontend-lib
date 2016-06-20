@@ -23,7 +23,7 @@ export class Comment extends Model
 	user: any;
 	comment_compiled: string;
 	votes: number;
-	userVote: Comment_Vote;
+	user_vote: Comment_Vote;
 	status: number;
 	posted_on: number;
 	lang: string;
@@ -53,8 +53,8 @@ export class Comment extends Model
 			this.videos = Comment.Comment_Video.populate( data.videos );
 		}
 
-		if ( data && data.userVote ) {
-			this.userVote = new Comment.Comment_Vote( data.userVote );
+		if ( data && data.user_vote ) {
+			this.user_vote = new Comment.Comment_Vote( data.user_vote );
 		}
 	}
 
@@ -111,7 +111,7 @@ export class Comment extends Model
 		newVote.$save()
 			.then( () =>
 			{
-				this.userVote = newVote;
+				this.user_vote = newVote;
 				++this.votes;
 				this.isVotePending = false;
 			} );
@@ -119,15 +119,15 @@ export class Comment extends Model
 
 	$removeLike()
 	{
-		if ( !this.userVote || this.isVotePending ) {
+		if ( !this.user_vote || this.isVotePending ) {
 			return;
 		}
 		this.isVotePending = true;
 
-		this.userVote.$remove()
+		this.user_vote.$remove()
 			.then( () =>
 			{
-				this.userVote = null;
+				this.user_vote = null;
 				--this.votes;
 				this.isVotePending = false;
 			} );
