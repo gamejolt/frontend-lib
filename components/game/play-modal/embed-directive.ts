@@ -61,6 +61,10 @@ export class EmbedComponent implements AfterViewInit
 				this.embedWidth = 418 * 2;
 				this.embedHeight = 235 * 2;
 			}
+			else if ( this.build.emulator_type == gameBuild.EMULATOR_ZX ) {
+				this.embedWidth = 352 * 2;
+				this.embedHeight = 296 * 2;
+			}
 		}
 		else {
 			this.embedWidth = this.build.embed_width;
