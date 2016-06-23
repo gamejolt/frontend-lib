@@ -65,6 +65,10 @@ export class EmbedComponent implements AfterViewInit
 				this.embedWidth = 352 * 2;
 				this.embedHeight = 296 * 2;
 			}
+			else if ( this.build.emulator_type == gameBuild.EMULATOR_ATARI2600 ) {
+				this.embedWidth = 176 * 3;
+				this.embedHeight = 223 * 3;
+			}
 		}
 		else {
 			this.embedWidth = this.build.embed_width;
