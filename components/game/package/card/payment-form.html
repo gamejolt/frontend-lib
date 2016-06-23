@@ -1,14 +1,14 @@
 <div ng-if="formState.checkoutStep == 'primary'">
 	<p ng-if="::sellable.type == 'pwyw'">
-		<span ng-if="::!pricing.amount" translate translate-scope="{ developer: game.developer.display_name }">
+		<span ng-if="::!pricing.amount" translate translate-params-developer="game.developer.display_name">
 			Show {{ developer }} some <span class="jolticon jolticon-heart"></span> by supporting them.
 		</span>
-		<span ng-if="::pricing.amount" translate translate-scope="{ amount: gjCurrencyFilter( pricing.amount ) }">
+		<span ng-if="::pricing.amount" translate translate-params-amount="gjCurrencyFilter( pricing.amount )">
 			This developer suggests paying <strong>{{ amount }}</strong>, but you're able to pay what you want.
 		</span>
 	</p>
 
-	<p ng-if="::sellable.type == 'paid'" translate translate-scope="{ amount: gjCurrencyFilter( pricing.amount ) }">
+	<p ng-if="::sellable.type == 'paid'" translate translate-params-amount="gjCurrencyFilter( pricing.amount )">
 		The developer has set the price of this game to <strong>{{ amount }}</strong>, but you are able to support them by giving more.
 	</p>
 
@@ -40,7 +40,7 @@
 							>
 					</span>
 
-					<span class="text-muted" ng-if="::sellable.type == 'paid'" translate translate-scope="{ price: gjCurrencyFilter( pricing.amount ) }">
+					<span class="text-muted" ng-if="::sellable.type == 'paid'" translate translate-params-price="gjCurrencyFilter( pricing.amount )">
 						({{ price }} or more)
 					</span>
 

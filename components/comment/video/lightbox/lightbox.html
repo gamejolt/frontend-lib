@@ -1,0 +1,92 @@
+<div class="comment-video-lightbox">
+
+	<div class="comment-video-lightbox-interaction">
+		<div class="comment-video-lightbox-interaction-who">
+			<a class="comment-video-lightbox-game"
+				ui-sref="discover.games.view.overview( { slug: $ctrl.video.game.slug, id: $ctrl.video.game.id } )"
+				ng-click="$ctrl.onClose()"
+				gj-track-event="comment-video-lightbox:game"
+				>
+				<img gj-img-responsive="{{ ::$ctrl.video.game.img_thumbnail }}" alt="">
+				<div class="comment-video-lightbox-game-content">
+					<div class="comment-video-lightbox-game-content-title">
+						<strong>{{ $ctrl.video.game.title }}</strong>
+					</div>
+					<div class="comment-video-lightbox-game-content-dev">
+						<span translate>by</span>
+						{{ $ctrl.video.game.developer.display_name }}
+					</div>
+				</div>
+			</a>
+
+			<div class="separator hidden-xs"></div>
+
+			<a class="comment-video-lightbox-user"
+				ui-sref="profile.overview( { slug: $ctrl.video.comment.user.slug, id: $ctrl.video.comment.user.id } )"
+				gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }}"
+				tooltip-placement="bottom"
+				ng-click="$ctrl.onClose()"
+				gj-track-event="comment-video-lightbox:user"
+				>
+				<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">
+			</a>
+
+			<gj-social-youtube-subscribe
+				channel="{{ $ctrl.video.channel_id }}"
+				theme="dark"
+				>
+			</gj-social-youtube-subscribe>
+		</div>
+
+		<div class="comment-video-lightbox-interaction-actions">
+			<a class="btn"
+				ng-if="::$ctrl.canVote"
+				ng-class="{
+					'btn-block': $ctrl.screen.isXs,
+					'btn-success active': !!$ctrl.video.comment.user_vote,
+					'btn-outline btn-overlay-variant': !$ctrl.video.comment.user_vote,
+				}"
+				ng-click="$ctrl.toggleVote()"
+				gj-track-event="comment-video-lightbox:change-like"
+				>
+				<span class="btn-badge hidden-xs" ng-if="$ctrl.video.comment.votes > 0">
+					{{ $ctrl.video.comment.votes | number }}
+				</span>
+				<span class="jolticon jolticon-thumbs-up"></span>
+				<span ng-if="!$ctrl.video.comment.user_vote" translate>Like</span>
+				<span ng-if="!!$ctrl.video.comment.user_vote" translate>Liked!</span>
+			</a>
+
+			<a class="btn btn-outline btn-overlay-variant"
+				ng-class="{ 'btn-block': $ctrl.screen.isXs }"
+				ng-click="$ctrl.reply()"
+				gj-track-event="comment-video-lightbox:reply"
+				>
+				<span class="jolticon jolticon-reply"></span>
+				<span translate>Reply</span>
+			</a>
+
+			<a class="btn btn-danger-outline btn-overlay-variant"
+				ng-class="{ 'btn-block': $ctrl.screen.isXs }"
+				ng-click="$ctrl.onClose()"
+				>
+				<span class="jolticon jolticon-remove"></span>
+				<span translate>Close</span>
+			</a>
+		</div>
+	</div>
+
+	<div class="comment-video-lightbox-content">
+
+		<gj-video-embed
+			video-provider="youtube"
+			video-id="$ctrl.video.video_id"
+			max-video-width="$ctrl.maxWidth"
+			max-video-height="$ctrl.maxHeight"
+			autoplay="true"
+			>
+		</gj-video-embed>
+
+	</div>
+
+</div>

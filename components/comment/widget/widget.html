@@ -18,7 +18,6 @@
 			>
 			1 Comment
 		</h2>
-		</h2>
 
 		<div ng-if="!ctrl.commentsCount">
 			<p>
@@ -63,7 +62,7 @@
 				ng-disabled="ctrl.isTranslating"
 				translate
 				translate-comment="{{ lang }} is passed in with the current language"
-				translate-scope="{ lang: ctrl.getTranslationLabel( Translate.lang ) }"
+				translate-params-lang="ctrl.getTranslationLabel( Translate.lang )"
 				>
 				Translate comments to {{ lang }}
 			</button>

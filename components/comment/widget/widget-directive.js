@@ -42,7 +42,6 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 			this.translationsLoaded = false;
 			this.translations = {};
 
-			this.userVotes = {};
 			this.subscriptions = {};
 
 			if ( !App.user ) {
@@ -213,13 +212,6 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 						if ( payload.childComments ) {
 							var childComments = Comment.populate( payload.childComments );
 							_this.childComments = _.groupBy( childComments, 'parent_id' );
-						}
-
-						// Votes made by the user.
-						_this.userVotes = {};
-						if ( payload.userVotes ) {
-							var userVotes = Comment_Vote.populate( payload.userVotes );
-							_this.userVotes = _.indexBy( userVotes, 'comment_id' );
 						}
 
 						// User subscriptions to comment threads.

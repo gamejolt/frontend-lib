@@ -9,41 +9,52 @@ var path = require( 'path' );
 
 var rollupTypescript = require( 'rollup-plugin-typescript' );
 var rollupResolve = require( 'rollup-plugin-node-resolve' );
+var rollupString = require( 'rollup-plugin-string' );
+var rollupReplace = require( 'rollup-plugin-replace' );
 // var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
 
-var rollupOptions = {
-	rollup: require( 'rollup' ),
-	sourceMap: false,
-	format: 'iife',
-	plugins: [
-		rollupTypescript( {
-			typescript: require( 'typescript' ),
-		} ),
-		// {
-		// 	resolveId: function( id, from )
-		// 	{
-		// 		if ( id.startsWith( 'rxjs/' ) ) {
-		// 			return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
-		// 		}
-		// 	},
-		// },
-		rollupResolve( {
-			jsnext: true,
-			main: true,
-		} ),
-		// rollupCommonJs( {
-		// 	include: [
-		// 		'node_modules/rxjs-es/node_modules/symbol-observable/**',
-		// 	],
-		// } ),
-	],
-};
-
 module.exports = function( config )
 {
 	var baseDir = '../../../../../';
+
+	var rollupOptions = {
+		rollup: require( 'rollup' ),
+		sourceMap: false,
+		format: 'iife',
+		plugins: [
+			rollupReplace( {
+				values: {
+					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
+					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
+				},
+			} ),
+			rollupString( {
+				include: '**/*.html',
+			} ),
+			rollupTypescript( {
+				typescript: require( 'typescript' ),
+			} ),
+			// {
+			// 	resolveId: function( id, from )
+			// 	{
+			// 		if ( id.startsWith( 'rxjs/' ) ) {
+			// 			return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
+			// 		}
+			// 	},
+			// },
+			rollupResolve( {
+				jsnext: true,
+				main: true,
+			} ),
+			// rollupCommonJs( {
+			// 	include: [
+			// 		'node_modules/rxjs-es/node_modules/symbol-observable/**',
+			// 	],
+			// } ),
+		],
+	};
 
 	// This depends on html2js.
 	require( './html2js.js' )( config );
@@ -175,6 +186,24 @@ module.exports = function( config )
 	/**
 	 * Build out the vendor JS.
 	 */
+	gulp.task( 'js:vendor:rollup', function()
+	{
+		if ( !config.rollup || !config.rollup.vendor ) {
+			return;
+		}
+
+		var _rollupOptions = _.extend( {}, rollupOptions, {
+			moduleName: 'vendor',
+		} );
+
+		return gulp.src( 'src/vendor.ts', { read: false, base: 'src' } )
+			.pipe( plugins.rollup( _rollupOptions ) )
+			.pipe( plugins.rename( 'vendor.js' ) )
+			.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+			;
+	} );
+	vendorCommonDepends.push( 'js:vendor:rollup' );
+
 	gulp.task( 'js:vendor', vendorCommonDepends, function()
 	{
 		var excludeBower = [];
@@ -194,7 +223,9 @@ module.exports = function( config )
 			} );
 		}
 
-		var files = [];
+		var files = [
+			config.buildDir + '/tmp/rollup/vendor.js',
+		];
 		if ( bower.dependencies ) {
 
 			_.forEach( bower.dependencies, function( version, component )
@@ -232,7 +263,6 @@ module.exports = function( config )
 
 		if ( files.length ) {
 			return gulp.src( files )
-				.pipe( plugins.newer( config.buildDir + '/app/vendor.js' ) )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'vendor.js' ) )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
@@ -255,8 +285,13 @@ module.exports = function( config )
 
 		gulp.task( 'ts:' + section, function()
 		{
-			return rollupStream = gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
-				.pipe( plugins.rollup( rollupOptions ) )
+			var _rollupOptions = _.extend( {}, rollupOptions, {
+				external: Object.keys( config.rollup.vendor ),
+				globals: config.rollup.vendor,
+			} );
+
+			return gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
+				.pipe( plugins.rollup( _rollupOptions ) )
 				.pipe( plugins.rename( section + '.js' ) )
 				.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
 				;
@@ -321,17 +356,7 @@ module.exports = function( config )
 			// Pull in template partials if there are any.
 			stream.queue( gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ) );
 
-			// Now pull in the development file if we're running a development environment build.
-			if ( config.developmentEnv ) {
-				stream.queue( gulp.src( [ 'src/' + section + '/app-development.js' ], { base: 'src' } ) );
-			}
-			// We also pull in a development setting that imitates if production isn't specified explicitly.
-			else if ( !config.production ) {
-				stream.queue( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
-			}
-
 			var stream = stream.done()
-				.pipe( plugins.newer( config.buildDir + '/' + section + '/app.js' ) )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'app.js' ) );
 
@@ -447,8 +472,13 @@ module.exports = function( config )
 				}
 
 				if ( moduleDefinition.main ) {
+					var _rollupOptions = _.extend( {}, rollupOptions, {
+						external: Object.keys( config.rollup.vendor ),
+						globals: config.rollup.vendor,
+					} );
+
 					var rollupStream = gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
-						.pipe( plugins.rollup( rollupOptions ) );
+						.pipe( plugins.rollup( _rollupOptions ) );
 
 					stream = mergeStream( stream.done(), rollupStream );
 				}
@@ -458,7 +488,6 @@ module.exports = function( config )
 
 				// Call it with the arguments we've built up.
 				stream = stream
-					.pipe( plugins.newer( config.buildDir + '/app/modules/' + outputFilename ) )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 					.pipe( plugins.concat( outputFilename ) )
 					.pipe( injectModules( config ) )

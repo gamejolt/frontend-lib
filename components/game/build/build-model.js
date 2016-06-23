@@ -46,6 +46,15 @@ angular.module( 'gj.Game.Build' ).factory( 'Game_Build', function( Api, Model, G
 	Game_Build.EMULATOR_GBA = 'gba';
 	Game_Build.EMULATOR_GBC = 'gbc';
 	Game_Build.EMULATOR_GB = 'gb';
+	Game_Build.EMULATOR_NES = 'nes';
+	Game_Build.EMULATOR_VBOY = 'vb';
+	Game_Build.EMULATOR_GENESIS = 'md';
+	Game_Build.EMULATOR_SNES = 'snes';
+	Game_Build.EMULATOR_ZX = 'zx';
+	Game_Build.EMULATOR_MSX1 = 'msx1';
+	Game_Build.EMULATOR_MSX2 = 'msx2';
+	Game_Build.EMULATOR_ATARI2600 = 'atari2600';
+	Game_Build.EMULATOR_C64 = 'c64';
 
 	Game_Build.prototype.isBrowserBased = function()
 	{
