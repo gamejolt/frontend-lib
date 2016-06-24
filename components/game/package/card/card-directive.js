@@ -79,6 +79,15 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 	emulatorInfo[ Game_Build.EMULATOR_GB ] = gettextCatalog.getString( 'Game Boy' );
 	emulatorInfo[ Game_Build.EMULATOR_GBC ] = gettextCatalog.getString( 'Game Boy Color' );
 	emulatorInfo[ Game_Build.EMULATOR_GBA ] = gettextCatalog.getString( 'Game Boy Advance' );
+	emulatorInfo[ Game_Build.EMULATOR_NES ] = gettextCatalog.getString( 'NES' );
+	emulatorInfo[ Game_Build.EMULATOR_SNES ] = gettextCatalog.getString( 'SNES' );
+	emulatorInfo[ Game_Build.EMULATOR_VBOY ] = gettextCatalog.getString( 'Virtual Boy' );
+	emulatorInfo[ Game_Build.EMULATOR_GENESIS ] = gettextCatalog.getString( 'Genesis/Mega Drive' );
+	emulatorInfo[ Game_Build.EMULATOR_ATARI2600 ] = gettextCatalog.getString( 'Atari 2600' );
+	emulatorInfo[ Game_Build.EMULATOR_ZX ] = gettextCatalog.getString( 'ZX Spectrum' );
+	emulatorInfo[ Game_Build.EMULATOR_C64 ] = gettextCatalog.getString( 'Commodore 64' );
+	emulatorInfo[ Game_Build.EMULATOR_CPC ] = gettextCatalog.getString( 'Amstrad CPC' );
+	emulatorInfo[ Game_Build.EMULATOR_MSX ] = gettextCatalog.getString( 'MSX' );
 
 	function pluckOsSupport( build )
 	{

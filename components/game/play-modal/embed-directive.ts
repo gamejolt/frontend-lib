@@ -57,6 +57,10 @@ export class EmbedComponent implements AfterViewInit
 				this.embedWidth = 320 * 2;
 				this.embedHeight = 224 * 2;
 			}
+			else if ( this.build.emulator_type == gameBuild.EMULATOR_ATARI2600 ) {
+				this.embedWidth = 176 * 3;
+				this.embedHeight = 223 * 3;
+			}
 			else if ( this.build.emulator_type == gameBuild.EMULATOR_C64 ) {
 				this.embedWidth = 418 * 2;
 				this.embedHeight = 235 * 2;
@@ -65,9 +69,13 @@ export class EmbedComponent implements AfterViewInit
 				this.embedWidth = 352 * 2;
 				this.embedHeight = 296 * 2;
 			}
-			else if ( this.build.emulator_type == gameBuild.EMULATOR_ATARI2600 ) {
-				this.embedWidth = 176 * 3;
-				this.embedHeight = 223 * 3;
+			else if ( this.build.emulator_type == gameBuild.EMULATOR_CPC ) {
+				this.embedWidth = 384 * 2;
+				this.embedHeight = 272 * 2;
+			}
+			else if ( this.build.emulator_type == gameBuild.EMULATOR_MSX ) {
+				this.embedWidth = 272 * 2;
+				this.embedHeight = 233 * 2;
 			}
 		}
 		else {

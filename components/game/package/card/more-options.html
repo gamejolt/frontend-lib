@@ -14,7 +14,11 @@
 			<span ng-switch-when="downloadable" translate>
 				Download
 			</span>
-			<span ng-switch-when="rom" translate translate-params-platform="ctrl.emulatorInfo[ extraBuild.build.emulator_type ]" translate-comment="{{ platform }} will be the platform we are downloading for, such as Game Boy, NES, etc.">
+			<span ng-switch-when="rom"
+				translate
+				translate-params-platform="ctrl.emulatorInfo[ extraBuild.build.emulator_type ]"
+				translate-comment="{{ platform }} will be the platform we are downloading for, such as Game Boy, NES, etc."
+				>
 				Download {{ platform }} ROM
 			</span>
 			<span ng-switch-default translate>
