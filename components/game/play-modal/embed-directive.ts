@@ -1,4 +1,4 @@
-import { Component, Inject, Input, ViewChild, AfterViewInit } from 'ng-metadata/core';
+import { Component, Inject, Input, AfterViewInit } from 'ng-metadata/core';
 import { App } from './../../../../../app/app-service';
 import template from './embed.html';
 
