@@ -20,6 +20,9 @@ module.exports = function( config )
 
 	config.sections.push( 'app' );
 
+	config.buildSection = argv['section'] || null;
+	config.buildModule = argv['module'] || null;
+
 	config.buildBaseDir = process.env.BUILD_DIR || './';
 	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
 	config.libDir = 'src/lib/';

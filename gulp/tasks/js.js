@@ -188,7 +188,7 @@ module.exports = function( config )
 	 */
 	gulp.task( 'js:vendor:rollup', function()
 	{
-		if ( !config.rollup || !config.rollup.vendor ) {
+		if ( !config.rollup || !config.rollup.vendor || config.watching == 'watching' ) {
 			return;
 		}
 
@@ -206,6 +206,10 @@ module.exports = function( config )
 
 	gulp.task( 'js:vendor', vendorCommonDepends, function()
 	{
+		if ( config.watching == 'watching' ) {
+			return;
+		}
+
 		var excludeBower = [];
 
 		// Exclude bower files that are excluded in our config.
@@ -285,6 +289,10 @@ module.exports = function( config )
 
 		gulp.task( 'ts:' + section, function()
 		{
+			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+				return;
+			}
+
 			var _rollupOptions = _.extend( {}, rollupOptions, {
 				external: Object.keys( config.rollup.vendor ),
 				globals: config.rollup.vendor,
@@ -299,6 +307,10 @@ module.exports = function( config )
 
 		gulp.task( 'js:' + section, [ 'ts:' + section, 'html2js:' + section + ':partials' ], function()
 		{
+			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+				return;
+			}
+
 			// We don't include any app files that are being built into a separate module.
 			var excludeApp = [];
 			if ( config.modules ) {
@@ -402,6 +414,10 @@ module.exports = function( config )
 			// Create the gulp task to build this module.
 			gulp.task( 'js:module:' + outputFilename, function()
 			{
+				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
+					return;
+				}
+
 				var files = [];
 				if ( moduleDefinition.bower ) {
 					_.forEach( moduleDefinition.bower, function( component )

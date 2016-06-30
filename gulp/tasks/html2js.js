@@ -10,6 +10,10 @@ module.exports = function( config )
 	 */
 	gulp.task( 'html2js:datepicker', function()
 	{
+		if ( config.watching == 'watching' ) {
+			return;
+		}
+
 		return gulp.src( config.gjLibDir + 'components/datepicker/**/*.html' )
 			.pipe( plugins.newer( {
 				dest: config.buildDir + '/tmp/vendor-component-templates',
@@ -26,6 +30,10 @@ module.exports = function( config )
 
 	gulp.task( 'html2js:timepicker', function()
 	{
+		if ( config.watching == 'watching' ) {
+			return;
+		}
+
 		return gulp.src( config.gjLibDir + 'components/timepicker/**/*.html' )
 			.pipe( plugins.newer( {
 				dest: config.buildDir + '/tmp/vendor-component-templates',
@@ -42,6 +50,10 @@ module.exports = function( config )
 
 	gulp.task( 'html2js:tooltip', function()
 	{
+		if ( config.watching == 'watching' ) {
+			return;
+		}
+
 		return gulp.src( config.gjLibDir + 'components/tooltip/**/*.html' )
 			.pipe( plugins.newer( {
 				dest: config.buildDir + '/tmp/vendor-component-templates',
@@ -58,6 +70,10 @@ module.exports = function( config )
 
 	gulp.task( 'html2js:pagination', function()
 	{
+		if ( config.watching == 'watching' ) {
+			return;
+		}
+
 		return gulp.src( config.gjLibDir + 'components/pagination/{pagination,pager}.html' )
 			.pipe( plugins.newer( {
 				dest: config.buildDir + '/tmp/vendor-component-templates',
@@ -74,6 +90,10 @@ module.exports = function( config )
 
 	gulp.task( 'html2js:modal', function()
 	{
+		if ( config.watching == 'watching' ) {
+			return;
+		}
+
 		return gulp.src( config.gjLibDir + 'components/modal/**/*.html' )
 			.pipe( plugins.newer( {
 				dest: config.buildDir + '/tmp/vendor-component-templates',
@@ -95,6 +115,10 @@ module.exports = function( config )
 	{
 		gulp.task( 'html2js:' + section + ':partials', function()
 		{
+			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+				return;
+			}
+
 			return gulp.src( [ 'src/' + section + '/views/**/_*.html' ], { base: 'src' } )
 				.pipe( plugins.ngHtml2js( {
 					moduleName: 'App',
