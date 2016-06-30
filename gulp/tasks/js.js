@@ -411,8 +411,67 @@ module.exports = function( config )
 		// We loop through all of the modules we need to build and set up gulp tasks to build them.
 		_.forEach( config.modules, function( moduleDefinition, outputFilename )
 		{
+			gulp.task( 'ts:module:' + outputFilename, function()
+			{
+				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
+					return;
+				}
+
+				if ( !moduleDefinition.main ) {
+					return;
+				}
+
+				var vendorIds = Object.keys( config.rollup.vendor );
+				var _rollupOptions = _.extend( {}, rollupOptions, {
+					external: function( id )
+					{
+						var i;
+
+						if ( vendorIds.indexOf( id ) !== -1 ) {
+							return true;
+						}
+
+						if ( id[0] == '.' || id == 'typescript-helpers' ) {
+							return false;
+						}
+
+						if ( id.search( /node_modules/i ) !== -1 ) {
+							return false;
+						}
+
+						if ( moduleDefinition.components ) {
+							for ( i in moduleDefinition.components ) {
+								if ( id.search( new RegExp( 'src\/app\/components\/' + moduleDefinition.components[ i ] + '\/.*' ) ) !== -1 ) {
+									return false;
+								}
+							}
+						}
+
+						if ( moduleDefinition.views ) {
+							for ( i in moduleDefinition.views ) {
+								if ( id.search( new RegExp( 'src\/app\/views\/' + moduleDefinition.views[ i ] + '\/.*' ) ) !== -1 ) {
+									return false;
+								}
+							}
+						}
+
+						return true;
+					},
+					globals: config.rollup.vendor,
+				} );
+
+				var rollupStream = gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
+					.pipe( plugins.rollup( _rollupOptions ) );
+
+				return gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
+					.pipe( plugins.rollup( _rollupOptions ) )
+					.pipe( plugins.rename( outputFilename ) )
+					.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+					;
+			} );
+
 			// Create the gulp task to build this module.
-			gulp.task( 'js:module:' + outputFilename, function()
+			gulp.task( 'js:module:' + outputFilename, [ 'ts:module:' + outputFilename ], function()
 			{
 				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
 					return;
@@ -453,6 +512,9 @@ module.exports = function( config )
 
 				var stream = new streamqueue( { objectMode: true } );
 
+				// Gotta pull in TS/rollup file as the first thing.
+				stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + outputFilename ], { base: 'src' } ) );
+
 				if ( files.length ) {
 					stream.queue( gulp.src( files, { base: 'src' } ) );
 				}
@@ -487,23 +549,8 @@ module.exports = function( config )
 					} );
 				}
 
-				if ( moduleDefinition.main ) {
-					var _rollupOptions = _.extend( {}, rollupOptions, {
-						external: Object.keys( config.rollup.vendor ),
-						globals: config.rollup.vendor,
-					} );
-
-					var rollupStream = gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
-						.pipe( plugins.rollup( _rollupOptions ) );
-
-					stream = mergeStream( stream.done(), rollupStream );
-				}
-				else {
-					stream = stream.done();
-				}
-
 				// Call it with the arguments we've built up.
-				stream = stream
+				stream = stream.done()
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 					.pipe( plugins.concat( outputFilename ) )
 					.pipe( injectModules( config ) )
