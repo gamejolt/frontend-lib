@@ -31,6 +31,11 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 			this.is_published = true;
 		}
 
+		this._is_finished = this.development_status == Game.DEVELOPMENT_STATUS_FINISHED;
+		this._is_wip = this.development_status == Game.DEVELOPMENT_STATUS_WIP;
+		this._is_devlog = this.development_status == Game.DEVELOPMENT_STATUS_DEVLOG;
+		this._is_canceled = this.development_status == Game.DEVELOPMENT_STATUS_CANCELED;
+
 		this._has_packages = false;
 		if ( this.compatibility ) {
 			var keys = Object.keys( this.compatibility );
@@ -72,9 +77,6 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 		}
 	}
 
-	Game.TYPE_GAME = 'game';
-	Game.TYPE_DEVLOG = 'devlog';
-
 	Game.STATUS_HIDDEN = 0;
 	Game.STATUS_VISIBLE = 1;
 	Game.STATUS_REMOVED = 2;
@@ -82,6 +84,7 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 	Game.DEVELOPMENT_STATUS_FINISHED = 1;
 	Game.DEVELOPMENT_STATUS_WIP = 2;
 	Game.DEVELOPMENT_STATUS_CANCELED = 3;
+	Game.DEVELOPMENT_STATUS_DEVLOG = 4;
 
 	Game.prototype.getSref = function( page, includeParams )
 	{
@@ -91,7 +94,7 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 			sref = 'dashboard.developer.games.manage.game.overview';
 		}
 		else if ( page == 'edit' ) {
-			sref = 'dashboard.developer.games.manage.game.edit';
+			sref = 'dashboard.developer.games.manage.game.details';
 		}
 		else {
 			sref = 'discover.games.view.overview';
