@@ -19,14 +19,12 @@ export class Fireside_Post extends Model
 	hash: string;
 	title: string;
 	lead: string;
-	// header: gj.MediaItem;
 	header: any;
 	status: string;
 	added_on: number;
 	updated_on: number;
 	published_on: number;
 	like_count: number;
-	// user: gj.User;
 	user: any;
 	game_id: number;
 	slug: string;
