@@ -1,31 +1,35 @@
 <div class="form-markdown-editor-media-items">
 
-	<div class="form-markdown-editor-media-items-list scrollable scrollable-x overlay-scrollbar">
-		<div class="col-sm-5 form-markdown-editor-media-item" ng-repeat="item in mediaItems track by item.id">
-			<div class="form-markdown-editor-media-item-wrap">
-				<div class="controls">
-					<a class="btn btn-outline btn-sm btn-sparse btn-overlay-variant"
-						gj-tooltip="Copy Markdown Embed"
-						ng-click="copyLink( item )"
-						>
-						<span class="jolticon jolticon-link"></span>
-					</a>
+	<div class="row media-item-list scrollable scrollable-x overlay-scrollbar">
+		<div class="col col-sm-5"
+			ng-repeat="item in mediaItems track by item.id"
+			>
+
+			<div class="media-item-list-item">
+				<div class="media-item-list-item-inner">
+					<div class="media-item-list-item-controls">
+
+						<a class="btn btn-sparse"
+							gj-tooltip="Copy Markdown Embed"
+							ng-click="copyLink( item )"
+							>
+							<span class="jolticon jolticon-link"></span>
+						</a>
+
+					</div>
+
+					<span class="media-item-list-item-img" ng-style="{ 'background-image': 'url(\'' + item.img_url + '\')' }"></span>
 				</div>
-				<img class="img-responsive" ng-src="{{ item.img_url }}" alt="">
 			</div>
+
 		</div>
 	</div>
-
-	<hr ng-if="mediaItems.length">
+	<br>
 
 	<div oc-lazy-load="{ files: [ '/app/modules/upload.js' ] }">
 		<form gj-form="formModel" name="markdownEditorMediaItemForm">
 
 			<form-group name="image" hide-label="true">
-
-				<p class="help-block">
-					Upload a PNG, JPG, or GIF image. <br>
-				</p>
 
 				<gj-form-upload-control
 					name="image"

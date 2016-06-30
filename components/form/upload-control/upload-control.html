@@ -2,9 +2,18 @@
 	ng-file-drop-available="dropSupported = true"
 	ng-class="{ 'form-upload-control-drop-target': dropSupported }"
 	ng-file-drag-over-class="form-upload-control-drop-active"
-	ng-file-drop="onFileSelect( $files )">
+	ng-file-drop="onFileSelect( $files )"
+	>
 
-	<input type="file" ng-file-select="onFileSelect( $files )" ng-show="!ngModel.$viewValue.length" accept="{{ accept }}">
+	<div ng-show="!ngModel.$viewValue.length">
+		<div class="small">
+			<a class="link-muted" ng-click="showFileSelect()">
+				Upload a PNG, JPG, or GIF image.
+			</a>
+		</div>
+
+		<input type="file" ng-file-select="onFileSelect( $files )" ng-hide="true" accept="{{ accept }}">
+	</div>
 
 	<div class="form-upload-control-files" ng-show="ngModel.$viewValue.length && !progress">
 		<ul class="list-unstyled">

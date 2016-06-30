@@ -19,6 +19,7 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 			scope.progress = false;
 
 			ngModel.$isEmpty = $isEmpty;
+			scope.showFileSelect = showFileSelect;
 			scope.onFileSelect = onFileSelect;
 			scope.clearFiles = clearFiles;
 
@@ -77,6 +78,11 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 						scope.progress = false;
 					} );
 				}
+			}
+
+			function showFileSelect()
+			{
+				element[0].querySelector( 'input[type=file]' ).click();
 			}
 
 			function onFileSelect( files )

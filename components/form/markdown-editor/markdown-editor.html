@@ -1,5 +1,9 @@
 <div class="form-markdown-editor"
-	ng-class="{ 'is-editing': ctrl.currentTab == 'edit', 'is-previewing': ctrl.currentTab == 'preview' }"
+	ng-class="{
+		'is-editing': ctrl.currentTab == 'edit',
+		'is-previewing': ctrl.currentTab == 'preview',
+		'has-controls': true,
+	}"
 	>
 
 	<nav class="platform-list inline">
@@ -45,7 +49,7 @@
 		rows="1"
 		></textarea>
 
-	<div class="well fill-lightest" ng-show="ctrl.currentTab == 'edit'">
+	<div ng-show="ctrl.currentTab == 'edit'">
 		<form-markdown-editor-media-items
 			type="fireside-post-image"
 			parent-id="5556"
