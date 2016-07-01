@@ -9,6 +9,8 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			markdownPreviewUrl: '@',
 			markdownMode: '@?',
 			isPreviewDisabled: '=?disablePreview',
+			showMediaItems: '<?',
+			mediaItemType: '@?',
 		},
 		templateUrl: '/lib/gj-lib-client/components/form/markdown-editor/markdown-editor.html',
 		bindToController: true,
@@ -51,6 +53,10 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			var formGroup = controllers[2] || undefined;
 
 			_this.formGroup = formGroup;
+
+			if ( _this.showMediaItems && scope.$parent[ gjForm.formModel ].id ) {
+				_this.mediaItemParentId = scope.$parent[ gjForm.formModel ].id;
+			}
 
 			/**
 			 * When the tab is changed between Write and Preview.

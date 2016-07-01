@@ -6,13 +6,18 @@
 	>
 
 	<div ng-show="!ngModel.$viewValue.length">
-		<div class="small">
+
+		<!--
+			If we have a label, then we show the upload "button" as a link instead.
+			We hide the button and use it to simulate a click on it.
+		-->
+		<div class="small" ng-if="!!uploadLinkLabel">
 			<a class="link-muted" ng-click="showFileSelect()">
-				Upload a PNG, JPG, or GIF image.
+				{{ uploadLinkLabel }}
 			</a>
 		</div>
 
-		<input type="file" ng-file-select="onFileSelect( $files )" ng-hide="true" accept="{{ accept }}">
+		<input type="file" ng-file-select="onFileSelect( $files )" ng-hide="!!uploadLinkLabel" accept="{{ accept }}">
 	</div>
 
 	<div class="form-upload-control-files" ng-show="ngModel.$viewValue.length && !progress">
@@ -31,9 +36,8 @@
 
 	<div class="progress" ng-if="progress !== false">
 		<div class="progress-bar" role="progressbar" ng-attr-aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: progress + '%' }">
-			<!-- TODO Remove this when upload queue system is in place -->
 			<span ng-if="progress < 99">
-				{{progress}}%
+				{{ progress }}%
 			</span>
 			<span ng-if="progress >= 99">
 				Processing...
@@ -41,7 +45,6 @@
 		</div>
 	</div>
 
-	<!-- TODO Remove this when upload queue system is in place -->
 	<div ng-if="progress >= 99">
 		<br>
 		<div class="alert alert-info">

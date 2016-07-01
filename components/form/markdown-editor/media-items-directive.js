@@ -5,8 +5,8 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaIt
 		resetOnSubmit: true,
 	} );
 
-	form.scope.type = '@type';
-	form.scope.parentId = '=parentId';
+	form.scope.type = '@';
+	form.scope.parentId = '<';
 
 	form.onInit = function( scope )
 	{

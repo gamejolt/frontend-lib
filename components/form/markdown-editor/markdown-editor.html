@@ -2,7 +2,7 @@
 	ng-class="{
 		'is-editing': ctrl.currentTab == 'edit',
 		'is-previewing': ctrl.currentTab == 'preview',
-		'has-controls': true,
+		'has-controls': ctrl.showMediaItems,
 	}"
 	>
 
@@ -49,10 +49,10 @@
 		rows="1"
 		></textarea>
 
-	<div ng-show="ctrl.currentTab == 'edit'">
+	<div ng-if="ctrl.showMediaItems" ng-show="ctrl.currentTab == 'edit'">
 		<form-markdown-editor-media-items
-			type="fireside-post-image"
-			parent-id="5556"
+			type="{{ ctrl.mediaItemType }}"
+			parent-id="ctrl.mediaItemParentId"
 			>
 		</form-markdown-editor-media-items>
 	</div>

@@ -51,6 +51,11 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 				}
 			} );
 
+			attrs.$observe( 'uploadLinkLabel', function( val )
+			{
+				scope.uploadLinkLabel = val;
+			} );
+
 			function $isEmpty( value )
 			{
 				return angular.isUndefined( value )
