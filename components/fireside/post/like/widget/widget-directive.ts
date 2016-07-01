@@ -34,7 +34,6 @@ export class WidgetComponent
 			} );
 		}
 		else {
-			console.log( this.post.user_like, Object.getOwnPropertyNames( this.post.user_like ) );
 			this.post.user_like.$remove().then( __ =>
 			{
 				_.remove( this.post.likes, { id: this.post.user_like.id } );

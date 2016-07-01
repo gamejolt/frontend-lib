@@ -17,15 +17,10 @@ angular.module( 'gj.Game.KeyPool' ).factory( 'Game_KeyPool', function( Model, Us
 
 	Game_KeyPool.prototype.$import = function()
 	{
-		console.log( this );
 		return Api.sendRequest( '/web/dash/developer/games/key-pools/import/' + this.game_id + '/' + this.game_package_id,
 		{
 			data: this.data,
 			provider: this.provider,
-		} )
-		.then( function( payload )
-		{
-			console.log( payload );
 		} );
 	};
 

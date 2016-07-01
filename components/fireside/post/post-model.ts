@@ -47,7 +47,7 @@ export class Fireside_Post extends Model
 	static MediaItem: any;
 
 	static TYPE_TEXT = 'text';
-	static TYPE_IMAGE = 'image';
+	static TYPE_MEDIA = 'media';
 
 	static STATUS_DRAFT = 'draft';
 	static STATUS_ACTIVE = 'active';
