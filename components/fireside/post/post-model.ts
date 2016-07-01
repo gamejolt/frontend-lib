@@ -2,14 +2,17 @@ import { Injectable } from 'ng-metadata/core';
 import { Model } from './../../model/model-service';
 import { Fireside_Post_Tag } from './tag/tag-model';
 import { Fireside_Post_Like } from './like/like-model';
+import { ModalConfirm } from './../../modal/confirm/confirm-service';
 
-export function Fireside_PostFactory( Environment, Model, Fireside_Post_Tag, Fireside_Post_Like, MediaItem )
+export function Fireside_PostFactory( Environment, Model, Fireside_Post_Tag, Fireside_Post_Like, MediaItem, ModalConfirm, gettextCatalog )
 {
 	return Model.create( Fireside_Post, {
 		Environment,
 		Fireside_Post_Tag,
 		Fireside_Post_Like,
 		MediaItem,
+		ModalConfirm,
+		gettextCatalog,
 	} );
 }
 
@@ -45,6 +48,8 @@ export class Fireside_Post extends Model
 	static Fireside_Post_Tag: typeof Fireside_Post_Tag;
 	static Fireside_Post_Like: typeof Fireside_Post_Like;
 	static MediaItem: any;
+	static ModalConfirm: ModalConfirm;
+	static gettextCatalog: ng.gettext.gettextCatalog;
 
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';
@@ -83,12 +88,12 @@ export class Fireside_Post extends Model
 
 	$save()
 	{
-		if ( Fireside_Post.Environment.isWttf ) {
+		if ( this.game_id ) {
 			if ( !this.id ) {
-				return this.$_save( '/web/dash/developer/games/devlog/save/' + this.game_id, 'firesidePost', { file: this.file } );
+				return this.$_save( `/web/dash/developer/games/devlog/save/${this.game_id}`, 'firesidePost', { file: this.file } );
 			}
 			else {
-				return this.$_save( '/web/dash/developer/games/devlog/save/' + this.game_id + '/' + this.id, 'firesidePost', { file: this.file } );
+				return this.$_save( `/web/dash/developer/games/devlog/save/${this.game_id}/${this.id}`, 'firesidePost', { file: this.file } );
 			}
 		}
 		else {
@@ -96,18 +101,36 @@ export class Fireside_Post extends Model
 				return this.$_save( '/fireside/dash/posts/add', 'firesidePost' );
 			}
 			else {
-				return this.$_save( '/fireside/dash/posts/save/' + this.id, 'firesidePost' );
+				return this.$_save( `/fireside/dash/posts/save/${this.id}`, 'firesidePost' );
 			}
 		}
 	}
 
 	$clearHeader()
 	{
-		return this.$_save( '/fireside/dash/posts/clear-header/' + this.id, 'firesidePost' );
+		return this.$_save( `/fireside/dash/posts/clear-header/${this.id}`, 'firesidePost' );
+	}
+
+	remove()
+	{
+		return Fireside_Post.ModalConfirm.show(
+			Fireside_Post.gettextCatalog.getString( 'Are you sure you want to remove this post?' ),
+			undefined,
+			'yes'
+		)
+		.then( _ =>
+		{
+			return this.$remove();
+		} );
 	}
 
 	$remove()
 	{
-		return this.$_remove( '/fireside/dash/posts/remove/' + this.id );
+		if ( this.game_id ) {
+			return this.$_remove( `/web/dash/developer/games/devlog/remove/${this.game_id}/${this.id}` );
+		}
+		else {
+			return this.$_remove( `/fireside/dash/posts/remove/${this.id}` );
+		}
 	}
 }
