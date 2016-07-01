@@ -28,7 +28,7 @@ export class WidgetComponent
 
 			newLike.$save().then( __ =>
 			{
-				this.post.likes.unshift( newLike );
+				// this.post.likes.unshift( newLike );
 				this.post.user_like = newLike;
 				++this.post.like_count;
 			} );
@@ -36,7 +36,7 @@ export class WidgetComponent
 		else {
 			this.post.user_like.$remove().then( __ =>
 			{
-				_.remove( this.post.likes, { id: this.post.user_like.id } );
+				// _.remove( this.post.likes, { id: this.post.user_like.id } );
 				this.post.user_like = null;
 				--this.post.like_count;
 			} );

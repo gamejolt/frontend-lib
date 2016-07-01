@@ -1,22 +1,23 @@
 <div class="fireside-post-like-widget"
 	ng-class="{ 'fireside-post-like-widget-no-avatars': $ctrl.noAvatars }"
 	>
-	<a class="btn btn-outline btn-big"
+	<a class="btn"
 		ng-if="$ctrl.app.user && $ctrl.app.user.id != $ctrl.post.user.id"
 		ng-click="$ctrl.toggleLike()"
+		ng-class="{ 'btn-outline': !$ctrl.post.user_like, 'btn-success-outline active': $ctrl.post.user_like }"
 		>
 		<span class="btn-badge" ng-if="$ctrl.post.like_count">
 			{{ $ctrl.post.like_count | number }}
 		</span>
 
-		<span class="jolticon jolticon-heart" ng-show="!$ctrl.post.user_like"></span>
-		<span ng-show="!$ctrl.post.user_like" translate>Like This Post</span>
-
-		<span class="jolticon jolticon-remove" ng-show="$ctrl.post.user_like"></span>
-		<span ng-show="$ctrl.post.user_like" translate>Remove Like</span>
+		<span class="jolticon jolticon-heart"></span>
+		<span ng-switch="!!$ctrl.post.user_like">
+			<span ng-switch-when="false" translate>Like This Post</span>
+			<span ng-switch-when="true" translate>Liked!</span>
+		</span>
 	</a>
 
-	<div class="fireside-post-like-widget-likes avatar-circle"
+	<!--<div class="fireside-post-like-widget-likes avatar-circle"
 		ng-if="!$ctrl.noAvatars"
 		ng-class="{ 'no-likes': !$ctrl.post.likes.length }"
 		>
@@ -35,5 +36,5 @@
 			more
 		</div>
 
-	</div>
+	</div>-->
 </div>

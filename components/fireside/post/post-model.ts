@@ -28,6 +28,7 @@ export class Fireside_Post extends Model
 	updated_on: number;
 	published_on: number;
 	like_count: number;
+	comment_count: number;
 	user: any;
 	game_id: number;
 	slug: string;
@@ -35,8 +36,8 @@ export class Fireside_Post extends Model
 	content: string;
 	compiled_content: string;
 
-	tags: Fireside_Post_Tag[];
-	likes: Fireside_Post_Like[];
+	tags: Fireside_Post_Tag[] = [];
+	// likes: Fireside_Post_Like[];
 	user_like: Fireside_Post_Like;
 
 	url: string;
@@ -70,9 +71,9 @@ export class Fireside_Post extends Model
 			this.tags = Fireside_Post.Fireside_Post_Tag.populate( data.tags );
 		}
 
-		if ( data && data.likes ) {
-			this.likes = Fireside_Post.Fireside_Post_Like.populate( data.tags );
-		}
+		// if ( data && data.likes ) {
+		// 	this.likes = Fireside_Post.Fireside_Post_Like.populate( data.tags );
+		// }
 
 		if ( data && data.user_like ) {
 			this.user_like = new Fireside_Post.Fireside_Post_Like( data.user_like );
