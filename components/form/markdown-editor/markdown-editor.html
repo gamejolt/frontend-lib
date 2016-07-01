@@ -9,12 +9,18 @@
 	<nav class="platform-list inline">
 		<ul ng-if="!ctrl.isPreviewDisabled">
 			<li>
-				<a ng-class="{ active: ctrl.currentTab == 'edit' }" ng-click="ctrl.currentTab = 'edit'; ctrl.onTabChanged()">
+				<a ng-class="{ active: ctrl.currentTab == 'edit' }"
+					ng-click="ctrl.currentTab = 'edit'; ctrl.onTabChanged()"
+					translate
+					>
 					Write
 				</a>
 			</li>
 			<li ng-if="ctrl.hasContent()">
-				<a ng-class="{ active: ctrl.currentTab == 'preview' }" ng-click="ctrl.currentTab = 'preview'; ctrl.onTabChanged()">
+				<a ng-class="{ active: ctrl.currentTab == 'preview' }"
+					ng-click="ctrl.currentTab = 'preview'; ctrl.onTabChanged()"
+					translate
+					>
 					Preview
 				</a>
 			</li>
@@ -24,14 +30,14 @@
 				<a href="{{ ::Environment.helpBaseUrl }}/{{ ::ctrl.markdownHelpUrl }}" target="_blank">
 					<span class="hidden-xs jolticon jolticon-markdown"></span>
 					<span class="hidden-sm hidden-md hidden-lg jolticon jolticon-markdown big"></span>
-					<span class="hidden-xs">Use Markdown to Edit</span>
+					<span class="hidden-xs" translate>Use Markdown to Edit</span>
 				</a>
 			</span>
 			<span ng-if="::ctrl.shouldShowWidgetHelp" class="form-markdown-editor-helplink">
 				<a ng-href="{{ ::Environment.helpBaseUrl }}/widgets-{{ ::ctrl.markdownMode }}" target="_blank">
 					<span class="hidden-xs jolticon jolticon-plug"></span>
 					<span class="hidden-sm hidden-md hidden-lg jolticon jolticon-plug big"></span>
-					<span class="hidden-xs">Available Widgets</span>
+					<span class="hidden-xs" translate>Available Widgets</span>
 				</a>
 			</span>
 		</div>

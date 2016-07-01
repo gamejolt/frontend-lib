@@ -27,7 +27,7 @@
 				<span class="form-upload-control-file-name">{{file.name}}</span>
 				<a class="i-button" ng-class="{ 'block big': Screen.isXs }" ng-click="clearFiles()">
 					<span class="jolticon jolticon-remove"></span>
-					Clear File
+					<span translate>Clear File</span>
 				</a>
 			</li>
 
@@ -39,7 +39,7 @@
 			<span ng-if="progress < 99">
 				{{ progress }}%
 			</span>
-			<span ng-if="progress >= 99">
+			<span ng-if="progress >= 99" translate>
 				Processing...
 			</span>
 		</div>
@@ -48,7 +48,7 @@
 	<div ng-if="progress >= 99">
 		<br>
 		<div class="alert alert-info">
-			<p>
+			<p translate>
 				Upload complete! Please wait while we process your file. This may take a few minutes, so don't close or refresh the page.
 			</p>
 		</div>
