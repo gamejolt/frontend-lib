@@ -17,11 +17,12 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 			scope.Screen = Screen;
 			scope.ngModel = ngModel;
 			scope.progress = false;
+			scope.multiple = angular.isDefined( attrs.multiple );
 
 			ngModel.$isEmpty = $isEmpty;
 			scope.showFileSelect = showFileSelect;
 			scope.onFileSelect = onFileSelect;
-			scope.clearFiles = clearFiles;
+			scope.clearFile = clearFile;
 
 			setupAcceptValidator();
 			setupFilesizeValidator();
@@ -30,7 +31,8 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 			// Make sure this control/model is completely reset on control load.
 			// This makes sure to remove any files that may have been set on the model on a save,
 			// but now we want to clear it all out completely for an edit form.
-			scope.clearFiles();
+			setDimensionsResolver( [] );
+			ngModel.$setViewValue( undefined );
 
 			// When an upload handler is set on the form state, we want to attach
 			// to it so we can show the progress of the upload.
@@ -90,7 +92,7 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 				element[0].querySelector( 'input[type=file]' ).click();
 			}
 
-			function onFileSelect( files )
+			function setDimensionsResolver( files )
 			{
 				// Any time they select new files and have geometry related validators, we want to set a new dimensions resolver.
 				// This will get the new dimensions for the files passed in so that we can validate against them.
@@ -106,15 +108,27 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 				else {
 					dimensionsResolver = null;
 				}
+			}
 
+			function onFileSelect( files )
+			{
+				setDimensionsResolver( files );
 				ngModel.$setViewValue( files );
 			}
 
-			function clearFiles()
+			function clearFile( index )
 			{
-				// If no files, then just clear the resolver.
-				dimensionsResolver = null;
-				ngModel.$setViewValue( undefined );
+				var files = ngModel.$viewValue;
+				files.splice( index, 1 );
+
+				setDimensionsResolver( files );
+
+				if ( !ngModel.$isEmpty( files ) ) {
+					ngModel.$setViewValue( files );
+				}
+				else {
+					ngModel.$setViewValue( undefined );
+				}
 			}
 
 			function setupAcceptValidator()

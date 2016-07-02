@@ -17,15 +17,28 @@
 			</a>
 		</div>
 
-		<input type="file" ng-file-select="onFileSelect( $files )" ng-hide="!!uploadLinkLabel" accept="{{ accept }}">
+		<input type="file"
+			ng-if="!multiple"
+			ng-file-select="onFileSelect( $files )"
+			ng-hide="!!uploadLinkLabel"
+			accept="{{ accept }}"
+			>
+
+		<input type="file"
+			ng-if="multiple"
+			ng-file-select="onFileSelect( $files )"
+			ng-hide="!!uploadLinkLabel"
+			accept="{{ accept }}"
+			multiple
+			>
 	</div>
 
 	<div class="form-upload-control-files" ng-show="ngModel.$viewValue.length && !progress">
 		<ul class="list-unstyled">
 
 			<li ng-repeat="file in ngModel.$viewValue">
-				<span class="form-upload-control-file-name">{{file.name}}</span>
-				<a class="i-button" ng-class="{ 'block big': Screen.isXs }" ng-click="clearFiles()">
+				<span class="form-upload-control-file-name">{{ file.name }}</span>
+				<a class="btn btn-danger-outline btn-sm" ng-class="{ 'block big': Screen.isXs }" ng-click="clearFile( $index )">
 					<span class="jolticon jolticon-remove"></span>
 					<span translate>Clear File</span>
 				</a>
@@ -35,7 +48,13 @@
 	</div>
 
 	<div class="progress" ng-if="progress !== false">
-		<div class="progress-bar" role="progressbar" ng-attr-aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: progress + '%' }">
+		<div class="progress-bar"
+			role="progressbar"
+			ng-attr-aria-valuenow="{{ progress }}"
+			aria-valuemin="0"
+			aria-valuemax="100"
+			ng-style="{ width: progress + '%' }"
+			>
 			<span ng-if="progress < 99">
 				{{ progress }}%
 			</span>

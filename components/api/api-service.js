@@ -91,7 +91,13 @@ angular.module( 'gj.Api' ).service( 'Api', function( $window, $http, $injector, 
 				options.file = _.flatten( _.values( options.file ) );
 			}
 			else {
-				options.fileFormDataName = 'file';
+				// Multi file upload in same form control.
+				if ( options.file.length > 1 ) {
+					options.fileFormDataName = 'file[]';
+				}
+				else {
+					options.fileFormDataName = 'file';
+				}
 			}
 
 			var requestPromise = $upload.upload( {
