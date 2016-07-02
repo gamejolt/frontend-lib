@@ -117,6 +117,15 @@ export class Fireside_Post extends Model
 		return this.$_save( `/fireside/dash/posts/clear-header/${this.id}`, 'firesidePost' );
 	}
 
+	$publish()
+	{
+		if ( this.game ) {
+			return this.$_save( `/web/dash/developer/games/devlog/publish/${this.game.id}/${this.id}`, 'firesidePost' );
+		}
+
+		throw new Error( 'Must be attached to a game to publish.' );
+	}
+
 	remove()
 	{
 		return Fireside_Post.ModalConfirm.show(
