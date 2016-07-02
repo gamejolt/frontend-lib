@@ -18,13 +18,13 @@ export class Model
 	static Api: any;
 
 	// We need to create some methods dynamically on the model.
-	static populate: ( rows: any[] ) => Model[];
+	static populate: ( rows: any[] ) => any[];
 	assign: ( other: any ) => void;
 
 	static create( self: any, injections?: any )
 	{
 		// These need to be created dynamically for each model type.
-		self.populate = function( rows: any[] ): Model[]
+		self.populate = function( rows: any[] ): any[]
 		{
 			const models = [];
 			if ( rows && angular.isArray( rows ) && rows.length ) {
