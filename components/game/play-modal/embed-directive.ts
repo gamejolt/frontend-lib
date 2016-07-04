@@ -54,7 +54,7 @@ export class EmbedComponent implements AfterViewInit
 				this.embedHeight = 224 * 2;
 			}
 			else if ( this.build.emulator_type == gameBuild.EMULATOR_SNES ) {
-				this.embedWidth = 320 * 2;
+				this.embedWidth = 256 * 2;
 				this.embedHeight = 224 * 2;
 			}
 			else if ( this.build.emulator_type == gameBuild.EMULATOR_ATARI2600 ) {
