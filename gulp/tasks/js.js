@@ -11,7 +11,7 @@ var rollupTypescript = require( 'rollup-plugin-typescript' );
 var rollupResolve = require( 'rollup-plugin-node-resolve' );
 var rollupString = require( 'rollup-plugin-string' );
 var rollupReplace = require( 'rollup-plugin-replace' );
-// var rollupCommonJs = require( 'rollup-plugin-commonjs' );
+var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
 
@@ -33,6 +33,14 @@ module.exports = function( config )
 			rollupString( {
 				include: '**/*.html',
 			} ),
+			{
+				// Gotta convert `import something = require( 'something' )` into const something = require( 'something' )
+				// TS with no module target strips it out if we don't change.
+				transform: function( code, id )
+				{
+					return code.replace( /import ([^ ]+).*?=.*?require/g, 'const $1 = require' );
+				}
+			},
 			rollupTypescript( {
 				typescript: require( 'typescript' ),
 			} ),
@@ -48,11 +56,12 @@ module.exports = function( config )
 				jsnext: true,
 				main: true,
 			} ),
-			// rollupCommonJs( {
-			// 	include: [
-			// 		'node_modules/rxjs-es/node_modules/symbol-observable/**',
-			// 	],
-			// } ),
+			rollupCommonJs( {
+				include: [
+					'node_modules/ua-parser-js/**',
+					// 'node_modules/rxjs-es/node_modules/symbol-observable/**',
+				],
+			} ),
 		],
 	};
 
