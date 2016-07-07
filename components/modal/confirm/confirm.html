@@ -3,12 +3,12 @@
 	<p>{{ ::$ctrl.options.message }}</p>
 </div>
 <div class="modal-footer">
-	<button class="i-button" ng-click="$ctrl.ok()" ng-switch="::$ctrl.options.buttonType">
+	<button class="btn btn-success-outline" ng-click="$ctrl.ok()" ng-switch="::$ctrl.options.buttonType">
 		<span class="jolticon jolticon-check"></span>
 		<span ng-switch-when="ok" translate>OK</span>
 		<span ng-switch-when="yes" translate>Yes</span>
 	</button>
-	<button class="i-button warning" ng-click="$ctrl.cancel()" ng-switch="::$ctrl.options.buttonType">
+	<button class="btn btn-danger-outline" ng-click="$ctrl.cancel()" ng-switch="::$ctrl.options.buttonType">
 		<span class="jolticon jolticon-remove"></span>
 		<span ng-switch-when="ok" translate>Cancel</span>
 		<span ng-switch-when="yes" translate>No</span>
