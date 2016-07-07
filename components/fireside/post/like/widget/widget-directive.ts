@@ -42,14 +42,14 @@ export class WidgetComponent
 				fireside_post_id: this.post.id
 			} );
 
-			newLike.$save().then( __ =>
+			newLike.$save().then( () =>
 			{
 				this.post.user_like = newLike;
 				++this.post.like_count;
 			} );
 		}
 		else {
-			this.post.user_like.$remove().then( __ =>
+			this.post.user_like.$remove().then( () =>
 			{
 				this.post.user_like = null;
 				--this.post.like_count;

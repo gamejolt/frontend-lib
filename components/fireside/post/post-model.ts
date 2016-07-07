@@ -133,7 +133,7 @@ export class Fireside_Post extends Model
 			undefined,
 			'yes'
 		)
-		.then( _ =>
+		.then( () =>
 		{
 			return this.$remove();
 		} );

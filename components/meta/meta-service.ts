@@ -25,7 +25,7 @@ export class Meta extends MetaContainer
 
 		this.clear();
 
-		$rootScope.$on( '$stateChangeSuccess', _ =>
+		$rootScope.$on( '$stateChangeSuccess', () =>
 		{
 			this.clear();
 		} );
