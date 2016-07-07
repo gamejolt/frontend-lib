@@ -1,18 +1,11 @@
-<div class="editable-accordion-item"
+<gj-card class="editable-accordion-item"
 	ng-click="item.toggleVisible()"
-	ng-class="{ 'not-expandable': item.notExpandable, 'has-drag-handle' : item.shouldShowHandle }"
+	is-expandable="!item.notExpandable"
+	is-draggable="item.shouldShowHandle"
+	is-expanded="accordion.activeItem == item.id"
 	gj-scroll-when="accordion.activeItem == item.id"
 	>
 
-	<div ng-if="item.shouldShowHandle" class="drag-handle" ui-tree-handle>
-		<span class="jolticon jolticon-arrows-v"></span>
-	</div>
+	<div ng-transclude></div>
 
-	<div class="chevron">
-		<span class="jolticon jolticon-chevron-right" ng-show="accordion.activeItem != item.id"></span>
-		<span class="jolticon jolticon-chevron-down" ng-show="accordion.activeItem == item.id"></span>
-	</div>
-
-	<div class="editable-accordion-item-heading" ng-transclude></div>
-
-</div>
+</gj-card>
