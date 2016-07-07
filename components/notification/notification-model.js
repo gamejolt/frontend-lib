@@ -7,18 +7,18 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 			angular.extend( this, data );
 		}
 
-		if ( this.subject == 'User' ) {
-			this.subject_model = new ($injector.get( 'User' ))( data.subject_model );
+		if ( this.from_resource == 'User' ) {
+			this.from_model = new ($injector.get( 'User' ))( data.from_resource_model );
 		}
 
-		if ( this.object == 'Game' ) {
-			this.object_model = new ($injector.get( 'Game' ))( data.object_model );
+		if ( this.to_resource == 'Game' ) {
+			this.to_model = new ($injector.get( 'Game' ))( data.to_resource_model );
 		}
-		else if ( this.object == 'User' ) {
-			this.object_model = new ($injector.get( 'User' ))( data.object_model );
+		else if ( this.to_resource == 'User' ) {
+			this.to_model = new ($injector.get( 'User' ))( data.to_resource_model );
 		}
-		else if ( this.object == 'Fireside_Post' ) {
-			this.object_model = new ($injector.get( 'Fireside_Post' ))( data.object_model );
+		else if ( this.to_resource == 'Fireside_Post' ) {
+			this.to_model = new ($injector.get( 'Fireside_Post' ))( data.to_resource_model );
 		}
 
 		this.url = '';
@@ -29,68 +29,80 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 		this.is_game_based = false;
 
 		if ( this.type == Notification.TYPE_COMMENT_ADD ) {
-			this.action_model = new ($injector.get( 'Comment' ))( data.action_model );
+			this.action_model = new ($injector.get( 'Comment' ))( data.action_resource_model );
 			this.action_label = 'Comment Reply';
 			this.url = undefined;  // Must pull asynchronously when they click on the notification.
 			this.jolticon = 'jolticon-share';
 			this.is_user_based = true;
 		}
 		else if ( this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
-			this.action_model = new ($injector.get( 'Comment' ))( data.action_model );
+			this.action_model = new ($injector.get( 'Comment' ))( data.action_resource_model );
 			this.action_label = 'New Comment';
 			this.url = undefined;  // Must pull asynchronously when they click on the notification.
 			this.jolticon = 'jolticon-add-comment';
 			this.is_user_based = true;
 		}
 		else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
-			this.action_model = new ($injector.get( 'Forum_Post' ))( data.action_model );
+			this.action_model = new ($injector.get( 'Forum_Post' ))( data.action_resource_model );
 			this.action_label = 'New Forum Post';
 			this.url = undefined;
 			this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
 			this.is_user_based = true;
 		}
 		else if ( this.type == Notification.TYPE_FRIENDSHIP_REQUEST ) {
-			this.action_model = new ($injector.get( 'User_Friendship' ))( data.action_model );
+			this.action_model = new ($injector.get( 'User_Friendship' ))( data.action_resource_model );
 			this.action_label = 'Friend Request';
-			this.url = $state.href( 'profile.overview', { slug: this.subject_model.slug, id: this.subject_model.id } );
+			this.url = $state.href( 'profile.overview', { slug: this.from_model.slug, id: this.from_model.id } );
 			this.jolticon = 'jolticon-friend-add-1';
 			this.is_user_based = true;
 		}
 		else if ( this.type == Notification.TYPE_FRIENDSHIP_ACCEPT ) {
-			this.action_model = new ($injector.get( 'User_Friendship' ))( data.action_model );
+			this.action_model = new ($injector.get( 'User_Friendship' ))( data.action_resource_model );
 			this.action_label = 'New Friend';
-			this.url = $state.href( 'profile.overview', { slug: this.subject_model.slug, id: this.subject_model.id } );
+			this.url = $state.href( 'profile.overview', { slug: this.from_model.slug, id: this.from_model.id } );
 			this.jolticon = 'jolticon-friend-add-2';
 			this.is_user_based = true;
 		}
 		else if ( this.type == Notification.TYPE_GAME_RATING_ADD ) {
-			this.action_model = new ($injector.get( 'Game_Rating' ))( data.action_model );
+			this.action_model = new ($injector.get( 'Game_Rating' ))( data.action_resource_model );
 			this.action_label = 'Game Rating';
-			this.url = this.object_model.getUrl();
+			this.url = this.to_model.getUrl();
 			this.jolticon = 'jolticon-chart';
 			this.is_game_based = true;
 		}
 		else if ( this.type == Notification.TYPE_GAME_FOLLOW ) {
-			this.action_model = new ($injector.get( 'GameLibrary_Game' ))( data.action_model );
+			this.action_model = new ($injector.get( 'GameLibrary_Game' ))( data.action_resource_model );
 			this.action_label = 'Game Follow';
-			this.url = this.subject_model.url;
+			this.url = this.from_model.url;
 			this.jolticon = 'jolticon-subscribe';
 			this.is_user_based = true;
 		}
 		else if ( this.type == Notification.TYPE_GAME_NEWS_ADD ) {
-			this.action_model = new ($injector.get( 'Game_NewsArticle' ))( data.action_model );
+			this.action_model = new ($injector.get( 'Game_NewsArticle' ))( data.action_resource_model );
 			this.action_label = 'News Update';
 			this.url = $state.href( 'discover.games.view.news.view', {
-				slug: this.object_model.slug,
-				id: this.object_model.id,
+				slug: this.to_model.slug,
+				id: this.to_model.id,
 				articleSlug: this.action_model.slug,
 				articleId: this.action_model.id,
 			} );
 			this.jolticon = 'jolticon-blog-article';
 			this.is_game_based = true;
 		}
+		else if ( this.type == Notification.TYPE_DEVLOG_POST_ADD ) {
+			this.action_model = new ($injector.get( 'Fireside_Post' ))( data.action_resource_model );
+			this.action_label = 'Devlog Post';
+			// this.url = $state.href( 'discover.games.view.news.view', {
+			// 	slug: this.to_model.slug,
+			// 	id: this.to_model.id,
+			// 	articleSlug: this.action_model.slug,
+			// 	articleId: this.action_model.id,
+			// } );
+			this.jolticon = 'jolticon-blog-article';
+			this.is_game_based = true;
+		}
 		else if ( this.type == Notification.TYPE_SELLABLE_SELL ) {
-			this.action_model = new ($injector.get( 'Order_Item' ))( data.action_model );
+			this.action_model = new ($injector.get( 'Order_Item' ))( data.action_resource_model );
 			this.action_label = 'Sale';
 			this.url = $state.href( 'dashboard.main.overview' );
 			this.jolticon = 'jolticon-heart';
@@ -106,6 +118,7 @@ angular.module( 'gj.Notification' ).factory( 'Notification', function(
 	Notification.TYPE_GAME_RATING_ADD = 'game-rating-add';
 	Notification.TYPE_GAME_FOLLOW = 'game-follow';
 	Notification.TYPE_GAME_NEWS_ADD = 'game-news-add';
+	Notification.TYPE_DEVLOG_POST_ADD = 'devlog-post-add';
 	Notification.TYPE_SELLABLE_SELL = 'sellable-sell';
 
 	Notification.fetchNotificationsFeed = function()
