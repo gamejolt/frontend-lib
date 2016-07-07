@@ -53,15 +53,22 @@
 				font-size: $font-size-base
 				font-weight: bold
 
+			a
+				@extend .link-unstyled
+
 	&-meta
 		@extend .text-muted
-		margin-bottom: $font-size-base
+		margin-top: 5px
 		font-size: $font-size-small
 
 		> .jolticon
 			vertical-align: middle
 
+		&-sm
+			font-size: $font-size-tiny
+
 	&-content
+		margin-top: 8px
 		color: $gray-lighter
 		font-size: $font-size-small
 
@@ -120,6 +127,6 @@
 			cursor: inherit
 			color: $white
 
-	&-list-item-anim
-		@extend .anim-fade-enter-right, .stagger-enter
-		@extend .anim-fade-leave-enlarge
+	&-inactive.card
+		@extend .fill-gray
+		color: $gray-dark

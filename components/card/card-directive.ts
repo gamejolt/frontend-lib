@@ -13,4 +13,5 @@ export class CardComponent
 	@Input( '<?' ) isDraggable = false;
 	@Input( '<?' ) isExpandable = false;
 	@Input( '<?' ) isExpanded = false;
+	@Input( '<?' ) isInactive = false;
 }

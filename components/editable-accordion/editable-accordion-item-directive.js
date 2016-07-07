@@ -6,7 +6,10 @@ angular.module( 'gj.EditableAccordion' ).directive( 'gjEditableAccordionItem', f
 		scope: {
 			toggledHandler: '&?itemToggled',
 			itemId: '@?itemId',
+			isInactive: '<',
 		},
+		bindToController: true,
+		controllerAs: '$ctrl',
 		controller: function( $scope, $attrs )
 		{
 			this.id = undefined;
@@ -35,8 +38,8 @@ angular.module( 'gj.EditableAccordion' ).directive( 'gjEditableAccordionItem', f
 				}
 
 				// If we have a handler, call it.
-				if ( $scope.toggledHandler ) {
-					$scope.toggledHandler( { state: state } );
+				if ( this.toggledHandler ) {
+					this.toggledHandler( { state: state } );
 				}
 			};
 		},
@@ -52,8 +55,8 @@ angular.module( 'gj.EditableAccordion' ).directive( 'gjEditableAccordionItem', f
 				scope.accordion = accordion;
 				scope.item = item;
 
-				if ( scope.itemId ) {
-					item.id = scope.itemId;
+				if ( this.itemId ) {
+					item.id = this.itemId;
 					accordion.registerItem( item.id );
 				}
 				else {

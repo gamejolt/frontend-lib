@@ -1,25 +1,28 @@
-<div class="game-package-card fill-darker soundtrack-package-card">
+<gj-card class="soundtrack-package-card">
 
 	<div class="row">
+		<div class="col-sm-9">
 
-		<div class="game-package-card-body col-sm-9">
+			<div class="card-title">
+				<h4>
+					<span translate>Game Soundtrack</span>
+					<span class="jolticon jolticon-musical-note-double big pull-right text-muted"></span>
+				</h4>
+			</div>
 
-			<h4 class="game-package-card-title">
-				Game Soundtrack
-				<span class="jolticon jolticon-musical-note-double big pull-right text-muted"></span>
-			</h4>
+			<div class="card-meta">
+				{{ ctrl.songs.length | number }} songs
+			</div>
 
-			<div class="game-package-card-description">
+			<br>
+
+			<div class="card-content">
 
 				<gj-fade-collapse
 					fade-collapse-height="250"
 					fade-collapse-is-open="ctrl.isShowingSoundtrack"
 					fade-collapse-is-required="ctrl.canToggleSoundtrack"
 					>
-
-					<div class="game-package-card-meta">
-						{{ ctrl.songs.length | number }} songs
-					</div>
 
 					<gj-audio-playlist
 						audio-playlist-songs="::ctrl.songs"
@@ -37,24 +40,12 @@
 				gj-track-event="game-soundtrack-card:show-all-songs"
 				></a>
 
-			<div class="game-package-card-buttons">
-				<a class="btn btn-success-outline"
-					ng-class="{ 'btn-block': Screen.isXs }"
-					ng-click="ctrl.download()"
-					gj-track-event="game-soundtrack-card:download"
-					>
-
-					<span class="jolticon jolticon-download"></span>
-					Download
-					<span class="jolticon-addon jolticon jolticon-musical-note-double"></span>
-				</a>
-			</div>
-
 		</div>
-
 		<div class="col-sm-3 hidden-xs">
-			<div class="game-package-card-thumb"
-				ng-style="{ 'background-image': 'url(\'' + ctrl.game.img_thumbnail + '\')' }">
+
+			<div class="card-thumb"
+				ng-style="{ 'background-image': 'url(\'' + ctrl.game.img_thumbnail + '\')' }"
+				>
 
 				<a class="play-button-overlay play-button-overlay-small hidden-xs"
 					ng-class="{ active: ctrl.isPlaying }"
@@ -67,8 +58,20 @@
 				</a>
 
 			</div>
-		</div>
 
+		</div>
 	</div>
 
-</div>
+	<div class="card-controls">
+		<a class="btn btn-success-outline"
+			ng-class="{ 'btn-block': Screen.isXs }"
+			ng-click="ctrl.download()"
+			gj-track-event="game-soundtrack-card:download"
+			>
+			<span class="jolticon jolticon-download"></span>
+			<span translate>Download</span>
+			<span class="jolticon-addon jolticon jolticon-musical-note-double"></span>
+		</a>
+	</div>
+
+</gj-card>

@@ -1,4 +1,4 @@
-<div class="game-package-card fill-darker"
+<gj-card class="game-package-card"
 	id="game-package-card-{{ ctrl.package.id }}"
 	>
 
@@ -41,114 +41,115 @@
 
 	</div>
 
-	<div class="game-package-card-body">
-
-		<h4 class="game-package-card-title">
+	<div class="card-title">
+		<h4>
 			{{ ::(ctrl.package.title || ctrl.game.title) }}
 		</h4>
+	</div>
 
-		<div class="game-package-card-meta">
+	<div class="card-meta card-meta-sm">
 
-			<!--
-				In client, if the game is installed.
-			-->
-			<span ng-if="ctrl.localPackage">
-				<!-- Reduce number of watches -->
-				<span ng-if="ctrl.localPackage.isInstalling()">
-					<span ng-if="!ctrl.localPackage.isPatchPaused()">
-						<span class="tag tag-blue" ng-if="ctrl.localPackage.isInstalling()" translate>INSTALLING</span>
-						<span class="tag tag-pink" ng-if="ctrl.localPackage.didInstallFail()" translate>INSTALL FAILED</span>
-					</span>
-					<span ng-if="ctrl.localPackage.isPatchPaused()">
-						<span class="tag" translate>INSTALL PAUSED</span>
-					</span>
+		<!--
+			In client, if the game is installed.
+		-->
+		<span ng-if="ctrl.localPackage">
+
+			<!-- Reduce number of watches -->
+			<span ng-if="ctrl.localPackage.isInstalling()">
+				<span ng-if="!ctrl.localPackage.isPatchPaused()">
+					<span class="tag tag-blue" ng-if="ctrl.localPackage.isInstalling()" translate>INSTALLING</span>
+					<span class="tag tag-pink" ng-if="ctrl.localPackage.didInstallFail()" translate>INSTALL FAILED</span>
 				</span>
-				<span ng-if="ctrl.localPackage.isUpdating()">
-					<span ng-if="!ctrl.localPackage.isPatchPaused()">
-						<span class="tag tag-blue" ng-if="ctrl.localPackage.isUpdating()" translate>UPDATING</span>
-						<span class="tag tag-pink" ng-if="ctrl.localPackage.didUpdateFail()" translate>UPDATE FAILED</span>
-					</span>
-					<span ng-if="ctrl.localPackage.isPatchPaused()">
-						<span class="tag" translate>UPDATE PAUSED</span>
-					</span>
+				<span ng-if="ctrl.localPackage.isPatchPaused()">
+					<span class="tag" translate>INSTALL PAUSED</span>
 				</span>
-				<span class="tag tag-active" ng-if="ctrl.localPackage.isSettled() && !ctrl.localPackage.isRunning()" translate>INSTALLED</span>
-				<span class="tag tag-active" ng-if="ctrl.localPackage.isRunning()" translate>RUNNING</span>
-				<span class="tag" ng-if="ctrl.localPackage.isRemoving()" translate>REMOVING</span>
-				<span class="dot-separator"></span>
 			</span>
-
-			<span
-				ng-repeat="supportKey in ::ctrl.support"
-				ng-class="::'jolticon jolticon-' + ctrl.supportInfo[ supportKey ].icon"
-				tooltip="{{ ::ctrl.supportInfo[ supportKey ].tooltip }}"
-				>
-			</span>
-
-			<span class="dot-separator" ng-if="ctrl.support.length"></span>
-
-			<span ng-if="ctrl.showcasedRelease">
-				<span class="game-package-card-version">
-					<span translate>Version:</span>
-					<strong>{{ ::ctrl.showcasedRelease.version_number }}</strong>
+			<span ng-if="ctrl.localPackage.isUpdating()">
+				<span ng-if="!ctrl.localPackage.isPatchPaused()">
+					<span class="tag tag-blue" ng-if="ctrl.localPackage.isUpdating()" translate>UPDATING</span>
+					<span class="tag tag-pink" ng-if="ctrl.localPackage.didUpdateFail()" translate>UPDATE FAILED</span>
 				</span>
-
-				<span class="dot-separator"></span>
-
-				<span class="game-package-card-date" am-time-ago="::ctrl.showcasedRelease.published_on"></span>
+				<span ng-if="ctrl.localPackage.isPatchPaused()">
+					<span class="tag" translate>UPDATE PAUSED</span>
+				</span>
 			</span>
-		</div>
+			<span class="tag tag-active" ng-if="ctrl.localPackage.isSettled() && !ctrl.localPackage.isRunning()" translate>INSTALLED</span>
+			<span class="tag tag-active" ng-if="ctrl.localPackage.isRunning()" translate>RUNNING</span>
+			<span class="tag" ng-if="ctrl.localPackage.isRemoving()" translate>REMOVING</span>
+			<span class="dot-separator"></span>
+		</span>
 
-		<div class="game-package-card-description" ng-if="::ctrl.package.description">
-			<gj-fade-collapse
-				fade-collapse-height="100"
-				fade-collapse-is-open="ctrl.showFullDescription"
-				fade-collapse-is-required="ctrl.canToggleDescription"
-				>
+		<span
+			ng-repeat="supportKey in ::ctrl.support"
+			ng-class="::'jolticon jolticon-' + ctrl.supportInfo[ supportKey ].icon"
+			tooltip="{{ ::ctrl.supportInfo[ supportKey ].tooltip }}"
+			>
+		</span>
 
-				<p ng-bind-html="::ctrl.package.description | linky"></p>
+		<span class="dot-separator" ng-if="ctrl.support.length"></span>
 
-			</gj-fade-collapse>
-		</div>
+		<span ng-if="ctrl.showcasedRelease">
+			<span translate>Version:</span>
+			<strong>{{ ::ctrl.showcasedRelease.version_number }}</strong>
+
+			<span class="dot-separator"></span>
+
+			<span am-time-ago="::ctrl.showcasedRelease.published_on"></span>
+		</span>
+	</div>
+
+	<div class="card-content" ng-if="::ctrl.package.description">
+		<gj-fade-collapse
+			fade-collapse-height="100"
+			fade-collapse-is-open="ctrl.showFullDescription"
+			fade-collapse-is-required="ctrl.canToggleDescription"
+			>
+
+			<div ng-bind-html="::ctrl.package.description | linky"></div>
+
+		</gj-fade-collapse>
 
 		<a class="hidden-text-expander"
 			ng-if="::ctrl.canToggleDescription"
 			ng-click="ctrl.showFullDescription = !ctrl.showFullDescription"
 			gj-track-event="game-package-card:show-full-description"
 			></a>
+	</div>
 
-		<div class="alert alert-warning" ng-if="::!ctrl.showcasedRelease" translate>
-			No published releases yet.
-		</div>
+	<div class="alert alert-warning" ng-if="::!ctrl.showcasedRelease" translate>
+		No published releases yet.
+	</div>
 
-		<div ng-if="ctrl.hasPaymentWell">
-			<div gj-expand-when="ctrl.isPaymentOpen" class="payment-well-expander">
-				<div class="payment-well">
+	<div ng-if="ctrl.hasPaymentWell">
+		<div gj-expand-when="ctrl.isPaymentOpen" class="payment-well-expander">
+			<div class="payment-well">
 
-					<gj-game-package-card-payment-form
-						game="::ctrl.game"
-						package="::ctrl.package"
-						sellable="::ctrl.sellable"
-						pricing="::ctrl.pricing"
-						on-bought="ctrl.onPackageBought()"
+				<gj-game-package-card-payment-form
+					game="::ctrl.game"
+					package="::ctrl.package"
+					sellable="::ctrl.sellable"
+					pricing="::ctrl.pricing"
+					on-bought="ctrl.onPackageBought()"
+					>
+				</gj-game-package-card-payment-form>
+
+				<div ng-if="::ctrl.sellable.type == 'pwyw'">
+					<hr>
+					<span class="jolticon jolticon-chevron-right middle"></span>
+					<a class="link-unstyled small"
+						ng-click="ctrl.skipPayment()"
 						>
-					</gj-game-package-card-payment-form>
-
-					<div ng-if="::ctrl.sellable.type == 'pwyw'">
-						<hr>
-						<span class="jolticon jolticon-chevron-right middle"></span>
-						<a class="link-unstyled small"
-							ng-click="ctrl.skipPayment()"
-							>
-							<span ng-if="::!Environment.isClient" translate>No thanks, take to me to the download.</span>
-							<span ng-if="::Environment.isClient" translate>No thanks, just install it.</span>
-						</a>
-					</div>
+						<span ng-if="::!Environment.isClient" translate>No thanks, take to me to the download.</span>
+						<span ng-if="::Environment.isClient" translate>No thanks, just install it.</span>
+					</a>
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<div class="game-package-card-buttons" ng-if="ctrl.sellable.type != 'paid' || ctrl.isOwned">
+	<div class="card-controls">
+
+		<div ng-if="ctrl.sellable.type != 'paid' || ctrl.isOwned">
 
 			<!--
 				The buttons are so different for client that we put them in a child component.
@@ -184,32 +185,34 @@
 				</span>
 			</div>
 
-			<div gj-expand-when="ctrl.isWhatOpen" class="payment-well-expander payment-well-expander-files">
-				<div class="payment-well">
-
-					<div ng-repeat="build in ctrl.builds">
-
-						{{ ::build.primary_file.filename }}
-						<small class="text-muted">({{ ::build.primary_file.filesize | filesize }})</small>
-
-						<span ng-repeat="os in ::[ 'windows', 'mac', 'linux', 'other' ]">
-							<span
-								ng-if="::build[ 'os_' + os ] || build[ 'os_' + os + '_64' ]"
-								ng-class="::'jolticon jolticon-' + ctrl.supportInfo[ os ].icon"
-								tooltip="{{ ::ctrl.supportInfo[ os ].tooltip }}"
-								>
-							</span>
-						</span>
-
-					</div>
-
-					<br>
-
-					<small translate>And really warm feelings for supporting an indie developer!</small>
-
-				</div>
-			</div>
 		</div>
 
 	</div>
-</div>
+
+	<div gj-expand-when="ctrl.isWhatOpen" class="payment-well-expander payment-well-expander-files">
+		<div class="payment-well">
+
+			<div ng-repeat="build in ctrl.builds">
+
+				{{ ::build.primary_file.filename }}
+				<small class="text-muted">({{ ::build.primary_file.filesize | filesize }})</small>
+
+				<span ng-repeat="os in ::[ 'windows', 'mac', 'linux', 'other' ]">
+					<span
+						ng-if="::build[ 'os_' + os ] || build[ 'os_' + os + '_64' ]"
+						ng-class="::'jolticon jolticon-' + ctrl.supportInfo[ os ].icon"
+						tooltip="{{ ::ctrl.supportInfo[ os ].tooltip }}"
+						>
+					</span>
+				</span>
+
+			</div>
+
+			<br>
+
+			<small translate>And really warm feelings for supporting an indie developer!</small>
+
+		</div>
+	</div>
+
+</gj-card>

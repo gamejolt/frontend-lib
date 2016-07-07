@@ -1,55 +1,4 @@
 .game-package-card
-	@extend .full-bleed-xs
-	padding: 15px
-	margin-bottom: $line-height-computed
-
-	// Package thumbs are optional.
-	&-thumb
-		position: relative
-		background-repeat: no-repeat
-		background-position: center center
-		background-size: cover
-		height: 0
-		padding-bottom: 100%
-
-	&-title
-		margin-top: 0
-		margin-bottom: 5px
-		font-weight: 300
-
-		@media $media-xs
-			font-size: $font-size-base
-			font-weight: bold
-
-	&-meta
-		@extend .text-muted
-		margin-bottom: $font-size-base
-
-		> .jolticon
-			vertical-align: middle
-
-	&-version
-	&-date
-		font-size: $font-size-tiny
-
-	&-description
-		clear: both
-		color: $gray-lighter
-		font-size: $font-size-small
-
-	& .hidden-text-expander
-		margin-bottom: $line-height-computed
-
-	.alert
-		// Less padding than normal.
-		padding-top: $font-size-base
-		padding-bottom: $font-size-base
-
-		.jolticon
-			vertical-align: text-bottom
-
-	.alert-info
-		@extend .fill-dark
 
 	&-pricing
 		@extend .fill-gray
@@ -77,23 +26,26 @@
 			&.muted
 				color: $gray-lighter
 
+	.card
+		padding-bottom: 0
+
+	.card-controls
+		margin-bottom: 15px
+
 	.payment-well-expander
 		margin-left: -15px
 		margin-right: -15px
 
-		&-files.is-expanded
-			margin-bottom: -15px
-
+		&-files
 			.payment-well
-				margin-bottom: 0
-				margin-top: $line-height-computed
+				margin: 0
 				border-bottom: 0
 
 	.payment-well
 		@extend .fill-dark
 		color: $white
 		padding: 15px
-		margin-bottom: $line-height-computed
+		margin-top: $line-height-computed
 		border-top: 1px dashed $gray-light
 		border-bottom: 1px dashed $gray-light
 
@@ -106,7 +58,6 @@
 
 	&-payment-what-link
 		display: block
-		// margin: $font-size-base 0
 		text-align: center
 		font-size: $font-size-small
 
