@@ -1,40 +1,24 @@
-<div class="fireside-post-like-widget"
-	ng-class="{ 'fireside-post-like-widget-no-avatars': $ctrl.noAvatars }"
-	>
+<div class="fireside-post-like-widget">
 	<a class="btn"
-		ng-if="$ctrl.app.user && $ctrl.app.user.id != $ctrl.post.user.id"
+		ng-if="::$ctrl.app.user && $ctrl.app.user.id != $ctrl.post.user.id"
 		ng-click="$ctrl.toggleLike()"
-		ng-class="{ 'btn-outline': !$ctrl.post.user_like, 'btn-success-outline active': $ctrl.post.user_like }"
+		ng-class="{
+			'btn-outline': !$ctrl.post.user_like,
+			'btn-success-outline active': $ctrl.post.user_like,
+			'btn-sparse': $ctrl.sparse,
+		}"
+		gj-tooltip="{{ $ctrl.getTooltip() }}"
 		>
-		<span class="btn-badge" ng-if="$ctrl.post.like_count">
+		<span class="btn-badge" ng-if="$ctrl.post.like_count && !$ctrl.sparse">
 			{{ $ctrl.post.like_count | number }}
 		</span>
 
 		<span class="jolticon jolticon-heart"></span>
-		<span ng-switch="!!$ctrl.post.user_like">
-			<span ng-switch-when="false" translate>Like This Post</span>
-			<span ng-switch-when="true" translate>Liked!</span>
+		<span ng-if="::!$ctrl.sparse">
+			<span ng-switch="!!$ctrl.post.user_like">
+				<span ng-switch-when="false" translate>Like This Post</span>
+				<span ng-switch-when="true" translate>Liked!</span>
+			</span>
 		</span>
 	</a>
-
-	<!--<div class="fireside-post-like-widget-likes avatar-circle"
-		ng-if="!$ctrl.noAvatars"
-		ng-class="{ 'no-likes': !$ctrl.post.likes.length }"
-		>
-
-		<div class="fireside-post-like-widget-avatar anim-fade-enter-enlarge anim-fade-leave-enlarge"
-			ng-repeat="like in $ctrl.post.likes track by like.id"
-			gj-tooltip="like.user.display_name"
-			tooltip-placement="bottom"
-			>
-			<span gj-user-avatar="like.user"></span>
-			<span class="jolticon jolticon-heart"></span>
-		</div>
-
-		<div class="fireside-post-like-widget-avatar-more" ng-if="($ctrl.post.like_count - $ctrl.post.likes.length) > 0">
-			<strong>{{ $ctrl.post.like_count - $ctrl.post.likes.length }}</strong>
-			more
-		</div>
-
-	</div>-->
 </div>

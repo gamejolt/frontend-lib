@@ -9,14 +9,30 @@ import { Fireside_Post_Like } from './../like-model';
 export class WidgetComponent
 {
 	@Input( '<firesidePost' ) post: Fireside_Post;
-	@Input( '<noAvatars' ) noAvatars: boolean;
+	@Input( '<?' ) sparse: boolean = false;
 
 	constructor(
 		@Inject( 'App' ) private app,
 		@Inject( 'Screen' ) private screen,
-		@Inject( 'Fireside_Post_Like' ) private firesidePostLike: typeof Fireside_Post_Like
+		@Inject( 'Fireside_Post_Like' ) private firesidePostLike: typeof Fireside_Post_Like,
+		@Inject( 'gettextCatalog' ) private gettextCatalog: ng.gettext.gettextCatalog
 	)
 	{
+	}
+
+	getTooltip()
+	{
+		// No tooltip if showing label.
+		if ( !this.sparse ) {
+			return undefined;
+		}
+
+		if ( !this.post.user_like ) {
+			return this.gettextCatalog.getString( 'Like This Post' );
+		}
+		else {
+			return this.gettextCatalog.getString( 'Liked!' );
+		}
 	}
 
 	toggleLike()
@@ -28,7 +44,6 @@ export class WidgetComponent
 
 			newLike.$save().then( __ =>
 			{
-				// this.post.likes.unshift( newLike );
 				this.post.user_like = newLike;
 				++this.post.like_count;
 			} );
@@ -36,7 +51,6 @@ export class WidgetComponent
 		else {
 			this.post.user_like.$remove().then( __ =>
 			{
-				// _.remove( this.post.likes, { id: this.post.user_like.id } );
 				this.post.user_like = null;
 				--this.post.like_count;
 			} );
