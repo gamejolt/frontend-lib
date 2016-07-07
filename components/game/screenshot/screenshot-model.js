@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Screenshot' ).factory( 'Game_Screenshot', function( Model, MediaItem )
+angular.module( 'gj.Game.Screenshot' ).factory( 'Game_Screenshot', function( $q, Model, MediaItem, Api )
 {
 	function Game_Screenshot( data )
 	{
@@ -19,7 +19,16 @@ angular.module( 'gj.Game.Screenshot' ).factory( 'Game_Screenshot', function( Mod
 	Game_Screenshot.prototype.$save = function()
 	{
 		if ( !this.id ) {
-			return this.$_save( '/web/dash/developer/games/media/save/image/' + this.game_id, 'gameScreenshot', { file: this.file } );
+
+			// When adding, we add multiple, so we can't treat it like a normal model save.
+			return Api.sendRequest( '/web/dash/developer/games/media/save/image/' + this.game_id, this, { file: this.file } )
+				.then( function( response )
+				{
+					if ( response.success ) {
+						return response;
+					}
+					return $q.reject( response );
+				} );
 		}
 		else {
 			return this.$_save( '/web/dash/developer/games/media/save/image/' + this.game_id + '/' + this.id, 'gameScreenshot' );
