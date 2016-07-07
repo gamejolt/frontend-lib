@@ -1,0 +1,118 @@
+.card
+	@extend .full-bleed-xs, .fill-darkest, .clearfix
+	position: relative
+	padding: 15px
+	margin-bottom: $line-height-computed
+
+	a &:hover
+		background-color: $black
+
+	&-expandable
+		padding-left: 40px
+		cursor: pointer
+		user-select: none
+
+	&-draggable
+		padding-right: 40px
+
+		// Since we full-bleed on mobile, if it has a drag handle, then we don't want to full bleed the right.
+		// This makes it easier to grab the drag handle since it's away from the edge a bit.
+		@media $media-xs
+			margin-right: 0
+
+	&-remove
+		float: right
+		color: $gray-light !important
+		margin-left: 10px
+
+		&
+		.jolticon
+			cursor: pointer
+
+		&:hover
+			color: $gj-pink !important
+
+	&-thumb
+		position: relative
+		background-repeat: no-repeat
+		background-position: center center
+		background-size: cover
+		height: 0
+		padding-bottom: 100%
+
+	&-title
+		margin-top: 0
+		margin-bottom: 5px
+
+		h4, h5
+			margin-top: 0
+			margin-bottom: 0
+			font-weight: 300
+
+			@media $media-xs
+				font-size: $font-size-base
+				font-weight: bold
+
+	&-meta
+		@extend .text-muted
+		margin-bottom: $font-size-base
+		font-size: $font-size-small
+
+		> .jolticon
+			vertical-align: middle
+
+	&-content
+		color: $gray-lighter
+		font-size: $font-size-small
+
+	&-controls
+		margin-top: $line-height-computed
+
+	hr
+		border-color: $gray-dark
+
+	.hidden-text-expander
+		margin-bottom: $line-height-computed
+
+	.alert
+		// Less padding than normal.
+		padding-top: $font-size-base
+		padding-bottom: $font-size-base
+
+		.jolticon
+			vertical-align: text-bottom
+
+	.alert-info
+		@extend .fill-dark
+
+	&-chevron
+		position: absolute
+		left: 0
+		top: 18px
+		width: 40px
+		text-align: center
+
+		 > .jolticon
+			cursor: inherit
+
+	&-drag-handle
+		position: absolute
+		right: 0
+		top: 0
+		bottom: 0
+		width: 20px
+		cursor: move
+		background-color: $gray-dark
+		user-select: none
+
+		> .jolticon
+			position: absolute
+			top: 50%
+			left: 0
+			margin-top: -8px
+			cursor: inherit
+			color: $white
+
+	&-list-item-anim
+		@extend .anim-fade-enter-right, .stagger-enter
+		@extend .anim-fade-leave-enlarge
