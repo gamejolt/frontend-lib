@@ -24,14 +24,14 @@ angular.module( 'gj.History.Cache' )
 
 	this.cache = function()
 	{
-		var name, promise;
+		var name, fn;
 		if ( arguments.length == 2 ) {
 			name = arguments[0];
-			promise = arguments[1];
+			fn = arguments[1];
 		}
 		else {
 			name = 'payload';
-			promise = arguments[0];
+			fn = arguments[0];
 		}
 
 		// We only pull from cache if they're in a historical state.
@@ -39,7 +39,7 @@ angular.module( 'gj.History.Cache' )
 			return $q.resolve( _currentState.data[ name ] );
 		}
 
-		return promise.then( function( data )
+		return fn().then( function( data )
 		{
 			_currentState.data[ name ] = data;
 			return data;
