@@ -19,6 +19,7 @@ export function Fireside_PostFactory( Environment, Model, Fireside_Post_Tag, Fir
 @Injectable()
 export class Fireside_Post extends Model
 {
+	type: string;
 	hash: string;
 	title: string;
 	lead: string;
