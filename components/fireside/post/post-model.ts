@@ -3,15 +3,19 @@ import { Model } from './../../model/model-service';
 import { Fireside_Post_Tag } from './tag/tag-model';
 import { Fireside_Post_Like } from './like/like-model';
 import { ModalConfirm } from './../../modal/confirm/confirm-service';
+import { App } from './../../../../../app/app-service';
+import { HistoryTick } from './../../history-tick/history-tick-service';
 
-export function Fireside_PostFactory( Environment, Model, Fireside_Post_Tag, Fireside_Post_Like, MediaItem, ModalConfirm, gettextCatalog )
+export function Fireside_PostFactory( App, Environment, Model, Fireside_Post_Tag, Fireside_Post_Like, MediaItem, ModalConfirm, HistoryTick, gettextCatalog )
 {
 	return Model.create( Fireside_Post, {
+		App,
 		Environment,
 		Fireside_Post_Tag,
 		Fireside_Post_Like,
 		MediaItem,
 		ModalConfirm,
+		HistoryTick,
 		gettextCatalog,
 	} );
 }
@@ -19,6 +23,22 @@ export function Fireside_PostFactory( Environment, Model, Fireside_Post_Tag, Fir
 @Injectable()
 export class Fireside_Post extends Model
 {
+	static App: App;
+	static Environment: any;
+	static Fireside_Post_Tag: typeof Fireside_Post_Tag;
+	static Fireside_Post_Like: typeof Fireside_Post_Like;
+	static MediaItem: any;
+	static ModalConfirm: ModalConfirm;
+	static HistoryTick: HistoryTick;
+	static gettextCatalog: ng.gettext.gettextCatalog;
+
+	static TYPE_TEXT = 'text';
+	static TYPE_MEDIA = 'media';
+
+	static STATUS_DRAFT = 'draft';
+	static STATUS_ACTIVE = 'active';
+	static STATUS_REMOVED = 'removed';
+
 	type: string;
 	hash: string;
 	title: string;
@@ -46,20 +66,6 @@ export class Fireside_Post extends Model
 
 	// For uploads.
 	file: any;
-
-	static Environment: any;
-	static Fireside_Post_Tag: typeof Fireside_Post_Tag;
-	static Fireside_Post_Like: typeof Fireside_Post_Like;
-	static MediaItem: any;
-	static ModalConfirm: ModalConfirm;
-	static gettextCatalog: ng.gettext.gettextCatalog;
-
-	static TYPE_TEXT = 'text';
-	static TYPE_MEDIA = 'media';
-
-	static STATUS_DRAFT = 'draft';
-	static STATUS_ACTIVE = 'active';
-	static STATUS_REMOVED = 'removed';
 
 	constructor( data?: any )
 	{
@@ -110,6 +116,20 @@ export class Fireside_Post extends Model
 			else {
 				return this.$_save( `/fireside/dash/posts/save/${this.id}`, 'firesidePost' );
 			}
+		}
+	}
+
+	$viewed()
+	{
+		if ( !Fireside_Post.App.user || this.user.id != Fireside_Post.App.user.id ) {
+			Fireside_Post.HistoryTick.sendBeacon( 'fireside-post', this.id );
+		}
+	}
+
+	$expanded()
+	{
+		if ( !Fireside_Post.App.user || this.user.id != Fireside_Post.App.user.id ) {
+			Fireside_Post.HistoryTick.sendBeacon( 'fireside-post-expand', this.id );
 		}
 	}
 

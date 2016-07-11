@@ -84,7 +84,7 @@ export class HistoryTick
 			const img = this.$document[0].createElement( 'img' );
 			img.width = 1;
 			img.height = 1;
-			img.src = this.environment.apiHost + '/tick/' + type + '/' + resourceId + '?' + queryParams.join( '&' );
+			img.src = `${this.environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join( '&' )}`;
 
 			// Always resolve.
 			img.onload = img.onerror = () =>
