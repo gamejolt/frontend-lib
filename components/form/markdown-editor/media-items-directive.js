@@ -1,4 +1,4 @@
-angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaItems', function( Form, Api, MediaItem, Permalink )
+angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaItems', function( Form, Api, MediaItem, Clipboard )
 {
 	var form = new Form( {
 		template: '/lib/gj-lib-client/components/form/markdown-editor/media-items.html',
@@ -25,7 +25,7 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaIt
 
 		scope.copyLink = function( mediaItem )
 		{
-			Permalink.copy( '![](' + mediaItem.img_url.replace( / /g, '+' ) + ')' );
+			Clipboard.copy( '![](' + mediaItem.img_url.replace( / /g, '+' ) + ')' );
 		};
 	};
 
