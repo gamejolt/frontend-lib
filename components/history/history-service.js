@@ -12,6 +12,15 @@ window.addEventListener( 'popstate', function()
 angular.module( 'gj.History' )
 .run( function( $rootScope, $state, $window, $location, History )
 {
+	// Store the future state.
+	// It's helpful to know where we are transitioning to in resolves in some cases.
+	$rootScope.$on( '$stateChangeStart', function()
+	{
+		if ( arguments[1] ) {
+			History.futureState = [ arguments[1], arguments[2] ];
+		}
+	} );
+
 	// Clear ourselves out on success or error.
 	$rootScope.$on( '$stateChangeSuccess', function()
 	{
@@ -28,6 +37,7 @@ angular.module( 'gj.History' )
 	var _this = this;
 
 	this.inHistorical = false;
+	this.futureState = null;
 
 	$window._gjHistoryPop = function()
 	{
@@ -40,6 +50,7 @@ angular.module( 'gj.History' )
 		$timeout( function()
 		{
 			_this.inHistorical = false;
+			_this.futureState = null;
 		} );
 	};
 } );
