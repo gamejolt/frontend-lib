@@ -116,10 +116,10 @@ angular.module( 'gj.Scroll' ).service( 'Scroll', function( $rootScope, $timeout,
 				// Do it based on the screen's height, so that mobile and stuff works well too.
 				// This is because I think it's kind of annoying when the edge hits the exact top of the browser.
 				if ( options.animate !== false ) {
-					_this.context.duScrollToElement( element, (Screen.height * 0.1), duScrollDuration, duScrollEasing );
+					_this.context.duScrollToElement( element, (Screen.height * 0.1) + _this.offsetTop, duScrollDuration, duScrollEasing );
 				}
 				else {
-					_this.context.duScrollToElement( element, (Screen.height * 0.1) );
+					_this.context.duScrollToElement( element, (Screen.height * 0.1) + _this.offsetTop );
 				}
 			}
 			else {
