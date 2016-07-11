@@ -6,8 +6,9 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 		scope: {},
 		bindToController: {
 			resource: '@commentResource',
-			resourceId: '=commentResourceId',
+			resourceId: '<commentResourceId',
 			currentPage: '=?currentPage',
+			noIntro: '<',
 		},
 		controllerAs: 'ctrl',
 		controller: function( $scope, $state, $window, $location, $timeout, $injector, $sce, App, Comment, Comment_Vote, Subscription, User, Growls, Environment, Scroll,
