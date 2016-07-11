@@ -58,20 +58,20 @@ export class Comment extends Model
 		}
 	}
 
-	static fetch( resource, resourceId, page )
+	static fetch( resource: string, resourceId: number, page: number )
 	{
 		let query = '';
 		if ( page ) {
 			query = '?page=' + page;
 		}
 
-		return Comment.Api.sendRequest( '/comments/' + resource + '/' + resourceId + query, null, { detach: true } );
+		return Comment.Api.sendRequest( `/comments/${resource}/${resourceId}${query}`, null, { detach: true } );
 	}
 
-	static getCommentPage( commentId )
+	static getCommentPage( commentId: number ): ng.IPromise<number>
 	{
-		return Comment.Api.sendRequest( '/comments/get-comment-page/' + commentId, null, { detach: true } )
-			.then( ( response ) =>
+		return Comment.Api.sendRequest( `/comments/get-comment-page/${commentId}`, null, { detach: true } )
+			.then( response =>
 			{
 				if ( !response || response.error ) {
 					return Comment.$q.reject( response.error );
@@ -81,10 +81,10 @@ export class Comment extends Model
 			} );
 	}
 
-	static getCommentUrl( commentId )
+	static getCommentUrl( commentId: number ): ng.IPromise<string>
 	{
-		return Comment.Api.sendRequest( '/comments/get-comment-url/' + commentId, null, { detach: true } )
-			.then( ( response ) =>
+		return Comment.Api.sendRequest( `/comments/get-comment-url/${commentId}`, null, { detach: true } )
+			.then( response =>
 			{
 				if ( !response || response.error ) {
 					return Comment.$q.reject( response.error );
@@ -96,7 +96,7 @@ export class Comment extends Model
 
 	$save()
 	{
-		return this.$_save( '/comments/add/' + this.resource + '/' + this.resource_id, 'comment', { detach: true } );
+		return this.$_save( `/comments/add/${this.resource}/${this.resource_id}`, 'comment', { detach: true } );
 	}
 
 	$like()
