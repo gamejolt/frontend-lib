@@ -1,5 +1,5 @@
 import { Component, Input } from 'ng-metadata/core';
-import template from './card.html';
+import template from 'html!./card.html';
 
 @Component({
 	selector: 'gj-card',

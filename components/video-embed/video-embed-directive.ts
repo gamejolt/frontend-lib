@@ -1,7 +1,7 @@
 import { Component, Input, Inject, OnChanges, SimpleChanges } from 'ng-metadata/core';
 import { Ruler } from './../ruler/ruler-service';
 import { Screen } from './../screen/screen-service';
-import template from './video-embed.html';
+import template from 'html!./video-embed.html';
 
 const VIDEO_RATIO = 0.5625;  // 16:9
 

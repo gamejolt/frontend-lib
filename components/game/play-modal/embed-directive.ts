@@ -1,6 +1,6 @@
 import { Component, Inject, Input, ViewChild, AfterViewInit } from 'ng-metadata/core';
 import { App } from './../../../../../app/app-service';
-import template from './embed.html';
+import template from 'html!./embed.html';
 
 @Component({
 	selector: 'gj-game-play-modal-embed',

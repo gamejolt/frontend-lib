@@ -4,7 +4,7 @@ import { Screen } from './../../../screen/screen-service';
 import { HistoryTick } from './../../../history-tick/history-tick-service';
 import { Comment } from './../../comment-model';
 import { Comment_Video } from '../video-model';
-import template from './lightbox.html';
+import template from 'html!./lightbox.html';
 
 @Component({
 	selector: 'gj-comment-video-lightbox',

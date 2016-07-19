@@ -1,5 +1,5 @@
 import { Injectable, Inject } from 'ng-metadata/core';
-import template from './confirm.html';
+import template from 'html!./confirm.html';
 
 @Injectable()
 export class ModalConfirm
