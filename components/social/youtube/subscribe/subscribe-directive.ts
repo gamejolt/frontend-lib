@@ -10,8 +10,8 @@ import { Youtube_Sdk } from './../sdk/sdk-service';
 export class SubscribeComponent
 {
 	@Input( '@' ) channel: string;
-	@Input( '@?' ) layout: string;
-	@Input( '@?' ) theme: string;
+	@Input( '@?' ) layout?: string;
+	@Input( '@?' ) theme?: string;
 
 	constructor(
 		@Inject( 'Youtube_Sdk' ) private sdk: Youtube_Sdk

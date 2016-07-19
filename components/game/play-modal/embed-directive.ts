@@ -1,4 +1,4 @@
-import { Component, Inject, Input, ViewChild, AfterViewInit } from 'ng-metadata/core';
+import { Component, Inject, Input, AfterViewInit } from 'ng-metadata/core';
 import { App } from './../../../../../app/app-service';
 import template from 'html!./embed.html';
 
@@ -21,7 +21,6 @@ export class EmbedComponent implements AfterViewInit
 		@Inject( '$q' ) private $q: ng.IQService,
 		@Inject( '$interval' ) private $interval: ng.IIntervalService,
 		@Inject( 'Environment' ) private environment: any,
-		@Inject( 'Game_PlayModal' ) playModal: any,
 		@Inject( 'Game_Build' ) gameBuild: any,
 		@Inject( 'Api' ) private api: any,
 		@Inject( 'App' ) private app: App
@@ -91,7 +90,7 @@ export class EmbedComponent implements AfterViewInit
 			.then( response =>
 			{
 				let src = `${this.environment.gameserverUrl}/view/${this.build.id}`;
-				let queryParams = [];
+				let queryParams: string[] = [];
 
 				if ( response && response.token ) {
 					queryParams.push( `username=${this.app.user.username}` );
@@ -115,7 +114,7 @@ export class EmbedComponent implements AfterViewInit
 
 	focus()
 	{
-		const gameFrame: HTMLElement = this.$element[0].querySelector( '#online-game-frame' );
+		const gameFrame: HTMLElement = <any>this.$element[0].querySelector( '#online-game-frame' );
 		if ( gameFrame ) {
 			gameFrame.focus();
 		}

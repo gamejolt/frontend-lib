@@ -62,7 +62,7 @@ export class Screen
 	 * The context that the Screen's dimensions are based on.
 	 * If null we will just copy over the values of the "window" variants.
 	 */
-	context: HTMLElement = null;
+	context: HTMLElement | null = null;
 
 	/**
 	 * If it's Retina/HiDPI or not.
@@ -94,11 +94,12 @@ export class Screen
 
 	private _generateMq()
 	{
+		const $window: any = this.$window;
 		/**
 		 * Checks a media query breakpoint.
 		 * https://github.com/paulirish/matchMedia.js/blob/master/matchMedia.js
 		 */
-		const matchMedia = this.$window.matchMedia || this.$window.msMatchMedia;
+		const matchMedia = $window.matchMedia || $window.msMatchMedia;
 		if ( matchMedia ) {
 			this.mq = function( mq )
 			{
@@ -107,12 +108,12 @@ export class Screen
 		}
 		else {
 			// For browsers that support matchMedium api such as IE 9 and webkit
-			let styleMedia = (this.$window.styleMedia || this.$window.media);
+			let styleMedia = ($window.styleMedia || $window.media);
 
 			// For those that don't support matchMedium
 			if ( !styleMedia ) {
-				const style = this.$window.document.createElement( 'style' );
-				const script = this.$window.document.getElementsByTagName( 'script' )[0];
+				const style = $window.document.createElement( 'style' );
+				const script = $window.document.getElementsByTagName( 'script' )[0];
 
 				style.type = 'text/css';
 				style.id = 'matchmediajs-test';
@@ -120,10 +121,10 @@ export class Screen
 				script.parentNode.insertBefore( style, script );
 
 				// 'style.currentStyle' is used by IE <= 8 and 'window.getComputedStyle' for all other browsers
-				const info = ('getComputedStyle' in this.$window) && this.$window.getComputedStyle( style, null ) || style.currentStyle;
+				const info = ('getComputedStyle' in $window) && $window.getComputedStyle( style, null ) || style.currentStyle;
 
 				styleMedia = {
-					matchMedium: function( media )
+					matchMedium: function( media: any )
 					{
 						const text = '@media ' + media + '{ #matchmediajs-test { width: 1px; } }';
 
@@ -230,8 +231,8 @@ export class Screen
 			this.isWindowDesktop = true;
 		}
 
-		this.windowWidth = this.$window.innerWidth > 0 ? this.$window.innerWidth : this.$window.width;
-		this.windowHeight = this.$window.innerHeight > 0 ? this.$window.innerHeight : this.$window.height;
+		this.windowWidth = this.$window.innerWidth > 0 ? this.$window.innerWidth : this.$window['width'];
+		this.windowHeight = this.$window.innerHeight > 0 ? this.$window.innerHeight : this.$window['height'];
 
 		// Now if we have a Screen context set, let's get settings for that.
 		// Othwerise we simply use the $indow dimensions.

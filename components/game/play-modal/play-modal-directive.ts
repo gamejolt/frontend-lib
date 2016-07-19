@@ -19,10 +19,7 @@ export class PlayModalComponent
 	@Output() close: Function;
 
 	constructor(
-		@Inject( '$injector' ) $injector: any,
-		@Inject( '$document' ) $document: ng.IDocumentService,
-		@Inject( '$element' ) $element: ng.IRootElementService,
-		@Inject( 'App' ) app: App
+		@Inject( 'App' ) app: App,
 	)
 	{
 		// If the game has ads turned off, set it as "shown" initially.

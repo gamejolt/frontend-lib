@@ -12,14 +12,13 @@ export class Meta extends MetaContainer
 
 	constructor(
 		@Inject( '$rootScope' ) $rootScope: ng.IRootScopeService,
-		@Inject( '$window' ) private $window: ng.IWindowService,
 		@Inject( '$document' ) private $document: ng.IDocumentService,
 		@Inject( 'Environment' ) private Environment: any
 	)
 	{
 		super( $document[0] );
 
-		this._originalTitle = this.title;
+		this._originalTitle = this.$document[0].title;
 		this._fb = new FbMetaContainer( this.$document[0] );
 		this._twitter = new TwitterMetaContainer( this.$document[0] );
 
@@ -31,7 +30,7 @@ export class Meta extends MetaContainer
 		} );
 	}
 
-	set title( title: string )
+	set title( title: string | null )
 	{
 		if ( title ) {
 			if ( this.Environment.isClient ) {
@@ -50,29 +49,25 @@ export class Meta extends MetaContainer
 
 	get title() { return this.$document[0].title; }
 
-	set description( value: string ) { this._set( 'description', value ); }
+	set description( value: string | null ) { this._set( 'description', value ); }
 	get description() { return this._get( 'description' ); }
 
-	set redirect( value: string ) { this._set( 'redirect', value ); }
+	set redirect( value: string | null ) { this._set( 'redirect', value ); }
 	get redirect() { return this._get( 'redirect' ); }
 
-	set responseCode( value: string ) { this._set( 'responseCode', value ); }
+	set responseCode( value: string | null ) { this._set( 'responseCode', value ); }
 	get responseCode() { return this._get( 'responseCode' ); }
 
-	set fb( values: Object )
+	set fb( values: any )
 	{
-		for ( const i in values ) {
-			this._fb[ i ] = values[ i ];
-		}
+		angular.merge( this._fb, values );
 	}
 
 	get fb() { return this._fb; }
 
-	set twitter( values: Object )
+	set twitter( values: any )
 	{
-		for ( const i in values ) {
-			this._twitter[ i ] = values[ i ];
-		}
+		angular.merge( this._twitter, values );
 	}
 
 	get twitter() { return this._twitter; }

@@ -6,7 +6,17 @@ import { ModalConfirm } from './../../modal/confirm/confirm-service';
 import { App } from './../../../../../app/app-service';
 import { HistoryTick } from './../../history-tick/history-tick-service';
 
-export function Fireside_PostFactory( App, Environment, Model, Fireside_Post_Tag, Fireside_Post_Like, MediaItem, ModalConfirm, HistoryTick, gettextCatalog )
+export function Fireside_PostFactory(
+	Model: any,
+	App: any,
+	Environment: any,
+	Fireside_Post_Tag: any,
+	Fireside_Post_Like: any,
+	MediaItem: any,
+	ModalConfirm: any,
+	HistoryTick: any,
+	gettextCatalog: any,
+)
 {
 	return Model.create( Fireside_Post, {
 		App,
@@ -60,7 +70,7 @@ export class Fireside_Post extends Model
 	tags: Fireside_Post_Tag[] = [];
 	media: any[] = [];
 	// likes: Fireside_Post_Like[];
-	user_like: Fireside_Post_Like;
+	user_like: Fireside_Post_Like | null;
 
 	url: string;
 

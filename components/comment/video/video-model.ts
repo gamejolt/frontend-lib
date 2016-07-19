@@ -2,7 +2,7 @@ import { Injectable } from 'ng-metadata/core';
 import { Model } from './../../model/model-service';
 import { Comment } from './../comment-model';
 
-export function Comment_VideoFactory( Model, $injector, Game )
+export function Comment_VideoFactory( Model: any, $injector: any, Game: any )
 {
 	return Model.create( Comment_Video, {
 		$injector,

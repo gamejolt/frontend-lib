@@ -15,19 +15,18 @@ export class VideoEmbedComponent implements OnChanges
 	@Input( '<' ) videoId: string;
 	@Input( '<?' ) maxVideoHeight: number;
 	@Input( '<?' ) maxVideoWidth: number;
-	@Input( '<?' ) autoplay: boolean;
+	@Input( '<?' ) autoplay = false;
 
 	embedUrl: string;
 	width: number;
 	height: number;
 
 	constructor(
-		@Inject( '$scope' ) private $scope: any,
+		@Inject( '$scope' ) $scope: any,
 		@Inject( '$element' ) private $element: any,
 		@Inject( '$sce' ) private $sce: ng.ISCEService,
-		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
-		@Inject( 'Screen' ) private screen: Screen,
+		@Inject( 'Screen' ) screen: Screen,
 		@Inject( 'Ruler' ) private ruler: Ruler
 	)
 	{
@@ -44,7 +43,7 @@ export class VideoEmbedComponent implements OnChanges
 
 	ngOnChanges( changes: SimpleChanges )
 	{
-		let url;
+		let url: string;
 
 		if ( changes['videoId'] ) {
 			if ( this.videoProvider == 'youtube' ) {
@@ -52,6 +51,9 @@ export class VideoEmbedComponent implements OnChanges
 			}
 			else if ( this.videoProvider == 'vimeo' ) {
 				url = 'https://player.vimeo.com/video/' + this.videoId;
+			}
+			else {
+				throw new Error( 'Invalid video provider.' );
 			}
 
 			if ( this.autoplay ) {

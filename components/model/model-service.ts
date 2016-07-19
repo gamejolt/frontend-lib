@@ -1,6 +1,6 @@
 import { Injectable } from 'ng-metadata/core';
 
-export function ModelFactory( $q, Api )
+export function ModelFactory( $q: any, Api: any )
 {
 	Model.$q = $q;
 	Model.Api = Api;
@@ -26,7 +26,7 @@ export class Model
 		// These need to be created dynamically for each model type.
 		self.populate = function( rows: any[] ): any[]
 		{
-			const models = [];
+			const models: any[] = [];
 			if ( rows && angular.isArray( rows ) && rows.length ) {
 				for ( const row of rows ) {
 					models.push( new self( row ) );
@@ -54,21 +54,6 @@ export class Model
 		}
 
 		return self;
-	}
-
-	/**
-	 * Turn a constructor into an injectable name.
-	 */
-	static _getInjectionName( injection ): string
-	{
-		let injectionString = injection.toString();
-		const newLineIndex = injectionString.indexOf( '\n' );
-		injectionString = ( newLineIndex === -1 ) ? injectionString : injectionString.substring( 0, newLineIndex );
-
-		const parsedFnStatement = /function\s*([^\s(]+)/.exec( injectionString );
-		const [ , name = ''] = parsedFnStatement || [];
-
-		return name;
 	}
 
 	/**
@@ -119,13 +104,13 @@ export class Model
 	$_save( url: string, field: string, options?: any ): angular.IPromise<any>
 	{
 		return Model.Api.sendRequest( url, this, options )
-			.then( response => this.processUpdate( response, field ) );
+			.then( ( response: any ) => this.processUpdate( response, field ) );
 	}
 
 	$_remove( url: string, options?: any ): angular.IPromise<any>
 	{
 		// Always force a POST (passing in an object).
 		return Model.Api.sendRequest( url, {}, options )
-			.then( response => this.processRemove( response ) );
+			.then( ( response: any ) => this.processRemove( response ) );
 	}
 }

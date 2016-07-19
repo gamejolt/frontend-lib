@@ -52,9 +52,9 @@ export class HistoryTick
 			return;
 		}
 
-		return this.$q( ( resolve, reject ) =>
+		return this.$q( ( resolve ) =>
 		{
-			const queryParams = [];
+			const queryParams: string[] = [];
 
 			// Cache busting.
 			queryParams.push( 'cb=' + Date.now() );
@@ -89,8 +89,8 @@ export class HistoryTick
 			// Always resolve.
 			img.onload = img.onerror = () =>
 			{
-				img.onload = null;
-				img.onerror = null;
+				delete img.onload;
+				delete img.onerror;
 				resolve();
 			};
 

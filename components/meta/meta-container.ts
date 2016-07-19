@@ -1,7 +1,7 @@
 export class MetaField
 {
-	original: string;
-	current: string;
+	original: string | null;
+	current: string | null;
 }
 
 export class MetaContainer
@@ -14,11 +14,11 @@ export class MetaContainer
 		this._head = this._document.head;
 	}
 
-	protected _set( name: string, content: string )
+	protected _set( name: string, content: string | null )
 	{
 		this._storeField( name, content );
 
-		let elem = <HTMLMetaElement>this._head.querySelector( `meta[name="${name}"]` );
+		let elem = this._head.querySelector( `meta[name="${name}"]` ) as HTMLMetaElement;
 
 		// Remove if we're nulling it out.
 		if ( !content ) {
@@ -40,15 +40,15 @@ export class MetaContainer
 
 	protected _get( name: string )
 	{
-		return this._fields[ name ] ? this._fields[ name ].current : undefined;
+		return this._fields[ name ] ? this._fields[ name ].current : null;
 	}
 
-	protected _storeField( name: string, content: string )
+	protected _storeField( name: string, content: string | null )
 	{
 		if ( !this._fields[ name ] ) {
 			const field = new MetaField();
 
-			const elem = <HTMLMetaElement>this._head.querySelector( `meta[name="${name}"]` );
+			const elem = this._head.querySelector( `meta[name="${name}"]` ) as HTMLMetaElement;
 			if ( elem ) {
 				field.original = elem.content;
 			}

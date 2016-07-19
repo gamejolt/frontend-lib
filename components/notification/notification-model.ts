@@ -1,7 +1,16 @@
 import { Injectable } from 'ng-metadata/core';
 import { Model } from './../model/model-service';
 
-export function NotificationFactory( Model, Api, $state, $q, $injector, $location, $window, Environment )
+export function NotificationFactory(
+	Model: any,
+	Api: any,
+	$state: any,
+	$q: any,
+	$injector: any,
+	$location: any,
+	$window: any,
+	Environment: any,
+)
 {
 	return Model.create( Notification, {
 		Api,
@@ -53,7 +62,7 @@ export class Notification extends Model
 	to_model: any;
 
 	// Generated.
-	url = '';
+	url: string | undefined = '';
 	action_label = '';
 	jolticon = '';
 
@@ -151,15 +160,16 @@ export class Notification extends Model
 		}
 
 		// Keep memory clean after bootstrapping the models.
-		delete this['from_resource_model'];
-		delete this['action_resource_model'];
-		delete this['to_resource_model'];
+		const that: any = this;
+		delete that['from_resource_model'];
+		delete that['action_resource_model'];
+		delete that['to_resource_model'];
 	}
 
 	static fetchNotificationsFeed()
 	{
 		return Notification.Api.sendRequest( '/web/dash/activity/notifications-feed', null, { detach: true } )
-			.then( response =>
+			.then( ( response: any ) =>
 			{
 				return {
 					notifications: Notification.populate( response.notifications ),
@@ -204,12 +214,15 @@ export class Notification extends Model
 			|| this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER
 			|| this.type == Notification.TYPE_FORUM_POST_ADD
 		) {
-			let promise = null;
+			let promise: ng.IPromise<string>;
 			if ( this.type == Notification.TYPE_COMMENT_ADD || this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
 				promise = Notification.$injector.get( 'Comment' ).getCommentUrl( this.action_resource_id );
 			}
 			else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
 				promise = Notification.$injector.get( 'Forum_Post' ).getPostUrl( this.action_resource_id );
+			}
+			else {
+				throw new Error( 'Invalid type.' );
 			}
 
 			promise.then( url =>
@@ -226,7 +239,7 @@ export class Notification extends Model
 						require( 'nw.gui' ).Shell.openExternal( url );
 					}
 					else {
-						Notification.$window.location = url;
+						Notification.$window.location.href = url;
 					}
 				}
 			} )

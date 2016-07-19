@@ -1,7 +1,7 @@
 import { Injectable } from 'ng-metadata/core';
 import { Model } from './../../model/model-service';
 
-export function Comment_VoteFactory( Model )
+export function Comment_VoteFactory( Model: any )
 {
 	return Model.create( Comment_Vote );
 }

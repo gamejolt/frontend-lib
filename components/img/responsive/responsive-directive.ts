@@ -13,8 +13,8 @@ export class ResponsiveDirective implements OnChanges
 {
 	@Input( '@gjImgResponsive' ) startSrc: string;
 	@Input( '<?imgResponsiveNoMediaserver' ) noMediaserver = false;
-	@Input( '<?imgResponsiveWidth' ) width: number;
-	@Input( '<?imgResponsiveHeight' ) height: number;
+	@Input( '<?imgResponsiveWidth' ) width?: number;
+	@Input( '<?imgResponsiveHeight' ) height?: number;
 
 	@Output() onLoadedChange: Function;
 
@@ -23,14 +23,13 @@ export class ResponsiveDirective implements OnChanges
 
 	constructor(
 		@Inject( '$element' ) $element: ng.IAugmentedJQuery,
-		@Inject( '$timeout' ) $timeout: ng.ITimeoutService,
 		@Inject( '$scope' ) private $scope: ng.IScope,
 		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'Ruler' ) private ruler: Ruler,
 		@Inject( 'ImgHelper' ) private imgHelper: ImgHelper
 	)
 	{
-		this.element = $element[0];
+		this.element = $element[0] as HTMLImageElement;
 		this.element.classList.add( 'img-responsive' );
 
 		screen.setResizeSpy( $scope, () => this.updateSrc() );
@@ -103,8 +102,12 @@ export class ResponsiveDirective implements OnChanges
 	{
 		this.$scope.$applyAsync( () =>
 		{
+			if ( !this.width || !this.height ) {
+				return;
+			}
+
 			const containerWidth = this.ruler.width( this.element.parentNode as HTMLElement );
-			const newDimensions = this.imgHelper.getResizedDimensions( this.width, this.height, containerWidth, null );
+			const newDimensions = this.imgHelper.getResizedDimensions( this.width, this.height, containerWidth );
 			this.element.style.height = `${newDimensions.height}px`;
 		} );
 	}

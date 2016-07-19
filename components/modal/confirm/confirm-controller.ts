@@ -5,7 +5,7 @@ export class ModalCtrl
 {
 	constructor(
 		@Inject( '$modalInstance' ) private $modalInstance: any,
-		@Inject( 'options' ) private options: any
+		@Inject( 'options' ) public options: any,
 	)
 	{
 	}

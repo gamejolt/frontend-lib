@@ -21,7 +21,7 @@ export class ImgHelper
 		} );
 	}
 
-	getResizedDimensions( originalWidth: number, originalHeight: number, maxWidth: number, maxHeight: number )
+	getResizedDimensions( originalWidth: number, originalHeight: number, maxWidth?: number, maxHeight?: number )
 	{
 		const aspectRatio = originalHeight / originalWidth;
 		let width: number, height: number;
@@ -43,6 +43,9 @@ export class ImgHelper
 		else if ( !maxWidth && maxHeight ) {
 			height = Math.min( originalHeight, maxHeight );
 			width = height / aspectRatio;
+		}
+		else {
+			throw new Error( 'Invalid params.' );
 		}
 
 		return {

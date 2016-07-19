@@ -1,7 +1,7 @@
 import { Injectable } from 'ng-metadata/core';
 import { Model } from './../../model/model-service';
 
-export function Youtube_ChannelFactory( Model )
+export function Youtube_ChannelFactory( Model: any )
 {
 	return Model.create( Youtube_Channel, {
 	} );

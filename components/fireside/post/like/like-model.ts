@@ -1,9 +1,10 @@
 import { Injectable } from 'ng-metadata/core';
 import { Model } from './../../../model/model-service';
 
-export function Fireside_Post_LikeFactory( User, Model )
+export function Fireside_Post_LikeFactory( $q: any, User: any, Model: any )
 {
 	return Model.create( Fireside_Post_Like, {
+		$q,
 		User,
 	} );
 }
@@ -11,13 +12,14 @@ export function Fireside_Post_LikeFactory( User, Model )
 @Injectable()
 export class Fireside_Post_Like extends Model
 {
+	static User: any;
+	static $q: angular.IQService;
+
 	fireside_post_id: number;
 	user_id: number;
 	// user: gj.User;
 	user: any;
 	added_on: number;
-
-	static User: any;
 
 	constructor( data?: any )
 	{
@@ -33,6 +35,7 @@ export class Fireside_Post_Like extends Model
 		if ( !this.id ) {
 			return this.$_save( '/fireside/posts/like/' + this.fireside_post_id, 'firesidePostLike', { ignorePayloadUser: true } );
 		}
+		return Fireside_Post_Like.$q.reject();
 	}
 
 	$remove()

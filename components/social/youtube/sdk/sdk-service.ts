@@ -8,7 +8,6 @@ export class Youtube_Sdk
 	constructor(
 		@Inject( '$window' ) private $window: ng.IWindowService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
-		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'Environment' ) private environment: any
 	)
 	{
@@ -21,9 +20,9 @@ export class Youtube_Sdk
 		}
 
 		if ( !this.isBootstrapped ) {
-			let bootstrapLib = ( d, s, id ) =>
+			let bootstrapLib = ( d: any, s: any, id: any ) =>
 			{
-				let js, fjs = d.getElementsByTagName( s )[0];
+				let js: any, fjs = d.getElementsByTagName( s )[0];
 				if ( !d.getElementById( id ) ) {
 					js = d.createElement( s );
 					js.id = id;

@@ -14,7 +14,7 @@ export class Clipboard
 	{
 		// We have to add it into view, select, copy, then remove. Yeesh.
 		const rand = Math.random();
-		const clipboardElem = angular.element( `<input type="text" value="${url}" id="clipboard-${rand}">` );
+		const clipboardElem: any = angular.element( `<input type="text" value="${url}" id="clipboard-${rand}">` );
 		angular.element( this.$document[0].body ).append( clipboardElem );
 		clipboardElem[0].select();
 

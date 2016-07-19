@@ -3,7 +3,7 @@ import { Model } from './../model/model-service';
 import { Comment_Video } from './video/video-model';
 import { Comment_Vote } from './vote/vote-model';
 
-export function CommentFactory( $q, Model, Api, User, Comment_Video, Comment_Vote )
+export function CommentFactory( $q: any, Model: any, Api: any, User: any, Comment_Video: any, Comment_Vote: any )
 {
 	return Model.create( Comment, {
 		$q,
@@ -23,7 +23,7 @@ export class Comment extends Model
 	user: any;
 	comment_compiled: string;
 	votes: number;
-	user_vote: Comment_Vote;
+	user_vote?: Comment_Vote;
 	status: number;
 	posted_on: number;
 	lang: string;
@@ -71,7 +71,7 @@ export class Comment extends Model
 	static getCommentPage( commentId: number ): ng.IPromise<number>
 	{
 		return Comment.Api.sendRequest( `/comments/get-comment-page/${commentId}`, null, { detach: true } )
-			.then( response =>
+			.then( ( response: any ) =>
 			{
 				if ( !response || response.error ) {
 					return Comment.$q.reject( response.error );
@@ -84,7 +84,7 @@ export class Comment extends Model
 	static getCommentUrl( commentId: number ): ng.IPromise<string>
 	{
 		return Comment.Api.sendRequest( `/comments/get-comment-url/${commentId}`, null, { detach: true } )
-			.then( response =>
+			.then( ( response: any ) =>
 			{
 				if ( !response || response.error ) {
 					return Comment.$q.reject( response.error );
@@ -127,7 +127,7 @@ export class Comment extends Model
 		this.user_vote.$remove()
 			.then( () =>
 			{
-				this.user_vote = null;
+				this.user_vote = undefined;
 				--this.votes;
 				this.isVotePending = false;
 			} );

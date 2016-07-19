@@ -32,7 +32,7 @@ export class Ruler
 		return this._dimensions( 'offsetHeight', elem );
 	}
 
-	private _dimensions( baseProp: string, _elem: HTMLElement | Document ): number
+	private _dimensions( baseProp: 'clientWidth' | 'clientHeight' | 'offsetWidth' | 'offsetHeight', _elem: HTMLElement | Document ): number
 	{
 		let elem: HTMLElement;
 
@@ -50,7 +50,7 @@ export class Ruler
 		// This only matters for currently hidden elements that wouldn't return dimensions.
 		let swappedStyles = false;
 		const oldStyles = {};
-		if ( DISPLAY_SWAP_REGEX.test( styles.display ) && elem.offsetWidth === 0 ) {
+		if ( DISPLAY_SWAP_REGEX.test( styles.display || '' ) && elem.offsetWidth === 0 ) {
 			swappedStyles = true;
 
 			for ( const name in CSS_SHOW_STYLES ) {
@@ -61,16 +61,16 @@ export class Ruler
 
 		let val = elem[ baseProp ];
 		if ( baseProp === 'clientWidth' ) {
-			val -= parseFloat( styles.paddingLeft ) + parseFloat( styles.paddingRight );
+			val -= parseFloat( styles.paddingLeft || '' ) + parseFloat( styles.paddingRight || '' );
 		}
 		else if ( baseProp === 'clientHeight') {
-			val -= parseFloat( styles.paddingTop ) + parseFloat( styles.paddingBottom );
+			val -= parseFloat( styles.paddingTop || '' ) + parseFloat( styles.paddingBottom || '' );
 		}
 		else if ( baseProp === 'offsetWidth' ) {
-			val += parseFloat( styles.marginLeft ) + parseFloat( styles.marginRight );
+			val += parseFloat( styles.marginLeft || '' ) + parseFloat( styles.marginRight || '' );
 		}
 		else if ( baseProp === 'offsetHeight') {
-			val += parseFloat( styles.marginTop ) + parseFloat( styles.marginBottom );
+			val += parseFloat( styles.marginTop || '' ) + parseFloat( styles.marginBottom || '' );
 		}
 
 		if ( swappedStyles ) {

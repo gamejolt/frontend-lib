@@ -72,7 +72,7 @@ export class Game_PlayModal
 		);
 		const modalElem = this.$compile( modalElemTemplate )( modalScope );
 
-		this.$animate.enter( modalElem, body );
+		this.$animate.enter( modalElem, angular.element( body ) );
 		body.classList.add( 'game-play-modal-open' );
 
 		// Pull into this scope.
