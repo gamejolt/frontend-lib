@@ -4,8 +4,8 @@ import { Injectable, Inject } from 'ng-metadata/core';
 export class ImgHelper
 {
 	constructor(
-		@Inject( '$document' ) private $document: angular.IDocumentService,
-		@Inject( '$q' ) private $q: angular.IQService
+		@Inject( '$document' ) private $document: ng.IDocumentService,
+		@Inject( '$q' ) private $q: ng.IQService
 	)
 	{
 	}

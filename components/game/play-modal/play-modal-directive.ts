@@ -20,8 +20,8 @@ export class PlayModalComponent
 
 	constructor(
 		@Inject( '$injector' ) $injector: any,
-		@Inject( '$document' ) $document: angular.IDocumentService,
-		@Inject( '$element' ) $element: angular.IRootElementService,
+		@Inject( '$document' ) $document: ng.IDocumentService,
+		@Inject( '$element' ) $element: ng.IRootElementService,
 		@Inject( 'App' ) app: App
 	)
 	{

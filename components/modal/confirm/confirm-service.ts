@@ -10,7 +10,7 @@ export class ModalConfirm
 	{
 	}
 
-	show( message: string, title = 'Confirm...', buttonType: 'ok' | 'yes' = 'ok' ): angular.IPromise<void>
+	show( message: string, title = 'Confirm...', buttonType: 'ok' | 'yes' = 'ok' ): ng.IPromise<void>
 	{
 		const modalInstance = this.$modal.open( {
 			template,

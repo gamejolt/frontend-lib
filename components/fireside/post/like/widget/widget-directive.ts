@@ -15,7 +15,7 @@ export class WidgetComponent
 		@Inject( 'App' ) private app,
 		@Inject( 'Screen' ) private screen,
 		@Inject( 'Fireside_Post_Like' ) private firesidePostLike: typeof Fireside_Post_Like,
-		@Inject( 'gettextCatalog' ) private gettextCatalog: angular.gettext.gettextCatalog
+		@Inject( 'gettextCatalog' ) private gettextCatalog: ng.gettext.gettextCatalog
 	)
 	{
 	}

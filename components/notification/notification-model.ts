@@ -19,11 +19,11 @@ export class Notification extends Model
 {
 	static Api: any;
 	static Environment: any;
-	static $state: angular.ui.IStateService;
-	static $q: angular.IQService;
+	static $state: ng.ui.IStateService;
+	static $q: ng.IQService;
 	static $injector: any;
-	static $location: angular.ILocationService;
-	static $window: angular.IWindowService;
+	static $location: ng.ILocationService;
+	static $window: ng.IWindowService;
 
 	static TYPE_COMMENT_ADD = 'comment-add';
 	static TYPE_COMMENT_ADD_OBJECT_OWNER = 'comment-add-object-owner';

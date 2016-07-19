@@ -6,9 +6,9 @@ export class Youtube_Sdk
 	isBootstrapped = false;
 
 	constructor(
-		@Inject( '$window' ) private $window: angular.IWindowService,
-		@Inject( '$timeout' ) private $timeout: angular.ITimeoutService,
-		@Inject( '$location' ) private $location: angular.ILocationService,
+		@Inject( '$window' ) private $window: ng.IWindowService,
+		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
+		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'Environment' ) private environment: any
 	)
 	{

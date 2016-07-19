@@ -20,12 +20,12 @@ export class LightboxComponent implements OnInit
 	maxWidth: number;
 
 	constructor(
-		@Inject( '$element' ) private $element: angular.IRootElementService,
-		@Inject( '$scope' ) private $scope: angular.IScope,
-		@Inject( '$document' ) private $document: angular.IDocumentService,
-		@Inject( '$animate' ) private $animate: angular.animate.IAnimateService,
-		@Inject( '$location' ) private $location: angular.ILocationService,
-		@Inject( 'hotkeys' ) private hotkeys: angular.hotkeys.HotkeysProvider,
+		@Inject( '$element' ) private $element: ng.IRootElementService,
+		@Inject( '$scope' ) private $scope: ng.IScope,
+		@Inject( '$document' ) private $document: ng.IDocumentService,
+		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
+		@Inject( '$location' ) private $location: ng.ILocationService,
+		@Inject( 'hotkeys' ) private hotkeys: ng.hotkeys.HotkeysProvider,
 		@Inject( 'App' ) private app: App,
 		@Inject( 'Environment' ) private environment: any,
 		@Inject( 'Screen' ) private screen: Screen,

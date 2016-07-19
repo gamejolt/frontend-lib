@@ -31,7 +31,7 @@ export class Comment extends Model
 
 	isVotePending: boolean = false;
 
-	static $q: angular.IQService;
+	static $q: ng.IQService;
 	static Api: any;
 	static User: any;
 	static Comment_Video: typeof Comment_Video;
@@ -68,7 +68,7 @@ export class Comment extends Model
 		return Comment.Api.sendRequest( `/comments/${resource}/${resourceId}${query}`, null, { detach: true } );
 	}
 
-	static getCommentPage( commentId: number ): angular.IPromise<number>
+	static getCommentPage( commentId: number ): ng.IPromise<number>
 	{
 		return Comment.Api.sendRequest( `/comments/get-comment-page/${commentId}`, null, { detach: true } )
 			.then( response =>
@@ -81,7 +81,7 @@ export class Comment extends Model
 			} );
 	}
 
-	static getCommentUrl( commentId: number ): angular.IPromise<string>
+	static getCommentUrl( commentId: number ): ng.IPromise<string>
 	{
 		return Comment.Api.sendRequest( `/comments/get-comment-url/${commentId}`, null, { detach: true } )
 			.then( response =>

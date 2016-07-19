@@ -70,8 +70,8 @@ export class Screen
 	isHiDpi = false;
 
 	constructor(
-		@Inject( '$rootScope' ) private $rootScope: angular.IRootScopeService,
-		@Inject( '$window' ) private $window: angular.IWindowService
+		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
+		@Inject( '$window' ) private $window: ng.IWindowService
 	)
 	{
 		this._generateMq();
@@ -151,7 +151,7 @@ export class Screen
 	/**
 	 * Sets the Screen's context.
 	 */
-	setContext( element: angular.IRootElementService )
+	setContext( element: ng.IRootElementService )
 	{
 		if ( !element ) {
 			this.context = null;
@@ -167,7 +167,7 @@ export class Screen
 	 * @param {angular.Scope} scope
 	 * @param {function} onResize
 	 */
-	setResizeSpy( scope: angular.IScope, onResize: Function )
+	setResizeSpy( scope: ng.IScope, onResize: Function )
 	{
 		const resizeHandlerOff = this.$rootScope.$on( 'Screen.onResize', () =>
 		{
