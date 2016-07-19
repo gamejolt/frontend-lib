@@ -30,6 +30,13 @@ module.exports = function( config )
 					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
 				},
 			} ),
+			{
+				// import template from 'html!./something.html';
+				transform: function( code, id )
+				{
+					return code.replace( 'html!', '' );
+				},
+			},
 			rollupString( {
 				include: '**/*.html',
 			} ),
