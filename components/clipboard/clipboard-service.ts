@@ -4,7 +4,7 @@ import { Injectable, Inject } from 'ng-metadata/core';
 export class Clipboard
 {
 	constructor(
-		@Inject( '$document' ) private $document: ng.IDocumentService,
+		@Inject( '$document' ) private $document: angular.IDocumentService,
 		@Inject( 'Growls' ) private growls: any
 	)
 	{

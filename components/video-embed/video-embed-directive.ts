@@ -24,9 +24,9 @@ export class VideoEmbedComponent implements OnChanges
 	constructor(
 		@Inject( '$scope' ) private $scope: any,
 		@Inject( '$element' ) private $element: any,
-		@Inject( '$sce' ) private $sce: ng.ISCEService,
-		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
-		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
+		@Inject( '$sce' ) private $sce: angular.ISCEService,
+		@Inject( '$rootScope' ) private $rootScope: angular.IRootScopeService,
+		@Inject( '$timeout' ) private $timeout: angular.ITimeoutService,
 		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'Ruler' ) private ruler: Ruler
 	)

@@ -7,12 +7,12 @@ export class Game_PlayModal
 	hasModal = false;
 
 	constructor(
-		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
-		@Inject( '$document' ) private $document: ng.IDocumentService,
-		@Inject( '$q' ) private $q: ng.IQService,
-		@Inject( '$state' ) private $state: ng.ui.IStateService,
-		@Inject( '$compile' ) private $compile: ng.ICompileService,
-		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
+		@Inject( '$rootScope' ) private $rootScope: angular.IRootScopeService,
+		@Inject( '$document' ) private $document: angular.IDocumentService,
+		@Inject( '$q' ) private $q: angular.IQService,
+		@Inject( '$state' ) private $state: angular.ui.IStateService,
+		@Inject( '$compile' ) private $compile: angular.ICompileService,
+		@Inject( '$animate' ) private $animate: angular.animate.IAnimateService,
 		@Inject( '$injector' ) private $injector: any,
 		@Inject( 'Growls' ) private Growls: any,
 		@Inject( 'HistoryTick' ) private HistoryTick: HistoryTick,

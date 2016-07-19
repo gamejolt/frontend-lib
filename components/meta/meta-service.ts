@@ -11,9 +11,9 @@ export class Meta extends MetaContainer
 	private _originalTitle: string;
 
 	constructor(
-		@Inject( '$rootScope' ) $rootScope: ng.IRootScopeService,
-		@Inject( '$window' ) private $window: ng.IWindowService,
-		@Inject( '$document' ) private $document: ng.IDocumentService,
+		@Inject( '$rootScope' ) $rootScope: angular.IRootScopeService,
+		@Inject( '$window' ) private $window: angular.IWindowService,
+		@Inject( '$document' ) private $document: angular.IDocumentService,
 		@Inject( 'Environment' ) private Environment: any
 	)
 	{

@@ -16,10 +16,10 @@ export class EmbedComponent implements AfterViewInit
 	@Input( '<' ) build: any;
 
 	constructor(
-		@Inject( '$element' ) private $element: ng.IRootElementService,
-		@Inject( '$sce' ) private $sce: ng.ISCEService,
-		@Inject( '$q' ) private $q: ng.IQService,
-		@Inject( '$interval' ) private $interval: ng.IIntervalService,
+		@Inject( '$element' ) private $element: angular.IRootElementService,
+		@Inject( '$sce' ) private $sce: angular.ISCEService,
+		@Inject( '$q' ) private $q: angular.IQService,
+		@Inject( '$interval' ) private $interval: angular.IIntervalService,
 		@Inject( 'Environment' ) private environment: any,
 		@Inject( 'Game_PlayModal' ) playModal: any,
 		@Inject( 'Game_Build' ) gameBuild: any,

@@ -30,7 +30,7 @@ export class Fireside_Post extends Model
 	static MediaItem: any;
 	static ModalConfirm: ModalConfirm;
 	static HistoryTick: HistoryTick;
-	static gettextCatalog: ng.gettext.gettextCatalog;
+	static gettextCatalog: angular.gettext.gettextCatalog;
 
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';

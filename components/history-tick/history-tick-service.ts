@@ -13,8 +13,8 @@ export class HistoryTick
 	private _sources: { [key: string]: string } = {};
 
 	constructor(
-		@Inject( '$document' ) private $document: ng.IDocumentService,
-		@Inject( '$q' ) private $q: ng.IQService,
+		@Inject( '$document' ) private $document: angular.IDocumentService,
+		@Inject( '$q' ) private $q: angular.IQService,
 		@Inject( 'Environment' ) private environment: any,
 		@Inject( 'Referrer' ) private referrer: any,
 		@Inject( 'Device' ) private device: any

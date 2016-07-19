@@ -22,9 +22,9 @@ export class ResponsiveDirective implements OnChanges
 	currentSrc: string;
 
 	constructor(
-		@Inject( '$element' ) $element: ng.IAugmentedJQuery,
-		@Inject( '$timeout' ) $timeout: ng.ITimeoutService,
-		@Inject( '$scope' ) private $scope: ng.IScope,
+		@Inject( '$element' ) $element: angular.IAugmentedJQuery,
+		@Inject( '$timeout' ) $timeout: angular.ITimeoutService,
+		@Inject( '$scope' ) private $scope: angular.IScope,
 		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'Ruler' ) private ruler: Ruler,
 		@Inject( 'ImgHelper' ) private imgHelper: ImgHelper
