@@ -1,4 +1,4 @@
-angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, Model, Environment, User, MediaItem )
+angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Api, App, Model, Environment, User, MediaItem )
 {
 	if ( $injector.has( 'Registry' ) ) {
 		$injector.get( 'Registry' ).setConfig( 'Game', {
@@ -261,6 +261,30 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 		}
 
 		return builds[0];
+	};
+
+	Game.prototype.$follow = function()
+	{
+		var _this = this;
+		return Api.sendRequest( '/web/library/games/add/followed', { game_id: this.id } )
+			.then( function( response )
+			{
+				_this.is_following = true;
+				++_this.follower_count;
+				return response;
+			} );
+	};
+
+	Game.prototype.$unfollow = function()
+	{
+		var _this = this;
+		return this.$_remove( '/web/library/games/remove/followed/' + this.id )
+			.then( function( response )
+			{
+				_this.is_following = false;
+				--_this.follower_count;
+				return response;
+			} );
 	};
 
 	Game.prototype.$save = function()
