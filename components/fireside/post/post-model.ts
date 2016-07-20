@@ -10,6 +10,7 @@ export function Fireside_PostFactory(
 	Model: any,
 	App: any,
 	Environment: any,
+	Game: any,
 	Fireside_Post_Tag: any,
 	Fireside_Post_Like: any,
 	MediaItem: any,
@@ -21,6 +22,7 @@ export function Fireside_PostFactory(
 	return Model.create( Fireside_Post, {
 		App,
 		Environment,
+		Game,
 		Fireside_Post_Tag,
 		Fireside_Post_Like,
 		MediaItem,
@@ -35,6 +37,7 @@ export class Fireside_Post extends Model
 {
 	static App: App;
 	static Environment: any;
+	static Game: any;
 	static Fireside_Post_Tag: typeof Fireside_Post_Tag;
 	static Fireside_Post_Like: typeof Fireside_Post_Like;
 	static MediaItem: any;
@@ -83,6 +86,10 @@ export class Fireside_Post extends Model
 
 		if ( data && data.header ) {
 			this.header = new Fireside_Post.MediaItem( data.header );
+		}
+
+		if ( data && data.game ) {
+			this.game = new Fireside_Post.Game( data.game );
 		}
 
 		if ( data && data.tags ) {
