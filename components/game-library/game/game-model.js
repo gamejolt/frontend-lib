@@ -11,15 +11,5 @@ angular.module( 'gj.GameLibrary.Game' ).factory( 'GameLibrary_Game', function( M
 		}
 	}
 
-	GameLibrary_Game.prototype.$save = function()
-	{
-		return this.$_save( '/web/library/games/add/followed', 'gameLibraryGame' );
-	};
-
-	GameLibrary_Game.prototype.$remove = function()
-	{
-		return this.$_remove( '/web/library/games/remove/followed/' + this.game_id );
-	};
-
 	return Model.create( GameLibrary_Game );
 } );
