@@ -80,6 +80,9 @@ export class Fireside_Post extends Model
 
 	url: string;
 
+	// For feeds.
+	scroll_id?: number;
+
 	// For uploads.
 	file: any;
 

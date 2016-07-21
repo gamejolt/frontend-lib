@@ -69,6 +69,9 @@ export class Notification extends Model
 	is_user_based = false;
 	is_game_based = false;
 
+	// For feeds.
+	scroll_id?: number;
+
 	constructor( data?: any )
 	{
 		super( data );
@@ -165,42 +168,10 @@ export class Notification extends Model
 		delete that['to_resource_model'];
 	}
 
-	static fetchNotificationsFeed()
-	{
-		return Notification.Api.sendRequest( '/web/dash/activity/notifications-feed', null, { detach: true } )
-			.then( ( response: any ) =>
-			{
-				return {
-					notifications: Notification.populate( response.notifications ),
-					notificationsCount: response.notificationsCount || 0,
-				};
-			} );
-	}
-
 	static fetchNotificationsCount()
 	{
-		return Notification.Api.sendRequest( '/web/dash/activity/notifications-count', null, { detach: true } );
+		return Notification.Api.sendRequest( '/web/dash/activity/count', null, { detach: true } );
 	}
-
-	// static $readAll( type: string )
-	// {
-	// 	if ( type ) {
-	// 		type = '/' + type;
-	// 	}
-	// 	else {
-	// 		type = '';
-	// 	}
-
-	// 	return Notification.Api.sendRequest( '/web/dash/activity/mark-all-read' + type, {} )
-	// 		.then( response =>
-	// 		{
-	// 			if ( !response.success ) {
-	// 				return Notification.$q.reject( response );
-	// 			}
-
-	// 			return response;
-	// 		} );
-	// }
 
 	go()
 	{
