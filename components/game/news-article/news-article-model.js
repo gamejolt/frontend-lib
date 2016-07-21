@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.NewsArticle' ).factory( 'Game_NewsArticle', function( Model, User, Game, Notification, KeyGroup )
+angular.module( 'gj.Game.NewsArticle' ).factory( 'Game_NewsArticle', function( Model, User, Game, KeyGroup )
 {
 	function Game_NewsArticle( data )
 	{
@@ -7,10 +7,6 @@ angular.module( 'gj.Game.NewsArticle' ).factory( 'Game_NewsArticle', function( M
 
 			if ( data.game ) {
 				this.game = new Game( data.game );
-			}
-
-			if ( data.notification ) {
-				this.notification = new Notification( data.notification );
 			}
 
 			if ( data.key_groups ) {
