@@ -141,12 +141,11 @@ export class Notification extends Model
 			else if ( this.type == Notification.TYPE_DEVLOG_POST_ADD ) {
 				this.action_model = new (Notification.$injector.get( 'Fireside_Post' ))( data.action_resource_model );
 				this.action_label = 'Devlog Post';
-				// this.url = Notification.$state.href( 'discover.games.view.news.view', {
-				// 	slug: this.to_model.slug,
-				// 	id: this.to_model.id,
-				// 	articleSlug: this.action_model.slug,
-				// 	articleId: this.action_model.id,
-				// } );
+				this.url = Notification.$state.href( 'discover.games.view.devlog.view', {
+					slug: this.to_model.slug,
+					id: this.to_model.id,
+					postSlug: this.action_model.slug,
+				} );
 				this.jolticon = 'jolticon-blog-article';
 				this.is_game_based = true;
 			}
