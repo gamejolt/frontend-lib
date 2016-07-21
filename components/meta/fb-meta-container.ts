@@ -14,8 +14,8 @@ export class FbMetaContainer extends MetaContainer
 	set type( value: string | null ) { this._set( 'og:type', value ); }
 	get type() { return this._get( 'og:type' ); }
 
-	set image( value: string | null ) { this._set( 'og:type', value ); }
-	get image() { return this._get( 'og:type' ); }
+	set image( value: string | null ) { this._set( 'og:image', value ); }
+	get image() { return this._get( 'og:image' ); }
 
 	set profileId( value: string | null ) { this._set( 'og:profile_id', value ); }
 	get profileId() { return this._get( 'og:profile_id' ); }
