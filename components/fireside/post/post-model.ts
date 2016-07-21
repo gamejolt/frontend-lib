@@ -9,6 +9,7 @@ import { HistoryTick } from './../../history-tick/history-tick-service';
 export function Fireside_PostFactory(
 	Model: any,
 	App: any,
+	Api: any,
 	Environment: any,
 	Game: any,
 	Fireside_Post_Tag: any,
@@ -21,6 +22,7 @@ export function Fireside_PostFactory(
 {
 	return Model.create( Fireside_Post, {
 		App,
+		Api,
 		Environment,
 		Game,
 		Fireside_Post_Tag,
@@ -36,6 +38,7 @@ export function Fireside_PostFactory(
 export class Fireside_Post extends Model
 {
 	static App: App;
+	static Api: any;
 	static Environment: any;
 	static Game: any;
 	static Fireside_Post_Tag: typeof Fireside_Post_Tag;
@@ -114,6 +117,15 @@ export class Fireside_Post extends Model
 	static pullHashFromUrl( url: string )
 	{
 		return url.substring( url.lastIndexOf( '-' ) + 1 );
+	}
+
+	fetchLikes(): ng.IPromise<Fireside_Post_Like[]>
+	{
+		return Fireside_Post.Api.sendRequest( `/fireside/posts/likes/${this.id}` )
+			.then( ( response: any ) =>
+			{
+				return Fireside_Post.Fireside_Post_Like.populate( response.likes );
+			} );
 	}
 
 	$save()
