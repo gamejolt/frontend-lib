@@ -297,6 +297,11 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Ap
 		}
 	};
 
+	Game.prototype.$saveDescription = function()
+	{
+		return this.$_save( '/web/dash/developer/games/description/save/' + this.id, 'game' );
+	};
+
 	Game.prototype.$saveMaturity = function()
 	{
 		return this.$_save( '/web/dash/developer/games/maturity/save/' + this.id, 'game' );
