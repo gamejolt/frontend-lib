@@ -1,3 +1,6 @@
+gj-card
+	display: block
+
 .card
 	@extend .full-bleed-xs, .fill-darkest, .clearfix
 	position: relative
@@ -54,14 +57,16 @@
 				font-weight: bold
 
 			a
-				@extend .link-unstyled
+				&
+				.card-inactive &
+					@extend .link-unstyled
 
 	&-meta
 		@extend .text-muted
 		margin-top: 5px
 		font-size: $font-size-small
 
-		> .jolticon
+		> .jolticonadd games
 			vertical-align: middle
 
 		&-sm
@@ -128,5 +133,13 @@
 			color: $white
 
 	&-inactive.card
-		@extend .fill-gray
+		@extend .fill-dark
 		color: $gray-dark
+
+		.card
+
+			&-controls
+				border-color: $gray
+
+		hr
+			border-color: $gray
