@@ -14,5 +14,35 @@
 			float: none
 			display: inline-block
 
-	.media-item-list-item
-		margin-bottom: 0
+		&-item
+			display: block
+			position: relative
+			height: 0
+			padding-top: 80%
+			background-color: $gray-darkest
+
+			@media $media-xs
+				margin-bottom: $grid-gutter-width-xs
+
+		&-item-inner
+			position: absolute
+			top: 5px
+			right: 5px
+			bottom: 5px
+			left: 5px
+
+		&-item-controls
+			position: absolute
+			top: -5px
+			right: 5px
+			z-index: 1
+
+		&-item-img
+			position: absolute
+			top: 0
+			right: 0
+			bottom: 0
+			left: 0
+			background-repeat: no-repeat
+			background-position: center center
+			background-size: cover
