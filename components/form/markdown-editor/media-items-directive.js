@@ -34,8 +34,11 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaIt
 		return Api.sendRequest( '/web/dash/media-items/add', scope.formModel, { file: scope.formModel.file } )
 			.then( function( response )
 			{
-				if ( response.success !== false ) {
-					scope.mediaItems.unshift( new MediaItem( response.mediaItem ) );
+				var i;
+				if ( response.success !== false && angular.isArray( response.mediaItems ) ) {
+					for ( i in response.mediaItems ) {
+						scope.mediaItems.unshift( new MediaItem( response.mediaItems[ i ] ) );
+					}
 				}
 
 				return response;
