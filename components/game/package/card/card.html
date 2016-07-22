@@ -116,8 +116,11 @@
 			></a>
 	</div>
 
-	<div class="alert alert-warning" ng-if="::!ctrl.showcasedRelease" translate>
-		No published releases yet.
+	<div ng-if="::!ctrl.showcasedRelease">
+		<br>
+		<div class="alert alert-warning" translate>
+			No published releases yet.
+		</div>
 	</div>
 
 	<div ng-if="ctrl.hasPaymentWell">
@@ -147,7 +150,7 @@
 		</div>
 	</div>
 
-	<div class="card-controls">
+	<div class="card-controls" ng-if="::ctrl.showcasedRelease">
 
 		<div ng-if="ctrl.sellable.type != 'paid' || ctrl.isOwned">
 
