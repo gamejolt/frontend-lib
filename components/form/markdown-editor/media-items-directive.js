@@ -20,6 +20,9 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaIt
 				{
 					scope.formState.isLoaded = true;
 					scope.mediaItems = MediaItem.populate( response.mediaItems );
+					scope.maxFilesize = response.maxFilesize;
+					scope.maxWidth = response.maxWidth;
+					scope.maxHeight = response.maxHeight;
 				} );
 		}
 
