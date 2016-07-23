@@ -134,11 +134,16 @@ export class Fireside_Post extends Model
 	$save()
 	{
 		if ( this.game ) {
+			const options = {
+				allowComplexData: [ 'keyGroups' ],
+				file: this.file,
+			};
+
 			if ( !this.id ) {
-				return this.$_save( `/web/dash/developer/games/devlog/save/${this.game.id}`, 'firesidePost', { file: this.file } );
+				return this.$_save( `/web/dash/developer/games/devlog/save/${this.game.id}`, 'firesidePost', options );
 			}
 			else {
-				return this.$_save( `/web/dash/developer/games/devlog/save/${this.game.id}/${this.id}`, 'firesidePost', { file: this.file } );
+				return this.$_save( `/web/dash/developer/games/devlog/save/${this.game.id}/${this.id}`, 'firesidePost', options );
 			}
 		}
 		else {
