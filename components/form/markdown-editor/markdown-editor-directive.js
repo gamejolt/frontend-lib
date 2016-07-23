@@ -38,6 +38,10 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 				this.shouldShowWidgetHelp = true;
 			}
 
+			if ( this.markdownMode == 'devlog' ) {
+				this.shouldShowWidgetHelp = true;
+			}
+
 			if ( this.markdownMode == 'jams' ) {
 				this.shouldShowWidgetHelp = true;
 			}
