@@ -12,9 +12,6 @@ const WIDTH_REGEX = /\/(\d+)\//;
 export class ResponsiveDirective implements OnChanges
 {
 	@Input( '@gjImgResponsive' ) startSrc: string;
-	@Input( '<?imgResponsiveNoMediaserver' ) noMediaserver = false;
-	@Input( '<?imgResponsiveWidth' ) width?: number;
-	@Input( '<?imgResponsiveHeight' ) height?: number;
 
 	@Output() onLoadedChange: Function;
 
@@ -33,17 +30,12 @@ export class ResponsiveDirective implements OnChanges
 		this.element.classList.add( 'img-responsive' );
 
 		screen.setResizeSpy( $scope, () => this.updateSrc() );
-		screen.setResizeSpy( $scope, () => this.updateDimensions() );
 	}
 
 	ngOnChanges( changes: SimpleChanges )
 	{
-		if ( changes['startSrc'] || changes['noMediaserver'] ) {
+		if ( changes['startSrc'] ) {
 			this.updateSrc();
-		}
-
-		if ( changes['width'] || changes['height'] ) {
-			this.updateDimensions();
 		}
 	}
 
@@ -60,27 +52,24 @@ export class ResponsiveDirective implements OnChanges
 			}
 
 			// Update width in the URL.
+			// We keep width within 100px increment bounds.
 			let newSrc = this.startSrc;
-			if ( !this.noMediaserver ) {
+			let mediaserverWidth = containerWidth;
+			if ( this.screen.isHiDpi ) {
 
-				// We keep width within 100px increment bounds.
-				let mediaserverWidth = containerWidth;
-				if ( this.screen.isHiDpi ) {
+				// For high dpi, double the width.
+				mediaserverWidth = mediaserverWidth * 2;
+				mediaserverWidth = Math.ceil( mediaserverWidth / 100 ) * 100;
+			}
+			else {
+				mediaserverWidth = Math.ceil( mediaserverWidth / 100 ) * 100;
+			}
 
-					// For high dpi, double the width.
-					mediaserverWidth = mediaserverWidth * 2;
-					mediaserverWidth = Math.ceil( mediaserverWidth / 100 ) * 100;
-				}
-				else {
-					mediaserverWidth = Math.ceil( mediaserverWidth / 100 ) * 100;
-				}
-
-				if ( newSrc.search( WIDTH_HEIGHT_REGEX ) !== -1 ) {
-					newSrc = newSrc.replace( WIDTH_HEIGHT_REGEX, '/' + mediaserverWidth + 'x2000/' );
-				}
-				else {
-					newSrc = newSrc.replace( WIDTH_REGEX, '/' + mediaserverWidth + '/' );
-				}
+			if ( newSrc.search( WIDTH_HEIGHT_REGEX ) !== -1 ) {
+				newSrc = newSrc.replace( WIDTH_HEIGHT_REGEX, '/' + mediaserverWidth + 'x2000/' );
+			}
+			else {
+				newSrc = newSrc.replace( WIDTH_REGEX, '/' + mediaserverWidth + '/' );
 			}
 
 			// Only if the src changed from previous runs.
@@ -95,20 +84,6 @@ export class ResponsiveDirective implements OnChanges
 						.then( () => this.onLoadedChange( { $loaded: true } ) );
 				}
 			}
-		} );
-	}
-
-	updateDimensions()
-	{
-		this.$scope.$applyAsync( () =>
-		{
-			if ( !this.width || !this.height ) {
-				return;
-			}
-
-			const containerWidth = this.ruler.width( this.element.parentNode as HTMLElement );
-			const newDimensions = this.imgHelper.getResizedDimensions( this.width, this.height, containerWidth );
-			this.element.style.height = `${newDimensions.height}px`;
 		} );
 	}
 }
