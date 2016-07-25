@@ -322,14 +322,24 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Ap
 		return this.$_save( '/web/dash/developer/games/header/clear/' + this.id, 'game' );
 	};
 
+	Game.prototype.$saveSettings = function()
+	{
+		return this.$_save( '/web/dash/developer/games/settings/save/' + this.id, 'game' );
+	};
+
 	Game.prototype.$setStatus = function( status )
 	{
 		return this.$_save( '/web/dash/developer/games/set-status/' + this.id + '/' + status, 'game' );
 	};
 
-	Game.prototype.$saveSettings = function()
+	Game.prototype.$setDevStage = function( stage )
 	{
-		return this.$_save( '/web/dash/developer/games/settings/save/' + this.id, 'game' );
+		return this.$_save( '/web/dash/developer/games/set-dev-stage/' + this.id + '/' + stage, 'game' );
+	};
+
+	Game.prototype.$setCanceled = function( isCanceled )
+	{
+		return this.$_save( '/web/dash/developer/games/set-canceled/' + this.id + '/' + (isCanceled ? '1' : '0'), 'game' );
 	};
 
 	Game.prototype.$remove = function( status )
