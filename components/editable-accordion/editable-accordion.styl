@@ -10,7 +10,6 @@ gj-editable-accordion-add
 	border: 0
 	background: $gray-lighter
 
-.editable-accordion-item
 .editable-accordion-item-edit
 .editable-accordion-button
 .editable-accordion-item-add
@@ -21,121 +20,6 @@ gj-editable-accordion-add
 .editable-accordion-item-container
 	@extend .anim-fade-enter-right, .stagger-enter
 	@extend .anim-fade-leave-enlarge
-
-// .editable-accordion-item
-// 	@extend .fill-darker
-// 	position: relative
-// 	padding: 10px
-// 	padding-left: 40px  // For the open/close chevron.
-// 	color: $white
-// 	cursor: pointer
-// 	user-select: none
-
-// 	// Full bleed the container on mobile.
-// 	@media $media-xs
-// 		margin-left: -($grid-gutter-width-xs /2)
-// 		margin-right: -($grid-gutter-width-xs /2)
-
-// 	// Not expandable doesn't show chevron and also isn't clickable.
-// 	&.not-expandable
-// 		padding-left: 10px
-// 		cursor: default
-// 		user-select: text
-
-// 		> .chevron
-// 			display: none
-
-// 	&.has-drag-handle
-// 		padding-right: 40px
-
-// 		// Since we full-bleed on mobile, if it has a drag handle, then we don't want to full bleed the right.
-// 		// This makes it easier to grab the drag handle since it's away from the edge a bit.
-// 		@media $media-xs
-// 			margin-right: 0
-
-// 	// Inactive pages.
-// 	// Gray them out a bit.
-// 	.editable-accordion-item-container.inactive &
-// 		@extend .fill-light
-// 		color: $gray-dark
-
-// 	> .chevron
-// 		position: absolute
-// 		left: 0
-// 		top: 11px
-// 		width: 40px
-// 		text-align: center
-
-// 		 > .jolticon
-// 			cursor: inherit
-
-// 	> .drag-handle
-// 		position: absolute
-// 		right: 0
-// 		top: 0
-// 		bottom: 0
-// 		width: 20px
-// 		cursor: move
-// 		background-color: $gray-dark
-// 		user-select: none
-
-// 		> .jolticon
-// 			position: absolute
-// 			top: 50%
-// 			left: 0
-// 			margin-top: -8px
-// 			cursor: inherit
-// 			color: $white
-
-// gj-editable-accordion-item-heading
-// 	display: block
-
-// .editable-accordion-item-heading
-// 	@extend .clearfix
-
-// 	&-media
-// 		float: left
-// 		width: 100px
-// 		margin-right: 15px
-
-// 	&-text
-// 		float: left
-
-// 	.controls
-// 		float: right
-
-// 		> .i-button
-// 		> .btn
-// 			vertical-align: text-top
-
-// 	.tags-inline
-// 		display: inline-block
-// 		margin-left: 5px
-
-// 		> .tag
-// 			vertical-align: text-bottom
-
-// 	.stats
-// 		float: right
-// 		margin-left: 15px
-// 		text-align: right
-
-// .editable-accordion-media-lg
-// 	width: 150px
-
-// .editable-accordion-item-heading-title
-// 	margin: 0
-
-// .editable-accordion-item-heading-description
-// 	@extend .text-muted
-// 	font-size: $font-size-small
-
-// 	.editable-accordion-item-container.inactive &
-// 		color: $gray-dark
-
-// .editable-accordion-item-heading-title
-// .editable-accordion-item-heading-description
-// 	margin-bottom: 5px
 
 /**
  * Add/Edit Stuff
