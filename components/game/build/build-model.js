@@ -97,10 +97,18 @@ angular.module( 'gj.Game.Build' ).factory( 'Game_Build', function( Api, Model, G
 		}
 	};
 
-	Game_Build.prototype.$remove = function()
+	Game_Build.prototype.$remove = function( game )
 	{
 		var params = [ this.game_id, this.game_package_id, this.game_release_id, this.id ];
-		return this.$_remove( '/web/dash/developer/games/builds/remove/' + params.join( '/' ) );
+		return this.$_remove( '/web/dash/developer/games/builds/remove/' + params.join( '/' ) )
+			.then( function( response )
+			{
+				if ( game && response.game ) {
+					game.assign( response.game );
+				}
+
+				return response;
+			} );
 	};
 
 	return Model.create( Game_Build );

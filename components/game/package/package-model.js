@@ -80,9 +80,17 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 		}
 	};
 
-	Game_Package.prototype.$remove = function()
+	Game_Package.prototype.$remove = function( game )
 	{
-		return this.$_remove( '/web/dash/developer/games/packages/remove/' + this.game_id + '/' + this.id );
+		return this.$_remove( '/web/dash/developer/games/packages/remove/' + this.game_id + '/' + this.id )
+			.then( function( response )
+			{
+				if ( game && response.game ) {
+					game.assign( response.game );
+				}
+
+				return response;
+			} );
 	};
 
 	return Model.create( Game_Package );

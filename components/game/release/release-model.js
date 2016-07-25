@@ -21,19 +21,43 @@ angular.module( 'gj.Game.Release' ).factory( 'Game_Release', function( Api, Mode
 		}
 	};
 
-	Game_Release.prototype.$publish = function()
+	Game_Release.prototype.$publish = function( game )
 	{
-		return this.$_save( '/web/dash/developer/games/releases/publish/' + this.game_id + '/' + this.game_package_id + '/' + this.id, 'gameRelease' );
+		return this.$_save( '/web/dash/developer/games/releases/publish/' + this.game_id + '/' + this.game_package_id + '/' + this.id, 'gameRelease' )
+			.then( function( response )
+			{
+				if ( game && response.game ) {
+					game.assign( response.game );
+				}
+
+				return response;
+			} );
 	};
 
-	Game_Release.prototype.$unpublish = function()
+	Game_Release.prototype.$unpublish = function( game )
 	{
-		return this.$_save( '/web/dash/developer/games/releases/unpublish/' + this.game_id + '/' + this.game_package_id + '/' + this.id, 'gameRelease' );
+		return this.$_save( '/web/dash/developer/games/releases/unpublish/' + this.game_id + '/' + this.game_package_id + '/' + this.id, 'gameRelease' )
+			.then( function( response )
+			{
+				if ( game && response.game ) {
+					game.assign( response.game );
+				}
+
+				return response;
+			} );
 	};
 
-	Game_Release.prototype.$remove = function()
+	Game_Release.prototype.$remove = function( game )
 	{
-		return this.$_remove( '/web/dash/developer/games/releases/remove/' + this.game_id + '/' + this.game_package_id + '/' + this.id );
+		return this.$_remove( '/web/dash/developer/games/releases/remove/' + this.game_id + '/' + this.game_package_id + '/' + this.id )
+			.then( function( response )
+			{
+				if ( game && response.game ) {
+					game.assign( response.game );
+				}
+
+				return response;
+			} );
 	};
 
 	return Model.create( Game_Release );
