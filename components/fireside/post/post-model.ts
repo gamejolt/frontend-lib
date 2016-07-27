@@ -75,8 +75,10 @@ export class Fireside_Post extends Model
 	game: any;
 	slug: string;
 	subline: string;
-	content_markdown: string;
 	content_compiled: string;
+	content_markdown: string;
+	view_count?: number;
+	expand_count?: number;
 
 	tags: Fireside_Post_Tag[] = [];
 	media: any[] = [];
