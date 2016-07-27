@@ -60,7 +60,7 @@ export class Fireside_Post extends Model
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
-	type: string;
+	type: 'text' | 'media' | 'video';
 	hash: string;
 	title: string;
 	lead: string;
