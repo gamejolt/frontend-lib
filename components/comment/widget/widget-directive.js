@@ -9,6 +9,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 			resourceId: '<commentResourceId',
 			currentPage: '=?currentPage',
 			noIntro: '<',
+			onCommentCount: '&?',
 		},
 		controllerAs: 'ctrl',
 		controller: function( $scope, $state, $window, $location, $timeout, $injector, $sce, App, Comment, Comment_Vote, Subscription, User, Growls, Environment, Scroll,
@@ -227,6 +228,10 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 						_this.isShowingTranslations = false;
 						_this.translationsLoaded = false;
 						_this.allowTranslate = _this.gatherTranslatable().length;
+
+						if ( _this.onCommentCount ) {
+							_this.onCommentCount( { $count: _this.commentsCount } );
+						}
 					} )
 					.catch( function( payload )
 					{
