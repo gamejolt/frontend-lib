@@ -59,6 +59,7 @@ gj-card
 			a
 				&
 				.card-inactive &
+				.card-disabled &
 					@extend .link-unstyled
 
 	&-meta
@@ -102,7 +103,7 @@ gj-card
 			vertical-align: text-bottom
 
 	.alert-info
-		@extend .fill-dark
+		@extend .fill-darker
 
 	&-chevron
 		position: absolute
@@ -133,6 +134,8 @@ gj-card
 			color: $white
 
 	&-inactive.card
+	&-disabled.card
+	a &-disabled.card:hover
 		@extend .fill-dark
 		color: $gray-dark
 
@@ -143,3 +146,6 @@ gj-card
 
 		hr
 			border-color: $gray
+
+	&-disabled.card
+		cursor: not-allowed

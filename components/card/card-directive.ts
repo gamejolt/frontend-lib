@@ -14,4 +14,5 @@ export class CardComponent
 	@Input( '<?' ) isExpandable = false;
 	@Input( '<?' ) isExpanded = false;
 	@Input( '<?' ) isInactive = false;
+	@Input( '<?' ) isDisabled = false;
 }
