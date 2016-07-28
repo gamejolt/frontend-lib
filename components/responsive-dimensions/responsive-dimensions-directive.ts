@@ -13,7 +13,7 @@ export class ResponsiveDimensionsDirective implements OnChanges
 
 	constructor(
 		@Inject( '$element' ) $element: ng.IAugmentedJQuery,
-		@Inject( '$scope' ) private $scope: ng.IScope,
+		@Inject( '$scope' ) $scope: ng.IScope,
 		@Inject( 'Screen' ) screen: Screen,
 		@Inject( 'Ruler' ) private ruler: Ruler,
 	)
@@ -31,10 +31,7 @@ export class ResponsiveDimensionsDirective implements OnChanges
 
 	private updateDimensions()
 	{
-		this.$scope.$applyAsync( () =>
-		{
-			const containerWidth = this.ruler.width( this.element.parentNode as HTMLElement );
-			this.element.style.height = `${containerWidth / this.ratio}px`;
-		} );
+		const containerWidth = this.ruler.width( this.element.parentNode as HTMLElement );
+		this.element.style.height = `${containerWidth / this.ratio}px`;
 	}
 }
