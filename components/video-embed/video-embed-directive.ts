@@ -27,17 +27,15 @@ export class VideoEmbedComponent implements OnChanges
 		@Inject( '$sce' ) private $sce: ng.ISCEService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( 'Screen' ) screen: Screen,
-		@Inject( 'Ruler' ) private ruler: Ruler
+		@Inject( 'Ruler' ) private ruler: Ruler,
 	)
 	{
-		this.recalculateDimensions();
+		this.$timeout( () => this.recalculateDimensions() );
+
 		screen.setResizeSpy( $scope, () =>
 		{
 			// Wait till it renders before calculating.
-			this.$timeout( () =>
-			{
-				this.recalculateDimensions();
-			} );
+			this.$timeout( () => this.recalculateDimensions() );
 		} );
 	}
 
