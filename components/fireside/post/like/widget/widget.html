@@ -14,9 +14,12 @@
 		</span>
 
 		<span class="jolticon jolticon-heart"></span>
-		<span ng-if="::!$ctrl.sparse">
+		<span class="hidden-xs">
 			<span ng-switch="!!$ctrl.post.user_like">
-				<span ng-switch-when="false" translate>Like This Post</span>
+				<span ng-switch-when="false">
+					<span ng-if="::!$ctrl.sparse" translate>Like This Post</span>
+					<span ng-if="::$ctrl.sparse" translate>Like</span>
+				</span>
 				<span ng-switch-when="true" translate>Liked!</span>
 			</span>
 		</span>
