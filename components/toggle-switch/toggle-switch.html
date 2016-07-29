@@ -1,4 +1,9 @@
-<span class="toggle-switch-inner" hm-panstart="dragStart( $event )" hm-pan="drag( $event )" hm-panend="dragEnd( $event )" hm-recognizer-options='{ "threshold": 3 }'>
+<span class="toggle-switch-inner"
+	hm-panstart="dragStart( $event )"
+	hm-pan="drag( $event )"
+	hm-panend="dragEnd( $event )"
+	hm-recognizer-options='{ "threshold": 3, invokeApply: false }'
+	>
 	<span class="toggle-switch-on">{{ onText }}</span>
 	<span class="toggle-switch-knob"></span>
 	<span class="toggle-switch-off">{{ offText }}</span>
