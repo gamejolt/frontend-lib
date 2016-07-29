@@ -34,7 +34,6 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Ap
 		this._is_finished = this.development_status == Game.DEVELOPMENT_STATUS_FINISHED;
 		this._is_wip = this.development_status == Game.DEVELOPMENT_STATUS_WIP;
 		this._is_devlog = this.development_status == Game.DEVELOPMENT_STATUS_DEVLOG;
-		this._is_canceled = this.development_status == Game.DEVELOPMENT_STATUS_CANCELED;
 
 		this._has_packages = false;
 		if ( this.compatibility ) {
