@@ -34,17 +34,40 @@
 	</div>
 
 	<div class="form-upload-control-files" ng-show="ngModel.$viewValue.length && !progress">
-		<ul class="list-unstyled">
+		<div
+			ui-tree
+			ui-tree-nodes
+			drag-enabled="isSortable ? true : false"
+			ng-model="ngModel.$viewValue"
+			>
 
-			<li ng-repeat="file in ngModel.$viewValue">
-				<span class="form-upload-control-file-name">{{ file.name }}</span>
-				<a class="btn btn-danger-outline btn-sm" ng-class="{ 'block big': Screen.isXs }" ng-click="clearFile( $index )">
-					<span class="jolticon jolticon-remove"></span>
-					<span translate>Clear File</span>
-				</a>
-			</li>
+			<gj-card
+				ng-repeat="file in ngModel.$viewValue"
+				ui-tree-node
+				is-draggable="isSortable ? true : false"
+				>
+				<div class="row">
+					<div class="col-xs-3" ng-if="::isImage( file )">
+						<gj-form-upload-control-img-preview file="file"></gj-form-upload-control-img-preview>
+					</div>
+					<div ng-class="::isImage( file ) ? 'col-xs-9' : 'col-xs-12'">
+						<div class="card-title">
+							<h5>
+								{{ file.name }}
+							</h5>
+						</div>
 
-		</ul>
+						<div class="card-controls">
+							<a class="btn btn-danger-outline" ng-click="clearFile( $index )">
+								<span class="jolticon jolticon-remove"></span>
+								<span translate>Clear File</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</gj-card>
+
+		</div>
 	</div>
 
 	<div class="progress" ng-if="progress !== false">
@@ -68,7 +91,7 @@
 		<br>
 		<div class="alert alert-info">
 			<p translate>
-				Upload complete! Please wait while we process your file. This may take a few minutes, so don't close or refresh the page.
+				Upload complete! Please wait while we process your file(s). This may take a few minutes, so don't close or refresh the page.
 			</p>
 		</div>
 	</div>

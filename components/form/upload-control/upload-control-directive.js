@@ -5,6 +5,7 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 		require: [ 'ngModel', '^^formGroup' ],
 		scope: {
 			gjFileSelect: '&?gjFileSelect',
+			isSortable: '<',
 		},
 		templateUrl: '/lib/gj-lib-client/components/form/upload-control/upload-control.html',
 		link: function( scope, element, attrs, ctrls )
@@ -18,11 +19,13 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 			scope.ngModel = ngModel;
 			scope.progress = false;
 			scope.multiple = angular.isDefined( attrs.multiple );
+			scope.isSortable = !!scope.isSortable;  // Force bool.
 
 			ngModel.$isEmpty = $isEmpty;
 			scope.showFileSelect = showFileSelect;
 			scope.onFileSelect = onFileSelect;
 			scope.clearFile = clearFile;
+			scope.isImage = isImage;
 
 			setupAcceptValidator();
 			setupFilesizeValidator();
@@ -66,6 +69,12 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 					|| value !== value
 					|| (angular.isArray( value ) && value.length == 0)
 					;
+			}
+
+			function isImage( file )
+			{
+				var type = '|' + file.type.slice( file.type.lastIndexOf( '/' ) + 1 ) + '|';
+				return '|jpg|png|jpeg|bmp|gif|'.indexOf( type ) !== -1;
 			}
 
 			function attachUploadHandler( uploadHandler )
