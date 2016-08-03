@@ -27,7 +27,6 @@ export class VideoComponent implements OnInit, OnDestroy
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
 	)
 	{
-		console.log( 'yo' );
 	}
 
 	ngOnInit()
@@ -62,8 +61,6 @@ export class VideoComponent implements OnInit, OnDestroy
 		this.video.addEventListener( 'canplaythrough', canplaythrough );
 
 		this.$element[0].appendChild( this.video );
-
-		console.log( 'added video' );
 	}
 
 	/**
