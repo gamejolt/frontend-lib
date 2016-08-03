@@ -39,7 +39,7 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaIt
 			{
 				var i;
 				if ( response.success !== false && angular.isArray( response.mediaItems ) ) {
-					for ( i in response.mediaItems ) {
+					for ( var i = 0; i < response.mediaItems.length; ++i ) {
 						scope.mediaItems.unshift( new MediaItem( response.mediaItems[ i ] ) );
 					}
 				}

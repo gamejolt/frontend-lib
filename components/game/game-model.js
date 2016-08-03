@@ -38,7 +38,7 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Ap
 		this._has_packages = false;
 		if ( this.compatibility ) {
 			var keys = Object.keys( this.compatibility );
-			for ( var i in keys ) {
+			for ( var i = 0; i < keys.length; ++i ) {
 				if ( keys[ i ] != 'id' && keys[ i ] != 'game_id' ) {
 					this._has_packages = true;
 					break;
