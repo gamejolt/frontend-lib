@@ -26,7 +26,7 @@ export class PlayModalComponent
 		this.adShown = !this.game._should_show_ads;
 
 		// If this is the developer of the game, don't show an ad.
-		if ( this.game.developer.id == app.user.id ) {
+		if ( app.user && this.game.developer.id == app.user.id ) {
 			this.adShown = true;
 		}
 	}
