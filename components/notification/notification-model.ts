@@ -70,7 +70,7 @@ export class Notification extends Model
 	is_game_based = false;
 
 	// For feeds.
-	scroll_id?: number;
+	scroll_id?: string;
 
 	constructor( data?: any )
 	{
