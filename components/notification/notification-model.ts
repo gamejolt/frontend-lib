@@ -91,6 +91,9 @@ export class Notification extends Model
 			else if ( data.to_resource == 'Fireside_Post' ) {
 				this.to_model = new (Notification.$injector.get( 'Fireside_Post' ))( data.to_resource_model );
 			}
+			else if ( data.to_resource == 'Forum_Topic' ) {
+				this.to_model = new (Notification.$injector.get( 'Forum_Topic' ))( data.to_resource_model );
+			}
 
 			if ( this.type == Notification.TYPE_COMMENT_ADD ) {
 				this.action_model = new (Notification.$injector.get( 'Comment' ))( data.action_resource_model );
