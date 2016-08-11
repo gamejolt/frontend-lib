@@ -209,7 +209,7 @@ export class Notification extends Model
 				}
 				else {
 					if ( Notification.Environment.isClient ) {
-						require( 'nw.gui' ).Shell.openExternal( url );
+						nw.Shell.openExternal( url );
 					}
 					else {
 						Notification.$window.location.href = url;

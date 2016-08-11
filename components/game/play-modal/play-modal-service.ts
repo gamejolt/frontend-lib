@@ -30,8 +30,7 @@ export class Game_PlayModal
 
 		// TODO: This only goes to game page. We need to direct to a URL that would open the correct build in a modal.
 		if ( this.Environment.isClient && _build.type != this.Game_Build.TYPE_HTML && _build.type != this.Game_Build.TYPE_ROM ) {
-			const gui = require( 'nw.gui' );
-			gui.Shell.openExternal( this.Environment.baseUrl + this.$state.href( 'discover.games.view.overview', {
+			nw.Shell.openExternal( this.Environment.baseUrl + this.$state.href( 'discover.games.view.overview', {
 				slug: _game.slug,
 				id: _game.id,
 			} ) );

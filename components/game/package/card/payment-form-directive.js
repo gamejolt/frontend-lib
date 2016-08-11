@@ -292,7 +292,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 						}
 						// Otherwise we have to open in browser.
 						else {
-							require( 'nw.gui' ).Shell.openExternal( response.redirectUrl );
+							nw.Shell.openExternal( response.redirectUrl );
 						}
 					}
 					// For site we have to replace the URL completely since we are switching to https.
