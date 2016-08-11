@@ -3,7 +3,8 @@ angular.module( 'gj.Alert.Dismissable' ).component( 'gjAlertDismissable', {
 	bindings: {
 		alertType: '@',
 		dismissKey: '@',
-		noMargin: '<',
+		noMargin: '<?',
+		onDismiss: '&?',
 	},
 	transclude: true,
 	controller: function()
@@ -20,6 +21,10 @@ angular.module( 'gj.Alert.Dismissable' ).component( 'gjAlertDismissable', {
 		{
 			localStorage.setItem( STORAGE_KEY_PREFIX + this.dismissKey, '1' );
 			this.shouldShow = false;
+
+			if ( this.onDismiss ) {
+				this.onDismiss();
+			}
 		};
 	},
 } );

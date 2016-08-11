@@ -1,1 +1,1 @@
-angular.module( 'gj.Game.NewsArticle', [ 'gj.Model', 'gj.Game', 'gj.User' ] );
+angular.module( 'gj.Game.NewsArticle', [ 'gj.Model', 'gj.Game', 'gj.User', 'gj.KeyGroup' ] );

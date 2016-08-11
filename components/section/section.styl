@@ -1,12 +1,20 @@
 .section
 	@extend .well-row
 
-	/**
-	 * Nav only section
-	 */
 	&.nav-only
 		padding-top: 0
 		padding-bottom: 0
+
+	&-has-nav
+		padding-bottom: 0
+
+	&-thin
+		padding-top: ($grid-gutter-width / 2)
+		padding-bottom: ($grid-gutter-width / 2)
+
+		@media $media-xs
+			padding-top: ($grid-gutter-width-xs / 2)
+			padding-bottom: ($grid-gutter-width-xs / 2)
 
 	/**
 	 * Header section
@@ -28,17 +36,6 @@
 	footer&
 		@extend .fill-darkest
 
-	/**
-	 * Thin section
-	 */
-	&.section-thin
-		padding-top: ($grid-gutter-width / 2)
-		padding-bottom: ($grid-gutter-width / 2)
-
-		@media $media-xs
-			padding-top: ($grid-gutter-width-xs / 2)
-			padding-bottom: ($grid-gutter-width-xs / 2)
-
 .section-header
 	margin-top: 0
 
@@ -54,3 +51,7 @@
 	> .i-button
 		@extend .i-button.light
 		vertical-align: top  // Force them at the top.
+
+nav.section-nav
+	margin-top: $line-height-computed * 2
+	margin-bottom: 0 !important

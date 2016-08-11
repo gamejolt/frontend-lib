@@ -1,4 +1,4 @@
-angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, Model, Environment, User, MediaItem )
+angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Api, App, Model, Environment, User, MediaItem )
 {
 	if ( $injector.has( 'Registry' ) ) {
 		$injector.get( 'Registry' ).setConfig( 'Game', {
@@ -24,17 +24,21 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 			}
 		}
 
-		this._has_cover = !!this.img_header;
+		this._has_cover = !!this.header_media_item;
 
 		this.is_published = false;
 		if ( this.status == Game.STATUS_VISIBLE ) {
 			this.is_published = true;
 		}
 
+		this._is_finished = this.development_status == Game.DEVELOPMENT_STATUS_FINISHED;
+		this._is_wip = this.development_status == Game.DEVELOPMENT_STATUS_WIP;
+		this._is_devlog = this.development_status == Game.DEVELOPMENT_STATUS_DEVLOG;
+
 		this._has_packages = false;
 		if ( this.compatibility ) {
 			var keys = Object.keys( this.compatibility );
-			for ( var i in keys ) {
+			for ( var i = 0; i < keys.length; ++i ) {
 				if ( keys[ i ] != 'id' && keys[ i ] != 'game_id' ) {
 					this._has_packages = true;
 					break;
@@ -79,6 +83,7 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 	Game.DEVELOPMENT_STATUS_FINISHED = 1;
 	Game.DEVELOPMENT_STATUS_WIP = 2;
 	Game.DEVELOPMENT_STATUS_CANCELED = 3;
+	Game.DEVELOPMENT_STATUS_DEVLOG = 4;
 
 	Game.prototype.getSref = function( page, includeParams )
 	{
@@ -88,7 +93,7 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 			sref = 'dashboard.developer.games.manage.game.overview';
 		}
 		else if ( page == 'edit' ) {
-			sref = 'dashboard.developer.games.manage.game.edit';
+			sref = 'dashboard.developer.games.manage.game.details';
 		}
 		else {
 			sref = 'discover.games.view.overview';
@@ -257,6 +262,30 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 		return builds[0];
 	};
 
+	Game.prototype.$follow = function()
+	{
+		var _this = this;
+		return Api.sendRequest( '/web/library/games/add/followed', { game_id: this.id } )
+			.then( function( response )
+			{
+				_this.is_following = true;
+				++_this.follower_count;
+				return response;
+			} );
+	};
+
+	Game.prototype.$unfollow = function()
+	{
+		var _this = this;
+		return this.$_remove( '/web/library/games/remove/followed/' + this.id )
+			.then( function( response )
+			{
+				_this.is_following = false;
+				--_this.follower_count;
+				return response;
+			} );
+	};
+
 	Game.prototype.$save = function()
 	{
 		if ( this.id ) {
@@ -265,6 +294,11 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 		else {
 			return this.$_save( '/web/dash/developer/games/save', 'game' );
 		}
+	};
+
+	Game.prototype.$saveDescription = function()
+	{
+		return this.$_save( '/web/dash/developer/games/description/save/' + this.id, 'game' );
 	};
 
 	Game.prototype.$saveMaturity = function()
@@ -287,14 +321,24 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, App, M
 		return this.$_save( '/web/dash/developer/games/header/clear/' + this.id, 'game' );
 	};
 
+	Game.prototype.$saveSettings = function()
+	{
+		return this.$_save( '/web/dash/developer/games/settings/save/' + this.id, 'game' );
+	};
+
 	Game.prototype.$setStatus = function( status )
 	{
 		return this.$_save( '/web/dash/developer/games/set-status/' + this.id + '/' + status, 'game' );
 	};
 
-	Game.prototype.$saveSettings = function()
+	Game.prototype.$setDevStage = function( stage )
 	{
-		return this.$_save( '/web/dash/developer/games/settings/save/' + this.id, 'game' );
+		return this.$_save( '/web/dash/developer/games/set-dev-stage/' + this.id + '/' + stage, 'game' );
+	};
+
+	Game.prototype.$setCanceled = function( isCanceled )
+	{
+		return this.$_save( '/web/dash/developer/games/set-canceled/' + this.id + '/' + (isCanceled ? '1' : '0'), 'game' );
 	};
 
 	Game.prototype.$remove = function( status )

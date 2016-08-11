@@ -1,14 +1,16 @@
 <div class="modal-body">
-	<h2 class="modal-title">{{ ::modalCtrl.options.title }}</h2>
-	<p>{{ ::modalCtrl.options.message }}</p>
+	<h2 class="modal-title">{{ ::$ctrl.options.title }}</h2>
+	<p>{{ ::$ctrl.options.message }}</p>
 </div>
 <div class="modal-footer">
-	<button class="i-button" ng-click="modalCtrl.ok()">
+	<button class="btn btn-success-outline" ng-click="$ctrl.ok()" ng-switch="::$ctrl.options.buttonType">
 		<span class="jolticon jolticon-check"></span>
-		{{ ::(modalCtrl.options.buttonType == 'ok' ? 'OK' : 'Yes') }}
+		<span ng-switch-when="ok" translate>OK</span>
+		<span ng-switch-when="yes" translate>Yes</span>
 	</button>
-	<button class="i-button warning" ng-click="modalCtrl.cancel()">
+	<button class="btn btn-danger-outline" ng-click="$ctrl.cancel()" ng-switch="::$ctrl.options.buttonType">
 		<span class="jolticon jolticon-remove"></span>
-		{{ ::(modalCtrl.options.buttonType == 'ok' ? 'Cancel' : 'No') }}
+		<span ng-switch-when="ok" translate>Cancel</span>
+		<span ng-switch-when="yes" translate>No</span>
 	</button>
 </div>

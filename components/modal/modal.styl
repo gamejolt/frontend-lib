@@ -67,11 +67,14 @@ $modal-padding-xs = ($grid-gutter-width-xs / 2)
 // Shell div to position the modal with bottom padding
 .modal-dialog
 	position: relative
-	margin-top: 100px
 	width: 100%
 	background-color: $modal-content-bg
 	border-top: 3px solid $gj-blue
 	border-bottom: @border-top
+
+	@media $media-sm-up
+		margin-top: 100px
+		margin-bottom: 100px
 
 // Actual modal
 .modal-content

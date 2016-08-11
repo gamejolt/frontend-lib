@@ -20,8 +20,8 @@ angular.module( 'gj.Report.Modal' ).controller( 'Report_ModalCtrl', function( $m
 		this.type = 'Forum_Post';
 	}
 	else {
-		throw new Error( 'Invalid resource to report.' );
 		$modalInstance.dismiss();
+		throw new Error( 'Invalid resource to report.' );
 	}
 
 	this.onSubmitted = function( response )

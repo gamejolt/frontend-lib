@@ -1,0 +1,17 @@
+<div class="video-embed">
+	<div class="video-embed-inner">
+
+		<iframe nwdisable nwfaketop
+			type="text/html" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
+			ng-if="$ctrl.videoProvider == 'youtube' && $ctrl.embedUrl"
+			width="{{ $ctrl.width }}" height="{{ $ctrl.height }}"
+			ng-src="{{ $ctrl.embedUrl }}"></iframe>
+
+		<iframe nwdisable nwfaketop
+			frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
+			ng-if="$ctrl.videoProvider == 'vimeo' && $ctrl.embedUrl"
+			width="{{ $ctrl.width }}" height="{{ $ctrl.height }}"
+			ng-src="{{ $ctrl.embedUrl }}"></iframe>
+
+	</div>
+</div>

@@ -1,0 +1,153 @@
+gj-card
+	display: block
+
+.card
+	@extend .full-bleed-xs, .fill-darkest, .clearfix
+	position: relative
+	padding: 15px
+	margin-bottom: $line-height-computed
+
+	a &:hover
+		background-color: $black
+
+	&-expandable
+		padding-left: 40px
+		cursor: pointer
+		user-select: none
+
+	&-draggable
+		padding-right: 40px
+
+		// Since we full-bleed on mobile, if it has a drag handle, then we don't want to full bleed the right.
+		// This makes it easier to grab the drag handle since it's away from the edge a bit.
+		@media $media-xs
+			margin-right: 0
+
+	&-remove
+		float: right
+		color: $gray-light !important
+		margin-left: 10px
+
+		&
+		.jolticon
+			cursor: pointer
+
+		&:hover
+			color: $gj-pink !important
+
+	&-thumb
+		position: relative
+		background-repeat: no-repeat
+		background-position: center center
+		background-size: cover
+		height: 0
+		padding-bottom: 100%
+
+	&-title
+		margin-top: 0
+		margin-bottom: 5px
+
+		h4, h5
+			margin-top: 0
+			margin-bottom: 0
+			font-weight: 300
+
+			@media $media-xs
+				font-size: $font-size-base
+				font-weight: bold
+
+			a
+				&
+				.card-inactive &
+				.card-disabled &
+					@extend .link-unstyled
+
+	&-meta
+		@extend .text-muted
+		margin-top: 5px
+		font-size: $font-size-small
+
+		> .jolticonadd games
+			vertical-align: middle
+
+		&-sm
+			font-size: $font-size-tiny
+
+	&-content
+		margin-top: 8px
+		color: $gray-lighter
+		font-size: $font-size-small
+
+	&-stats
+		float: right
+		margin-left: 15px
+		text-align: right
+
+	&-controls
+		margin-top: $line-height-computed
+		padding-top: $line-height-computed
+		border-top: 1px solid $gray-dark
+
+	hr
+		border-color: $gray-dark
+
+	.hidden-text-expander
+		margin-bottom: $line-height-computed
+
+	.alert
+		// Less padding than normal.
+		padding-top: $font-size-base
+		padding-bottom: $font-size-base
+
+		.jolticon
+			vertical-align: text-bottom
+
+	.alert-info
+		@extend .fill-darker
+
+	&-chevron
+		position: absolute
+		left: 0
+		top: 18px
+		width: 40px
+		text-align: center
+
+		 > .jolticon
+			cursor: inherit
+
+	&-drag-handle
+		position: absolute
+		right: 0
+		top: 0
+		bottom: 0
+		width: 20px
+		cursor: move
+		background-color: $gray-dark
+		user-select: none
+
+		> .jolticon
+			position: absolute
+			top: 50%
+			left: 0
+			margin-top: -8px
+			cursor: inherit
+			color: $white
+
+	&-inactive.card
+	&-disabled.card
+	a &-disabled.card:hover
+		@extend .fill-dark
+
+		.card
+
+			&-controls
+				border-color: $gray
+
+			&-drag-handle
+				background-color: $gray-darkest
+
+		hr
+			border-color: $gray
+
+	&-disabled.card
+		cursor: not-allowed

@@ -1,0 +1,14 @@
+<div class="card fill-darkest"
+	ng-class="{ 'card-expandable': $ctrl.isExpandable, 'card-draggable': $ctrl.isDraggable, 'card-inactive': $ctrl.isInactive, 'card-disabled': $ctrl.isDisabled }"
+	>
+
+	<div class="card-drag-handle" ng-if="$ctrl.isDraggable" ui-tree-handle>
+		<span class="jolticon jolticon-arrows-v"></span>
+	</div>
+
+	<div class="card-chevron" ng-if="$ctrl.isExpandable">
+		<span class="jolticon" ng-class="'jolticon-chevron-' + ($ctrl.isExpanded ? 'down' : 'right')"></span>
+	</div>
+
+	<div ng-transclude></div>
+</div>

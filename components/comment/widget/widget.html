@@ -1,30 +1,31 @@
 <div class="comment-widget" ng-class="{ 'comment-widget-translating': ctrl.isTranslating }">
 	<div ng-if="!ctrl.hasLoaded && !ctrl.hasError">
-		<h2 class="section-header" translate>Comments</h2>
+		<h2 class="section-header" ng-if="!ctrl.noIntro" translate>Comments</h2>
 		<gj-loading></gj-loading>
 	</div>
 
 	<div ng-if="ctrl.hasError">
-		<h2 class="section-header" translate>Comments</h2>
+		<h2 class="section-header" ng-if="!ctrl.noIntro" translate>Comments</h2>
 		<div class="alert alert-warning" translate>Couldn't fetch comments for game.</div>
 	</div>
 
 	<div ng-if="ctrl.hasLoaded && !ctrl.hasError">
-		<h2 class="section-header" ng-if="!ctrl.commentsCount" translate>No Comments Yet</h2>
-		<h2 class="section-header" ng-if="ctrl.commentsCount"
-			translate
-			translate-n="ctrl.commentsCount"
-			translate-plural="{{ $count | number }} Comments"
-			>
-			1 Comment
-		</h2>
-		</h2>
+		<div ng-if="!ctrl.noIntro">
+			<h2 class="section-header" ng-if="!ctrl.commentsCount" translate>No Comments Yet</h2>
+			<h2 class="section-header" ng-if="ctrl.commentsCount"
+				translate
+				translate-n="ctrl.commentsCount"
+				translate-plural="{{ $count | number }} Comments"
+				>
+				1 Comment
+			</h2>
 
-		<div ng-if="!ctrl.commentsCount">
-			<p>
-				<em translate>Let us know your thoughts and be the first to comment!</em>
-			</p>
-			<br>
+			<div ng-if="!ctrl.commentsCount">
+				<p>
+					<em translate>Let us know your thoughts and be the first to comment!</em>
+				</p>
+				<br>
+			</div>
 		</div>
 
 		<!-- Comment Add Form -->
@@ -37,14 +38,14 @@
 			</gj-comment-widget-add-form>
 		</div>
 
-		<div ng-if="!App.user">
+		<div ng-if="!App.user" class="alert alert-info">
 			<p>You must be <a ng-href="{{ ::ctrl.loginUrl }}">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
 		<hr>
 
 		<div class="text-center">
-			<gj-pagination
+			<gj-pager
 				id="comment-pagination"
 				ng-if="ctrl.perPage && ctrl.parentCount"
 				items-per-page="ctrl.perPage"
@@ -53,7 +54,7 @@
 				query-param="comment_page"
 				on-page-change="ctrl.onPageChange( $event, $page )"
 				>
-			</gj-pagination>
+			</gj-pager>
 		</div>
 
 		<div class="comment-widget-translate-btn" ng-if="ctrl.allowTranslate">
@@ -63,7 +64,7 @@
 				ng-disabled="ctrl.isTranslating"
 				translate
 				translate-comment="{{ lang }} is passed in with the current language"
-				translate-scope="{ lang: ctrl.getTranslationLabel( Translate.lang ) }"
+				translate-params-lang="ctrl.getTranslationLabel( Translate.lang )"
 				>
 				Translate comments to {{ lang }}
 			</button>
@@ -123,7 +124,7 @@
 		</div>
 
 		<div class="text-center">
-			<gj-pagination
+			<gj-pager
 				ng-if="ctrl.perPage && ctrl.parentCount"
 				items-per-page="ctrl.perPage"
 				total-items="ctrl.parentCount"
@@ -131,7 +132,7 @@
 				query-param="comment_page"
 				on-page-change="ctrl.onPageChange( $event, $page, true )"
 				>
-			</gj-pagination>
+			</gj-pager>
 		</div>
 	</div>
 </div>

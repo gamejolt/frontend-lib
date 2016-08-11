@@ -1,38 +1,15 @@
-.form-upload-control .progress
-	margin-bottom: 0
+.form-upload-control
 
-.form-upload-control-drop-target
-	border: 2px dashed $gray-light
-	padding: ($grid-gutter-width / 2)
-
-.form-upload-control-drop-active
-	border-color: $gj-green
-	border-style: solid
-
-.form-upload-control-files
-
-	> ul
+	.progress
 		margin-bottom: 0
 
-		> li:last-child
-			margin-bottom: 0
-
-	.i-button
-		vertical-align: middle
-
-.form-upload-control-file-name
-	text-overflow()
-	font-weight: bold
-	display: inline-block
-	vertical-align: middle
-	max-width: 100%
-	margin-bottom: $line-height-computed
-
-@media $media-sm-up
-
-	.form-upload-control-files .i-button
-		margin-left: 10px
-
-	.form-upload-control-file-name
-		max-width: 80%
+	gj-card:last-child .card
 		margin-bottom: 0
+
+	&-drop-target
+		border: 2px dashed $gray-light
+		padding: ($grid-gutter-width / 2)
+
+	&-drop-active
+		border-color: $gj-green
+		border-style: solid

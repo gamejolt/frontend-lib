@@ -3,13 +3,74 @@ var gulp = require( 'gulp' );
 var gutil = require( 'gulp-util' );
 var plugins = require( 'gulp-load-plugins' )();
 var streamqueue = require( 'streamqueue' );
+var mergeStream = require( 'merge-stream' );
 var fs = require( 'fs' );
+var path = require( 'path' );
+
+var rollupTypescript = require( 'rollup-plugin-typescript' );
+var rollupResolve = require( 'rollup-plugin-node-resolve' );
+var rollupString = require( 'rollup-plugin-string' );
+var rollupReplace = require( 'rollup-plugin-replace' );
+var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
 var injectModules = require( '../plugins/gulp-inject-modules.js' );
 
 module.exports = function( config )
 {
 	var baseDir = '../../../../../';
+
+	var rollupOptions = {
+		rollup: require( 'rollup' ),
+		sourceMap: false,
+		format: 'iife',
+		plugins: [
+			rollupReplace( {
+				values: {
+					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
+					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
+				},
+			} ),
+			{
+				// import template from 'html!./something.html';
+				transform: function( code, id )
+				{
+					return code.replace( 'html!', '' );
+				},
+			},
+			rollupString( {
+				include: '**/*.html',
+			} ),
+			{
+				// Gotta convert `import something = require( 'something' )` into const something = require( 'something' )
+				// TS with no module target strips it out if we don't change.
+				transform: function( code, id )
+				{
+					return code.replace( /import ([^ ]+).*?=.*?require/g, 'const $1 = require' );
+				}
+			},
+			rollupTypescript( {
+				typescript: require( 'typescript' ),
+			} ),
+			// {
+			// 	resolveId: function( id, from )
+			// 	{
+			// 		if ( id.startsWith( 'rxjs/' ) ) {
+			// 			return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
+			// 		}
+			// 	},
+			// },
+			rollupResolve( {
+				jsnext: true,
+				main: true,
+			} ),
+			rollupCommonJs( {
+				include: [
+					'node_modules/ua-parser-js/**',
+					// 'node_modules/rxjs-es/node_modules/symbol-observable/**',
+				],
+			} ),
+		],
+	};
 
 	// This depends on html2js.
 	require( './html2js.js' )( config );
@@ -141,8 +202,30 @@ module.exports = function( config )
 	/**
 	 * Build out the vendor JS.
 	 */
+	gulp.task( 'js:vendor:rollup', function()
+	{
+		if ( !config.rollup || !config.rollup.vendor || config.watching == 'watching' ) {
+			return;
+		}
+
+		var _rollupOptions = _.extend( {}, rollupOptions, {
+			moduleName: 'vendor',
+		} );
+
+		return gulp.src( 'src/vendor.ts', { read: false, base: 'src' } )
+			.pipe( plugins.rollup( _rollupOptions ) )
+			.pipe( plugins.rename( 'vendor.js' ) )
+			.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+			;
+	} );
+	vendorCommonDepends.push( 'js:vendor:rollup' );
+
 	gulp.task( 'js:vendor', vendorCommonDepends, function()
 	{
+		if ( config.watching == 'watching' ) {
+			return;
+		}
+
 		var excludeBower = [];
 
 		// Exclude bower files that are excluded in our config.
@@ -160,7 +243,9 @@ module.exports = function( config )
 			} );
 		}
 
-		var files = [];
+		var files = [
+			config.buildDir + '/tmp/rollup/vendor.js',
+		];
 		if ( bower.dependencies ) {
 
 			_.forEach( bower.dependencies, function( version, component )
@@ -198,7 +283,6 @@ module.exports = function( config )
 
 		if ( files.length ) {
 			return gulp.src( files )
-				// .pipe( plugins.newer( config.buildDir + '/app/vendor.js' ) )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'vendor.js' ) )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
@@ -219,8 +303,30 @@ module.exports = function( config )
 	{
 		sectionTasks.push( 'js:' + section );
 
-		gulp.task( 'js:' + section, [ 'html2js:' + section + ':partials' ], function()
+		gulp.task( 'ts:' + section, function()
 		{
+			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+				return;
+			}
+
+			var _rollupOptions = _.extend( {}, rollupOptions, {
+				external: Object.keys( config.rollup.vendor ),
+				globals: config.rollup.vendor,
+			} );
+
+			return gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
+				.pipe( plugins.rollup( _rollupOptions ) )
+				.pipe( plugins.rename( section + '.js' ) )
+				.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+				;
+		} );
+
+		gulp.task( 'js:' + section, [ 'ts:' + section, 'html2js:' + section + ':partials' ], function()
+		{
+			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+				return;
+			}
+
 			// We don't include any app files that are being built into a separate module.
 			var excludeApp = [];
 			if ( config.modules ) {
@@ -259,34 +365,26 @@ module.exports = function( config )
 				} );
 			}
 
-			var queue = [
-				{ objectMode: true },
+			var stream = new streamqueue( { objectMode: true } );
 
-				// Pull in modules definitions only first.
-				gulp.src( _.union( [
-					'src/' + section + '/**/*.js',
-					'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
-				], excludeApp ), { base: 'src' } ),
+			// Gotta pull in TS/rollup file as the first thing.
+			stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + section + '.js' ], { base: 'src' } ) );
 
-				// Then pull in the actual components.
-				gulp.src( _.union( [
-					'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
-				], excludeApp ), { base: 'src' } ),
+			// Pull in modules definitions only before actual components..
+			stream.queue( gulp.src( _.union( [
+				'src/' + section + '/**/*.js',
+				'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
+			], excludeApp ), { base: 'src' } ) );
 
-				// Pull in template partials if there are any.
-				gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ),
-			];
+			// Then pull in the actual components.
+			stream.queue( gulp.src( _.union( [
+				'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
+			], excludeApp ), { base: 'src' } ) );
 
-			// Now pull in the development file if we're running a development environment build.
-			if ( config.developmentEnv ) {
-				queue.push( gulp.src( [ 'src/' + section + '/app-development.js' ], { base: 'src' } ) );
-			}
-			// We also pull in a development setting that imitates if production isn't specified explicitly.
-			else if ( !config.production ) {
-				queue.push( gulp.src( [ 'src/' + section + '/app-development-for-production.js' ], { base: 'src' } ) );
-			}
+			// Pull in template partials if there are any.
+			stream.queue( gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ) );
 
-			var stream = streamqueue.apply( streamqueue, queue )
+			var stream = stream.done()
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 				.pipe( plugins.concat( 'app.js' ) );
 
@@ -304,6 +402,7 @@ module.exports = function( config )
 				.pipe( plugins.angularEmbedTemplates( {
 					minimize: minimizeOptions,
 					skipTemplates: skipTemplateUrlMatches,
+					skipErrors: true,
 				} ) )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
@@ -328,9 +427,72 @@ module.exports = function( config )
 		// We loop through all of the modules we need to build and set up gulp tasks to build them.
 		_.forEach( config.modules, function( moduleDefinition, outputFilename )
 		{
-			// Create the gulp task to build this module.
-			gulp.task( 'js:module:' + outputFilename, function()
+			gulp.task( 'ts:module:' + outputFilename, function()
 			{
+				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
+					return;
+				}
+
+				if ( !moduleDefinition.main ) {
+					return;
+				}
+
+				var vendorIds = Object.keys( config.rollup.vendor );
+				var _rollupOptions = _.extend( {}, rollupOptions, {
+					external: function( id )
+					{
+						var i;
+
+						if ( vendorIds.indexOf( id ) !== -1 ) {
+							return true;
+						}
+
+						if ( id[0] == '.' || id == 'typescript-helpers' ) {
+							return false;
+						}
+
+						if ( id.search( /node_modules/i ) !== -1 ) {
+							return false;
+						}
+
+						if ( moduleDefinition.components ) {
+							for ( i in moduleDefinition.components ) {
+								if ( id.search( new RegExp( 'src\/app\/components\/' + moduleDefinition.components[ i ] + '\/.*' ) ) !== -1 ) {
+									return false;
+								}
+							}
+						}
+
+						if ( moduleDefinition.views ) {
+							for ( i in moduleDefinition.views ) {
+								if ( id.search( new RegExp( 'src\/app\/views\/' + moduleDefinition.views[ i ] + '\/.*' ) ) !== -1 ) {
+									return false;
+								}
+							}
+						}
+
+						return true;
+					},
+					globals: config.rollup.vendor,
+				} );
+
+				var rollupStream = gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
+					.pipe( plugins.rollup( _rollupOptions ) );
+
+				return gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
+					.pipe( plugins.rollup( _rollupOptions ) )
+					.pipe( plugins.rename( outputFilename ) )
+					.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+					;
+			} );
+
+			// Create the gulp task to build this module.
+			gulp.task( 'js:module:' + outputFilename, [ 'ts:module:' + outputFilename ], function()
+			{
+				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
+					return;
+				}
+
 				var files = [];
 				if ( moduleDefinition.bower ) {
 					_.forEach( moduleDefinition.bower, function( component )
@@ -364,11 +526,13 @@ module.exports = function( config )
 
 				gutil.log( 'Build module ' + outputFilename + ' with files: ' + gutil.colors.gray( JSON.stringify( files ) ) );
 
-				var args = [];
-				args.push( { objectMode: true } );
+				var stream = new streamqueue( { objectMode: true } );
+
+				// Gotta pull in TS/rollup file as the first thing.
+				stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + outputFilename ], { base: 'src' } ) );
 
 				if ( files.length ) {
-					args.push( gulp.src( files, { base: 'src' } ) );
+					stream.queue( gulp.src( files, { base: 'src' } ) );
 				}
 
 				// Component files?
@@ -376,13 +540,13 @@ module.exports = function( config )
 					moduleDefinition.components.forEach( function( component )
 					{
 						// Pull in modules definitions only first.
-						args.push( gulp.src( [
+						stream.queue( gulp.src( [
 							'src/app/components/' + component + '/**/*.js',
 							'!src/app/components/' + component + '/**/*-{service,controller,directive,filter,model,production,development,node}.js',
 						], { base: 'src' } ) );
 
 						// Then pull in the actual components.
-						args.push( gulp.src( [
+						stream.queue( gulp.src( [
 							'src/app/components/' + component + '/**/*-{service,controller,directive,filter,model}.js',
 						], { base: 'src' } ) );
 					} );
@@ -395,15 +559,14 @@ module.exports = function( config )
 						// We don't pull in state or module definitions (files without a suffx).
 						// This way the states will all be available for routing, but controllers and what not
 						// can be lazy loaded in.
-						args.push( gulp.src( [
+						stream.queue( gulp.src( [
 							'src/app/views/' + view + '/**/*-{service,controller,directive,filter,model}.js',
 						], { base: 'src' } ) );
 					} );
 				}
 
 				// Call it with the arguments we've built up.
-				var stream = streamqueue.apply( streamqueue, args )
-					// .pipe( plugins.newer( config.buildDir + '/app/modules/' + outputFilename ) )
+				stream = stream.done()
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 					.pipe( plugins.concat( outputFilename ) )
 					.pipe( injectModules( config ) )
@@ -411,6 +574,7 @@ module.exports = function( config )
 					.pipe( plugins.angularEmbedTemplates( {
 						minimize: minimizeOptions,
 						skipTemplates: skipTemplateUrlMatches,
+						skipErrors: true,
 					} ) )
 					.pipe( config.production ? plugins.uglify() : gutil.noop() )
 					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {

@@ -5,6 +5,7 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 		require: [ 'ngModel', '^^formGroup' ],
 		scope: {
 			gjFileSelect: '&?gjFileSelect',
+			isSortable: '<',
 		},
 		templateUrl: '/lib/gj-lib-client/components/form/upload-control/upload-control.html',
 		link: function( scope, element, attrs, ctrls )
@@ -17,10 +18,14 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 			scope.Screen = Screen;
 			scope.ngModel = ngModel;
 			scope.progress = false;
+			scope.multiple = angular.isDefined( attrs.multiple );
+			scope.isSortable = !!scope.isSortable;  // Force bool.
 
 			ngModel.$isEmpty = $isEmpty;
+			scope.showFileSelect = showFileSelect;
 			scope.onFileSelect = onFileSelect;
-			scope.clearFiles = clearFiles;
+			scope.clearFile = clearFile;
+			scope.isImage = isImage;
 
 			setupAcceptValidator();
 			setupFilesizeValidator();
@@ -29,7 +34,8 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 			// Make sure this control/model is completely reset on control load.
 			// This makes sure to remove any files that may have been set on the model on a save,
 			// but now we want to clear it all out completely for an edit form.
-			scope.clearFiles();
+			setDimensionsResolver( [] );
+			ngModel.$setViewValue( undefined );
 
 			// When an upload handler is set on the form state, we want to attach
 			// to it so we can show the progress of the upload.
@@ -50,6 +56,11 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 				}
 			} );
 
+			attrs.$observe( 'uploadLinkLabel', function( val )
+			{
+				scope.uploadLinkLabel = val;
+			} );
+
 			function $isEmpty( value )
 			{
 				return angular.isUndefined( value )
@@ -58,6 +69,12 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 					|| value !== value
 					|| (angular.isArray( value ) && value.length == 0)
 					;
+			}
+
+			function isImage( file )
+			{
+				var type = '|' + file.type.slice( file.type.lastIndexOf( '/' ) + 1 ) + '|';
+				return '|jpg|png|jpeg|bmp|gif|'.indexOf( type ) !== -1;
 			}
 
 			function attachUploadHandler( uploadHandler )
@@ -79,7 +96,12 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 				}
 			}
 
-			function onFileSelect( files )
+			function showFileSelect()
+			{
+				element[0].querySelector( 'input[type=file]' ).click();
+			}
+
+			function setDimensionsResolver( files )
 			{
 				// Any time they select new files and have geometry related validators, we want to set a new dimensions resolver.
 				// This will get the new dimensions for the files passed in so that we can validate against them.
@@ -95,15 +117,27 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 				else {
 					dimensionsResolver = null;
 				}
+			}
 
+			function onFileSelect( files )
+			{
+				setDimensionsResolver( files );
 				ngModel.$setViewValue( files );
 			}
 
-			function clearFiles()
+			function clearFile( index )
 			{
-				// If no files, then just clear the resolver.
-				dimensionsResolver = null;
-				ngModel.$setViewValue( undefined );
+				var files = ngModel.$viewValue;
+				files.splice( index, 1 );
+
+				setDimensionsResolver( files );
+
+				if ( !ngModel.$isEmpty( files ) ) {
+					ngModel.$setViewValue( files );
+				}
+				else {
+					ngModel.$setViewValue( undefined );
+				}
 			}
 
 			function setupAcceptValidator()

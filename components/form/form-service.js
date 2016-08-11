@@ -157,6 +157,10 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 
 		return scope.formState.progress.then( function()
 		{
+			if ( _this.onSubmitSuccess ) {
+				_this.onSubmitSuccess( scope, response );
+			}
+
 			// Send the new model back into the submit handler.
 			if ( angular.isDefined( scope.submitHandler ) ) {
 				scope.submitHandler( { formModel: scope.formModel, $response: response } );

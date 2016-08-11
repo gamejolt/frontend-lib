@@ -68,6 +68,9 @@ angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', funct
 		else if ( provider == 'facebook' ) {
 			providerUpper = 'Facebook';
 		}
+		else if ( provider == 'google' ) {
+			providerUpper = 'Google+';
+		}
 
 		return App.user.$unlinkAccount( provider ).then( function( response )
 		{

@@ -11,6 +11,9 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 	Game_Package.STATUS_ACTIVE = 'active';
 	Game_Package.STATUS_REMOVED = 'removed';
 
+	Game_Package.VISIBILITY_PRIVATE = 'private';
+	Game_Package.VISIBILITY_PUBLIC = 'public';
+
 	Game_Package.prototype.shouldShowNamePrice = function()
 	{
 		return this._sellable
@@ -39,7 +42,7 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 		var indexedReleases = _.indexBy( packageData.releases, 'id' );
 		var indexedSellables = _.indexBy( packageData.sellables, 'game_package_id' );
 
-		for ( i in packageData.packages ) {
+		for ( var i = 0; i < packageData.packages.length; ++i ) {
 			var _package = packageData.packages[ i ];
 			_package._releases = _.where( packageData.releases, { game_package_id: _package.id } );
 			_package._builds = _.where( packageData.builds, { game_package_id: _package.id } );
@@ -51,13 +54,13 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 			}
 		}
 
-		for ( i in packageData.releases ) {
+		for ( var i = 0; i < packageData.releases.length; ++i ) {
 			var release = packageData.releases[ i ];
 			release._package = indexedPackages[ release.game_package_id ];
 			release._builds = _.where( release._package._builds, { game_release_id: release.id } );
 		}
 
-		for ( i in packageData.builds ) {
+		for ( var i = 0; i < packageData.builds.length; ++i ) {
 			var build = packageData.builds[ i ];
 			build._package = indexedPackages[ build.game_package_id ];
 			build._release = indexedReleases[ build.game_release_id ];
@@ -77,9 +80,17 @@ angular.module( 'gj.Game.Package' ).factory( 'Game_Package', function( $q, Api, 
 		}
 	};
 
-	Game_Package.prototype.$remove = function()
+	Game_Package.prototype.$remove = function( game )
 	{
-		return this.$_remove( '/web/dash/developer/games/packages/remove/' + this.game_id + '/' + this.id );
+		return this.$_remove( '/web/dash/developer/games/packages/remove/' + this.game_id + '/' + this.id )
+			.then( function( response )
+			{
+				if ( game && response.game ) {
+					game.assign( response.game );
+				}
+
+				return response;
+			} );
 	};
 
 	return Model.create( Game_Package );

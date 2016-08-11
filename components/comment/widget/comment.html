@@ -37,6 +37,31 @@
 			gj-track-event="comment-widget:toggle-full-content"
 			></a>
 
+		<div class="comment-widget-comment-videos" ng-if="::comment.videos.length">
+			<div class="row">
+				<gj-comment-video-thumbnail
+					class="col-xs-6"
+					ng-repeat="video in comment.videos | limitTo:(commentState.showAllVideos ? 10 : 2) track by video.id"
+					video="::video"
+					>
+				</gj-comment-video-thumbnail>
+			</div>
+
+			<div class="comment-widget-comment-videos-more-link"
+				ng-if="comment.videos.length > 2 && !commentState.showAllVideos"
+				>
+				<a class="small link-muted"
+					ng-click="commentState.showAllVideos = true"
+					translate
+					translate-params-$count="comment.videos.length - 2"
+					gj-track-event="comment-widget:more-videos"
+					>
+					+{{ $count }} more videos
+				</a>
+			</div>
+			<br>
+		</div>
+
 		<div class="comment-widget-comment-meta">
 
 			<!--
@@ -53,7 +78,7 @@
 					We make it a sparse i-button that's highlighted when they've voted on the comment,
 					otherwise it's just a simple clear icon.
 				-->
-				<span ng-class="{ 'i-button sparse active': ctrl.userVotes[comment.id] }">
+				<span ng-class="{ 'i-button sparse active': comment.user_vote }">
 					<span class="jolticon jolticon-thumbs-up"></span>
 				</span>
 

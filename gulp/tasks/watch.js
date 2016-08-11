@@ -21,8 +21,7 @@ module.exports = function( config )
 	// This way we're not live reloading a ton before the initial build is done.
 	gulp.task( 'watch:start', function( cb )
 	{
-		// Set that we're watching.
-		config.watching = true;
+		config.watching = 'initial';
 
 		return sequence( 'default', 'serve', cb );
 	} );
@@ -30,6 +29,8 @@ module.exports = function( config )
 	// We depend on 'default' so that it does the full build before starting.
 	gulp.task( 'watch', [ 'watch:start' ], function()
 	{
+		config.watching = 'watching';
+
 		// Stylus.
 		gulp.watch(
 			[
@@ -40,7 +41,7 @@ module.exports = function( config )
 
 		// JavaScript AND html.
 		var jsPaths = [
-			'src/**/*.js',
+			'src/**/*.{js,ts}',
 
 			// Templates compile into JS for components.
 			'src/**/*.html',
@@ -48,7 +49,7 @@ module.exports = function( config )
 
 		gulp.watch(
 			jsPaths,
-			[ 'html:js:reload' ]
+			[ 'html-js:reload' ]
 		);
 
 		gulp.task( 'reload:js', function()
@@ -56,7 +57,7 @@ module.exports = function( config )
 			gulp.src( jsPaths, { read: false } ).pipe( plugins.connect.reload() );
 		} );
 
-		gulp.task( 'html:js:reload', function( cb )
+		gulp.task( 'html-js:reload', function( cb )
 		{
 			return sequence( 'html', 'js', 'reload:js', cb );
 		} );
