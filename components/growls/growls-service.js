@@ -147,17 +147,21 @@ angular.module( 'gj.Growls' ).service( 'Growls', function( $rootScope, $controll
 
 	function createSystemNotification( options )
 	{
-		var notification = new $window.Notification( options.title, {
-			body: options.message,
+		var notifier = require( 'node-notifier' );
+
+		notifier.notify( {
+			title: options.title,
+			message: options.message,
 			icon: options.icon,
+			sound: false,
+			wait: true,
 		} );
 
 		if ( options.onclick ) {
-			notification.onclick = function( event )
+			notifier.on( 'click', function()
 			{
-				options.onclick( event );
-				notification.close();
-			};
+				options.onclick();
+			} );
 		}
 	}
 } );
