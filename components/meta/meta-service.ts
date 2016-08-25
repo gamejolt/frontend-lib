@@ -2,6 +2,7 @@ import { Injectable, Inject } from 'ng-metadata/core';
 import { MetaContainer } from './meta-container';
 import { FbMetaContainer } from './fb-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
+import { MicrodataContainer } from './microdata-container';
 
 @Injectable()
 export class Meta extends MetaContainer
@@ -9,6 +10,7 @@ export class Meta extends MetaContainer
 	private _fb: FbMetaContainer;
 	private _twitter: TwitterMetaContainer;
 	private _originalTitle: string;
+	private _microdata: MicrodataContainer;
 
 	constructor(
 		@Inject( '$rootScope' ) $rootScope: ng.IRootScopeService,
@@ -21,6 +23,7 @@ export class Meta extends MetaContainer
 		this._originalTitle = this.$document[0].title;
 		this._fb = new FbMetaContainer( this.$document[0] );
 		this._twitter = new TwitterMetaContainer( this.$document[0] );
+		this._microdata = new MicrodataContainer( this.$document[0] );
 
 		this.clear();
 
@@ -72,6 +75,11 @@ export class Meta extends MetaContainer
 
 	get twitter() { return this._twitter; }
 
+	set microdata( microdata: Object )
+	{
+		this._microdata.set( microdata );
+	}
+
 	clear()
 	{
 		this.description = null;
@@ -95,5 +103,7 @@ export class Meta extends MetaContainer
 			url: null,
 			shareMessage: null,
 		};
+
+		this._microdata.clear();
 	}
 }
