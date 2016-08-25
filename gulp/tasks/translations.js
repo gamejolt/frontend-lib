@@ -10,8 +10,7 @@ module.exports = function( config )
 	gulp.task( 'translations:extract', function()
 	{
 		return gulp.src( [
-			'src/**/*.{js,html}',
-			'!src/bower-lib/**/*',
+			'build/dev/**/*.{js,html}',
 		] )
 			.pipe( plugins.angularGettext.extract( 'main.pot' ) )
 			.pipe( gulp.dest( 'build/translations' ) );
