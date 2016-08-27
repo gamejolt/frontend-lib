@@ -144,6 +144,8 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			builds: '=gameBuilds',
 			key: '@?',
 			launchOptions: '=?gameBuildLaunchOptions',
+			partnerReferralKey: '=?',
+			partnerReferralUser: '=?',
 		},
 		controllerAs: 'ctrl',
 		controller: function( $scope, $attrs, $parse )

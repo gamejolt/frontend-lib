@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, App, Screen, Form, Environment, Api, Geo, Sellable, Order_Payment, Growls, Device, HistoryTick, gjCurrencyFilter, gettextCatalog )
+angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, $state, App, Screen, Form, Environment, Api, Geo, Sellable, Order_Payment, Growls, Device, HistoryTick, gjCurrencyFilter, gettextCatalog )
 {
 	var form = new Form( {
 		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
@@ -8,10 +8,15 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 	form.scope.package = '=';
 	form.scope.sellable = '=';
 	form.scope.pricing = '=';
+
+	form.scope.partnerReferralKey = '=?';
+	form.scope.partnerReferralUser = '=?';
+
 	form.scope.onBought = '&';
 
 	form.onInit = function( scope )
 	{
+		scope.$state = $state;
 		scope.Screen = Screen;
 		scope.App = App;
 		scope.gjCurrencyFilter = gjCurrencyFilter;
@@ -221,6 +226,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			setupData['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
 			setupData['os'] = Device.os();
 			setupData['arch'] = Device.arch();
+			setupData['ref'] = scope.partnerReferralKey || null;
 
 			return Api.sendRequest( '/web/checkout/setup-order', setupData )
 				.then( function( response )
@@ -278,6 +284,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		data['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
 		data['os'] = Device.os();
 		data['arch'] = Device.arch();
+		data['ref'] = scope.partnerReferralKey || null;
 
 		return Api.sendRequest( '/web/checkout/setup-order', data )
 			.then( function( response )

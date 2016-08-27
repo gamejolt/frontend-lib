@@ -1,4 +1,18 @@
 <div ng-if="formState.checkoutStep == 'primary'">
+
+	<div class="alert alert-info"
+		ng-if="::partnerReferralUser"
+		>
+		<span
+			translate
+			translate-params-user="::partnerReferralUser.display_name"
+			translate-params-profile-url="::$state.href( 'profile.overview', { slug: partnerReferralUser.slug, id: partnerReferralUser.id } )"
+			>
+			You've accessed this game through a Game Jolt Partner link! A percentage of this sale will go to <a href="{{ profileUrl }}">{{ user }}</a>.
+		</span>
+		<a class="link-muted" translate>Learn more about the Game Jolt Partner referral system.</a>
+	</div>
+
 	<p ng-if="::sellable.type == 'pwyw'">
 		<span ng-if="::!pricing.amount" translate translate-params-developer="game.developer.display_name">
 			Show {{ developer }} some <span class="jolticon jolticon-heart"></span> by supporting them.
