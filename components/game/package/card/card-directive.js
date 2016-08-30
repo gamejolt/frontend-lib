@@ -195,12 +195,12 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			}
 
 			// Event to be able to open up the payment form.
-			$scope.$on( 'Game_Package_Card.showPaymentOptions', function( event, package )
+			$scope.$on( 'Game_Package_Card.showPaymentOptions', function( event, _package )
 			{
 				// Spoof that we've clicked to "download" the package.
 				// This will ensure that the payment well opens with the correct
 				// build for "skip paying".
-				if ( _this.package.id == package.id ) {
+				if ( _this.package.id == _package.id ) {
 					_this.buildClick( _this.downloadableBuild );
 				}
 			} );
