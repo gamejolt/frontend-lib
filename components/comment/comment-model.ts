@@ -96,7 +96,10 @@ export class Comment extends Model
 
 	$save()
 	{
-		return this.$_save( `/comments/add/${this.resource}/${this.resource_id}`, 'comment', { detach: true } );
+		if ( !this.id ) {
+			return this.$_save( `/comments/add/${this.resource}/${this.resource_id}`, 'comment' );
+		}
+		return this.$_save( `/comments/edit/${this.id}`, 'comment' );
 	}
 
 	$like()
