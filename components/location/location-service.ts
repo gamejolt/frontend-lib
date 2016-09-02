@@ -41,6 +41,9 @@ export class Location
 			const $stateParams: ng.ui.IStateParamsService = this.$injector.get( '$stateParams' );
 			let mergedParams = angular.extend( {}, $stateParams, this.pendingParams );
 
+			this.isApplyPending = false;
+			this.pendingParams = undefined;
+
 			// Only change the URL if the params we need to enforce aren't set.
 			// If they're the same, the URL doesn't need to be changed. It's correct.
 			if ( angular.equals( mergedParams, $stateParams ) ) {
@@ -63,9 +66,6 @@ export class Location
 			else {
 				this.$state.go( this.$state.current, mergedParams, { location: 'replace' } );
 			}
-
-			this.isApplyPending = false;
-			this.pendingParams = undefined;
 		} );
 	}
 
