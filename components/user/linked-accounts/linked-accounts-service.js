@@ -70,6 +70,9 @@ angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', funct
 		else if ( provider == 'facebook' ) {
 			providerUpper = 'Facebook';
 		}
+		else if ( provider == 'twitch' ) {
+			providerUpper = 'Twitch';
+		}
 		else if ( provider == 'google' ) {
 			providerUpper = 'Google+';
 		}

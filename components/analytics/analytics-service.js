@@ -8,6 +8,7 @@ angular.module( 'gj.Analytics' ).service( 'Analytics', function( $rootScope, $lo
 
 	this.SOCIAL_NETWORK_FB = 'facebook';
 	this.SOCIAL_NETWORK_TWITTER = 'twitter';
+	this.SOCIAL_NETWORK_TWITCH = 'twitch';
 	this.SOCIAL_NETWORK_YOUTUBE = 'youtube';
 
 	this.SOCIAL_ACTION_LIKE = 'like';
