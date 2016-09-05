@@ -3,7 +3,7 @@ import { Model } from './../model/model-service';
 import { Comment_Video } from './video/video-model';
 import { Comment_Vote } from './vote/vote-model';
 
-export function CommentFactory( $q: any, Model: any, Api: any, User: any, Comment_Video: any, Comment_Vote: any )
+export function CommentFactory( $q: any, Model: any, Api: any, User: any, Comment_Video: any, Comment_Vote: any, Subscription: any )
 {
 	return Model.create( Comment, {
 		$q,
@@ -11,6 +11,7 @@ export function CommentFactory( $q: any, Model: any, Api: any, User: any, Commen
 		User,
 		Comment_Video,
 		Comment_Vote,
+		Subscription,
 	} );
 }
 
@@ -28,14 +29,17 @@ export class Comment extends Model
 	posted_on: number;
 	lang: string;
 	videos: Comment_Video[];
+	subscription?: any;
 
 	isVotePending: boolean = false;
+	isFollowPending: boolean = false;
 
 	static $q: ng.IQService;
 	static Api: any;
 	static User: any;
 	static Comment_Video: typeof Comment_Video;
 	static Comment_Vote: typeof Comment_Vote;
+	static Subscription: any;
 
 	static STATUS_REMOVED = 0;
 	static STATUS_VISIBLE = 1;
@@ -55,6 +59,10 @@ export class Comment extends Model
 
 		if ( data && data.user_vote ) {
 			this.user_vote = new Comment.Comment_Vote( data.user_vote );
+		}
+
+		if ( data && data.subscription ) {
+			this.subscription = new Comment.Subscription( data.subscription );
 		}
 	}
 
@@ -133,6 +141,36 @@ export class Comment extends Model
 				this.user_vote = undefined;
 				--this.votes;
 				this.isVotePending = false;
+			} );
+	}
+
+	$follow()
+	{
+		if ( this.isFollowPending ) {
+			return;
+		}
+		this.isFollowPending = true;
+
+		Comment.Subscription.$subscribe( this.id )
+			.then( ( subscription: any ) =>
+			{
+				this.subscription = subscription;
+				this.isFollowPending = false;
+			} );
+	}
+
+	$removeFollow()
+	{
+		if ( !this.subscription || this.isFollowPending ) {
+			return;
+		}
+		this.isFollowPending = true;
+
+		this.subscription.$remove()
+			.then( () =>
+			{
+				this.subscription = undefined;
+				this.isFollowPending = false;
 			} );
 	}
 }

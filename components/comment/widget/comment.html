@@ -132,18 +132,10 @@
 					<span class="jolticon jolticon-reply"></span>
 					<span translate>Reply</span>
 				</a>
-			</div>
 
-
-			<script> /*
-			<div class="comment-widget-comment-meta">
-
-
-				<span ng-if="::canFollow">
-					<span class="dot-separator"></span>
-
-					<a
-						ng-if="!$ctrl.commentWidtet.subscriptions[ $ctrl.comment.id ]"
+				<span ng-if="::$ctrl.canFollow">
+					<a class="btn btn-outline btn-sm"
+						ng-if="!$ctrl.comment.subscription"
 						ng-click="$ctrl.toggleFollow()"
 						gj-tooltip="{{ 'Get notifications when people post new replies to this thread.' | translate }}"
 						gj-track-event="comment-widget:follow-click"
@@ -152,30 +144,57 @@
 						<span translate>Follow Thread</span>
 					</a>
 
-					<a class="following"
-						ng-if="$ctrl.commentWidget.subscriptions[ $ctrl.comment.id ]"
+					<a class="btn btn-outline btn-sm active"
+						ng-if="!!$ctrl.comment.subscription"
 						ng-click="$ctrl.toggleFollow()"
 						gj-track-event="comment-widget:follow-click"
 						>
-						<span class="jolticon jolticon-subscribed"></span>
-						<span translate>Stop Following</span>
-					</a>
-				</span>
-
-				<span ng-if="::$ctrl.app.user && ($ctrl.app.user.id != $ctrl.comment.user || $ctrl.app.user.permissionLevel >= 3)">
-					<span class="dot-separator"></span>
-
-					<a
-						gj-tooltip="{{ 'More Options' | translate }}"
-						gj-popover-trigger="comment-more-options-{{ ::$ctrl.comment.id }}"
-						>
-						<span class="jolticon jolticon-ellipsis-h"></span>
+						<span class="jolticon jolticon-subscribe"></span>
+						<span translate>Following</span>
 					</a>
 				</span>
 
 			</div>
-			*/ </script>
 
+		</div>
+
+		<div class="timeline-list comment-widget-replies"
+			ng-if="$ctrl.childComments.length || $ctrl.isReplying"
+			>
+
+			<!--
+				Child Comments
+			-->
+			<div class="timeline-list-item"
+				ng-repeat="childComment in $ctrl.childComments || [] track by childComment.id"
+				>
+
+				<gj-comment-widget-comment
+					comment="childComment"
+					is-child="true"
+					>
+				</gj-comment-widget-comment>
+
+			</div>
+
+			<!--
+				Don't include the form in the DOM until we need it.
+				When the if is triggered, the scroll-when will trigger and we'll scroll to
+				the reply box.
+			-->
+			<div class="timeline-list-item"
+				ng-if="$ctrl.isReplying"
+				gj-scroll-when
+				>
+				<gj-comment-widget-comment-form
+					show-user="true"
+					resource="{{ ::$ctrl.comment.resource }}"
+					resource-id="::$ctrl.comment.resourceId"
+					parent-id="::$ctrl.comment.id"
+					gj-form-submit-handler="$ctrl.onCommentAdd( formModel, true )"
+					>
+				</gj-comment-widget-comment-form>
+			</div>
 		</div>
 
 	</div>

@@ -86,13 +86,6 @@ export class WidgetComponent
 					this.childComments = _.groupBy( childComments, 'parent_id' );
 				}
 
-				// User subscriptions to comment threads.
-				// this.subscriptions = {};
-				// if ( payload.subscriptions ) {
-				// 	var subscriptions = Subscription.populate( payload.subscriptions );
-				// 	this.subscriptions = _.indexBy( subscriptions, 'resource_id' );
-				// }
-
 				this.translations = {};
 				this.isTranslating = false;
 				this.isShowingTranslations = false;
@@ -204,7 +197,7 @@ export class WidgetComponent
 		this.updateUrl();
 
 		if ( shouldScroll ) {
-			this.scroll.to( 'comment-pagination' );
+			this.scroll.to( 'comment-list' );
 		}
 
 		this.analytics.trackEvent( 'comment-widget', 'change-page', this.currentPage );

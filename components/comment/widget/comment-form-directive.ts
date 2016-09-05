@@ -11,6 +11,7 @@ export function CommentFormFactory( Form: any, App: any, gettextCatalog: any )
 	form.scope.resource = '@';
 	form.scope.resourceId = '<';
 	form.scope.parentId = '<?';
+	form.scope.showUser = '<?';
 	form.scope.gjFormCancelHandler = '&?';
 
 	form.onInit = ( scope: any ) =>

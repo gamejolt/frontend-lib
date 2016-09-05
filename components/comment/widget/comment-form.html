@@ -1,8 +1,8 @@
-<div class="comment-widget-comment-form">
+<div class="timeline-list-item-icon" ng-if="::showUser">
+	<span gj-user-avatar="::user"></span>
+</div>
 
-	<div class="comment-widget-comment-form-user">
-		<div gj-user-avatar="user"></div>
-	</div>
+<div ng-class="::{ 'timeline-list-item-main': showUser }">
 
 	<form gj-form="formModel" name="commentAddForm">
 
@@ -31,5 +31,4 @@
 		</button>
 
 	</form>
-
 </div>

@@ -12,8 +12,9 @@ export class CommentComponent implements OnInit
 {
 	@Input( '<' ) comment: Comment;
 	@Input( '<?' ) isChild?: boolean;
+	@Input( '<?' ) childComments?: Comment[];
+	@Input( '<?' ) isReplying?: boolean;
 
-	isFollowPending = false;
 	profileUrl: string;
 	isOwner: boolean;
 
@@ -127,30 +128,12 @@ export class CommentComponent implements OnInit
 
 	toggleFollow()
 	{
-		if ( this.isFollowPending ) {
-			return;
+		if ( !!this.comment.subscription ) {
+			this.comment.$removeFollow();
 		}
-
-		this.isFollowPending = true;
-
-		// if ( !this.commentWidget.subscriptions[ scope.comment.id ] ) {
-
-		// 	Subscription.$subscribe( scope.comment.id )
-		// 		.then( function( newSubscription )
-		// 		{
-		// 			scope.ctrl.subscriptions[ scope.comment.id ] = newSubscription;
-		// 			scope.isFollowPending = false;
-		// 		} );
-		// }
-		// else {
-
-		// 	scope.ctrl.subscriptions[ scope.comment.id ].$remove()
-		// 		.then( function()
-		// 		{
-		// 			delete scope.ctrl.subscriptions[ scope.comment.id ];
-		// 			scope.isFollowPending = false;
-		// 		} );
-		// }
+		else {
+			this.comment.$follow();
+		}
 	}
 
 	selectVideo( video: Comment_Video )

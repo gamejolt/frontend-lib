@@ -36,37 +36,6 @@
 			</div>
 		</div>
 
-		<!--
-			Comment Add Form
-		-->
-		<div ng-if="$ctrl.app.user">
-			<gj-comment-widget-comment-form
-				resource="{{ $ctrl.resource }}"
-				resource-id="$ctrl.resourceId"
-				gj-form-submit-handler="$ctrl.onCommentAdd( formModel, false )"
-				>
-			</gj-comment-widget-comment-form>
-		</div>
-
-		<div ng-if="!$ctrl.app.user" class="alert alert-info">
-			<p>You must be <a ng-href="{{ ::$ctrl.loginUrl }}">logged in</a> to Game Jolt to post a comment.</p>
-		</div>
-
-		<hr>
-
-		<div class="text-center">
-			<gj-pager
-				id="comment-pagination"
-				ng-if="$ctrl.perPage && $ctrl.parentCount"
-				items-per-page="$ctrl.perPage"
-				total-items="$ctrl.parentCount"
-				current-page="$ctrl.currentPage"
-				query-param="comment_page"
-				on-page-change="$ctrl.onPageChange( $event, $page )"
-				>
-			</gj-pager>
-		</div>
-
 		<div class="comment-widget-translate-btn" ng-if="$ctrl.allowTranslate">
 			<button class="btn btn-block btn-outline"
 				ng-click="$ctrl.toggleTranslate()"
@@ -97,41 +66,38 @@
 			</div>
 		</div>
 
-		<!-- Comments List -->
-		<div class="activity-feed timeline-list full-bleed">
+		<div ng-if="!$ctrl.app.user" class="alert alert-info">
+			<p>You must be <a ng-href="{{ ::$ctrl.loginUrl }}">logged in</a> to Game Jolt to post a comment.</p>
+		</div>
+
+		<div class="timeline-list full-bleed" id="comment-list">
+
+			<!--
+				Comment Add Form
+			-->
+			<div class="timeline-list-item" ng-if="$ctrl.app.user">
+				<gj-comment-widget-comment-form
+					show-user="true"
+					resource="{{ $ctrl.resource }}"
+					resource-id="$ctrl.resourceId"
+					gj-form-submit-handler="$ctrl.onCommentAdd( formModel, false )"
+					>
+				</gj-comment-widget-comment-form>
+			</div>
+
+			<!--
+				Comments List
+			-->
 			<div class="timeline-list-item"
 				ng-repeat="comment in $ctrl.comments track by comment.id"
 				>
 
-				<!-- Comment -->
-				<gj-comment-widget-comment comment="comment"></gj-comment-widget-comment>
-
-				<!-- Child Comments -->
-				<div ng-if="$ctrl.childComments[ comment.id ]">
-
-					<gj-comment-widget-comment
-						ng-repeat="childComment in $ctrl.childComments[ comment.id ] track by childComment.id"
-						comment="childComment"
-						is-child="true"
-						>
-					</gj-comment-widget-comment>
-
-				</div>
-
-				<!--
-					Don't include the form in the DOM until we need it.
-					When the if is triggered, the scroll-when will trigger and we'll scroll to
-					the reply box.
-				-->
-				<div ng-if="$ctrl.replyingTo == comment.id" gj-scroll-when>
-					<gj-comment-widget-comment-form
-						resource="{{ $ctrl.resource }}"
-						resource-id="$ctrl.resourceId"
-						parent-id="comment.id"
-						gj-form-submit-handler="$ctrl.onCommentAdd( formModel, true )"
-						>
-					</gj-comment-widget-comment-form>
-				</div>
+				<gj-comment-widget-comment
+					comment="comment"
+					child-comments="$ctrl.childComments[ comment.id ]"
+					is-replying="$ctrl.replyingTo == comment.id"
+					>
+				</gj-comment-widget-comment>
 
 			</div>
 		</div>
