@@ -23,7 +23,7 @@
 
 			<a class="comment-video-lightbox-user"
 				ui-sref="profile.overview( { username: $ctrl.video.comment.user.username } )"
-				gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }}"
+				gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }} (@{{ ::$ctrl.video.comment.user.username }})"
 				tooltip-placement="bottom"
 				ng-click="$ctrl.onClose()"
 				gj-track-event="comment-video-lightbox:user"
