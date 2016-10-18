@@ -86,7 +86,7 @@
 							<div ng-if="hasSufficientWalletFunds()">
 								<a class="saved-card" ng-click="collectAddress( 'wallet' )" ng-class="{ disabled: formState.isLoadingMethods }">
 									<div class="saved-card-avatar">
-										<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
+										<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }} (@{{ App.user.username }})">
 									</div>
 									<div class="saved-card-content">
 										<div class="saved-card-label" translate>
@@ -118,7 +118,7 @@
 							<div>
 								<a class="saved-card" ng-click="checkoutSavedCard( cards[0] )" ng-class="{ disabled: formState.isLoadingMethods }">
 									<div class="saved-card-avatar">
-										<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }}">
+										<img ng-src="{{ ::App.user.img_avatar }}" class="img-responsive" alt="" gj-tooltip="{{ App.user.display_name }} (@{{ App.user.username }})">
 									</div>
 									<div class="saved-card-content">
 										<div class="saved-card-label" translate>

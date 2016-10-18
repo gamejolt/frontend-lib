@@ -22,8 +22,8 @@
 
 		<a class="comment-video-thumbnail-user"
 			ng-if="::$ctrl.showUser"
-			ui-sref="profile.overview( { slug: $ctrl.video.comment.user.slug, id: $ctrl.video.comment.user.id } )"
-			gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }}"
+			ui-sref="profile.overview( { username: $ctrl.video.comment.user.username } )"
+			gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }} (@{{ ::$ctrl.video.comment.user.username }})"
 			gj-track-event="comment-video-thumbnail:user"
 			>
 			<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">

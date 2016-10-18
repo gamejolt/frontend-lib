@@ -15,7 +15,10 @@
 				>
 				Owner
 			</span>
-			<a ng-href="{{ ::profileUrl }}">{{ ::comment.user.display_name }}</a>
+			<a ng-href="{{ ::profileUrl }}">
+				{{ ::comment.user.display_name }}
+				<small>@{{ ::comment.user.username }}</small>
+			</a>
 			<span class="comment-widget-comment-time" am-time-ago="comment.posted_on"></span>
 			<span ng-if="::isOwner" class="comment-widget-comment-owner tag hidden-xs" translate>Owner</span>
 		</div>

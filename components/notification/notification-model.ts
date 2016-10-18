@@ -119,14 +119,14 @@ export class Notification extends Model
 			else if ( this.type == Notification.TYPE_FRIENDSHIP_REQUEST ) {
 				this.action_model = new (Notification.$injector.get( 'User_Friendship' ))( data.action_resource_model );
 				this.action_label = 'Friend Request';
-				this.url = Notification.$state.href( 'profile.overview', { slug: this.from_model.slug, id: this.from_model.id } );
+				this.url = Notification.$state.href( 'profile.overview', { username: this.from_model.username } );
 				this.jolticon = 'jolticon-friend-add-1';
 				this.is_user_based = true;
 			}
 			else if ( this.type == Notification.TYPE_FRIENDSHIP_ACCEPT ) {
 				this.action_model = new (Notification.$injector.get( 'User_Friendship' ))( data.action_resource_model );
 				this.action_label = 'New Friend';
-				this.url = Notification.$state.href( 'profile.overview', { slug: this.from_model.slug, id: this.from_model.id } );
+				this.url = Notification.$state.href( 'profile.overview', { username: this.from_model.username } );
 				this.jolticon = 'jolticon-friend-add-2';
 				this.is_user_based = true;
 			}
