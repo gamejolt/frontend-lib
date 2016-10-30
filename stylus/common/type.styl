@@ -38,12 +38,17 @@ h4, .h4
 	margin-top: ($line-height-computed * 2.5)
 	margin-bottom: $font-size-base
 	word-wrap: break-word
+	font-weight: bold
+
+	small, code
+		font-weight: normal
 
 h5, .h5,
 h6, .h6
 	margin-top: ($line-height-computed * 2)
 	margin-bottom: $font-size-base
 	word-wrap: break-word
+	font-weight: bold
 
 .text-size-h1
 	font-size: $font-size-h1
@@ -64,9 +69,6 @@ h6, .h6
 	font-size: $font-size-h6
 
 @media $media-xs
-
-	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6
-		font-weight: 300
 
 	h1, .h1, .text-size-h1
 		font-size: $font-size-h1-xs
