@@ -28,7 +28,7 @@
 		</div>
 
 		<div ng-if="!App.user" class="alert alert-info">
-			<p>You must be <a ng-href="{{ ::ctrl.loginUrl }}">logged in</a> to Game Jolt to post a comment.</p>
+			<p>You must be <a gj-auth-required ng-href="{{ ::ctrl.loginUrl }}">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
 		<hr>
