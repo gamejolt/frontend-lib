@@ -1,6 +1,13 @@
 .translate-lang-selector
 	margin: $line-height-computed auto
 	width: auto
+	background-color: transparent
+	color: $gray-light
+	border-color: $gray-light
+
+	&:focus
+	&:active
+		border-color: $white
 
 	@media $media-sm-up
 		display: inline-block
