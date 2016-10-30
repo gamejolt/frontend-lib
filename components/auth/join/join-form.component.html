@@ -1,0 +1,44 @@
+<form class="auth-form" gj-form="formModel" name="joinForm" ng-submit="onSubmit()">
+	<fieldset ng-disabled="!Connection.isOnline">
+
+		<form-group name="email" label="{{ 'Email' | translate }}" hide-label="true">
+			<input form-control="email"
+				ng-model-options="{ updateOn: 'blur', debounce: { 'blur': 0 } }"
+				gj-form-validate-availability="/web/auth/check-field-availability/email"
+				ng-attr-placeholder="{{ 'Email' | translate }}"
+				>
+			<control-errors></control-errors>
+		</form-group>
+
+		<form-group name="username" label="{{ 'Username' | translate }}" hide-label="true">
+			<input form-control="text"
+				ng-minlength="3"
+				ng-maxlength="30"
+				gj-pattern="username"
+				ng-model-options="{ updateOn: 'blur', debounce: { 'blur': 0 } }"
+				gj-form-validate-availability="/web/auth/check-field-availability/username"
+				ng-attr-placeholder="{{ 'Username' | translate }}"
+				>
+			<control-errors></control-errors>
+		</form-group>
+
+		<form-group name="password" label="{{ 'Password' | translate }}" hide-label="true">
+			<input form-control="password"
+				ng-minlength="4"
+				ng-maxlength="30"
+				ng-model-options="{ updateOn: 'blur', debounce: { 'blur': 0 } }"
+				ng-attr-placeholder="{{ 'Password' | translate }}"
+				>
+			<control-errors></control-errors>
+		</form-group>
+		<br>
+
+		<div class="form-group">
+			<button gj-form-submit-button class="btn btn-block" ng-class="{ 'btn-success-outline btn-dark-variant': darkVariant }">
+				<span class="jolticon jolticon-friends"></span>
+				<span translate>Sign Up</span>
+			</button>
+		</div>
+
+	</fieldset>
+</form>

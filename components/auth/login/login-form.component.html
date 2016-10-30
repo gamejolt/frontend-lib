@@ -1,0 +1,42 @@
+<form class="auth-form" gj-form="formModel" name="loginForm" ng-submit="onSubmit()">
+	<fieldset ng-disabled="!Connection.isOnline">
+
+		<!--
+			Minlength not needed since the login will fail if incorrect anyway.
+		-->
+
+		<form-group name="username" label="{{ 'Username' | translate }}" hide-label="true">
+			<input form-control="text"
+				ng-maxlength="30"
+				gj-pattern="username"
+				ng-keyup="keyup()"
+				ng-attr-placeholder="{{ 'Username' | translate }}">
+
+			<control-errors></control-errors>
+		</form-group>
+
+		<form-group name="password" label="{{ 'Password' | translate }}" hide-label="true">
+			<input form-control="password"
+				ng-maxlength="30"
+				ng-keyup="keyup()"
+				ng-attr-placeholder="{{ 'Password' | translate }}">
+
+			<control-errors></control-errors>
+		</form-group>
+		<br>
+
+		<div class="alert alert-warning anim-fade-in-enlarge no-animate-leave" ng-if="formState.invalidLogin" translate>
+			Incorrect username or password.
+		</div>
+
+		<gj-loading ng-if="formState.isProcessing" label="{{ 'Figuring this all out...' | translate }}" class="loading-centered"></gj-loading>
+
+		<div class="form-group">
+			<button gj-form-submit-button class="btn btn-block" ng-class="{ 'btn-success-outline btn-dark-variant': darkVariant }">
+				<span class="jolticon jolticon-sign-in"></span>
+				<span translate>Log In</span>
+			</button>
+		</div>
+
+	</fieldset>
+</form>

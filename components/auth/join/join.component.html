@@ -1,0 +1,45 @@
+<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
+	ng-class="{ 'btn-dark-variant': $ctrl.darkVariant }"
+	ng-disabled="!$ctrl.conn.isOnline"
+	ng-click="$ctrl.linkedAccountLogin( 'facebook' )"
+	>
+	<span class="jolticon jolticon-facebook"></span>
+	<span translate>Sign Up With Facebook</span>
+</button>
+
+<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
+	ng-class="{ 'btn-dark-variant': $ctrl.darkVariant }"
+	ng-disabled="!$ctrl.conn.isOnline"
+	ng-click="$ctrl.linkedAccountLogin( 'google' )"
+	>
+	<span class="jolticon jolticon-google-plus"></span>
+	<span translate>Sign Up With Google+</span>
+</button>
+
+<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
+	ng-class="{ 'btn-dark-variant': $ctrl.darkVariant }"
+	ng-disabled="!$ctrl.conn.isOnline"
+	ng-click="$ctrl.linkedAccountLogin( 'twitter' )"
+	>
+	<span class="jolticon jolticon-twitter"></span>
+	<span translate>Sign Up With Twitter</span>
+</button>
+
+<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
+	ng-class="{ 'btn-dark-variant': $ctrl.darkVariant }"
+	ng-disabled="!$ctrl.conn.isOnline"
+	ng-click="$ctrl.linkedAccountLogin( 'twitch' )"
+	>
+	<span class="jolticon jolticon-twitch"></span>
+	<span translate>Sign Up With Twitch</span>
+</button>
+
+<div class="auth-line-thru">
+	<span translate>or</span>
+</div>
+
+<gj-auth-join-form
+	dark-variant="$ctrl.darkVariant"
+	gj-form-submit-handler="$ctrl.onJoined( formModel )"
+	>
+</gj-auth-join-form>
