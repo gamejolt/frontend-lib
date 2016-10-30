@@ -31,20 +31,7 @@
 			<p>You must be <a gj-auth-required ng-href="{{ ::ctrl.loginUrl }}">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
-		<hr>
-
-		<div class="text-center">
-			<gj-pager
-				id="comment-pagination"
-				ng-if="ctrl.perPage && ctrl.parentCount"
-				items-per-page="ctrl.perPage"
-				total-items="ctrl.parentCount"
-				current-page="ctrl.currentPage"
-				query-param="comment_page"
-				on-page-change="ctrl.onPageChange( $event, $page )"
-				>
-			</gj-pager>
-		</div>
+		<hr id="comment-pagination">
 
 		<div class="comment-widget-translate-btn" ng-if="ctrl.allowTranslate">
 			<button class="btn btn-block btn-outline"
@@ -112,16 +99,15 @@
 			</div>
 		</div>
 
-		<div class="text-center">
-			<gj-pager
-				ng-if="ctrl.perPage && ctrl.parentCount"
-				items-per-page="ctrl.perPage"
-				total-items="ctrl.parentCount"
-				current-page="ctrl.currentPage"
-				query-param="comment_page"
-				on-page-change="ctrl.onPageChange( $event, $page, true )"
-				>
-			</gj-pager>
-		</div>
+		<gj-pagination
+			pager="true"
+			ng-if="ctrl.perPage && ctrl.parentCount"
+			items-per-page="ctrl.perPage"
+			total-items="ctrl.parentCount"
+			current-page="ctrl.currentPage"
+			query-param="comment_page"
+			on-page-change="ctrl.onPageChange( $event, $page, true )"
+			>
+		</gj-pagination>
 	</div>
 </div>
