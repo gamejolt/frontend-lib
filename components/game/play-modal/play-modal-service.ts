@@ -1,5 +1,6 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 import { HistoryTick } from './../../history-tick/history-tick-service';
+import { Popover } from '../../popover/popover.service';
 
 @Injectable()
 export class Game_PlayModal
@@ -17,7 +18,7 @@ export class Game_PlayModal
 		@Inject( 'Growls' ) private Growls: any,
 		@Inject( 'HistoryTick' ) private HistoryTick: HistoryTick,
 		@Inject( 'Environment' ) private Environment: any,
-		@Inject( 'Popover' ) private Popover: any,
+		@Inject( 'Popover' ) private Popover: Popover,
 		@Inject( 'Analytics' ) private Analytics: any,
 		@Inject( 'Game_Build' ) private Game_Build: any
 	)
