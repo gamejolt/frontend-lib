@@ -57,14 +57,15 @@ export class Location
 			}
 
 			// This will do a controller refresh, which kind of sucks, but it's more important to keep the URL up to date.
-			// NOTE: Setting `notify` to false doesn't work. ui-sref links don't get updated with the new URL.
+			// NOTE: Setting `notify` to false means that ui-sref links don't get updated with the new URL.
+			// This shouldn't be too big of an issue since search engines will eventually correct it.
 			// When prerendering we don't redirect in browser, we just send a redirect header.
 			if ( this.Environment.isPrerender ) {
 				this.Meta.redirect = this.$state.href( this.$state.current, mergedParams );
 				this.Meta.responseCode = '301';
 			}
 			else {
-				this.$state.go( this.$state.current, mergedParams, { location: 'replace' } );
+				this.$state.go( this.$state.current, mergedParams, { location: 'replace', notify: false } );
 			}
 		} );
 	}
