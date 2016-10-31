@@ -2,7 +2,7 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Ap
 {
 	if ( $injector.has( 'Registry' ) ) {
 		$injector.get( 'Registry' ).setConfig( 'Game', {
-			maxItems: 50,
+			maxItems: 100,
 		} );
 	}
 
