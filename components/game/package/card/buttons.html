@@ -1,17 +1,15 @@
-<button class="btn btn-primary-outline"
+<button class="btn btn-primary-outline btn-block-xs"
 	ng-if="::ctrl.browserBuild"
 	ng-click="ctrl.buildClick( ctrl.browserBuild )"
-	ng-class="{ 'btn-block': Screen.isXs }"
 	>
 	<span class="jolticon jolticon-play"></span>
 	<span translate>Play</span>
 	<span class="jolticon-addon jolticon" ng-class="::'jolticon-' + ctrl.showcasedBrowserIcon"></span>
 </button>
 
-<button class="btn btn-success-outline"
+<button class="btn btn-success-outline btn-block-xs"
 	ng-if="::ctrl.downloadableBuild"
 	ng-click="ctrl.buildClick( ctrl.downloadableBuild )"
-	ng-class="{ 'btn-block': Screen.isXs }"
 	>
 	<span class="jolticon jolticon-download"></span>
 	<span translate>Download</span>
@@ -25,9 +23,9 @@
 	button with a [...] after.
 	If the package has normal builds too, then we just show it as a more options sparse button.
 -->
-<button class="btn"
+<button class="btn btn-block-xs"
 	ng-if="::ctrl.extraBuilds.length"
-	ng-class="{ 'btn-success-outline': ctrl.otherOnly, 'btn-outline': !ctrl.otherOnly, 'btn-block': Screen.isXs }"
+	ng-class="{ 'btn-success-outline': ctrl.otherOnly, 'btn-outline': !ctrl.otherOnly }"
 	gj-popover-trigger="game-package-card-more-options-{{ ctrl.package.id }}"
 	gj-track-event="game-package-card:more-options"
 	>

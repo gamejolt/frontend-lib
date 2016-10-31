@@ -169,6 +169,17 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 .btn-block + .btn-block
 	margin-top: 5px
 
+@media $media-xs
+	.btn-block-xs
+		display: block
+		width: 100%
+		text-align: center
+
+	.btn-block-xs + .btn-block-xs
+	.btn-block-xs + .btn-block
+	.btn-block + .btn-block-xs
+		margin-top: 5px
+
 /**
  * Outline buttons
  */

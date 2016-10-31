@@ -39,10 +39,9 @@
 		</div>
 
 		<div class="comment-video-lightbox-interaction-actions">
-			<a class="btn"
+			<a class="btn btn-block-xs"
 				ng-if="::$ctrl.canVote"
 				ng-class="{
-					'btn-block': $ctrl.screen.isXs,
 					'btn-success active': !!$ctrl.video.comment.user_vote,
 					'btn-outline btn-overlay-variant': !$ctrl.video.comment.user_vote,
 				}"
@@ -57,8 +56,7 @@
 				<span ng-if="!!$ctrl.video.comment.user_vote" translate>Liked!</span>
 			</a>
 
-			<a class="btn btn-outline btn-overlay-variant"
-				ng-class="{ 'btn-block': $ctrl.screen.isXs }"
+			<a class="btn btn-outline btn-overlay-variant btn-block-xs"
 				ng-click="$ctrl.reply()"
 				gj-track-event="comment-video-lightbox:reply"
 				>
@@ -66,8 +64,7 @@
 				<span translate>Reply</span>
 			</a>
 
-			<a class="btn btn-danger-outline btn-overlay-variant"
-				ng-class="{ 'btn-block': $ctrl.screen.isXs }"
+			<a class="btn btn-danger-outline btn-overlay-variant btn-block-xs"
 				ng-click="$ctrl.onClose()"
 				>
 				<span class="jolticon jolticon-remove"></span>
