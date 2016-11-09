@@ -25,8 +25,14 @@
 		</form-group>
 		<br>
 
-		<div class="alert alert-warning anim-fade-in-enlarge no-animate-leave" ng-if="formState.invalidLogin" translate>
-			Incorrect username or password.
+		<div class="alert alert-warning anim-fade-in-enlarge no-animate-leave" ng-if="formState.invalidLogin">
+			<p translate>Incorrect username or password.</p>
+			<p translate>Please note, after 5 incorrect login attempts you will be locked out of your account for 1 hour.</p>
+			<p translate>If you've forgotten your username or password, you can retrieve them below.</p>
+		</div>
+
+		<div class="alert alert-warning anim-fade-in-enlarge no-animate-leave" ng-if="formState.blockedLogin">
+			<p translate>Whoa, there! You've tried to log in too many times and just straight up failed. You'll have to cool down a bit before trying again.</p>
 		</div>
 
 		<gj-loading ng-if="formState.isProcessing" label="{{ 'Figuring this all out...' | translate }}" class="loading-centered"></gj-loading>

@@ -10,20 +10,34 @@ export function AuthLoginFormFactory( Api: any, Form: any, Connection: any )
 	{
 		scope.Connection = Connection;
 
-		scope.formState.invalidLogin = false;
 		scope.keyup = () =>
 		{
-			scope.formState.invalidLogin = false;
+			scope.resetErrors();
 		};
+
+		scope.resetErrors = () =>
+		{
+			scope.formState.invalidLogin = false;
+			scope.formState.blockedLogin = false;
+		};
+
+		scope.resetErrors();
 	};
 
 	form.onSubmit = function( scope: any )
 	{
+		scope.resetErrors();
+
 		return Api.sendRequest( '/web/auth/login', scope.formModel ).then( ( response: any ) =>
 		{
 			if ( response.success === false ) {
-				if ( response.reason && response.reason == 'invalid-login' ) {
-					scope.formState.invalidLogin = true;
+				if ( response.reason ) {
+					if ( response.reason == 'invalid-login' ) {
+						scope.formState.invalidLogin = true;
+					}
+					else if ( response.reason == 'blocked' ) {
+						scope.formState.blockedLogin = true;
+					}
 				}
 			}
 
