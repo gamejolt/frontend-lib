@@ -35,6 +35,10 @@ angular.module( 'gj.Api' ).service( 'Api', function( $window, $http, $injector, 
 			// - will ignore the version number so it doesn't refresh
 			// - won't direct to an error page if there was a status code error
 			detach: false,
+
+			// You can change the default api host/path used through these.
+			apiHost: undefined,
+			apiPath: undefined,
 		} );
 
 		// Set up the detachment options if detach is set.
@@ -72,7 +76,7 @@ angular.module( 'gj.Api' ).service( 'Api', function( $window, $http, $injector, 
 		if ( !options.file ) {
 			var requestPromise = $http( {
 				method: (sanitizedPostData ? 'POST' : 'GET'),
-				url: _this.apiHost + _this.apiPath + uri,
+				url: (options.apiHost || _this.apiHost) + (options.apiPath || _this.apiPath) + uri,
 				data: (sanitizedPostData || ''),
 				withCredentials: options.withCredentials,
 				ignoreLoadingBar: options.ignoreLoadingBar
@@ -102,7 +106,7 @@ angular.module( 'gj.Api' ).service( 'Api', function( $window, $http, $injector, 
 
 			var requestPromise = $upload.upload( {
 				method: 'POST',
-				url: _this.apiHost + _this.apiPath + uri,
+				url: (options.apiHost || _this.apiHost) + (options.apiPath || _this.apiPath) + uri,
 				data: (sanitizedPostData || undefined),
 				file: options.file,
 				fileFormDataName: options.fileFormDataName,
