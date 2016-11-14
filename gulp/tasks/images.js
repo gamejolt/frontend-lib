@@ -54,8 +54,5 @@ module.exports = function( config )
 			.pipe( plugins.connect.reload() )
 	} );
 
-	gulp.task( 'images', [ 'images:svg', 'images:raster', 'images:lib:svg', 'images:lib:raster' ], function()
-	{
-		// Dependencies only.
-	} );
+	gulp.task( 'images', gulp.parallel( 'images:svg', 'images:raster', 'images:lib:svg', 'images:lib:raster' ) );
 };

@@ -1,6 +1,5 @@
 var argv = require( 'minimist' )( process.argv );
 var gulp = require( 'gulp' );
-var sequence = require( 'run-sequence' );
 var shell = require( 'gulp-shell' );
 
 module.exports = function( config )
@@ -38,7 +37,6 @@ module.exports = function( config )
 	require( './translations.js' )( config );
 	require( './inject.js' )( config );
 	require( './clean.js' )( config );
-	require( './watch.js' )( config );
 
 	gulp.task( 'extra', function()
 	{
@@ -54,13 +52,12 @@ module.exports = function( config )
 		] ).pipe( gulp.dest( config.buildDir ) );
 	} );
 
-	gulp.task( 'pre', function(){} );
-	gulp.task( 'post', function(){} );
+	gulp.task( 'pre', function( cb ){ cb(); } );
+	gulp.task( 'post', function( cb ){ cb(); } );
 
-	gulp.task( 'default', function( callback )
-	{
-		return sequence( 'clean:pre', 'pre', [ 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ], 'translations:compile', 'inject', 'post', 'clean:post', callback );
-	} );
+	gulp.task( 'default', gulp.series( 'clean:pre', 'pre', gulp.parallel( 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ), 'translations:compile', 'inject', 'post', 'clean:post' ) );
+
+	require( './watch.js' )( config );
 
 	gulp.task( 'update-lib', shell.task( [
 		'cd ' + config.gjLibDir + ' && git pull',

@@ -1,12 +1,12 @@
 var gulp = require( 'gulp' );
-var sequence = require( 'run-sequence' );
 var historyApiFallback = require( 'connect-history-api-fallback' );
 var plugins = require( 'gulp-load-plugins' )();
 
 module.exports = function( config )
 {
-	gulp.task( 'serve', function()
+	gulp.task( 'serve', function( cb )
 	{
+		cb();
 		plugins.connect.server( {
 			root: config.buildDir,
 			livereload: true,
@@ -19,15 +19,16 @@ module.exports = function( config )
 
 	// We want to do a full default build, and then start the server.
 	// This way we're not live reloading a ton before the initial build is done.
-	gulp.task( 'watch:start', function( cb )
+	function startWatch( cb )
 	{
 		config.watching = 'initial';
+		cb();
+	}
 
-		return sequence( 'default', 'serve', cb );
-	} );
+	gulp.task( 'watch:start', gulp.series( startWatch, 'default', 'serve' ) );
 
 	// We depend on 'default' so that it does the full build before starting.
-	gulp.task( 'watch', [ 'watch:start' ], function()
+	gulp.task( 'watch', gulp.series( 'watch:start', function()
 	{
 		config.watching = 'watching';
 
@@ -36,7 +37,7 @@ module.exports = function( config )
 			[
 				'src/**/*.styl',
 			],
-			[ 'styles' ]
+			gulp.parallel( 'styles' )
 		);
 
 		// JavaScript AND html.
@@ -47,27 +48,24 @@ module.exports = function( config )
 			'src/**/*.html',
 		];
 
-		gulp.watch(
-			jsPaths,
-			[ 'html-js:reload' ]
-		);
-
 		gulp.task( 'reload:js', function()
 		{
-			gulp.src( jsPaths, { read: false } ).pipe( plugins.connect.reload() );
+			return gulp.src( jsPaths, { read: false } ).pipe( plugins.connect.reload() );
 		} );
 
-		gulp.task( 'html-js:reload', function( cb )
-		{
-			return sequence( 'html', 'js', 'reload:js', cb );
-		} );
+		gulp.task( 'html-js:reload', gulp.series( 'html', 'js', 'reload:js' ) );
+
+		gulp.watch(
+			jsPaths,
+			gulp.parallel( 'html-js:reload' )
+		);
 
 		// Images.
 		gulp.watch(
 			[
 				'src/**/*.{png,jpg,jpeg,gif,svg,ico}'
 			],
-			[ 'images' ]
+			gulp.parallel( 'images' )
 		);
 
 		// Markdown.
@@ -75,7 +73,7 @@ module.exports = function( config )
 			[
 				'src/**/*.md',
 			],
-			[ 'markdown' ]
+			gulp.parallel( 'markdown' )
 		);
-	} );
+	} ) );
 };

@@ -1,12 +1,11 @@
 var gulp = require( 'gulp' );
 var gutil = require( 'gulp-util' );
 var plugins = require( 'gulp-load-plugins' )();
-var sequence = require( 'run-sequence' );
 
 module.exports = function( config )
 {
-	gulp.task( 'html:pre', function(){} );
-	gulp.task( 'html:post', function(){} );
+	gulp.task( 'html:pre', function( cb ){ cb(); } );
+	gulp.task( 'html:post', function( cb ){ cb(); } );
 
 	gulp.task( 'html:main', function()
 	{
@@ -33,8 +32,5 @@ module.exports = function( config )
 		return stream;
 	} );
 
-	gulp.task( 'html', function( cb )
-	{
-		return sequence( 'html:pre', 'html:main', 'html:post', cb );
-	} );
+	gulp.task( 'html', gulp.series( 'html:pre', 'html:main', 'html:post' ) );
 };
