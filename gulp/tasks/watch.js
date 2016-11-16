@@ -37,27 +37,21 @@ module.exports = function( config )
 			[
 				'src/**/*.styl',
 			],
+			{ delay: 750 },
 			gulp.parallel( 'styles' )
 		);
 
-		// JavaScript AND html.
-		var jsPaths = [
-			'src/**/*.{js,ts}',
-
-			// Templates compile into JS for components.
-			'src/**/*.html',
-		];
-
 		gulp.task( 'reload:js', function()
 		{
-			return gulp.src( jsPaths, { read: false } ).pipe( plugins.connect.reload() );
+			return gulp.src( 'src/**/*.{js,ts,html}', { read: false } ).pipe( plugins.connect.reload() );
 		} );
 
-		gulp.task( 'html-js:reload', gulp.series( 'html', 'js', 'reload:js' ) );
-
 		gulp.watch(
-			jsPaths,
-			gulp.parallel( 'html-js:reload' )
+			[
+				'src/**/*.{js,ts,html}',
+			],
+			{ delay: 750 },
+			gulp.series( 'html', 'js', 'reload:js' )
 		);
 
 		// Images.
@@ -65,6 +59,7 @@ module.exports = function( config )
 			[
 				'src/**/*.{png,jpg,jpeg,gif,svg,ico}'
 			],
+			{ delay: 750 },
 			gulp.parallel( 'images' )
 		);
 
@@ -73,6 +68,7 @@ module.exports = function( config )
 			[
 				'src/**/*.md',
 			],
+			{ delay: 750 },
 			gulp.parallel( 'markdown' )
 		);
 	} ) );
