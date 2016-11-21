@@ -1,6 +1,7 @@
 <div class="fireside-post-like-widget">
 	<a class="btn"
-		ng-if="::$ctrl.app.user && $ctrl.app.user.id != $ctrl.post.user.id"
+		ng-if="::$ctrl.app.user.id != $ctrl.post.user.id"
+		gj-auth-required
 		ng-click="$ctrl.toggleLike()"
 		ng-class="{
 			'btn-outline': !$ctrl.post.user_like,

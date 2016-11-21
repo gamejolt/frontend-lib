@@ -1,6 +1,5 @@
 var gulp = require( 'gulp' );
 var plugins = require( 'gulp-load-plugins' )();
-var sequence = require( 'run-sequence' );
 var renameLangs = require( '../plugins/gulp-rename-langs.js' );
 var splitTranslations = require( '../plugins/gulp-split-translations.js' );
 var sanitizeTranslations = require( '../plugins/gulp-sanitize-translations.js' );

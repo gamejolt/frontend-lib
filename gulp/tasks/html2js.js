@@ -8,9 +8,10 @@ module.exports = function( config )
 	/**
 	 * Vendor template files that need to be compiled.
 	 */
-	gulp.task( 'html2js:datepicker', function()
+	gulp.task( 'html2js:datepicker', function( cb )
 	{
 		if ( config.watching == 'watching' ) {
+			cb();
 			return;
 		}
 
@@ -28,9 +29,10 @@ module.exports = function( config )
 			.pipe( gulp.dest( config.buildDir + '/tmp/vendor-component-templates/' ) );
 	} );
 
-	gulp.task( 'html2js:timepicker', function()
+	gulp.task( 'html2js:timepicker', function( cb )
 	{
 		if ( config.watching == 'watching' ) {
+			cb();
 			return;
 		}
 
@@ -48,9 +50,10 @@ module.exports = function( config )
 			.pipe( gulp.dest( config.buildDir + '/tmp/vendor-component-templates/' ) );
 	} );
 
-	gulp.task( 'html2js:tooltip', function()
+	gulp.task( 'html2js:tooltip', function( cb )
 	{
 		if ( config.watching == 'watching' ) {
+			cb();
 			return;
 		}
 
@@ -68,9 +71,10 @@ module.exports = function( config )
 			.pipe( gulp.dest( config.buildDir + '/tmp/vendor-component-templates/' ) );
 	} );
 
-	gulp.task( 'html2js:pagination', function()
+	gulp.task( 'html2js:pagination', function( cb )
 	{
 		if ( config.watching == 'watching' ) {
+			cb();
 			return;
 		}
 
@@ -88,9 +92,10 @@ module.exports = function( config )
 			.pipe( gulp.dest( config.buildDir + '/tmp/vendor-component-templates/' ) );
 	} );
 
-	gulp.task( 'html2js:modal', function()
+	gulp.task( 'html2js:modal', function( cb )
 	{
 		if ( config.watching == 'watching' ) {
+			cb();
 			return;
 		}
 
@@ -113,9 +118,10 @@ module.exports = function( config )
 	 */
 	config.sections.forEach( function( section )
 	{
-		gulp.task( 'html2js:' + section + ':partials', function()
+		gulp.task( 'html2js:' + section + ':partials', function( cb )
 		{
 			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+				cb();
 				return;
 			}
 

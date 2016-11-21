@@ -10,6 +10,10 @@ $form-common-spacing = ($line-height-computed / 2)
 // and the top of the line. Basically the amount of spacing around the font in the line.
 $line-spacing-above-text = (($line-height-computed - $font-size-base) / 2)
 
+// Try to match heading style.
+legend
+	font-weight: bold
+
 .form-group
 	@extend .anim-fade-in-right, .stagger, .no-animate-leave
 	margin-bottom: ($line-height-computed * 1.5)

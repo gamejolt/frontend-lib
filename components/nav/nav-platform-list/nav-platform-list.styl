@@ -20,6 +20,9 @@ nav.platform-list
 			margin: 0
 			list-style: none
 
+			&:first-child a
+				margin-top: 0
+
 		a
 			display: block
 			padding: 0 15px
@@ -39,9 +42,6 @@ nav.platform-list
 
 			// Fade any color changes.
 			transition: color 300ms
-
-			&:first-child
-				margin-top: 0
 
 			// Show the left border on hover.
 			&:hover
@@ -174,3 +174,14 @@ section.nav-only
 	nav.platform-list.inline
 		margin-top: $font-size-base
 		margin-bottom: 0
+
+nav.platform-list
+	font-family: $font-family-heading
+	margin-bottom: ($line-height-computed / 2)
+
+	ul > li > ul
+		font-size: $font-size-small
+
+		> li > a
+			margin: ($line-height-computed / 2) 0
+			padding-left: 30px

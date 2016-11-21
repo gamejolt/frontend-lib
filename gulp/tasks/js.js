@@ -202,9 +202,10 @@ module.exports = function( config )
 	/**
 	 * Build out the vendor JS.
 	 */
-	gulp.task( 'js:vendor:rollup', function()
+	gulp.task( 'js:vendor:rollup', function( cb )
 	{
 		if ( !config.rollup || !config.rollup.vendor || config.watching == 'watching' ) {
+			cb();
 			return;
 		}
 
@@ -220,9 +221,10 @@ module.exports = function( config )
 	} );
 	vendorCommonDepends.push( 'js:vendor:rollup' );
 
-	gulp.task( 'js:vendor', vendorCommonDepends, function()
+	gulp.task( 'js:vendor', gulp.series( gulp.parallel( vendorCommonDepends ), function( cb )
 	{
 		if ( config.watching == 'watching' ) {
+			cb();
 			return;
 		}
 
@@ -293,7 +295,7 @@ module.exports = function( config )
 				.pipe( gulp.dest( config.buildDir + '/app' ) )
 				;
 		}
-	} );
+	} ) );
 
 	/**
 	 * Build out the section components.
@@ -303,9 +305,10 @@ module.exports = function( config )
 	{
 		sectionTasks.push( 'js:' + section );
 
-		gulp.task( 'ts:' + section, function()
+		gulp.task( 'ts:' + section, function( cb )
 		{
 			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+				cb();
 				return;
 			}
 
@@ -321,9 +324,10 @@ module.exports = function( config )
 				;
 		} );
 
-		gulp.task( 'js:' + section, [ 'ts:' + section, 'html2js:' + section + ':partials' ], function()
+		gulp.task( 'js:' + section, gulp.series( gulp.parallel( 'ts:' + section, 'html2js:' + section + ':partials' ), function( cb )
 		{
 			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+				cb();
 				return;
 			}
 
@@ -368,7 +372,7 @@ module.exports = function( config )
 			var stream = new streamqueue( { objectMode: true } );
 
 			// Gotta pull in TS/rollup file as the first thing.
-			stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + section + '.js' ], { base: 'src' } ) );
+			stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + section + '.js' ], { base: 'src', allowEmpty: true } ) );
 
 			// Pull in modules definitions only before actual components..
 			stream.queue( gulp.src( _.union( [
@@ -413,10 +417,10 @@ module.exports = function( config )
 				;
 
 			return stream;
-		} );
+		} ) );
 	} );
 
-	gulp.task( 'js:sections', sectionTasks );
+	gulp.task( 'js:sections', gulp.parallel( sectionTasks ) );
 
 	/**
 	 * Build out the modules.
@@ -427,13 +431,15 @@ module.exports = function( config )
 		// We loop through all of the modules we need to build and set up gulp tasks to build them.
 		_.forEach( config.modules, function( moduleDefinition, outputFilename )
 		{
-			gulp.task( 'ts:module:' + outputFilename, function()
+			gulp.task( 'ts:module:' + outputFilename, function( cb )
 			{
 				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
+					cb();
 					return;
 				}
 
 				if ( !moduleDefinition.main ) {
+					cb();
 					return;
 				}
 
@@ -487,9 +493,10 @@ module.exports = function( config )
 			} );
 
 			// Create the gulp task to build this module.
-			gulp.task( 'js:module:' + outputFilename, [ 'ts:module:' + outputFilename ], function()
+			gulp.task( 'js:module:' + outputFilename, gulp.series( 'ts:module:' + outputFilename, function( cb )
 			{
 				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
+					cb();
 					return;
 				}
 
@@ -529,7 +536,7 @@ module.exports = function( config )
 				var stream = new streamqueue( { objectMode: true } );
 
 				// Gotta pull in TS/rollup file as the first thing.
-				stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + outputFilename ], { base: 'src' } ) );
+				stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + outputFilename ], { base: 'src', allowEmpty: true } ) );
 
 				if ( files.length ) {
 					stream.queue( gulp.src( files, { base: 'src' } ) );
@@ -585,30 +592,33 @@ module.exports = function( config )
 					;
 
 				return stream;
-			} );
+			} ) );
 
 			// Now store this module build task reference.
 			moduleBuilds.push( 'js:module:' + outputFilename );
 		} );
 	}
-	gulp.task( 'js:modules', moduleBuilds );
+	gulp.task( 'js:modules', gulp.parallel( moduleBuilds ) );
 
 	/**
 	 * Copy any node app components.
 	 */
-	gulp.task( 'js:node:app', function()
+	gulp.task( 'js:node:app', function( cb )
 	{
 		// Only if we are including node files.
-		if ( config.includeNode ) {
-			var src = config.sections.map( function( section )
-			{
-				return 'src/' + section + '/**/*-node.js';
-			} );
+		if ( !config.includeNode ) {
+			cb();
+			return;
+		}
 
-			return gulp.src( src, { base: 'src' } )
-				.pipe( gulp.dest( config.buildDir ) );
-					}
+		var src = config.sections.map( function( section )
+		{
+			return 'src/' + section + '/**/*-node.js';
+		} );
+
+		return gulp.src( src, { base: 'src' } )
+			.pipe( gulp.dest( config.buildDir ) );
 	} );
 
-	gulp.task( 'js', [ 'js:vendor', 'js:sections', 'js:modules', 'js:node:app' ] );
+	gulp.task( 'js', gulp.parallel( 'js:vendor', 'js:sections', 'js:modules', 'js:node:app' ) );
 };

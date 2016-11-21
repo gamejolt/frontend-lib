@@ -8,7 +8,6 @@ export default angular.module( 'gj.Game.PlayModal', [
 	'gj.Ad.Video',
 	'gj.HistoryTick',
 	'gj.Analytics',
-	'gj.Popover',
 	'gj.Load',
 ] )
 .directive( ...provide( PlayModalComponent ) )

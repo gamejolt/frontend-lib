@@ -1,12 +1,12 @@
 var gulp = require( 'gulp' );
-var sequence = require( 'run-sequence' );
 var historyApiFallback = require( 'connect-history-api-fallback' );
 var plugins = require( 'gulp-load-plugins' )();
 
 module.exports = function( config )
 {
-	gulp.task( 'serve', function()
+	gulp.task( 'serve', function( cb )
 	{
+		cb();
 		plugins.connect.server( {
 			root: config.buildDir,
 			livereload: true,
@@ -17,17 +17,8 @@ module.exports = function( config )
 		} );
 	} );
 
-	// We want to do a full default build, and then start the server.
-	// This way we're not live reloading a ton before the initial build is done.
-	gulp.task( 'watch:start', function( cb )
-	{
-		config.watching = 'initial';
-
-		return sequence( 'default', 'serve', cb );
-	} );
-
 	// We depend on 'default' so that it does the full build before starting.
-	gulp.task( 'watch', [ 'watch:start' ], function()
+	gulp.task( 'watch', gulp.series( 'default', 'serve', function()
 	{
 		config.watching = 'watching';
 
@@ -36,38 +27,30 @@ module.exports = function( config )
 			[
 				'src/**/*.styl',
 			],
-			[ 'styles' ]
-		);
-
-		// JavaScript AND html.
-		var jsPaths = [
-			'src/**/*.{js,ts}',
-
-			// Templates compile into JS for components.
-			'src/**/*.html',
-		];
-
-		gulp.watch(
-			jsPaths,
-			[ 'html-js:reload' ]
+			{ delay: 750 },
+			gulp.parallel( 'styles' )
 		);
 
 		gulp.task( 'reload:js', function()
 		{
-			gulp.src( jsPaths, { read: false } ).pipe( plugins.connect.reload() );
+			return gulp.src( 'src/**/*.{js,ts,html}', { read: false } ).pipe( plugins.connect.reload() );
 		} );
 
-		gulp.task( 'html-js:reload', function( cb )
-		{
-			return sequence( 'html', 'js', 'reload:js', cb );
-		} );
+		gulp.watch(
+			[
+				'src/**/*.{js,ts,html}',
+			],
+			{ delay: 750 },
+			gulp.series( 'html', 'js', 'reload:js' )
+		);
 
 		// Images.
 		gulp.watch(
 			[
 				'src/**/*.{png,jpg,jpeg,gif,svg,ico}'
 			],
-			[ 'images' ]
+			{ delay: 750 },
+			gulp.parallel( 'images' )
 		);
 
 		// Markdown.
@@ -75,7 +58,8 @@ module.exports = function( config )
 			[
 				'src/**/*.md',
 			],
-			[ 'markdown' ]
+			{ delay: 750 },
+			gulp.parallel( 'markdown' )
 		);
-	} );
+	} ) );
 };

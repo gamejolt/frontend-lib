@@ -18,6 +18,33 @@
 	vertical-align: middle
 	background-color: $gray-lighter
 
+hr.underbar
+	margin-top: 0
+	border-top: 3px solid $gray-light
+	width: 50px
+	margin-left: 0
+	margin-right: 0
+	display: none
+	text-align: left
+
+	@media $media-sm-up
+		display: block
+
+	&.underbar-center
+		margin-left: auto
+		margin-right: auto
+
+	.fill-black &
+		border-top-color: $white
+
+	.fill-darkest &
+	.fill-darker &
+	.fill-dark &
+		border-top-color: $gray-light
+
+	.fill-pink &
+		border-top-color: $black
+
 // Mobile screens are so small that it doesn't make sense to have a fixed table styling on them.
 // Let's by default only apply this to sm and up.
 @media $media-sm-up

@@ -2,7 +2,7 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Ap
 {
 	if ( $injector.has( 'Registry' ) ) {
 		$injector.get( 'Registry' ).setConfig( 'Game', {
-			maxItems: 50,
+			maxItems: 100,
 		} );
 	}
 
@@ -243,20 +243,33 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Ap
 
 	Game.chooseBestBuild = function( builds, os, arch )
 	{
-		var build, search;
+		var sortedBuilds = _.sortBy( builds, function( o )
+		{
+			return o._release.sort;
+		} );
 
-		if ( arch == '64' ) {
-			search = {};
-			search[ 'os_' + os + '_64' ] = true;
-			if ( build = _.find( builds, search ) ) {
-				return build;
+		var search;
+		search = {};
+		search[ 'os_' + os ] = true;
+		var build32 = _.find( sortedBuilds, search );
+
+		search = {};
+		search[ 'os_' + os + '_64' ] = true;
+		var build64 = _.find( sortedBuilds, search );
+
+		// If they are on 64bit, and we have a 64 bit build, we should try to
+		// use it.
+		if ( arch == '64' && build64 ) {
+
+			// If the 64bit build is an older version than the 32bit build, then
+			// we have to use 32bit anyway.
+			if ( !build32 || build64._release.sort <= build32._release.sort ) {
+				return build64;
 			}
 		}
 
-		search = {};
-		search[ 'os_' + os ] = true;
-		if ( build = _.find( builds, search ) ) {
-			return build;
+		if ( build32 ) {
+			return build32;
 		}
 
 		return builds[0];

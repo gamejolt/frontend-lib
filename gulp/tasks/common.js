@@ -1,12 +1,16 @@
 var argv = require( 'minimist' )( process.argv );
 var gulp = require( 'gulp' );
-var sequence = require( 'run-sequence' );
 var shell = require( 'gulp-shell' );
+var FwdRef = require( 'undertaker-forward-reference' );
+
+// https://github.com/gulpjs/undertaker-forward-reference
+// https://github.com/gulpjs/gulp/issues/802
+gulp.registry( FwdRef() );
 
 module.exports = function( config )
 {
 	config.production = argv.production || false;
-	config.watching = false;
+	config.watching = argv._.indexOf( 'watch' ) !== -1 ? 'initial' : false;
 	config.noSourcemaps = config.noSourcemaps || false;
 
 	// Whether or not the environment of angular should be production or development.
@@ -38,7 +42,6 @@ module.exports = function( config )
 	require( './translations.js' )( config );
 	require( './inject.js' )( config );
 	require( './clean.js' )( config );
-	require( './watch.js' )( config );
 
 	gulp.task( 'extra', function()
 	{
@@ -54,13 +57,30 @@ module.exports = function( config )
 		] ).pipe( gulp.dest( config.buildDir ) );
 	} );
 
-	gulp.task( 'pre', function(){} );
-	gulp.task( 'post', function(){} );
-
-	gulp.task( 'default', function( callback )
+	function noop( cb )
 	{
-		return sequence( 'clean:pre', 'pre', [ 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ], 'translations:compile', 'inject', 'post', 'clean:post', callback );
-	} );
+		cb();
+	}
+
+	// This will probably break eventually.
+	// unwrap exists in gulp, but not in the forward ref thing
+	// That's why this works, but it could easily not work in future.
+	function checkHooks( cb )
+	{
+		if ( !gulp.task( 'pre' ).unwrap ) {
+			gulp.task( 'pre', noop );
+		}
+
+		if ( !gulp.task( 'post' ).unwrap ) {
+			gulp.task( 'post', noop );
+		}
+
+		cb();
+	}
+
+	gulp.task( 'default', gulp.series( checkHooks, 'clean:pre', 'pre', gulp.parallel( 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ), 'translations:compile', 'inject', 'post', 'clean:post' ) );
+
+	require( './watch.js' )( config );
 
 	gulp.task( 'update-lib', shell.task( [
 		'cd ' + config.gjLibDir + ' && git pull',

@@ -64,12 +64,12 @@ vendors = official
 	animation-name: back-in
 	animation-duration: 400ms
 	animation-timing-function: $ease-out
-	animation-fill-mode: forwards
-	opacity: 0
+	animation-fill-mode: both
+	opacity: 1
 
 for direction in 'up' 'right' 'down' 'left'
 	+create-animation( 'back', 'in', direction )
 		animation-name: unquote( 'back-in-' + direction )
 		animation-duration: 400ms
-		animation-fill-mode: forwards
-		opacity: 0
+		animation-fill-mode: both
+		opacity: 1
