@@ -17,18 +17,8 @@ module.exports = function( config )
 		} );
 	} );
 
-	// We want to do a full default build, and then start the server.
-	// This way we're not live reloading a ton before the initial build is done.
-	function startWatch( cb )
-	{
-		config.watching = 'initial';
-		cb();
-	}
-
-	gulp.task( 'watch:start', gulp.series( startWatch, 'default', 'serve' ) );
-
 	// We depend on 'default' so that it does the full build before starting.
-	gulp.task( 'watch', gulp.series( 'watch:start', function()
+	gulp.task( 'watch', gulp.series( 'default', 'serve', function()
 	{
 		config.watching = 'watching';
 
