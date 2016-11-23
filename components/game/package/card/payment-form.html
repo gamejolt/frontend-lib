@@ -1,16 +1,16 @@
 <div ng-if="formState.checkoutStep == 'primary'">
 
 	<div class="alert alert-info"
-		ng-if="::partnerReferralUser"
+		ng-if="::partnerReferredBy"
 		>
 		<span
 			translate
-			translate-params-user="::partnerReferralUser.display_name"
-			translate-params-profile-url="::$state.href( 'profile.overview', { slug: partnerReferralUser.slug, id: partnerReferralUser.id } )"
+			translate-params-user="::partnerReferredBy.display_name"
+			translate-params-profile="::$state.href( 'profile.overview', { username: partnerReferredBy.username } )"
 			>
-			You've accessed this game through a Game Jolt Partner link! A percentage of this sale will go to <a href="{{ profileUrl }}">{{ user }}</a>.
+			You've accessed this game through a Game Jolt Partner link! A percentage of this sale will go to <a href="{{ profile }}">{{ user }}</a>.
 		</span>
-		<a class="link-muted" translate>Learn more about the Game Jolt Partner referral system.</a>
+		<a class="link-muted" ui-sref="landing.partners" translate>Learn more about the Game Jolt Partner system.</a>
 	</div>
 
 	<p ng-if="::sellable.type == 'pwyw'">

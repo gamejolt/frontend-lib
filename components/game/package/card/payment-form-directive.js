@@ -9,8 +9,8 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 	form.scope.sellable = '=';
 	form.scope.pricing = '=';
 
-	form.scope.partnerReferralKey = '=?';
-	form.scope.partnerReferralUser = '=?';
+	form.scope.partnerReferredKey = '=?';
+	form.scope.partnerReferredBy = '=?';
 
 	form.scope.onBought = '&';
 
@@ -226,7 +226,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			setupData['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
 			setupData['os'] = Device.os();
 			setupData['arch'] = Device.arch();
-			setupData['ref'] = scope.partnerReferralKey || null;
+			setupData['ref'] = scope.partnerReferredKey || null;
 
 			return Api.sendRequest( '/web/checkout/setup-order', setupData )
 				.then( function( response )
@@ -284,7 +284,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		data['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
 		data['os'] = Device.os();
 		data['arch'] = Device.arch();
-		data['ref'] = scope.partnerReferralKey || null;
+		data['ref'] = scope.partnerReferredKey || null;
 
 		return Api.sendRequest( '/web/checkout/setup-order', data )
 			.then( function( response )

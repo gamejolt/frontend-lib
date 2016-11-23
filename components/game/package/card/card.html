@@ -132,8 +132,8 @@
 					package="::ctrl.package"
 					sellable="::ctrl.sellable"
 					pricing="::ctrl.pricing"
-					partner-referral-key="::ctrl.partnerReferralKey"
-					partner-referral-user="::ctrl.partnerReferralUser"
+					partner-referred-key="::ctrl.partnerReferredKey"
+					partner-referred-by="::ctrl.partnerReferredBy"
 					on-bought="ctrl.onPackageBought()"
 					>
 				</gj-game-package-card-payment-form>
@@ -154,7 +154,7 @@
 
 	<div class="card-controls" ng-if="::ctrl.showcasedRelease">
 
-		<div ng-if="ctrl.sellable.type != 'paid' || ctrl.isOwned">
+		<div ng-if="ctrl.sellable.type != 'paid' || ctrl.isOwned || ctrl.isPartner">
 
 			<!--
 				The buttons are so different for client that we put them in a child component.
@@ -166,6 +166,15 @@
 
 			<div ng-if="::!Environment.isClient">
 				<gj-game-package-card-buttons></gj-game-package-card-buttons>
+			</div>
+
+			<div ng-if="ctrl.isPartner && ctrl.sellable.type == 'paid'">
+				<br>
+				<div class="alert alert-success">
+					<span class="jolticon jolticon-check"></span>
+					<span translate>You get access to this package because you're a partner.</span>
+				</div>
+				<hr>
 			</div>
 
 		</div>
