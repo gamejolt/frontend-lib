@@ -144,6 +144,9 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			builds: '=gameBuilds',
 			key: '@?',
 			launchOptions: '=?gameBuildLaunchOptions',
+			isPartner: '=?',
+			partnerReferredKey: '=?',
+			partnerReferredBy: '=?',
 		},
 		controllerAs: 'ctrl',
 		controller: function( $scope, $attrs, $parse )
@@ -197,11 +200,10 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			// Event to be able to open up the payment form.
 			$scope.$on( 'Game_Package_Card.showPaymentOptions', function( event, _package )
 			{
-				// Spoof that we've clicked to "download" the package.
-				// This will ensure that the payment well opens with the correct
-				// build for "skip paying".
+				// Ennsure that the payment well opens with the correct build
+				// for "skip paying".
 				if ( _this.package.id == _package.id ) {
-					_this.buildClick( _this.downloadableBuild );
+					_this.showPayment( _this.downloadableBuild );
 				}
 			} );
 
@@ -361,7 +363,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 					this._doBuildClick( build, fromExtraSection );
 				}
 				// This will show the payment form if we're supposed to.
-				else if ( this.showPayment( build ) ) {
+				else if ( this.sellable.type == 'pwyw' && this.showPayment( build ) ) {
 				}
 				// Otherwise direct to the build.
 				else {
@@ -416,7 +418,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				Analytics.trackEvent( 'game-package-card', 'download', 'download' );
 
 				Game_Downloader.download( this.game, build, {
-					isOwned: this.sellable && this.isOwned,
+					isOwned: (this.sellable && this.isOwned) || this.isPartner,
 					key: this.key,
 				} );
 			};
@@ -426,7 +428,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				Analytics.trackEvent( 'game-package-card', 'download', 'play' );
 
 				Game_PlayModal.show( this.game, build, {
-					isOwned: this.sellable && this.isOwned,
+					isOwned: (this.sellable && this.isOwned) || this.isPartner,
 					key: this.key,
 				} );
 			};
