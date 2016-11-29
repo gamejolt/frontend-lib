@@ -63,6 +63,28 @@
 							Because of payment processing fees, we are not able to sell this game for less than {{ minOrderAmount | gjCurrency }}. You can click the link below to grab the download for free, though!
 						</control-error>
 					</control-errors>
+
+					<br>
+
+					<p class="small"><strong translate>Support the developer by paying more</strong></p>
+
+					<p>
+						<button class="btn btn-success-outline" ng-click="addMoney( 1 )">
+							+$1
+						</button>
+						<button class="btn btn-success-outline" ng-click="addMoney( 2 )">
+							+$2
+						</button>
+						<button class="btn btn-success-outline" ng-click="addMoney( 5 )">
+							+$5
+						</button>
+						<button class="btn btn-success-outline" ng-click="addMoney( 10 )">
+							+$10
+						</button>
+					</p>
+
+					<hr>
+
 				</div>
 			</form-group>
 

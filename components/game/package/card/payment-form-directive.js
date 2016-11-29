@@ -35,6 +35,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 		scope.walletBalance = 0;
 		scope.walletTax = 0;
 
+		scope.addMoney = addMoney;
 		scope.collectAddress = collectAddress;
 		scope.checkoutCard = checkoutCard;
 		scope.checkoutPaypal = checkoutPaypal;
@@ -92,6 +93,15 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 						scope.walletTax = response.walletTax;
 					}
 				} );
+		}
+
+		function addMoney( add )
+		{
+			// Don't add if the form field is invalid.
+			// It will blank out the total amount.
+			if ( scope.paymentForm.amount.$valid ) {
+				scope.formModel.amount += add;
+			}
 		}
 
 		function hasSufficientWalletFunds()
