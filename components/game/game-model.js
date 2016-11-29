@@ -85,6 +85,10 @@ angular.module( 'gj.Game' ).factory( 'Game', function( $state, $injector, $q, Ap
 	Game.DEVELOPMENT_STATUS_CANCELED = 3;
 	Game.DEVELOPMENT_STATUS_DEVLOG = 4;
 
+	Game.LOCKED_STATUS_UNLOCKED = 0;
+	Game.LOCKED_STATUS_DMCA = 1;
+	Game.LOCKED_STATUS_AUTOHANDLED = 2;
+
 	Game.prototype.getSref = function( page, includeParams )
 	{
 		var sref = '';
