@@ -4,8 +4,26 @@ var plugins = require( 'gulp-load-plugins' )();
 
 module.exports = function( config )
 {
-	gulp.task( 'html:pre', function( cb ){ cb(); } );
-	gulp.task( 'html:post', function( cb ){ cb(); } );
+	function noop( cb )
+	{
+		cb();
+	}
+
+	// This will probably break eventually.
+	// unwrap exists in gulp, but not in the forward ref thing
+	// That's why this works, but it could easily not work in future.
+	function checkHooks( cb )
+	{
+		if ( !gulp.task( 'html:pre' ).unwrap ) {
+			gulp.task( 'html:pre', noop );
+		}
+
+		if ( !gulp.task( 'html:post' ).unwrap ) {
+			gulp.task( 'html:post', noop );
+		}
+
+		cb();
+	}
 
 	gulp.task( 'html:main', function()
 	{
@@ -32,5 +50,5 @@ module.exports = function( config )
 		return stream;
 	} );
 
-	gulp.task( 'html', gulp.series( 'html:pre', 'html:main', 'html:post' ) );
+	gulp.task( 'html', gulp.series( checkHooks, 'html:pre', 'html:main', 'html:post' ) );
 };
