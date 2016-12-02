@@ -4,7 +4,7 @@ angular.module( 'gj.Environment' ).provider( 'Environment', function()
 
 	provider.env = 'production';
 	provider.buildType = 'production';
-	provider.isClient = typeof global != 'undefined' && typeof process == 'object';
+	provider.isClient = !!window.gjIsClient;
 	provider.isMobileApp = !!window.cordova;
 	provider.isSecure = window.location.protocol == 'https:';
 	provider.isWttf = false;
