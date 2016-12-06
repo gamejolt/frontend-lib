@@ -1,4 +1,5 @@
 import { Injectable, Inject } from 'ng-metadata/core';
+import { PartnerReferral } from '../partner-referral/partner-referral-service';
 
 export interface BeaconOptions
 {
@@ -17,6 +18,7 @@ export class HistoryTick
 		@Inject( '$q' ) private $q: ng.IQService,
 		@Inject( 'Environment' ) private environment: any,
 		@Inject( 'Referrer' ) private referrer: any,
+		@Inject( 'PartnerReferral' ) private partnerReferral: PartnerReferral,
 		@Inject( 'Device' ) private device: any
 	)
 	{
@@ -71,6 +73,11 @@ export class HistoryTick
 				const source = this.getSource( options.sourceResource, options.sourceResourceId );
 				if ( source ) {
 					queryParams.push( 'source=' + source );
+				}
+
+				const ref = this.partnerReferral.getReferrer( options.sourceResource, options.sourceResourceId );
+				if ( ref ) {
+					queryParams.push( 'ref=' + ref );
 				}
 			}
 
