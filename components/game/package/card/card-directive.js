@@ -301,6 +301,30 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 					this.showcasedRelease = this.browserBuild._release;
 				}
 
+				function addExtraBuild( build, type )
+				{
+					// Whether or not we stored this build in extra builds yet.
+					var alreadyAdded = false;
+					_this.extraBuilds.forEach( function( extraBuild )
+					{
+						if ( extraBuild.build.id == build.id ) {
+							alreadyAdded = true;
+						}
+					} );
+
+					if ( alreadyAdded ) {
+						return;
+					}
+
+					_this.extraBuilds.push( {
+						type: build.type,
+						icon: _this.supportInfo[ type ].icon,
+						build: build,
+						arch: _this.supportInfo[ type ].arch || null,
+						platform: type,
+					} );
+				}
+
 				// Now pull the extra builds (ones that aren't default).
 				angular.forEach( indexedBuilds, function( build, type )
 				{
@@ -314,13 +338,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 						}
 					}
 
-					_this.extraBuilds.push( {
-						type: build.type,
-						icon: _this.supportInfo[ type ].icon,
-						build: build,
-						arch: _this.supportInfo[ type ].arch || null,
-						platform: type,
-					} );
+					addExtraBuild( build, type );
 				} );
 
 				// Add all the "Other" builds onto the end of extra.
@@ -332,12 +350,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 							supportKey = 'rom';
 						}
 
-						_this.extraBuilds.push( {
-							type: build.type,
-							icon: _this.supportInfo[ supportKey ].icon,
-							build: build,
-							platform: supportKey,
-						} );
+						addExtraBuild( build, supportKey );
 					} );
 				}
 
