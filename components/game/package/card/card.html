@@ -18,9 +18,19 @@
 
 			<!-- Fixed Pricing -->
 			<div ng-switch-when="paid">
+				<span class="game-package-card-pricing-sale-percentage"
+					ng-if="::ctrl.sale"
+					>
+					-{{ ::ctrl.salePercentageOff }}%
+				</span>
 				<strong class="game-package-card-pricing-amount">
-					{{ ::ctrl.integer() | currency:undefined:0 }}<span class="game-package-card-pricing-decimal">.{{ ::ctrl.decimal() }}</span>
+					{{ ::ctrl.integer( ctrl.pricing ) | currency:undefined:0 }}<span class="game-package-card-pricing-decimal">.{{ ::ctrl.decimal( ctrl.pricing ) }}</span>
 				</strong>
+				<span class="game-package-card-pricing-amount game-package-card-pricing-amount-old"
+					ng-if="::ctrl.sale"
+					>
+					{{ ::ctrl.integer( ctrl.saleOldPricing ) | currency:undefined:0 }}<span class="game-package-card-pricing-decimal">.{{ ::ctrl.decimal( ctrl.saleOldPricing ) }}</span>
+				</span>
 				<br><span class="game-package-card-pricing-tag muted">or more</span>
 			</div>
 
@@ -96,6 +106,12 @@
 
 			<span am-time-ago="::ctrl.showcasedRelease.published_on"></span>
 		</span>
+	</div>
+
+	<div class="card-content card-sale-info" ng-if="::ctrl.sale">
+		<strong translate>On sale!</strong>
+		<span translate>Offer ends in</span>
+		<gj-countdown end="::ctrl.pricing.end"></gj-countdown>
 	</div>
 
 	<div class="card-content" ng-if="::ctrl.package.description">
