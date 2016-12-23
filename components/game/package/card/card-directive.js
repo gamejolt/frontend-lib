@@ -189,8 +189,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				this.isOwned = true;
 			}
 
+			this.sale = false;
+			this.salePercentageOff = 0;
+			this.saleOldPricing = undefined;
 			if ( this.sellable && angular.isArray( this.sellable.pricings ) ) {
 				this.pricing = this.sellable.pricings[0];
+				if ( this.pricing.promotional ) {
+					this.saleOldPricing = this.sellable.pricings[1];
+					this.sale = true;
+					this.salePercentageOff = ((this.saleOldPricing.amount - this.pricing.amount) / this.saleOldPricing.amount * 100).toFixed( 0 );
+				}
 			}
 
 			this.hasPaymentWell = false;
@@ -447,14 +455,14 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				} );
 			};
 
-			this.integer = function()
+			this.integer = function( pricing )
 			{
-				return Math.floor( this.pricing.amount / 100 );
+				return Math.floor( pricing.amount / 100 );
 			};
 
-			this.decimal = function()
+			this.decimal = function( pricing )
 			{
-				var amount = this.pricing.amount;
+				var amount = pricing.amount;
 
 				amount %= 100;
 				if ( amount < 10 ) {
