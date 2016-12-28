@@ -1,1 +1,1 @@
-angular.module( 'gj.Game.Build.Param', [ 'gj.Game.Build' ] );
+angular.module( 'gj.Game.Build.Param', [ 'gj.Model' ] );

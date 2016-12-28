@@ -598,7 +598,13 @@ module.exports = function( config )
 			moduleBuilds.push( 'js:module:' + outputFilename );
 		} );
 	}
-	gulp.task( 'js:modules', gulp.parallel( moduleBuilds ) );
+
+	if ( moduleBuilds.length ) {
+		gulp.task( 'js:modules', gulp.parallel( moduleBuilds ) );
+	}
+	else {
+		gulp.task( 'js:modules', ( cb ) => cb() );
+	}
 
 	/**
 	 * Copy any node app components.

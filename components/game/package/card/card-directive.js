@@ -143,7 +143,6 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			releases: '=gameReleases',
 			builds: '=gameBuilds',
 			key: '@?',
-			launchOptions: '=?gameBuildLaunchOptions',
 			isPartner: '=?',
 			partnerReferredKey: '=?',
 			partnerReferredBy: '=?',
