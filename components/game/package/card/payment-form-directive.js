@@ -11,6 +11,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 	form.scope.partnerReferredKey = '=?';
 	form.scope.partnerReferredBy = '=?';
+	form.scope.partnerNoCut = '=?';
 
 	form.scope.onBought = '&';
 

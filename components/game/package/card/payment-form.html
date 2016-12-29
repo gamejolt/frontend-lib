@@ -1,7 +1,7 @@
 <div ng-if="formState.checkoutStep == 'primary'">
 
 	<div class="alert alert-info"
-		ng-if="::partnerReferredBy"
+		ng-if="::partnerReferredBy && !partnerNoCut"
 		>
 		<span
 			translate

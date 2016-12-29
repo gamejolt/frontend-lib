@@ -17,6 +17,15 @@
 		&-decimal
 			font-size: $font-size-small
 
+		&-amount-old
+			color: $gray-lighter
+			margin-left: 5px
+			text-decoration: line-through
+
+			&
+			.game-package-card-pricing-decimal
+				font-size: $font-size-tiny
+
 		&-tag
 			color: $white
 			font-size: $font-size-tiny
@@ -26,8 +35,23 @@
 			&.muted
 				color: $gray-lighter
 
+		&-sale-percentage
+			display: block
+			margin-left: -10px
+			margin-right: -10px
+			margin-top: -10px
+			margin-bottom: 5px
+			padding-top: 3px
+			padding-bottom: 3px
+			font-weight: bold
+			background-color: $gj-green
+			color: $black
+
 	.card
 		padding-bottom: 0
+
+	.card-sale-info
+		color: $gj-green
 
 	.card-controls
 		margin-bottom: 15px

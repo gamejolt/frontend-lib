@@ -477,6 +477,14 @@ module.exports = function( config )
 							}
 						}
 
+						if ( moduleDefinition.libComponents ) {
+							for ( i in moduleDefinition.libComponents ) {
+								if ( id.search( new RegExp( 'src\/lib\/gj\-lib\-client\/components\/' + moduleDefinition.libComponents[ i ] + '\/.*' ) ) !== -1 ) {
+									return false;
+								}
+							}
+						}
+
 						return true;
 					},
 					globals: config.rollup.vendor,

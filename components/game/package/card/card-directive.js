@@ -146,6 +146,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 			isPartner: '=?',
 			partnerReferredKey: '=?',
 			partnerReferredBy: '=?',
+			partnerNoCut: '=?',
 		},
 		controllerAs: 'ctrl',
 		controller: function( $scope, $attrs, $parse )
@@ -187,8 +188,16 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				this.isOwned = true;
 			}
 
+			this.sale = false;
+			this.salePercentageOff = 0;
+			this.saleOldPricing = undefined;
 			if ( this.sellable && angular.isArray( this.sellable.pricings ) ) {
 				this.pricing = this.sellable.pricings[0];
+				if ( this.pricing.promotional ) {
+					this.saleOldPricing = this.sellable.pricings[1];
+					this.sale = true;
+					this.salePercentageOff = ((this.saleOldPricing.amount - this.pricing.amount) / this.saleOldPricing.amount * 100).toFixed( 0 );
+				}
 			}
 
 			this.hasPaymentWell = false;
@@ -300,6 +309,30 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 					this.showcasedRelease = this.browserBuild._release;
 				}
 
+				function addExtraBuild( build, type )
+				{
+					// Whether or not we stored this build in extra builds yet.
+					var alreadyAdded = false;
+					_this.extraBuilds.forEach( function( extraBuild )
+					{
+						if ( extraBuild.build.id == build.id ) {
+							alreadyAdded = true;
+						}
+					} );
+
+					if ( alreadyAdded ) {
+						return;
+					}
+
+					_this.extraBuilds.push( {
+						type: build.type,
+						icon: _this.supportInfo[ type ].icon,
+						build: build,
+						arch: _this.supportInfo[ type ].arch || null,
+						platform: type,
+					} );
+				}
+
 				// Now pull the extra builds (ones that aren't default).
 				angular.forEach( indexedBuilds, function( build, type )
 				{
@@ -313,13 +346,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 						}
 					}
 
-					_this.extraBuilds.push( {
-						type: build.type,
-						icon: _this.supportInfo[ type ].icon,
-						build: build,
-						arch: _this.supportInfo[ type ].arch || null,
-						platform: type,
-					} );
+					addExtraBuild( build, type );
 				} );
 
 				// Add all the "Other" builds onto the end of extra.
@@ -331,12 +358,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 							supportKey = 'rom';
 						}
 
-						_this.extraBuilds.push( {
-							type: build.type,
-							icon: _this.supportInfo[ supportKey ].icon,
-							build: build,
-							platform: supportKey,
-						} );
+						addExtraBuild( build, supportKey );
 					} );
 				}
 
@@ -432,14 +454,14 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 				} );
 			};
 
-			this.integer = function()
+			this.integer = function( pricing )
 			{
-				return Math.floor( this.pricing.amount / 100 );
+				return Math.floor( pricing.amount / 100 );
 			};
 
-			this.decimal = function()
+			this.decimal = function( pricing )
 			{
-				var amount = this.pricing.amount;
+				var amount = pricing.amount;
 
 				amount %= 100;
 				if ( amount < 10 ) {
