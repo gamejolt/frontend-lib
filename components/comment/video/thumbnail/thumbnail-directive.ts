@@ -1,4 +1,4 @@
-import { Component, Input } from 'ng-metadata/core';
+import { Component, Input } from '@angular/core';
 import { Comment_Video } from '../video-model';
 import template from 'html!./thumbnail.html';
 

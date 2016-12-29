@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { AuthLoginComponent } from './login.component';
 import { AuthLoginFormFactory } from './login-form.component';
 

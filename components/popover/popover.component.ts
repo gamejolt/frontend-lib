@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Input, Output } from 'ng-metadata/core';
+import { Component, Inject, OnInit, Input, Output } from '@angular/core';
 import template from 'html!./popover.component.html';
 import { Popover } from './popover.service';
 import { Ruler } from '../ruler/ruler-service';

@@ -1,4 +1,4 @@
-import { Component, Input } from 'ng-metadata/core';
+import { Component, Input } from '@angular/core';
 import template from 'html!./card.html';
 
 @Component({

@@ -1,4 +1,4 @@
-import { Component, Input, Inject, OnChanges, SimpleChanges } from 'ng-metadata/core';
+import { Component, Input, Inject, OnChanges, SimpleChanges } from '@angular/core';
 import { Ruler } from './../../ruler/ruler-service';
 import { Screen } from './../../screen/screen-service';
 import template from 'html!./embed.html';

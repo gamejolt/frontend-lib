@@ -1,4 +1,4 @@
-import { Injectable, Inject } from 'ng-metadata/core';
+import { Injectable, Inject } from '@angular/core';
 import { HistoryTick } from './../../history-tick/history-tick-service';
 import { Popover } from '../../popover/popover.service';
 

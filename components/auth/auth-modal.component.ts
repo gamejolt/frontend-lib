@@ -1,4 +1,4 @@
-import { Component } from 'ng-metadata/core';
+import { Component } from '@angular/core';
 import template from 'html!./auth-modal.component.html';
 
 @Component({

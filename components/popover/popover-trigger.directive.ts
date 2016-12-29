@@ -1,4 +1,4 @@
-import { Directive, Inject, HostListener, Input } from 'ng-metadata/core';
+import { Directive, Inject, HostListener, Input } from '@angular/core';
 import { Popover } from './popover.service';
 
 @Directive({

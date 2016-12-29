@@ -1,4 +1,4 @@
-import { Directive, Inject, Input, Output, OnChanges, SimpleChanges } from 'ng-metadata/core';
+import { Directive, Inject, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { Screen } from './../../screen/screen-service';
 import { Ruler } from './../../ruler/ruler-service';
 import { ImgHelper } from './../helper/helper-service';

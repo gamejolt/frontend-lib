@@ -14,6 +14,11 @@ module.exports = function( config )
 		}
 
 		var options = {
+			dontGlobal: [
+				/^\/node_modules\/.*$/,
+				/^\/tmp\/.*$/,
+				/^\/bower\-lib\/.*$/,
+			],
 			dontRenameFile: [
 				// Examples: /index.html, /chat.html, index.html
 				// Not: /app/views/something.html

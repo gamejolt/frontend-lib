@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnChanges, SimpleChanges, Inject } from 'ng-metadata/core';
+import { Component, Input, Output, OnChanges, SimpleChanges, Inject } from '@angular/core';
 import template from 'html!./pagination.component.html';
 import { Screen } from '../screen/screen-service';
 

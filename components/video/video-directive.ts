@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, OnDestroy } from 'ng-metadata/core';
+import { Component, Inject, Input, OnInit, OnDestroy } from '@angular/core';
 import template from 'html!./video.html';
 
 /**

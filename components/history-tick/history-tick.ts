@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { HistoryTick } from './history-tick-service';
 
 export default angular.module( 'gj.HistoryTick', [ 'gj.Referrer' ] )

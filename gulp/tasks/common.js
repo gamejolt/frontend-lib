@@ -54,7 +54,8 @@ module.exports = function( config )
 			'src/**/*.pdf',
 			'src/**/*.txt',
 			'src/channel.html',
-		] ).pipe( gulp.dest( config.buildDir ) );
+		], { allowEmpty: true } )
+		.pipe( gulp.dest( config.buildDir ) );
 	} );
 
 	function noop( cb )
@@ -78,7 +79,7 @@ module.exports = function( config )
 		cb();
 	}
 
-	gulp.task( 'default', gulp.series( checkHooks, 'clean:pre', 'pre', gulp.parallel( 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ), 'translations:compile', 'inject', 'post', 'clean:post' ) );
+	gulp.task( 'default', gulp.series( checkHooks, 'clean:pre', 'pre', gulp.parallel( 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ), 'inject', 'post', 'clean:post' ) );
 
 	require( './watch.js' )( config );
 

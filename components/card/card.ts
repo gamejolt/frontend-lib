@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { CardComponent } from './card-directive';
 
 export default angular.module( 'gj.Card', [] )

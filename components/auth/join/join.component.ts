@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from 'ng-metadata/core';
+import { Component, Inject, Input } from '@angular/core';
 import template from 'html!./join.component.html';
 
 import { Connection } from '../../connection/connection-service';

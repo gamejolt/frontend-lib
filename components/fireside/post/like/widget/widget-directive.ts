@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from 'ng-metadata/core';
+import { Component, Inject, Input } from '@angular/core';
 import { Fireside_Post } from './../../post-model';
 import { Fireside_Post_Like } from './../like-model';
 import { App } from './../../../../../../../app/app-service';

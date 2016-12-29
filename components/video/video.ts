@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { VideoComponent } from './video-directive';
 
 export default angular.module( 'gj.Video', [] )

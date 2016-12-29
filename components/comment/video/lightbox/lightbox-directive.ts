@@ -1,4 +1,4 @@
-import { Component, Inject, Input, Output, OnInit } from 'ng-metadata/core';
+import { Component, Inject, Input, Output, OnInit } from '@angular/core';
 import { App } from './../../../../../../app/app-service.ts';
 import { Screen } from './../../../screen/screen-service';
 import { HistoryTick } from './../../../history-tick/history-tick-service';
