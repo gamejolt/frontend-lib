@@ -1,4 +1,4 @@
-import { Injectable } from 'ng-metadata/core';
+import { Injectable } from '@angular/core';
 import { Model } from './../model/model-service';
 import { Comment_Video } from './video/video-model';
 import { Comment_Vote } from './vote/vote-model';

@@ -1,4 +1,4 @@
-import { Injectable } from 'ng-metadata/core';
+import { Injectable } from '@angular/core';
 import { Model } from './../../model/model-service';
 import { Fireside_Post_Tag } from './tag/tag-model';
 import { Fireside_Post_Like } from './like/like-model';

@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { PopoverTriggerComponent } from './popover-trigger.directive';
 import { PopoverBackdropComponent } from './backdrop.component';
 import { PopoverComponent } from './popover.component';

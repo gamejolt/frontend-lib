@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnChanges, SimpleChanges } from 'ng-metadata/core';
+import { Component, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Screen } from './../../../../lib/gj-lib-client/components/screen/screen-service';
 import template from 'html!./media-bar.component.html';
 

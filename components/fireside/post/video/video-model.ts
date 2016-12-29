@@ -1,4 +1,4 @@
-import { Injectable } from 'ng-metadata/core';
+import { Injectable } from '@angular/core';
 import { Model } from './../../../model/model-service';
 
 export function Fireside_Post_VideoFactory( Model: any )

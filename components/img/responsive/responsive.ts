@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { ResponsiveDirective } from './responsive-directive';
 import ImgHelperModule from './../helper/helper';
 

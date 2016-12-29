@@ -1,4 +1,4 @@
-import { Component, Inject, SkipSelf, AfterViewInit, OnDestroy } from 'ng-metadata/core';
+import { Component, Inject, SkipSelf, AfterViewInit, OnDestroy } from '@angular/core';
 import { Screen } from '../../screen/screen-service';
 import { MediaBarComponent } from '../media-bar.component';
 import template from 'html!./lightbox.component.html';

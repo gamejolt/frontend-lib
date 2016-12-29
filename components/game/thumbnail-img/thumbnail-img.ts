@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { ThumbnailImgComponent } from './thumbnail-img-directive';
 
 export default angular.module( 'gj.Game.ThumbnailImg', [] )

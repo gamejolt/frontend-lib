@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { PlayModalComponent } from './play-modal-directive';
 import { EmbedComponent } from './embed-directive';
 import { Game_PlayModal } from './play-modal-service';

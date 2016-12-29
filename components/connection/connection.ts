@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { ConnectionReconnectFactory } from './reconnect-service';
 import { Connection } from './connection-service';
 

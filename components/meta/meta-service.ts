@@ -1,4 +1,7 @@
-import { Injectable, Inject } from 'ng-metadata/core';
+import { Injectable, Inject } from '@angular/core';
+import { Title, Meta as ngMeta, DOCUMENT } from '@angular/platform-browser';
+
+import { Environment } from '../environment/environment.service';
 import { MetaContainer } from './meta-container';
 import { FbMetaContainer } from './fb-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
@@ -13,30 +16,32 @@ export class Meta extends MetaContainer
 	private _microdata: MicrodataContainer;
 
 	constructor(
-		@Inject( '$rootScope' ) $rootScope: ng.IRootScopeService,
-		@Inject( '$document' ) private $document: ng.IDocumentService,
-		@Inject( 'Environment' ) private Environment: any
+		@Inject( DOCUMENT ) document: HTMLDocument,
+		ngMetaService: ngMeta,
+		private titleService: Title,
+		private env: Environment,
 	)
 	{
-		super( $document[0] );
+		super( ngMetaService );
 
-		this._originalTitle = this.$document[0].title;
-		this._fb = new FbMetaContainer( this.$document[0] );
-		this._twitter = new TwitterMetaContainer( this.$document[0] );
-		this._microdata = new MicrodataContainer( this.$document[0] );
+		this._originalTitle = this.titleService.getTitle();
+		this._fb = new FbMetaContainer( ngMetaService );
+		this._twitter = new TwitterMetaContainer( ngMetaService );
+		this._microdata = new MicrodataContainer( document );
 
 		this.clear();
 
-		$rootScope.$on( '$stateChangeSuccess', () =>
-		{
-			this.clear();
-		} );
+		// TODO: Figure out new way with ui-router.
+		// $rootScope.$on( '$stateChangeSuccess', () =>
+		// {
+		// 	this.clear();
+		// } );
 	}
 
 	set title( title: string | null )
 	{
 		if ( title ) {
-			if ( this.Environment.isClient ) {
+			if ( this.env.isClient ) {
 				title += ' - Game Jolt';
 			}
 			else {
@@ -47,10 +52,10 @@ export class Meta extends MetaContainer
 			title = this._originalTitle;
 		}
 
-		this.$document[ 0 ].title = title;
+		this.titleService.setTitle( title );
 	}
 
-	get title() { return this.$document[0].title; }
+	get title() { return this.titleService.getTitle(); }
 
 	set description( value: string | null ) { this._set( 'description', value ); }
 	get description() { return this._get( 'description' ); }
@@ -63,14 +68,14 @@ export class Meta extends MetaContainer
 
 	set fb( values: any )
 	{
-		angular.merge( this._fb, values );
+		Object.assign( this._fb, values );
 	}
 
 	get fb() { return this._fb; }
 
 	set twitter( values: any )
 	{
-		angular.merge( this._twitter, values );
+		Object.assign( this._twitter, values );
 	}
 
 	get twitter() { return this._twitter; }

@@ -1,4 +1,4 @@
-import { Component, Output } from 'ng-metadata/core';
+import { Component, Output } from '@angular/core';
 
 @Component({
 	selector: 'gj-popover-backdrop',

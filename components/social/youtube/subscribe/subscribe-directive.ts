@@ -1,4 +1,4 @@
-import { Component, Input, Inject } from 'ng-metadata/core';
+import { Component, Input, Inject } from '@angular/core';
 import { Youtube_Sdk } from './../sdk/sdk-service';
 
 @Component({

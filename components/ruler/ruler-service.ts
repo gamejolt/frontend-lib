@@ -1,4 +1,4 @@
-import { Injectable } from 'ng-metadata/core';
+import { Injectable } from '@angular/core';
 
 // Swappable if display is none or starts with table except "table", "table-cell", or "table-caption"
 // See here for display values: https://developer.mozilla.org/en-US/docs/CSS/display

@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { TranslateSpoof } from './spoof.service';
 
 export default angular.module( 'gj.Translate.Spoof', [] )

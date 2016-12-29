@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { ThumbnailComponent } from './thumbnail-directive';
 
 export default angular.module( 'gj.Comment.Video.Thumbnail', [] )

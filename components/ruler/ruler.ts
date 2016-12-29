@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { Ruler } from './ruler-service';
 
 export default angular.module( 'gj.Ruler', [] )

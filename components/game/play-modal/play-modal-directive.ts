@@ -1,4 +1,4 @@
-import { Component, Inject, Input, Output } from 'ng-metadata/core';
+import { Component, Inject, Input, Output } from '@angular/core';
 import { App } from './../../../../../app/app-service';
 import template from 'html!./play-modal.html';
 

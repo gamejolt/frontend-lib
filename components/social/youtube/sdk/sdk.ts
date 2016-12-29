@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { Youtube_Sdk } from './sdk-service';
 
 export default angular.module( 'gj.Social.Youtube.Sdk', [] )

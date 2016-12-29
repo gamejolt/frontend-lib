@@ -1,4 +1,4 @@
-import { Injectable } from 'ng-metadata/core';
+import { Injectable } from '@angular/core';
 
 const TIMEOUT_INITIAL = 2000;
 const TIMEOUT_GROW = 1.5;

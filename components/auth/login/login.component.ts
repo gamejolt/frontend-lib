@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from 'ng-metadata/core';
+import { Component, Inject, Input } from '@angular/core';
 import template from 'html!./login.component.html';
 
 import { App } from '../../../../../auth/app-service';

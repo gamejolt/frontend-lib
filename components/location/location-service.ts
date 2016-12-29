@@ -1,4 +1,4 @@
-import { Injectable, Inject } from 'ng-metadata/core';
+import { Injectable, Inject } from '@angular/core';
 import { Meta } from './../meta/meta-service';
 
 @Injectable()

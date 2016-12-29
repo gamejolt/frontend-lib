@@ -1,4 +1,4 @@
-import { Directive, HostListener, Output } from 'ng-metadata/core';
+import { Directive, HostListener, Output } from '@angular/core';
 
 @Directive({
 	selector: '[gj-load]',

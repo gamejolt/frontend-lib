@@ -28,7 +28,7 @@ module.exports = function( config )
 				'src/**/*.styl',
 			],
 			{ delay: 750 },
-			gulp.parallel( 'styles' )
+			gulp.series( 'styles', 'inject' )
 		);
 
 		gulp.task( 'reload:js', function()
@@ -41,7 +41,7 @@ module.exports = function( config )
 				'src/**/*.{js,ts,html}',
 			],
 			{ delay: 750 },
-			gulp.series( 'html', 'js', 'reload:js' )
+			gulp.series( 'html', 'js', 'inject', 'reload:js' )
 		);
 
 		// Images.
@@ -50,7 +50,7 @@ module.exports = function( config )
 				'src/**/*.{png,jpg,jpeg,gif,svg,ico}'
 			],
 			{ delay: 750 },
-			gulp.parallel( 'images' )
+			gulp.parallel( 'images', 'inject' )
 		);
 
 		// Markdown.
@@ -59,7 +59,7 @@ module.exports = function( config )
 				'src/**/*.md',
 			],
 			{ delay: 750 },
-			gulp.parallel( 'markdown' )
+			gulp.parallel( 'markdown', 'inject' )
 		);
 	} ) );
 };

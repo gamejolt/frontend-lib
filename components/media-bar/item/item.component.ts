@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Input, SkipSelf } from 'ng-metadata/core';
+import { Component, Inject, OnInit, Input, SkipSelf } from '@angular/core';
 import { Screen } from '../../screen/screen-service';
 import template from 'html!./item.component.html';
 import { MediaBarComponent } from '../media-bar.component';

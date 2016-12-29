@@ -13,11 +13,20 @@ var rollupString = require( 'rollup-plugin-string' );
 var rollupReplace = require( 'rollup-plugin-replace' );
 var rollupCommonJs = require( 'rollup-plugin-commonjs' );
 
-var injectModules = require( '../plugins/gulp-inject-modules.js' );
+const webpack = require( 'webpack' );
 
 module.exports = function( config )
 {
 	var baseDir = '../../../../../';
+
+	// Deprecated options.
+	if ( config.extraBower || config.excludeBower ) {
+		throw new Error( 'Bower functionality is removed! Include through TS import.' );
+	}
+
+	if ( config.extraLib ) {
+		throw new Error( 'Extra lib is removed! Include through TS import.' );
+	}
 
 	var rollupOptions = {
 		rollup: require( 'rollup' ),
@@ -51,251 +60,144 @@ module.exports = function( config )
 			rollupTypescript( {
 				typescript: require( 'typescript' ),
 			} ),
-			// {
-			// 	resolveId: function( id, from )
-			// 	{
-			// 		if ( id.startsWith( 'rxjs/' ) ) {
-			// 			return path.resolve( __dirname + '/../../../../../node_modules/rxjs-es/' + id.replace( 'rxjs/', '' ) + '.js' );
-			// 		}
-			// 	},
-			// },
 			rollupResolve( {
+				module: true,
 				jsnext: true,
 				main: true,
 			} ),
 			rollupCommonJs( {
 				include: [
+					'node_modules/rxjs/**',
+					'node_modules/core-js/**',
 					'node_modules/ua-parser-js/**',
-					// 'node_modules/rxjs-es/node_modules/symbol-observable/**',
 				],
 			} ),
 		],
 	};
 
-	// This depends on html2js.
-	require( './html2js.js' )( config );
+	var webpackOptions = require( '../config/webpack.common' );
 
-	// Pull their bower file.
-	var bower = require( baseDir + 'bower.json' );
-
-	function getBowerComponentFiles( component )
+	gulp.task( 'js:webpack', function( cb )
 	{
-		var files = [];
-		var mainFile = null;
-
-		// Try to get the bower config for this component.
-		var componentBower = require( baseDir + config.bowerDir + component + '/.bower.json' );
-		if ( componentBower.main ) {
-			if ( _.isString( componentBower.main ) && componentBower.main.match( /\.js$/ ) ) {
-				mainFile = componentBower.main;
-			}
-			else if ( _.isArray( componentBower.main ) ) {
-				_.forEach( componentBower.main, function( file )
-				{
-					if ( file.match( /\.js$/ ) ) {
-						mainFile = file;
-						return false;  // Found the file, stop looping.
-					}
-				} );
-			}
-		}
-
-		if ( component == 'modernizr' ) {
-			mainFile = 'modernizr.js';
-		}
-		else if ( component == 'marked' ) {
-			mainFile = 'lib/marked.js';
-		}
-		else if ( component == 'ace-builds' ) {
-			mainFile = 'src/ace.js';
-		}
-		else if ( component == 'masonry' ) {
-			mainFile = 'dist/masonry.pkgd.js';
-		}
-		else if ( component == 'script.js' ) {
-			mainFile = 'dist/script.js';
-		}
-		else if ( component == 'jcrop' ) {
-			mainFile = 'js/jquery.Jcrop.min.js';
-		}
-		else if ( component == 'ng-file-upload' ) {
-			config.extraBower['ng-file-upload'] = [
-				'angular-file-upload-html5-shim.js'
-			];
-		}
-		else if ( !mainFile ) {
-			gutil.log( gutil.colors.red( 'Component not found: ' + component ) );
-		}
-
-		if ( mainFile ) {
-			mainFile = mainFile.replace( './', '' );
-			files.push( config.bowerDir + component + '/' + mainFile );
-		}
-
-		// Does this bower component also have an extra file to pull in from our config?
-		if ( config.extraBower && config.extraBower[component] ) {
-			var extraFiles = config.extraBower[component];
-			if ( _.isString( extraFiles ) ) {
-				extraFiles = [ extraFiles ];
-			}
-
-			if ( _.isArray( extraFiles ) ) {
-				_.forEach( extraFiles, function( extraFile )
-				{
-					files.push( config.bowerDir + component + '/' + extraFile );
-				} );
-			}
-		}
-
-		return files;
-	}
-
-	// Do we need to include any html2js templates for vendor common?
-	// This is mostly for angular-ui-bootstrap.
-	var vendorCommonDepends = [];
-	if ( config && config.extraBower && config.extraBower['angular-bootstrap'] ) {
-		_.forEach( config.extraBower['angular-bootstrap'], function( extraFile )
+		webpack( webpackOptions( config ), ( err, stats ) =>
 		{
-			if ( extraFile.indexOf( 'datepicker.js' ) !== -1 ) {
-				vendorCommonDepends.push( 'html2js:datepicker' );
+			if ( err ) {
+				console.error( err.stack || err );
+				if ( err.details ) {
+					console.error( err.details );
+				}
+				return;
 			}
-			else if ( extraFile.indexOf( 'timepicker.js' ) !== -1 ) {
-				vendorCommonDepends.push( 'html2js:timepicker' );
+
+			const info = stats.toJson();
+
+			if ( stats.hasErrors() ) {
+				console.error( info.errors );
 			}
-			else if ( extraFile.indexOf( 'tooltip.js' ) !== -1 ) {
-				vendorCommonDepends.push( 'html2js:tooltip' );
+
+			if ( stats.hasWarnings() ) {
+				console.warn( info.warnings );
 			}
-			else if ( extraFile.indexOf( 'pagination.js' ) !== -1 ) {
-				vendorCommonDepends.push( 'html2js:pagination' );
-			}
-			else if ( extraFile.indexOf( 'modal.js' ) !== -1 ) {
-				vendorCommonDepends.push( 'html2js:modal' );
-			}
+
+			cb();
 		} );
-	}
+	} );
 
-	/**
-	 * We inject the template contents in angular stuff when templateUrl is found.
-	 * This is the function to filter out matches we don't want to do so for.
-	 */
-	function skipTemplateUrlMatches( templatePath )
-	{
-		// Basically:
-		//   /*/views/
-		//   /*/components/forms/
-		return /^\/[^\/]*\/views\//.test( templatePath )
-			|| /^\/[^\/]*\/components\/forms\//.test( templatePath )
-			;
-	}
-
-	var minimizeOptions = {
-		empty: true,                      // KEEP empty attributes
-		cdata: true,                      // KEEP CDATA from scripts
-		comments: true,                   // KEEP comments
-		ssi: true,                        // KEEP Server Side Includes
-		conditionals: true,               // KEEP conditional internet explorer comments
-		spare: true,                      // KEEP redundant attributes
-		quotes: true,                     // KEEP arbitrary quotes
-		loose: true,                      // KEEP one whitespace
-	};
-
-	/**
-	 * Build out the vendor JS.
-	 */
-	gulp.task( 'js:vendor:rollup', function( cb )
+	gulp.task( 'js:polyfill', function( cb )
 	{
 		if ( !config.rollup || !config.rollup.vendor || config.watching == 'watching' ) {
 			cb();
 			return;
 		}
 
-		var _rollupOptions = _.extend( {}, rollupOptions, {
-			moduleName: 'vendor',
-		} );
+		var _rollupOptions = Object.assign( {}, rollupOptions );
 
-		return gulp.src( 'src/vendor.ts', { read: false, base: 'src' } )
+		return gulp.src( 'src/polyfill.ts', { read: false, base: 'src' } )
+			// .pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
 			.pipe( plugins.rollup( _rollupOptions ) )
-			.pipe( plugins.rename( 'vendor.js' ) )
-			.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+			.pipe( plugins.rename( 'polyfill.js' ) )
+			.pipe( config.production ? plugins.uglify() : gutil.noop() )
+			// .pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
+			// 	sourceRoot: '/../../src/app/',
+			// } ) )
+			.pipe( plugins.size( { gzip: true, title: 'js:polyfill' } ) )
+			.pipe( gulp.dest( config.buildDir ) )
 			;
 	} );
-	vendorCommonDepends.push( 'js:vendor:rollup' );
 
-	gulp.task( 'js:vendor', gulp.series( gulp.parallel( vendorCommonDepends ), function( cb )
+	/**
+	 * Build out the vendor JS.
+	 */
+	gulp.task( 'js:vendor', function( cb )
 	{
-		if ( config.watching == 'watching' ) {
+		if ( !config.rollup || !config.rollup.vendor || config.watching == 'watching' ) {
 			cb();
 			return;
 		}
 
-		var excludeBower = [];
+		var _rollupOptions = Object.assign( {}, rollupOptions, {
+			moduleName: 'vendor',
+		} );
 
-		// Exclude bower files that are excluded in our config.
-		if ( config.excludeBower ) {
-			excludeBower = _.union( excludeBower, config.excludeBower );
-		}
+		return gulp.src( 'src/vendor.ts', { read: false, base: 'src' } )
+			// .pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
+			.pipe( plugins.rollup( _rollupOptions ) )
+			.pipe( plugins.rename( 'vendor.js' ) )
+			.pipe( config.production ? plugins.uglify() : gutil.noop() )
+			// .pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
+			// 	sourceRoot: '/../../src/app/',
+			// } ) )
+			.pipe( plugins.size( { gzip: true, title: 'js:vendor' } ) )
+			.pipe( gulp.dest( config.buildDir ) )
+			;
+	} );
 
-		// Don't include any bower files that we're pulling into separate modules.
-		if ( config.modules ) {
-			_.forEach( config.modules, function( moduleDefinition )
-			{
-				if ( moduleDefinition.bower ) {
-					excludeBower = _.union( excludeBower, moduleDefinition.bower );
-				}
-			} );
-		}
+	// gulp.task( 'js:vendor', function( cb )
+	// {
+	// 	if ( config.watching == 'watching' ) {
+	// 		cb();
+	// 		return;
+	// 	}
 
-		var files = [
-			config.buildDir + '/tmp/rollup/vendor.js',
-		];
-		if ( bower.dependencies ) {
+	// 	var files = [
+	// 		config.buildDir + '/tmp/rollup/vendor.js',
+	// 	];
 
-			_.forEach( bower.dependencies, function( version, component )
-			{
-				// Skip over any bower files that we'd like to exclude from the main build.
-				if ( excludeBower && excludeBower.indexOf( component ) !== -1 ) {
-					return true;
-				}
+	// 	// Do we also have extra lib files to include?
+	// 	if ( config.extraLib ) {
+	// 		_.forEach( config.extraLib, function( extraFiles, repo )
+	// 		{
+	// 			if ( _.isString( extraFiles ) ) {
+	// 				extraFiles = [ extraFiles ];
+	// 			}
 
-				files = _.union( files, getBowerComponentFiles( component ) );
-			} );
-		}
+	// 			if ( _.isArray( extraFiles ) ) {
+	// 				_.forEach( extraFiles, function( extraFile )
+	// 				{
+	// 					files.push( config.libDir + repo + '/' + extraFile );
+	// 				} );
+	// 			}
+	// 		} );
+	// 	}
 
-		// Do we also have extra lib files to include?
-		if ( config.extraLib ) {
-			_.forEach( config.extraLib, function( extraFiles, repo )
-			{
-				if ( _.isString( extraFiles ) ) {
-					extraFiles = [ extraFiles ];
-				}
+	// 	// Include the compiled vendor component templates.
+	// 	files.push( config.buildDir + '/tmp/vendor-component-templates/**/*.js' );
 
-				if ( _.isArray( extraFiles ) ) {
-					_.forEach( extraFiles, function( extraFile )
-					{
-						files.push( config.libDir + repo + '/' + extraFile );
-					} );
-				}
-			} );
-		}
+	// 	gutil.log( 'Adding files to vendor: ' + gutil.colors.gray( JSON.stringify( files ) ) );
 
-		// Include the compiled vendor component templates.
-		files.push( config.buildDir + '/tmp/vendor-component-templates/**/*.js' );
-
-		gutil.log( 'Adding files to vendor: ' + gutil.colors.gray( JSON.stringify( files ) ) );
-
-		if ( files.length ) {
-			return gulp.src( files )
-				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
-				.pipe( plugins.concat( 'vendor.js' ) )
-				.pipe( config.production ? plugins.uglify() : gutil.noop() )
-				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
-					sourceRoot: '/../../src/app/',
-				} ) )
-				.pipe( plugins.size( { gzip: true, title: 'js:vendor' } ) )
-				.pipe( gulp.dest( config.buildDir + '/app' ) )
-				;
-		}
-	} ) );
+	// 	if ( files.length ) {
+	// 		return gulp.src( files )
+	// 			.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
+	// 			.pipe( plugins.concat( 'vendor.js' ) )
+	// 			.pipe( config.production ? plugins.uglify() : gutil.noop() )
+	// 			.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
+	// 				sourceRoot: '/../../src/app/',
+	// 			} ) )
+	// 			.pipe( plugins.size( { gzip: true, title: 'js:vendor' } ) )
+	// 			.pipe( gulp.dest( config.buildDir + '/app' ) )
+	// 			;
+	// 	}
+	// } );
 
 	/**
 	 * Build out the section components.
@@ -305,92 +207,27 @@ module.exports = function( config )
 	{
 		sectionTasks.push( 'js:' + section );
 
-		gulp.task( 'ts:' + section, function( cb )
+		gulp.task( 'js:' + section, function( cb )
 		{
 			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
 				cb();
 				return;
 			}
 
-			var _rollupOptions = _.extend( {}, rollupOptions, {
-				external: Object.keys( config.rollup.vendor ),
-				globals: config.rollup.vendor,
-			} );
+			var _rollupOptions = Object.assign( {}, rollupOptions );
 
-			return gulp.src( 'src/' + section + '/app.ts', { read: false, base: 'src' } )
-				.pipe( plugins.rollup( _rollupOptions ) )
-				.pipe( plugins.rename( section + '.js' ) )
-				.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
-				;
-		} );
-
-		gulp.task( 'js:' + section, gulp.series( gulp.parallel( 'ts:' + section, 'html2js:' + section + ':partials' ), function( cb )
-		{
-			if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
-				cb();
-				return;
-			}
-
-			// We don't include any app files that are being built into a separate module.
-			var excludeApp = [];
-			if ( config.modules ) {
-				_.forEach( config.modules, function( moduleDefinition )
-				{
-					if ( moduleDefinition.components ) {
-						moduleDefinition.components.forEach( function( component )
-						{
-							excludeApp.push( '!src/' + section + '/components/' + component + '/**/*.js' );
-						} );
-					}
-
-					// We pull in the state definitions, but exclude any controllers, directives, etc.
-					if ( moduleDefinition.views ) {
-						moduleDefinition.views.forEach( function( view )
-						{
-							excludeApp.push( '!src/' + section + '/views/' + view + '/**/*-{service,controller,directive,filter,model}.js' );
-						} );
-					}
-
-					if ( moduleDefinition.lib ) {
-						_.forEach( moduleDefinition.lib, function( extraFiles, repo )
-						{
-							if ( _.isString( extraFiles ) ) {
-								extraFiles = [ extraFiles ];
-							}
-
-							if ( _.isArray( extraFiles ) ) {
-								_.forEach( extraFiles, function( extraFile )
-								{
-									excludeApp.push( '!' + config.libDir + repo + '/' + extraFile );
-								} );
-							}
-						} );
-					}
+			if ( config.rollup && config.rollup.vendor ) {
+				Object.assign( _rollupOptions, {
+					external: Object.keys( config.rollup.vendor ),
+					globals: config.rollup.vendor,
 				} );
 			}
 
-			var stream = new streamqueue( { objectMode: true } );
-
-			// Gotta pull in TS/rollup file as the first thing.
-			stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + section + '.js' ], { base: 'src', allowEmpty: true } ) );
-
-			// Pull in modules definitions only before actual components..
-			stream.queue( gulp.src( _.union( [
-				'src/' + section + '/**/*.js',
-				'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
-			], excludeApp ), { base: 'src' } ) );
-
-			// Then pull in the actual components.
-			stream.queue( gulp.src( _.union( [
-				'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
-			], excludeApp ), { base: 'src' } ) );
-
-			// Pull in template partials if there are any.
-			stream.queue( gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ) );
-
-			var stream = stream.done()
-				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
-				.pipe( plugins.concat( 'app.js' ) );
+			var stream = gulp.src( 'src/' + section + '/main.ts', { read: false, base: 'src' } )
+				// .pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
+				.pipe( plugins.rollup( _rollupOptions ) )
+				.pipe( plugins.rename( 'app.js' ) )
+				;
 
 			// Add in any injections here that may be configured.
 			// They should go in before further processing.
@@ -401,23 +238,104 @@ module.exports = function( config )
 			}
 
 			stream = stream
-				.pipe( injectModules( config ) )
-				.pipe( plugins.ngAnnotate() )
-				.pipe( plugins.angularEmbedTemplates( {
-					minimize: minimizeOptions,
-					skipTemplates: skipTemplateUrlMatches,
-					skipErrors: true,
-				} ) )
 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
-				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
-					sourceRoot: '/../../src/' + section + '/',
-				} ) )
+				// .pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
+				// 	sourceRoot: '/../../src/' + section + '/',
+				// } ) )
 				.pipe( plugins.size( { gzip: true, title: 'js:' + section } ) )
 				.pipe( gulp.dest( config.buildDir + '/' + section ) )
 				;
 
 			return stream;
-		} ) );
+		} );
+
+		// gulp.task( 'js:' + section, gulp.series( gulp.parallel( 'ts:' + section ), function( cb )
+		// {
+		// 	if ( config.buildSection && config.buildSection != section && config.watching == 'watching' ) {
+		// 		cb();
+		// 		return;
+		// 	}
+
+		// 	// We don't include any app files that are being built into a separate module.
+		// 	var excludeApp = [];
+		// 	if ( config.modules ) {
+		// 		_.forEach( config.modules, function( moduleDefinition )
+		// 		{
+		// 			if ( moduleDefinition.components ) {
+		// 				moduleDefinition.components.forEach( function( component )
+		// 				{
+		// 					excludeApp.push( '!src/' + section + '/components/' + component + '/**/*.js' );
+		// 				} );
+		// 			}
+
+		// 			// We pull in the state definitions, but exclude any controllers, directives, etc.
+		// 			if ( moduleDefinition.views ) {
+		// 				moduleDefinition.views.forEach( function( view )
+		// 				{
+		// 					excludeApp.push( '!src/' + section + '/views/' + view + '/**/*-{service,controller,directive,filter,model}.js' );
+		// 				} );
+		// 			}
+
+		// 			if ( moduleDefinition.lib ) {
+		// 				_.forEach( moduleDefinition.lib, function( extraFiles, repo )
+		// 				{
+		// 					if ( _.isString( extraFiles ) ) {
+		// 						extraFiles = [ extraFiles ];
+		// 					}
+
+		// 					if ( _.isArray( extraFiles ) ) {
+		// 						_.forEach( extraFiles, function( extraFile )
+		// 						{
+		// 							excludeApp.push( '!' + config.libDir + repo + '/' + extraFile );
+		// 						} );
+		// 					}
+		// 				} );
+		// 			}
+		// 		} );
+		// 	}
+
+		// 	var stream = new streamqueue( { objectMode: true } );
+
+		// 	// Gotta pull in TS/rollup file as the first thing.
+		// 	stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + section + '.js' ], { base: 'src', allowEmpty: true } ) );
+
+		// 	// Pull in modules definitions only before actual components..
+		// 	stream.queue( gulp.src( _.union( [
+		// 		'src/' + section + '/**/*.js',
+		// 		'!src/' + section + '/**/*-{service,controller,directive,filter,model,production,development,node}.js'
+		// 	], excludeApp ), { base: 'src' } ) );
+
+		// 	// Then pull in the actual components.
+		// 	stream.queue( gulp.src( _.union( [
+		// 		'src/' + section + '/**/*-{service,controller,directive,filter,model}.js'
+		// 	], excludeApp ), { base: 'src' } ) );
+
+		// 	// Pull in template partials if there are any.
+		// 	stream.queue( gulp.src( [ config.buildDir + '/tmp/' + section + '-partials/**/*.html.js' ], { base: 'src' } ) );
+
+		// 	var stream = stream.done()
+		// 		.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
+		// 		.pipe( plugins.concat( 'app.js' ) );
+
+		// 	// Add in any injections here that may be configured.
+		// 	// They should go in before further processing.
+		// 	if ( config.injections ) {
+		// 		for ( var key in config.injections ) {
+		// 			stream = stream.pipe( plugins.replace( key, config.injections[ key ] ) );
+		// 		}
+		// 	}
+
+		// 	stream = stream
+		// 		.pipe( config.production ? plugins.uglify() : gutil.noop() )
+		// 		.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
+		// 			sourceRoot: '/../../src/' + section + '/',
+		// 		} ) )
+		// 		.pipe( plugins.size( { gzip: true, title: 'js:' + section } ) )
+		// 		.pipe( gulp.dest( config.buildDir + '/' + section ) )
+		// 		;
+
+		// 	return stream;
+		// } ) );
 	} );
 
 	gulp.task( 'js:sections', gulp.parallel( sectionTasks ) );
@@ -426,186 +344,167 @@ module.exports = function( config )
 	 * Build out the modules.
 	 */
 	var moduleBuilds = [];
-	if ( config.modules ) {
+	// if ( config.modules ) {
 
-		// We loop through all of the modules we need to build and set up gulp tasks to build them.
-		_.forEach( config.modules, function( moduleDefinition, outputFilename )
-		{
-			gulp.task( 'ts:module:' + outputFilename, function( cb )
-			{
-				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
-					cb();
-					return;
-				}
+	// 	// We loop through all of the modules we need to build and set up gulp tasks to build them.
+	// 	_.forEach( config.modules, function( moduleDefinition, outputFilename )
+	// 	{
+	// 		gulp.task( 'ts:module:' + outputFilename, function( cb )
+	// 		{
+	// 			if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
+	// 				cb();
+	// 				return;
+	// 			}
 
-				if ( !moduleDefinition.main ) {
-					cb();
-					return;
-				}
+	// 			if ( !moduleDefinition.main ) {
+	// 				cb();
+	// 				return;
+	// 			}
 
-				var vendorIds = Object.keys( config.rollup.vendor );
-				var _rollupOptions = _.extend( {}, rollupOptions, {
-					external: function( id )
-					{
-						var i;
+	// 			var vendorIds = Object.keys( config.rollup.vendor );
+	// 			var _rollupOptions = Object.assign( {}, rollupOptions, {
+	// 				external: function( id )
+	// 				{
+	// 					var i;
 
-						if ( vendorIds.indexOf( id ) !== -1 ) {
-							return true;
-						}
+	// 					if ( vendorIds.indexOf( id ) !== -1 ) {
+	// 						return true;
+	// 					}
 
-						if ( id[0] == '.' || id == 'typescript-helpers' ) {
-							return false;
-						}
+	// 					if ( id[0] == '.' || id == 'typescript-helpers' ) {
+	// 						return false;
+	// 					}
 
-						if ( id.search( /node_modules/i ) !== -1 ) {
-							return false;
-						}
+	// 					if ( id.search( /node_modules/i ) !== -1 ) {
+	// 						return false;
+	// 					}
 
-						if ( moduleDefinition.components ) {
-							for ( i in moduleDefinition.components ) {
-								if ( id.search( new RegExp( 'src\/app\/components\/' + moduleDefinition.components[ i ] + '\/.*' ) ) !== -1 ) {
-									return false;
-								}
-							}
-						}
+	// 					if ( moduleDefinition.components ) {
+	// 						for ( i in moduleDefinition.components ) {
+	// 							if ( id.search( new RegExp( 'src\/app\/components\/' + moduleDefinition.components[ i ] + '\/.*' ) ) !== -1 ) {
+	// 								return false;
+	// 							}
+	// 						}
+	// 					}
 
-						if ( moduleDefinition.views ) {
-							for ( i in moduleDefinition.views ) {
-								if ( id.search( new RegExp( 'src\/app\/views\/' + moduleDefinition.views[ i ] + '\/.*' ) ) !== -1 ) {
-									return false;
-								}
-							}
-						}
+	// 					if ( moduleDefinition.views ) {
+	// 						for ( i in moduleDefinition.views ) {
+	// 							if ( id.search( new RegExp( 'src\/app\/views\/' + moduleDefinition.views[ i ] + '\/.*' ) ) !== -1 ) {
+	// 								return false;
+	// 							}
+	// 						}
+	// 					}
 
-						if ( moduleDefinition.libComponents ) {
-							for ( i in moduleDefinition.libComponents ) {
-								if ( id.search( new RegExp( 'src\/lib\/gj\-lib\-client\/components\/' + moduleDefinition.libComponents[ i ] + '\/.*' ) ) !== -1 ) {
-									return false;
-								}
-							}
-						}
+	// 					return true;
+	// 				},
+	// 				globals: config.rollup.vendor,
+	// 			} );
 
-						return true;
-					},
-					globals: config.rollup.vendor,
-				} );
+	// 			var rollupStream = gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
+	// 				.pipe( plugins.rollup( _rollupOptions ) );
 
-				var rollupStream = gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
-					.pipe( plugins.rollup( _rollupOptions ) );
+	// 			return gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
+	// 				.pipe( plugins.rollup( _rollupOptions ) )
+	// 				.pipe( plugins.rename( outputFilename ) )
+	// 				.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
+	// 				;
+	// 		} );
 
-				return gulp.src( 'src/app' + moduleDefinition.main, { read: false, base: 'src' } )
-					.pipe( plugins.rollup( _rollupOptions ) )
-					.pipe( plugins.rename( outputFilename ) )
-					.pipe( gulp.dest( config.buildDir + '/tmp/rollup' ) )
-					;
-			} );
+	// 		// Create the gulp task to build this module.
+	// 		gulp.task( 'js:module:' + outputFilename, gulp.series( 'ts:module:' + outputFilename, function( cb )
+	// 		{
+	// 			if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
+	// 				cb();
+	// 				return;
+	// 			}
 
-			// Create the gulp task to build this module.
-			gulp.task( 'js:module:' + outputFilename, gulp.series( 'ts:module:' + outputFilename, function( cb )
-			{
-				if ( config.buildModule && config.buildModule != outputFilename && config.watching == 'watching' ) {
-					cb();
-					return;
-				}
+	// 			if ( moduleDefinition.bower ) {
+	// 				throw new Error( 'Bower is deprecated! Include through TS import.' );
+	// 			}
 
-				var files = [];
-				if ( moduleDefinition.bower ) {
-					_.forEach( moduleDefinition.bower, function( component )
-					{
-						files = _.union( files, getBowerComponentFiles( component ) );
-					} );
-				}
+	// 			if ( moduleDefinition.lib ) {
+	// 				_.forEach( moduleDefinition.lib, function( extraFiles, repo )
+	// 				{
+	// 					if ( _.isString( extraFiles ) ) {
+	// 						extraFiles = [ extraFiles ];
+	// 					}
 
-				if ( moduleDefinition.lib ) {
-					_.forEach( moduleDefinition.lib, function( extraFiles, repo )
-					{
-						if ( _.isString( extraFiles ) ) {
-							extraFiles = [ extraFiles ];
-						}
+	// 					if ( _.isArray( extraFiles ) ) {
+	// 						_.forEach( extraFiles, function( extraFile )
+	// 						{
+	// 							files.push( config.libDir + repo + '/' + extraFile );
+	// 						} );
+	// 					}
+	// 				} );
+	// 			}
 
-						if ( _.isArray( extraFiles ) ) {
-							_.forEach( extraFiles, function( extraFile )
-							{
-								files.push( config.libDir + repo + '/' + extraFile );
-							} );
-						}
-					} );
-				}
+	// 			if ( moduleDefinition.componentVendor ) {
+	// 				_.forEach( moduleDefinition.componentVendor, function( component )
+	// 				{
+	// 					files.push( config.gjLibDir + 'components/' + component + '/*-vendor.js' );
+	// 				} );
+	// 			}
 
-				if ( moduleDefinition.componentVendor ) {
-					_.forEach( moduleDefinition.componentVendor, function( component )
-					{
-						files.push( config.gjLibDir + 'components/' + component + '/*-vendor.js' );
-					} );
-				}
+	// 			gutil.log( 'Build module ' + outputFilename + ' with files: ' + gutil.colors.gray( JSON.stringify( files ) ) );
 
-				gutil.log( 'Build module ' + outputFilename + ' with files: ' + gutil.colors.gray( JSON.stringify( files ) ) );
+	// 			var stream = new streamqueue( { objectMode: true } );
 
-				var stream = new streamqueue( { objectMode: true } );
+	// 			// Gotta pull in TS/rollup file as the first thing.
+	// 			stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + outputFilename ], { base: 'src', allowEmpty: true } ) );
 
-				// Gotta pull in TS/rollup file as the first thing.
-				stream.queue( gulp.src( [ config.buildDir + '/tmp/rollup/' + outputFilename ], { base: 'src', allowEmpty: true } ) );
+	// 			if ( files.length ) {
+	// 				stream.queue( gulp.src( files, { base: 'src' } ) );
+	// 			}
 
-				if ( files.length ) {
-					stream.queue( gulp.src( files, { base: 'src' } ) );
-				}
+	// 			// Component files?
+	// 			if ( moduleDefinition.components ) {
+	// 				moduleDefinition.components.forEach( function( component )
+	// 				{
+	// 					// Pull in modules definitions only first.
+	// 					stream.queue( gulp.src( [
+	// 						'src/app/components/' + component + '/**/*.js',
+	// 						'!src/app/components/' + component + '/**/*-{service,controller,directive,filter,model,production,development,node}.js',
+	// 					], { base: 'src' } ) );
 
-				// Component files?
-				if ( moduleDefinition.components ) {
-					moduleDefinition.components.forEach( function( component )
-					{
-						// Pull in modules definitions only first.
-						stream.queue( gulp.src( [
-							'src/app/components/' + component + '/**/*.js',
-							'!src/app/components/' + component + '/**/*-{service,controller,directive,filter,model,production,development,node}.js',
-						], { base: 'src' } ) );
+	// 					// Then pull in the actual components.
+	// 					stream.queue( gulp.src( [
+	// 						'src/app/components/' + component + '/**/*-{service,controller,directive,filter,model}.js',
+	// 					], { base: 'src' } ) );
+	// 				} );
+	// 			}
 
-						// Then pull in the actual components.
-						stream.queue( gulp.src( [
-							'src/app/components/' + component + '/**/*-{service,controller,directive,filter,model}.js',
-						], { base: 'src' } ) );
-					} );
-				}
+	// 			// Views files?
+	// 			if ( moduleDefinition.views ) {
+	// 				moduleDefinition.views.forEach( function( view )
+	// 				{
+	// 					// We don't pull in state or module definitions (files without a suffx).
+	// 					// This way the states will all be available for routing, but controllers and what not
+	// 					// can be lazy loaded in.
+	// 					stream.queue( gulp.src( [
+	// 						'src/app/views/' + view + '/**/*-{service,controller,directive,filter,model}.js',
+	// 					], { base: 'src' } ) );
+	// 				} );
+	// 			}
 
-				// Views files?
-				if ( moduleDefinition.views ) {
-					moduleDefinition.views.forEach( function( view )
-					{
-						// We don't pull in state or module definitions (files without a suffx).
-						// This way the states will all be available for routing, but controllers and what not
-						// can be lazy loaded in.
-						stream.queue( gulp.src( [
-							'src/app/views/' + view + '/**/*-{service,controller,directive,filter,model}.js',
-						], { base: 'src' } ) );
-					} );
-				}
+	// 			// Call it with the arguments we've built up.
+	// 			stream = stream.done()
+	// 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
+	// 				.pipe( plugins.concat( outputFilename ) )
+	// 				.pipe( config.production ? plugins.uglify() : gutil.noop() )
+	// 				.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
+	// 					sourceRoot: '/../../src/app/modules/',
+	// 				} ) )
+	// 				.pipe( plugins.size( { gzip: true, title: 'js:module:' + outputFilename } ) )
+	// 				.pipe( gulp.dest( config.buildDir + '/app/modules' ) )
+	// 				;
 
-				// Call it with the arguments we've built up.
-				stream = stream.done()
-					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init() )
-					.pipe( plugins.concat( outputFilename ) )
-					.pipe( injectModules( config ) )
-					.pipe( plugins.ngAnnotate() )
-					.pipe( plugins.angularEmbedTemplates( {
-						minimize: minimizeOptions,
-						skipTemplates: skipTemplateUrlMatches,
-						skipErrors: true,
-					} ) )
-					.pipe( config.production ? plugins.uglify() : gutil.noop() )
-					.pipe( config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.write( '.', {
-						sourceRoot: '/../../src/app/modules/',
-					} ) )
-					.pipe( plugins.size( { gzip: true, title: 'js:module:' + outputFilename } ) )
-					.pipe( gulp.dest( config.buildDir + '/app/modules' ) )
-					;
+	// 			return stream;
+	// 		} ) );
 
-				return stream;
-			} ) );
-
-			// Now store this module build task reference.
-			moduleBuilds.push( 'js:module:' + outputFilename );
-		} );
-	}
+	// 		// Now store this module build task reference.
+	// 		moduleBuilds.push( 'js:module:' + outputFilename );
+	// 	} );
+	// }
 
 	if ( moduleBuilds.length ) {
 		gulp.task( 'js:modules', gulp.parallel( moduleBuilds ) );
@@ -634,5 +533,7 @@ module.exports = function( config )
 			.pipe( gulp.dest( config.buildDir ) );
 	} );
 
-	gulp.task( 'js', gulp.parallel( 'js:vendor', 'js:sections', 'js:modules', 'js:node:app' ) );
+	// gulp.task( 'js', gulp.parallel( 'js:vendor', 'js:sections', 'js:modules', 'js:node:app' ) );
+	gulp.task( 'js', gulp.parallel( 'js:polyfill', 'js:vendor', 'js:sections' ) );
+	// gulp.task( 'js', gulp.parallel( 'js:webpack' ) );
 };

@@ -1,3 +1,5 @@
+import { Meta as ngMeta } from '@angular/platform-browser';
+
 export class MetaField
 {
 	original: string | null;
@@ -6,36 +8,39 @@ export class MetaField
 
 export class MetaContainer
 {
-	private _head: HTMLHeadElement;
 	private _fields: { [key: string]: MetaField } = {};
 
-	constructor( private _document: HTMLDocument )
+	constructor( private ngMetaService: ngMeta )
 	{
-		this._head = this._document.head;
 	}
 
 	protected _set( name: string, content: string | null )
 	{
 		this._storeField( name, content );
 
-		let elem = this._head.querySelector( `meta[name="${name}"]` ) as HTMLMetaElement;
+		let elem = this.ngMetaService.getTag( `name="${name}"` );
 
 		// Remove if we're nulling it out.
 		if ( !content ) {
 			if ( elem ) {
-				this._head.removeChild( elem );
+				this.ngMetaService.removeTagElement( elem );
 			}
 			return;
 		}
 
-		// Create if not exists.
+		// Upsert.
 		if ( !elem ) {
-			elem = this._document.createElement( 'meta' );
-			elem.name = name;
-			this._head.appendChild( elem );
+			elem = this.ngMetaService.addTag( {
+				name,
+				content,
+			} );
 		}
-
-		elem.content = content;
+		else {
+			this.ngMetaService.updateTag( {
+				name,
+				content,
+			} );
+		}
 	}
 
 	protected _get( name: string )
@@ -48,7 +53,7 @@ export class MetaContainer
 		if ( !this._fields[ name ] ) {
 			const field = new MetaField();
 
-			const elem = this._head.querySelector( `meta[name="${name}"]` ) as HTMLMetaElement;
+			const elem = this.ngMetaService.getTag( `name="${name}"` );
 			if ( elem ) {
 				field.original = elem.content;
 			}

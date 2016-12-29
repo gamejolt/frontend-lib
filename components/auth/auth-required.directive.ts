@@ -1,5 +1,6 @@
-import { Directive, Inject } from 'ng-metadata/core';
+import { Directive, Inject } from '@angular/core';
 import { AuthModal } from './auth-modal.service';
+import { App } from '../app/app.service';
 
 @Directive( {
 	selector: 'gj-auth-required',
@@ -9,11 +10,8 @@ export class AuthRequiredDirective
 	constructor(
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
 		@Inject( 'Analytics' ) private analytics: any,
-		@Inject( 'AuthModal' ) private modal: AuthModal,
-
-		// We can't inject through type yet since App may be different
-		// depending on where this is included.
-		@Inject( 'App' ) private app: any,
+		private modal: AuthModal,
+		private app: App,
 	)
 	{
 		// Can't use HostListener with ng-metadata because it was binding

@@ -1,4 +1,4 @@
-import { Component, Input, Inject, SkipSelf, OnChanges, SimpleChanges, OnInit } from 'ng-metadata/core';
+import { Component, Input, Inject, SkipSelf, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { MediaBarComponent } from '../../media-bar.component';
 import { MediaBarLightboxComponent, MediaBarLightboxConfig } from '../lightbox.component';
 import template from 'html!./item.component.html';

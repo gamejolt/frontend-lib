@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { ResponsiveDimensionsDirective } from './responsive-dimensions-directive';
 
 export default angular.module( 'gj.ResponsiveDimensions', [] )

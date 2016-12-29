@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { WidgetComponent } from './widget-directive';
 
 export default angular.module( 'gj.Fireside.Post.Like.Widget', [] )

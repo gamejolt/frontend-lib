@@ -1,4 +1,4 @@
-import { provide } from 'ng-metadata/core';
+import { provide } from '@angular/core';
 import { MediaBarComponent } from './media-bar.component';
 import { MediaBarItemComponent } from './item/item.component';
 import { MediaBarLightboxComponent } from './lightbox/lightbox.component';
