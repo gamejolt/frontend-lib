@@ -6,6 +6,7 @@ import { Fireside_Post_Video } from './video/video-model';
 import { ModalConfirm } from './../../modal/confirm/confirm-service';
 import { App } from './../../../../../app/app-service';
 import { HistoryTick } from './../../history-tick/history-tick-service';
+import { Environment } from '../../environment/environment.service';
 
 export function Fireside_PostFactory(
 	Model: any,
@@ -42,7 +43,7 @@ export class Fireside_Post extends Model
 {
 	static App: App;
 	static Api: any;
-	static Environment: any;
+	static Environment: Environment;
 	static Game: any;
 	static Fireside_Post_Tag: typeof Fireside_Post_Tag;
 	static Fireside_Post_Like: typeof Fireside_Post_Like;

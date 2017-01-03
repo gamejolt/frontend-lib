@@ -3,6 +3,7 @@ import { MetaContainer } from './meta-container';
 import { FbMetaContainer } from './fb-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
 import { MicrodataContainer } from './microdata-container';
+import { Environment } from '../environment/environment.service';
 
 @Injectable()
 export class Meta extends MetaContainer
@@ -15,7 +16,7 @@ export class Meta extends MetaContainer
 	constructor(
 		@Inject( '$rootScope' ) $rootScope: ng.IRootScopeService,
 		@Inject( '$document' ) private $document: ng.IDocumentService,
-		@Inject( 'Environment' ) private Environment: any
+		@Inject( 'Environment' ) private Environment: Environment,
 	)
 	{
 		super( $document[0] );

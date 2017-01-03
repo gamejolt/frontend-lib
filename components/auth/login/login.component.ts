@@ -3,6 +3,7 @@ import template from 'html!./login.component.html';
 
 import { App } from '../../../../../auth/app-service';
 import { Connection } from '../../connection/connection-service';
+import { Environment } from '../../environment/environment.service';
 
 @Component({
 	selector: 'gj-auth-login',
@@ -16,7 +17,7 @@ export class AuthLoginComponent
 		@Inject( '$window' ) private $window: ng.IWindowService,
 		@Inject( '$stateParams' ) private $stateParams: ng.ui.IStateParamsService,
 		@Inject( 'App' ) private app: App,
-		@Inject( 'Environment' ) private env: any,
+		@Inject( 'Environment' ) private env: Environment,
 		@Inject( 'Connection' ) public conn: Connection,
 		@Inject( 'User_LinkedAccounts' ) private userLinkedAccounts: any,
 	)

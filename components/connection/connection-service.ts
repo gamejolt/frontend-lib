@@ -1,5 +1,6 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 import { ConnectionReconnect } from './reconnect-service';
+import { Environment } from '../environment/environment.service';
 
 @Injectable()
 export class Connection
@@ -16,7 +17,7 @@ export class Connection
 		@Inject( '$window' ) $window: ng.IWindowService,
 		@Inject( '$document' ) $document: ng.IDocumentService,
 		@Inject( '$injector' ) $injector: any,
-		@Inject( 'Environment' ) private env: any,
+		@Inject( 'Environment' ) private env: Environment,
 		@Inject( 'ConnectionReconnect' ) private connectionReconnect: typeof ConnectionReconnect,
 	)
 	{

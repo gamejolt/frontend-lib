@@ -1,4 +1,5 @@
 import { Injectable } from 'ng-metadata/core';
+import { Environment } from '../environment/environment.service';
 
 const TIMEOUT_INITIAL = 2000;
 const TIMEOUT_GROW = 1.5;
@@ -17,7 +18,7 @@ export class ConnectionReconnect
 {
 	static $timeout: ng.ITimeoutService;
 	static $http: ng.IHttpService;
-	static env: any;
+	static env: Environment;
 
 	private _checkUrl: string;
 

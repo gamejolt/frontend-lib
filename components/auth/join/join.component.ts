@@ -2,6 +2,7 @@ import { Component, Inject, Input } from 'ng-metadata/core';
 import template from 'html!./join.component.html';
 
 import { Connection } from '../../connection/connection-service';
+import { Environment } from '../../environment/environment.service';
 
 @Component({
 	selector: 'gj-auth-join',
@@ -13,7 +14,7 @@ export class AuthJoinComponent
 
 	constructor(
 		@Inject( '$state' ) private $state: ng.ui.IStateService,
-		@Inject( 'Environment' ) private env: any,
+		@Inject( 'Environment' ) private env: Environment,
 		@Inject( 'Connection' ) public conn: Connection,
 		@Inject( 'User_LinkedAccounts' ) private userLinkedAccounts: any,
 	)
