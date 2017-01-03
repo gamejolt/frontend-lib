@@ -31,9 +31,12 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	display: inline-block
 	overflow: hidden
 	height: $navbar-height
-	padding: 15px 10px
 	line-height: 20px
 	user-select: none
+	padding: 15px 10px
+
+	@media $media-sm-up
+		padding: 15px
 
 	> .notification-tag
 		position: absolute
