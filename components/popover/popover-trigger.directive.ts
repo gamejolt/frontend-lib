@@ -11,7 +11,7 @@ export class PopoverTriggerComponent
 	@Input( '<' ) popoverTriggerDisabled = false;
 
 	constructor(
-		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
+		@Inject( '$element' ) public $element: ng.IAugmentedJQuery,
 		@Inject( 'Popover' ) private popoverService: Popover,
 	)
 	{
@@ -25,8 +25,8 @@ export class PopoverTriggerComponent
 	@HostListener( 'click', [ '$event' ] )
 	onClick( $event: JQueryEventObject )
 	{
-		if ( this.popoverTriggerEvent != 'click' || this.popoverTriggerDisabled ) {
-			return;
+		if ( this.popoverTriggerEvent !== 'click' || this.popoverTriggerDisabled ) {
+			return true;
 		}
 
 		const popover = this.getPopover();
@@ -48,12 +48,13 @@ export class PopoverTriggerComponent
 	@HostListener( 'mouseenter' )
 	onMouseEnter()
 	{
-		if ( this.popoverTriggerEvent != 'hover' || this.popoverTriggerDisabled ) {
-			return;
+		if ( this.popoverTriggerEvent !== 'hover' || this.popoverTriggerDisabled ) {
+			return true;
 		}
 
 		const popover = this.getPopover();
 		if ( popover ) {
+			popover.attachedTrigger = this;
 			popover.show( this.$element );
 		}
 	}
@@ -61,13 +62,14 @@ export class PopoverTriggerComponent
 	@HostListener( 'mouseleave' )
 	onMouseLeave()
 	{
-		if ( this.popoverTriggerEvent != 'hover' || this.popoverTriggerDisabled ) {
-			return;
+		if ( this.popoverTriggerEvent !== 'hover' || this.popoverTriggerDisabled ) {
+			return true;
 		}
 
 		const popover = this.getPopover();
 		if ( popover ) {
-			this.popoverService.hideAll();
+			popover.attachedTrigger = this;
+			popover.hide();
 		}
 	}
 }

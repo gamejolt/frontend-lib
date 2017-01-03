@@ -1,8 +1,10 @@
-import { Component, Inject, OnInit, Input, Output } from 'ng-metadata/core';
-import template from 'html!./popover.component.html';
+import { Component, Inject, OnInit, Input, Output, HostListener, SkipSelf, Optional } from 'ng-metadata/core';
 import { Popover } from './popover.service';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
+import { PopoverTriggerComponent } from './popover-trigger.directive';
+import { PopoverContextDirective } from './popover-context.directive';
+import template from 'html!./popover.component.html';
 
 interface PopoverTiggerEvent extends JQueryEventObject
 {
@@ -21,8 +23,9 @@ export class PopoverComponent implements OnInit
 	@Input( '@popoverId' ) id: string;
 	@Input( '<?popoverAppendToBody' ) appendToBody = false;
 	@Input( '<?popoverTriggerManually' ) triggerManually = false;
-	@Input( '@?popoverPositionBy' ) positionBy?: 'position' | 'offset';
+	@Input( '@?popoverPositionBy' ) positionBy?: 'position' | 'offset' | 'fixed';
 	@Input( '@?popoverTrackElementWidth' ) trackElementWidth?: string;
+	@Input( '@?popoverPosition' ) position: 'top' | 'right' | 'bottom' | 'left' = 'bottom';
 	@Input( '@?popoverPositionHorizontal' ) positionHorizontal?: string;
 	@Input( '<?popoverHideOnStateChange' ) hideOnStateChange = false;
 
@@ -31,6 +34,8 @@ export class PopoverComponent implements OnInit
 
 	isShowing = false;
 	isAppendedToBody = false;
+
+	attachedTrigger?: PopoverTriggerComponent;
 
 	private originalParent: ng.IAugmentedJQuery;
 	private backdropElemCompiled?: ng.IAugmentedJQuery;
@@ -47,16 +52,38 @@ export class PopoverComponent implements OnInit
 		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
 		@Inject( '$compile' ) private $compile: ng.ICompileService,
 		@Inject( 'Popover' ) private popoverService: Popover,
+		@Inject( 'Scroll' ) private scroll: any,
 		@Inject( 'Ruler' ) private ruler: Ruler,
 		@Inject( 'Screen' ) public screen: Screen,
+		@Inject( PopoverContextDirective ) @SkipSelf() @Optional() private context: PopoverContextDirective,
 	)
 	{
 		this.originalParent = this.$element.parent();
 	}
 
+	// If we are attached to an on "hover" trigger, then we want need to make
+	// sure to show the popover if they leave the trigger and move their mouse
+	// into the popover. This way it won't hide when they move to use the
+	// popover.
+	@HostListener( 'mouseenter' )
+	onMouseEnter()
+	{
+		if ( this.attachedTrigger && this.attachedTrigger.popoverTriggerEvent === 'hover' ) {
+			this.show( this.attachedTrigger.$element );
+		}
+	}
+
+	@HostListener( 'mouseleave' )
+	onMouseLeave()
+	{
+		if ( this.attachedTrigger && this.attachedTrigger.popoverTriggerEvent === 'hover' ) {
+			this.hide();
+		}
+	}
+
 	ngOnInit()
 	{
-		this.$element.addClass( 'popover bottom' );
+		this.$element.addClass( 'popover' );
 
 		// Track this popover.
 		this.popoverService.registerPopover( this.id, this );
@@ -137,6 +164,9 @@ export class PopoverComponent implements OnInit
 			showPromise = this.focused( {} );
 		}
 
+		// Add the correct direction class.
+		this.$element.removeClass( 'left top right bottom' ).addClass( this.position );
+
 		// Should it be appended to the body instead of where it lives currently?
 		// We check this every time we need to show.
 		if ( this.appendToBody && !this.isAppendedToBody ) {
@@ -154,6 +184,7 @@ export class PopoverComponent implements OnInit
 
 			const triggerWidth = triggerElement[0].offsetWidth;
 			const triggerHeight = triggerElement[0].offsetHeight;
+			const triggerOffset = this.$position.offset( triggerElement );
 
 			// If we are tracking a particular element's width, then we set this popover to
 			// be the same width as the element.
@@ -174,44 +205,89 @@ export class PopoverComponent implements OnInit
 			}
 
 			const popoverWidth = this.ruler.outerWidth( elem );
-			const triggerOffset = this.$position.offset( triggerElement );
+			const popoverHeight = this.ruler.outerHeight( elem );
 
 			// If we're appending to body, then we're positioning it relative to the whole screen.
 			// If we're keeping it in place, then we position relative to the parent positioner.
 			// We allow to override this logic through a param, though.
 			const positionBy = this.positionBy || (this.appendToBody ? 'offset' : 'position');
 
-			let left: number, top: number;
-			if ( positionBy == 'offset' ) {
-				left = triggerOffset.left;
-				top = triggerOffset.top;
+			let triggerLeft: number, triggerTop: number, triggerRight: number, triggerBottom: number;
+			if ( positionBy === 'offset' ) {
+				triggerLeft = triggerOffset.left;
+				triggerTop = triggerOffset.top;
+			}
+			else if ( positionBy === 'fixed' ) {
+				triggerLeft = triggerOffset.left - this.scroll.context.duScrollLeft();
+				triggerTop = triggerOffset.top - this.scroll.context.duScrollTop();
 			}
 			else {
 				const triggerPos = this.$position.position( triggerElement );
-				left = triggerPos.left;
-				top = triggerPos.top;
+				triggerLeft = triggerPos.left;
+				triggerTop = triggerPos.top;
 			}
 
-			// Align to the right if the trigger is past the window mid line.
-			if ( this.positionHorizontal == 'left' || triggerOffset.left > (this.screen.windowWidth / 2) ) {
-				elem.style.left = left - popoverWidth + triggerWidth + 'px';
-				elem.style.top = top + triggerHeight + 'px';
+			triggerRight = triggerLeft + triggerWidth;
+			triggerBottom = triggerTop + triggerHeight;
+
+			if ( positionBy === 'fixed' ) {
+				elem.style.position = 'fixed';
 			}
 			else {
-				elem.style.left = left + 'px';
-				elem.style.top = top + triggerHeight + 'px';
+				elem.style.position = 'absolute';
 			}
 
-			// This is the extra spacing for the popover element around the edges.
-			// If we want to position the arrow correctly, we need to subtract half of this.
-			const elementStyles = this.$window.getComputedStyle( elem );
-			const extraSpacing = elementStyles.left ? ((popoverWidth - this.ruler.width( elem )) / 2) + parseFloat( elementStyles.left ) : 0;
+			if ( this.position === 'top' || this.position === 'bottom' ) {
+
+				// Align to the right if the trigger is past the window mid line.
+				// Always go by the trigger offset.
+				if ( this.positionHorizontal === 'left' || triggerOffset.left > (this.screen.windowWidth / 2) ) {
+					elem.style.left = triggerRight - popoverWidth + 'px';
+				}
+				else {
+					elem.style.left = triggerLeft + 'px';
+				}
+
+				if ( this.position === 'bottom' ) {
+					elem.style.top = triggerBottom + 'px';
+				}
+				else if ( this.position === 'top' ) {
+					elem.style.bottom = triggerTop + 'px';
+				}
+			}
+			else if ( this.position === 'left' || this.position === 'right' ) {
+
+				// Align to the right if the trigger is past the window mid line.
+				if ( triggerTop > (this.screen.windowHeight / 2) ) {
+					elem.style.top = triggerBottom - popoverHeight + 'px';
+				}
+				else {
+					elem.style.top = triggerTop + 'px';
+				}
+
+				if ( this.position === 'left' ) {
+					elem.style.right = triggerLeft + 'px';
+				}
+				else if ( this.position === 'right' ) {
+					elem.style.left = triggerRight + 'px';
+				}
+			}
 
 			// Align the arrow to match the center of the trigger element.
 			// Unless the popover is smaller than the element, then we align to center of popover.
+			// The extra spacing is for the popover element around the edges.
+			// If we want to position the arrow correctly, we need to subtract half of this.
+			const elementStyles = this.$window.getComputedStyle( elem );
 			const arrowElem = elem.getElementsByClassName( 'arrow' )[0] as HTMLElement | undefined;
 			if ( arrowElem ) {
-				arrowElem.style.left = left + Math.min( triggerWidth / 2, (popoverWidth / 2) ) - extraSpacing + 'px';
+				if ( this.position === 'top' || this.position === 'bottom' ) {
+					const extraSpacing = elementStyles.left ? ((popoverWidth - this.ruler.width( elem )) / 2) + parseFloat( elementStyles.left ) : 0;
+					arrowElem.style.left = triggerLeft + Math.min( triggerWidth / 2, popoverWidth / 2 ) - extraSpacing + 'px';
+				}
+				else if ( this.position === 'left' || this.position === 'right' ) {
+					const extraSpacing = elementStyles.top ? ((popoverHeight - this.ruler.height( elem )) / 2) + parseFloat( elementStyles.top ) : 0;
+					arrowElem.style.top = triggerTop + Math.min( triggerHeight / 2, popoverHeight / 2 ) - extraSpacing + 'px';
+				}
 			}
 
 			this.$animate.addClass( this.$element, 'active' );
@@ -222,7 +298,13 @@ export class PopoverComponent implements OnInit
 
 			const backdropElem = angular.element( '<gj-popover-backdrop hide="$ctrl.hide()"></gj-popover-backdrop>' );
 			this.backdropElemCompiled = this.$compile( backdropElem )( this.$scope );
-			this.$document.find( 'body' ).append( this.backdropElemCompiled );
+
+			if ( this.context ) {
+				this.context.$element.append( this.backdropElemCompiled );
+			}
+			else {
+				this.$document.find( 'body' ).append( this.backdropElemCompiled );
+			}
 
 			// If we need to hide it on state change as well.
 			if ( this.hideOnStateChange && !this.hideDeregister ) {
