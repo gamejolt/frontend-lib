@@ -13,9 +13,10 @@ export class AuthModal
 	show(): ng.IPromise<undefined>
 	{
 		const modalInstance = this.$modal.open( {
+			controller: 'AuthModalCtrl',
 			controllerAs: '$ctrl',
 			template,
-			controller: 'AuthModalCtrl',
+			size: 'sm',
 		} );
 
 		return modalInstance.result;

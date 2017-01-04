@@ -1,21 +1,23 @@
-<div class="modal-body">
+<div class="modal-controls">
+	<button class="btn btn-danger-outline" ng-click="modalCtrl.close()">
+		<span class="jolticon jolticon-remove"></span>
+		<span translate>Close</span>
+	</button>
+</div>
+
+<div class="modal-header">
 	<h2 class="modal-title" ng-if="modalCtrl.type == 'Comment'" translate>Report Comment</h2>
 	<h2 class="modal-title" ng-if="modalCtrl.type == 'Game'" translate>Report Game</h2>
 	<h2 class="modal-title" ng-if="modalCtrl.type == 'User'" translate>Report User</h2>
 	<h2 class="modal-title" ng-if="modalCtrl.type == 'Forum_Topic'" translate>Report Topic</h2>
 	<h2 class="modal-title" ng-if="modalCtrl.type == 'Forum_Post'" translate>Report Post</h2>
+</div>
 
+<div class="modal-body">
 	<gj-form-report
 		report-type="{{ modalCtrl.type }}"
 		report-resource="modalCtrl.resource"
 		gj-form-submit-handler="modalCtrl.onSubmitted()"
 		>
 	</gj-form-report>
-</div>
-
-<div class="modal-footer">
-	<button class="i-button warning" ng-click="modalCtrl.close()">
-		<span class="jolticon jolticon-remove"></span>
-		<span translate>Close</span>
-	</button>
 </div>
