@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Input, Output, HostListener, SkipSelf, Optional } from 'ng-metadata/core';
+import { Component, Inject, OnInit, Input, Output, HostListener, SkipSelf, Optional, OnDestroy } from 'ng-metadata/core';
 import { Popover } from './popover.service';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
@@ -18,7 +18,7 @@ interface PopoverTiggerEvent extends JQueryEventObject
 		transclude: true,
 	}
 })
-export class PopoverComponent implements OnInit
+export class PopoverComponent implements OnInit, OnDestroy
 {
 	@Input( '@popoverId' ) id: string;
 	@Input( '<?popoverAppendToBody' ) appendToBody = false;
@@ -81,43 +81,45 @@ export class PopoverComponent implements OnInit
 		}
 	}
 
+	/**
+	 * Register a click handler on the element to stop it from propagating
+	 * to the $document click handler that closes all popovers.
+	 */
+	@HostListener( 'click', [ '$event' ] )
+	onClick( event: PopoverTiggerEvent)
+	{
+		// We set that this event originated from a popover click.
+		// This will tell our global document handler that is set when the popover is showing
+		// to not hide popovers.
+		event.gjPopoverClick = true;
+
+		return true;
+	}
+
 	ngOnInit()
 	{
 		this.$element.addClass( 'popover' );
 
 		// Track this popover.
 		this.popoverService.registerPopover( this.id, this );
+	}
 
-		/**
-		 * Register a click handler on the element to stop it from propagating
-		 * to the $document click handler that closes all popovers.
-		 */
-		this.$element.on( 'click', ( event: PopoverTiggerEvent ) =>
-		{
-			// We set that this event originated from a popover click.
-			// This will tell our global document handler that is set when the popover is showing
-			// to not hide popovers.
-			event.gjPopoverClick = true;
-		} );
+	ngOnDestroy()
+	{
+		// There is some times a race condition when we reload a page where it re-registers the popover for the view
+		// before we have a chance to deregister the old one.
+		// We check to make sure that the ID referenced is this exact popover controller, otherwise we skip the deregistration
+		// since it was already overriden and effectively deregistered.
+		if ( this.popoverService.getPopover( this.id ) === this ) {
+			this.popoverService.deregisterPopover( this.id );
+		}
 
-		// Deregister the popover when the scope it was attached to is destroyed.
-		this.$scope.$on( '$destroy', () =>
-		{
-			// There is some times a race condition when we reload a page where it re-registers the popover for the view
-			// before we have a chance to deregister the old one.
-			// We check to make sure that the ID referenced is this exact popover controller, otherwise we skip the deregistration
-			// since it was already overriden and effectively deregistered.
-			if ( this.popoverService.getPopover( this.id ) === this ) {
-				this.popoverService.deregisterPopover( this.id );
-			}
-
-			// Gotta make sure to clean up after itself complete.
-			// This includes the popover backdrop and what not.
-			// Passing true will set the element to remove itself from the DOM now that we're done with it.
-			// This ensures that even if the popover is appended to the body, if the scope it was attached to is destroyed,
-			// it's still cleaned up.
-			this.hide( true );
-		} );
+		// Gotta make sure to clean up after itself complete.
+		// This includes the popover backdrop and what not.
+		// Passing true will set the element to remove itself from the DOM now that we're done with it.
+		// This ensures that even if the popover is appended to the body, if the scope it was attached to is destroyed,
+		// it's still cleaned up.
+		this.hide( true );
 	}
 
 	// We use the wrapped to generate an on/off click handler.

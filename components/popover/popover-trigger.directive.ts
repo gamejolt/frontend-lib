@@ -43,6 +43,9 @@ export class PopoverTriggerComponent
 			// If we let it bubble, this popover will close.
 			$event.stopPropagation();
 		}
+		else {
+			return true;
+		}
 	}
 
 	@HostListener( 'mouseenter' )
