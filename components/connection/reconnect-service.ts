@@ -32,7 +32,7 @@ export class ConnectionReconnect
 	{
 		// We just hit the favicon from the CDN.
 		// Should be pretty lightweight.
-		this._checkUrl = 'https://b6d3e9q9.ssl.hwcdn.net/app/img/favicon.png';
+		this._checkUrl = 'https://s.gjcdn.net/app/img/favicon.png';
 
 		if ( ConnectionReconnect.env.env == 'development' ) {
 			this._checkUrl = 'http://development.gamejolt.com/app/img/favicon.png';
