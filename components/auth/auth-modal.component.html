@@ -1,15 +1,9 @@
-<div class="modal-body">
-
-	<div class="row">
-		<div class="col-sm-7 col-md-6 col-lg-5 col-centered">
-			<gj-auth-join></gj-auth-join>
-		</div>
-	</div>
-
-</div>
-
-<div class="modal-footer visible-xs">
-	<button class="btn btn-block btn-outline" ng-click="$ctrl.close()">
+<div class="modal-controls">
+	<button class="btn btn-danger-outline" ng-click="$ctrl.close()" translate>
 		Close
 	</button>
+</div>
+
+<div class="modal-body">
+	<gj-auth-join></gj-auth-join>
 </div>

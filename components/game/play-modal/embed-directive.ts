@@ -1,5 +1,6 @@
 import { Component, Inject, Input, AfterViewInit } from 'ng-metadata/core';
 import { App } from './../../../../../app/app-service';
+import { Environment } from '../../environment/environment.service';
 import template from 'html!./embed.html';
 
 @Component({
@@ -20,7 +21,7 @@ export class EmbedComponent implements AfterViewInit
 		@Inject( '$sce' ) private $sce: ng.ISCEService,
 		@Inject( '$q' ) private $q: ng.IQService,
 		@Inject( '$interval' ) private $interval: ng.IIntervalService,
-		@Inject( 'Environment' ) private environment: any,
+		@Inject( 'Environment' ) private environment: Environment,
 		@Inject( 'Game_Build' ) gameBuild: any,
 		@Inject( 'Api' ) private api: any,
 		@Inject( 'App' ) private app: App

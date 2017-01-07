@@ -5,6 +5,9 @@ $popover-arrow-size = 8px
 $popover-size = 400px
 $popover-spacing = 5px
 
+// This will be used to push the popover away from the trigger by this amount.
+$popover-extra-margin = 3px
+
 .popover
 	position: absolute
 	top: 0
@@ -13,10 +16,6 @@ $popover-spacing = 5px
 	display: none
 	max-width: $popover-size
 	text-align: left // Reset given new insertion method
-	background-color: $popover-bg-color
-	background-clip: padding-box
-	border: 2px solid $popover-border-color
-	box-shadow 5px 5px 10px rgba( 0, 0, 0, 0.1 )
 
 	// Overrides for proper insertion
 	white-space: normal
@@ -32,46 +31,89 @@ $popover-spacing = 5px
 			max-height: none
 
 	&.active-add
-		@extend .anim-fade-in-up
-
 		// Make it a bit faster than normal on enter.
 		// This way they can interact with it sooner.
 		animation-duration: 250ms
 
 	&.active-remove
-		@extend .anim-fade-out-shrink
+		@extend .no-animate
 		display: block  // Force it visible while removing.
 
 	// When active show it visible.
 	&.active
 		display: block
 
-	// Offset the popover to account for the popover arrow
 	&.top
-		margin-top: -3px
 		& > .arrow
 			caret( $popover-border-color, 'down', $popover-arrow-size )
+			bottom: -($popover-arrow-size - $popover-extra-margin)
+
+		&.active-add
+			@extend .anim-fade-in-down
 
 	&.right
-		margin-left: 3px
 		& > .arrow
 			caret( $popover-border-color, 'left', $popover-arrow-size )
+			left: -($popover-arrow-size - $popover-extra-margin)
+
+		&.active-add
+			@extend .anim-fade-in-right
 
 	&.bottom
-		margin-top: 3px
 		& > .arrow
 			caret( $popover-border-color, 'up', $popover-arrow-size )
+			top: -($popover-arrow-size - $popover-extra-margin)
+
+		&.active-add
+			@extend .anim-fade-in-up
 
 	&.left
-		margin-left: -3px
 		& > .arrow
 			caret( $popover-border-color, 'right', $popover-arrow-size )
+			right: -($popover-arrow-size - $popover-extra-margin)
+
+		&.active-add
+			@extend .anim-fade-in-left
+
+.popover-content
+	@extend .scrollable
+	max-height: 360px
+	min-width: 200px
+	background-color: $popover-bg-color
+	background-clip: padding-box
+	border: 2px solid $popover-border-color
+	box-shadow 5px 5px 10px rgba( 0, 0, 0, 0.1 )
+
+	.popover.top &
+		margin-bottom: $popover-extra-margin
+
+	.popover.right &
+		margin-left: $popover-extra-margin
+
+	.popover.bottom &
+		margin-top: $popover-extra-margin
+
+	.popover.left &
+		margin-right: $popover-extra-margin
+
+	> nav.pills > ul
+	> .i-button
+		margin-bottom: $popover-spacing
+
+	> nav.platform-list
+		margin-bottom: 0
+		margin-top: $popover-spacing * 2
+
+	.alert
+		margin-bottom: 0
 
 .popover-dark
-	@extend .fill-darkest
 	border: 0
-	background-color: $popover-bg-color-dark
 	padding: 2px
+
+	.popover-content
+		@extend .fill-darkest
+		background-color: $popover-bg-color-dark
 
 	&.top > .arrow
 		caret( $popover-bg-color-dark, 'down', $popover-arrow-size )
@@ -88,22 +130,6 @@ $popover-spacing = 5px
 .popover-no-collapse
 	@media $media-sm-up
 		width: $popover-size
-
-.popover-content
-	@extend .scrollable
-	max-height: 360px
-	min-width: 200px
-
-	> nav.pills > ul
-	> .i-button
-		margin-bottom: $popover-spacing
-
-	> nav.platform-list
-		margin-bottom: 0
-		margin-top: $popover-spacing * 2
-
-	.alert
-		margin-bottom: 0
 
 .popover-heading
 	margin: $popover-spacing
@@ -129,8 +155,10 @@ $popover-spacing = 5px
 
 	// Force it so that it takes up the width of the container.
 	.popover
-		border-left: 0
-		border-right: 0
 		left: 0 !important
 		right: 0 !important
 		max-width: none !important
+
+	.popover-content
+		border-right: 0
+		border-left: 0

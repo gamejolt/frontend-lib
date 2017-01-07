@@ -1,5 +1,6 @@
 import { Injectable } from 'ng-metadata/core';
 import { Model } from './../model/model-service';
+import { Environment } from '../environment/environment.service';
 
 export function NotificationFactory(
 	Model: any,
@@ -27,7 +28,7 @@ export function NotificationFactory(
 export class Notification extends Model
 {
 	static Api: any;
-	static Environment: any;
+	static Environment: Environment;
 	static $state: ng.ui.IStateService;
 	static $q: ng.IQService;
 	static $injector: any;

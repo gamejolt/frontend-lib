@@ -1,4 +1,5 @@
 import { Injectable, Inject } from 'ng-metadata/core';
+import { Environment } from '../../../environment/environment.service';
 
 @Injectable()
 export class Youtube_Sdk
@@ -8,7 +9,7 @@ export class Youtube_Sdk
 	constructor(
 		@Inject( '$window' ) private $window: ng.IWindowService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
-		@Inject( 'Environment' ) private environment: any
+		@Inject( 'Environment' ) private environment: Environment,
 	)
 	{
 	}

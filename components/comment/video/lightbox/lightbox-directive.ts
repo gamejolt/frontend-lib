@@ -1,9 +1,10 @@
 import { Component, Inject, Input, Output, OnInit } from 'ng-metadata/core';
-import { App } from './../../../../../../app/app-service.ts';
+import { App } from './../../../../../../app/app-service';
 import { Screen } from './../../../screen/screen-service';
 import { HistoryTick } from './../../../history-tick/history-tick-service';
 import { Comment } from './../../comment-model';
 import { Comment_Video } from '../video-model';
+import { Environment } from '../../../environment/environment.service';
 import template from 'html!./lightbox.html';
 
 @Component({
@@ -27,7 +28,7 @@ export class LightboxComponent implements OnInit
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'hotkeys' ) hotkeys: ng.hotkeys.HotkeysProvider,
 		@Inject( 'App' ) app: App,
-		@Inject( 'Environment' ) private environment: any,
+		@Inject( 'Environment' ) private environment: Environment,
 		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'Comment' ) private comment: typeof Comment,
 		@Inject( 'HistoryTick' ) private historyTick: HistoryTick
