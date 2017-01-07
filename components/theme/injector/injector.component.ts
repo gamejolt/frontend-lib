@@ -26,11 +26,11 @@ export class ThemeInjectorComponent implements OnInit, AfterViewInit
 			switch ( event.data.type ) {
 				case 'theme-update': {
 
-					if ( !event.data.theme || !event.data.themeDefinition ) {
+					if ( !event.data.theme || !event.data.definition ) {
 						return;
 					}
 
-					this.refreshStyles( event.data.themeDefinition, event.data.theme );
+					this.refreshStyles( event.data.definition, event.data.theme );
 					return;
 				};
 			}
