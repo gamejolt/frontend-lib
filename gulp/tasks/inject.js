@@ -13,6 +13,8 @@ module.exports = function( config )
 			return;
 		}
 
+		var injectVersion = config.injectVersion || 1;
+
 		var options = {
 			dontRenameFile: [
 				// Examples: /index.html, /chat.html, index.html
@@ -29,6 +31,11 @@ module.exports = function( config )
 			transformPath: function( rev, source, path )
 			{
 				return config.staticCdn + rev;
+			},
+			transformFilename: function( file, hash )
+			{
+				var ext = path.extname( file.path );
+				return path.basename( file.path, ext ) + '.' + hash + '-' + injectVersion + ext;
 			},
 		};
 
