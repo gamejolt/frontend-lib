@@ -55,7 +55,7 @@ export class ThemeInjectorComponent implements OnInit, AfterViewInit
 
 				let propertyValue: string;
 				if ( definition.type == 'image' ) {
-					propertyValue = 'url("' + currentTheme[field] + '")';
+					propertyValue = 'url("' + currentTheme[field].img_url + '")';
 				}
 				else if ( definition.type == 'background-repeat' ) {
 					if ( currentTheme[field] == 'repeat-x' ) {
