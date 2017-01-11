@@ -1,0 +1,24 @@
+<div oc-lazy-load="{ files: [ '/app/modules/upload.js' ] }">
+	<form gj-form="formModel" name="themeEditorImageForm">
+
+		<form-group name="image" hide-label="true">
+
+			<gj-form-upload-control
+				name="image"
+				ng-model="formModel.file"
+				gj-upload-progress-handler="formState.progress"
+				gj-file-select="onSubmit()"
+				gj-max-filesize="maxFilesize"
+				gj-max-img-width="maxWidth"
+				gj-max-img-height="maxHeight"
+				accept=".png,.jpg,.jpeg,.gif"
+				upload-link-label="Upload a PNG, JPG, or GIF image."
+				>
+			</gj-form-upload-control>
+
+			<control-errors></control-errors>
+
+		</form-group>
+
+	</form>
+</div>

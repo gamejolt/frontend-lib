@@ -1,0 +1,41 @@
+.font-selector
+	@extend .fill-white
+
+	&-font-list
+		margin: 0
+		padding: 0
+		height: 300px
+		overflow-y: auto
+		overflow-x: hidden
+
+	&-font-list-item
+	&-selected
+		margin: 0
+		padding: 8px 15px
+		list-style: none
+		cursor: pointer
+
+		&:hover
+			background-color: $gray-lightest
+
+			.font-selector-cancel
+				color: $black
+
+	&-selected-label
+		clear: both
+
+	&-cancel
+		float: right
+		color: $gray-light
+
+	&-clear
+		float: right
+		color: $gray-light !important
+
+		&:hover
+			color: $black !important
+
+	&-filter
+		padding: 10px 15px
+		background-color: $gray-lighter
+

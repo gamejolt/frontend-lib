@@ -1,0 +1,142 @@
+<div class="theme-editor" oc-lazy-load="[ '/app/modules/jquery.js' ]">
+	<div oc-lazy-load="[ '/app/modules/theme-editor.js' ]">
+
+		<gj-loading ng-if="!$ctrl.isLoaded"></gj-loading>
+
+		<div ng-if="$ctrl.isLoaded">
+
+			<p ng-if="$ctrl.definition.styleGroups.length > 1">
+				<select class="form-control" ng-model="$ctrl.selectedGroup" ng-options="group.name for group in $ctrl.definition.styleGroups"></select>
+			</p>
+
+			<form novalidate>
+
+				<div class="theme-editor-section" ng-repeat="section in $ctrl.selectedGroup.sections track by $index">
+
+					<h4>{{ section.section }}</h4>
+
+					<div class="theme-editor-definitions">
+						<div class="form-group" ng-repeat="definitionField in section.definitions track by $index">
+
+							<label class="control-label">{{ $ctrl.definition.definitions[definitionField].title }}</label>
+
+							<div ng-switch="$ctrl.definition.definitions[definitionField].type">
+
+								<!-- Colopicker -->
+								<div class="theme-editor-colorpicker"
+									ng-switch-when="color"
+									>
+
+									<input class="form-control"
+										gj-colorpicker="{ allowEmpty: true }"
+										ng-model="$ctrl.theme[definitionField]"
+										ng-change="$ctrl.refresh()"
+										>
+								</div>
+
+								<!-- Image -->
+								<div
+									ng-switch-when="image"
+									>
+
+									<gj-theme-editor-image
+										type="sites-theme-image"
+										parent-id="$ctrl.resourceId"
+										ng-model="$ctrl.theme[definitionField]"
+										ng-change="$ctrl.refresh()"
+										>
+									</gj-theme-editor-image>
+
+								</div>
+
+								<!-- Font Family -->
+								<gj-theme-editor-font-selector
+									class="theme-editor-font-family"
+									ng-switch-when="fontFamily"
+									ng-model="$ctrl.theme[definitionField]"
+									ng-change="$ctrl.refresh()"
+									>
+								</gj-theme-editor-font-selector>
+
+								<!-- Dropdown -->
+								<div class="theme-editor-dropdown"
+									ng-switch-when="dropdown"
+									>
+
+									<select class="form-control"
+										ng-model="$ctrl.theme[definitionField]"
+										ng-change="$ctrl.refresh()"
+										>
+										<option
+											ng-repeat="option in $ctrl.definition.definitions[ definitionField ].options"
+											ng-value="option"
+											>
+											{{ option }}
+										</option>
+									</select>
+								</div>
+
+								<!-- Background Repeat -->
+								<div class="theme-editor-dropdown"
+									ng-switch-when="backgroundRepeat"
+									>
+
+									<select class="form-control"
+										ng-model="$ctrl.theme[definitionField]"
+										ng-change="$ctrl.refresh()"
+										>
+										<option value="">Repeat</option>
+										<option value="repeat-x">Repeat Horizontal</option>
+										<option value="repeat-y">Repeat Vertical</option>
+										<option value="no-repeat">Don't Repeat</option>
+									</select>
+								</div>
+
+								<!-- Background Size -->
+								<div class="theme-editor-dropdown"
+									ng-switch-when="backgroundSize"
+									>
+
+									<select class="form-control"
+										ng-model="$ctrl.theme[definitionField]"
+										ng-change="$ctrl.refresh()"
+										>
+										<option value="">Auto (Default)</option>
+										<option value="cover">Cover</option>
+										<option value="contain">Contain</option>
+									</select>
+								</div>
+
+								<!-- Background Position -->
+								<div class="theme-editor-dropdown"
+									ng-switch-when="backgroundPosition"
+									>
+
+									<select class="form-control"
+										ng-model="$ctrl.theme[definitionField]"
+										ng-change="$ctrl.refresh()"
+										>
+										<option value="">Top</option>
+										<option value="topLeft">Top Left</option>
+										<option value="Right">Right</option>
+										<option value="topRight">Top Right</option>
+										<option value="bottomRight">Bottom Right</option>
+										<option value="bottom">Bottom</option>
+										<option value="bottomLeft">Bottom Left</option>
+										<option value="left">Left</option>
+										<option value="center">Center</option>
+									</select>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>
