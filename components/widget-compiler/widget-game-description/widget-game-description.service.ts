@@ -2,7 +2,7 @@ import { Injectable, Inject } from 'ng-metadata/core';
 import { WidgetCompilerWidget } from '../widget';
 
 const TEMPLATE = `
-	<div gj-widget-compiler-bind="game.description"></div>
+	<div gj-widget-compiler-bind="game.description_compiled"></div>
 `;
 
 @Injectable()
