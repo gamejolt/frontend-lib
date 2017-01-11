@@ -9,16 +9,19 @@
 
 	.media-item-list
 		white-space: nowrap
+		margin: 0 -10px
 
-		.col
-			float: none
+		&-col
 			display: inline-block
+			width: 40%
+			max-width: 200px
+			padding: 0 10px
 
 		&-item
 			display: block
 			position: relative
-			height: 0
 			padding-top: 80%
+			height: 0
 			background-color: $gray-darkest
 
 			@media $media-xs
