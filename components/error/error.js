@@ -1,15 +1,15 @@
 angular.module( 'gj.Error', [] ).config( function( $stateProvider, $urlRouterProvider )
 {
 	[
-		400,
-		403,
-		404,
-		500,
+		{ code: 400, template: '/lib/gj-lib-client/components/error/error-400.html' },
+		{ code: 403, template: '/lib/gj-lib-client/components/error/error-403.html' },
+		{ code: 404, template: '/lib/gj-lib-client/components/error/error-404.html' },
+		{ code: 500, template: '/lib/gj-lib-client/components/error/error-500.html' },
 	]
-	.forEach( function( code )
+	.forEach( function( data )
 	{
-		$stateProvider.state( 'error-' + code, {
-			templateUrl: /*!*/ '/lib/gj-lib-client/components/error/error-' + code + '.html',
+		$stateProvider.state( 'error-' + data.code, {
+			templateUrl: data.template,
 			resolve: {
 				init: function( $injector )
 				{
