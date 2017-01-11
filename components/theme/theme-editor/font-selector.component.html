@@ -1,0 +1,38 @@
+<style ng-bind-html="$ctrl.fontDefinitions"></style>
+
+<div class="font-selector" ng-class="{ 'is-open': $ctrl.isSelectorShowing }">
+
+	<div class="font-selector-selected" ng-click="$ctrl.toggleSelector()">
+
+		<span class="font-selector-cancel" ng-show="$ctrl.isSelectorShowing">cancel</span>
+
+		<a class="font-selector-clear" ng-show="!$ctrl.isSelectorShowing && $ctrl.selectedFont" ng-click="$ctrl.clearSelectedFont()">clear</a>
+
+		<div class="font-selector-selected-label" ng-show="!$ctrl.selectedFont">
+			Choose a font...
+		</div>
+
+		<div class="font-selector-selected-label" ng-show="$ctrl.selectedFont" ng-style="{ 'font-family': ('\'' + $ctrl.selectedFont.family + '::Selector\'') }">
+			{{ $ctrl.selectedFont.family }}
+		</div>
+	</div>
+
+	<div class="font-selector-filter" ng-show="$ctrl.isSelectorShowing">
+		<input type="text" class="form-control"
+			ng-model="$ctrl.fontListFilter"
+			ng-change="$ctrl.filterFontList()"
+			placeholder="Filter fonts"
+			>
+	</div>
+
+	<ul class="font-selector-font-list" ng-if="$ctrl.isSelectorShowing">
+
+		<li class="font-selector-font-list-item"
+			ng-repeat="font in $ctrl.fontListFiltered track by font.family"
+			ng-style="::{ 'font-family': ('\'' + font.family + '::Selector\'') }"
+			ng-click="$ctrl.selectFont( font )">
+
+			{{ ::font.family }}
+		</li>
+	</ul>
+</div>

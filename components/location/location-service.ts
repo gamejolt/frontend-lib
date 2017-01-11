@@ -1,5 +1,6 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 import { Meta } from './../meta/meta-service';
+import { Environment } from '../environment/environment.service';
 
 @Injectable()
 export class Location
@@ -13,7 +14,7 @@ export class Location
 		@Inject( '$state' ) private $state: ng.ui.IStateService,
 		@Inject( '$injector' ) private $injector: any,
 		@Inject( 'Meta' ) private Meta: Meta,
-		@Inject( 'Environment' ) private Environment: any,
+		@Inject( 'Environment' ) private Environment: Environment,
 	)
 	{
 	}

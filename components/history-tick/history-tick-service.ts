@@ -1,5 +1,6 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 import { PartnerReferral } from '../partner-referral/partner-referral-service';
+import { Environment } from '../environment/environment.service';
 
 export interface BeaconOptions
 {
@@ -16,7 +17,7 @@ export class HistoryTick
 	constructor(
 		@Inject( '$document' ) private $document: ng.IDocumentService,
 		@Inject( '$q' ) private $q: ng.IQService,
-		@Inject( 'Environment' ) private environment: any,
+		@Inject( 'Environment' ) private environment: Environment,
 		@Inject( 'Referrer' ) private referrer: any,
 		@Inject( 'PartnerReferral' ) private partnerReferral: PartnerReferral,
 		@Inject( 'Device' ) private device: any

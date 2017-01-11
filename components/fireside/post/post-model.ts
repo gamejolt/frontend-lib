@@ -3,9 +3,11 @@ import { Model } from './../../model/model-service';
 import { Fireside_Post_Tag } from './tag/tag-model';
 import { Fireside_Post_Like } from './like/like-model';
 import { Fireside_Post_Video } from './video/video-model';
+import { Fireside_Post_Sketchfab } from './sketchfab/sketchfab-model';
 import { ModalConfirm } from './../../modal/confirm/confirm-service';
 import { App } from './../../../../../app/app-service';
 import { HistoryTick } from './../../history-tick/history-tick-service';
+import { Environment } from '../../environment/environment.service';
 
 export function Fireside_PostFactory(
 	Model: any,
@@ -16,6 +18,7 @@ export function Fireside_PostFactory(
 	Fireside_Post_Tag: any,
 	Fireside_Post_Like: any,
 	Fireside_Post_Video: any,
+	Fireside_Post_Sketchfab: any,
 	MediaItem: any,
 	ModalConfirm: any,
 	HistoryTick: any,
@@ -30,6 +33,7 @@ export function Fireside_PostFactory(
 		Fireside_Post_Tag,
 		Fireside_Post_Like,
 		Fireside_Post_Video,
+		Fireside_Post_Sketchfab,
 		MediaItem,
 		ModalConfirm,
 		HistoryTick,
@@ -42,11 +46,12 @@ export class Fireside_Post extends Model
 {
 	static App: App;
 	static Api: any;
-	static Environment: any;
+	static Environment: Environment;
 	static Game: any;
 	static Fireside_Post_Tag: typeof Fireside_Post_Tag;
 	static Fireside_Post_Like: typeof Fireside_Post_Like;
 	static Fireside_Post_Video: typeof Fireside_Post_Video;
+	static Fireside_Post_Sketchfab: typeof Fireside_Post_Sketchfab;
 	static MediaItem: any;
 	static ModalConfirm: ModalConfirm;
 	static HistoryTick: HistoryTick;
@@ -55,12 +60,13 @@ export class Fireside_Post extends Model
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';
 	static TYPE_VIDEO = 'video';
+	static TYPE_SKETCHFAB = 'sketchfab';
 
 	static STATUS_DRAFT = 'draft';
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
-	type: 'text' | 'media' | 'video';
+	type: 'text' | 'media' | 'video' | 'sketchfab';
 	hash: string;
 	title: string;
 	lead: string;
@@ -83,6 +89,7 @@ export class Fireside_Post extends Model
 	tags: Fireside_Post_Tag[] = [];
 	media: any[] = [];
 	videos: Fireside_Post_Video[] = [];
+	sketchfabs: Fireside_Post_Sketchfab[] = [];
 	user_like: Fireside_Post_Like | null;
 
 	url: string;
@@ -115,6 +122,10 @@ export class Fireside_Post extends Model
 
 		if ( data && data.videos ) {
 			this.videos = Fireside_Post.Fireside_Post_Video.populate( data.videos );
+		}
+
+		if ( data && data.sketchfabs ) {
+			this.sketchfabs = Fireside_Post.Fireside_Post_Sketchfab.populate( data.sketchfabs );
 		}
 
 		if ( data && data.user_like ) {
