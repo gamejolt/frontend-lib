@@ -11,6 +11,7 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			isPreviewDisabled: '=?disablePreview',
 			showMediaItems: '<?',
 			mediaItemType: '@?',
+			debounce: '<?',
 		},
 		templateUrl: '/lib/gj-lib-client/components/form/markdown-editor/markdown-editor.html',
 		bindToController: true,
@@ -58,7 +59,7 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 
 			_this.formGroup = formGroup;
 
-			if ( _this.showMediaItems && scope.$parent[ gjForm.formModel ].id ) {
+			if ( _this.showMediaItems && !!scope.$parent[ gjForm.formModel ].id ) {
 				_this.mediaItemParentId = scope.$parent[ gjForm.formModel ].id;
 			}
 

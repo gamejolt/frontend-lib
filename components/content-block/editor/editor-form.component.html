@@ -1,0 +1,17 @@
+<form gj-form="formModel" name="contentBlockEditorForm">
+
+	<form-group class="no-animate" name="content_markdown" label="{{ 'Content' | translate }}" hide-label="true">
+		<div
+			form-markdown-editor
+			markdown-mode="sites"
+			disable-preview="true"
+			show-media-items="true"
+			media-item-type="sites-content-image"
+			debounce="0"
+			>
+		</div>
+
+		<control-errors></control-errors>
+	</form-group>
+
+</form>

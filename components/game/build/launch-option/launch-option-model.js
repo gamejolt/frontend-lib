@@ -1,4 +1,4 @@
-angular.module( 'gj.Game.Build.LaunchOption' ).factory( 'Game_Build_LaunchOption', function( Model, Api )
+angular.module( 'gj.Game.Build.LaunchOption' ).factory( 'Game_Build_LaunchOption', function( Model )
 {
 	function Game_Build_LaunchOption( data )
 	{

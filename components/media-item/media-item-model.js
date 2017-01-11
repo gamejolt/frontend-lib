@@ -17,6 +17,9 @@ angular.module( 'gj.MediaItem' ).factory( 'MediaItem', function( Model )
 
 	MediaItem.TYPE_FEATURED_HEADER = 'featured-header';
 
+	MediaItem.TYPE_SITES_THEME_IMAGE = 'sites-theme-image';
+	MediaItem.TYPE_SITES_CONTENT_IMAGE = 'sites-content-image';
+
 	MediaItem.STATUS_ACTIVE = 'active';
 	MediaItem.STATUS_REMOVED = 'removed';
 

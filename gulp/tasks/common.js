@@ -54,7 +54,8 @@ module.exports = function( config )
 			'src/**/*.pdf',
 			'src/**/*.txt',
 			'src/channel.html',
-		] ).pipe( gulp.dest( config.buildDir ) );
+		], { allowEmpty: true } )
+		.pipe( gulp.dest( config.buildDir ) );
 	} );
 
 	function noop( cb )
