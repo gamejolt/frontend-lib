@@ -21,6 +21,7 @@ export class Site extends Model
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
+	url: string;
 	user: any;
 	game?: any;
 	theme: SiteTheme;
