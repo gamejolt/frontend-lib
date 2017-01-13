@@ -26,8 +26,8 @@ export class Environment
 	firesideBaseUrl = 'http://fireside.gamejolt.com';
 	helpBaseUrl = 'https://help.gamejolt.com';
 	devBaseUrl = 'http://dev.gamejolt.com';
-	gameserverUrl = 'http://gamejolt.net/gameserver';
-	mediaserverUrl = 'https://p5b4y2t6.ssl.hwcdn.net';
+	gameserverUrl = (isSecure ? 'https' : 'http') + '://gamejolt.net/gameserver';
+	mediaserverUrl = 'https://m.gjcdn.net';
 
 	apiHost = 'https://gamejolt.com';
 	activityStreamHost = 'https://activity.gamejolt.com';
