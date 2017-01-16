@@ -9,8 +9,8 @@ angular.module( 'gj.Form' ).directive( 'formControl', function( $compile )
 		// Alphanumeric, underscores.
 		hashtag: /^[\w\_]+$/,
 
-		// Alphanumeric, underscores, hyphens, and period.
-		username: /^[\w\-\.]+$/,
+		// Alphanumeric, underscores, hyphens.
+		username: /^[\w\-]+$/,
 
 		// GA Tracking ID
 		gaTrackingId: /^UA\-[0-9]+\-[0-9]+$/,
