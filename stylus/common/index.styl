@@ -12,21 +12,12 @@ $gj-exclude-common-utilities ?= false
 $gj-exclude-common-responsive-utilities ?= false
 $gj-exclude-common-fills ?= false
 
-// Enable overriding of where certain folders live.
-$gj-bower-lib-folder ?= '../../../../bower-lib'
-$gj-app-styles-folder ?= '../../../../app'
-
 // Our common functions.
 @import './functions'
 
 // Normalize
 if ( !$gj-exclude-common-normalize )
 	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/normalize'
-
-// Set up our global variables.
-@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/variables'
-@import './variables'
-@import $gj-app-styles-folder + '/styles/variables'
 
 // Bootstrap core
 @import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/mixins'
