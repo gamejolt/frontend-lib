@@ -1,11 +1,11 @@
 import { provide } from 'ng-metadata/core';
-import { ResponsiveDirective } from './responsive-directive';
-import ImgHelperModule from './../helper/helper';
+import { ImgResponsiveDirective } from './responsive-directive';
+import ImgHelperModule from '../helper/helper';
 
 export default angular.module( 'gj.Img.ImgResponsive', [
 	'gj.Screen',
 	'gj.Ruler',
 	ImgHelperModule,
 ] )
-.directive( ...provide( ResponsiveDirective ) )
+.directive( ...provide( ImgResponsiveDirective ) )
 .name;

@@ -1,4 +1,4 @@
-angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q, $window, $document, $timeout, $parse, $position, AutoScroll, History, Scroll, $state )
+angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q, $window, $document, $timeout, $parse, $position, AutoScroll, History, Scroll, $state, $transitions )
 {
 	return {
 		link: function( scope, element, attrs )
@@ -62,17 +62,17 @@ angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q
 
 			function registerWatchers()
 			{
-				startWatcher = scope.$on( '$stateChangeStart', function( $event )
+				startWatcher = $transitions.onStart( {}, function( trans )
 				{
 					prevAnchor = AutoScroll.anchor();
-					if ( arguments[1] ) {
-						AutoScroll.pushState( $state.href( arguments[3], arguments[4] ), scrollElem );
+					if ( trans.to() ) {
+						AutoScroll.pushState( $state.href( trans.from(), trans.params( 'from' ) ), scrollElem );
 					}
 				} );
 
-				successWatcher = scope.$on( '$stateChangeSuccess', function()
+				successWatcher = $transitions.onSuccess( {}, function( trans )
 				{
-					doScroll( $state.href( arguments[1], arguments[2] ) );
+					doScroll( $state.href( trans.to(), trans.params( 'to' ) ) );
 				} );
 			}
 

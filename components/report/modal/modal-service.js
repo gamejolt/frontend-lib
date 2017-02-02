@@ -3,7 +3,7 @@ angular.module( 'gj.Report.Modal' ).service( 'Report_Modal', function( $modal )
 	this.show = function( resource )
 	{
 		var modalInstance = $modal.open( {
-			templateUrl: '/lib/gj-lib-client/components/report/modal/modal.html',
+			template: require( '!html-loader!./modal.html' ),
 			controller: 'Report_ModalCtrl',
 			controllerAs: 'modalCtrl',
 			size: 'sm',

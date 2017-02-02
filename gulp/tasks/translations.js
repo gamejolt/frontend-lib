@@ -25,6 +25,6 @@ module.exports = function( config )
 			.pipe( renameLangs() )
 			.pipe( sanitizeTranslations() )
 			.pipe( splitTranslations( config.translationSections ) )
-			.pipe( gulp.dest( config.buildDir + '/translations' ) );
+			.pipe( gulp.dest( 'src/translations' ) );
 	} );
 };

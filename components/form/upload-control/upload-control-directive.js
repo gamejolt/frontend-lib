@@ -7,7 +7,7 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 			gjFileSelect: '&?gjFileSelect',
 			isSortable: '<',
 		},
-		templateUrl: '/lib/gj-lib-client/components/form/upload-control/upload-control.html',
+		template: require( '!html-loader!./upload-control.html' ),
 		link: function( scope, element, attrs, ctrls )
 		{
 			var ngModel = ctrls[0];

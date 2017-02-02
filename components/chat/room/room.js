@@ -1,1 +1,3 @@
-angular.module( 'gj.Chat.Room', [ 'gj.Model' ] );
+angular.module( 'gj.Chat.Room', [] );
+
+require( './room-model' );

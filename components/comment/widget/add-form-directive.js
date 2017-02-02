@@ -2,7 +2,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetAddForm', funct
 {
 	var form = new Form( {
 		model: 'Comment',
-		template: '/lib/gj-lib-client/components/comment/widget/add-form.html',
+		template: require( './add-form.html' ),
 
 		// We want the comment form to clear out after a comment submission.
 		resetOnSubmit: true

@@ -2,7 +2,7 @@ angular.module( 'gj.User.UserAvatar' ).directive( 'gjUserAvatar', function( Envi
 {
 	return {
 		restrict: 'A',
-		templateUrl: '/lib/gj-lib-client/components/user/user-avatar/user-avatar.html',
+		template: require( '!html-loader!./user-avatar.html' ),
 		scope: {
 			user: '=gjUserAvatar',
 			avatarLink: '@?',

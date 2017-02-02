@@ -4,7 +4,7 @@ angular.module( 'gj.EditableAccordion' ).directive( 'gjEditableAccordionItemHead
 		restrict: 'E',
 		transclude: true,
 		require: [ '^gjEditableAccordion', '^gjEditableAccordionItem' ],
-		templateUrl: '/lib/gj-lib-client/components/editable-accordion/editable-accordion-item-heading.html',
+		template: require( '!html-loader!./editable-accordion-item-heading.html' ),
 		scope: {},
 		link: function( scope, element, attrs, ctrls )
 		{

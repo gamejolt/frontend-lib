@@ -1,9 +1,8 @@
-<div class="theme-editor" oc-lazy-load="[ '/app/modules/jquery.js' ]">
-	<div oc-lazy-load="[ '/app/modules/theme-editor.js' ]">
+<div class="theme-editor">
 
 		<gj-loading ng-if="!$ctrl.isLoaded"></gj-loading>
 
-		<div ng-if="$ctrl.isLoaded">
+		<div ng-if="$ctrl.isLoaded && $ctrl.Loader.ready( 'spectrum' )">
 
 			<p ng-if="$ctrl.definition.styleGroups.length > 1">
 				<select class="form-control" ng-model="$ctrl.selectedGroup" ng-options="group.name for group in $ctrl.definition.styleGroups"></select>

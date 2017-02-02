@@ -1,1 +1,3 @@
-angular.module( 'gj.Game.DataStore.Item', [ 'gj.Model', 'gj.Game', 'gj.User' ] );
+angular.module( 'gj.Game.DataStore.Item', [] );
+
+require( './item-model' );

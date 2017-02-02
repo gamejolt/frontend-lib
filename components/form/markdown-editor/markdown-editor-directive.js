@@ -13,7 +13,7 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			mediaItemType: '@?',
 			debounce: '<?',
 		},
-		templateUrl: '/lib/gj-lib-client/components/form/markdown-editor/markdown-editor.html',
+		template: require( '!html-loader!./markdown-editor.html' ),
 		bindToController: true,
 		controllerAs: 'ctrl',
 		controller: function( $scope )

@@ -1,7 +1,8 @@
 import { Component, Input, Inject, SkipSelf, OnChanges, SimpleChanges, OnInit } from 'ng-metadata/core';
+import * as template from '!html-loader!./item.component.html';
+
 import { MediaBarComponent } from '../../media-bar.component';
 import { MediaBarLightboxComponent, MediaBarLightboxConfig } from '../lightbox.component';
-import template from 'html!./item.component.html';
 
 @Component({
 	selector: 'gj-media-bar-lightbox-item',
@@ -9,10 +10,10 @@ import template from 'html!./item.component.html';
 })
 export class MediaBarLightboxItemComponent implements OnInit, OnChanges
 {
-	@Input( '<' ) item: any;
-	@Input( '<' ) itemIndex: number;
-	@Input( '<' ) activeIndex: number;
-	@Input( '<' ) mediaBar: MediaBarComponent;
+	@Input() item: any;
+	@Input() itemIndex: number;
+	@Input() activeIndex: number;
+	@Input() mediaBar: MediaBarComponent;
 
 	elem: HTMLElement;
 
@@ -24,7 +25,6 @@ export class MediaBarLightboxItemComponent implements OnInit, OnChanges
 	maxHeight?: number;
 
 	constructor(
-		// @Inject( '$window' ) private $window: ng.IWindowService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( '$scope' ) $scope: ng.IScope,
 		@Inject( '$element' ) $element: ng.IAugmentedJQuery,

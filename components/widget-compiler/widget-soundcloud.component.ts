@@ -16,7 +16,7 @@ import { Component, Input, OnInit, Inject } from 'ng-metadata/core';
 export class WidgetCompilerWidgetSoundcloudComponent implements OnInit
 {
 	@Input( '<trackId' ) trackId = '';
-	@Input( '<?color' ) color = '';
+	@Input( '<color' ) color = '';
 
 	embedSrc: string;
 

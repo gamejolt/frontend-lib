@@ -2,7 +2,7 @@ angular.module( 'gj.Game.Soundtrack.Card' ).directive( 'gjGameSoundtrackCard', f
 {
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/game/soundtrack/card/card.html',
+		template: require( '!html-loader!./card.html' ),
 		scope: {
 			game: '=gameSoundtrackCardGame',
 			songs: '=gameSoundtrackCardSongs',

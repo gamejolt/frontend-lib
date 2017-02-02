@@ -1,1 +1,3 @@
-angular.module( 'gj.Jam.Game', [ 'gj.Model', 'gj.Jam', 'gj.Jam.Award', ] );
+angular.module( 'gj.Jam.Game', [ 'gj.Jam', 'gj.Jam.Award', ] );
+
+require( './game-model' );

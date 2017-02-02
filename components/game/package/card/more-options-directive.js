@@ -4,6 +4,6 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardMoreOption
 		restrict: 'E',
 		require: '^gjGamePackageCard',
 		scope: true,
-		templateUrl: '/lib/gj-lib-client/components/game/package/card/more-options.html',
+		template: require( '!html-loader!./more-options.html' ),
 	};
 } );

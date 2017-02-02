@@ -1,7 +1,7 @@
-import { Directive, Inject, Input, Output, OnChanges, SimpleChanges } from 'ng-metadata/core';
-import { Screen } from './../../screen/screen-service';
-import { Ruler } from './../../ruler/ruler-service';
-import { ImgHelper } from './../helper/helper-service';
+import { Directive, Inject, Input, Output, OnChanges, SimpleChanges, EventEmitter } from 'ng-metadata/core';
+import { Screen } from '../../screen/screen-service';
+import { Ruler } from '../../ruler/ruler-service';
+import { ImgHelper } from '../helper/helper-service';
 
 const WIDTH_HEIGHT_REGEX = /\/(\d+)x(\d+)\//;
 const WIDTH_REGEX = /\/(\d+)\//;
@@ -9,11 +9,11 @@ const WIDTH_REGEX = /\/(\d+)\//;
 @Directive({
 	selector: '[gj-img-responsive]',
 })
-export class ResponsiveDirective implements OnChanges
+export class ImgResponsiveDirective implements OnChanges
 {
 	@Input( '@gjImgResponsive' ) startSrc: string;
 
-	@Output() onLoadedChange: Function;
+	@Output() private onLoadedChange = new EventEmitter<boolean>();
 
 	element: HTMLImageElement;
 	currentSrc: string;
@@ -78,11 +78,9 @@ export class ResponsiveDirective implements OnChanges
 				this.element.src = newSrc;
 
 				// Keep the isLoaded state up to date?
-				if ( this.onLoadedChange ) {
-					this.onLoadedChange( { $loaded: false } );
-					this.imgHelper.loaded( newSrc )
-						.then( () => this.onLoadedChange( { $loaded: true } ) );
-				}
+				this.onLoadedChange.emit( false );
+				this.imgHelper.loaded( newSrc )
+					.then( () => this.onLoadedChange.emit( true ) );
 			}
 		} );
 	}

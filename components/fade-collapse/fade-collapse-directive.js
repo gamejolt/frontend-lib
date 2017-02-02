@@ -7,7 +7,7 @@ angular.module( 'gj.FadeCollapse' ).directive( 'gjFadeCollapse', function(
 		restrict: 'E',
 		transclude: true,
 		scope: true,
-		templateUrl: '/lib/gj-lib-client/components/fade-collapse/fade-collapse.html',
+		template: require( '!html-loader!./fade-collapse.html' ),
 		controllerAs: 'ctrl',
 		bindToController: true,
 		link: function( scope, element, attrs )

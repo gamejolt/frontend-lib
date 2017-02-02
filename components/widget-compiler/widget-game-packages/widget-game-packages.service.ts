@@ -15,7 +15,7 @@ const TEMPLATE = `
 	</div>
 `;
 
-@Injectable()
+@Injectable( 'WidgetCompilerWidgetGamePackages' )
 export class WidgetCompilerWidgetGamePackages implements WidgetCompilerWidget
 {
 	readonly name = 'game-packages';

@@ -1,6 +1,5 @@
-import { Component, Inject, Input, Output, Self } from 'ng-metadata/core';
-import { NgModel } from 'ng-metadata/common';
-import template from 'html!./image.component.html';
+import { Component, Inject, Input, Self } from 'ng-metadata/core';
+import * as template from '!html-loader!./image.component.html';
 
 @Component({
 	selector: 'gj-theme-editor-image',
@@ -11,13 +10,11 @@ export class ThemeEditorImageComponent
 	@Input( '@' ) type: string;
 	@Input( '<' ) parentId: number;
 
-	@Output() change: Function;
-
 	isLoaded = false;
 	mediaItem: any;
 
 	constructor(
-		@Inject( NgModel ) @Self() private ngModel: NgModel,
+		@Inject( 'ngModel' ) @Self() private ngModel: ng.INgModelController,
 	)
 	{
 	}

@@ -4,7 +4,7 @@
 		<div class="comment-video-lightbox-interaction-who">
 			<a class="comment-video-lightbox-game"
 				ui-sref="discover.games.view.overview( { slug: $ctrl.video.game.slug, id: $ctrl.video.game.id } )"
-				ng-click="$ctrl.onClose()"
+				ng-click="$ctrl.close()"
 				gj-track-event="comment-video-lightbox:game"
 				>
 				<img gj-img-responsive="{{ ::$ctrl.video.game.img_thumbnail }}" alt="">
@@ -25,7 +25,7 @@
 				ui-sref="profile.overview( { username: $ctrl.video.comment.user.username } )"
 				gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }} (@{{ ::$ctrl.video.comment.user.username }})"
 				tooltip-placement="bottom"
-				ng-click="$ctrl.onClose()"
+				ng-click="$ctrl.close()"
 				gj-track-event="comment-video-lightbox:user"
 				>
 				<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">
@@ -65,7 +65,7 @@
 			</a>
 
 			<a class="btn btn-danger-outline btn-overlay-variant btn-block-xs"
-				ng-click="$ctrl.onClose()"
+				ng-click="$ctrl.close()"
 				>
 				<span class="jolticon jolticon-remove"></span>
 				<span translate>Close</span>

@@ -1,7 +1,7 @@
 import { Component, Input, Inject, OnChanges, SimpleChanges } from 'ng-metadata/core';
-import { Ruler } from './../../ruler/ruler-service';
-import { Screen } from './../../screen/screen-service';
-import template from 'html!./embed.html';
+import { Ruler } from '../../ruler/ruler-service';
+import { Screen } from '../../screen/screen-service';
+import * as template from '!html-loader!./embed.html';
 
 const VIDEO_RATIO = 0.5625;  // 16:9
 
@@ -13,9 +13,9 @@ export class VideoEmbedComponent implements OnChanges
 {
 	@Input( '@' ) videoProvider: 'youtube' | 'vimeo';
 	@Input( '<' ) videoId: string;
-	@Input( '<?' ) maxVideoHeight: number;
-	@Input( '<?' ) maxVideoWidth: number;
-	@Input( '<?' ) autoplay = false;
+	@Input( '<' ) maxVideoHeight: number;
+	@Input( '<' ) maxVideoWidth: number;
+	@Input( '<' ) autoplay = false;
 
 	embedUrl: string;
 	width: number;

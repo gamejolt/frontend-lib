@@ -1,7 +1,7 @@
 angular.module( 'gj.Report.Form' ).directive( 'gjFormReport', function( $q, App, Form, Api )
 {
 	var form = new Form( {
-		template: '/lib/gj-lib-client/components/report/form/form.html',
+		template: require( './form.html' ),
 	} );
 
 	form.scope.type = '@reportType';

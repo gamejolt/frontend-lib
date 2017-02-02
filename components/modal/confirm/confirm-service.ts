@@ -1,7 +1,7 @@
 import { Injectable, Inject } from 'ng-metadata/core';
-import template from 'html!./confirm.html';
+import * as template from '!html-loader!./confirm.html';
 
-@Injectable()
+@Injectable( 'ModalConfirm' )
 export class ModalConfirm
 {
 	constructor(
@@ -10,7 +10,7 @@ export class ModalConfirm
 	{
 	}
 
-	show( message: string, title = 'Confirm...', buttonType: 'ok' | 'yes' = 'ok' ): ng.IPromise<void>
+	show( message: string, title = 'Confirm...', buttonType: 'ok' | 'yes' = 'ok' ): Promise<void>
 	{
 		const modalInstance = this.$modal.open( {
 			template,

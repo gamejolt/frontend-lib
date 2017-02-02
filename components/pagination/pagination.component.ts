@@ -1,5 +1,7 @@
-import { Component, Input, Output, OnChanges, SimpleChanges, Inject } from 'ng-metadata/core';
-import template from 'html!./pagination.component.html';
+import { Component, Input, Output, OnChanges, SimpleChanges, Inject, EventEmitter } from 'ng-metadata/core';
+import { StateService } from 'angular-ui-router';
+import * as template from '!html-loader!./pagination.component.html';
+
 import { Screen } from '../screen/screen-service';
 
 const MaxPagesShown = 5;
@@ -13,15 +15,15 @@ export class PaginationComponent implements OnChanges
 	@Input( '<' ) totalItems: number;
 	@Input( '<' ) itemsPerPage: number;
 	@Input( '<' ) currentPage: number;
-	@Input( '@?' ) queryParam = 'page';
+	@Input( '@' ) queryParam = 'page';
 
 	// These only make sense for pagers.
-	@Input( '<?' ) pager = false;
-	@Input( '<?' ) reverseButtons = false;
-	@Input( '@?' ) nextText?: string;
-	@Input( '@?' ) previousText?: string;
+	@Input( '<' ) pager = false;
+	@Input( '<' ) reverseButtons = false;
+	@Input( '@' ) nextText?: string;
+	@Input( '@' ) previousText?: string;
 
-	@Output( '?' ) onPageChange: Function;
+	@Output() private onPageChange = new EventEmitter<{ event: JQueryEventObject, page: number }>();
 
 	prevPage: number | undefined;
 	nextPage: number;
@@ -34,7 +36,7 @@ export class PaginationComponent implements OnChanges
 	pages: number[] = [];
 
 	constructor(
-		@Inject( '$state' ) public $state: ng.ui.IStateService,
+		@Inject( '$state' ) public $state: StateService,
 		@Inject( 'Screen' ) public screen: Screen,
 	)
 	{
@@ -97,8 +99,6 @@ export class PaginationComponent implements OnChanges
 
 	onPageClick( $event: JQueryEventObject, page: number )
 	{
-		if ( this.onPageChange ) {
-			this.onPageChange( { $event: $event, $page: page } );
-		}
+		this.onPageChange.emit( { event: $event, page: page } );
 	}
 }

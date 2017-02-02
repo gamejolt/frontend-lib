@@ -2,7 +2,7 @@ angular.module( 'gj.Translate.LangSelector' ).directive( 'gjTranslateLangSelecto
 {
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/translate/lang-selector/lang-selector.html',
+		template: require( '!html-loader!./lang-selector.html' ),
 		scope: {
 			onLangChangeEvent: '&?onLangChange',
 		},

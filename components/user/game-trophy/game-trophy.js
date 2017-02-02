@@ -1,1 +1,3 @@
-angular.module( 'gj.User.GameTrophy', [ 'gj.Model', 'gj.User', 'gj.Game', 'gj.Game.Trophy' ] );
+angular.module( 'gj.User.GameTrophy', [ 'gj.Game.Trophy' ] );
+
+require( './game-trophy-model' );

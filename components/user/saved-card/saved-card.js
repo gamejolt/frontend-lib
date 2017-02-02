@@ -1,1 +1,3 @@
-angular.module( 'gj.User.SavedCard', [ 'gj.Model', 'gj.User' ] );
+angular.module( 'gj.User.SavedCard', [] );
+
+require( './saved-card-model' );

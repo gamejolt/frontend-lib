@@ -1,9 +1,10 @@
 import { Injectable, Inject } from 'ng-metadata/core';
+import { State } from 'angular-ui-router';
 
-@Injectable()
+@Injectable( 'ConnectionStatePermissions' )
 export class ConnectionStatePermissions
 {
-	currentState?: ng.ui.IState;
+	currentState?: State;
 
 	constructor(
 		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
@@ -18,7 +19,7 @@ export class ConnectionStatePermissions
 		 * This way on a payload failure in the Payload service we can see if we should still
 		 * allow the state to transition successfully.
 		 */
-		this.$rootScope.$on( '$stateChangeStart', ( _event: ng.IAngularEvent, toState: ng.ui.IState ) =>
+		this.$rootScope.$on( '$stateChangeStart', ( _event: ng.IAngularEvent, toState: State ) =>
 		{
 			this.setCurrentState( toState );
 		} );
@@ -57,7 +58,7 @@ export class ConnectionStatePermissions
 		} );
 	}
 
-	setCurrentState( state: ng.ui.IState )
+	setCurrentState( state: State )
 	{
 		this.currentState = state;
 	}

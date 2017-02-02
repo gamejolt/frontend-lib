@@ -1,8 +1,8 @@
 <div class="form-upload-control"
-	ng-file-drop-available="dropSupported = true"
+	ngf-drop-available="dropSupported"
 	ng-class="{ 'form-upload-control-drop-target': dropSupported }"
-	ng-file-drag-over-class="form-upload-control-drop-active"
-	ng-file-drop="onFileSelect( $files )"
+	ngf-drag-over-class="'form-upload-control-drop-active'"
+	ngf-drop="onFileSelect( $files )"
 	>
 
 	<div ng-show="!ngModel.$viewValue.length">
@@ -19,16 +19,18 @@
 
 		<input type="file"
 			ng-if="!multiple"
-			ng-file-select="onFileSelect( $files )"
+			ngf-select="onFileSelect( $files )"
 			ng-hide="!!uploadLinkLabel"
-			accept="{{ accept }}"
+			accept="accept"
+			ngf-multiple="false"
 			>
 
 		<input type="file"
 			ng-if="multiple"
-			ng-file-select="onFileSelect( $files )"
+			ngf-select="onFileSelect( $files )"
 			ng-hide="!!uploadLinkLabel"
-			accept="{{ accept }}"
+			accept="accept"
+			ngf-multiple="true"
 			multiple
 			>
 	</div>

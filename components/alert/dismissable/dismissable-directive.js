@@ -1,5 +1,5 @@
 angular.module( 'gj.Alert.Dismissable' ).component( 'gjAlertDismissable', {
-	templateUrl: '/lib/gj-lib-client/components/alert/dismissable/dismissable.html',
+	template: require( '!html-loader!./dismissable.html' ),
 	bindings: {
 		alertType: '@',
 		dismissKey: '@',

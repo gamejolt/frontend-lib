@@ -3,7 +3,7 @@ angular.module( 'gj.Loading' ).directive( 'gjLoading', function( $interpolate, $
 	return {
 		restrict: 'E',
 		scope: true,
-		templateUrl: '/lib/gj-lib-client/components/loading/loading.html',
+		template: require( '!html-loader!./loading.html' ),
 		link: function( scope, element, attrs )
 		{
 			scope.label = attrs.label ? $interpolate( attrs.label )( scope ) : 'Loading...';
@@ -15,15 +15,15 @@ angular.module( 'gj.Loading' ).directive( 'gjLoading', function( $interpolate, $
 
 			// Make sure all these paths are full paths so that they get revisioned correctly by the build script.
 			var mapping = {
-				'loading': '/lib/gj-lib-client/components/loading/loading.gif',
-				'loading-2x': '/lib/gj-lib-client/components/loading/loading-2x.gif',
-				'loading-bw': '/lib/gj-lib-client/components/loading/loading-bw.gif',
-				'loading-bw-2x': '/lib/gj-lib-client/components/loading/loading-bw-2x.gif',
+				'loading': require( './loading.gif' ),
+				'loading-2x': require( './loading-2x.gif' ),
+				'loading-bw': require( './loading-bw.gif' ),
+				'loading-bw-2x': require( './loading-bw-2x.gif' ),
 
-				'loading-stationary': '/lib/gj-lib-client/components/loading/loading-stationary.gif',
-				'loading-stationary-2x': '/lib/gj-lib-client/components/loading/loading-stationary-2x.gif',
-				'loading-stationary-bw': '/lib/gj-lib-client/components/loading/loading-stationary-bw.gif',
-				'loading-stationary-bw-2x': '/lib/gj-lib-client/components/loading/loading-stationary-bw-2x.gif',
+				'loading-stationary': require( './loading-stationary.gif' ),
+				'loading-stationary-2x': require( './loading-stationary-2x.gif' ),
+				'loading-stationary-bw': require( './loading-stationary-bw.gif' ),
+				'loading-stationary-bw-2x': require( './loading-stationary-bw-2x.gif' ),
 			};
 
 			var index = 'loading'

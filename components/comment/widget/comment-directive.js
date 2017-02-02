@@ -2,7 +2,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidgetComment', funct
 {
 	return {
 		require: '^gjCommentWidget',
-		templateUrl: '/lib/gj-lib-client/components/comment/widget/comment.html',
+		template: require( '!html-loader!./comment.html' ),
 		scope: true,
 		link: {
 			pre: function( scope, element, attrs, commentWidget )

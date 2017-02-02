@@ -1,1 +1,3 @@
-angular.module( 'gj.Jam.Page', [ 'gj.Model', 'gj.Jam' ] );
+angular.module( 'gj.Jam.Page', [ 'gj.Jam' ] );
+
+require( './page-model' );

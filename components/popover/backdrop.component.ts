@@ -1,4 +1,4 @@
-import { Component, Output } from 'ng-metadata/core';
+import { Component, Output, EventEmitter } from 'ng-metadata/core';
 
 @Component({
 	selector: 'gj-popover-backdrop',
@@ -8,5 +8,10 @@ import { Component, Output } from 'ng-metadata/core';
 })
 export class PopoverBackdropComponent
 {
-	@Output() hide: Function;
+	@Output() private _hide = new EventEmitter<void>();
+
+	hide()
+	{
+		this._hide.emit( undefined );
+	}
 }

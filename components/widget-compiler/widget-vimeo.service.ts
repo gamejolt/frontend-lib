@@ -8,7 +8,7 @@ const TEMPLATE = `
 	</gj-widget-compiler-widget-vimeo>
 `;
 
-@Injectable()
+@Injectable( 'WidgetCompilerWidgetVimeo' )
 export class WidgetCompilerWidgetVimeo implements WidgetCompilerWidget
 {
 	readonly name = 'vimeo';

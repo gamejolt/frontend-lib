@@ -1,0 +1,23 @@
+<div class="graph full-bleed-xs"
+	ng-class="::'graph-' + $ctrl.type + ($ctrl.backgroundVariant ? ' graph-background-variant' : '')"
+	>
+	<div ng-if="$ctrl.Loader.ready( 'chart' )">
+		<div class="chart">
+			<canvas
+				tc-chartjs
+				chart-type="{{ ::$ctrl.type }}"
+				chart-data="$ctrl.data"
+				chart-options="$ctrl.chartOptions"
+				chart-legend="$ctrl.legendBinding"
+				chart="{}"
+				>
+			</canvas>
+		</div>
+		<div
+			tc-chartjs-legend
+			ng-if="$ctrl.shouldShowLegend"
+			chart-legend="$ctrl.legendBinding"
+			>
+		</div>
+	</div>
+</div>

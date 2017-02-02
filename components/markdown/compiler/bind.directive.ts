@@ -1,4 +1,4 @@
-import { Directive, OnChanges, SimpleChanges, Input, Output } from 'ng-metadata/core';
+import { Directive, OnChanges, SimpleChanges, Input, Output, EventEmitter } from 'ng-metadata/core';
 
 @Directive({
 	selector: '[gj-markdown-compiler-bind]',
@@ -7,7 +7,7 @@ export class MarkdownCompilerBindDirective implements OnChanges
 {
 	@Input( '<gjMarkdownCompilerBind' ) content?: string;
 
-	@Output() markdownCompiled: Function;
+	@Output() private markdownCompiled = new EventEmitter<string>();
 
 	constructor()
 	{
@@ -17,13 +17,11 @@ export class MarkdownCompilerBindDirective implements OnChanges
 	{
 		if ( changes['content'] && typeof this.content != 'undefined'  ) {
 
-			this.markdownCompiled( {
-				$compiledContent: marked( this.content, {
-					sanitize: true,
-					breaks: false,
-					pedantic: true,
-				} )
-			} );
+			this.markdownCompiled.emit( marked( this.content, {
+				sanitize: true,
+				breaks: false,
+				pedantic: true,
+			} ) );
 		}
 	}
 }

@@ -1,7 +1,10 @@
-export function AuthJoinFormFactory( Api: any, Form: any, Connection: any )
+import { Api } from '../../api/api.service';
+
+AuthJoinFormFactory.$inject = [ 'Form', 'Connection' ];
+export function AuthJoinFormFactory( Form: any, Connection: any )
 {
 	const form = new Form( {
-		template: '/lib/gj-lib-client/components/auth/join/join-form.component.html',
+		template: require( './join-form.component.html' ),
 	} );
 
 	form.scope.darkVariant = '<';

@@ -1,28 +1,19 @@
-import { Injectable } from 'ng-metadata/core';
-import { Model } from './../../../model/model-service';
+import { StateService } from 'angular-ui-router';
+import { Model } from '../../../model/model.service';
+import { getProvider } from '../../../../utils/utils';
 
-export function Fireside_Post_TagFactory( Model: any, $state: any )
-{
-	return Model.create( Fireside_Post_Tag, {
-		$state,
-	} );
-}
-
-@Injectable()
-export class Fireside_Post_Tag extends Model
+export class FiresidePostTag extends Model
 {
 	fireside_post_id: number;
 	tag: string;
 	added_on: number;
 
-	static $state: any;
-
 	getSref( page?: number, includeParams?: boolean )
 	{
-		let sref = 'tags.view';
+		let sref = 'fireside.tags.view';
 
 		if ( includeParams ) {
-			sref += '( ' + angular.toJson( this.getSrefParams( page ) ) + ' )';
+			sref += '( ' + JSON.stringify( this.getSrefParams( page ) ) + ' )';
 		}
 
 		return sref;
@@ -35,6 +26,11 @@ export class Fireside_Post_Tag extends Model
 
 	getUrl( page?: number )
 	{
-		return Fireside_Post_Tag.$state.href( this.getSref( page ), this.getSrefParams( page ) );
+		return getProvider<StateService>( '$state' ).href(
+			this.getSref( page ),
+			this.getSrefParams( page ),
+		);
 	}
 }
+
+Model.create( FiresidePostTag );

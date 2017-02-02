@@ -3,7 +3,7 @@ angular.module( 'gj.User.UserBar' ).directive( 'gjUserBar', function( Environmen
 	return {
 		restrict: 'A',
 		replace: true,
-		templateUrl: '/lib/gj-lib-client/components/user/user-bar/user-bar.html',
+		template: require( '!html-loader!./user-bar.html' ),
 		transclude: true,
 		scope: {
 			user: '=gjUserBar',

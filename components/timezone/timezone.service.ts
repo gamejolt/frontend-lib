@@ -1,15 +1,10 @@
-import { Injectable, Inject } from 'ng-metadata/core';
+import { Injectable } from 'ng-metadata/core';
+import { Api } from '../api/api.service';
 
-@Injectable()
+@Injectable( 'Timezone' )
 export class Timezone
 {
 	private timezonesFetch: any;
-
-	constructor(
-		@Inject( 'Api' ) private apiService: any,
-	)
-	{
-	}
 
 	getTimezones()
 	{
@@ -22,7 +17,7 @@ export class Timezone
 				processPayload: false,
 			};
 
-			this.timezonesFetch = this.apiService.sendRequest( '/jams/manage/jams/get-timezones', null, options )
+			this.timezonesFetch = Api.sendRequest( '/jams/manage/jams/get-timezones', null, options )
 				.then( ( response: any ) =>
 				{
 					return response.data;

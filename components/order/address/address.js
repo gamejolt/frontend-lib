@@ -1,1 +1,3 @@
-angular.module( 'gj.Order.Address', [ 'gj.Model' ] );
+angular.module( 'gj.Order.Address', [] );
+
+require( './address-model' );

@@ -1,40 +1,15 @@
-import { Injectable } from 'ng-metadata/core';
-import { Model } from './../model/model-service';
+import { Model } from '../model/model.service';
 import { Environment } from '../environment/environment.service';
+import { getProvider } from '../../utils/utils';
+import { FiresidePost } from '../fireside/post/post-model';
+import { Comment } from '../comment/comment-model';
+import { StateService } from 'angular-ui-router';
+import { User } from '../user/user.model';
+import { Api } from '../api/api.service';
+import { Game } from '../game/game.model';
 
-export function NotificationFactory(
-	Model: any,
-	Api: any,
-	$state: any,
-	$q: any,
-	$injector: any,
-	$location: any,
-	$window: any,
-	Environment: any,
-)
-{
-	return Model.create( Notification, {
-		Api,
-		$state,
-		$q,
-		$injector,
-		$location,
-		$window,
-		Environment,
-	} );
-}
-
-@Injectable()
 export class Notification extends Model
 {
-	static Api: any;
-	static Environment: Environment;
-	static $state: ng.ui.IStateService;
-	static $q: ng.IQService;
-	static $injector: any;
-	static $location: ng.ILocationService;
-	static $window: ng.IWindowService;
-
 	static TYPE_COMMENT_ADD = 'comment-add';
 	static TYPE_COMMENT_ADD_OBJECT_OWNER = 'comment-add-object-owner';
 	static TYPE_FORUM_POST_ADD = 'forum-post-add';
@@ -73,96 +48,93 @@ export class Notification extends Model
 	// For feeds.
 	scroll_id?: string;
 
-	constructor( data?: any )
+	constructor( data: any = {} )
 	{
 		super( data );
 
-		if ( data ) {
+		if ( data.from_resource == 'User' ) {
+			this.from_model = new User( data.from_resource_model );
+		}
 
-			if ( data.from_resource == 'User' ) {
-				this.from_model = new (Notification.$injector.get( 'User' ))( data.from_resource_model );
-			}
+		if ( data.to_resource == 'Game' ) {
+			this.to_model = new Game( data.to_resource_model );
+		}
+		else if ( data.to_resource == 'User' ) {
+			this.to_model = new User( data.to_resource_model );
+		}
+		else if ( data.to_resource == 'Fireside_Post' ) {
+			this.to_model = new FiresidePost( data.to_resource_model );
+		}
+		else if ( data.to_resource == 'Forum_Topic' ) {
+			this.to_model = new (getProvider<any>( 'Form_Topic' ))( data.to_resource_model );
+		}
 
-			if ( data.to_resource == 'Game' ) {
-				this.to_model = new (Notification.$injector.get( 'Game' ))( data.to_resource_model );
-			}
-			else if ( data.to_resource == 'User' ) {
-				this.to_model = new (Notification.$injector.get( 'User' ))( data.to_resource_model );
-			}
-			else if ( data.to_resource == 'Fireside_Post' ) {
-				this.to_model = new (Notification.$injector.get( 'Fireside_Post' ))( data.to_resource_model );
-			}
-			else if ( data.to_resource == 'Forum_Topic' ) {
-				this.to_model = new (Notification.$injector.get( 'Forum_Topic' ))( data.to_resource_model );
-			}
-
-			if ( this.type == Notification.TYPE_COMMENT_ADD ) {
-				this.action_model = new (Notification.$injector.get( 'Comment' ))( data.action_resource_model );
-				this.action_label = 'Comment Reply';
-				this.url = undefined;  // Must pull asynchronously when they click on the notification.
-				this.jolticon = 'jolticon-share';
-				this.is_user_based = true;
-			}
-			else if ( this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
-				this.action_model = new (Notification.$injector.get( 'Comment' ))( data.action_resource_model );
-				this.action_label = 'New Comment';
-				this.url = undefined;  // Must pull asynchronously when they click on the notification.
-				this.jolticon = 'jolticon-add-comment';
-				this.is_user_based = true;
-			}
-			else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
-				this.action_model = new (Notification.$injector.get( 'Forum_Post' ))( data.action_resource_model );
-				this.action_label = 'New Forum Post';
-				this.url = undefined;
-				this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
-				this.is_user_based = true;
-			}
-			else if ( this.type == Notification.TYPE_FRIENDSHIP_REQUEST ) {
-				this.action_model = new (Notification.$injector.get( 'User_Friendship' ))( data.action_resource_model );
-				this.action_label = 'Friend Request';
-				this.url = Notification.$state.href( 'profile.overview', { username: this.from_model.username } );
-				this.jolticon = 'jolticon-friend-add-1';
-				this.is_user_based = true;
-			}
-			else if ( this.type == Notification.TYPE_FRIENDSHIP_ACCEPT ) {
-				this.action_model = new (Notification.$injector.get( 'User_Friendship' ))( data.action_resource_model );
-				this.action_label = 'New Friend';
-				this.url = Notification.$state.href( 'profile.overview', { username: this.from_model.username } );
-				this.jolticon = 'jolticon-friend-add-2';
-				this.is_user_based = true;
-			}
-			else if ( this.type == Notification.TYPE_GAME_RATING_ADD ) {
-				this.action_model = new (Notification.$injector.get( 'Game_Rating' ))( data.action_resource_model );
-				this.action_label = 'Game Rating';
-				this.url = this.to_model.getUrl();
-				this.jolticon = 'jolticon-chart';
-				this.is_game_based = true;
-			}
-			else if ( this.type == Notification.TYPE_GAME_FOLLOW ) {
-				this.action_model = new (Notification.$injector.get( 'GameLibrary_Game' ))( data.action_resource_model );
-				this.action_label = 'Game Follow';
-				this.url = this.from_model.url;
-				this.jolticon = 'jolticon-subscribe';
-				this.is_user_based = true;
-			}
-			else if ( this.type == Notification.TYPE_DEVLOG_POST_ADD ) {
-				this.action_model = new (Notification.$injector.get( 'Fireside_Post' ))( data.action_resource_model );
-				this.action_label = 'Devlog Post';
-				this.url = Notification.$state.href( 'discover.games.view.devlog.view', {
-					slug: this.to_model.slug,
-					id: this.to_model.id,
-					postSlug: this.action_model.slug,
-				} );
-				this.jolticon = 'jolticon-blog-article';
-				this.is_game_based = true;
-			}
-			else if ( this.type == Notification.TYPE_SELLABLE_SELL ) {
-				this.action_model = new (Notification.$injector.get( 'Order_Item' ))( data.action_resource_model );
-				this.action_label = 'Sale';
-				this.url = Notification.$state.href( 'dashboard.main.overview' );
-				this.jolticon = 'jolticon-heart';
-				this.is_user_based = true;
-			}
+		if ( this.type == Notification.TYPE_COMMENT_ADD ) {
+			this.action_model = new Comment( data.action_resource_model );
+			this.action_label = 'Comment Reply';
+			this.url = undefined;  // Must pull asynchronously when they click on the notification.
+			this.jolticon = 'jolticon-share';
+			this.is_user_based = true;
+		}
+		else if ( this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
+			this.action_model = new Comment( data.action_resource_model );
+			this.action_label = 'New Comment';
+			this.url = undefined;  // Must pull asynchronously when they click on the notification.
+			this.jolticon = 'jolticon-add-comment';
+			this.is_user_based = true;
+		}
+		else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
+			this.action_model = new (getProvider<any>( 'Forum_Post' ))( data.action_resource_model );
+			this.action_label = 'New Forum Post';
+			this.url = undefined;
+			this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
+			this.is_user_based = true;
+		}
+		else if ( this.type == Notification.TYPE_FRIENDSHIP_REQUEST ) {
+			this.action_model = new (getProvider<any>( 'User_Friendship' ))( data.action_resource_model );
+			this.action_label = 'Friend Request';
+			this.url = getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
+			this.jolticon = 'jolticon-friend-add-1';
+			this.is_user_based = true;
+		}
+		else if ( this.type == Notification.TYPE_FRIENDSHIP_ACCEPT ) {
+			this.action_model = new (getProvider<any>( 'User_Friendship' ))( data.action_resource_model );
+			this.action_label = 'New Friend';
+			this.url = getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
+			this.jolticon = 'jolticon-friend-add-2';
+			this.is_user_based = true;
+		}
+		else if ( this.type == Notification.TYPE_GAME_RATING_ADD ) {
+			this.action_model = new (getProvider<any>( 'Game_Rating' ))( data.action_resource_model );
+			this.action_label = 'Game Rating';
+			this.url = this.to_model.getUrl();
+			this.jolticon = 'jolticon-chart';
+			this.is_game_based = true;
+		}
+		else if ( this.type == Notification.TYPE_GAME_FOLLOW ) {
+			this.action_model = new (getProvider<any>( 'GameLibrary_Game' ))( data.action_resource_model );
+			this.action_label = 'Game Follow';
+			this.url = this.from_model.url;
+			this.jolticon = 'jolticon-subscribe';
+			this.is_user_based = true;
+		}
+		else if ( this.type == Notification.TYPE_DEVLOG_POST_ADD ) {
+			this.action_model = new FiresidePost( data.action_resource_model );
+			this.action_label = 'Devlog Post';
+			this.url = getProvider<StateService>( '$state' ).href( 'discover.games.view.devlog.view', {
+				slug: this.to_model.slug,
+				id: this.to_model.id,
+				postSlug: this.action_model.slug,
+			} );
+			this.jolticon = 'jolticon-blog-article';
+			this.is_game_based = true;
+		}
+		else if ( this.type == Notification.TYPE_SELLABLE_SELL ) {
+			this.action_model = new (getProvider<any>( 'Order_Item' ))( data.action_resource_model );
+			this.action_label = 'Sale';
+			this.url = getProvider<StateService>( '$state' ).href( 'dashboard.main.overview', {} );
+			this.jolticon = 'jolticon-heart';
+			this.is_user_based = true;
 		}
 
 		// Keep memory clean after bootstrapping the models.
@@ -174,13 +146,13 @@ export class Notification extends Model
 
 	static fetchNotificationsCount()
 	{
-		return Notification.Api.sendRequest( '/web/dash/activity/count', null, { detach: true } );
+		return Api.sendRequest( '/web/dash/activity/count', null, { detach: true } );
 	}
 
-	go()
+	async go()
 	{
 		if ( this.url ) {
-			Notification.$location.url( this.url.replace( '#!', '' ) );
+			getProvider<ng.ILocationService>( '$location' ).url( this.url.replace( '#!', '' ) );
 		}
 		// Need to fetch the URL first.
 		else if (
@@ -188,43 +160,41 @@ export class Notification extends Model
 			|| this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER
 			|| this.type == Notification.TYPE_FORUM_POST_ADD
 		) {
-			let promise: ng.IPromise<string>;
-			if ( this.type == Notification.TYPE_COMMENT_ADD || this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
-				promise = Notification.$injector.get( 'Comment' ).getCommentUrl( this.action_resource_id );
-			}
-			else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
-				promise = Notification.$injector.get( 'Forum_Post' ).getPostUrl( this.action_resource_id );
-			}
-			else {
-				throw new Error( 'Invalid type.' );
-			}
+			let url: string;
 
-			promise.then( url =>
-			{
-				// If we're going to a URL within this domain, then we want to strip off the domain stuff
-				// and go to the URL. Otherwise we need to do a full-page change to the domain/url.
-				const search = Notification.Environment.baseUrl;
-				if ( url.search( search ) === 0 ) {
-					url = url.replace( search, '' );
-					Notification.$location.url( url );
+			try {
+				if ( this.type == Notification.TYPE_COMMENT_ADD || this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
+					url = await Comment.getCommentUrl( this.action_resource_id );
+				}
+				else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
+					url = await getProvider<any>( 'Forum_Post' ).getPostUrl( this.action_resource_id );
 				}
 				else {
-					if ( Notification.Environment.isClient ) {
+					throw new Error( 'Invalid type.' );
+				}
+
+				// If we're going to a URL within this domain, then we want to strip off the domain stuff
+				// and go to the URL. Otherwise we need to do a full-page change to the domain/url.
+				const search = Environment.baseUrl;
+				if ( url.search( search ) === 0 ) {
+					url = url.replace( search, '' );
+					getProvider<any>( '$location' ).url( url );
+				}
+				else {
+					if ( GJ_IS_CLIENT ) {
 						require( 'nw.gui' ).Shell.openExternal( url );
 					}
 					else {
-						Notification.$window.location.href = url;
+						window.location.href = url;
 					}
 				}
-			} )
-			.catch( () =>
-			{
-				Notification.$injector.get( 'Growls' ).error( 'Could not go to comment.' );
-			} );
+			}
+			catch ( _e ) {
+				getProvider<any>( 'Growls' ).error( 'Could not go to comment.' );
+			}
 		}
-		else {
-			throw new Error( 'No URL to go to for notification.' );
-		}
+
+		throw new Error( 'No URL to go to for notification.' );
 	}
 
 	$read()
@@ -232,3 +202,5 @@ export class Notification extends Model
 		return this.$_save( '/web/dash/activity/mark-read/' + this.id, 'notification', { detach: true } );
 	}
 }
+
+Model.create( Notification );

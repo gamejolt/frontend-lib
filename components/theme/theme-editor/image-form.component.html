@@ -1,11 +1,10 @@
-<div oc-lazy-load="{ files: [ '/app/modules/upload.js' ] }">
+<div ng-if="Loader.ready( 'upload' )">
 	<form gj-form="formModel" name="themeEditorImageForm">
 
 		<form-group name="image" hide-label="true">
 
 			<gj-form-upload-control
-				name="image"
-				ng-model="formModel.file"
+				form-control="upload"
 				gj-upload-progress-handler="formState.progress"
 				gj-file-select="onSubmit()"
 				gj-max-filesize="maxFilesize"

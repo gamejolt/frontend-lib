@@ -33,30 +33,31 @@ module.exports = function( config )
 	config.gjLibDir = 'src/lib/gj-lib-client/';
 	config.bowerDir = 'src/bower-lib/';
 
-	require( './styles.js' )( config );
-	require( './js.js' )( config );
-	require( './html.js' )( config );
-	require( './fonts.js' )( config );
-	require( './markdown.js' )( config );
-	require( './images.js' )( config );
+	// require( './styles.js' )( config );
+	// require( './js.js' )( config );
+	// require( './html.js' )( config );
+	// require( './fonts.js' )( config );
+	// require( './markdown.js' )( config );
+	// require( './images.js' )( config );
 	require( './translations.js' )( config );
-	require( './inject.js' )( config );
+	require( './webpack.js' )( config );
+	// require( './inject.js' )( config );
 	require( './clean.js' )( config );
 
-	gulp.task( 'extra', function()
-	{
-		return gulp.src( [
-			'!src/bower-lib/**/*',
-			'src/**/*.xml',
-			'src/**/*.mp4',
-			'src/**/*.wav',
-			'src/**/*.ogg',
-			'src/**/*.pdf',
-			'src/**/*.txt',
-			'src/channel.html',
-		], { allowEmpty: true } )
-		.pipe( gulp.dest( config.buildDir ) );
-	} );
+	// gulp.task( 'extra', function()
+	// {
+	// 	return gulp.src( [
+	// 		'!src/bower-lib/**/*',
+	// 		'src/**/*.xml',
+	// 		'src/**/*.mp4',
+	// 		'src/**/*.wav',
+	// 		'src/**/*.ogg',
+	// 		'src/**/*.pdf',
+	// 		'src/**/*.txt',
+	// 		'src/channel.html',
+	// 	], { allowEmpty: true } )
+	// 	.pipe( gulp.dest( config.buildDir ) );
+	// } );
 
 	function noop( cb )
 	{
@@ -79,9 +80,26 @@ module.exports = function( config )
 		cb();
 	}
 
-	gulp.task( 'default', gulp.series( checkHooks, 'clean:pre', 'pre', gulp.parallel( 'styles', 'js', 'images', 'html', 'fonts', 'markdown', 'extra' ), 'translations:compile', 'inject', 'post', 'clean:post' ) );
+	// gulp.task( 'default', gulp.series(
+	// 	checkHooks,
+	// 	'clean:pre',
+	// 	'pre',
+	// 	gulp.parallel(
+	// 		// 'styles',
+	// 		'js'
+	// 		// 'images',
+	// 		// 'html',
+	// 		// 'fonts',
+	// 		// 'markdown',
+	// 		// 'extra'
+	// 	),
+	// 	'translations:compile',
+	// 	// 'inject',
+	// 	'post',
+	// 	'clean:post'
+	// ) );
 
-	require( './watch.js' )( config );
+	// require( './watch.js' )( config );
 
 	gulp.task( 'update-lib', shell.task( [
 		'cd ' + config.gjLibDir + ' && git pull',

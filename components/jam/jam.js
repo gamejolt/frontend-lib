@@ -1,1 +1,0 @@
-angular.module( 'gj.Jam', [ 'gj.Model' ] );

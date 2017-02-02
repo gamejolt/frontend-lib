@@ -52,7 +52,7 @@
 					<span translate>Show original comments</span>
 					<span class="translate-button-branding">
 						<span translate>translated by</span>
-						<img src="/lib/gj-lib-client/components/comment/widget/google-logo.png" alt="Google">
+						<img src="./google-logo.png" alt="Google">
 					</span>
 				</button>
 
@@ -106,7 +106,7 @@
 			total-items="ctrl.parentCount"
 			current-page="ctrl.currentPage"
 			query-param="comment_page"
-			on-page-change="ctrl.onPageChange( $event, $page, true )"
+			(on-page-change)="ctrl.onPageChange( $event.event, $event.page, true )"
 			>
 		</gj-pagination>
 	</div>

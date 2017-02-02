@@ -1,5 +1,6 @@
 import { Component, Inject, Input } from 'ng-metadata/core';
-import template from 'html!./join.component.html';
+import { StateService } from 'angular-ui-router';
+import * as template from '!html-loader!./join.component.html';
 
 import { Connection } from '../../connection/connection-service';
 import { Environment } from '../../environment/environment.service';
@@ -13,8 +14,7 @@ export class AuthJoinComponent
 	@Input( '<' ) darkVariant = false;
 
 	constructor(
-		@Inject( '$state' ) private $state: ng.ui.IStateService,
-		@Inject( 'Environment' ) private env: Environment,
+		@Inject( '$state' ) private $state: StateService,
 		@Inject( 'Connection' ) public conn: Connection,
 		@Inject( 'User_LinkedAccounts' ) private userLinkedAccounts: any,
 	)
@@ -36,7 +36,7 @@ export class AuthJoinComponent
 		// We store these so we can log them in automatically once their verification happens.
 		// Store it in session so that it can get cleaned up.
 		// We only do this on Client because there is no way to eaily go back/refresh in client.
-		if ( this.env.isClient ) {
+		if ( GJ_IS_CLIENT ) {
 			sessionStorage.setItem( 'auth-user', formModel.username );
 			sessionStorage.setItem( 'auth-pass', formModel.password );
 		}
@@ -47,7 +47,7 @@ export class AuthJoinComponent
 			this.$state.go( 'auth.join.almost' );
 		}
 		else {
-			window.location.href = this.env.authBaseUrl + '/join/almost';
+			window.location.href = Environment.authBaseUrl + '/join/almost';
 		}
 	}
 }

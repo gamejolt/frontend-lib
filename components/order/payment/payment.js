@@ -1,1 +1,3 @@
-angular.module( 'gj.Order.Payment', [ 'gj.Model', 'gj.Order.Payment.Refund' ] );
+angular.module( 'gj.Order.Payment', [ 'gj.Order.Payment.Refund' ] );
+
+require( './payment-model' );

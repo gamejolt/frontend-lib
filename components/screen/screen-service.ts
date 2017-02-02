@@ -14,7 +14,7 @@ const LG_WIDTH = 1200;
  */
 const HIDPI_BREAKPOINT = 1.5;
 
-@Injectable()
+@Injectable( 'Screen' )
 export class Screen
 {
 	// This gets generated depending on if their browser has it or not.

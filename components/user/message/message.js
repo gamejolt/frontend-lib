@@ -1,1 +1,3 @@
-angular.module( 'gj.User.Message', [ 'gj.User' ] );
+angular.module( 'gj.User.Message', [] );
+
+require( './message-model' );

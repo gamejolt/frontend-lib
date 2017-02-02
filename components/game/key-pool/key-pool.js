@@ -1,1 +1,3 @@
-angular.module( 'gj.Game.KeyPool', [ 'gj.Model', 'gj.Game', 'gj.User' ] );
+angular.module( 'gj.Game.KeyPool', [] );
+
+require( './key-pool-model' );

@@ -1,1 +1,3 @@
-angular.module( 'gj.Game.NewsArticle', [ 'gj.Model', 'gj.Game', 'gj.User', 'gj.KeyGroup' ] );
+angular.module( 'gj.Game.NewsArticle', [] );
+
+require( './news-article-model' );

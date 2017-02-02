@@ -1,25 +1,12 @@
-import { Injectable } from 'ng-metadata/core';
 import { Environment } from '../environment/environment.service';
+import { getProvider } from '../../utils/utils';
 
 const TIMEOUT_INITIAL = 2000;
 const TIMEOUT_GROW = 1.5;
 const TIMEOUT_MAX = 30000;
 
-export function ConnectionReconnectFactory( $timeout: any, $http: any, Environment: any )
-{
-	ConnectionReconnect.$timeout = $timeout;
-	ConnectionReconnect.$http = $http;
-	ConnectionReconnect.env = Environment;
-	return ConnectionReconnect;
-}
-
-@Injectable()
 export class ConnectionReconnect
 {
-	static $timeout: ng.ITimeoutService;
-	static $http: ng.IHttpService;
-	static env: Environment;
-
 	private _checkUrl: string;
 
 	private _failFn: Function;
@@ -34,7 +21,7 @@ export class ConnectionReconnect
 		// Should be pretty lightweight.
 		this._checkUrl = 'https://s.gjcdn.net/app/img/favicon.png';
 
-		if ( ConnectionReconnect.env.env == 'development' ) {
+		if ( Environment.env == 'development' ) {
 			this._checkUrl = 'http://development.gamejolt.com/app/img/favicon.png';
 		}
 
@@ -47,7 +34,9 @@ export class ConnectionReconnect
 
 	private _setTimeout()
 	{
-		this._timeoutPromise = ConnectionReconnect.$timeout( () =>
+		const $timeout = getProvider<ng.ITimeoutService>( '$timeout' );
+
+		this._timeoutPromise = $timeout( () =>
 		{
 			// Before checking reset the timeout details.
 			this._timeoutMs = Math.min( TIMEOUT_MAX, this._timeoutMs * TIMEOUT_GROW );
@@ -60,16 +49,16 @@ export class ConnectionReconnect
 
 	check()
 	{
+		const $http = getProvider<ng.IHttpService>( '$http' );
+
 		// Make sure we don't cache the call.
-		ConnectionReconnect.$http.head( this._checkUrl + '?cb=' + Date.now() )
+		$http.head( this._checkUrl + '?cb=' + Date.now() )
 			.then( () =>
 			{
-				console.log( 'success' );
 				this.finish();
 			} )
 			.catch( ( response: any ) =>
 			{
-				console.log( 'fail', response );
 				// Just as long as the response doesn't have a status code of -1.
 				// After all, a 404 still means that we are connected to the internet.
 				if ( response.status !== -1 ) {
@@ -85,9 +74,11 @@ export class ConnectionReconnect
 
 	finish()
 	{
+		const $timeout = getProvider<ng.ITimeoutService>( '$timeout' );
+
 		// If this was called when we're currently waiting on a timeout we need to clean it up.
 		if ( this._timeoutPromise ) {
-			ConnectionReconnect.$timeout.cancel( this._timeoutPromise );
+			$timeout.cancel( this._timeoutPromise );
 		}
 
 		this._successFn();

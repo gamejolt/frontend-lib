@@ -1,7 +1,7 @@
 import { Injectable, Inject } from 'ng-metadata/core';
-import template from 'html!./auth-modal.component.html';
+import * as template from '!html-loader!./auth-modal.component.html';
 
-@Injectable()
+@Injectable( 'AuthModal' )
 export class AuthModal
 {
 	constructor(
@@ -10,7 +10,7 @@ export class AuthModal
 	{
 	}
 
-	show(): ng.IPromise<undefined>
+	show(): Promise<undefined>
 	{
 		const modalInstance = this.$modal.open( {
 			controller: 'AuthModalCtrl',

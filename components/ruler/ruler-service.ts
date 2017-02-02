@@ -9,7 +9,7 @@ const CSS_SHOW_STYLES = {
 	display: 'block',
 };
 
-@Injectable()
+@Injectable( 'Ruler' )
 export class Ruler
 {
 	width( elem: HTMLElement | Document )

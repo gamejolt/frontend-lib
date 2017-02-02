@@ -1,7 +1,7 @@
 import { Component, Input, Inject, OnChanges, SimpleChanges } from 'ng-metadata/core';
-import { Ruler } from './../../ruler/ruler-service';
-import { Screen } from './../../screen/screen-service';
-import template from 'html!./embed.component.html';
+import { Ruler } from '../../ruler/ruler-service';
+import { Screen } from '../../screen/screen-service';
+import * as template from '!html-loader!./embed.component.html';
 
 const RATIO = 0.5625;  // 16:9
 
@@ -11,10 +11,10 @@ const RATIO = 0.5625;  // 16:9
 })
 export class SketchfabEmbedComponent implements OnChanges
 {
-	@Input( '<' ) sketchfabId: string;
-	@Input( '<?' ) maxWidth: number;
-	@Input( '<?' ) maxHeight: number;
-	@Input( '<?' ) autoplay = false;
+	@Input() sketchfabId: string;
+	@Input() maxWidth: number;
+	@Input() maxHeight: number;
+	@Input() autoplay = false;
 
 	embedUrl: string;
 	width: number;
@@ -40,6 +40,7 @@ export class SketchfabEmbedComponent implements OnChanges
 
 	ngOnChanges( changes: SimpleChanges )
 	{
+		console.log( this.autoplay );
 		if ( changes['sketchfabId'] ) {
 			let url = `https://sketchfab.com/models/${this.sketchfabId}/embed`;
 

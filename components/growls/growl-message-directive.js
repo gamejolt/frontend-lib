@@ -2,7 +2,7 @@ angular.module( 'gj.Growls' ).directive( 'gjGrowlMessage', function( $timeout, $
 {
 	return {
 		restrict: 'A',
-		templateUrl: '/lib/gj-lib-client/components/growls/growl-message.html',
+		template: require( '!html-loader!./growl-message.html' ),
 		scope: {
 			message: '=gjGrowlMessage',
 			index: '=gjGrowlIndex',

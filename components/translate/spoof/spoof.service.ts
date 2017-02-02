@@ -1,6 +1,6 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 
-@Injectable()
+@Injectable( 'gettextCatalog' )
 export class TranslateSpoof
 {
 	constructor(

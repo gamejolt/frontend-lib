@@ -1,20 +1,19 @@
 import { Component, Inject, Input } from 'ng-metadata/core';
-import { Fireside_Post } from './../../post-model';
-import { Fireside_Post_Like } from './../like-model';
-import { App } from './../../../../../../../app/app-service';
+import { FiresidePost } from '../../post-model';
+import { FiresidePostLike } from '../like-model';
+import { App } from '../../../../../../../app/app-service';
 
 @Component({
 	selector: 'gj-fireside-post-like-widget',
-	templateUrl: '/lib/gj-lib-client/components/fireside/post/like/widget/widget.html',
+	template: require( '!html-loader!./widget.html' ),
 })
 export class WidgetComponent
 {
-	@Input( '<firesidePost' ) post: Fireside_Post;
-	@Input( '<?' ) sparse = false;
+	@Input( '<firesidePost' ) post: FiresidePost;
+	@Input( '<' ) sparse = false;
 
 	constructor(
 		@Inject( 'App' ) public app: App,
-		@Inject( 'Fireside_Post_Like' ) private firesidePostLike: typeof Fireside_Post_Like,
 		@Inject( 'gettextCatalog' ) private gettextCatalog: ng.gettext.gettextCatalog
 	)
 	{
@@ -38,7 +37,7 @@ export class WidgetComponent
 	toggleLike()
 	{
 		if ( !this.post.user_like ) {
-			const newLike = new this.firesidePostLike( {
+			const newLike = new FiresidePostLike( {
 				fireside_post_id: this.post.id
 			} );
 

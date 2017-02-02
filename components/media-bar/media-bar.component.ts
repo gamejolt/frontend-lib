@@ -1,6 +1,7 @@
-import { Component, Inject, Input, OnChanges, SimpleChanges } from 'ng-metadata/core';
-import { Screen } from './../../../../lib/gj-lib-client/components/screen/screen-service';
-import template from 'html!./media-bar.component.html';
+import { Component, Inject, Input, OnChanges, SimpleChanges, Host, Optional } from 'ng-metadata/core';
+import * as template from '!html-loader!./media-bar.component.html';
+
+import { Screen } from '../../../../lib/gj-lib-client/components/screen/screen-service';
 
 @Component({
 	selector: 'gj-media-bar',
@@ -8,7 +9,7 @@ import template from 'html!./media-bar.component.html';
 })
 export class MediaBarComponent implements OnChanges
 {
-	@Input( '<' ) mediaItems: any[];
+	@Input() mediaItems: any[];
 
 	private _urlChecked = false;
 
@@ -18,17 +19,16 @@ export class MediaBarComponent implements OnChanges
 
 	constructor(
 		@Inject( '$location' ) private $location: ng.ILocationService,
-		// @Inject( 'gettextCatalog' ) private gettextCatalog: ng.gettext.gettextCatalog,
 		@Inject( 'Screen' ) public screen: Screen,
-		// @Inject( 'Growls' ) private growls: any,
-		// @Inject( 'Analytics' ) private analytics: any
+		@Inject( 'Growls' ) private growls: any,
+		@Inject( 'Analytics' ) @Host() @Optional() private analytics: any | null,
 	)
 	{
 	}
 
 	ngOnChanges( changes: SimpleChanges )
 	{
-		if ( changes['mediaItems'] && angular.isDefined( this.mediaItems ) && !this._urlChecked ) {
+		if ( changes['mediaItems'] && typeof this.mediaItems !== 'undefined' && !this._urlChecked ) {
 			this._checkUrl();
 		}
 	}
@@ -36,24 +36,24 @@ export class MediaBarComponent implements OnChanges
 	setActiveItem( item: any )
 	{
 		let index = item;
-		if ( angular.isObject( item ) ) {
+		if ( typeof item === 'object' ) {
 			index = _.findIndex( this.mediaItems, { id: item.id } );
 		}
 
 		this.go( index );
-		// this.analytics.trackEvent( 'media-bar', 'item-click', index );
+		this.trackEvent( 'item-click', index );
 	}
 
 	goNext()
 	{
 		this.go( Math.min( (this.mediaItems.length - 1), this.activeIndex + 1 ) );
-		// this.analytics.trackEvent( 'media-bar', 'next' );
+		this.trackEvent( 'next' );
 	}
 
 	goPrev()
 	{
 		this.go( Math.max( 0, this.activeIndex - 1 ) );
-		// this.analytics.trackEvent( 'media-bar', 'prev' );
+		this.trackEvent( 'prev' );
 	}
 
 	go( index: number )
@@ -68,7 +68,7 @@ export class MediaBarComponent implements OnChanges
 		this.activeItem = null;
 		this.activeIndex = null;
 		this.isPlaying = null;
-		// this.analytics.trackEvent( 'media-bar', 'close' );
+		this.trackEvent( 'close' );
 	}
 
 	private _checkUrl()
@@ -88,29 +88,46 @@ export class MediaBarComponent implements OnChanges
 				id = parseInt( hash.substring( 'video-'.length ) );
 				type = 'video';
 			}
+			else if ( hash.indexOf( 'sketchfab-' ) !== -1 ) {
+				id = parseInt( hash.substring( 'sketchfab-'.length ) );
+				type = 'sketchfab';
+			}
 
 			if ( id && type ) {
 				const item = _.find( this.mediaItems, { id: id } );
 				if ( item ) {
 					this.setActiveItem( item );
-					// this.analytics.trackEvent( 'media-bar', 'permalink' );
+					this.trackEvent( 'permalink' );
 				}
 				else {
 					if ( type == 'image' ) {
-						// this.growls.error(
-						// 	this.gettextCatalog.getString( 'games.view.media.invalid_image_growl' ),
-						// 	this.gettextCatalog.getString( 'games.view.media.invalid_image_growl_title' )
-						// );
+						this.growls.error(
+							`We couldn't find the image that was linked. It may have been removed.`,
+							`Invalid Image URL`
+						);
 					}
 					else if ( type == 'video' ) {
-						// this.growls.error(
-						// 	this.gettextCatalog.getString( 'games.view.media.invalid_video_growl' ),
-						// 	this.gettextCatalog.getString( 'games.view.media.invalid_video_growl_title' )
-						// );
+						this.growls.error(
+							`We couldn't find the video that was linked. It may have been removed.`,
+							`Invalid Video URL`
+						);
 					}
-					// this.analytics.trackEvent( 'media-bar', 'permalink-invalid' );
+					else if ( type == 'sketchfab' ) {
+						this.growls.error(
+							`We couldn't find the sketchfab model that was linked. It may have been removed.`,
+							`Invalid Sketchfab URL`
+						);
+					}
+					this.trackEvent( 'permalink-invalid' );
 				}
 			}
+		}
+	}
+
+	private trackEvent( action: string, label?: string )
+	{
+		if ( this.analytics ) {
+			this.analytics.trackEvent( 'media-bar', action, label );
 		}
 	}
 }

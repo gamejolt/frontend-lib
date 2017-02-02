@@ -134,7 +134,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCard', functio
 
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/game/package/card/card.html',
+		template: require( '!html-loader!./card.html' ),
 		scope: {},
 		bindToController: {
 			game: '=game',

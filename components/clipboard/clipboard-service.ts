@@ -1,6 +1,6 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 
-@Injectable()
+@Injectable( 'Clipboard' )
 export class Clipboard
 {
 	constructor(

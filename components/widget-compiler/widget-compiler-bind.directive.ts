@@ -8,8 +8,8 @@ import { WidgetCompiler } from './widget-compiler-service';
 export class WidgetCompilerBindComponent implements OnInit, OnChanges
 {
 	@Input( '<gjWidgetCompilerBind' ) content = '';
-	@Input( '<?widgetCompilerDisabled' ) isDisabled = false;
-	@Input( '<?widgetCompilerScope' ) contextScope: ng.IScope;
+	@Input( '<widgetCompilerDisabled' ) isDisabled = false;
+	@Input( '<widgetCompilerScope' ) contextScope: ng.IScope;
 
 	constructor(
 		@Inject( '$scope' ) private $scope: ng.IScope,

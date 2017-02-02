@@ -1,1 +1,3 @@
-angular.module( 'gj.Game.Rating', [ 'gj.Model', 'gj.Game' ] );
+angular.module( 'gj.Game.Rating', [] );
+
+require( './rating-model' );

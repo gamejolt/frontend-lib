@@ -1,14 +1,6 @@
-import { Injectable } from 'ng-metadata/core';
-import { Model } from './../../../model/model-service';
+import { Model } from '../../../model/model.service';
 
-export function Fireside_Post_VideoFactory( Model: any )
-{
-	return Model.create( Fireside_Post_Video, {
-	} );
-}
-
-@Injectable()
-export class Fireside_Post_Video extends Model
+export class FiresidePostVideo extends Model
 {
 	static PROVIDER_YOUTUBE = 'youtube';
 
@@ -17,3 +9,5 @@ export class Fireside_Post_Video extends Model
 	video_id: string;
 	thumbnail_url: string;
 }
+
+Model.create( FiresidePostVideo );

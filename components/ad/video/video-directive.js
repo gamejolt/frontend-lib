@@ -2,7 +2,7 @@ angular.module( 'gj.Ad.Video' ).directive( 'gjAdVideo', function()
 {
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/ad/video/video.html',
+		template: require( '!html-loader!./video.html' ),
 		scope: {
 			resource: '@adResource',
 			resourceId: '=adResourceId',

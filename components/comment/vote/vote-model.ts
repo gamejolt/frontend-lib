@@ -1,13 +1,6 @@
-import { Injectable } from 'ng-metadata/core';
-import { Model } from './../../model/model-service';
+import { Model } from '../../model/model.service';
 
-export function Comment_VoteFactory( Model: any )
-{
-	return Model.create( Comment_Vote );
-}
-
-@Injectable()
-export class Comment_Vote extends Model
+export class CommentVote extends Model
 {
 	comment_id: number;
 	user_id: number;
@@ -23,3 +16,5 @@ export class Comment_Vote extends Model
 		return this.$_remove( '/comments/votes/remove/' + this.id, { ignorePayloadUser: true } );
 	}
 }
+
+Model.create( CommentVote );

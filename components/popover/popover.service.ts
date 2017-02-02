@@ -1,7 +1,7 @@
 import { Injectable } from 'ng-metadata/core';
 import { PopoverComponent } from './popover.component';
 
-@Injectable()
+@Injectable( 'Popover' )
 export class Popover
 {
 	popovers: { [k: string]: PopoverComponent } = {};
@@ -34,7 +34,7 @@ export class Popover
 				return;
 			}
 
-			if ( popover.isShowing ) {
+			if ( popover.isVisible ) {
 				popover.hide();
 			}
 		} );

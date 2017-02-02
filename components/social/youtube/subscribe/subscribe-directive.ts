@@ -1,5 +1,5 @@
 import { Component, Input, Inject } from 'ng-metadata/core';
-import { Youtube_Sdk } from './../sdk/sdk-service';
+import { YoutubeSdk } from '../sdk/sdk-service';
 
 @Component({
 	selector: 'gj-social-youtube-subscribe',
@@ -10,11 +10,11 @@ import { Youtube_Sdk } from './../sdk/sdk-service';
 export class SubscribeComponent
 {
 	@Input( '@' ) channel: string;
-	@Input( '@?' ) layout?: string;
-	@Input( '@?' ) theme?: string;
+	@Input( '@' ) layout?: string;
+	@Input( '@' ) theme?: string;
 
 	constructor(
-		@Inject( 'Youtube_Sdk' ) private sdk: Youtube_Sdk
+		@Inject( 'Youtube_Sdk' ) private sdk: YoutubeSdk
 	)
 	{
 		if ( !this.layout ) {

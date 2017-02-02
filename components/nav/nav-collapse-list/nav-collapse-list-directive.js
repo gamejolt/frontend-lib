@@ -2,7 +2,7 @@ angular.module( 'gj.Nav.NavCollapseList' ).directive( 'gjNavCollapseList', funct
 {
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/nav/nav-collapse-list/nav-collapse-list.html',
+		template: require( '!html-loader!./nav-collapse-list.html' ),
 		scope: {},
 		transclude: true,
 		link: function( scope, elem )
