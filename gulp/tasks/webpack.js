@@ -236,10 +236,6 @@ module.exports = function( config )
 					chunksSortMode: 'dependency',
 				} ),
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
-				// devNoop || new ScriptExtHtmlWebpackPlugin({
-				// 	sync: [ 'manifest' ],
-				// 	defaultAttribute: 'async',
-				// }),
 				// prodNoop || new DashboardPlugin(),
 			]
 		};
@@ -258,16 +254,9 @@ module.exports = function( config )
 		var compiler = webpack( webpackSectionConfigs[ config.buildSection ] );
 
 		var server = new WebpackDevServer( compiler, {
-			// historyApiFallback: true,
 			historyApiFallback: {
 				rewrites: [
 					{ from: /./, to: (config.buildSection === 'app' ? '/index.html' : '/' + config.buildSection + '.html') },
-					// // shows views/landing.html as the landing page
-					// { from: /^\/$/, to: '/views/landing.html' },
-					// // shows views/subpage.html for all routes starting with /subpage
-					// { from: /^\/subpage/, to: '/views/subpage.html' },
-					// // shows views/404.html on all other pages
-					// { from: /./, to: '/views/404.html' },
 				],
 			},
 			quiet: true,
