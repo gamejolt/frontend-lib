@@ -20,6 +20,7 @@ module.exports = function( config, projectBase )
 	config.developmentEnv = argv.development || false;
 
 	config.port = config.port || 8080;
+	config.framework = config.framework || 'angular';
 
 	config.sections = config.sections || [];
 	config.translationSections = config.translationSections || [];

@@ -29,29 +29,30 @@ module.exports = function( config )
 		level: 2,
 	} );
 
-	function stylesLoader( loaders )
+	function stylesLoader( loaders, options )
 	{
 		if ( config.production ) {
 			return ExtractTextPlugin.extract( loaders );
 		}
+
 		loaders.unshift( 'style-loader' );
-		return loaders;
+
+		return loaders.join( '!' );
 	}
 
 	var webpackSectionConfigs = {};
 	var webpackSectionTasks = [];
 	config.sections.forEach( function( section )
 	{
-		// var section = 'app';
 		var indexHtml = section === 'app' ? 'index.html' : section + '.html';
 
 		var appEntries = [
-			path.resolve( base, 'src/' + section + '/main.ts' ),
 			path.resolve( base, 'src/' + section + '/main.styl' ),
+			path.resolve( base, 'src/' + section + '/main.ts' ),
 		];
 
 		if ( !config.production ) {
-			appEntries.push( 'webpack-dev-server/client?http://localhost:8080/' );
+			appEntries.push( 'webpack-dev-server/client?http://localhost:' + config.port + '/' );
 			appEntries.push( 'webpack/hot/dev-server' );
 		}
 
@@ -82,14 +83,7 @@ module.exports = function( config )
 		var stylusLoader = stylesLoader( [
 			'css-loader?-minimize',
 			'postcss-loader',
-			{
-				loader: 'stylus-loader',
-				options: {
-					paths: [ 'src/' ],
-					'resolve url': true,
-					'include css': true,
-				},
-			},
+			'stylus-loader?paths[]=src/&resolve url&include css',
 		] );
 
 		webpackSectionConfigs[ section ] = {
@@ -116,8 +110,10 @@ module.exports = function( config )
 						test: /\.vue$/,
 						loader: 'vue-loader',
 						options: {
-							ts: tsLoader,
-							styl: stylusLoader,
+							loaders: {
+								ts: tsLoader,
+								styl: stylusLoader,
+							}
 						},
 					},
 					{
@@ -156,7 +152,7 @@ module.exports = function( config )
 					},
 					{
 						test: /\.styl$/,
-						use: stylusLoader,
+						loader: stylusLoader,
 					},
 					{
 						test: /\.md$/,
@@ -186,8 +182,8 @@ module.exports = function( config )
 					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
 					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
 					GJ_IS_CLIENT: JSON.stringify( false ),
-					GJ_IS_ANGULAR: JSON.stringify( false ),
-					GJ_IS_VUE: JSON.stringify( true ),
+					GJ_IS_ANGULAR: JSON.stringify( config.framework === 'angular' ),
+					GJ_IS_VUE: JSON.stringify( config.framework === 'vue' ),
 				}),
 				new webpack.LoaderOptionsPlugin({
 					options: {
@@ -261,7 +257,7 @@ module.exports = function( config )
 					inject: true,
 					chunksSortMode: 'dependency',
 				} ),
-				// prodNoop || new FriendlyErrorsWebpackPlugin(),
+				prodNoop || new FriendlyErrorsWebpackPlugin(),
 				// prodNoop || new DashboardPlugin(),
 			]
 		};
@@ -285,7 +281,7 @@ module.exports = function( config )
 					{ from: /./, to: (config.buildSection === 'app' ? '/index.html' : '/' + config.buildSection + '.html') },
 				],
 			},
-			// quiet: true,
+			quiet: true,
 			hot: true,
 			watchOptions: {
 				aggregateTimeout: 300,
