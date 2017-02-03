@@ -133,13 +133,7 @@ export class Api
 
 		// If we aren't processing the payload, then just return the promise.
 		if ( !options.processPayload ) {
-			let response = await requestPromise;
-
-			if ( GJ_IS_VUE ) {
-				response = JSON.parse( response.text );
-			}
-
-			return response;
+			return await requestPromise;
 		}
 
 		return await Payload.processResponse( requestPromise, options );
@@ -199,7 +193,6 @@ export class Api
 			}
 
 			const request = require( 'superagent' );
-
 			const _request = request( method, url ).send( data );
 
 			if ( options.withCredentials ) {
