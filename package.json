@@ -37,6 +37,9 @@
     "webpack-dashboard": "0.3.0",
     "webpack-dev-server": "2.2.1",
     "postcss-loader": "1.2.2",
-    "autoprefixer": "6.7.2"
+    "autoprefixer": "6.7.2",
+    "vue-loader": "10.2.3",
+    "vue-style-loader": "2.0.0",
+    "vue-typescript-import-dts": "3.0.1"
   }
 }
