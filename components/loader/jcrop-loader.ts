@@ -11,7 +11,7 @@ export class JcropLoader extends LoaderBase
 
 		await require.ensure( [], () =>
 		{
-			require( 'jcrop' );
+			require( 'jquery-jcrop' );
 		}, 'jcrop' );
 	}
 }
