@@ -27,6 +27,7 @@
     "string-replace-loader": "1.0.5",
     "style-loader": "0.13.1",
     "stylus": "0.54.5",
+    "stylus-loader": "2.4.0",
     "ts-loader": "2.0.0",
     "tslib": "1.5.0",
     "typescript": "2.1.5",
