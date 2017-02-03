@@ -4,5 +4,4 @@
 
 </template>
 
-<script lang="ts" src="./jolticon.ts" />
-<style lang="styl" scoped src="./jolticon.styl"></style>
+<script lang="ts" src="./jolticon.ts"></script>
