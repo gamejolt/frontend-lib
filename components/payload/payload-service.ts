@@ -1,4 +1,4 @@
-import { getProvider } from '../../utils/utils';
+import { getProvider, hasProvider } from '../../utils/utils';
 import { RequestOptions } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
 
@@ -68,7 +68,12 @@ export class Payload
 		}, ...options };
 
 		try {
-			const response = await requestPromise;
+			let response = await requestPromise;
+
+			if ( GJ_IS_VUE ) {
+				response = response || {};
+				response.data = JSON.parse( response.text );
+			}
 
 			if ( !response || !response.data ) {
 				if ( !options.noErrorRedirect ) {
@@ -102,6 +107,8 @@ export class Payload
 		}
 		catch ( response ) {
 
+			console.log( 'error', response );
+
 			// Rethrow certain errors.
 			// This will fail the transition/api call and eventually call `handlePayloadError`.
 			const rethrowErrors = [ this.ERROR_INVALID, this.ERROR_NEW_VERSION ];
@@ -129,7 +136,7 @@ export class Payload
 			if ( !options.noErrorRedirect ) {
 
 				// If the response indicated a failed connection.
-				if ( response.status == -1 ) {
+				if ( response.status === -1 ) {
 					throw {
 						type: 'payload',
 						error: this.ERROR_OFFLINE,
@@ -138,7 +145,7 @@ export class Payload
 				}
 				// If it was a 401 error, then they need to be logged in.
 				// Let's redirect them to the login page on the main site.
-				else if ( response.status == 401 ) {
+				else if ( response.status === 401 ) {
 					throw {
 						type: 'payload',
 						error: this.ERROR_NOT_LOGGED,
@@ -253,12 +260,11 @@ export class Payload
 
 	private static checkAnalyticsExperiments( response: any, _options: RequestOptions )
 	{
-		const Analytics = getProvider<any>( 'Analytics' );
-
-		if ( !GJ_IS_ANGULAR || !Analytics || !response.data.payload ) {
+		if ( !GJ_IS_ANGULAR || !hasProvider( 'Analytics' ) || !response.data.payload ) {
 			return;
 		}
 
+		const Analytics = getProvider<any>( 'Analytics' );
 		const payload = response.data.payload;
 		if ( payload._experiment && payload._variation && payload._variation !== -1 ) {
 			Analytics.setCurrentExperiment( payload._experiment, payload._variation );
@@ -307,17 +313,17 @@ export class Payload
 			if ( error.error === this.ERROR_NEW_VERSION ) {
 				window.location.href = $state.href( toState, toParams, { absolute: true } );
 			}
-			else if ( error.error == this.ERROR_NOT_LOGGED ) {
+			else if ( error.error === this.ERROR_NOT_LOGGED ) {
 				window.location.href = Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent( $location.url() );
 			}
-			else if ( error.error == this.ERROR_INVALID ) {
+			else if ( error.error === this.ERROR_INVALID ) {
 				$state.go( 'error-500' );
 			}
-			else if ( error.error == this.ERROR_HTTP_ERROR && (!error.status || this.httpErrors.indexOf( error.status ) != -1) ) {
+			else if ( error.error === this.ERROR_HTTP_ERROR && (!error.status || this.httpErrors.indexOf( error.status ) !== -1) ) {
 				$state.go( 'error-' + (error.status || 500) );
 			}
 			else {
-				var retryUrl = $state.href( toState, toParams );
+				const retryUrl = $state.href( toState, toParams );
 				$state.go( 'error-offline', { retryUrl: retryUrl } );
 			}
 		}
