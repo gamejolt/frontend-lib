@@ -34,6 +34,8 @@
     "url-loader": "0.5.7",
     "webpack": "2.2.0",
     "webpack-dashboard": "0.3.0",
-    "webpack-dev-server": "2.2.0"
+    "webpack-dev-server": "2.2.0",
+    "postcss-loader": "1.2.2",
+    "autoprefixer": "6.7.2"
   }
 }
