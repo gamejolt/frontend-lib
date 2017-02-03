@@ -4,12 +4,12 @@ var path = require( 'path' );
 var webpack = require( 'webpack' );
 var HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 var FriendlyErrorsWebpackPlugin = require( 'friendly-errors-webpack-plugin' );
-var ScriptExtHtmlWebpackPlugin = require( 'script-ext-html-webpack-plugin' );
 var ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 var WebpackDevServer = require( 'webpack-dev-server' );
 var OptimizeCssPlugin = require( 'optimize-css-assets-webpack-plugin' );
 var ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
 var DashboardPlugin = require( 'webpack-dashboard/plugin' );
+var autoprefixer = require( 'autoprefixer' );
 
 var CleanCss = require( 'clean-css' );
 
@@ -29,12 +29,13 @@ module.exports = function( config )
 		level: 2,
 	} );
 
-	function stylesLoader( loader )
+	function stylesLoader( loaders )
 	{
 		if ( config.production ) {
-			return ExtractTextPlugin.extract( loader );
+			return ExtractTextPlugin.extract( loaders );
 		}
-		return 'style-loader!' + loader;
+		loaders.unshift( 'style-loader' );
+		return loaders;
 	}
 
 	var webpackSectionConfigs = {};
@@ -46,6 +47,7 @@ module.exports = function( config )
 
 		var appEntries = [
 			path.resolve( base, 'src/' + section + '/main.ts' ),
+			path.resolve( base, 'src/' + section + '/main.styl' ),
 		];
 
 		if ( !config.production ) {
@@ -131,7 +133,18 @@ module.exports = function( config )
 					},
 					{
 						test: /\.styl$/,
-						loader: stylesLoader( 'css-loader!stylus-loader?paths[]=src/&resolve url&include css' ),
+						use: stylesLoader( [
+							'css-loader?-minimize',
+							'postcss-loader',
+							{
+								loader: 'stylus-loader',
+								options: {
+									paths: [ 'src/' ],
+									'resolve url': true,
+									'include css': true,
+								},
+							},
+						] ),
 					},
 					{
 						test: /\.md$/,
@@ -176,10 +189,11 @@ module.exports = function( config )
 							ignoreCustomFragments: [ /\{\{.*?}}/ ],
 						},
 						stylus: {
-							default: {
-								preferPathResolver: 'webpack'
-							},
+							preferPathResolver: 'webpack'
 						},
+						postcss: [
+							autoprefixer(),
+						],
 					}
 				}),
 				devNoop || new webpack.optimize.UglifyJsPlugin({
