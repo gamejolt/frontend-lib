@@ -1,38 +1,35 @@
-import { Injectable } from 'ng-metadata/core';
-
 // Swappable if display is none or starts with table except "table", "table-cell", or "table-caption"
 // See here for display values: https://developer.mozilla.org/en-US/docs/CSS/display
 const DISPLAY_SWAP_REGEX = /^(none|table(?!-c[ea]).+)/;
-const CSS_SHOW_STYLES = {
+const CSS_SHOW_STYLES: any = {
 	position: 'absolute',
 	visibility: 'hidden',
 	display: 'block',
 };
 
-@Injectable( 'Ruler' )
 export class Ruler
 {
-	width( elem: HTMLElement | Document )
+	static width( elem: HTMLElement | Document )
 	{
-		return this._dimensions( 'clientWidth', elem );
+		return this.dimensions( 'clientWidth', elem );
 	}
 
-	height( elem: HTMLElement | Document )
+	static height( elem: HTMLElement | Document )
 	{
-		return this._dimensions( 'clientHeight', elem );
+		return this.dimensions( 'clientHeight', elem );
 	}
 
-	outerWidth( elem: HTMLElement | Document )
+	static outerWidth( elem: HTMLElement | Document )
 	{
-		return this._dimensions( 'offsetWidth', elem );
+		return this.dimensions( 'offsetWidth', elem );
 	}
 
-	outerHeight( elem: HTMLElement | Document )
+	static outerHeight( elem: HTMLElement | Document )
 	{
-		return this._dimensions( 'offsetHeight', elem );
+		return this.dimensions( 'offsetHeight', elem );
 	}
 
-	private _dimensions( baseProp: 'clientWidth' | 'clientHeight' | 'offsetWidth' | 'offsetHeight', _elem: HTMLElement | Document ): number
+	private static dimensions( baseProp: 'clientWidth' | 'clientHeight' | 'offsetWidth' | 'offsetHeight', _elem: HTMLElement | Document ): number
 	{
 		let elem: HTMLElement;
 
@@ -49,13 +46,13 @@ export class Ruler
 		// but it must have a current display style that would benefit.
 		// This only matters for currently hidden elements that wouldn't return dimensions.
 		let swappedStyles = false;
-		const oldStyles = {};
+		const oldStyles: any = {};
 		if ( DISPLAY_SWAP_REGEX.test( styles.display || '' ) && elem.offsetWidth === 0 ) {
 			swappedStyles = true;
 
 			for ( const name in CSS_SHOW_STYLES ) {
-				oldStyles[ name ] = elem.style[ name ];
-				elem.style[ name ] = CSS_SHOW_STYLES[ name ];
+				oldStyles[ name ] = (elem.style as any)[ name ];
+				(elem.style as any)[ name ] = CSS_SHOW_STYLES[ name ];
 			}
 		}
 
@@ -75,7 +72,7 @@ export class Ruler
 
 		if ( swappedStyles ) {
 			for ( const name in CSS_SHOW_STYLES ) {
-				elem.style[ name ] = oldStyles[ name ];
+				(elem.style as any)[ name ] = oldStyles[ name ];
 			}
 		}
 

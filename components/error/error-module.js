@@ -55,7 +55,7 @@ angular.module( 'gj.Error', [] ).config( function( $stateProvider, $urlRouterPro
 
 	$urlRouterProvider.otherwise( function( $injector, $location )
 	{
-		console.log( 'could not find state' );
+		console.log( 'Could not find state. Going to 404.' );
 		$injector.get( '$state' ).go( 'error-404' );
 
 		// Return true to signify that we took care of it.

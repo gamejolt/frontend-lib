@@ -17,7 +17,7 @@ export class MarkdownCompilerBindDirective implements OnChanges
 	{
 		if ( changes['content'] && typeof this.content != 'undefined'  ) {
 
-			this.markdownCompiled.emit( marked( this.content, {
+			this.markdownCompiled.emit( window.marked( this.content, {
 				sanitize: true,
 				breaks: false,
 				pedantic: true,

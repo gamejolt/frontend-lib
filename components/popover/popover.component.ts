@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit, Input, Output, HostListener, SkipSelf, Optional, OnDestroy, EventEmitter } from 'ng-metadata/core';
+import * as template from '!html-loader!./popover.component.html';
+
 import { Popover } from './popover.service';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
 import { PopoverTriggerComponent } from './popover-trigger.directive';
 import { PopoverContextDirective } from './popover-context.directive';
-import * as template from '!html-loader!./popover.component.html';
 
 interface PopoverTiggerEvent extends JQueryEventObject
 {
@@ -55,7 +56,6 @@ export class PopoverComponent implements OnInit, OnDestroy
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( 'Popover' ) private popoverService: Popover,
 		@Inject( 'Scroll' ) private scroll: any,
-		@Inject( 'Ruler' ) private ruler: Ruler,
 		@Inject( 'Screen' ) public screen: Screen,
 		@Inject( '[gj-popover-context]' ) @SkipSelf() @Optional() private context: PopoverContextDirective,
 	)
@@ -205,8 +205,8 @@ export class PopoverComponent implements OnInit, OnDestroy
 			elem.style.width = '';
 		}
 
-		const popoverWidth = this.ruler.outerWidth( elem );
-		const popoverHeight = this.ruler.outerHeight( elem );
+		const popoverWidth = Ruler.outerWidth( elem );
+		const popoverHeight = Ruler.outerHeight( elem );
 
 		// If we're appending to body, then we're positioning it relative to the whole screen.
 		// If we're keeping it in place, then we position relative to the parent positioner.
@@ -282,11 +282,11 @@ export class PopoverComponent implements OnInit, OnDestroy
 		const arrowElem = elem.getElementsByClassName( 'arrow' )[0] as HTMLElement | undefined;
 		if ( arrowElem ) {
 			if ( this.position === 'top' || this.position === 'bottom' ) {
-				const extraSpacing = elementStyles.left ? ((popoverWidth - this.ruler.width( elem )) / 2) + parseFloat( elementStyles.left ) : 0;
+				const extraSpacing = elementStyles.left ? ((popoverWidth - Ruler.width( elem )) / 2) + parseFloat( elementStyles.left ) : 0;
 				arrowElem.style.left = triggerLeft + Math.min( triggerWidth / 2, popoverWidth / 2 ) - extraSpacing + 'px';
 			}
 			else if ( this.position === 'left' || this.position === 'right' ) {
-				const extraSpacing = elementStyles.top ? ((popoverHeight - this.ruler.height( elem )) / 2) + parseFloat( elementStyles.top ) : 0;
+				const extraSpacing = elementStyles.top ? ((popoverHeight - Ruler.height( elem )) / 2) + parseFloat( elementStyles.top ) : 0;
 				arrowElem.style.top = triggerTop + Math.min( triggerHeight / 2, popoverHeight / 2 ) - extraSpacing + 'px';
 			}
 		}

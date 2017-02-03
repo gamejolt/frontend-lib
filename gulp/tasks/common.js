@@ -7,7 +7,7 @@ var FwdRef = require( 'undertaker-forward-reference' );
 // https://github.com/gulpjs/gulp/issues/802
 gulp.registry( FwdRef() );
 
-module.exports = function( config )
+module.exports = function( config, projectBase )
 {
 	config.production = argv.production || false;
 	config.watching = argv._.indexOf( 'watch' ) !== -1 ? 'initial' : false;
@@ -23,10 +23,9 @@ module.exports = function( config )
 	config.translationSections = config.translationSections || [];
 
 	config.sections.push( 'app' );
+	config.buildSection = argv['section'] || 'app';
 
-	config.buildSection = argv['section'] || null;
-	config.buildModule = argv['module'] || null;
-
+	config.projectBase = projectBase;
 	config.buildBaseDir = process.env.BUILD_DIR || './';
 	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
 	config.libDir = 'src/lib/';

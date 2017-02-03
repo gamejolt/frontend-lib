@@ -1,10 +1,8 @@
-import { Injectable, Inject } from 'ng-metadata/core';
-
-@Injectable()
 export class AuthModalCtrl
 {
+	/*@ngInject*/
 	constructor(
-		@Inject( '$modalInstance' ) private $modalInstance: any,
+		private $modalInstance: any,
 	)
 	{
 	}

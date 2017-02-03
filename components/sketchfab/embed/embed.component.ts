@@ -1,7 +1,8 @@
 import { Component, Input, Inject, OnChanges, SimpleChanges } from 'ng-metadata/core';
+import * as template from '!html-loader!./embed.component.html';
+
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
-import * as template from '!html-loader!./embed.component.html';
 
 const RATIO = 0.5625;  // 16:9
 
@@ -26,7 +27,6 @@ export class SketchfabEmbedComponent implements OnChanges
 		@Inject( '$sce' ) private $sce: ng.ISCEService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( 'Screen' ) screen: Screen,
-		@Inject( 'Ruler' ) private ruler: Ruler,
 	)
 	{
 		this.$timeout( () => this.recalculateDimensions() );
@@ -40,7 +40,6 @@ export class SketchfabEmbedComponent implements OnChanges
 
 	ngOnChanges( changes: SimpleChanges )
 	{
-		console.log( this.autoplay );
 		if ( changes['sketchfabId'] ) {
 			let url = `https://sketchfab.com/models/${this.sketchfabId}/embed`;
 
@@ -54,7 +53,7 @@ export class SketchfabEmbedComponent implements OnChanges
 
 	recalculateDimensions()
 	{
-		this.width = this.ruler.width( this.$element[0].getElementsByClassName( 'sketchfab-embed-inner' )[0] );
+		this.width = Ruler.width( this.$element[0].getElementsByClassName( 'sketchfab-embed-inner' )[0] );
 
 		if ( this.maxWidth ) {
 			this.width = Math.min( this.maxWidth, this.width );

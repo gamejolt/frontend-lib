@@ -1,3 +1,3 @@
-angular.module( 'gj.Scroll.Parallax', [ 'gj.Ruler' ] );
+angular.module( 'gj.Scroll.Parallax', [] );
 
 require( './parallax-directive' );

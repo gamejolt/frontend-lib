@@ -90,11 +90,11 @@ export class ContentBlockEditorComponent implements OnInit
 		const scrollPos = txtarea.scrollTop;
 		let strPos = 0;
 		const br = ( ( txtarea.selectionStart || txtarea.selectionStart == 0 ) ?
-			'ff' : ( document.selection ? 'ie' : false ) );
+			'ff' : ( (document as any).selection ? 'ie' : false ) );
 
 		if ( br === 'ie' ) {
 			txtarea.focus();
-			var range = document.selection.createRange();
+			var range = (document as any).selection.createRange();
 			range.moveStart( 'character', -txtarea.value.length );
 			strPos = range.text.length;
 		}
@@ -108,7 +108,7 @@ export class ContentBlockEditorComponent implements OnInit
 		strPos = strPos + text.length;
 		if ( br === 'ie' ) {
 			txtarea.focus();
-			var ieRange = document.selection.createRange();
+			var ieRange = (document as any).selection.createRange();
 			ieRange.moveStart( 'character', -txtarea.value.length );
 			ieRange.moveStart( 'character', strPos );
 			ieRange.moveEnd( 'character', 0 );

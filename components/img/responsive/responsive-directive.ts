@@ -1,4 +1,5 @@
 import { Directive, Inject, Input, Output, OnChanges, SimpleChanges, EventEmitter } from 'ng-metadata/core';
+
 import { Screen } from '../../screen/screen-service';
 import { Ruler } from '../../ruler/ruler-service';
 import { ImgHelper } from '../helper/helper-service';
@@ -22,7 +23,6 @@ export class ImgResponsiveDirective implements OnChanges
 		@Inject( '$element' ) $element: ng.IAugmentedJQuery,
 		@Inject( '$scope' ) private $scope: ng.IScope,
 		@Inject( 'Screen' ) private screen: Screen,
-		@Inject( 'Ruler' ) private ruler: Ruler,
 		@Inject( 'ImgHelper' ) private imgHelper: ImgHelper
 	)
 	{
@@ -43,7 +43,7 @@ export class ImgResponsiveDirective implements OnChanges
 	{
 		this.$scope.$applyAsync( () =>
 		{
-			const containerWidth = this.ruler.width( this.element.parentNode as HTMLElement );
+			const containerWidth = Ruler.width( this.element.parentNode as HTMLElement );
 
 			// Make sure we never do a 0 width, just in case.
 			// Seems to happen in some situations.
