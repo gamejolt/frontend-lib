@@ -19,6 +19,8 @@ module.exports = function( config, projectBase )
 	// You can pass this flag in to include the dev environment config for angular instead.
 	config.developmentEnv = argv.development || false;
 
+	config.port = config.port || 8080;
+
 	config.sections = config.sections || [];
 	config.translationSections = config.translationSections || [];
 

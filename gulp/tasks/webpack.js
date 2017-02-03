@@ -55,6 +55,43 @@ module.exports = function( config )
 			appEntries.push( 'webpack/hot/dev-server' );
 		}
 
+		var tsLoader = [
+			{
+				// God save us.
+				loader: 'string-replace-loader',
+				options: {
+					search: '$import(',
+					replace: 'import('
+				}
+			},
+			{
+				loader: 'ng-annotate-loader',
+				options: {
+					add: true,
+					map: { inline: true },
+				},
+			},
+			{
+				loader: 'ts-loader',
+				options: {
+					transpileOnly: true,
+				}
+			},
+		];
+
+		var stylusLoader = stylesLoader( [
+			'css-loader?-minimize',
+			'postcss-loader',
+			{
+				loader: 'stylus-loader',
+				options: {
+					paths: [ 'src/' ],
+					'resolve url': true,
+					'include css': true,
+				},
+			},
+		] );
+
 		webpackSectionConfigs[ section ] = {
 			entry: {
 				app: appEntries,
@@ -76,30 +113,16 @@ module.exports = function( config )
 			module: {
 				rules: [
 					{
+						test: /\.vue$/,
+						loader: 'vue-loader',
+						options: {
+							ts: tsLoader,
+							styl: stylusLoader,
+						},
+					},
+					{
 						test: /\.tsx?$/,
-						use: [
-							{
-								// God save us.
-								loader: 'string-replace-loader',
-								options: {
-									search: '$import(',
-									replace: 'import('
-								}
-							},
-							{
-								loader: 'ng-annotate-loader',
-								options: {
-									add: true,
-									map: { inline: true },
-								},
-							},
-							{
-								loader: 'ts-loader',
-								options: {
-									transpileOnly: true,
-								}
-							},
-						],
+						use: tsLoader,
 						exclude: /node_modules/,
 					},
 					{
@@ -133,18 +156,7 @@ module.exports = function( config )
 					},
 					{
 						test: /\.styl$/,
-						use: stylesLoader( [
-							'css-loader?-minimize',
-							'postcss-loader',
-							{
-								loader: 'stylus-loader',
-								options: {
-									paths: [ 'src/' ],
-									'resolve url': true,
-									'include css': true,
-								},
-							},
-						] ),
+						use: stylusLoader,
 					},
 					{
 						test: /\.md$/,
@@ -174,8 +186,8 @@ module.exports = function( config )
 					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
 					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
 					GJ_IS_CLIENT: JSON.stringify( false ),
-					GJ_IS_ANGULAR: JSON.stringify( true ),
-					GJ_IS_VUE: JSON.stringify( false ),
+					GJ_IS_ANGULAR: JSON.stringify( false ),
+					GJ_IS_VUE: JSON.stringify( true ),
 				}),
 				new webpack.LoaderOptionsPlugin({
 					options: {
@@ -249,7 +261,7 @@ module.exports = function( config )
 					inject: true,
 					chunksSortMode: 'dependency',
 				} ),
-				prodNoop || new FriendlyErrorsWebpackPlugin(),
+				// prodNoop || new FriendlyErrorsWebpackPlugin(),
 				// prodNoop || new DashboardPlugin(),
 			]
 		};
@@ -273,14 +285,14 @@ module.exports = function( config )
 					{ from: /./, to: (config.buildSection === 'app' ? '/index.html' : '/' + config.buildSection + '.html') },
 				],
 			},
-			quiet: true,
+			// quiet: true,
 			hot: true,
 			watchOptions: {
 				aggregateTimeout: 300,
 			}
 		} );
 
-		server.listen( 8080, 'localhost' );
+		server.listen( config.port, 'localhost' );
 	} );
 
 	gulp.task( 'compile', gulp.series( webpackSectionTasks ) );
