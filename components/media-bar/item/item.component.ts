@@ -1,8 +1,9 @@
-import { Component, Inject, OnInit, Input, SkipSelf, Host, Optional } from 'ng-metadata/core';
+import { Component, Inject, OnInit, Input, SkipSelf } from 'ng-metadata/core';
 import * as template from '!html-loader!./item.component.html';
 
 import { Screen } from '../../screen/screen-service';
 import { MediaBarComponent } from '../media-bar.component';
+import { Analytics } from '../../analytics/analytics.service';
 
 @Component({
 	selector: 'gj-media-bar-item',
@@ -16,7 +17,6 @@ export class MediaBarItemComponent implements OnInit
 
 	constructor(
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
-		@Inject( 'Analytics' ) @Host() @Optional() private analytics: any,
 		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( MediaBarComponent ) @SkipSelf() private mediaBar: MediaBarComponent,
 	)
@@ -62,8 +62,8 @@ export class MediaBarItemComponent implements OnInit
 		if ( !this.screen.isXs ) {
 			this.mediaBar.setActiveItem( this.item );
 		}
-		else if ( this.analytics ) {
-			this.analytics.trackEvent( 'media-bar', 'item-click-mobile' );
+		else {
+			Analytics.trackEvent( 'media-bar', 'item-click-mobile' );
 		}
 	};
 }

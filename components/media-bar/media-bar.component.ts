@@ -1,7 +1,8 @@
-import { Component, Inject, Input, OnChanges, SimpleChanges, Host, Optional } from 'ng-metadata/core';
+import { Component, Inject, Input, OnChanges, SimpleChanges } from 'ng-metadata/core';
 import * as template from '!html-loader!./media-bar.component.html';
 
 import { Screen } from '../../../../lib/gj-lib-client/components/screen/screen-service';
+import { Analytics } from '../analytics/analytics.service';
 
 @Component({
 	selector: 'gj-media-bar',
@@ -21,7 +22,6 @@ export class MediaBarComponent implements OnChanges
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'Screen' ) public screen: Screen,
 		@Inject( 'Growls' ) private growls: any,
-		@Inject( 'Analytics' ) @Host() @Optional() private analytics: any | null,
 	)
 	{
 	}
@@ -126,8 +126,6 @@ export class MediaBarComponent implements OnChanges
 
 	private trackEvent( action: string, label?: string )
 	{
-		if ( this.analytics ) {
-			this.analytics.trackEvent( 'media-bar', action, label );
-		}
+		Analytics.trackEvent( 'media-bar', action, label );
 	}
 }

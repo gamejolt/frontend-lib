@@ -1,9 +1,10 @@
-import { Component, Inject, SkipSelf, AfterViewInit, OnDestroy, Host, Optional } from 'ng-metadata/core';
+import { Component, Inject, SkipSelf, AfterViewInit, OnDestroy } from 'ng-metadata/core';
 import * as template from '!html-loader!./lightbox.component.html';
 
 import { Screen } from '../../screen/screen-service';
 import { MediaBarComponent } from '../media-bar.component';
 import { Loader } from '../../loader/loader.service';
+import { Analytics } from '../../analytics/analytics.service';
 
 export const MediaBarLightboxConfig = {
 	opacityStart: 0.5,
@@ -41,7 +42,6 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'hotkeys' ) private hotkeys: ng.hotkeys.HotkeysProvider,
-		@Inject( 'Analytics' ) @Host() @Optional() private analytics: any,
 		@Inject( MediaBarComponent ) @SkipSelf() private mediaBar: MediaBarComponent,
 	)
 	{
@@ -256,15 +256,11 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 			if ( Math.abs( velocity ) > 0.65 && $event.distance > 10 ) {
 				if ( velocity < 0 ) {
 					this.goNext();
-					if ( this.analytics ) {
-						this.analytics.trackEvent( 'media-bar', 'swiped-next' );
-					}
+					Analytics.trackEvent( 'media-bar', 'swiped-next' );
 				}
 				else {
 					this.goPrev();
-					if ( this.analytics ) {
-						this.analytics.trackEvent( 'media-bar', 'swiped-prev' );
-					}
+					Analytics.trackEvent( 'media-bar', 'swiped-prev' );
 				}
 				return;
 			}

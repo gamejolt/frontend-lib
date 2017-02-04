@@ -124,12 +124,12 @@ export class Analytics
 				// This will ensure that resolve() gets called at least within 1s.
 				lastArg.hitCallback = cb;
 				window.setTimeout( cb, 1000 );
-				ga.apply( args );
+				ga.apply( null, args );
 			}
 			else {
 
 				// Otherwise do it immediately.
-				ga.apply( args );
+				ga.apply( null, args );
 				cb();
 			}
 		} );

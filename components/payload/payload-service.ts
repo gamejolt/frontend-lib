@@ -1,6 +1,7 @@
-import { getProvider, hasProvider } from '../../utils/utils';
+import { getProvider } from '../../utils/utils';
 import { RequestOptions } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
+import { Analytics } from '../analytics/analytics.service';
 
 export class Payload
 {
@@ -260,11 +261,10 @@ export class Payload
 
 	private static checkAnalyticsExperiments( response: any, _options: RequestOptions )
 	{
-		if ( !GJ_IS_ANGULAR || !hasProvider( 'Analytics' ) || !response.data.payload ) {
+		if ( !response.data.payload ) {
 			return;
 		}
 
-		const Analytics = getProvider<any>( 'Analytics' );
 		const payload = response.data.payload;
 		if ( payload._experiment && payload._variation && payload._variation !== -1 ) {
 			Analytics.setCurrentExperiment( payload._experiment, payload._variation );
