@@ -83,7 +83,7 @@ module.exports = function( config )
 		var stylusLoader = stylesLoader( [
 			'css-loader?-minimize',
 			'postcss-loader',
-			'stylus-loader?paths[]=src/&resolve url&include css',
+			'stylus-relative-loader?paths[]=src/&resolve url&include css',
 		] );
 
 		webpackSectionConfigs[ section ] = {
@@ -97,10 +97,11 @@ module.exports = function( config )
 				chunkFilename: config.production ? section + '.[id].[chunkhash:6].js' : undefined,
 			},
 			resolve: {
-				extensions: [ '.tsx', '.ts', '.js' ],
+				extensions: [ '.tsx', '.ts', '.js', '.styl' ],
 				alias: {
 					// Always "app" base img.
 					'img': path.resolve( base, 'src/app/img' ),
+					'styles': path.resolve( base, 'src/' + section + '/styles' ),
 				}
 			},
 			externals: externals,
