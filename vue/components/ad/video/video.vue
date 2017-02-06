@@ -22,7 +22,7 @@
 
 			<div class="ad-video-player-embed">
 				<video class="ad-video-player-embed-video">
-					<source src="./blank-video.mp4"></source>
+					<source :src="blankVideoSrc"></source>
 				</video>
 			</div>
 

@@ -40,6 +40,8 @@ export default class AppAdVideo extends Vue
 	private remainingInterval: any;
 	timeRemaining: number | null = null;
 
+	blankVideoSrc: string = require( './blank-video.mp4' );
+
 	async mounted()
 	{
 		try {
