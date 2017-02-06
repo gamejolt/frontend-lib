@@ -27,6 +27,7 @@ export class Environment
 	static mediaserverUrl = 'https://m.gjcdn.net';
 
 	static apiHost = 'https://gamejolt.com';
+	static gameserverApiHost = 'https://gamejolt.net';
 	static activityStreamHost = 'https://activity.gamejolt.com';
 	static chatHost = 'https://chat.gamejolt.com';
 	static widgetHost = 'https://widgets.gamejolt.com';
@@ -49,6 +50,7 @@ if ( Environment.env === 'development' ) {
 	Environment.mediaserverUrl = 'http://media.development.gamejolt.com';
 
 	Environment.apiHost = 'http://development.gamejolt.com';
+	Environment.gameserverApiHost = 'http://development.gamejolt.com';
 	Environment.activityStreamHost = 'http://activity.development.gamejolt.com';
 	Environment.chatHost = 'http://chat.development.gamejolt.com';
 	Environment.widgetHost = 'http://localhost:8081';
