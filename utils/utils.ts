@@ -55,3 +55,20 @@ export function lazyload( func: Function ): Promise<void>
 // {
 // 	require( 'angular-hammer' );
 // } ), 'hammer' );
+
+export function loadScript( src: string )
+{
+	return new Promise( ( resolve, reject ) =>
+	{
+		const script = window.document.createElement( 'script' );
+		script.type = 'text/javascript';
+		script.async = true;
+
+		const docHead = window.document.head || window.document.getElementsByTagName( 'head' )[0];
+		docHead.appendChild( script );
+
+		script.onload = resolve;
+		script.onerror = reject;
+		script.src = src;
+	} );
+}
