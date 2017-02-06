@@ -4,6 +4,7 @@ import { Environment } from '../../../../components/environment/environment.serv
 import { Analytics } from '../../../../components/analytics/analytics.service';
 import { Ads } from '../../../../components/ad/ads.service';
 import { time } from '../../../filters/time';
+import { loadScript } from '../../../../utils/utils';
 
 import * as AppLoading from '../../loading/loading.vue';
 import * as AppJolticon from '../../jolticon/jolticon.vue';
@@ -45,7 +46,7 @@ export default class AppAdVideo extends Vue
 	async mounted()
 	{
 		try {
-			await this.injectIma();
+			await loadScript( ImaScriptSrc );
 			await this.bootstrap();
 		}
 		catch ( e ) {
@@ -78,24 +79,6 @@ export default class AppAdVideo extends Vue
 	beforeDestroy()
 	{
 		this.cleanup();
-	}
-
-	private injectIma()
-	{
-		return new Promise<any>( ( resolve, reject ) =>
-		{
-			// Load in the google IMA script.
-			const imaScript = window.document.createElement( 'script' );
-			imaScript.type = 'text/javascript';
-			imaScript.async = true;
-
-			const docHead = window.document.head || window.document.getElementsByTagName( 'head' )[0];
-			docHead.appendChild( imaScript );
-
-			imaScript.onload = resolve;
-			imaScript.onerror = reject;
-			imaScript.src = ImaScriptSrc;
-		} );
 	}
 
 	private bootstrap()
