@@ -42,8 +42,8 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 			// The form service should set this up on the `formState` object as a `progress` Promise.
 			scope.$watch( function()
 			{
-				if ( scope.$parent.formState ) {
-					return scope.$parent.formState.progress;
+				if ( scope.$parent.formModel ) {
+					return scope.$parent.formModel._progress;
 				}
 				return undefined;
 			}, attachUploadHandler );
@@ -77,22 +77,13 @@ angular.module( 'gj.Form.UploadControl' ).directive( 'gjFormUploadControl', func
 				return '|jpg|png|jpeg|bmp|gif|'.indexOf( type ) !== -1;
 			}
 
-			function attachUploadHandler( uploadHandler )
+			function attachUploadHandler( event )
 			{
-				if ( uploadHandler ) {
-
-					// Watch the progress event and update our progress.
-					uploadHandler.then( null, null, function( event )
-					{
-						if ( event.lengthComputable ) {
-							scope.progress = Math.ceil( 100.0 * event.loaded / event.total );
-						}
-					} )
-					// When we've either completed or failed, return the progress to 0.
-					.finally( function()
-					{
-						scope.progress = false;
-					} );
+				if ( event ) {
+					scope.progress = Math.ceil( 100.0 * event.current / event.total );
+				}
+				else {
+					scope.progress = false;
 				}
 			}
 

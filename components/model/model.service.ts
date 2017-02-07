@@ -1,9 +1,10 @@
-import { Api, RequestOptions } from '../api/api.service';
+import { Api, RequestOptions, ProgressEvent } from '../api/api.service';
 
 export class Model
 {
 	id: number;
 	_removed: boolean;
+	_progress?: ProgressEvent;
 
 	// We need to create some methods dynamically on the model.
 	static populate: ( rows: any[] ) => any[];
@@ -81,8 +82,13 @@ export class Model
 		return Promise.reject( response );
 	}
 
-	async $_save( url: string, field: string, options?: RequestOptions ): Promise<any>
+	async $_save( url: string, field: string, options: RequestOptions = {} ): Promise<any>
 	{
+		// Keep track of progress within the model.
+		if ( !options.progress ) {
+			options.progress = ( event ) => this._progress = event;
+		}
+
 		const response = await Api.sendRequest( url, this, options );
 		return this.processUpdate( response, field );
 	}

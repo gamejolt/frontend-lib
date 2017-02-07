@@ -108,8 +108,6 @@ export class Payload
 		}
 		catch ( response ) {
 
-			console.log( 'error', response );
-
 			// Rethrow certain errors.
 			// This will fail the transition/api call and eventually call `handlePayloadError`.
 			const rethrowErrors = [ this.ERROR_INVALID, this.ERROR_NEW_VERSION ];

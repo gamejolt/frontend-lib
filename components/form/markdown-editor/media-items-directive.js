@@ -39,7 +39,13 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaIt
 
 	form.onSubmit = function( scope )
 	{
-		return Api.sendRequest( '/web/dash/media-items/add', scope.formModel, { file: scope.formModel.file } )
+		return Api.sendRequest( '/web/dash/media-items/add', scope.formModel, {
+			file: scope.formModel.image,
+			progress: function( event )
+			{
+				scope.formModel._progress = event;
+			},
+		} )
 			.then( function( response )
 			{
 				var i;

@@ -18,10 +18,18 @@ angular.module( 'gj.Game.Screenshot' ).factory( 'Game_Screenshot', function( $q,
 
 	Game_Screenshot.prototype.$save = function()
 	{
+		var _this = this;
+
 		if ( !this.id ) {
 
 			// When adding, we add multiple, so we can't treat it like a normal model save.
-			return Api.sendRequest( '/web/dash/developer/games/media/save/image/' + this.game_id, this, { file: this.file } )
+			return Api.sendRequest( '/web/dash/developer/games/media/save/image/' + this.game_id, this, {
+				file: this.file,
+				progress: function( event )
+				{
+					_this._progress = event;
+				},
+			} )
 				.then( function( response )
 				{
 					if ( response.success ) {
