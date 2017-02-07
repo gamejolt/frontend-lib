@@ -1,10 +1,12 @@
+import * as angular from 'angular';
 import { Injectable, Inject } from 'ng-metadata/core';
 import { HistoryTick } from '../../history-tick/history-tick-service';
 import { Popover } from '../../popover/popover.service';
-import { Environment } from '../../environment/environment.service';
 import { Device } from '../../device/device.service';
 import { hasProvider, getProvider } from '../../../utils/utils';
+import { Game } from '../game.model';
 import { GameBuild } from '../build/build.model';
+import { Analytics } from '../../analytics/analytics.service';
 
 @Injectable( 'Game_PlayModal' )
 export class GamePlayModal
@@ -13,20 +15,18 @@ export class GamePlayModal
 
 	constructor(
 		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
-		@Inject( '$document' ) private $document: ng.IDocumentService,
 		@Inject( '$compile' ) private $compile: ng.ICompileService,
 		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
 		@Inject( 'Growls' ) private growls: any,
 		@Inject( 'HistoryTick' ) private historyTick: HistoryTick,
 		@Inject( 'Popover' ) private popover: Popover,
-		@Inject( 'Analytics' ) private analytics: any,
 	)
 	{
 	}
 
-	show( _game: any, _build: any, options: { key?: string } = {} )
+	async show( _game: Game, _build: GameBuild, options: { key?: string } = {} )
 	{
-		this.analytics.trackEvent( 'game-play', 'play' );
+		Analytics.trackEvent( 'game-play', 'play' );
 
 		if ( this.hasModal ) {
 			this.growls.error( 'You already have a browser game open. You can only have one running at a time.', 'Oh no!' );
@@ -39,52 +39,50 @@ export class GamePlayModal
 			key: options.key,
 		} );
 
-		const gameserverUrl = `${Environment.secureBaseUrl}/x/builds/get-download-url/${_build.id}?key=${options.key}`;
+		// const gameserverUrl = `${Environment.secureBaseUrl}/x/builds/get-download-url/${_build.id}?key=${options.key || ''}`;
+
+		// If they clicked into this through a popover.
+		this.popover.hideAll();
 
 		// Will open the gameserver in their browser.
-		if ( GJ_IS_CLIENT && _build.type != GameBuild.TYPE_HTML && _build.type != GameBuild.TYPE_ROM ) {
+		if ( GJ_IS_CLIENT && _build.type !== GameBuild.TYPE_HTML && _build.type !== GameBuild.TYPE_ROM ) {
 			const gui = require( 'nw.gui' );
-			gui.Shell.openExternal( gameserverUrl );
-
-			// If they clicked into this through a popover.
-			this.popover.hideAll();
-
-			return Promise.resolve( undefined );
+			const payload = await _build.getDownloadUrl( { key: options.key } );
+			gui.Shell.openExternal( payload.downloadUrl );
+			return;
 		}
 
 		// Safari doesn't allow you to set cookies on a domain that isn't the
 		// same as the current domain. That means our cookie signing breaks in
 		// the iframe. To fix we have to open a new tab to the gameserver.
 		if ( Device.browser().indexOf( 'Safari' ) !== -1 ) {
-			window.open( gameserverUrl );
 
-			// If they clicked into this through a popover.
-			this.popover.hideAll();
-
-			return Promise.resolve( undefined );
+			// We have to open the window first before getting the URL. The
+			// browser will block the popup unless it's done directly in the
+			// onclick handler. Once we have the download URL we can direct the
+			// window that we now have the reference to.
+			const win = window.open( '' );
+			const payload = await _build.getDownloadUrl( { key: options.key } );
+			win.location.href = payload.downloadUrl;
+			return;
 		}
 
 		this.hasModal = true;
+		const payload = await _build.getDownloadUrl( { key: options.key } );
 
 		const modalScope = this.$rootScope.$new( true );
-		modalScope['game'] = _game;
-		modalScope['build'] = _build;
-		modalScope['options'] = options;
+		modalScope['url'] = payload.downloadUrl;
 		modalScope['canMinimize'] = hasProvider( 'Minbar' );
 		modalScope['minimize'] = minimize;
-		modalScope['maximize'] = maximize;
 		modalScope['close'] = close;
 
-		const body: HTMLElement = this.$document.find( 'body' ).eq( 0 )[0];
+		const body: HTMLElement = document.body;
 		const modalElemTemplate = angular.element( `
 			<gj-game-play-modal
-				game="game"
-				build="build"
-				key="options.key"
-				can-minimize="canMinimize"
-				minimize="minimize()"
-				maximize="maximize()"
-				close="close()"
+				[url]="url"
+				[can-minimize]="canMinimize"
+				(minimize)="minimize()"
+				(close)="close()"
 				>
 			</gj-game-play-modal>`
 		);
@@ -106,10 +104,10 @@ export class GamePlayModal
 			// When this minbar item is clicked, it basically shows this modal again.
 			const Minbar = getProvider<any>( 'Minbar' );
 			const minbarItem = Minbar.add( {
-				title: this.game.title,
-				thumb: this.game.img_thumbnail,
+				title: _game.title,
+				thumb: _game.img_thumbnail,
 				isActive: true,  // Only one game open at a time, so make it active.
-				onClick: function()
+				onClick: () =>
 				{
 					// We remove the item from the minbar.
 					Minbar.remove( minbarItem );
@@ -130,7 +128,7 @@ export class GamePlayModal
 		const self = this;
 		function close()
 		{
-			$animate.leave( modalElem ).then( function()
+			$animate.leave( modalElem ).then( () =>
 			{
 				modalScope.$destroy();
 				body.classList.remove( 'game-play-modal-open' );

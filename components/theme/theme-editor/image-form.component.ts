@@ -37,7 +37,10 @@ export function ThemeEditorImageFormFactory(
 
 	form.onSubmit = function( scope: any )
 	{
-		return Api.sendRequest( '/web/dash/media-items/add-one', scope.formModel, { file: scope.formModel.file } );
+		return Api.sendRequest( '/web/dash/media-items/add-one', scope.formModel, {
+			file: scope.formModel.image,
+			progress: ( event ) => scope.formModel._progress = event,
+		} );
 	};
 
 	return form;

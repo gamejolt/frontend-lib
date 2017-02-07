@@ -21,7 +21,7 @@
 			ng-if="!multiple"
 			ngf-select="onFileSelect( $files )"
 			ng-hide="!!uploadLinkLabel"
-			accept="accept"
+			accept="{{ accept }}"
 			ngf-multiple="false"
 			>
 
@@ -29,7 +29,7 @@
 			ng-if="multiple"
 			ngf-select="onFileSelect( $files )"
 			ng-hide="!!uploadLinkLabel"
-			accept="accept"
+			accept="{{ accept }}"
 			ngf-multiple="true"
 			multiple
 			>

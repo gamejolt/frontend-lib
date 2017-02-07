@@ -1,6 +1,7 @@
 import * as angular from 'angular';
 import { Injectable, bundle } from 'ng-metadata/core';
 import { reflector } from 'ng-metadata/src/core/reflection/reflection';
+import { OutputMetadata, InputMetadata } from 'ng-metadata/src/core/directives/metadata_directives';
 import { ResolvePolicy } from 'angular-ui-router';
 import { getProvider, kebabCase } from './utils';
 import { isPrerender } from '../components/environment/environment.service';
@@ -106,8 +107,19 @@ export function makeState( name: string, options: StateCreatorOptions )
 function genRouteTemplate( component: any )
 {
 	const [ annotation ] = reflector.annotations( component );
-	const inputs = Object.keys( reflector.propMetadata( component ) );
-	const mappedInputs = inputs.map( ( input ) => ` [${kebabCase( input )}]="::$resolve['${input}'] || $ctrl['${input}']"` );
+	const propsMetadata = reflector.propMetadata( component );
+	const props = Object.keys( propsMetadata );
 
-	return `<${annotation.selector} ${mappedInputs}></${annotation.selector}></pre>`;
+	const mappedProps = props.map( ( prop ) =>
+	{
+		const propMetadata = propsMetadata[ prop ][0];
+		if ( propMetadata instanceof InputMetadata ) {
+			return ` [${kebabCase( prop )}]="::$resolve['${prop}'] || $ctrl['${prop}']"`;
+		}
+		else if ( propMetadata instanceof OutputMetadata ) {
+			return ` (${kebabCase( prop )})="$ctrl['${prop}']( $event )"`;
+		}
+	} );
+
+	return `<${annotation.selector} ${mappedProps}></${annotation.selector}>`;
 }

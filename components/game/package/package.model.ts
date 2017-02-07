@@ -6,6 +6,15 @@ import { Api } from '../../api/api.service';
 import { GameRelease } from '../release/release.model';
 import { Sellable } from '../../sellable/sellable.model';
 
+export interface GamePackagePayload
+{
+	packages: GamePackage[];
+	releases: GameRelease[];
+	builds: GameBuild[];
+	launchOptions: GameBuildLaunchOption[];
+	sellables: Sellable[];
+}
+
 export class GamePackage extends Model
 {
 	static readonly STATUS_HIDDEN = 'hidden';
@@ -43,13 +52,7 @@ export class GamePackage extends Model
 
 	static processPackagePayload( payload: any )
 	{
-		let packageData: {
-			packages: GamePackage[],
-			releases: GameRelease[],
-			builds: GameBuild[],
-			launchOptions: GameBuildLaunchOption[],
-			sellables: Sellable[],
-		} = {
+		let packageData: GamePackagePayload = {
 			packages: payload.packages ? GamePackage.populate( payload.packages ) : [],
 			releases: payload.releases ? GameRelease.populate( payload.releases ) : [],
 			builds: payload.builds ? GameBuild.populate( payload.builds ) : [],
