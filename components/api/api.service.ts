@@ -10,6 +10,11 @@ export interface RequestOptions
 	file?: any;
 
 	/**
+	 * Progress handler. Will only be used when uploading a file.
+	 */
+	progress?: ( event: ProgressEvent ) => void;
+
+	/**
 	 * Whether or not to show the loading bar.
 	 */
 	ignoreLoadingBar?: boolean;
@@ -66,6 +71,12 @@ export interface RequestOptions
 	apiPath?: string;
 }
 
+export interface ProgressEvent
+{
+	current: number;
+	total: number;
+}
+
 export class Api
 {
 	static apiHost: string = Environment.apiHost;
@@ -74,7 +85,6 @@ export class Api
 	static async sendRequest( uri: string, postData?: any, options: RequestOptions = {} ): Promise<any>
 	{
 		options = { ...<RequestOptions>{
-			file: undefined,
 			ignoreLoadingBar: false,
 			processPayload: true,
 			withCredentials: true,
@@ -164,7 +174,7 @@ export class Api
 				}
 			// }
 
-			return Upload.upload( {
+			const uploadPromise = Upload.upload( {
 				method: 'POST',
 				url,
 				data: { ...data, file: _options.file },
@@ -174,6 +184,18 @@ export class Api
 				// We show a form upload progress bar instead.
 				ignoreLoadingBar: true,
 			} );
+
+			uploadPromise.then( null, null, ( event: any ) =>
+			{
+				if ( options.progress && event.lengthComputable ) {
+					options.progress( {
+						current: event.loaded,
+						total: event.total,
+					} );
+				}
+			} );
+
+			return uploadPromise;
 		}
 
 		return getProvider<any>( '$http' )( {
