@@ -1,5 +1,5 @@
 import { Component, Input } from 'ng-metadata/core';
-import template from 'html!./thumbnail-img.html';
+import * as template from '!html-loader!./thumbnail-img.html';
 
 @Component({
 	selector: 'gj-game-thumbnail-img',

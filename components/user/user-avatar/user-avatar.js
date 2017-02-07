@@ -1,1 +1,3 @@
-angular.module( 'gj.User.UserAvatar', [ 'gj.User' ] );
+angular.module( 'gj.User.UserAvatar', [] );
+
+require( './user-avatar-directive' );

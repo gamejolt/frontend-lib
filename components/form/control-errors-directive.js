@@ -22,7 +22,7 @@ angular.module( 'gj.Form' ).directive( 'controlErrors', function( $filter, $time
 		restrict: 'EA',
 		require: [ '^form', '^formGroup', 'controlErrors' ],
 		transclude: true,
-		templateUrl: '/lib/gj-lib-client/components/form/control-errors.html',
+		template: require( '!html-loader!./control-errors.html' ),
 		bindToController: {
 			labelInput: '@label',
 			position: '@',

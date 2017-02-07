@@ -59,8 +59,7 @@ floating-img()
 	border: 1px solid rgba( 255, 255, 255, 0.10 )
 	box-shadow: 0 0 20px rgba( 0, 0, 0, 0.8 )
 
-$selection-color = #b4d5fe
-
+$selection-color ?= #b4d5fe
 link-underlines( color, bg-color, bg-color-hover )
 
 	// Local mixin
@@ -91,3 +90,14 @@ link-underlines( color, bg-color, bg-color-hover )
 
 	&:hover
 		background-image: linear-gradient(bg-color, bg-color), linear-gradient(bg-color, bg-color), linear-gradient(bg-color-hover, bg-color-hover)
+
+clearfix()
+	&:before,
+	&:after
+		content: " "
+		display: table
+
+	&:after
+		clear: both
+
+@import '../mixins/play-button-overlay'

@@ -1,1 +1,3 @@
-angular.module( 'gj.User.Friendship', [ 'gj.User' ] );
+angular.module( 'gj.User.Friendship', [] );
+
+require( './friendship-model' );

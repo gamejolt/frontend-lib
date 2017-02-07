@@ -1,1 +1,3 @@
-angular.module( 'gj.Jam.VotingCategory', [ 'gj.Model' ] );
+angular.module( 'gj.Jam.VotingCategory', [] );
+
+require( './voting-category-model' );

@@ -1,8 +1,9 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 import { ConnectionReconnect } from './reconnect-service';
 import { Environment } from '../environment/environment.service';
+import { getProvider, hasProvider } from '../../utils/utils';
 
-@Injectable()
+@Injectable( 'Connection' )
 export class Connection
 {
 	isDeviceOffline: boolean;
@@ -16,9 +17,6 @@ export class Connection
 		@Inject( '$rootScope' ) $rootScope: ng.IRootScopeService,
 		@Inject( '$window' ) $window: ng.IWindowService,
 		@Inject( '$document' ) $document: ng.IDocumentService,
-		@Inject( '$injector' ) $injector: any,
-		@Inject( 'Environment' ) private env: Environment,
-		@Inject( 'ConnectionReconnect' ) private connectionReconnect: typeof ConnectionReconnect,
 	)
 	{
 		// This attribute isn't perfect.
@@ -30,11 +28,11 @@ export class Connection
 		this.isOnline = !this.isDeviceOffline && !this.hasRequestFailure;
 
 		// Convenience var to make it easier to hide things offline just in client.
-		this.isClientOffline = env.isClient && !this.isOnline;
+		this.isClientOffline = GJ_IS_CLIENT && !this.isOnline;
 
 		// For easier testing.
-		if ( env.buildType == 'development' && $injector.has( 'hotkeys' ) ) {
-			$injector.get( 'hotkeys' ).add( {
+		if ( Environment.buildType == 'development' && hasProvider( 'hotkeys' ) ) {
+			getProvider<any>( 'hotkeys' ).add( {
 				combo: 'o',
 				description: 'Toggle offline mode.',
 				callback: () =>
@@ -81,7 +79,7 @@ export class Connection
 	{
 		// We don't want to set that we have a request failure until we do a first check that fails.
 		// When we come back online, we just want to set that we no longer have a request failure.
-		this._reconnectChecker = new this.connectionReconnect(
+		this._reconnectChecker = new ConnectionReconnect(
 			() =>
 			{
 				// If we were marked as no request failure, let's put us in that mode.
@@ -142,6 +140,6 @@ export class Connection
 			this.isOnline = true;
 		}
 
-		this.isClientOffline = this.env.isClient && !this.isOnline;
+		this.isClientOffline = GJ_IS_CLIENT && !this.isOnline;
 	}
 }

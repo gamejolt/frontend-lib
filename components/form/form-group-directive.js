@@ -24,7 +24,7 @@ angular.module( 'gj.Form' ).directive( 'formGroup', function( $interpolate, $par
 		require: [ '^gjForm', 'formGroup' ],
 		scope: true,
 		transclude: true,
-		templateUrl: '/lib/gj-lib-client/components/form/form-group.html',
+		template: require( '!html-loader!./form-group.html' ),
 		controller: function( $scope, $attrs )
 		{
 			this.name = undefined;

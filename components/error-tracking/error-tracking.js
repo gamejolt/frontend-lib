@@ -13,3 +13,5 @@ angular.module( 'gj.ErrorTracking', [] )
 			};
 		} );
 	} );
+
+require( './error-tracking-vendor' );

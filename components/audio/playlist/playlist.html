@@ -7,7 +7,7 @@
 		on-song-ended="ctrl.onSongEnded()">
 	</gj-audio-player>
 
-	<button class="audio-playlist-player-play i-button big light sparse" ng-click="ctrl.mainSongButton()" gj-track-event="audio-playlist:click:button">
+	<button class="audio-playlist-player-play btn btn-sparse" ng-click="ctrl.mainSongButton()" gj-track-event="audio-playlist:click:button">
 		<span class="jolticon"
 			ng-class="{ 'jolticon-play': !ctrl.currentSong, 'jolticon-stop': ctrl.currentSong }"></span>
 	</button>
@@ -33,7 +33,7 @@
 		ng-class="{ active: song.id == ctrl.currentSong.id }">
 
 		<span class="audio-playlist-play" ng-click="ctrl.toggleSong( song )">
-			<a class="i-button sparse light" gj-track-event="audio-playlist:click:icon">
+			<a class="btn btn-sparse" gj-track-event="audio-playlist:click:icon">
 				<span class="jolticon" ng-class="'jolticon-' + (song.id == ctrl.currentSong.id ? 'stop' : 'play-small')"></span>
 			</a>
 		</span>

@@ -7,8 +7,14 @@ import { Popover } from './popover.service';
 export class PopoverTriggerComponent
 {
 	@Input( '@gjPopoverTrigger' ) popoverId: string;
-	@Input( '@?' ) popoverTriggerEvent: 'click' | 'hover' = 'click';
 	@Input( '<' ) popoverTriggerDisabled = false;
+
+	/**
+	 * `click` will toggle it on/off when clicked.
+	 * `hover` will show when moused over, and hide when moused out.
+	 * `click-show` will only show when clicked and won't hide ever.
+	 */
+	@Input( '@' ) popoverTriggerEvent: 'click' | 'hover' | 'click-show' = 'click';
 
 	constructor(
 		@Inject( '$element' ) public $element: ng.IAugmentedJQuery,
@@ -25,7 +31,8 @@ export class PopoverTriggerComponent
 	@HostListener( 'click', [ '$event' ] )
 	onClick( $event: JQueryEventObject )
 	{
-		if ( this.popoverTriggerEvent !== 'click' || this.popoverTriggerDisabled ) {
+		if ( [ 'click', 'click-show' ].indexOf( this.popoverTriggerEvent ) === -1
+			|| this.popoverTriggerDisabled ) {
 			return true;
 		}
 
@@ -35,9 +42,15 @@ export class PopoverTriggerComponent
 			// First make sure all popovers currently showing are hidden.
 			this.popoverService.hideAll( { skip: popover } );
 
-			// Trigger the popover.
-			// Will either hide or show depending on its status.
-			popover.trigger( this.$element );
+			if ( this.popoverTriggerEvent === 'click' ) {
+
+				// Trigger the popover.
+				// Will either hide or show depending on its status.
+				popover.trigger( this.$element );
+			}
+			else if ( this.popoverTriggerEvent === 'click-show' ) {
+				popover.show( this.$element );
+			}
 
 			// Make sure this event doesn't bubble up to our global $document click event.
 			// If we let it bubble, this popover will close.

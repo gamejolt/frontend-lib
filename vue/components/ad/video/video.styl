@@ -1,0 +1,33 @@
+@import '~styles/variables'
+@import '../../../../stylus/common/mixins'
+
+.ad-video
+	text-align: center
+
+	&-player
+		position: relative
+		margin: 0 auto
+		width: 910px
+		height: 512px
+
+	&-player-ad-container
+	&-player-embed-video
+	&-player-play-overlay
+		position: absolute
+		top: 0
+		left: 0
+		width: 910px
+		height: 512px
+
+	&-player-play-overlay
+		background-color: rgba( $black, 0.2 )
+		cursor: pointer
+		z-index: 2
+
+		.play-button-overlay
+			@extend $play-button-overlay
+
+	&-player .loading
+		position: relative
+		padding-top: $grid-gutter-width
+		z-index: 2

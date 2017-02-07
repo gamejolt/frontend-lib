@@ -1,13 +1,5 @@
-import { Injectable } from 'ng-metadata/core';
-import { Model } from '../../model/model-service';
+import { Model } from '../../model/model.service';
 
-export function SiteBuildFactory( Model: any )
-{
-	return Model.create( SiteBuild, {
-	} );
-}
-
-@Injectable()
 export class SiteBuild extends Model
 {
 	static STATUS_ACTIVE = 'active';
@@ -41,3 +33,5 @@ export class SiteBuild extends Model
 		return this.$_remove( '/web/dash/sites/remove-build/' + this.site_id + '/' + this.id );
 	}
 }
+
+Model.create( SiteBuild );

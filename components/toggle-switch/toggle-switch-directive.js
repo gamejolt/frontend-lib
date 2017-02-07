@@ -12,7 +12,7 @@ angular.module( 'gj.ToggleSwitch' ).directive( 'gjToggleSwitch', function ( $win
 		require: 'ngModel',
 		scope: {},
 		compile: compile,
-		templateUrl: '/lib/gj-lib-client/components/toggle-switch/toggle-switch.html',
+		template: require( '!html-loader!./toggle-switch.html' ),
 	};
 
 	function compile( element, attrs )

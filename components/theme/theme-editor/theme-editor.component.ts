@@ -1,6 +1,9 @@
-import { Component, Input, OnInit, Inject, Output } from 'ng-metadata/core';
-import template from 'html!./theme-editor.component.html';
+import { Component, Input, OnInit, Output, EventEmitter } from 'ng-metadata/core';
+import * as template from '!html-loader!./theme-editor.component.html';
+
 import { SiteTemplate } from '../../site/template/template-model';
+import { Api } from '../../api/api.service';
+import { Loader } from '../../loader/loader.service';
 
 interface StyleGroup {
 	name: string;
@@ -21,7 +24,7 @@ export class ThemeEditorComponent implements OnInit
 	@Input( '<' ) theme: any;
 	@Input( '<' ) resourceId: number;
 
-	@Output() changed: Function;
+	@Output() private changed = new EventEmitter<any>();
 
 	isLoaded = false;
 
@@ -31,32 +34,27 @@ export class ThemeEditorComponent implements OnInit
 	definition: any = {};
 	selectedGroup: StyleGroup;
 
+	Loader = Loader;
+
 	private initialTheme: any = {};
 
-	constructor(
-		@Inject( 'Api' ) private api: any,
-		@Inject( 'SiteTemplate' ) private templateModel: typeof SiteTemplate,
-	)
+	async ngOnInit()
 	{
-	}
+		Loader.load( 'spectrum' );
 
-	ngOnInit()
-	{
 		// Save the initial content, as well.
 		this.initialTheme = angular.copy( this.theme );
 
-		this.api.sendRequest( '/sites-io/get-template/' + this.template )
-			.then( ( response: any ) =>
-			{
-				this.isLoaded = true;
+		const response = await Api.sendRequest( '/sites-io/get-template/' + this.template );
 
-				this.templateObj = new this.templateModel( response.template );
-				this.definition = this.templateObj.data;
-				this.selectedGroup = this.definition.styleGroups[0];
+		this.isLoaded = true;
 
-				// Make sure we update the page with the current theme.
-				this.refresh();
-			} );
+		this.templateObj = new SiteTemplate( response.template );
+		this.definition = this.templateObj.data;
+		this.selectedGroup = this.definition.styleGroups[0];
+
+		// Make sure we update the page with the current theme.
+		this.refresh();
 	}
 
 	refresh()
@@ -72,6 +70,6 @@ export class ThemeEditorComponent implements OnInit
 			iframe.contentWindow.postMessage( msg, '*' );
 		}
 
-		this.changed( { $theme: this.theme } );
+		this.changed.emit( this.theme );
 	}
 }

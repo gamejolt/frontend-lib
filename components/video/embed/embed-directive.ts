@@ -1,7 +1,8 @@
 import { Component, Input, Inject, OnChanges, SimpleChanges } from 'ng-metadata/core';
-import { Ruler } from './../../ruler/ruler-service';
-import { Screen } from './../../screen/screen-service';
-import template from 'html!./embed.html';
+import * as template from '!html-loader!./embed.html';
+
+import { Ruler } from '../../ruler/ruler-service';
+import { Screen } from '../../screen/screen-service';
 
 const VIDEO_RATIO = 0.5625;  // 16:9
 
@@ -13,9 +14,9 @@ export class VideoEmbedComponent implements OnChanges
 {
 	@Input( '@' ) videoProvider: 'youtube' | 'vimeo';
 	@Input( '<' ) videoId: string;
-	@Input( '<?' ) maxVideoHeight: number;
-	@Input( '<?' ) maxVideoWidth: number;
-	@Input( '<?' ) autoplay = false;
+	@Input( '<' ) maxVideoHeight: number;
+	@Input( '<' ) maxVideoWidth: number;
+	@Input( '<' ) autoplay = false;
 
 	embedUrl: string;
 	width: number;
@@ -27,7 +28,6 @@ export class VideoEmbedComponent implements OnChanges
 		@Inject( '$sce' ) private $sce: ng.ISCEService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( 'Screen' ) screen: Screen,
-		@Inject( 'Ruler' ) private ruler: Ruler,
 	)
 	{
 		this.$timeout( () => this.recalculateDimensions() );
@@ -64,7 +64,7 @@ export class VideoEmbedComponent implements OnChanges
 
 	recalculateDimensions()
 	{
-		this.width = this.ruler.width( this.$element[0].getElementsByClassName( 'video-embed-inner' )[0] );
+		this.width = Ruler.width( this.$element[0].getElementsByClassName( 'video-embed-inner' )[0] );
 
 		if ( this.maxVideoWidth ) {
 			this.width = Math.min( this.maxVideoWidth, this.width );

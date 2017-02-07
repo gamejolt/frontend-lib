@@ -9,7 +9,7 @@ const TEMPLATE = `
 	</gj-widget-compiler-widget-soundcloud>
 `;
 
-@Injectable()
+@Injectable( 'WidgetCompilerWidgetSoundcloud' )
 export class WidgetCompilerWidgetSoundcloud implements WidgetCompilerWidget
 {
 	readonly name = 'soundcloud';

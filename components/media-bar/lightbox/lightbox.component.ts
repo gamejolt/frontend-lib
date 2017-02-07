@@ -1,7 +1,10 @@
 import { Component, Inject, SkipSelf, AfterViewInit, OnDestroy } from 'ng-metadata/core';
+import * as template from '!html-loader!./lightbox.component.html';
+
 import { Screen } from '../../screen/screen-service';
 import { MediaBarComponent } from '../media-bar.component';
-import template from 'html!./lightbox.component.html';
+import { Loader } from '../../loader/loader.service';
+import { Analytics } from '../../analytics/analytics.service';
 
 export const MediaBarLightboxConfig = {
 	opacityStart: 0.5,
@@ -29,17 +32,16 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 	isDragging = false;
 	waitingForFrame = false;
 
+	Loader = Loader;
+
 	constructor(
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
-		@Inject( '$document' ) private $document: ng.IDocumentService,
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
-		@Inject( '$window' ) private $window: ng.IWindowService,
 		@Inject( '$scope' ) private $scope: ng.IScope,
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'hotkeys' ) private hotkeys: ng.hotkeys.HotkeysProvider,
-		// @Inject( 'Analytics' ) Analytics: any,
 		@Inject( MediaBarComponent ) @SkipSelf() private mediaBar: MediaBarComponent,
 	)
 	{
@@ -86,11 +88,16 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 
 	ngAfterViewInit()
 	{
-		this.sliderElem = this.elem.getElementsByClassName( 'media-bar-lightbox-slider' )[0] as HTMLElement;
+		Loader.load( 'hammer' );
+	}
+
+	setSlider( slider: HTMLElement )
+	{
+		this.sliderElem = slider;
 
 		// Move it to the body.
 		// This should fix the z-indexing and put it on top of the whole shell.
-		this.$document[0].body.appendChild( this.elem );
+		window.document.body.appendChild( this.elem );
 
 		this.calcMaxDimensions();
 		this.refreshSliderPosition();
@@ -134,6 +141,9 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 			else if ( this.mediaBar.activeItem.media_type == 'video' ) {
 				hash = 'video-';
 			}
+			else if ( this.mediaBar.activeItem.media_type == 'sketchfab' ) {
+				hash = 'sketchfab-';
+			}
 			hash += this.mediaBar.activeItem.id;
 		}
 		else {
@@ -158,7 +168,7 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 			newOffset = -(this.maxItemWidth * this.mediaBar.activeIndex - padding);
 		}
 
-		this.sliderElem.style.transform = 'translate3d( ' + newOffset + 'px, 0, 0 )';
+		this.sliderElem.style.transform = `translate3d( ${newOffset}px, 0, 0 )`;
 		this.currentSliderOffset = newOffset;
 	}
 
@@ -173,15 +183,15 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 		this.elem.classList.add( 'dragging' );
 	}
 
-	pan( $event: ng.IAngularEvent )
+	pan( $event: HammerInput )
 	{
 		if ( !this.waitingForFrame ) {
 			this.waitingForFrame = true;
-			this.$window.requestAnimationFrame( () => this.panTick( $event ) );
+			window.requestAnimationFrame( () => this.panTick( $event ) );
 		}
 	}
 
-	panTick( $event: ng.IAngularEvent )
+	panTick( $event: HammerInput )
 	{
 		this.waitingForFrame = false;
 
@@ -190,30 +200,32 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 			return;
 		}
 
-		this.sliderElem.style.transform = 'translate3d( ' + (this.currentSliderOffset + $event.deltaX) + 'px, 0, 0 )';
+		this.sliderElem.style.transform = `translate3d( ${this.currentSliderOffset + $event.deltaX}px, 0, 0 )`;
 
-		// const slidePercent = Math.abs( $event.deltaX ) / (this.screen.windowWidth * 0.8);
-		// const opacity = MediaBarLightboxConfig.opacityStart + (slidePercent * (1 - MediaBarLightboxConfig.opacityStart));
-		// const scale = MediaBarLightboxConfig.scaleStart + (slidePercent * (1 - MediaBarLightboxConfig.scaleStart));
+		const slidePercent = Math.abs( $event.deltaX ) / (this.screen.windowWidth * 0.8);
+		const opacity = MediaBarLightboxConfig.opacityStart + (slidePercent * (1 - MediaBarLightboxConfig.opacityStart));
+		const scale = MediaBarLightboxConfig.scaleStart + (slidePercent * (1 - MediaBarLightboxConfig.scaleStart));
 
-		// if ( this.nextElem ) {
-		// 	this.nextElem.style.opacity = opacity + '';
-		// 	this.nextElem.style.transform = 'scale( ' + scale + ', ' + scale + ' )';
-		// }
+		if ( this.nextElem ) {
+			this.nextElem.style.opacity = opacity + '';
+			this.nextElem.style.transform = `scale( ${scale}, ${scale} )`;
+		}
 
-		// if ( this.prevElem ) {
-		// 	this.prevElem.style.opacity = opacity + '';
-		// 	this.prevElem.style.transform = 'scale( ' + scale + ', ' + scale + ' )';
-		// }
+		if ( this.prevElem ) {
+			this.prevElem.style.opacity = opacity + '';
+			this.prevElem.style.transform = `scale( ${scale}, ${scale} )`;
+		}
 
-		// // Do the inverse of what we do with the adjacent siblings.
-		// if ( this.activeElem ) {
-		// 	this.activeElem.style.opacity = ((1 + MediaBarLightboxConfig.opacityStart) - opacity) + '';
-		// 	this.activeElem.style.transform = 'scale( ' + ((1 + MediaBarLightboxConfig.scaleStart) - scale) + ', ' + ((1 + MediaBarLightboxConfig.scaleStart) - scale) + ' )';
-		// }
+		// Do the inverse of what we do with the adjacent siblings.
+		if ( this.activeElem ) {
+			const scaleX = (1 + MediaBarLightboxConfig.scaleStart) - scale;
+			const scaleY = (1 + MediaBarLightboxConfig.scaleStart) - scale;
+			this.activeElem.style.opacity = ((1 + MediaBarLightboxConfig.opacityStart) - opacity) + '';
+			this.activeElem.style.transform = `scale( ${scaleX}, ${scaleY} )`;
+		}
 	}
 
-	panEnd( $event: ng.IAngularEvent )
+	panEnd( $event: HammerInput )
 	{
 		this.isDragging = false;
 
@@ -240,15 +252,15 @@ export class MediaBarLightboxComponent implements AfterViewInit, OnDestroy
 			}
 
 			// Make sure we moved at a high enough velocity and distance to register the "swipe".
-			var velocity = $event.velocityX;
+			const velocity = $event.velocityX;
 			if ( Math.abs( velocity ) > 0.65 && $event.distance > 10 ) {
-				if ( velocity > 0 ) {
+				if ( velocity < 0 ) {
 					this.goNext();
-					// this.Analytics.trackEvent( 'media-bar', 'swiped-next' );
+					Analytics.trackEvent( 'media-bar', 'swiped-next' );
 				}
 				else {
 					this.goPrev();
-					// this.Analytics.trackEvent( 'media-bar', 'swiped-prev' );
+					Analytics.trackEvent( 'media-bar', 'swiped-prev' );
 				}
 				return;
 			}

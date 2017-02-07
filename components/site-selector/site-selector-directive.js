@@ -2,7 +2,7 @@ angular.module( 'gj.SiteSelector' ).directive( 'gjSiteSelector', function()
 {
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/site-selector/site-selector.html',
+		template: require( '!html-loader!./site-selector.html' ),
 		scope: {},
 		bindToController: {
 			currentSite: '@siteSelectorCurrent',

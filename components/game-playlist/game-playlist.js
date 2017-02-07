@@ -1,1 +1,3 @@
-angular.module( 'gj.GamePlaylist', [ 'gj.Model', 'gj.GamePlaylist.Game' ] );
+angular.module( 'gj.GamePlaylist', [ 'gj.GamePlaylist.Game' ] );
+
+require( './game-playlist-model' );

@@ -8,7 +8,7 @@ const TEMPLATE = `
 	</gj-widget-compiler-widget-youtube>
 `;
 
-@Injectable()
+@Injectable( 'WidgetCompilerWidgetYoutube' )
 export class WidgetCompilerWidgetYoutube implements WidgetCompilerWidget
 {
 	readonly name = 'youtube';

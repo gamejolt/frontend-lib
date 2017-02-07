@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit, OnDestroy } from 'ng-metadata/core';
-import template from 'html!./video.html';
+import * as template from '!html-loader!./video.html';
 
 /**
  * We have to not use angular for video embed stuff!
@@ -15,7 +15,7 @@ export class VideoComponent implements OnInit, OnDestroy
 	@Input( '@' ) poster: any;
 	@Input( '@' ) webm: any;
 	@Input( '@' ) mp4: any;
-	@Input( '<?' ) showLoading = false;
+	@Input( '<' ) showLoading = false;
 
 	private video: HTMLVideoElement;
 

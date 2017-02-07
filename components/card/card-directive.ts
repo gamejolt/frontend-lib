@@ -1,5 +1,5 @@
 import { Component, Input } from 'ng-metadata/core';
-import template from 'html!./card.html';
+import * as template from '!html-loader!./card.html';
 
 @Component({
 	selector: 'gj-card',
@@ -10,9 +10,9 @@ import template from 'html!./card.html';
 })
 export class CardComponent
 {
-	@Input( '<?' ) isDraggable = false;
-	@Input( '<?' ) isExpandable = false;
-	@Input( '<?' ) isExpanded = false;
-	@Input( '<?' ) isInactive = false;
-	@Input( '<?' ) isDisabled = false;
+	@Input( '<' ) isDraggable = false;
+	@Input( '<' ) isExpandable = false;
+	@Input( '<' ) isExpanded = false;
+	@Input( '<' ) isInactive = false;
+	@Input( '<' ) isDisabled = false;
 }

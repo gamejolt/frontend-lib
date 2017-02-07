@@ -1,62 +1,19 @@
-import { Injectable } from 'ng-metadata/core';
-import { Model } from './../../model/model-service';
-import { Fireside_Post_Tag } from './tag/tag-model';
-import { Fireside_Post_Like } from './like/like-model';
-import { Fireside_Post_Video } from './video/video-model';
-import { Fireside_Post_Sketchfab } from './sketchfab/sketchfab-model';
-import { ModalConfirm } from './../../modal/confirm/confirm-service';
-import { App } from './../../../../../app/app-service';
-import { HistoryTick } from './../../history-tick/history-tick-service';
+import { Model } from '../../model/model.service';
+import { FiresidePostTag } from './tag/tag-model';
+import { FiresidePostLike } from './like/like-model';
+import { FiresidePostVideo } from './video/video-model';
+import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
+import { ModalConfirm } from '../../modal/confirm/confirm-service';
+import { App } from '../../../../../app/app-service';
+import { HistoryTick } from '../../history-tick/history-tick-service';
 import { Environment } from '../../environment/environment.service';
+import { getProvider } from '../../../utils/utils';
+import { MediaItem } from '../../media-item/media-item-model';
+import { Game } from '../../game/game.model';
+import { Api } from '../../api/api.service';
 
-export function Fireside_PostFactory(
-	Model: any,
-	App: any,
-	Api: any,
-	Environment: any,
-	Game: any,
-	Fireside_Post_Tag: any,
-	Fireside_Post_Like: any,
-	Fireside_Post_Video: any,
-	Fireside_Post_Sketchfab: any,
-	MediaItem: any,
-	ModalConfirm: any,
-	HistoryTick: any,
-	gettextCatalog: any,
-)
+export class FiresidePost extends Model
 {
-	return Model.create( Fireside_Post, {
-		App,
-		Api,
-		Environment,
-		Game,
-		Fireside_Post_Tag,
-		Fireside_Post_Like,
-		Fireside_Post_Video,
-		Fireside_Post_Sketchfab,
-		MediaItem,
-		ModalConfirm,
-		HistoryTick,
-		gettextCatalog,
-	} );
-}
-
-@Injectable()
-export class Fireside_Post extends Model
-{
-	static App: App;
-	static Api: any;
-	static Environment: Environment;
-	static Game: any;
-	static Fireside_Post_Tag: typeof Fireside_Post_Tag;
-	static Fireside_Post_Like: typeof Fireside_Post_Like;
-	static Fireside_Post_Video: typeof Fireside_Post_Video;
-	static Fireside_Post_Sketchfab: typeof Fireside_Post_Sketchfab;
-	static MediaItem: any;
-	static ModalConfirm: ModalConfirm;
-	static HistoryTick: HistoryTick;
-	static gettextCatalog: ng.gettext.gettextCatalog;
-
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';
 	static TYPE_VIDEO = 'video';
@@ -70,7 +27,7 @@ export class Fireside_Post extends Model
 	hash: string;
 	title: string;
 	lead: string;
-	header: any;
+	header?: MediaItem;
 	status: string;
 	added_on: number;
 	updated_on: number;
@@ -86,11 +43,11 @@ export class Fireside_Post extends Model
 	view_count?: number;
 	expand_count?: number;
 
-	tags: Fireside_Post_Tag[] = [];
-	media: any[] = [];
-	videos: Fireside_Post_Video[] = [];
-	sketchfabs: Fireside_Post_Sketchfab[] = [];
-	user_like: Fireside_Post_Like | null;
+	tags: FiresidePostTag[] = [];
+	media: MediaItem[] = [];
+	videos: FiresidePostVideo[] = [];
+	sketchfabs: FiresidePostSketchfab[] = [];
+	user_like: FiresidePostLike | null;
 
 	url: string;
 
@@ -100,39 +57,39 @@ export class Fireside_Post extends Model
 	// For uploads.
 	file: any;
 
-	constructor( data?: any )
+	constructor( data: any = {} )
 	{
 		super( data );
 
-		if ( data && data.header ) {
-			this.header = new Fireside_Post.MediaItem( data.header );
+		if ( data.header ) {
+			this.header = new MediaItem( data.header );
 		}
 
-		if ( data && data.game ) {
-			this.game = new Fireside_Post.Game( data.game );
+		if ( data.game ) {
+			this.game = new Game( data.game );
 		}
 
-		if ( data && data.tags ) {
-			this.tags = Fireside_Post.Fireside_Post_Tag.populate( data.tags );
+		if ( data.tags ) {
+			this.tags = FiresidePostTag.populate( data.tags );
 		}
 
-		if ( data && data.media ) {
-			this.media = Fireside_Post.MediaItem.populate( data.media );
+		if ( data.media ) {
+			this.media = MediaItem.populate( data.media );
 		}
 
-		if ( data && data.videos ) {
-			this.videos = Fireside_Post.Fireside_Post_Video.populate( data.videos );
+		if ( data.videos ) {
+			this.videos = FiresidePostVideo.populate( data.videos );
 		}
 
-		if ( data && data.sketchfabs ) {
-			this.sketchfabs = Fireside_Post.Fireside_Post_Sketchfab.populate( data.sketchfabs );
+		if ( data.sketchfabs ) {
+			this.sketchfabs = FiresidePostSketchfab.populate( data.sketchfabs );
 		}
 
-		if ( data && data.user_like ) {
-			this.user_like = new Fireside_Post.Fireside_Post_Like( data.user_like );
+		if ( data.user_like ) {
+			this.user_like = new FiresidePostLike( data.user_like );
 		}
 
-		this.url = Fireside_Post.Environment.firesideBaseUrl + '/post/' + this.slug;
+		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
 	}
 
 	static pullHashFromUrl( url: string )
@@ -140,13 +97,10 @@ export class Fireside_Post extends Model
 		return url.substring( url.lastIndexOf( '-' ) + 1 );
 	}
 
-	fetchLikes(): ng.IPromise<Fireside_Post_Like[]>
+	async fetchLikes(): Promise<FiresidePostLike[]>
 	{
-		return Fireside_Post.Api.sendRequest( `/fireside/posts/likes/${this.id}` )
-			.then( ( response: any ) =>
-			{
-				return Fireside_Post.Fireside_Post_Like.populate( response.likes );
-			} );
+		const response = await Api.sendRequest( `/fireside/posts/likes/${this.id}` );
+		return FiresidePostLike.populate( response.likes );
 	}
 
 	$save()
@@ -176,15 +130,17 @@ export class Fireside_Post extends Model
 
 	$viewed()
 	{
-		if ( !Fireside_Post.App.user || this.user.id != Fireside_Post.App.user.id ) {
-			Fireside_Post.HistoryTick.sendBeacon( 'fireside-post', this.id );
+		const App = getProvider<App>( 'App' );
+		if ( !App.user || this.user.id != App.user.id ) {
+			getProvider<HistoryTick>( 'HistoryTick' ).sendBeacon( 'fireside-post', this.id );
 		}
 	}
 
 	$expanded()
 	{
-		if ( !Fireside_Post.App.user || this.user.id != Fireside_Post.App.user.id ) {
-			Fireside_Post.HistoryTick.sendBeacon( 'fireside-post-expand', this.id );
+		const App = getProvider<App>( 'App' );
+		if ( !App.user || this.user.id != App.user.id ) {
+			getProvider<HistoryTick>( 'HistoryTick' ).sendBeacon( 'fireside-post-expand', this.id );
 		}
 	}
 
@@ -202,17 +158,18 @@ export class Fireside_Post extends Model
 		throw new Error( 'Must be attached to a game to publish.' );
 	}
 
-	remove()
+	async remove()
 	{
-		return Fireside_Post.ModalConfirm.show(
-			Fireside_Post.gettextCatalog.getString( 'Are you sure you want to remove this post?' ),
-			undefined,
-			'yes'
-		)
-		.then( () =>
-		{
-			return this.$remove();
-		} );
+		const gettextCatalog = getProvider<ng.gettext.gettextCatalog>( 'gettextCatalog' );
+
+		await getProvider<ModalConfirm>( 'ModalConfirm' )
+			.show(
+				gettextCatalog.getString( 'Are you sure you want to remove this post?' ),
+				undefined,
+				'yes'
+			);
+
+		return this.$remove();
 	}
 
 	$remove()
@@ -225,3 +182,5 @@ export class Fireside_Post extends Model
 		}
 	}
 }
+
+Model.create( FiresidePost );

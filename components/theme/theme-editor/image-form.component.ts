@@ -1,10 +1,13 @@
+import { Api } from '../../api/api.service';
+import { Loader } from '../../loader/loader.service';
+
+ThemeEditorImageFormFactory.$inject = [ 'Form' ];
 export function ThemeEditorImageFormFactory(
 	Form: any,
-	Api: any,
 )
 {
 	const form = new Form( {
-		template: '/lib/gj-lib-client/components/theme/theme-editor/image-form.component.html',
+		template: require( './image-form.component.html' ),
 		resetOnSubmit: true,
 	} );
 
@@ -13,6 +16,9 @@ export function ThemeEditorImageFormFactory(
 
 	form.onInit = function( scope: any )
 	{
+		scope.Loader = Loader;
+		Loader.load( 'upload' );
+
 		scope.formState.isLoaded = false;
 		scope.formModel.type = scope.type;
 		scope.formModel.parent_id = scope.parentId;
@@ -31,7 +37,10 @@ export function ThemeEditorImageFormFactory(
 
 	form.onSubmit = function( scope: any )
 	{
-		return Api.sendRequest( '/web/dash/media-items/add-one', scope.formModel, { file: scope.formModel.file } );
+		return Api.sendRequest( '/web/dash/media-items/add-one', scope.formModel, {
+			file: scope.formModel.image,
+			progress: ( event ) => scope.formModel._progress = event,
+		} );
 	};
 
 	return form;

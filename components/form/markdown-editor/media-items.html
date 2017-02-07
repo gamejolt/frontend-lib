@@ -26,15 +26,13 @@
 	</div>
 	<br>
 
-	<div oc-lazy-load="{ files: [ '/app/modules/upload.js' ] }">
-		<form gj-form="formModel" name="markdownEditorMediaItemForm">
+	<form gj-form="formModel" name="markdownEditorMediaItemForm">
+		<div ng-if="Loader.ready( 'upload' )">
 
 			<form-group name="image" hide-label="true">
 
 				<gj-form-upload-control
-					name="image"
-					ng-model="formModel.file"
-					gj-upload-progress-handler="formState.progress"
+					form-control="upload"
 					gj-file-select="onSubmit()"
 					gj-max-filesize="maxFilesize"
 					gj-max-img-width="maxWidth"
@@ -49,7 +47,7 @@
 
 			</form-group>
 
-		</form>
-	</div>
+		</div>
+	</form>
 
 </div>

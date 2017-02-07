@@ -12,53 +12,44 @@ $gj-exclude-common-utilities ?= false
 $gj-exclude-common-responsive-utilities ?= false
 $gj-exclude-common-fills ?= false
 
-// Enable overriding of where certain folders live.
-$gj-bower-lib-folder ?= '../../../../bower-lib'
-$gj-app-styles-folder ?= '../../../../app'
-
 // Our common functions.
 @import './functions'
 
 // Normalize
 if ( !$gj-exclude-common-normalize )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/normalize'
-
-// Set up our global variables.
-@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/variables'
-@import './variables'
-@import $gj-app-styles-folder + '/styles/variables'
+	@import '~bootstrap-stylus/stylus/normalize'
 
 // Bootstrap core
-@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/mixins'
+@import '~bootstrap-stylus/stylus/mixins'
 
 if ( !$gj-exclude-common-scaffolding )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/scaffolding'
+	@import '~bootstrap-stylus/stylus/scaffolding'
 
 if ( !$gj-exclude-common-type )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/type'
+	@import '~bootstrap-stylus/stylus/type'
 
 if ( !$gj-exclude-common-code )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/code'
+	@import '~bootstrap-stylus/stylus/code'
 
 if ( !$gj-exclude-common-grid )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/grid'
+	@import '~bootstrap-stylus/stylus/grid'
 
 if ( !$gj-exclude-common-forms )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/forms'
+	@import '~bootstrap-stylus/stylus/forms'
 
 // Bootstrap components
 if ( !$gj-exclude-common-input-groups )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/input-groups'
+	@import '~bootstrap-stylus/stylus/input-groups'
 
 if ( !$gj-exclude-common-tables )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/tables'
+	@import '~bootstrap-stylus/stylus/tables'
 
 // Bootstrap utilities
 if ( !$gj-exclude-common-utilities )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/utilities'
+	@import '~bootstrap-stylus/stylus/utilities'
 
 if ( !$gj-exclude-common-responsive-utilities )
-	@import $gj-bower-lib-folder + '/bootstrap-stylus/stylus/responsive-utilities'
+	@import '~bootstrap-stylus/stylus/responsive-utilities'
 
 // ----------------------------------------
 

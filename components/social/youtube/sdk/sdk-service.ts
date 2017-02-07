@@ -1,22 +1,21 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 import { Environment } from '../../../environment/environment.service';
 
-@Injectable()
-export class Youtube_Sdk
+@Injectable( 'Youtube_Sdk' )
+export class YoutubeSdk
 {
 	isBootstrapped = false;
 
 	constructor(
 		@Inject( '$window' ) private $window: ng.IWindowService,
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
-		@Inject( 'Environment' ) private environment: Environment,
 	)
 	{
 	}
 
 	load()
 	{
-		if ( this.environment.isPrerender ) {
+		if ( Environment.isPrerender ) {
 			return;
 		}
 

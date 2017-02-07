@@ -1,1 +1,3 @@
-angular.module( 'gj.Translation', [ 'gj.Model' ] );
+angular.module( 'gj.Translation', [] );
+
+require( './translation-model' );

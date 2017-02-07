@@ -8,7 +8,11 @@
 		</div>
 
 		<div ng-if="$ctrl.mediaItems">
-			<gj-media-bar-item ng-repeat="item in $ctrl.mediaItems track by item.id" item="item"></gj-media-bar-item>
+			<gj-media-bar-item
+				ng-repeat="item in $ctrl.mediaItems track by item.id"
+				[item]="item"
+				>
+			</gj-media-bar-item>
 		</div>
 
 	</div>
@@ -18,9 +22,7 @@
 	We don't show lightbox on mobile.
 	The media bar by itself already shows images larger than the lightbox will show.
 -->
-<div oc-lazy-load="{ files: [ '/app/modules/hammer.js' ] }">
-	<gj-media-bar-lightbox
-		ng-if="$ctrl.activeItem && !$ctrl.screen.isXs"
-		>
-	</gj-media-bar-lightbox>
-</div>
+<gj-media-bar-lightbox
+	ng-if="$ctrl.activeItem && !$ctrl.screen.isXs"
+	>
+</gj-media-bar-lightbox>

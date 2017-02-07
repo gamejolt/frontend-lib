@@ -1,1 +1,3 @@
-angular.module( 'gj.Subscription', [ 'gj.Model' ] );
+angular.module( 'gj.Subscription', [] );
+
+require( './subscription-model' );

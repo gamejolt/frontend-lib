@@ -1,9 +1,11 @@
+var moment = require( 'moment' );
+
 angular.module( 'gj.DatetimePicker' ).directive( 'gjDatetimePicker', function( $window, DateHelper )
 {
 	return {
 		restrict: 'AE',
 		require: '^form',
-		templateUrl: '/lib/gj-lib-client/components/datetime-picker/datetime-picker.html',
+		template: require( '!html-loader!./datetime-picker.html' ),
 		scope: {
 			name: '@',
 			dateModel: '=',
@@ -30,7 +32,7 @@ angular.module( 'gj.DatetimePicker' ).directive( 'gjDatetimePicker', function( $
 				// This way they can select a date from scratch.
 				// Time should be set to midnight, though.
 				scope.date = null;
-				scope.time = $window.moment().startOf( 'day' );
+				scope.time = moment().startOf( 'day' );
 			}
 
 			// Now convert from moments to date objects.

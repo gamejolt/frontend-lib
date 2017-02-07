@@ -1,7 +1,7 @@
 angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, $state, App, Screen, Form, Environment, Api, Geo, Sellable, Order_Payment, Growls, Device, HistoryTick, gjCurrencyFilter, gettextCatalog )
 {
 	var form = new Form( {
-		template: '/lib/gj-lib-client/components/game/package/card/payment-form.html',
+		template: require( './payment-form.html' ),
 	} );
 
 	form.scope.game = '=';

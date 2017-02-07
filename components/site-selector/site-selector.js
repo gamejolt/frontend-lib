@@ -1,1 +1,3 @@
-angular.module( 'gj.SiteSelector', [ 'gj.Environment', 'gj.Popover' ] );
+angular.module( 'gj.SiteSelector', [] );
+
+require( './site-selector-directive' );

@@ -1,7 +1,7 @@
 angular.module( 'gj.Jam.Game.Vote.Widget' ).directive( 'gjJamGameVoteWidgetForm', function( Form, Jam_Game_Vote, Screen )
 {
 	var form = new Form( {
-		template: '/lib/gj-lib-client/components/jam/game/vote/widget/form.html',
+		template: require( './form.html' ),
 	} );
 
 	form.scope.jam = '=gjJam';

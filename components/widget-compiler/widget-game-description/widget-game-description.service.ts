@@ -5,7 +5,7 @@ const TEMPLATE = `
 	<div gj-widget-compiler-bind="game.description_compiled"></div>
 `;
 
-@Injectable()
+@Injectable( 'WidgetCompilerWidgetGameDescription' )
 export class WidgetCompilerWidgetGameDescription implements WidgetCompilerWidget
 {
 	readonly name = 'game-description';

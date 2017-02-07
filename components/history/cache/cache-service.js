@@ -1,21 +1,21 @@
 angular.module( 'gj.History.Cache' )
-.run( function( $rootScope, $state, History_Cache )
+.run( function( $transitions, $state, History_Cache )
 {
-	$rootScope.$on( '$stateChangeStart', function()
+	$transitions.onBefore( {}, function( trans )
 	{
-		if ( arguments[1] ) {
-			History_Cache.stateStart( $state.href( arguments[1], arguments[2] ) );
+		if ( trans.to() ) {
+			History_Cache.stateStart( $state.href( trans.to(), trans.params( 'to' ) ) );
 		}
 	} );
 
-	$rootScope.$on( '$stateChangeSuccess', function()
+	$transitions.onSuccess( {}, function( trans )
 	{
-		if ( arguments[1] ) {
+		if ( trans.to() ) {
 			History_Cache.stateSuccess();
 		}
 	} );
 } )
-.service( 'History_Cache', function( $q, $window, $rootScope, $state, History )
+.service( 'History_Cache', function( $window, History )
 {
 	var MAX_ITEMS = 5;
 
@@ -36,7 +36,7 @@ angular.module( 'gj.History.Cache' )
 
 		// We only pull from cache if they're in a historical state.
 		if ( History.inHistorical && _currentState.data[ name ] ) {
-			return $q.resolve( _currentState.data[ name ] );
+			return Promise.resolve( _currentState.data[ name ] );
 		}
 
 		return fn().then( function( data )

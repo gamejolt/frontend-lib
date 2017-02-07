@@ -2,7 +2,7 @@ angular.module( 'gj.Comment.Widget' ).directive( 'gjCommentWidget', function()
 {
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/comment/widget/widget.html',
+		template: require( '!html-loader!./widget.html' ),
 		scope: {},
 		bindToController: {
 			resource: '@commentResource',

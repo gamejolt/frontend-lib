@@ -1,4 +1,4 @@
-angular.module( 'gj.BodyClasses' ).directive( 'gjBodyClasses', function( $state )
+angular.module( 'gj.BodyClasses' ).directive( 'gjBodyClasses', function( $state, $transitions )
 {
 	return {
 		restrict: 'A',
@@ -31,9 +31,9 @@ angular.module( 'gj.BodyClasses' ).directive( 'gjBodyClasses', function( $state 
 				}
 			}
 
-			scope.$on( '$stateChangeSuccess', function( event, toState )
+			$transitions.onSuccess( {}, function( trans )
 			{
-				onStateChange( toState.name );
+				onStateChange( trans.to().name );
 			} );
 		}
 	};

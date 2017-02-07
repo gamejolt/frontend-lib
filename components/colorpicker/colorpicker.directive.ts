@@ -1,5 +1,4 @@
 import { Directive, Inject, Input, OnInit, Host, OnDestroy } from 'ng-metadata/core';
-import { NgModel } from 'ng-metadata/common';
 
 @Directive({
 	selector: '[gj-colorpicker]',
@@ -14,7 +13,7 @@ export class ColorpickerDirective implements OnInit, OnDestroy
 		@Inject( '$window' ) private $window: ng.IWindowService,
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
 		@Inject( '$scope' ) private $scope: ng.IScope,
-		@Inject( 'ngModel' ) @Host() private ngModel: NgModel,
+		@Inject( 'ngModel' ) @Host() private ngModel: ng.INgModelController,
 	)
 	{
 	}

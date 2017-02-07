@@ -1,1 +1,3 @@
-angular.module( 'gj.User.UserBar', [ 'gj.User', 'gj.User.UserAvatar', 'gj.SiteSelector', 'gj.Environment' ] );
+angular.module( 'gj.User.UserBar', [ 'gj.User.UserAvatar', 'gj.SiteSelector' ] );
+
+require( './user-bar-directive' );

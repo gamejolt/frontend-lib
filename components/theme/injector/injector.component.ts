@@ -22,7 +22,7 @@ export class ThemeInjectorComponent implements OnInit, AfterViewInit
 	{
 		this.$window.addEventListener( 'message', ( event: MessageEvent ) =>
 		{
-			console.log( 'got msg', event.data );
+			// console.log( 'got msg', event.data );
 			switch ( event.data.type ) {
 				case 'theme-update': {
 

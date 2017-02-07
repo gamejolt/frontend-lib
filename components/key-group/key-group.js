@@ -1,1 +1,3 @@
-angular.module( 'gj.KeyGroup', [ 'gj.Model', 'gj.Game' ] );
+angular.module( 'gj.KeyGroup', [] );
+
+require( './key-group-model' );

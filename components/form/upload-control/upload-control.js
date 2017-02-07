@@ -1,1 +1,4 @@
-angular.module( 'gj.Form.UploadControl', [ 'gj.Form', 'gj.Api', 'gj.Screen' ] );
+angular.module( 'gj.Form.UploadControl', [] );
+
+require( './img-preview-directive' );
+require( './upload-control-directive' );

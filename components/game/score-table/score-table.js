@@ -1,1 +1,3 @@
-angular.module( 'gj.Game.ScoreTable', [ 'gj.Model', 'gj.Game' ] );
+angular.module( 'gj.Game.ScoreTable', [] );
+
+require( './score-table-model' );

@@ -1,1 +1,3 @@
-angular.module( 'gj.User.GameSession', [ 'gj.Model', 'gj.User', 'gj.Game' ] );
+angular.module( 'gj.User.GameSession', [] );
+
+require( './game-session-model' );

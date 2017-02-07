@@ -3,9 +3,8 @@ import { MetaContainer } from './meta-container';
 import { FbMetaContainer } from './fb-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
 import { MicrodataContainer } from './microdata-container';
-import { Environment } from '../environment/environment.service';
 
-@Injectable()
+@Injectable( 'Meta' )
 export class Meta extends MetaContainer
 {
 	private _fb: FbMetaContainer;
@@ -16,15 +15,14 @@ export class Meta extends MetaContainer
 	constructor(
 		@Inject( '$rootScope' ) $rootScope: ng.IRootScopeService,
 		@Inject( '$document' ) private $document: ng.IDocumentService,
-		@Inject( 'Environment' ) private Environment: Environment,
 	)
 	{
-		super( $document[0] );
+		super( window.document );
 
-		this._originalTitle = this.$document[0].title;
-		this._fb = new FbMetaContainer( this.$document[0] );
-		this._twitter = new TwitterMetaContainer( this.$document[0] );
-		this._microdata = new MicrodataContainer( this.$document[0] );
+		this._originalTitle = window.document.title;
+		this._fb = new FbMetaContainer( window.document );
+		this._twitter = new TwitterMetaContainer( window.document );
+		this._microdata = new MicrodataContainer( window.document );
 
 		this.clear();
 
@@ -37,7 +35,7 @@ export class Meta extends MetaContainer
 	set title( title: string | null )
 	{
 		if ( title ) {
-			if ( this.Environment.isClient ) {
+			if ( GJ_IS_CLIENT ) {
 				title += ' - Game Jolt';
 			}
 			else {

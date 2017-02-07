@@ -1,10 +1,11 @@
+ContentBlockEditorFormFactory.$inject = [ 'Form' ];
 export function ContentBlockEditorFormFactory(
 	Form: any,
 )
 {
 	const form = new Form( {
 		model: 'SiteContentBlock',
-		template: '/lib/gj-lib-client/components/content-block/editor/editor-form.component.html',
+		template: require( './editor-form.component.html' ),
 	} );
 
 	form.scope.compiled = '&';

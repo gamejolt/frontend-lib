@@ -1,6 +1,6 @@
 import { Directive, Inject, Input, OnChanges, SimpleChanges } from 'ng-metadata/core';
-import { Screen } from './../screen/screen-service';
-import { Ruler } from './../ruler/ruler-service';
+import { Screen } from '../screen/screen-service';
+import { Ruler } from '../ruler/ruler-service';
 
 @Directive({
 	selector: '[gj-responsive-dimensions]',
@@ -15,7 +15,6 @@ export class ResponsiveDimensionsDirective implements OnChanges
 		@Inject( '$element' ) $element: ng.IAugmentedJQuery,
 		@Inject( '$scope' ) $scope: ng.IScope,
 		@Inject( 'Screen' ) screen: Screen,
-		@Inject( 'Ruler' ) private ruler: Ruler,
 	)
 	{
 		this.element = $element[0] as HTMLImageElement;
@@ -31,7 +30,7 @@ export class ResponsiveDimensionsDirective implements OnChanges
 
 	private updateDimensions()
 	{
-		const containerWidth = this.ruler.width( this.element.parentNode as HTMLElement );
+		const containerWidth = Ruler.width( this.element.parentNode as HTMLElement );
 		this.element.style.height = `${containerWidth / this.ratio}px`;
 	}
 }

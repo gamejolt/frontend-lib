@@ -36,8 +36,9 @@ $popover-extra-margin = 3px
 		animation-duration: 250ms
 
 	&.active-remove
-		@extend .no-animate
+		@extend .anim-fade-out-shrink
 		display: block  // Force it visible while removing.
+		z-index: $zindex-popover - 1
 
 	// When active show it visible.
 	&.active
@@ -97,7 +98,7 @@ $popover-extra-margin = 3px
 		margin-right: $popover-extra-margin
 
 	> nav.pills > ul
-	> .i-button
+	> .btn
 		margin-bottom: $popover-spacing
 
 	> nav.platform-list

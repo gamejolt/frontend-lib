@@ -2,7 +2,7 @@ angular.module( 'gj.Audio.Playlist' ).directive( 'gjAudioPlaylist', function()
 {
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/audio/playlist/playlist.html',
+		template: require( '!html-loader!./playlist.html' ),
 		scope: {
 			songs: '=audioPlaylistSongs',
 			isPlaying: '=?audioPlaylistIsPlaying',

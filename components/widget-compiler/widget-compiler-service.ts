@@ -18,7 +18,7 @@ const REGEX = {
 	whitespaceTrim: /^\s+|\s+$/g
 };
 
-@Injectable()
+@Injectable( 'WidgetCompiler' )
 export class WidgetCompiler
 {
 	widgets: { [k: string]: WidgetCompilerWidget } = {};

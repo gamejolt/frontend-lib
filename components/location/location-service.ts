@@ -1,8 +1,11 @@
 import { Injectable, Inject } from 'ng-metadata/core';
-import { Meta } from './../meta/meta-service';
-import { Environment } from '../environment/environment.service';
+import { StateService, StateParams } from 'angular-ui-router';
 
-@Injectable()
+import { Meta } from '../meta/meta-service';
+import { Environment } from '../environment/environment.service';
+import { getProvider } from '../../utils/utils';
+
+@Injectable( 'Location' )
 export class Location
 {
 	private isApplyPending = false;
@@ -11,10 +14,8 @@ export class Location
 	constructor(
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( '$location' ) private $location: ng.ILocationService,
-		@Inject( '$state' ) private $state: ng.ui.IStateService,
-		@Inject( '$injector' ) private $injector: any,
+		@Inject( '$state' ) private $state: StateService,
 		@Inject( 'Meta' ) private Meta: Meta,
-		@Inject( 'Environment' ) private Environment: Environment,
 	)
 	{
 	}
@@ -39,7 +40,7 @@ export class Location
 
 		this.$timeout( () =>
 		{
-			const $stateParams: ng.ui.IStateParamsService = this.$injector.get( '$stateParams' );
+			const $stateParams: StateParams = getProvider<StateParams>( '$stateParams' );
 			let mergedParams = angular.extend( {}, $stateParams, this.pendingParams );
 
 			this.isApplyPending = false;
@@ -61,7 +62,7 @@ export class Location
 			// NOTE: Setting `notify` to false means that ui-sref links don't get updated with the new URL.
 			// This shouldn't be too big of an issue since search engines will eventually correct it.
 			// When prerendering we don't redirect in browser, we just send a redirect header.
-			if ( this.Environment.isPrerender ) {
+			if ( Environment.isPrerender ) {
 				this.Meta.redirect = this.$state.href( this.$state.current, mergedParams );
 				this.Meta.responseCode = '301';
 			}
@@ -75,7 +76,7 @@ export class Location
 	{
 		// We don't actually redirect if we're prerendering.
 		// We instead just return a redirect header.
-		if ( this.Environment.isPrerender ) {
+		if ( Environment.isPrerender ) {
 			this.Meta.redirect = this.$state.href( state, params );
 			this.Meta.responseCode = '301';
 		}

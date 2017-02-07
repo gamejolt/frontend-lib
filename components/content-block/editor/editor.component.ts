@@ -1,8 +1,9 @@
 import { Component, Input, Inject, OnInit } from 'ng-metadata/core';
-import template from 'html!./editor.component.html';
+import * as template from '!html-loader!./editor.component.html';
 
 import { SiteContentBlock } from '../../site/content-block/content-block-model';
 import { Environment } from '../../environment/environment.service';
+import { Api } from '../../api/api.service';
 
 const PREVIEW_DEBOUNCE = 2000;
 
@@ -19,11 +20,11 @@ export class ContentBlockEditorComponent implements OnInit
 	private previewIndex = 0;
 	private fetchPreview: Function;
 
+	env = Environment;
+
 	constructor(
 		@Inject( '$scope' ) private $scope: ng.IScope,
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
-		@Inject( 'Api' ) private api: any,
-		@Inject( 'Environment' ) public env: Environment,
 	)
 	{
 	}
@@ -48,7 +49,7 @@ export class ContentBlockEditorComponent implements OnInit
 	private _fetchPreview()
 	{
 		const previewIndex = ++this.previewIndex;
-		this.api.sendRequest( '/web/dash/sites/content-preview', { content: this.contentBlock.content_markdown }, { ignorePayloadUser: true } )
+		Api.sendRequest( '/web/dash/sites/content-preview', { content: this.contentBlock.content_markdown }, { ignorePayloadUser: true } )
 			.then( ( response: any ) =>
 			{
 				if ( previewIndex === this.previewIndex ) {
@@ -88,12 +89,12 @@ export class ContentBlockEditorComponent implements OnInit
 
 		const scrollPos = txtarea.scrollTop;
 		let strPos = 0;
-		const br = ( ( txtarea.selectionStart || txtarea.selectionStart == '0' ) ?
-			'ff' : ( document.selection ? 'ie' : false ) );
+		const br = ( ( txtarea.selectionStart || txtarea.selectionStart == 0 ) ?
+			'ff' : ( (document as any).selection ? 'ie' : false ) );
 
 		if ( br === 'ie' ) {
 			txtarea.focus();
-			var range = document.selection.createRange();
+			var range = (document as any).selection.createRange();
 			range.moveStart( 'character', -txtarea.value.length );
 			strPos = range.text.length;
 		}
@@ -107,7 +108,7 @@ export class ContentBlockEditorComponent implements OnInit
 		strPos = strPos + text.length;
 		if ( br === 'ie' ) {
 			txtarea.focus();
-			var ieRange = document.selection.createRange();
+			var ieRange = (document as any).selection.createRange();
 			ieRange.moveStart( 'character', -txtarea.value.length );
 			ieRange.moveStart( 'character', strPos );
 			ieRange.moveEnd( 'character', 0 );

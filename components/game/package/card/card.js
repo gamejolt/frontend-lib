@@ -1,1 +1,6 @@
-angular.module( 'gj.Game.Package.Card', [ 'gj.Game.Package', 'gj.Game.PlayModal', 'gj.Analytics', 'gj.Currency', 'gj.Countdown' ] );
+angular.module( 'gj.Game.Package.Card', [] );
+
+require( './buttons-directive' );
+require( './card-directive' );
+require( './more-options-directive' );
+require( './payment-form-directive' );

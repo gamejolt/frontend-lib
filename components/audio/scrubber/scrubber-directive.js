@@ -6,7 +6,7 @@ angular.module( 'gj.Audio.Scrubber' ).directive( 'gjAudioScrubber', function()
 			currentTime: '=?songCurrentTime',
 			duration: '=?songDuration',
 		},
-		templateUrl: '/lib/gj-lib-client/components/audio/scrubber/scrubber.html',
+		template: require( '!html-loader!./scrubber.html' ),
 		bindToController: true,
 		controllerAs: 'ctrl',
 		controller: function( $scope, $element )

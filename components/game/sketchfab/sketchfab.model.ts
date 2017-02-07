@@ -1,13 +1,5 @@
-import { Injectable } from 'ng-metadata/core';
-import { Model } from '../../model/model-service';
+import { Model } from '../../model/model.service';
 
-export function GameSketchfabFactory( Model: any )
-{
-	return Model.create( GameSketchfab, {
-	} );
-}
-
-@Injectable()
 export class GameSketchfab extends Model
 {
 	media_type: 'sketchfab';
@@ -39,3 +31,5 @@ export class GameSketchfab extends Model
 		return this.$_remove( '/web/dash/developer/games/media/remove/sketchfab/' + this.game_id + '/' + this.id );
 	}
 }
+
+Model.create( GameSketchfab );

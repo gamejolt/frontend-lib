@@ -1,7 +1,9 @@
+var Loader = require( '../../loader/loader.service' ).Loader;
+
 angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaItems', function( Form, Api, MediaItem, Clipboard )
 {
 	var form = new Form( {
-		template: '/lib/gj-lib-client/components/form/markdown-editor/media-items.html',
+		template: require( './media-items.html' ),
 		resetOnSubmit: true,
 	} );
 
@@ -10,6 +12,9 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaIt
 
 	form.onInit = function( scope )
 	{
+		scope.Loader = Loader;
+		Loader.load( 'upload' );
+
 		scope.formState.isLoaded = false;
 		scope.formModel.type = scope.type;
 		scope.formModel.parent_id = scope.parentId;
@@ -34,7 +39,13 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditorMediaIt
 
 	form.onSubmit = function( scope )
 	{
-		return Api.sendRequest( '/web/dash/media-items/add', scope.formModel, { file: scope.formModel.file } )
+		return Api.sendRequest( '/web/dash/media-items/add', scope.formModel, {
+			file: scope.formModel.image,
+			progress: function( event )
+			{
+				scope.formModel._progress = event;
+			},
+		} )
 			.then( function( response )
 			{
 				var i;

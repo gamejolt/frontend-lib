@@ -1,3 +1,5 @@
+var moment = require( 'moment' );
+
 angular.module( 'gj.Jam' ).factory( 'Jam', function( Model, Environment, Api )
 {
 	function Jam( data )

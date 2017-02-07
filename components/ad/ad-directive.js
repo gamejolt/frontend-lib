@@ -62,7 +62,7 @@ angular.module( 'gj.Ad' ).directive( 'gjAd', function( $timeout, $window, $docum
 
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/ad/ad.html',
+		template: require( '!html-loader!./ad.html' ),
 		scope: {},
 		compile: function( element, attrs )
 		{

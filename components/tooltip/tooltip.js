@@ -4,3 +4,5 @@ angular.module( 'gj.Tooltip', [ 'ui.bootstrap.tooltip', 'ui.bootstrap.tooltip.tp
 		appendToBody: true,
 	} );
 } );
+
+require( './tooltip-directive' );

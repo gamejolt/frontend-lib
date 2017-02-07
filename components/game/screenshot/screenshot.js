@@ -1,1 +1,3 @@
-angular.module( 'gj.Game.Screenshot', [ 'gj.Model', 'gj.MediaItem' ] );
+angular.module( 'gj.Game.Screenshot', [] );
+
+require( './screenshot-model' );

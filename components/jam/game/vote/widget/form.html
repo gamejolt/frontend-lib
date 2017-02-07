@@ -86,12 +86,12 @@
 	<div class="form-group submit-group">
 		<div ng-class="{ 'col-sm-8 col-sm-offset-4': jam.voting_type == 'categories' }">
 
-			<button gj-form-submit-button class="i-button" ng-class="{ block: Screen.isMobile }" ng-disabled="!jamGameVoteWidgetForm.$valid || !overallRating" ng-click="onSubmit()">
+			<button gj-form-submit-button class="btn" ng-class="{ block: Screen.isMobile }" ng-disabled="!jamGameVoteWidgetForm.$valid || !overallRating" ng-click="onSubmit()">
 				<span class="jolticon jolticon-chevron-right"></span>
 				Save Vote
 			</button>
 
-			<button ng-if="overallRating" class="i-button warning" ng-class="{ block: Screen.isMobile }" ng-click="onClear()">
+			<button ng-if="overallRating" class="btn btn-danger" ng-class="{ block: Screen.isMobile }" ng-click="onClear()">
 				<span class="jolticon jolticon-remove"></span>
 				Clear Vote
 			</button>

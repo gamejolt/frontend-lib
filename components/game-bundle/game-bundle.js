@@ -1,1 +1,3 @@
-angular.module( 'gj.GameBundle', [ 'gj.Model', 'gj.Game' ] );
+angular.module( 'gj.GameBundle', [] );
+
+require( './game-bundle-model' );

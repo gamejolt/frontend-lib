@@ -1,1 +1,3 @@
-angular.module( 'gj.User.GameScore', [ 'gj.Model', 'gj.User', 'gj.Game', 'gj.Game.ScoreTable' ] );
+angular.module( 'gj.User.GameScore', [ 'gj.Game.ScoreTable' ] );
+
+require( './game-score-model' );

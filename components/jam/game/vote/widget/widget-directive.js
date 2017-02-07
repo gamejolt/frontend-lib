@@ -2,7 +2,7 @@ angular.module( 'gj.Jam.Game.Vote.Widget' ).directive( 'gjJamGameVoteWidget', fu
 {
 	return {
 		restrict: 'E',
-		templateUrl: '/lib/gj-lib-client/components/jam/game/vote/widget/widget.html',
+		template: require( '!html-loader!./widget.html' ),
 		scope: {},
 		bindToController: {
 			jam: '=gjJam',

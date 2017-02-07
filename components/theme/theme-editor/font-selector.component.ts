@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, Self } from 'ng-metadata/core';
-import { NgModel } from 'ng-metadata/common';
-import template from 'html!./font-selector.component.html';
+import * as template from '!html-loader!./font-selector.component.html';
+
+import { Api } from '../../api/api.service';
 
 interface FontDefinition {
 	family: string;
@@ -31,8 +32,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
 		@Inject( '$scope' ) private $scope: ng.IScope,
 		@Inject( 'filterFilter' ) private filterFilter: ng.IFilterFilter,
-		@Inject( 'Api' ) private api: any,
-		@Inject( NgModel ) @Self() private ngModel: NgModel,
+		@Inject( 'ngModel' ) @Self() private ngModel: ng.INgModelController,
 	)
 	{
 	}
@@ -69,7 +69,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit
 					} );
 			}
 
-			const fontListElement = angular.element( this.$element[0].querySelector( '.font-selector-font-list' ) );
+			const fontListElement = angular.element( this.$element[0].querySelector( '.font-selector-font-list' ) as Element );
 			const liHeight = 38;
 			const listHeight = 300;
 
@@ -121,7 +121,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit
 
 	private getFontList(): any
 	{
-		return this.api.sendRequest( '/jams/manage/jams/theme/get-font-list', null, { detach: true, processPayload: false } )
+		return Api.sendRequest( '/jams/manage/jams/theme/get-font-list', null, { detach: true, processPayload: false } )
 			.then( ( response: any ) =>
 			{
 				if ( response.data && angular.isDefined( response.data.items ) ) {

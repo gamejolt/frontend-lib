@@ -1,1 +1,3 @@
-angular.module( 'gj.LinkedKey', [ 'gj.Model' ] );
+angular.module( 'gj.LinkedKey', [] );
+
+require( './linked-key-model' );

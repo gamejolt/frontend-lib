@@ -1,1 +1,3 @@
-angular.module( 'gj.Jam.Award', [ 'gj.Model' ] );
+angular.module( 'gj.Jam.Award', [] );
+
+require( './award-model' );

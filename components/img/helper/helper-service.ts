@@ -1,20 +1,13 @@
-import { Injectable, Inject } from 'ng-metadata/core';
+import { Injectable } from 'ng-metadata/core';
 
-@Injectable()
+@Injectable( 'ImgHelper' )
 export class ImgHelper
 {
-	constructor(
-		@Inject( '$document' ) private $document: ng.IDocumentService,
-		@Inject( '$q' ) private $q: ng.IQService
-	)
-	{
-	}
-
 	loaded( url: string )
 	{
-		return new this.$q( ( resolve, reject ) =>
+		return new Promise( ( resolve, reject ) =>
 		{
-			const img: HTMLImageElement = this.$document[0].createElement( 'img' );
+			const img: HTMLImageElement = window.document.createElement( 'img' );
 			img.onload = resolve;
 			img.onerror = reject;
 			img.src = url;

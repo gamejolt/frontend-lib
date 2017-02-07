@@ -4,7 +4,7 @@ angular.module( 'gj.EditableAccordion' ).directive( 'gjEditableAccordionAdd', fu
 		restrict: 'E',
 		transclude: true,
 		require: '^gjEditableAccordion',
-		templateUrl: '/lib/gj-lib-client/components/editable-accordion/editable-accordion-add.html',
+		template: require( '!html-loader!./editable-accordion-add.html' ),
 		scope: {
 			addLabel: '@'
 		},

@@ -1,7 +1,7 @@
-import { Component, Input, Output, Inject } from 'ng-metadata/core';
+import { Component, Input, Output, Inject, EventEmitter } from 'ng-metadata/core';
 import { Popover } from '../../popover/popover.service';
 import { SiteTemplate } from '../../site/template/template-model';
-import template from 'html!./selector.component.html';
+import * as template from '!html-loader!./selector.component.html';
 
 @Component({
 	selector: 'gj-theme-selector',
@@ -12,7 +12,7 @@ export class ThemeSelectorComponent
 	@Input( '<' ) templates: SiteTemplate[];
 	@Input( '<' ) currentTemplate: number;
 
-	@Output() changed: Function;
+	@Output() private changed = new EventEmitter<number>();
 
 	current: any;
 
@@ -33,7 +33,7 @@ export class ThemeSelectorComponent
 	{
 		this.currentTemplate = id;
 		this.current = _.find( this.templates, { id: this.currentTemplate } );
-		this.changed( { $template: id } );
+		this.changed.emit( id );
 		this.popover.hideAll();
 	}
 }

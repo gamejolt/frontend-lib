@@ -1,6 +1,7 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 import { PartnerReferral } from '../partner-referral/partner-referral-service';
 import { Environment } from '../environment/environment.service';
+import { Device } from '../device/device.service';
 
 export interface BeaconOptions
 {
@@ -9,18 +10,14 @@ export interface BeaconOptions
 	key?: string;
 }
 
-@Injectable()
+@Injectable( 'HistoryTick' )
 export class HistoryTick
 {
 	private _sources: { [key: string]: string } = {};
 
 	constructor(
-		@Inject( '$document' ) private $document: ng.IDocumentService,
-		@Inject( '$q' ) private $q: ng.IQService,
-		@Inject( 'Environment' ) private environment: Environment,
 		@Inject( 'Referrer' ) private referrer: any,
 		@Inject( 'PartnerReferral' ) private partnerReferral: PartnerReferral,
-		@Inject( 'Device' ) private device: any
 	)
 	{
 	}
@@ -51,11 +48,11 @@ export class HistoryTick
 
 	sendBeacon( type: string, resourceId: number, options: BeaconOptions = {} )
 	{
-		if ( this.environment.isPrerender ) {
+		if ( Environment.isPrerender ) {
 			return;
 		}
 
-		return this.$q( ( resolve ) =>
+		return new Promise( ( resolve ) =>
 		{
 			const queryParams: string[] = [];
 
@@ -63,8 +60,8 @@ export class HistoryTick
 			queryParams.push( 'cb=' + Date.now() );
 
 			// Device info.
-			queryParams.push( 'os=' + this.device.os() );
-			const arch = this.device.arch();
+			queryParams.push( 'os=' + Device.os() );
+			const arch = Device.arch();
 			if ( arch ) {
 				queryParams.push( 'arch=' + arch );
 			}
@@ -89,10 +86,10 @@ export class HistoryTick
 
 			// This is enough to send the beacon.
 			// No need to add it to the page.
-			const img = this.$document[0].createElement( 'img' );
+			const img = window.document.createElement( 'img' );
 			img.width = 1;
 			img.height = 1;
-			img.src = `${this.environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join( '&' )}`;
+			img.src = `${Environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join( '&' )}`;
 
 			// Always resolve.
 			img.onload = img.onerror = () =>
@@ -102,7 +99,7 @@ export class HistoryTick
 				resolve();
 			};
 
-			if ( this.environment.env == 'development' ) {
+			if ( Environment.env == 'development' ) {
 				console.log( 'Tracking history tick.', {
 					type: type,
 					resourceId: resourceId,

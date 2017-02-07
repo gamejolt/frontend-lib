@@ -1,5 +1,6 @@
 import { Directive, Inject } from 'ng-metadata/core';
 import { AuthModal } from './auth-modal.service';
+import { Analytics } from '../analytics/analytics.service';
 
 @Directive( {
 	selector: 'gj-auth-required',
@@ -8,7 +9,6 @@ export class AuthRequiredDirective
 {
 	constructor(
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
-		@Inject( 'Analytics' ) private analytics: any,
 		@Inject( 'AuthModal' ) private modal: AuthModal,
 
 		// We can't inject through type yet since App may be different
@@ -28,7 +28,7 @@ export class AuthRequiredDirective
 			event.preventDefault();
 
 			this.modal.show();
-			this.analytics.trackEvent( 'auth-required-modal', 'shown' );
+			Analytics.trackEvent( 'auth-required-modal', 'shown' );
 		} );
 	}
 }

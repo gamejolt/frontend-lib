@@ -1,1 +1,3 @@
-angular.module( 'gj.Jam.Stream', [ 'gj.Model', 'gj.Jam' ] );
+angular.module( 'gj.Jam.Stream', [ 'gj.Jam' ] );
+
+require( './stream-model' );

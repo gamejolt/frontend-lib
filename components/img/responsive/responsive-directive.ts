@@ -1,7 +1,8 @@
-import { Directive, Inject, Input, Output, OnChanges, SimpleChanges } from 'ng-metadata/core';
-import { Screen } from './../../screen/screen-service';
-import { Ruler } from './../../ruler/ruler-service';
-import { ImgHelper } from './../helper/helper-service';
+import { Directive, Inject, Input, Output, OnChanges, SimpleChanges, EventEmitter } from 'ng-metadata/core';
+
+import { Screen } from '../../screen/screen-service';
+import { Ruler } from '../../ruler/ruler-service';
+import { ImgHelper } from '../helper/helper-service';
 
 const WIDTH_HEIGHT_REGEX = /\/(\d+)x(\d+)\//;
 const WIDTH_REGEX = /\/(\d+)\//;
@@ -9,11 +10,11 @@ const WIDTH_REGEX = /\/(\d+)\//;
 @Directive({
 	selector: '[gj-img-responsive]',
 })
-export class ResponsiveDirective implements OnChanges
+export class ImgResponsiveDirective implements OnChanges
 {
 	@Input( '@gjImgResponsive' ) startSrc: string;
 
-	@Output() onLoadedChange: Function;
+	@Output() private onLoadedChange = new EventEmitter<boolean>();
 
 	element: HTMLImageElement;
 	currentSrc: string;
@@ -22,7 +23,6 @@ export class ResponsiveDirective implements OnChanges
 		@Inject( '$element' ) $element: ng.IAugmentedJQuery,
 		@Inject( '$scope' ) private $scope: ng.IScope,
 		@Inject( 'Screen' ) private screen: Screen,
-		@Inject( 'Ruler' ) private ruler: Ruler,
 		@Inject( 'ImgHelper' ) private imgHelper: ImgHelper
 	)
 	{
@@ -43,7 +43,7 @@ export class ResponsiveDirective implements OnChanges
 	{
 		this.$scope.$applyAsync( () =>
 		{
-			const containerWidth = this.ruler.width( this.element.parentNode as HTMLElement );
+			const containerWidth = Ruler.width( this.element.parentNode as HTMLElement );
 
 			// Make sure we never do a 0 width, just in case.
 			// Seems to happen in some situations.
@@ -78,11 +78,9 @@ export class ResponsiveDirective implements OnChanges
 				this.element.src = newSrc;
 
 				// Keep the isLoaded state up to date?
-				if ( this.onLoadedChange ) {
-					this.onLoadedChange( { $loaded: false } );
-					this.imgHelper.loaded( newSrc )
-						.then( () => this.onLoadedChange( { $loaded: true } ) );
-				}
+				this.onLoadedChange.emit( false );
+				this.imgHelper.loaded( newSrc )
+					.then( () => this.onLoadedChange.emit( true ) );
 			}
 		} );
 	}
