@@ -3,11 +3,6 @@ export class MicrodataContainer
 	private static _document = window.document;
 	private static _head = MicrodataContainer._document.head;
 
-	// constructor( private _document: HTMLDocument )
-	// {
-	// 	this._head = this._document.head;
-	// }
-
 	static set( microdata: Object )
 	{
 		let elem = this._head.querySelector( 'script[type="application/ld+json"]' ) as HTMLScriptElement;

@@ -15,7 +15,6 @@ export class Location
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( '$state' ) private $state: StateService,
-		@Inject( 'Meta' ) private Meta: Meta,
 	)
 	{
 	}
@@ -63,8 +62,8 @@ export class Location
 			// This shouldn't be too big of an issue since search engines will eventually correct it.
 			// When prerendering we don't redirect in browser, we just send a redirect header.
 			if ( Environment.isPrerender ) {
-				this.Meta.redirect = this.$state.href( this.$state.current, mergedParams );
-				this.Meta.responseCode = '301';
+				Meta.redirect = this.$state.href( this.$state.current, mergedParams );
+				Meta.responseCode = '301';
 			}
 			else {
 				this.$state.go( this.$state.current, mergedParams, { location: 'replace', notify: false } );
@@ -77,8 +76,8 @@ export class Location
 		// We don't actually redirect if we're prerendering.
 		// We instead just return a redirect header.
 		if ( Environment.isPrerender ) {
-			this.Meta.redirect = this.$state.href( state, params );
-			this.Meta.responseCode = '301';
+			Meta.redirect = this.$state.href( state, params );
+			Meta.responseCode = '301';
 		}
 		else {
 			this.$state.go( state, params, { location: 'replace' } );

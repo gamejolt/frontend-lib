@@ -10,25 +10,13 @@ export class Meta extends MetaContainer
 	private static _twitter = TwitterMetaContainer;
 	private static _microdata = MicrodataContainer;
 
-	// constructor(
-	// 	// @Inject( '$rootScope' ) $rootScope: ng.IRootScopeService,
-	// 	// @Inject( '$document' ) private $document: ng.IDocumentService,
-	// )
-	// {
-	// 	super();
-
-	// 	this._originalTitle = window.document.title;
-	// 	this._fb = new FbMetaContainer( window.document );
-	// 	this._twitter = new TwitterMetaContainer( window.document );
-	// 	this._microdata = new MicrodataContainer( window.document );
-
-	// 	this.clear();
-
-	// 	$rootScope.$on( '$stateChangeSuccess', () =>
-	// 	{
-	// 		this.clear();
-	// 	} );
-	// }
+	static initAngular( $rootScope: any )
+	{
+		$rootScope.$on( '$stateChangeSuccess', () =>
+		{
+			this.clear();
+		} );
+	}
 
 	static set title( title: string | null )
 	{
