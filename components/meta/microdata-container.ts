@@ -1,13 +1,14 @@
 export class MicrodataContainer
 {
-	private _head: HTMLHeadElement;
+	private static _document = window.document;
+	private static _head = MicrodataContainer._document.head;
 
-	constructor( private _document: HTMLDocument )
-	{
-		this._head = this._document.head;
-	}
+	// constructor( private _document: HTMLDocument )
+	// {
+	// 	this._head = this._document.head;
+	// }
 
-	set( microdata: Object )
+	static set( microdata: Object )
 	{
 		let elem = this._head.querySelector( 'script[type="application/ld+json"]' ) as HTMLScriptElement;
 		if ( elem ) {
@@ -20,7 +21,7 @@ export class MicrodataContainer
 		this._head.appendChild( elem );
 	}
 
-	clear()
+	static clear()
 	{
 		let elem = this._head.querySelector( 'script[type="application/ld+json"]' ) as HTMLScriptElement;
 		if ( elem ) {

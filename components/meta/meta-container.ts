@@ -6,15 +6,11 @@ export class MetaField
 
 export class MetaContainer
 {
-	private _head: HTMLHeadElement;
-	private _fields: { [key: string]: MetaField } = {};
+	private static _document = window.document;
+	private static _head = MetaContainer._document.head;
+	private static _fields: { [key: string]: MetaField } = {};
 
-	constructor( private _document: HTMLDocument )
-	{
-		this._head = this._document.head;
-	}
-
-	protected _set( name: string, content: string | null )
+	protected static _set( name: string, content: string | null )
 	{
 		this._storeField( name, content );
 
@@ -38,12 +34,12 @@ export class MetaContainer
 		elem.content = content;
 	}
 
-	protected _get( name: string )
+	protected static _get( name: string )
 	{
 		return this._fields[ name ] ? this._fields[ name ].current : null;
 	}
 
-	protected _storeField( name: string, content: string | null )
+	protected static _storeField( name: string, content: string | null )
 	{
 		if ( !this._fields[ name ] ) {
 			const field = new MetaField();
