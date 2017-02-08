@@ -3,7 +3,7 @@ import { YoutubeChannel } from './channel-model';
 
 @NgModule({
 	providers: [
-		{ provide: 'YoutubeChannel', useFactory: () => YoutubeChannel }
+		{ provide: 'Youtube_Channel', useFactory: () => YoutubeChannel }
 	],
 })
 export class YoutubeChannelModule { }
