@@ -91,7 +91,7 @@ module.exports = function( config )
 				app: appEntries,
 			},
 			output: {
-				publicPath: '/',
+				publicPath: (config.production ? config.staticCdn : '') + '/',
 				path: path.resolve( base, config.buildDir ),
 				filename: config.production ? section + '.[chunkhash:6].js' : section + '.js',
 				chunkFilename: config.production ? section + '.[id].[chunkhash:6].js' : undefined,
