@@ -179,6 +179,7 @@ module.exports = function( config )
 			// Eval may be faster, but it doesn't allow setting breakpoints.
 			devtool: 'cheap-module-inline-source-map',
 			plugins: [
+				devNoop || new webpack.NoEmitOnErrorsPlugin(),
 				new webpack.DefinePlugin({
 					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
 					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
