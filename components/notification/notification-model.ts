@@ -66,7 +66,7 @@ export class Notification extends Model
 			this.to_model = new FiresidePost( data.to_resource_model );
 		}
 		else if ( data.to_resource == 'Forum_Topic' ) {
-			this.to_model = new (getProvider<any>( 'Form_Topic' ))( data.to_resource_model );
+			this.to_model = new (getProvider<any>( 'Forum_Topic' ))( data.to_resource_model );
 		}
 
 		if ( this.type == Notification.TYPE_COMMENT_ADD ) {
