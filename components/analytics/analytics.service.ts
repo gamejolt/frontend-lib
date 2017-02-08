@@ -182,7 +182,7 @@ export class Analytics
 
 		// If no path passed in, then pull it from the location.
 		if ( !path ) {
-			path = window.location.href;
+			path = window.location.pathname + window.location.search + window.location.hash;
 		}
 
 		// Pull the title.
