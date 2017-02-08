@@ -26,10 +26,14 @@
 	</div>
 	<br>
 
+	<!--
+		Note, we have to make the form field optional, otherwise it will affect the
+		parent form and say it's invalid.
+	-->
 	<form gj-form="formModel" name="markdownEditorMediaItemForm">
 		<div ng-if="Loader.ready( 'upload' )">
 
-			<form-group name="image" hide-label="true">
+			<form-group name="image" hide-label="true" optional="true">
 
 				<gj-form-upload-control
 					form-control="upload"
