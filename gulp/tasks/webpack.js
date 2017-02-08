@@ -36,8 +36,7 @@ module.exports = function( config )
 		}
 
 		loaders.unshift( 'style-loader' );
-
-		return loaders.join( '!' );
+		return loaders;
 	}
 
 	var webpackSectionConfigs = {};
@@ -55,36 +54,6 @@ module.exports = function( config )
 			appEntries.push( 'webpack-dev-server/client?http://localhost:' + config.port + '/' );
 			appEntries.push( 'webpack/hot/dev-server' );
 		}
-
-		var tsLoader = [
-			{
-				// God save us.
-				loader: 'string-replace-loader',
-				options: {
-					search: '$import(',
-					replace: 'import('
-				}
-			},
-			{
-				loader: 'ng-annotate-loader',
-				options: {
-					add: true,
-					map: { inline: true },
-				},
-			},
-			{
-				loader: 'ts-loader',
-				options: {
-					transpileOnly: true,
-				}
-			},
-		];
-
-		var stylusLoader = stylesLoader( [
-			'css-loader?-minimize',
-			'postcss-loader',
-			'stylus-relative-loader?paths[]=src/&resolve url&include css',
-		] );
 
 		webpackSectionConfigs[ section ] = {
 			entry: {
@@ -105,21 +74,38 @@ module.exports = function( config )
 				}
 			},
 			externals: externals,
+			resolveLoader: {
+				alias: {
+					'view': 'vue-template-loader?scoped',
+				}
+			},
 			module: {
 				rules: [
 					{
-						test: /\.vue$/,
-						loader: 'vue-loader',
-						options: {
-							loaders: {
-								ts: tsLoader,
-								styl: stylusLoader,
-							}
-						},
-					},
-					{
 						test: /\.tsx?$/,
-						use: tsLoader,
+						use: [
+							{
+								// God save us.
+								loader: 'string-replace-loader',
+								options: {
+									search: '$import(',
+									replace: 'import('
+								}
+							},
+							{
+								loader: 'ng-annotate-loader',
+								options: {
+									add: true,
+									map: { inline: true },
+								},
+							},
+							{
+								loader: 'ts-loader',
+								options: {
+									transpileOnly: true,
+								}
+							},
+						],
 						exclude: /node_modules/,
 					},
 					{
@@ -143,7 +129,8 @@ module.exports = function( config )
 						],
 						exclude: /node_modules/,
 					},
-					{
+					// For vue we use the "view" alias.
+					config.framework === 'vue' ? {} : {
 						test: /\.html$/,
 						use: [
 							'file-loader?name=templates/[name].[hash:6].[ext]',
@@ -151,9 +138,19 @@ module.exports = function( config )
 							'html-loader',
 						],
 					},
+					// Gotta split it out for vue, but it would be fine with angular as well.
 					{
+						enforce: 'pre',
 						test: /\.styl$/,
-						loader: stylusLoader,
+						use: 'stylus-relative-loader?paths[]=src/&resolve url&include css',
+					},
+					{
+						enforce: 'post',
+						test: /\.styl$/,
+						use: stylesLoader( [
+							'css-loader?-minimize',
+							'postcss-loader',
+						] )
 					},
 					{
 						test: /\.md$/,

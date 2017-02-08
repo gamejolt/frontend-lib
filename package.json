@@ -40,7 +40,7 @@
     "autoprefixer": "6.7.2",
     "vue-loader": "10.2.3",
     "vue-style-loader": "2.0.0",
-    "vue-typescript-import-dts": "3.0.1",
+    "vue-template-loader": "0.2.2",
     "vue-template-compiler": "2.1.10"
   }
 }

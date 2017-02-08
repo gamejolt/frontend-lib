@@ -1,18 +1,20 @@
 import * as Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import * as View from 'view!./video.html?style=./video.styl';
+
 import { Environment } from '../../../../components/environment/environment.service';
 import { Analytics } from '../../../../components/analytics/analytics.service';
 import { Ads } from '../../../../components/ad/ads.service';
 import { time } from '../../../filters/time';
 import { loadScript } from '../../../../utils/utils';
-
-import * as AppLoading from '../../loading/loading.vue';
-import * as AppJolticon from '../../jolticon/jolticon.vue';
+import { AppLoading } from '../../loading/loading';
+import { AppJolticon } from '../../jolticon/jolticon';
 
 const ImaScriptSrc = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
 const AdSlotWidth = 910;
 const AdSlotHeight = 512;
 
+@View
 @Component({
 	name: 'ad-video',
 	filters: {
@@ -23,7 +25,7 @@ const AdSlotHeight = 512;
 		AppJolticon,
 	}
 })
-export default class AppAdVideo extends Vue
+export class AppAdVideo extends Vue
 {
 	@Prop( String ) resource: string;
 	@Prop( Number ) resourceId: number;
