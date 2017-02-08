@@ -12,7 +12,7 @@ export interface RequestOptions
 	/**
 	 * Progress handler. Will only be used when uploading a file.
 	 */
-	progress?: ( event: ProgressEvent ) => void;
+	progress?: ( event: ProgressEvent | undefined ) => void;
 
 	/**
 	 * Whether or not to show the loading bar.
@@ -185,15 +185,23 @@ export class Api
 				ignoreLoadingBar: true,
 			} );
 
-			uploadPromise.then( null, null, ( event: any ) =>
-			{
-				if ( options.progress && event.lengthComputable ) {
-					options.progress( {
-						current: event.loaded,
-						total: event.total,
-					} );
-				}
-			} );
+			// Set up progress events.
+			uploadPromise
+				.then( null, null, ( event: any ) =>
+				{
+					if ( options.progress && event.lengthComputable ) {
+						options.progress( {
+							current: event.loaded,
+							total: event.total,
+						} );
+					}
+				} )
+				.then( () =>
+				{
+					if ( options.progress ) {
+						options.progress( undefined );
+					}
+				} );
 
 			return uploadPromise;
 		}
