@@ -1,0 +1,20 @@
+<div section class="section fill-darker media-bar scrollable scrollable-x overlay-scrollbar"
+	:class="{ 'is-loading': !mediaItems }"
+	>
+	<div class="media-bar-items">
+
+		<div class="loading-container" v-if="!mediaItems">
+			<app-loading :centered="true" :no-color="true" :stationary="true" :hide-label="true" />
+		</div>
+
+		<div v-if="mediaItems">
+			<app-media-bar-item
+				v-for="item of mediaItems"
+				:key="item.id"
+				:item="item"
+				>
+			</app-media-bar-item>
+		</div>
+
+	</div>
+</div>

@@ -77,10 +77,10 @@
 
 		<gj-video-embed
 			video-provider="youtube"
-			video-id="$ctrl.video.video_id"
-			max-video-width="$ctrl.maxWidth"
-			max-video-height="$ctrl.maxHeight"
-			autoplay="true"
+			[video-id]="$ctrl.video.video_id"
+			[max-video-width]="$ctrl.maxWidth"
+			[max-video-height]="$ctrl.maxHeight"
+			[autoplay]="true"
 			>
 		</gj-video-embed>
 

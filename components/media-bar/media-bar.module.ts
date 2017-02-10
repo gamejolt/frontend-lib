@@ -1,17 +1,10 @@
 import { NgModule } from 'ng-metadata/core';
-import { MediaBarComponent } from './media-bar.component';
-import { MediaBarItemComponent } from './item/item.component';
-import { MediaBarLightboxComponent } from './lightbox/lightbox.component';
-import { MediaBarLightboxSliderComponent } from './lightbox/slider.component';
-import { MediaBarLightboxItemComponent } from './lightbox/item/item.component';
+import { makeComponentProvider } from '../../vue/angular-link';
+import { AppMediaBar } from './media-bar';
 
 @NgModule({
 	declarations: [
-		MediaBarComponent,
-		MediaBarItemComponent,
-		MediaBarLightboxComponent,
-		MediaBarLightboxSliderComponent,
-		MediaBarLightboxItemComponent,
+		makeComponentProvider( AppMediaBar ),
 	],
 })
 export class MediaBarModule { }

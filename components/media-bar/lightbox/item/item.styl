@@ -1,7 +1,9 @@
-$media-bar-lightbox-item-start-opacity = 0.5
-$media-bar-lightbox-item-start-scale = 0.5
+@import '~styles/variables'
 
-gj-media-bar-lightbox-item
+$media-bar-lightbox-item-start-opacity ?= 0.5
+$media-bar-lightbox-item-start-scale ?= 0.5
+
+.media-bar-lightbox-item
 	display: inline-block
 	width: 80%
 	vertical-align: top
@@ -16,37 +18,35 @@ gj-media-bar-lightbox-item
 	.dragging &
 		transition: none
 
-.media-bar-lightbox-item
-
 	// Browsers will allow you to drag the image somewhere to paste the URL.
 	// Turn that off since we want to enable dragging to switch images.
 	img
 		pointer-events: none
 
-.media-bar-lightbox-item-embed
-	position: relative
+	&-embed
+		position: relative
 
-	img
-	iframe
-		display: block
-		margin: 0 auto
-		border: 5px solid $gray-dark
+		img
+		iframe
+			display: block
+			margin: 0 auto
+			border: 5px solid $gray-dark
 
-.media-bar-lightbox-item-caption
-	padding-top: $font-size-base
-	text-align: center
-	color: $white
-	width: 900px
-	max-width: 80%
-	margin: 0 auto
-	white-space: normal
-
-	h4
-		margin-top: 0
+	&-caption
+		padding-top: $font-size-base
+		text-align: center
 		color: $white
-		font-weight: 300
+		width: 900px
+		max-width: 80%
+		margin: 0 auto
+		white-space: normal
 
-	a
-		color: $gj-blue
-		&:hover
-			color: $gj-pink
+		h4
+			margin-top: 0
+			color: $white
+			font-weight: 300
+
+		a
+			color: $gj-blue
+			&:hover
+				color: $gj-pink

@@ -1,0 +1,20 @@
+<div class="media-bar-item">
+	<a class="media-bar-item-wrapper" @click="onClick">
+
+		<img
+			v-app-img-responsive="item.img_thumbnail"
+			@imgloadchange="onLoadedChange"
+			:title="item.media_type == 'image' ? item.caption : item.title"
+			:alt="item.media_type == 'image' ? item.caption : item.title"
+			>
+
+		<span class="play-button-overlay play-button-overlay-small" v-if="item.media_type === 'video'">
+			<app-jolticon icon="play" />
+		</span>
+
+		<span class="play-button-overlay play-button-overlay-small" v-if="item.media_type === 'sketchfab'">
+			<app-jolticon icon="sketchfab" />
+		</span>
+
+	</a>
+</div>

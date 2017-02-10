@@ -1,6 +1,27 @@
-$zindex-media-bar-lightbox ?= 500
+// $zindex-media-bar-lightbox ?= 500
 
-@import './media-bar.component'
-@import './item/item.component'
-@import './lightbox/lightbox.component'
-@import './lightbox/item/item.component'
+// @import './media-bar.component'
+// @import './item/item.component'
+// @import './lightbox/lightbox.component'
+// @import './lightbox/item/item.component'
+
+.media-bar
+	position: relative
+	padding: 20px 0
+
+	&.is-loading
+		min-height: 150px + (20px * 2)
+
+	.loading-container
+		position: absolute
+		left: 0
+		right: 0
+		top: 50%
+
+		.loading
+			margin-top: -20px
+
+	&-items
+		margin: 0 auto
+		white-space: nowrap
+		text-align: center

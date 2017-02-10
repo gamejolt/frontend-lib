@@ -1,0 +1,101 @@
+<div class="media-bar-lightbox-item">
+	<div class="media-bar-lightbox-item-inner" v-if="isActive || isNext || isPrev">
+
+		<!-- Image -->
+		<div v-if="item.media_type === 'image'">
+			<div class="media-bar-lightbox-item-embed"
+				v-if="maxWidth && maxHeight"
+				>
+
+				<!--
+					The min/max will be the actual dimensions for the image thumbnail.
+				-->
+				<img
+					v-app-img-responsive="item.img_thumbnail"
+					:alt="item.caption"
+					:style="{ width: maxWidth + 'px', height: maxHeight + 'px' }"
+					>
+			</div>
+
+			<div class="media-bar-lightbox-item-caption" v-if="item.caption">
+				<h4>{{ item.caption }}</h4>
+			</div>
+		</div>
+
+		<!-- Video -->
+		<div v-if="item.media_type === 'video'">
+			<div class="media-bar-lightbox-item-embed"
+				v-if="maxWidth && maxHeight"
+				>
+				<div v-if="lightbox.mediaBar.isPlaying !== itemIndex">
+
+					<!--
+						Since we don't have the original width/height for videos, we have to just set max dimensions for the thumbnail.
+					-->
+					<img
+						v-app-img-responsive="item.img_thumbnail"
+						:alt="item.title"
+						:style="{ 'max-height': maxHeight + 'px', 'max-width': maxWidth + 'px' }"
+						>
+
+					<span class="play-button-overlay" @click="play">
+						<span class="jolticon jolticon-play"></span>
+					</span>
+				</div>
+
+				<div v-if="lightbox.mediaBar.isPlaying === itemIndex">
+					<app-video-embed
+						class="media-bar-lightbox-item-embed"
+						:video-provider="item.type"
+						:video-id="item.url"
+						:max-video-width="maxWidth"
+						:max-video-height="maxHeight"
+						:autoplay="true"
+						>
+					</app-video-embed>
+				</div>
+			</div>
+
+			<div class="media-bar-lightbox-item-caption">
+				<h4>{{ item.title }}</h4>
+				<!--TODO: This used to link links-->
+				<p v-if="item.description" v-text="item.description"></p>
+			</div>
+		</div>
+
+		<!-- Sketchfab -->
+		<div v-if="item.media_type === 'sketchfab'">
+			<div class="game-media-bar-lightbox-item-embed"
+				v-if="maxWidth && maxHeight"
+				>
+				<div v-if="lightbox.mediaBar.isPlaying !== itemIndex ">
+
+					<!--
+						Since we don't have the original width/height for videos, we have to just set max dimensions for the thumbnail.
+					-->
+					<img
+						:src="item.img_thumbnail"
+						alt=""
+						:style="{ 'max-height': maxHeight + 'px', 'max-width': maxWidth + 'px' }"
+						>
+
+					<span class="play-button-overlay" @click="play">
+						<span class="jolticon jolticon-play"></span>
+					</span>
+				</div>
+
+				<div v-if="lightbox.mediaBar.isPlaying === itemIndex">
+					<app-sketchfab-embed
+						class="game-media-bar-lightbox-item-embed"
+						:sketchfab-id="item.sketchfab_id"
+						:max-width="maxWidth"
+						:max-height="maxHeight"
+						:autoplay="true"
+						>
+					</app-sketchfab-embed>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
