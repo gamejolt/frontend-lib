@@ -22,14 +22,12 @@ export class ImgResponsiveDirective implements OnChanges
 	constructor(
 		@Inject( '$element' ) $element: ng.IAugmentedJQuery,
 		@Inject( '$scope' ) private $scope: ng.IScope,
-		@Inject( 'Screen' ) private screen: Screen,
-		@Inject( 'ImgHelper' ) private imgHelper: ImgHelper
 	)
 	{
 		this.element = $element[0] as HTMLImageElement;
 		this.element.classList.add( 'img-responsive' );
 
-		screen.setResizeSpy( $scope, () => this.updateSrc() );
+		Screen.setResizeSpy( $scope, () => this.updateSrc() );
 	}
 
 	ngOnChanges( changes: SimpleChanges )
@@ -55,7 +53,7 @@ export class ImgResponsiveDirective implements OnChanges
 			// We keep width within 100px increment bounds.
 			let newSrc = this.startSrc;
 			let mediaserverWidth = containerWidth;
-			if ( this.screen.isHiDpi ) {
+			if ( Screen.isHiDpi ) {
 
 				// For high dpi, double the width.
 				mediaserverWidth = mediaserverWidth * 2;
@@ -79,7 +77,7 @@ export class ImgResponsiveDirective implements OnChanges
 
 				// Keep the isLoaded state up to date?
 				this.onLoadedChange.emit( false );
-				this.imgHelper.loaded( newSrc )
+				ImgHelper.loaded( newSrc )
 					.then( () => this.onLoadedChange.emit( true ) );
 			}
 		} );
