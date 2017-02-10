@@ -183,6 +183,11 @@ module.exports = function( config )
 					GJ_IS_CLIENT: JSON.stringify( false ),
 					GJ_IS_ANGULAR: JSON.stringify( config.framework === 'angular' ),
 					GJ_IS_VUE: JSON.stringify( config.framework === 'vue' ),
+
+					// This sets vue in production mode.
+					'process.env': {
+						NODE_ENV: JSON.stringify( config.production ? 'production' : 'development' ),
+					},
 				}),
 				new webpack.LoaderOptionsPlugin({
 					options: {
