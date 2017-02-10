@@ -1,3 +1,3 @@
-angular.module( 'gj.Scroll.FixedResizer', [ 'ui.bootstrap.position', 'gj.Screen', 'gj.Scroll' ] );
+angular.module( 'gj.Scroll.FixedResizer', [ 'ui.bootstrap.position', 'gj.Scroll' ] );
 
 require( './fixed-resizer-directive' );

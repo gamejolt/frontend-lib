@@ -1,4 +1,4 @@
-angular.module( 'gj.Scroll', [ 'duScroll', 'gj.Screen' ] );
+angular.module( 'gj.Scroll', [ 'duScroll' ] );
 
 require( './scroll-context-directive' );
 require( './scroll-service' );

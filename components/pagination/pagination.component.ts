@@ -35,9 +35,10 @@ export class PaginationComponent implements OnChanges
 
 	pages: number[] = [];
 
+	screen = Screen;
+
 	constructor(
 		@Inject( '$state' ) public $state: StateService,
-		@Inject( 'Screen' ) public screen: Screen,
 	)
 	{
 	}

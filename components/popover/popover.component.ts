@@ -44,6 +44,8 @@ export class PopoverComponent implements OnInit, OnDestroy
 	private backdropElemCompiled?: ng.IAugmentedJQuery;
 	private hideDeregister?: any;
 
+	screen = Screen;
+
 	constructor(
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
 		@Inject( '$scope' ) private $scope: ng.IScope,
@@ -56,7 +58,6 @@ export class PopoverComponent implements OnInit, OnDestroy
 		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( 'Popover' ) private popoverService: Popover,
 		@Inject( 'Scroll' ) private scroll: any,
-		@Inject( 'Screen' ) public screen: Screen,
 		@Inject( '[gj-popover-context]' ) @SkipSelf() @Optional() private context: PopoverContextDirective,
 	)
 	{

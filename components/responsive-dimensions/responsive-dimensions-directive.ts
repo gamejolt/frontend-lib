@@ -14,11 +14,10 @@ export class ResponsiveDimensionsDirective implements OnChanges
 	constructor(
 		@Inject( '$element' ) $element: ng.IAugmentedJQuery,
 		@Inject( '$scope' ) $scope: ng.IScope,
-		@Inject( 'Screen' ) screen: Screen,
 	)
 	{
 		this.element = $element[0] as HTMLImageElement;
-		screen.setResizeSpy( $scope, () => this.updateDimensions() );
+		Screen.setResizeSpy( $scope, () => this.updateDimensions() );
 	}
 
 	ngOnChanges( changes: SimpleChanges )

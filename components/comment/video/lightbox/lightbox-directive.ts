@@ -28,7 +28,6 @@ export class LightboxComponent implements OnInit
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'hotkeys' ) hotkeys: ng.hotkeys.HotkeysProvider,
 		@Inject( 'App' ) app: App,
-		@Inject( 'Screen' ) private screen: Screen,
 		@Inject( 'HistoryTick' ) private historyTick: HistoryTick
 	)
 	{
@@ -51,7 +50,7 @@ export class LightboxComponent implements OnInit
 
 		this.calcMaxDimensions();
 
-		screen.setResizeSpy( $scope, () =>
+		Screen.setResizeSpy( $scope, () =>
 		{
 			this.calcMaxDimensions();
 		} );
@@ -84,13 +83,13 @@ export class LightboxComponent implements OnInit
 
 	calcMaxDimensions()
 	{
-		if ( this.screen.isXs ) {
-			this.maxWidth = this.screen.width;
-			this.maxHeight = this.screen.height;
+		if ( Screen.isXs ) {
+			this.maxWidth = Screen.width;
+			this.maxHeight = Screen.height;
 		}
 		else {
-			this.maxWidth = (this.screen.width * 0.8);
-			this.maxHeight = this.screen.height - (80 * 2);
+			this.maxWidth = (Screen.width * 0.8);
+			this.maxHeight = Screen.height - (80 * 2);
 		}
 	}
 
