@@ -1,4 +1,5 @@
 var gulp = require( 'gulp' );
+var gutil = require( 'gulp-util' );
 var path = require( 'path' );
 
 var webpack = require( 'webpack' );
@@ -176,7 +177,6 @@ module.exports = function( config )
 			// Eval may be faster, but it doesn't allow setting breakpoints.
 			devtool: 'cheap-module-inline-source-map',
 			plugins: [
-				devNoop || new webpack.NoEmitOnErrorsPlugin(),
 				new webpack.DefinePlugin({
 					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
 					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
@@ -265,7 +265,19 @@ module.exports = function( config )
 		gulp.task( 'compile:' + section, function( cb )
 		{
 			var compiler = webpack( webpackSectionConfigs[ section ] );
-			compiler.run( cb );
+			compiler.run( function( err, stats )
+			{
+				if ( err ) {
+					throw new gutil.PluginError( 'webpack:build', err );
+				}
+
+				gutil.log( '[webpack:build]', stats.toString( {
+					chunks: false,
+					colors: true
+				} ) );
+
+				cb();
+			} );
 		} );
 
 		webpackSectionTasks.push( 'compile:' + section );
