@@ -5,7 +5,7 @@ import { Component, Input } from 'ng-metadata/core';
 	template: `
 		<gj-video-embed
 			video-provider="vimeo"
-			video-id="$ctrl.videoId"
+			[video-id]="$ctrl.videoId"
 			>
 		</gj-video-embed>
 	`,

@@ -3,15 +3,15 @@
 
 		<iframe nwdisable nwfaketop
 			type="text/html" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
-			ng-if="$ctrl.videoProvider == 'youtube' && $ctrl.embedUrl"
-			width="{{ $ctrl.width }}" height="{{ $ctrl.height }}"
-			ng-src="{{ $ctrl.embedUrl }}"></iframe>
+			v-if="videoProvider === 'youtube' && embedUrl"
+			:width="width" :height="height"
+			:src="embedUrl"></iframe>
 
 		<iframe nwdisable nwfaketop
 			frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
-			ng-if="$ctrl.videoProvider == 'vimeo' && $ctrl.embedUrl"
-			width="{{ $ctrl.width }}" height="{{ $ctrl.height }}"
-			ng-src="{{ $ctrl.embedUrl }}"></iframe>
+			v-if="videoProvider === 'vimeo' && embedUrl"
+			:width="width" :height="height"
+			:src="embedUrl"></iframe>
 
 	</div>
 </div>

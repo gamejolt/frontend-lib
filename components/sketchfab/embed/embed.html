@@ -3,8 +3,8 @@
 
 		<iframe nwdisable nwfaketop
 			frameborder="0" allowvr allowfullscreen mozallowfullscreen webkitallowfullscreen
-			width="{{ $ctrl.width }}" height="{{ $ctrl.height }}"
-			ng-src="{{ $ctrl.embedUrl }}"
+			:width="width" :height="height"
+			:src="embedUrl"
 			>
 		</iframe>
 
