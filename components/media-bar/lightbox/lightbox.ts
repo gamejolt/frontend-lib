@@ -1,5 +1,6 @@
 import * as Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { Subscription } from 'rxjs/Subscription';
 const VueShortkey = require( 'vue-shortkey' );
 import * as View from '!view!./lightbox.html?style=./lightbox.styl';
 
@@ -7,9 +8,10 @@ import { Screen } from '../../screen/screen-service';
 import { AppMediaBar } from '../media-bar';
 import { Loader } from '../../loader/loader.service';
 import { Analytics } from '../../analytics/analytics.service';
-import { AppMediaBarLightboxSlider } from './slider';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import { AppMediaBarLightboxSlider } from './slider';
 import { AppMediaBarLightboxItem } from './item/item';
+import { getProvider } from '../../../utils/utils';
 
 Vue.use( VueShortkey );
 
@@ -45,17 +47,19 @@ export class AppMediaBarLightbox extends Vue
 	isDragging = false;
 	waitingForFrame = false;
 
-	Loader = Loader;
+	loaded = false;
+	resize$: Subscription;
 
-	resize$ = Screen.resizeChanges.subscribe( () =>
+	async mounted()
 	{
-		this.calcMaxDimensions();
-		this.refreshSliderPosition();
-	} );
+		this.resize$ = Screen.resizeChanges.subscribe( () =>
+		{
+			this.calcMaxDimensions();
+			this.refreshSliderPosition();
+		} );
 
-	created()
-	{
-		Loader.load( 'hammer-vue' );
+		await Loader.load( 'hammer-vue' );
+		this.loaded = true;
 	}
 
 	destroy()
@@ -120,7 +124,10 @@ export class AppMediaBarLightbox extends Vue
 
 		// Replace the URL. This way people can link to it by pulling from the browser bar,
 		// but we don't want it to mess up their history navigation after closing.
-		// this.$location.hash( hash ).replace();
+		if ( GJ_IS_ANGULAR ) {
+			const $location = getProvider<any>( '$location' );
+			$location.hash( hash ).replace();
+		}
 	}
 
 	refreshSliderPosition()
@@ -233,5 +240,5 @@ export class AppMediaBarLightbox extends Vue
 		// We don't change the active item and instead just refresh the slider position.
 		// This should reset the position after us moving it in drag().
 		this.refreshSliderPosition();
-	};
+	}
 }

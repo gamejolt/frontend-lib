@@ -7,6 +7,7 @@ import { Analytics } from '../analytics/analytics.service';
 import { AppLoading } from '../../vue/components/loading/loading';
 import { AppMediaBarItem } from './item/item';
 import { AppMediaBarLightbox } from './lightbox/lightbox';
+import { getProvider } from '../../utils/utils';
 
 @View
 @Component({
@@ -41,9 +42,13 @@ export class AppMediaBar extends Vue
 		}
 	}
 
-	updated()
+	async updated()
 	{
+		// It seems like since we were changing state in the updated event it
+		// wasn't correctly seeing that the check URL updates the state. Using
+		// next tick to fix this.
 		if ( typeof this.mediaItems !== 'undefined' && !this.urlChecked ) {
+			await this.$nextTick();
 			this.checkUrl();
 		}
 	}
@@ -66,13 +71,21 @@ export class AppMediaBar extends Vue
 
 	goNext()
 	{
-		this.go( Math.min( (this.mediaItems.length - 1), this.activeIndex + 1 ) );
+		if ( this.activeIndex + 1 >= this.mediaItems.length ) {
+			return;
+		}
+
+		this.go( this.activeIndex + 1 );
 		this.trackEvent( 'next' );
 	}
 
 	goPrev()
 	{
-		this.go( Math.max( 0, this.activeIndex - 1 ) );
+		if ( this.activeIndex - 1 < 0 ) {
+			return;
+		}
+
+		this.go( this.activeIndex - 1 );
 		this.trackEvent( 'prev' );
 	}
 
@@ -97,7 +110,7 @@ export class AppMediaBar extends Vue
 
 		// If there is a hash in the URL, let's try to load it in.
 		let id: number | undefined;
-		const hash = window.location.hash;
+		const hash = window.location.hash.substring( 1 );
 		if ( hash ) {
 			let type: string | undefined;
 			if ( hash.indexOf( 'screenshot-' ) !== -1 ) {
@@ -119,25 +132,26 @@ export class AppMediaBar extends Vue
 					this.setActiveItem( item );
 					this.trackEvent( 'permalink' );
 				}
-				else {
-					// if ( type === 'image' ) {
-					// 	this.growls.error(
-					// 		`We couldn't find the image that was linked. It may have been removed.`,
-					// 		`Invalid Image URL`
-					// 	);
-					// }
-					// else if ( type === 'video' ) {
-					// 	this.growls.error(
-					// 		`We couldn't find the video that was linked. It may have been removed.`,
-					// 		`Invalid Video URL`
-					// 	);
-					// }
-					// else if ( type === 'sketchfab' ) {
-					// 	this.growls.error(
-					// 		`We couldn't find the sketchfab model that was linked. It may have been removed.`,
-					// 		`Invalid Sketchfab URL`
-					// 	);
-					// }
+				else if ( GJ_IS_ANGULAR) {
+					const Growls = getProvider<any>( 'Growls' );
+					if ( type === 'image' ) {
+						Growls.error(
+							`We couldn't find the image that was linked. It may have been removed.`,
+							`Invalid Image URL`
+						);
+					}
+					else if ( type === 'video' ) {
+						Growls.error(
+							`We couldn't find the video that was linked. It may have been removed.`,
+							`Invalid Video URL`
+						);
+					}
+					else if ( type === 'sketchfab' ) {
+						Growls.error(
+							`We couldn't find the sketchfab model that was linked. It may have been removed.`,
+							`Invalid Sketchfab URL`
+						);
+					}
 					this.trackEvent( 'permalink-invalid' );
 				}
 			}
@@ -149,7 +163,6 @@ export class AppMediaBar extends Vue
 		if ( this.lightbox ) {
 			return;
 		}
-
 		const elem = document.createElement( 'div' );
 		window.document.body.appendChild( elem );
 

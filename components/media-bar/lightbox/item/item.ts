@@ -1,5 +1,6 @@
 import * as Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Subscription } from 'rxjs/Subscription';
 import * as View from '!view!./item.html?style=./item.styl';
 
 import { MediaBarLightboxConfig, AppMediaBarLightbox } from '../lightbox';
@@ -37,18 +38,15 @@ export class AppMediaBarLightboxItem extends Vue
 	maxWidth = 0;
 	maxHeight = 0;
 
-	resize$ = Screen.resizeChanges.subscribe( async () =>
-	{
-		// We have to do it after changes are applied to the DOM.
-		await this.$nextTick();
-		this.calcDimensions();
-	} );
+	resize$: Subscription;
 
 	mounted()
 	{
 		this.lightbox = findVueParent( this, AppMediaBarLightbox ) as AppMediaBarLightbox;
 		this.calcActive();
 		this.calcDimensions();
+
+		this.resize$ = Screen.resizeChanges.subscribe( () => this.calcDimensions() );
 	}
 
 	destroyed()
@@ -67,8 +65,10 @@ export class AppMediaBarLightboxItem extends Vue
 		this.lightbox.mediaBar.isPlaying = this.itemIndex;
 	}
 
-	calcDimensions()
+	async calcDimensions()
 	{
+		await this.$nextTick();
+
 		this.maxWidth = this.lightbox.maxItemWidth - MediaBarLightboxConfig.itemPadding;
 		this.maxHeight = this.lightbox.maxItemHeight;
 
@@ -103,10 +103,6 @@ export class AppMediaBarLightboxItem extends Vue
 		}
 
 		if ( this.isActive || this.isNext || this.isPrev ) {
-
-			// Since changing these values affect whether or not the image is loaded (v-if in the template)
-			// we have to wait until vue compiles back in.
-			await this.$nextTick();
 			this.calcDimensions();
 		}
 	}

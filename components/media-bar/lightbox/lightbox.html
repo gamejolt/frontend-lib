@@ -1,26 +1,26 @@
-<div v-if="Loader.ready( 'hammer-vue' )">
+<div v-if="loaded">
 	<v-touch
 		class="media-bar-lightbox"
 		@panstart="panStart"
 		@pan="pan"
 		@panend="panEnd"
 		>
+
+		<span v-shortkey="[ 'arrowleft' ]" @shortkey="goPrev"></span>
+		<span v-shortkey="[ 'arrowright' ]" @shortkey="goNext"></span>
+
 		<div class="media-bar-lightbox-inner">
 
 			<a class="media-bar-lightbox-prev"
 				v-if="mediaBar.activeIndex > 0"
-				v-shortkey="[ 'arrowleft' ]"
 				@click="goPrev"
-				@shortkey="goPrev"
 				>
 				<app-jolticon icon="chevron-left" />
 			</a>
 
 			<a class="media-bar-lightbox-next"
 				v-if="mediaBar.activeIndex < mediaBar.mediaItems.length - 1"
-				v-shortkey="[ 'arrowright' ]"
 				@click="goNext"
-				@shortkey="goNext"
 				>
 				<app-jolticon icon="chevron-right" />
 			</a>
