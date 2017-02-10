@@ -1,6 +1,6 @@
 import * as Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from 'view!./video.html?style=./video.styl';
+import * as View from '!view!./video.html?style=./video.styl';
 
 import { Environment } from '../../../../components/environment/environment.service';
 import { Analytics } from '../../../../components/analytics/analytics.service';
@@ -27,10 +27,10 @@ const AdSlotHeight = 512;
 })
 export class AppAdVideo extends Vue
 {
-	@Prop() resource: string;
-	@Prop() resourceId: number;
-	@Prop( { default: 'game' } ) resourceLabel: string;
-	@Prop() trackingLabel: string;
+	@Prop( String ) resource: string;
+	@Prop( Number ) resourceId: number;
+	@Prop( { type: String, default: 'game' } ) resourceLabel: string;
+	@Prop( String ) trackingLabel: string;
 
 	private videoElem: HTMLVideoElement;
 	private adContainerElem: HTMLElement;

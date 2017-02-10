@@ -8,5 +8,5 @@ import * as View from '!view!./jolticon.html';
 })
 export class AppJolticon extends Vue
 {
-	@Prop() icon: string;
+	@Prop( String ) icon: string;
 }

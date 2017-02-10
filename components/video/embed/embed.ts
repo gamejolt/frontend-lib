@@ -14,18 +14,30 @@ const VIDEO_RATIO = 0.5625;  // 16:9
 export class AppVideoEmbed extends Vue
 {
 	@Prop( String ) videoProvider: 'youtube' | 'vimeo';
-	@Prop() videoId: string;
-	@Prop() maxVideoHeight: number;
-	@Prop() maxVideoWidth: number;
-	@Prop( { default: false } ) autoplay: boolean;
+	@Prop( String ) videoId: string;
+	@Prop( Number ) maxVideoHeight: number;
+	@Prop( Number ) maxVideoWidth: number;
+	@Prop( { type: Boolean, default: false } ) autoplay: boolean;
 
 	embedUrl = '';
 	width = 0;
 	height = 0;
 
-	mounted()
+	resize = Screen.resizeChanges.subscribe( async () =>
 	{
-		this.$nextTick( () => this.recalculateDimensions() );
+		await this.$nextTick();
+		this.recalculateDimensions();
+	} );
+
+	async mounted()
+	{
+		await this.$nextTick();
+		this.recalculateDimensions();
+	}
+
+	destroyed()
+	{
+		this.resize.unsubscribe();
 	}
 
 	@Watch( 'videoId', { immediate: true } )
@@ -72,34 +84,3 @@ export class AppVideoEmbed extends Vue
 	}
 
 }
-
-
-/*
-@Component({
-	selector: 'gj-video-embed',
-	template,
-})
-export class VideoEmbedComponent implements OnChanges
-{
-
-
-	constructor(
-		@Inject( '$scope' ) $scope: any,
-		@Inject( '$element' ) private $element: any,
-		@Inject( '$sce' ) private $sce: ng.ISCEService,
-		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
-	)
-	{
-		this.$timeout( () => this.recalculateDimensions() );
-
-		Screen.setResizeSpy( $scope, () =>
-		{
-			// Wait till it renders before calculating.
-			this.$timeout( () => this.recalculateDimensions() );
-		} );
-	}
-
-
-
-}
-*/

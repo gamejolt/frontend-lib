@@ -13,18 +13,29 @@ const RATIO = 0.5625; // 16:9
 })
 export class AppSketchfabEmbed extends Vue
 {
-	@Prop() sketchfabId: string;
-	@Prop() maxWidth: number;
-	@Prop() maxHeight: number;
-	@Prop( { default: false } ) autoplay: boolean;
+	@Prop( String ) sketchfabId: string;
+	@Prop( Number ) maxWidth: number;
+	@Prop( Number ) maxHeight: number;
+	@Prop( { type: Boolean, default: false } ) autoplay: boolean;
 
 	embedUrl = '';
 	width = 0;
 	height = 0;
 
+	resize = Screen.resizeChanges.subscribe( async () =>
+	{
+		await this.$nextTick();
+		this.recalculateDimensions();
+	} );
+
 	mounted()
 	{
 		this.$nextTick( () => this.recalculateDimensions() );
+	}
+
+	destroyed()
+	{
+		this.resize.unsubscribe();
 	}
 
 	@Watch( 'sketchfabId', { immediate: true } )
@@ -59,26 +70,3 @@ export class AppSketchfabEmbed extends Vue
 		}
 	}
 }
-
-/*
-@Component({
-	selector: 'gj-sketchfab-embed',
-	template,
-})
-export class SketchfabEmbedComponent implements OnChanges
-{
-	constructor(
-		@Inject( '$scope' ) $scope: any,
-		@Inject( '$element' ) private $element: any,
-		@Inject( '$sce' ) private $sce: ng.ISCEService,
-		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
-	)
-	{
-		Screen.setResizeSpy( $scope, () =>
-		{
-			// Wait till it renders before calculating.
-			this.$timeout( () => this.recalculateDimensions() );
-		} );
-	}
-}
-*/

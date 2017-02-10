@@ -19,7 +19,7 @@ import { AppMediaBarLightbox } from './lightbox/lightbox';
 })
 export class AppMediaBar extends Vue
 {
-	@Prop() mediaItems: any[];
+	@Prop( Array ) mediaItems: any[];
 
 	private urlChecked = false;
 	private lightbox?: AppMediaBarLightbox;

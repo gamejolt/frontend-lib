@@ -11,8 +11,9 @@ var OptimizeCssPlugin = require( 'optimize-css-assets-webpack-plugin' );
 var ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
 var DashboardPlugin = require( 'webpack-dashboard/plugin' );
 var autoprefixer = require( 'autoprefixer' );
-
 var CleanCss = require( 'clean-css' );
+
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = function( config )
 {
@@ -208,7 +209,7 @@ module.exports = function( config )
 						],
 					}
 				}),
-				devNoop || new webpack.optimize.UglifyJsPlugin({
+				new webpack.optimize.UglifyJsPlugin({
 					compress: {
 						warnings: false,
 						screw_ie8: true,
@@ -263,6 +264,7 @@ module.exports = function( config )
 					chunksSortMode: 'dependency',
 				} ),
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
+				new BundleAnalyzerPlugin(),
 				// prodNoop || new DashboardPlugin(),
 			]
 		};

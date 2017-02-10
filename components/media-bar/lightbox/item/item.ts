@@ -25,8 +25,8 @@ import { Screen } from '../../../screen/screen-service';
 export class AppMediaBarLightboxItem extends Vue
 {
 	@Prop( Object ) item: any;
-	@Prop() itemIndex: number;
-	@Prop() activeIndex: number;
+	@Prop( Number ) itemIndex: number;
+	@Prop( Number ) activeIndex: number;
 
 	lightbox: AppMediaBarLightbox;
 
