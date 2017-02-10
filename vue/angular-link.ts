@@ -2,9 +2,6 @@ import * as Vue from 'vue';
 import { Component, Inject, OnChanges, SimpleChanges, OnDestroy } from 'ng-metadata/core';
 import { kebabCase } from '../utils/utils';
 
-const VueElement = require( 'vue-element/src/vue-element' ).default;
-Vue.use( VueElement );
-
 export function makeComponentProvider( component: typeof Vue )
 {
 	const instance = new component();
