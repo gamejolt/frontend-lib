@@ -1,9 +1,6 @@
-import { Injectable } from 'ng-metadata/core';
-
-@Injectable( 'ImgHelper' )
 export class ImgHelper
 {
-	loaded( url: string )
+	static loaded( url: string )
 	{
 		return new Promise( ( resolve, reject ) =>
 		{
@@ -14,7 +11,7 @@ export class ImgHelper
 		} );
 	}
 
-	getResizedDimensions( originalWidth: number, originalHeight: number, maxWidth?: number, maxHeight?: number )
+	static getResizedDimensions( originalWidth: number, originalHeight: number, maxWidth?: number, maxHeight?: number )
 	{
 		const aspectRatio = originalHeight / originalWidth;
 		let width: number, height: number;
