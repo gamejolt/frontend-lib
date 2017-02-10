@@ -33,7 +33,7 @@
 		ng-class="{ active: song.id == ctrl.currentSong.id }">
 
 		<span class="audio-playlist-play" ng-click="ctrl.toggleSong( song )">
-			<a class="btn btn-sparse" gj-track-event="audio-playlist:click:icon">
+			<a class="btn btn-sparse btn-sm" gj-track-event="audio-playlist:click:icon">
 				<span class="jolticon" ng-class="'jolticon-' + (song.id == ctrl.currentSong.id ? 'stop' : 'play-small')"></span>
 			</a>
 		</span>
