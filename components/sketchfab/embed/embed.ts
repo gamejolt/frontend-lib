@@ -1,5 +1,6 @@
 import * as Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Subscription } from 'rxjs/Subscription';
 import * as View from '!view!./embed.html';
 
 import { Ruler } from '../../ruler/ruler-service';
@@ -22,15 +23,12 @@ export class AppSketchfabEmbed extends Vue
 	width = 0;
 	height = 0;
 
-	resize$ = Screen.resizeChanges.subscribe( async () =>
-	{
-		await this.$nextTick();
-		this.recalculateDimensions();
-	} );
+	resize$: Subscription;
 
 	mounted()
 	{
-		this.$nextTick( () => this.recalculateDimensions() );
+		this.recalculateDimensions();
+		this.resize$ = Screen.resizeChanges.subscribe( () => this.recalculateDimensions() );
 	}
 
 	destroyed()
@@ -54,8 +52,10 @@ export class AppSketchfabEmbed extends Vue
 		this.embedUrl = url;
 	}
 
-	recalculateDimensions()
+	async recalculateDimensions()
 	{
+		await this.recalculateDimensions();
+
 		this.width = Ruler.width( this.$el.getElementsByClassName( 'sketchfab-embed-inner' )[0] as HTMLElement );
 
 		if ( this.maxWidth ) {

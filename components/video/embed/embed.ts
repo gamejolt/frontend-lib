@@ -1,5 +1,6 @@
 import * as Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Subscription } from 'rxjs/Subscription';
 import * as View from '!view!./embed.html?style=./embed.styl';
 
 import { Ruler } from '../../ruler/ruler-service';
@@ -23,16 +24,12 @@ export class AppVideoEmbed extends Vue
 	width = 0;
 	height = 0;
 
-	resize$ = Screen.resizeChanges.subscribe( async () =>
-	{
-		await this.$nextTick();
-		this.recalculateDimensions();
-	} );
+	resize$: Subscription;
 
-	async mounted()
+	mounted()
 	{
-		await this.$nextTick();
 		this.recalculateDimensions();
+		this.resize$ = Screen.resizeChanges.subscribe( () => this.recalculateDimensions() );
 	}
 
 	destroyed()
@@ -67,8 +64,10 @@ export class AppVideoEmbed extends Vue
 		this.embedUrl = url;
 	}
 
-	recalculateDimensions()
+	async recalculateDimensions()
 	{
+		await this.$nextTick();
+
 		this.width = Ruler.width( this.$el.getElementsByClassName( 'video-embed-inner' )[0] as HTMLElement );
 
 		if ( this.maxVideoWidth ) {
