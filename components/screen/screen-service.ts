@@ -1,4 +1,6 @@
-import { Injectable, Inject } from 'ng-metadata/core';
+import { Subject } from 'rxjs/Subject';
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import 'rxjs/add/operator/debounceTime';
 
 /**
  * Media query breakpoints.
@@ -14,145 +16,114 @@ const LG_WIDTH = 1200;
  */
 const HIDPI_BREAKPOINT = 1.5;
 
-@Injectable( 'Screen' )
+// Set up the `mq` func.
+let mq: ( mq: string ) => boolean;
+const _window: any = window;
+
+/**
+ * Checks a media query breakpoint.
+ * https://github.com/paulirish/matchMedia.js/blob/master/matchMedia.js
+ */
+const matchMedia = _window.matchMedia || _window.msMatchMedia;
+if ( matchMedia ) {
+	mq = ( _mq ) => matchMedia( _mq ) && matchMedia( _mq ).matches || false;
+}
+else {
+	// For browsers that support matchMedium api such as IE 9 and webkit
+	let styleMedia = (_window.styleMedia || _window.media);
+
+	// For those that don't support matchMedium
+	if ( !styleMedia ) {
+		const style = _window.document.createElement( 'style' );
+		const script = _window.document.getElementsByTagName( 'script' )[0];
+
+		style.type = 'text/css';
+		style.id = 'matchmediajs-test';
+
+		script.parentNode.insertBefore( style, script );
+
+		// 'style.currentStyle' is used by IE <= 8 and '_window.getComputedStyle' for all other browsers
+		const info = ('getComputedStyle' in _window) && _window.getComputedStyle( style, null ) || style.currentStyle;
+
+		styleMedia = {
+			matchMedium: function( media: any )
+			{
+				const text = '@media ' + media + '{ #matchmediajs-test { width: 1px; } }';
+
+				// 'style.styleSheet' is used by IE <= 8 and 'style.textContent' for all other browsers
+				if ( style.styleSheet ) {
+					style.styleSheet.cssText = text;
+				}
+				else {
+					style.textContent = text;
+				}
+
+				// Test if media query is true or false
+				return info.width === '1px';
+			}
+		};
+	}
+
+	mq = ( _mq ) => styleMedia.matchMedium( _mq || 'all' ) || false;
+}
+
 export class Screen
 {
-	// This gets generated depending on if their browser has it or not.
-	mq: ( mq: string ) => boolean;
-
 	/**
 	 * The actual width of the browser/screen context.
 	 * Either in actual pixels, or device pixels if we can.
 	 */
-	width = 0;
-	windowWidth = 0;
+	static width = 0;
+	static windowWidth = 0;
 
 	/**
 	 * The actual height of the browser/screen context.
 	 * Either in actual pixels, or device pixels if we can.
 	 */
-	height = 0;
-	windowHeight = 0;
+	static height = 0;
+	static windowHeight = 0;
 
 	/**
 	 * The breakpoint states.
 	*/
-	isXs = false;
-	isSm = false;
-	isMd = true;  // md is the default true state.
-	isLg = false;
-	breakpoint = 'md';
+	static isXs = false;
+	static isSm = false;
+	static isMd = true;  // md is the default true state.
+	static isLg = false;
+	static breakpoint = 'md';
 
-	isWindowXs = this.isXs;
-	isWindowSm = this.isSm;
-	isWindowMd = this.isMd;
-	isWindowLg = this.isLg;
-	windowBreakpoint = 'md';
+	static isWindowXs = Screen.isXs;
+	static isWindowSm = Screen.isSm;
+	static isWindowMd = Screen.isMd;
+	static isWindowLg = Screen.isLg;
+	static windowBreakpoint = 'md';
 
 	/**
 	 * Just some silly helpers.
 	 */
-	isMobile = false;
-	isDesktop = true;  // Desktop is default true state.
+	static isMobile = false;
+	static isDesktop = true;  // Desktop is default true state.
 
-	isWindowMobile = this.isMobile;
-	isWindowDesktop = this.isDesktop;
+	static isWindowMobile = Screen.isMobile;
+	static isWindowDesktop = Screen.isDesktop;
 
 	/**
 	 * The context that the Screen's dimensions are based on.
 	 * If null we will just copy over the values of the "window" variants.
 	 */
-	context: HTMLElement | null = null;
+	static context: HTMLElement | null = null;
 
 	/**
 	 * If it's Retina/HiDPI or not.
 	 */
-	isHiDpi = false;
+	static isHiDpi = mq( 'only screen and (-webkit-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + '), only screen and (min--moz-device-pixel-ratio: ' + HIDPI_BREAKPOINT + '), only screen and (-o-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ' / 1), only screen and (min-resolution: ' + HIDPI_BREAKPOINT + 'dppx), only screen and (min-resolution: ' + (HIDPI_BREAKPOINT * 96) + 'dpi)' );
 
-	constructor(
-		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
-		@Inject( '$window' ) private $window: ng.IWindowService
-	)
-	{
-		this._generateMq();
-
-		this.isHiDpi = this.mq( 'only screen and (-webkit-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + '), only screen and (min--moz-device-pixel-ratio: ' + HIDPI_BREAKPOINT + '), only screen and (-o-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ' / 1), only screen and (min-resolution: ' + HIDPI_BREAKPOINT + 'dppx), only screen and (min-resolution: ' + (HIDPI_BREAKPOINT * 96) + 'dpi)' );
-
-		// Check the breakpoints on app load.
-		this._onResize();
-
-		// Recheck on window resizes.
-		// Debounce so it's not called as often.
-		angular.element( $window ).on( 'resize', _.debounce( () =>
-		{
-			$rootScope.$apply( () =>
-			{
-				this._onResize();
-			} );
-		}, 250 ) );
-	}
-
-	private _generateMq()
-	{
-		const $window: any = this.$window;
-		/**
-		 * Checks a media query breakpoint.
-		 * https://github.com/paulirish/matchMedia.js/blob/master/matchMedia.js
-		 */
-		const matchMedia = $window.matchMedia || $window.msMatchMedia;
-		if ( matchMedia ) {
-			this.mq = function( mq )
-			{
-				return matchMedia( mq ) && matchMedia( mq ).matches || false;
-			};
-		}
-		else {
-			// For browsers that support matchMedium api such as IE 9 and webkit
-			let styleMedia = ($window.styleMedia || $window.media);
-
-			// For those that don't support matchMedium
-			if ( !styleMedia ) {
-				const style = $window.document.createElement( 'style' );
-				const script = $window.document.getElementsByTagName( 'script' )[0];
-
-				style.type = 'text/css';
-				style.id = 'matchmediajs-test';
-
-				script.parentNode.insertBefore( style, script );
-
-				// 'style.currentStyle' is used by IE <= 8 and 'window.getComputedStyle' for all other browsers
-				const info = ('getComputedStyle' in $window) && $window.getComputedStyle( style, null ) || style.currentStyle;
-
-				styleMedia = {
-					matchMedium: function( media: any )
-					{
-						const text = '@media ' + media + '{ #matchmediajs-test { width: 1px; } }';
-
-						// 'style.styleSheet' is used by IE <= 8 and 'style.textContent' for all other browsers
-						if ( style.styleSheet ) {
-							style.styleSheet.cssText = text;
-						}
-						else {
-							style.textContent = text;
-						}
-
-						// Test if media query is true or false
-						return info.width === '1px';
-					}
-				};
-			}
-
-			this.mq = function( mq )
-			{
-				return styleMedia.matchMedium( mq || 'all' ) || false;
-			};
-		}
-	}
+	static resizeChanges = new Subject<void>();
 
 	/**
 	 * Sets the Screen's context.
 	 */
-	setContext( element: ng.IRootElementService )
+	static setContext( element: ng.IRootElementService )
 	{
 		if ( !element ) {
 			this.context = null;
@@ -165,56 +136,56 @@ export class Screen
 	/**
 	 * Sets up a "spy" on the resize event.
 	 * Will remember to remove the handler when the scope is destroyed.
-	 * @param {angular.Scope} scope
-	 * @param {function} onResize
 	 */
-	setResizeSpy( scope: ng.IScope, onResize: Function )
+	static setResizeSpy( scope: any, onResize: Function )
 	{
-		const resizeHandlerOff = this.$rootScope.$on( 'Screen.onResize', () =>
-		{
-			onResize();
-		} );
+		if ( !GJ_IS_ANGULAR ) {
+			throw new Error( `You can only set a resize spy in angular.` );
+		}
 
-		scope.$on( '$destroy', () =>
-		{
-			resizeHandlerOff();
-		} );
+		const resizeChange$ = this.resizeChanges.subscribe( () => onResize() );
+		scope.$on( '$destroy', () => resizeChange$.unsubscribe() );
 	}
 
 	/**
 	 * Simply recalculates the breakpoint checks.
 	 * Shouldn't need to call this often.
 	 */
-	recalculate()
+	static recalculate()
 	{
 		this._onResize();
 	}
 
-	private _onResize()
+	static async _onResize()
 	{
-		// Get everything for the $window first.
-		if ( this.mq( 'only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)' ) ) {
+		// This will force angular to digest if needed.
+		if ( GJ_IS_ANGULAR ) {
+			await Promise.resolve();
+		}
+
+		// Get everything for the window first.
+		if ( mq( 'only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)' ) ) {
 			this.isWindowXs = true;
 			this.isWindowSm = false;
 			this.isWindowMd = false;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'xs';
 		}
-		else if ( this.mq( 'only screen and (min-width: ' + SM_WIDTH + 'px) and (max-width: ' + (MD_WIDTH - 1) + 'px)' ) ) {
+		else if ( mq( 'only screen and (min-width: ' + SM_WIDTH + 'px) and (max-width: ' + (MD_WIDTH - 1) + 'px)' ) ) {
 			this.isWindowXs = false;
 			this.isWindowSm = true;
 			this.isWindowMd = false;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'sm';
 		}
-		else if ( this.mq( 'only screen and (min-width: ' + MD_WIDTH + 'px) and (max-width: ' + (LG_WIDTH - 1) + 'px)' ) ) {
+		else if ( mq( 'only screen and (min-width: ' + MD_WIDTH + 'px) and (max-width: ' + (LG_WIDTH - 1) + 'px)' ) ) {
 			this.isWindowXs = false;
 			this.isWindowSm = false;
 			this.isWindowMd = true;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'md';
 		}
-		else if ( this.mq( 'only screen and (min-width: ' + LG_WIDTH + 'px)' ) ) {
+		else if ( mq( 'only screen and (min-width: ' + LG_WIDTH + 'px)' ) ) {
 			this.isWindowXs = false;
 			this.isWindowSm = false;
 			this.isWindowMd = false;
@@ -231,8 +202,8 @@ export class Screen
 			this.isWindowDesktop = true;
 		}
 
-		this.windowWidth = this.$window.innerWidth > 0 ? this.$window.innerWidth : this.$window['width'];
-		this.windowHeight = this.$window.innerHeight > 0 ? this.$window.innerHeight : this.$window['height'];
+		this.windowWidth = window.innerWidth > 0 ? window.innerWidth : (window as any)['width'];
+		this.windowHeight = window.innerHeight > 0 ? window.innerHeight : (window as any)['height'];
 
 		// Now if we have a Screen context set, let's get settings for that.
 		// Othwerise we simply use the $indow dimensions.
@@ -294,7 +265,18 @@ export class Screen
 			}
 		}
 
-		// Emit an event any time we resize.
-		this.$rootScope.$emit( 'Screen.onResize', this );
+		// Emit every time we resize.
+		this.resizeChanges.next();
 	}
 }
+
+// Check the breakpoints on app load.
+Screen._onResize();
+
+/**
+ * This is used internally to check things every time window resizes.
+ * We debounce this and afterwards fire the resizeChanges for everyone else.
+ */
+fromEvent( window, 'resize' )
+	.debounceTime( 250 )
+	.subscribe( () => Screen._onResize() );
