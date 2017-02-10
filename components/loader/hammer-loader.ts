@@ -11,6 +11,11 @@ export class HammerLoader extends LoaderBase
 		{
 			// This will require hammerjs as well.
 			require( 'angular-hammer' );
+
+			// And the vue hammer lib.
+			const Vue = require( 'vue' );
+			const VueTouch = require( 'vue-touch' );
+			Vue.use( VueTouch );
 		} ), 'hammer' );
 	}
 }

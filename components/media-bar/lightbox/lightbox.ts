@@ -1,6 +1,5 @@
 import * as Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-const VueTouch = require( 'vue-touch' ).component;
 const VueShortkey = require( 'vue-shortkey' );
 import * as View from '!view!./lightbox.html?style=./lightbox.styl';
 
@@ -25,7 +24,6 @@ export const MediaBarLightboxConfig = {
 @Component({
 	name: 'media-bar-lightbox',
 	components: {
-		VueTouch,
 		AppJolticon,
 		AppMediaBarLightboxSlider,
 		AppMediaBarLightboxItem,

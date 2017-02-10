@@ -1,61 +1,62 @@
-<vue-touch
-	class="media-bar-lightbox"
-	v-if="Loader.ready( 'hammer' )"
-	@panstart="panStart"
-	@pan="pan"
-	@panend="panEnd"
-	>
-	<div class="media-bar-lightbox-inner">
+<div v-if="Loader.ready( 'hammer' )">
+	<v-touch
+		class="media-bar-lightbox"
+		@panstart="panStart"
+		@pan="pan"
+		@panend="panEnd"
+		>
+		<div class="media-bar-lightbox-inner">
 
-		<a class="media-bar-lightbox-prev"
-			v-if="mediaBar.activeIndex > 0"
-			v-shortkey="[ 'arrowleft' ]"
-			@click="goPrev"
-			@shortkey="goPrev"
-			>
-			<app-jolticon icon="chevron-left" />
-		</a>
-
-		<a class="media-bar-lightbox-next"
-			v-if="mediaBar.activeIndex < mediaBar.mediaItems.length - 1"
-			v-shortkey="[ 'arrowright' ]"
-			@click="goNext"
-			@shortkey="goNext"
-			>
-			<app-jolticon icon="chevron-right" />
-		</a>
-
-		<div class="media-bar-lightbox-controls">
-			<a class="btn btn-outline btn-overlay-variant"
-				v-if="mediaBar.activeItem.media_type === 'image'"
-				:href="mediaBar.activeItem.media_item.img_url"
-				target="_blank"
+			<a class="media-bar-lightbox-prev"
+				v-if="mediaBar.activeIndex > 0"
+				v-shortkey="[ 'arrowleft' ]"
+				@click="goPrev"
+				@shortkey="goPrev"
 				>
-				<app-jolticon icon="download" />
-				<span>Download</span>
+				<app-jolticon icon="chevron-left" />
 			</a>
-			<a class="btn btn-danger-outline btn-overlay-variant"
-				v-shortkey="[ 'esc' ]"
-				@click="close"
-				@shortkey="close"
+
+			<a class="media-bar-lightbox-next"
+				v-if="mediaBar.activeIndex < mediaBar.mediaItems.length - 1"
+				v-shortkey="[ 'arrowright' ]"
+				@click="goNext"
+				@shortkey="goNext"
 				>
-				<app-jolticon icon="remove" />
-				<span>Close</span>
+				<app-jolticon icon="chevron-right" />
 			</a>
+
+			<div class="media-bar-lightbox-controls">
+				<a class="btn btn-outline btn-overlay-variant"
+					v-if="mediaBar.activeItem.media_type === 'image'"
+					:href="mediaBar.activeItem.media_item.img_url"
+					target="_blank"
+					>
+					<app-jolticon icon="download" />
+					<span>Download</span>
+				</a>
+				<a class="btn btn-danger-outline btn-overlay-variant"
+					v-shortkey="[ 'esc' ]"
+					@click="close"
+					@shortkey="close"
+					>
+					<app-jolticon icon="remove" />
+					<span>Close</span>
+				</a>
+			</div>
+
+			<app-media-bar-lightbox-slider>
+
+				<app-media-bar-lightbox-item
+					v-for="( item, index ) of mediaBar.mediaItems"
+					:key="item.id"
+					:item="item"
+					:item-index="index"
+					:active-index="mediaBar.activeIndex"
+					>
+				</app-media-bar-lightbox-item>
+
+			</app-media-bar-lightbox-slider>
+
 		</div>
-
-		<app-media-bar-lightbox-slider>
-
-			<app-media-bar-lightbox-item
-				v-for="( item, index ) of mediaBar.mediaItems"
-				:key="item.id"
-				:item="item"
-				:item-index="index"
-				:active-index="mediaBar.activeIndex"
-				>
-			</app-media-bar-lightbox-item>
-
-		</app-media-bar-lightbox-slider>
-
-	</div>
-</vue-touch>
+	</v-touch>
+</div>
