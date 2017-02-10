@@ -1,10 +1,12 @@
 import * as Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from 'view!./jolticon.html';
+import * as View from '!view!./jolticon.html';
 
 @View
-@Component({})
+@Component({
+	name: 'jolticon',
+})
 export class AppJolticon extends Vue
 {
-	@Prop( String ) icon: string;
+	@Prop() icon: string;
 }

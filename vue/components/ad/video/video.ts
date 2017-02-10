@@ -27,10 +27,10 @@ const AdSlotHeight = 512;
 })
 export class AppAdVideo extends Vue
 {
-	@Prop( String ) resource: string;
-	@Prop( Number ) resourceId: number;
-	@Prop( { type: String, default: 'game' } ) resourceLabel: string;
-	@Prop( String ) trackingLabel: string;
+	@Prop() resource: string;
+	@Prop() resourceId: number;
+	@Prop( { default: 'game' } ) resourceLabel: string;
+	@Prop() trackingLabel: string;
 
 	private videoElem: HTMLVideoElement;
 	private adContainerElem: HTMLElement;

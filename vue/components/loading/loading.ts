@@ -1,6 +1,6 @@
 import * as Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from 'view!./loading.html?style=./loading.styl';
+import * as View from '!view!./loading.html?style=./loading.styl';
 
 import { importContext } from '../../../utils/utils';
 
@@ -10,12 +10,12 @@ import { importContext } from '../../../utils/utils';
 })
 export class AppLoading extends Vue
 {
-	@Prop( { type: String, default: 'Loading...' } ) label: string;
-	@Prop( Boolean ) hideLabel: boolean;
-	@Prop( Boolean ) big: boolean;
-	@Prop( Boolean ) noColor: boolean;
-	@Prop( Boolean ) stationary: boolean;
-	@Prop( Boolean ) centered: boolean;
+	@Prop( { default: 'Loading...' } ) label: string;
+	@Prop() hideLabel: boolean;
+	@Prop() big: boolean;
+	@Prop() noColor: boolean;
+	@Prop() stationary: boolean;
+	@Prop() centered: boolean;
 
 	images = importContext( require.context( '../../../components/loading/', false, /\.gif$/ ) );
 
