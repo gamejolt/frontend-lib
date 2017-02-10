@@ -55,7 +55,7 @@ export class AppMediaBarLightbox extends Vue
 
 	created()
 	{
-		Loader.load( 'hammer' );
+		Loader.load( 'hammer-vue' );
 	}
 
 	destroy()

@@ -22,7 +22,7 @@ export class AppSketchfabEmbed extends Vue
 	width = 0;
 	height = 0;
 
-	resize = Screen.resizeChanges.subscribe( async () =>
+	resize$ = Screen.resizeChanges.subscribe( async () =>
 	{
 		await this.$nextTick();
 		this.recalculateDimensions();
@@ -35,7 +35,7 @@ export class AppSketchfabEmbed extends Vue
 
 	destroyed()
 	{
-		this.resize.unsubscribe();
+		this.resize$.unsubscribe();
 	}
 
 	@Watch( 'sketchfabId', { immediate: true } )
