@@ -7,6 +7,7 @@ import { hasProvider, getProvider } from '../../../utils/utils';
 import { Game } from '../game.model';
 import { GameBuild } from '../build/build.model';
 import { Analytics } from '../../analytics/analytics.service';
+import { Environment } from '../../environment/environment.service';
 
 @Injectable( 'Game_PlayModal' )
 export class GamePlayModal
@@ -24,6 +25,19 @@ export class GamePlayModal
 	{
 	}
 
+	private async getDownloadUrl( build: GameBuild, options: { key?: string } )
+	{
+		const payload = await build.getDownloadUrl( { key: options.key } );
+		let url = payload.url;
+
+		// TODO: Get rid of this once we switch to https-only.
+		if ( !Environment.isSecure ) {
+			url = url.replace( 'https://', 'http://' );
+		}
+
+		return url;
+	}
+
 	async show( _game: Game, _build: GameBuild, options: { key?: string } = {} )
 	{
 		Analytics.trackEvent( 'game-play', 'play' );
@@ -39,16 +53,14 @@ export class GamePlayModal
 			key: options.key,
 		} );
 
-		// const gameserverUrl = `${Environment.secureBaseUrl}/x/builds/get-download-url/${_build.id}?key=${options.key || ''}`;
-
 		// If they clicked into this through a popover.
 		this.popover.hideAll();
 
 		// Will open the gameserver in their browser.
 		if ( GJ_IS_CLIENT && _build.type !== GameBuild.TYPE_HTML && _build.type !== GameBuild.TYPE_ROM ) {
 			const gui = require( 'nw.gui' );
-			const payload = await _build.getDownloadUrl( { key: options.key } );
-			gui.Shell.openExternal( payload.downloadUrl );
+			const url = await this.getDownloadUrl( _build, { key: options.key } );
+			gui.Shell.openExternal( url );
 			return;
 		}
 
@@ -62,16 +74,16 @@ export class GamePlayModal
 			// onclick handler. Once we have the download URL we can direct the
 			// window that we now have the reference to.
 			const win = window.open( '' );
-			const payload = await _build.getDownloadUrl( { key: options.key } );
-			win.location.href = payload.downloadUrl;
+			const url = await this.getDownloadUrl( _build, { key: options.key } );
+			win.location.href = url;
 			return;
 		}
 
 		this.hasModal = true;
-		const payload = await _build.getDownloadUrl( { key: options.key } );
+		const url = await this.getDownloadUrl( _build, { key: options.key } );
 
 		const modalScope = this.$rootScope.$new( true );
-		modalScope['url'] = payload.downloadUrl;
+		modalScope['url'] = url;
 		modalScope['canMinimize'] = hasProvider( 'Minbar' );
 		modalScope['minimize'] = minimize;
 		modalScope['close'] = close;
