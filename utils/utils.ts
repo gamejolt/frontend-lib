@@ -1,13 +1,5 @@
 export type RequireContextMap = { [k: string]: string };
 
-const KebabCaseRegex = /[A-Z]/g;
-
-export function kebabCase( name: string )
-{
-	return name.replace( KebabCaseRegex, ( letter, pos ) =>
-		(pos ? '-' : '') + letter.toLowerCase() );
-}
-
 export function importContext( r: WebpackContext )
 {
 	let map: RequireContextMap = {};
