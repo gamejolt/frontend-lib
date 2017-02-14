@@ -19,7 +19,6 @@ export class GamePlayModal
 		@Inject( '$compile' ) private $compile: ng.ICompileService,
 		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
 		@Inject( 'Growls' ) private growls: any,
-		@Inject( 'HistoryTick' ) private historyTick: HistoryTick,
 		@Inject( 'Popover' ) private popover: Popover,
 	)
 	{
@@ -47,7 +46,7 @@ export class GamePlayModal
 			return Promise.reject( undefined );
 		}
 
-		this.historyTick.sendBeacon( 'game-build', _build.id, {
+		HistoryTick.sendBeacon( 'game-build', _build.id, {
 			sourceResource: 'Game',
 			sourceResourceId: _game.id,
 			key: options.key,

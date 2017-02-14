@@ -1,3 +1,3 @@
-angular.module( 'gj.Game.Downloader', [ 'gj.HistoryTick' ] );
+angular.module( 'gj.Game.Downloader', [] );
 
 require( './downloader-service' );

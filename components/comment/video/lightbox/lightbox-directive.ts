@@ -28,10 +28,9 @@ export class LightboxComponent implements OnInit
 		@Inject( '$location' ) private $location: ng.ILocationService,
 		@Inject( 'hotkeys' ) hotkeys: ng.hotkeys.HotkeysProvider,
 		@Inject( 'App' ) app: App,
-		@Inject( 'HistoryTick' ) private historyTick: HistoryTick
 	)
 	{
-		this.historyTick.sendBeacon( 'comment-video', this.video.id );
+		HistoryTick.sendBeacon( 'comment-video', this.video.id );
 
 		// Can't vote on this comment if...
 		// they aren't logged in

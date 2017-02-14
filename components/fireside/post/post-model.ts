@@ -132,7 +132,7 @@ export class FiresidePost extends Model
 	{
 		const App = getProvider<App>( 'App' );
 		if ( !App.user || this.user.id != App.user.id ) {
-			getProvider<HistoryTick>( 'HistoryTick' ).sendBeacon( 'fireside-post', this.id );
+			HistoryTick.sendBeacon( 'fireside-post', this.id );
 		}
 	}
 
@@ -140,7 +140,7 @@ export class FiresidePost extends Model
 	{
 		const App = getProvider<App>( 'App' );
 		if ( !App.user || this.user.id != App.user.id ) {
-			getProvider<HistoryTick>( 'HistoryTick' ).sendBeacon( 'fireside-post-expand', this.id );
+			HistoryTick.sendBeacon( 'fireside-post-expand', this.id );
 		}
 	}
 
