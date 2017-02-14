@@ -1,0 +1,13 @@
+<div>
+	<div v-for="sellable of sellables" :key="sellable.id">
+
+		<iframe nwdisable nwfaketop
+			:src="`${widgetHost}/sale/v1?key=${sellable.key}`"
+			frameborder="0"
+			width="100%"
+			height="245"
+			>
+		</iframe>
+
+	</div>
+</div>

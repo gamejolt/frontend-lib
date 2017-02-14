@@ -1,21 +1,56 @@
-import { provide } from 'ng-metadata/core';
+import * as Vue from 'vue';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 
-import { WidgetCompiler } from './widget-compiler-service';
-import { WidgetCompilerBindComponent } from './widget-compiler-bind.directive';
-import { WidgetCompilerWidgetYoutube } from './widget-youtube.service';
-import { WidgetCompilerWidgetVimeo } from './widget-vimeo.service';
-import { WidgetCompilerWidgetSoundcloud } from './widget-soundcloud.service';
-import { WidgetCompilerWidgetYoutubeComponent } from './widget-youtube.component';
-import { WidgetCompilerWidgetVimeoComponent } from './widget-vimeo.component';
-import { WidgetCompilerWidgetSoundcloudComponent } from './widget-soundcloud.component';
+import { WidgetCompiler, WidgetCompilerContext } from './widget-compiler.service';
 
-export default angular.module( 'gj.WidgetCompiler', [] )
-.service( ...provide( 'WidgetCompiler', { useClass: WidgetCompiler } ) )
-.directive( ...provide( WidgetCompilerBindComponent ) )
-.service( ...provide( 'WidgetCompilerWidgetYoutube', { useClass: WidgetCompilerWidgetYoutube } ) )
-.directive( ...provide( WidgetCompilerWidgetYoutubeComponent ) )
-.service( ...provide( 'WidgetCompilerWidgetVimeo', { useClass: WidgetCompilerWidgetVimeo } ) )
-.directive( ...provide( WidgetCompilerWidgetVimeoComponent ) )
-.service( ...provide( 'WidgetCompilerWidgetSoundcloud', { useClass: WidgetCompilerWidgetSoundcloud } ) )
-.directive( ...provide( WidgetCompilerWidgetSoundcloudComponent ) )
-.name;
+@Component({
+	name: 'widget-compiler',
+})
+export class AppWidgetCompiler extends Vue
+{
+	@Prop( String ) content: string;
+	@Prop( { type: Boolean, default: false } ) isDisabled: boolean;
+
+	@Prop( { type: WidgetCompilerContext, default: () => new WidgetCompilerContext() } )
+	context: WidgetCompilerContext;
+
+	mounted()
+	{
+		this.refresh();
+	}
+
+	@Watch( 'content' )
+	contentChanged()
+	{
+		this.refresh();
+	}
+
+	destroyed()
+	{
+		this.context.destroy();
+	}
+
+	private refresh()
+	{
+		if ( !this.content ) {
+			this.$el.innerHTML = '';
+			return;
+		}
+
+		if ( this.isDisabled ) {
+			this.$el.innerHTML = this.content;
+		}
+		else {
+			const compiledElem = WidgetCompiler.compile( this.context, this.content );
+			if ( compiledElem ) {
+				this.$el.innerHTML = '';
+				this.$el.appendChild( compiledElem );
+			}
+		}
+	}
+
+	render( h: Vue.CreateElement )
+	{
+		return h( 'div' );
+	}
+}

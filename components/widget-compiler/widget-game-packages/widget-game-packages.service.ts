@@ -1,42 +1,18 @@
-import { Injectable, Inject } from 'ng-metadata/core';
 import { WidgetCompilerWidget } from '../widget';
+import { WidgetCompilerContext } from '../widget-compiler.service';
+import { AppWidgetCompilerWidgetGamePackages } from './widget-game-packages';
 
-const TEMPLATE = `
-	<div ng-if="game && packages">
-		<gj-game-package-card
-			ng-repeat="package in packages"
-			game="::game"
-			sellable="::package._sellable"
-			game-package="::package"
-			game-releases="::package._releases"
-			game-builds="::package._builds"
-			>
-		</gj-game-package-card>
-	</div>
-`;
-
-@Injectable( 'WidgetCompilerWidgetGamePackages' )
-export class WidgetCompilerWidgetGamePackages implements WidgetCompilerWidget
+export class WidgetCompilerWidgetGamePackages extends WidgetCompilerWidget
 {
 	readonly name = 'game-packages';
 
-	constructor(
-		@Inject( '$compile' ) private $compile: ng.ICompileService,
-	)
+	compile( context: WidgetCompilerContext, _params: any[] = [] )
 	{
-	}
-
-	compile( scope: ng.IScope, _params: any[] = [] )
-	{
-		scope.$watchGroup( [
-			'$parent.game',
-			'$parent.packages',
-		],
-		( [ game, packages ] ) =>
+		return this.wrapComponent( AppWidgetCompilerWidgetGamePackages, () =>
 		{
-			angular.extend( scope, { game, packages } );
+			return {
+				sellables: context['sellables'],
+			};
 		} );
-
-		return this.$compile( TEMPLATE )( scope );
 	}
 }

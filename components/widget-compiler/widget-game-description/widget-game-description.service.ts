@@ -1,31 +1,18 @@
-import { Injectable, Inject } from 'ng-metadata/core';
 import { WidgetCompilerWidget } from '../widget';
+import { WidgetCompilerContext } from '../widget-compiler.service';
+import { AppWidgetCompiler } from '../widget-compiler';
 
-const TEMPLATE = `
-	<div gj-widget-compiler-bind="game.description_compiled"></div>
-`;
-
-@Injectable( 'WidgetCompilerWidgetGameDescription' )
-export class WidgetCompilerWidgetGameDescription implements WidgetCompilerWidget
+export class WidgetCompilerWidgetGameDescription extends WidgetCompilerWidget
 {
 	readonly name = 'game-description';
 
-	constructor(
-		@Inject( '$compile' ) private $compile: ng.ICompileService,
-	)
+	compile( context: WidgetCompilerContext, _params: any[] = [] )
 	{
-	}
-
-	compile( scope: ng.IScope, _params: any[] = [] )
-	{
-		scope.$watchGroup( [
-			'$parent.game',
-		],
-		( [ game ] ) =>
+		return this.wrapComponent( AppWidgetCompiler, () =>
 		{
-			angular.extend( scope, { game } );
+			return {
+				content: context['game'] && context['game'].description_compiled,
+			};
 		} );
-
-		return this.$compile( TEMPLATE )( scope );
 	}
 }

@@ -1,7 +1,17 @@
-import { provide } from 'ng-metadata/core';
+import * as Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import * as View from '!view!./widget-game-packages.html';
 
-import { WidgetCompilerWidgetGamePackages } from './widget-game-packages.service';
+import { Sellable } from '../../sellable/sellable.model';
+import { Environment } from '../../environment/environment.service';
 
-export default angular.module( 'gj.WidgetCompiler.WidgetGamePackages', [] )
-.service( ...provide( 'WidgetCompilerWidgetGamePackages', { useClass: WidgetCompilerWidgetGamePackages } ) )
-.name;
+@View
+@Component({
+	name: 'widget-compiler-widget-game-packages',
+})
+export class AppWidgetCompilerWidgetGamePackages extends Vue
+{
+	@Prop( { type: Array, default: [] } ) sellables: Sellable[];
+
+	widgetHost = Environment.widgetHost;
+}
