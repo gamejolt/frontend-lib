@@ -53,7 +53,7 @@ if ( Environment.env === 'development' ) {
 	Environment.gameserverApiHost = 'http://development.gamejolt.com';
 	Environment.activityStreamHost = 'http://activity.development.gamejolt.com';
 	Environment.chatHost = 'http://chat.development.gamejolt.com';
-	Environment.widgetHost = 'http://localhost:8081';
+	Environment.widgetHost = 'http://localhost:8086';
 }
 
 if ( GJ_IS_CLIENT ) {
