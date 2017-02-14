@@ -8,11 +8,11 @@
 			:alt="item.media_type == 'image' ? item.caption : item.title"
 			>
 
-		<span class="play-button-overlay play-button-overlay-small" v-if="item.media_type === 'video'">
+		<span class="media-bar-item-play" v-if="item.media_type === 'video'">
 			<app-jolticon icon="play" />
 		</span>
 
-		<span class="play-button-overlay play-button-overlay-small" v-if="item.media_type === 'sketchfab'">
+		<span class="media-bar-item-play" v-if="item.media_type === 'sketchfab'">
 			<app-jolticon icon="sketchfab" />
 		</span>
 
