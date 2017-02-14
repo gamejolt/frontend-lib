@@ -44,7 +44,6 @@ export class AppVideoEmbed extends Vue
 			return;
 		}
 
-		console.log( 'update video id' );
 		let url: string;
 
 		if ( this.videoProvider === 'youtube' ) {
