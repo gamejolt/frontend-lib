@@ -33,32 +33,37 @@ export class Referrer
 		}
 
 		if ( GJ_IS_ANGULAR ) {
-			const $rootScope = getProvider<any>( '$rootScope' );
 
-			$rootScope.$on( '$stateChangeStart', () =>
+			// Wait for injector.
+			setTimeout( () =>
 			{
-				// Don't track until we've tracked on full page view.
-				if ( this.firstPass ) {
-					return;
-				}
+				const $rootScope = getProvider<any>( '$rootScope' );
 
-				// Store the current one so we can rollback if the state change fails.
-				this.prev = this.referrer;
-				this.referrer = this.currentUrl;
-			} );
+				$rootScope.$on( '$stateChangeStart', () =>
+				{
+					// Don't track until we've tracked on full page view.
+					if ( this.firstPass ) {
+						return;
+					}
 
-			$rootScope.$on( '$stateChangeSuccess', () =>
-			{
-				// We have finished the first state change.
-				// We will now begin tracking new referrers.
-				this.firstPass = false;
-				this.currentUrl = window.location.href;
-			} );
+					// Store the current one so we can rollback if the state change fails.
+					this.prev = this.referrer;
+					this.referrer = this.currentUrl;
+				} );
 
-			$rootScope.$on( '$stateChangeError', () =>
-			{
-				// Rollback.
-				this.referrer = this.prev;
+				$rootScope.$on( '$stateChangeSuccess', () =>
+				{
+					// We have finished the first state change.
+					// We will now begin tracking new referrers.
+					this.firstPass = false;
+					this.currentUrl = window.location.href;
+				} );
+
+				$rootScope.$on( '$stateChangeError', () =>
+				{
+					// Rollback.
+					this.referrer = this.prev;
+				} );
 			} );
 		}
 	}
