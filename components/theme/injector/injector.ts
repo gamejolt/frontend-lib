@@ -1,6 +1,126 @@
-import { provide } from 'ng-metadata/core';
-import { ThemeInjectorComponent } from './injector.component';
+import * as Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
 
-export default angular.module( 'gj.Theme.Injector', [] )
-.directive( ...provide( ThemeInjectorComponent ) )
-.name;
+@Component({
+	name: 'theme-injector',
+})
+export class AppThemeInjector extends Vue
+{
+	@Prop( Object ) definition: any;
+	@Prop( Object ) theme: any;
+
+	styleElem: HTMLStyleElement;
+
+	mounted()
+	{
+		window.addEventListener( 'message', ( event: MessageEvent ) =>
+		{
+			// console.log( 'got msg', event.data );
+			switch ( event.data.type ) {
+				case 'theme-update':
+
+					if ( !event.data.theme || !event.data.definition ) {
+						break;
+					}
+
+					this.refreshStyles( event.data.definition, event.data.theme );
+					break;
+			}
+		} );
+
+		this.refreshStyles( this.definition, this.theme );
+	}
+
+	render( h: Vue.CreateElement )
+	{
+		return h( 'style' );
+	}
+
+	private refreshStyles( themeDefinition: any, currentTheme: any )
+	{
+		let styles: string[] = [];
+		let fonts: string[] = [];
+
+		Object.keys( themeDefinition.definitions ).forEach( ( field: string ) =>
+		{
+			const definition = themeDefinition.definitions[ field ];
+
+			if ( currentTheme && typeof currentTheme[field] !== 'undefined' && currentTheme[field] ) {
+
+				let propertyValue: string;
+				if ( definition.type === 'image' ) {
+					propertyValue = 'url("' + currentTheme[field].img_url + '")';
+				}
+				else if ( definition.type === 'background-repeat' ) {
+					if ( currentTheme[field] === 'repeat-x' ) {
+						propertyValue = 'repeat-x';
+					}
+					else if ( currentTheme[field] === 'repeat-y' ) {
+						propertyValue = 'repeat-y';
+					}
+					else if ( currentTheme[field] === 'no-repeat' ) {
+						propertyValue = 'no-repeat';
+					}
+					else {
+						propertyValue = 'repeat';
+					}
+				}
+				else if ( definition.type === 'background-position' ) {
+					if ( currentTheme[field] === 'topLeft' ) {
+						propertyValue = 'top left';
+					}
+					else if ( currentTheme[field] === 'topRight' ) {
+						propertyValue = 'top right';
+					}
+					else if ( currentTheme[field] === 'right' ) {
+						propertyValue = 'center right';
+					}
+					else if ( currentTheme[field] === 'bottomRight' ) {
+						propertyValue = 'bottom right';
+					}
+					else if ( currentTheme[field] === 'bottom' ) {
+						propertyValue = 'bottom center';
+					}
+					else if ( currentTheme[field] === 'bottomLeft' ) {
+						propertyValue = 'bottom left';
+					}
+					else if ( currentTheme[field] === 'left' ) {
+						propertyValue = 'center left';
+					}
+					else if ( currentTheme[field] === 'middle' ) {
+						propertyValue = 'center center';
+					}
+					else {
+						propertyValue = 'top center';
+					}
+				}
+				else if ( definition.type === 'fontFamily' ) {
+					propertyValue = `'${currentTheme[field].family}'`;
+					fonts.push( '@import url(//fonts.googleapis.com/css?family=' + currentTheme[field].family.replace( / /g, '+' ) + ');' );
+				}
+				else {
+					propertyValue = currentTheme[field];
+				}
+
+				for ( const injection of definition.injections || [ definition ] ) {
+
+					// If no property, skip it.
+					if ( typeof injection.property === 'undefined' ) {
+						continue;
+					}
+
+					const rule = `${injection.selector} { ${injection.property}: ${propertyValue} }`;
+					styles.push( rule );
+				}
+			}
+		} );
+
+		let stylesCompiled = styles.join( '' );
+
+		// Put in font imports first.
+		stylesCompiled = fonts.join( '' ) + stylesCompiled;
+
+		// Add it to the element.
+		this.$el.innerHTML = stylesCompiled;
+	}
+}
