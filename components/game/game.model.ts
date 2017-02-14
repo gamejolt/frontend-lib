@@ -142,7 +142,7 @@ export class Game extends Model
 		Registry.store( 'Game', this );
 	}
 
-	getSref( page: string, includeParams = false )
+	getSref( page = '', includeParams = false )
 	{
 		let sref = '';
 
@@ -163,7 +163,7 @@ export class Game extends Model
 		return sref;
 	}
 
-	getSrefParams( page: string )
+	getSrefParams( page = '' )
 	{
 		if ( [ 'dashboard', 'edit' ].indexOf( page ) !== -1 ) {
 			return { id: this.id };
@@ -176,10 +176,13 @@ export class Game extends Model
 		};
 	}
 
-	getUrl( page: string )
+	getUrl( page = '' )
 	{
 		if ( page === 'soundtrack' ) {
 			return '/games/' + this.slug + '/' + this.id + '/download/soundtrack';
+		}
+		else if ( !page ) {
+			return '/games/' + this.slug + '/' + this.id;
 		}
 
 		return getProvider<any>( '$state' ).href(
