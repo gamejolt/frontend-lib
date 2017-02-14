@@ -62,7 +62,7 @@ function createVueElement( componentDefinition: any )
 	componentDefinition = Object.assign( {}, componentDefinition );
 	const props: string[] = componentDefinition.props;
 
-	const rootElement: any = {
+	const rootElement: Vue.ComponentOptions<Vue> = {
 		props,
 		computed: {
 			reactiveProps( this: any )
@@ -72,7 +72,7 @@ function createVueElement( componentDefinition: any )
 				return reactivePropsList;
 			}
 		},
-		render( this: any, createElement: any )
+		render( this: any, createElement: Vue.CreateElement )
 		{
 			const data = {
 				props: this.reactiveProps
