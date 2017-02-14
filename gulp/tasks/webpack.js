@@ -89,8 +89,8 @@ module.exports = function( config )
 								// God save us.
 								loader: 'string-replace-loader',
 								options: {
-									search: '$import(',
-									replace: 'import('
+									search: /\$import\(/g,
+									replace: 'import(',
 								}
 							},
 							{
@@ -116,8 +116,8 @@ module.exports = function( config )
 								// God save us.
 								loader: 'string-replace-loader',
 								options: {
-									search: '$import(',
-									replace: 'import('
+									search: /\$import\(/g,
+									replace: 'import(',
 								}
 							},
 							{
