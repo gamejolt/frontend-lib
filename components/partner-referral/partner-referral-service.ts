@@ -1,27 +1,19 @@
-import { Injectable, Inject } from 'ng-metadata/core';
+import { parse } from 'qs';
 
-@Injectable( 'PartnerReferral' )
 export class PartnerReferral
 {
-	constructor(
-		@Inject( '$window' ) private $window: ng.IWindowService,
-		@Inject( '$location' ) private $location: ng.ILocationService,
-	)
+	static trackReferrer( resource: string, resourceId: number )
 	{
-	}
-
-	trackReferrer( resource: string, resourceId: number )
-	{
-		const queryParams = this.$location.search();
+		const queryParams = parse( window.location.search.substring( 1 ) );
 		const ref = queryParams['ref'];
 
 		if ( ref ) {
-			this.$window.sessionStorage.setItem( `partner-ref:${resource}:${resourceId}`, ref );
+			window.sessionStorage.setItem( `partner-ref:${resource}:${resourceId}`, ref );
 		}
 	}
 
-	getReferrer( resource: string, resourceId: number )
+	static getReferrer( resource: string, resourceId: number )
 	{
-		return this.$window.sessionStorage.getItem( `partner-ref:${resource}:${resourceId}` );
+		return window.sessionStorage.getItem( `partner-ref:${resource}:${resourceId}` );
 	}
 }
