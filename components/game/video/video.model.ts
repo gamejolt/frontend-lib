@@ -1,14 +1,10 @@
-angular.module( 'gj.Game.Video' ).factory( 'Game_Video', function( Model )
-{
-	function Game_Video( data )
-	{
-		if ( data ) {
-			angular.extend( this, data );
-		}
-	}
+import { Model } from '../../model/model.service';
+import { Game } from '../game.model';
 
-	Game_Video.TYPE_YOUTUBE = 'youtube';
-	Game_Video.TYPE_VIMEO = 'vimeo';
+export class GameVideo extends Model
+{
+	static readonly TYPE_YOUTUBE = 'youtube';
+	static readonly TYPE_VIMEO = 'vimeo';
 
 	// Examples...
 	// https://www.youtube.com/watch?v=DSvQAx5-PXU
@@ -20,18 +16,31 @@ angular.module( 'gj.Game.Video' ).factory( 'Game_Video', function( Model )
 	// http://youtu.be/Y6lUVz1kdOk
 	// http://youtu.be/Y6lUVz1kdOk?testing
 	// http://vimeo.com/98hfg98dhfg
-	Game_Video.REGEX = {
+	static readonly REGEX = {
 		VIDEO: /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|vimeo\.com\/)([a-zA-Z0-9_\-]+)(\S*)$/i,
 		YOUTUBE: /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_\-]+)(\S*)$/i,
 		VIMEO: /^(https?:\/\/)?(www\.)?(vimeo\.com\/)([a-zA-Z0-9_\-]+)(\S*)$/i
 	};
 
-	Game_Video.prototype.getUrl = function( game )
-	{
-		return game.getUrl() + '#video-' + this.id;
-	};
+	media_type: 'video';
 
-	Game_Video.prototype.$save = function()
+	game_id: number;
+	type: string;
+	url: string;
+	title: string;
+	description: string;
+	posted_on: number;
+	status: number;
+	img_thumbnail: string;
+	img_thumbnail_med: string;
+	img_thumbnail_large: string;
+
+	getUrl( game: Game )
+	{
+		return game.getUrl() + `#video-${this.id}`;
+	}
+
+	$save()
 	{
 		if ( !this.id ) {
 			return this.$_save( '/web/dash/developer/games/media/save/video/' + this.game_id, 'gameVideo' );
@@ -39,12 +48,12 @@ angular.module( 'gj.Game.Video' ).factory( 'Game_Video', function( Model )
 		else {
 			return this.$_save( '/web/dash/developer/games/media/save/video/' + this.game_id + '/' + this.id, 'gameVideo' );
 		}
-	};
+	}
 
-	Game_Video.prototype.$remove = function()
+	$remove()
 	{
 		return this.$_remove( '/web/dash/developer/games/media/remove/video/' + this.game_id + '/' + this.id );
-	};
+	}
+}
 
-	return Model.create( Game_Video );
-} );
+Model.create( GameVideo );
