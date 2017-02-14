@@ -1,6 +1,6 @@
 import * as Vue from 'vue';
 import { Component, Inject, OnChanges, SimpleChanges, OnDestroy } from 'ng-metadata/core';
-import { kebabCase } from '../utils/utils';
+import { kebabCase } from '../utils/string';
 
 export function makeComponentProvider( component: typeof Vue )
 {

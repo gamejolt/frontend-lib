@@ -3,8 +3,9 @@ import { Injectable, bundle } from 'ng-metadata/core';
 import { reflector } from 'ng-metadata/src/core/reflection/reflection';
 import { OutputMetadata, InputMetadata } from 'ng-metadata/src/core/directives/metadata_directives';
 import { ResolvePolicy } from 'angular-ui-router';
-import { getProvider, kebabCase } from './utils';
+import { getProvider } from './utils';
 import { isPrerender } from '../components/environment/environment.service';
+import { kebabCase } from './string';
 
 export function bootstrapFacade( $q: ng.IQService, $animate: ng.animate.IAnimateService )
 {
