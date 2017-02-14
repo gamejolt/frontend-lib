@@ -23,7 +23,7 @@ export class GameRelease extends Model
 	 */
 	build_count: number;
 
-	// These fields get added only during GamePackage.processPackagePayload.
+	// These fields get added only during GamePackagePayloadModel.
 	_package?: GamePackage;
 	_builds?: GameBuild[];
 
