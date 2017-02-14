@@ -1,7 +1,7 @@
-import { Injectable, Inject } from 'ng-metadata/core';
 import { PartnerReferral } from '../partner-referral/partner-referral-service';
 import { Environment } from '../environment/environment.service';
 import { Device } from '../device/device.service';
+import { Referrer } from '../referrer/referrer.service';
 
 export interface BeaconOptions
 {
@@ -10,17 +10,9 @@ export interface BeaconOptions
 	key?: string;
 }
 
-@Injectable( 'HistoryTick' )
 export class HistoryTick
 {
-	private _sources: { [key: string]: string } = {};
-
-	constructor(
-		@Inject( 'Referrer' ) private referrer: any,
-		@Inject( 'PartnerReferral' ) private partnerReferral: PartnerReferral,
-	)
-	{
-	}
+	private static _sources: { [key: string]: string | undefined } = {};
 
 	/**
 	 * You can track a source for a particular parent resource.
@@ -32,21 +24,21 @@ export class HistoryTick
 	 * If you get to this resource through different means we'll still just
 	 * track the initial way of getting there.
 	 */
-	trackSource( resource: string, resourceId: number )
+	static trackSource( resource: string, resourceId: number )
 	{
 		// Look specifically for undefined and not just null.
 		// There may have been a null referrer if we got here through a direct page hit.
-		if ( angular.isUndefined( this._sources[ resource + ':' + resourceId ] ) ) {
-			this._sources[ resource + ':' + resourceId ] = this.referrer.get();
+		if ( typeof this._sources[ resource + ':' + resourceId ] === 'undefined' ) {
+			this._sources[ resource + ':' + resourceId ] = Referrer.get();
 		}
 	}
 
-	getSource( resource: string, resourceId: number )
+	static getSource( resource: string, resourceId: number )
 	{
 		return this._sources[ resource + ':' + resourceId ];
 	}
 
-	sendBeacon( type: string, resourceId: number, options: BeaconOptions = {} )
+	static sendBeacon( type: string, resourceId: number, options: BeaconOptions = {} )
 	{
 		if ( Environment.isPrerender ) {
 			return;
@@ -73,7 +65,7 @@ export class HistoryTick
 					queryParams.push( 'source=' + source );
 				}
 
-				const ref = this.partnerReferral.getReferrer( options.sourceResource, options.sourceResourceId );
+				const ref = PartnerReferral.getReferrer( options.sourceResource, options.sourceResourceId );
 				if ( ref ) {
 					queryParams.push( 'ref=' + ref );
 				}
@@ -99,7 +91,7 @@ export class HistoryTick
 				resolve();
 			};
 
-			if ( Environment.env == 'development' ) {
+			if ( Environment.env === 'development' ) {
 				console.log( 'Tracking history tick.', {
 					type: type,
 					resourceId: resourceId,
