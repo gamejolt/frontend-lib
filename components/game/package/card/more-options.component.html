@@ -1,8 +1,8 @@
 <div class="list-group list-group-dark nowrap">
 
 	<a class="list-group-item has-icon"
-		ng-repeat="extraBuild in ::ctrl.extraBuilds track by extraBuild.icon + '-' + extraBuild.build.id"
-		ng-click="ctrl.buildClick( extraBuild.build, true )"
+		ng-repeat="extraBuild in ::$ctrl.card.extraBuilds track by extraBuild.icon + '-' + extraBuild.build.id"
+		ng-click="$ctrl._click( extraBuild.build )"
 		gj-track-event="game-package-card:more-options:click-option"
 		>
 		<span ng-class="::'jolticon jolticon-' + extraBuild.icon"></span>
@@ -16,7 +16,7 @@
 			</span>
 			<span ng-switch-when="rom"
 				translate
-				translate-params-platform="ctrl.emulatorInfo[ extraBuild.build.emulator_type ]"
+				translate-params-platform="$ctrl.emulatorInfo[ extraBuild.build.emulator_type ]"
 				translate-comment="{{ platform }} will be the platform we are downloading for, such as Game Boy, NES, etc."
 				>
 				Download {{ platform }} ROM
@@ -37,11 +37,11 @@
 		<!--
 			If the version is different than the main release, then show it.
 		-->
-		<span class="tiny" ng-if="::extraBuild.build.game_release_id != ctrl.showcasedRelease.id">
+		<span class="tiny" ng-if="::extraBuild.build.game_release_id != $ctrl.card.showcasedRelease.id">
 			<em>v{{ ::extraBuild.build._release.version_number }}</em>
 		</span>
 
-		<small class="text-muted" ng-if="Environment.isClient && extraBuild.type != 'html'">
+		<small class="text-muted" ng-if="$ctrl.Environment.isClient && extraBuild.type != 'html'">
 			<br>
 			<em translate>(will open in browser)</em>
 		</small>
