@@ -54,7 +54,7 @@ export class AppSketchfabEmbed extends Vue
 
 	async recalculateDimensions()
 	{
-		await this.recalculateDimensions();
+		await this.$nextTick();
 
 		this.width = Ruler.width( this.$el.getElementsByClassName( 'sketchfab-embed-inner' )[0] as HTMLElement );
 
