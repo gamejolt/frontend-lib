@@ -1,4 +1,3 @@
-import { getProvider } from '../../utils/utils';
 /**
  * Since we're in a single page app, the referrer doesn't get reset on every page change.
  * To be able to pull the correct referrer we need to spoof it by updating on every state change.
@@ -31,41 +30,41 @@ export class Referrer
 		if ( window.document.referrer ) {
 			this.referrer = window.document.referrer;
 		}
+	}
 
-		if ( GJ_IS_ANGULAR ) {
-
-			// Wait for injector.
-			setTimeout( () =>
-			{
-				const $rootScope = getProvider<any>( '$rootScope' );
-
-				$rootScope.$on( '$stateChangeStart', () =>
-				{
-					// Don't track until we've tracked on full page view.
-					if ( this.firstPass ) {
-						return;
-					}
-
-					// Store the current one so we can rollback if the state change fails.
-					this.prev = this.referrer;
-					this.referrer = this.currentUrl;
-				} );
-
-				$rootScope.$on( '$stateChangeSuccess', () =>
-				{
-					// We have finished the first state change.
-					// We will now begin tracking new referrers.
-					this.firstPass = false;
-					this.currentUrl = window.location.href;
-				} );
-
-				$rootScope.$on( '$stateChangeError', () =>
-				{
-					// Rollback.
-					this.referrer = this.prev;
-				} );
-			} );
+	static initAngular( $rootScope: any )
+	{
+		if ( !GJ_IS_ANGULAR ) {
+			return;
 		}
+
+		this.init();
+
+		$rootScope.$on( '$stateChangeStart', () =>
+		{
+			// Don't track until we've tracked on full page view.
+			if ( this.firstPass ) {
+				return;
+			}
+
+			// Store the current one so we can rollback if the state change fails.
+			this.prev = this.referrer;
+			this.referrer = this.currentUrl;
+		} );
+
+		$rootScope.$on( '$stateChangeSuccess', () =>
+		{
+			// We have finished the first state change.
+			// We will now begin tracking new referrers.
+			this.firstPass = false;
+			this.currentUrl = window.location.href;
+		} );
+
+		$rootScope.$on( '$stateChangeError', () =>
+		{
+			// Rollback.
+			this.referrer = this.prev;
+		} );
 	}
 
 	static get()
