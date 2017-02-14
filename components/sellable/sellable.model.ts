@@ -7,7 +7,7 @@ export class Sellable extends Model
 	static readonly TYPE_PAID = 'paid';
 	static readonly TYPE_PWYW = 'pwyw';
 
-	pricings: SellablePricing[];
+	pricings: SellablePricing[] = [];
 
 	game_package_id?: number;
 	type: 'free' | 'paid' | 'pwyw';
