@@ -1,0 +1,39 @@
+@import '~styles/variables'
+
+.tab-list
+
+	ul
+		margin: 0
+		padding: 0
+		margin-bottom: $line-height-computed
+		padding-left: $line-height-computed
+		border-bottom: 2px solid $gray-darker
+
+		> li
+			display: inline-block
+			margin: 0
+
+			> a
+				display: inline-block
+				padding: 7px 10px
+				margin: 0 3px
+				margin-bottom: -2px
+				cursor: pointer
+				border: 2px solid $black
+				font-weight: bold
+				color: $black
+
+				// Don't allow to select the text when clicking on a tab.
+				user-select: none
+
+				&:hover
+					background-color: $gray-lightest
+
+				&.active
+					border-bottom: 0
+					background-color: $white
+					padding-bottom: 9px
+
+	&-centered
+		text-align: center
+		margin-left: 0
