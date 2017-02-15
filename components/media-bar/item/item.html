@@ -2,10 +2,17 @@
 	<a class="media-bar-item-wrapper" @click="onClick">
 
 		<img
+			v-if="item.media_type !== 'sketchfab'"
 			v-app-img-responsive="item.img_thumbnail"
-			@imgloadchange="onLoadedChange"
 			:title="item.media_type == 'image' ? item.caption : item.title"
 			:alt="item.media_type == 'image' ? item.caption : item.title"
+			>
+
+		<img
+			v-else
+			class="img-responsive"
+			:src="item.img_thumbnail"
+			alt=""
 			>
 
 		<span class="media-bar-item-play" v-if="item.media_type === 'video'">

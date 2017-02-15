@@ -19,15 +19,8 @@
 		&:first-child
 			margin-left: 20px
 
-	// Keep hidden until loaded.
 	img
 		z-index: 0
-		display: none
-
-	&.loaded img
-		// @extend .anim-fade-in, .no-animate-xs
-		animation-duration: 600ms
-		display: block
 
 	&-play
 		@extend $play-button-overlay, $play-button-overlay.small

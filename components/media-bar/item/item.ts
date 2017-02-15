@@ -49,16 +49,6 @@ export class AppMediaBarItem extends Vue
 		}
 	}
 
-	onLoadedChange( event: CustomEvent )
-	{
-		if ( event.detail ) {
-			this.$el.classList.add( 'loaded' );
-		}
-		else {
-			this.$el.classList.remove( 'loaded' );
-		}
-	}
-
 	onClick()
 	{
 		// Lightbox is turned off on mobile.
