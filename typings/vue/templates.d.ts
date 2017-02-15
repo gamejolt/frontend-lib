@@ -1,4 +1,4 @@
-declare module '!view!*'
+declare module '!view*'
 {
 	import * as Vue from 'vue';
 	interface WithRender
