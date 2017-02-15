@@ -60,11 +60,6 @@ export class AppMediaBarLightboxItem extends Vue
 		this.calcActive();
 	}
 
-	play()
-	{
-		this.lightbox.mediaBar.isPlaying = this.itemIndex;
-	}
-
 	async calcDimensions()
 	{
 		await this.$nextTick();

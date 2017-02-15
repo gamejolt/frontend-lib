@@ -25,35 +25,17 @@
 		<!-- Video -->
 		<div v-if="item.media_type === 'video'">
 			<div class="media-bar-lightbox-item-embed"
-				v-if="maxWidth && maxHeight"
+				v-if="isActive && maxWidth && maxHeight"
 				>
-				<div v-if="lightbox.mediaBar.isPlaying !== itemIndex">
-
-					<!--
-						Since we don't have the original width/height for videos, we have to just set max dimensions for the thumbnail.
-					-->
-					<img
-						v-app-img-responsive="item.img_thumbnail"
-						:alt="item.title"
-						:style="{ 'max-height': maxHeight + 'px', 'max-width': maxWidth + 'px' }"
-						>
-
-					<span class="play-button-overlay" @click="play">
-						<span class="jolticon jolticon-play"></span>
-					</span>
-				</div>
-
-				<div v-if="lightbox.mediaBar.isPlaying === itemIndex">
-					<app-video-embed
-						class="media-bar-lightbox-item-embed"
-						:video-provider="item.type"
-						:video-id="item.url"
-						:max-video-width="maxWidth"
-						:max-video-height="maxHeight"
-						:autoplay="true"
-						>
-					</app-video-embed>
-				</div>
+				<app-video-embed
+					class="media-bar-lightbox-item-embed"
+					:video-provider="item.type"
+					:video-id="item.url"
+					:max-video-width="maxWidth"
+					:max-video-height="maxHeight"
+					:autoplay="true"
+					>
+				</app-video-embed>
 			</div>
 
 			<div class="media-bar-lightbox-item-caption">
@@ -66,34 +48,16 @@
 		<!-- Sketchfab -->
 		<div v-if="item.media_type === 'sketchfab'">
 			<div class="game-media-bar-lightbox-item-embed"
-				v-if="maxWidth && maxHeight"
+				v-if="isActive && maxWidth && maxHeight"
 				>
-				<div v-if="lightbox.mediaBar.isPlaying !== itemIndex ">
-
-					<!--
-						Since we don't have the original width/height for videos, we have to just set max dimensions for the thumbnail.
-					-->
-					<img
-						:src="item.img_thumbnail"
-						alt=""
-						:style="{ 'max-height': maxHeight + 'px', 'max-width': maxWidth + 'px' }"
-						>
-
-					<span class="play-button-overlay" @click="play">
-						<span class="jolticon jolticon-play"></span>
-					</span>
-				</div>
-
-				<div v-if="lightbox.mediaBar.isPlaying === itemIndex">
-					<app-sketchfab-embed
-						class="game-media-bar-lightbox-item-embed"
-						:sketchfab-id="item.sketchfab_id"
-						:max-width="maxWidth"
-						:max-height="maxHeight"
-						:autoplay="true"
-						>
-					</app-sketchfab-embed>
-				</div>
+				<app-sketchfab-embed
+					class="game-media-bar-lightbox-item-embed"
+					:sketchfab-id="item.sketchfab_id"
+					:max-width="maxWidth"
+					:max-height="maxHeight"
+					:autoplay="true"
+					>
+				</app-sketchfab-embed>
 			</div>
 		</div>
 

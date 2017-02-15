@@ -27,7 +27,6 @@ export class AppMediaBar extends Vue
 
 	activeItem: any | null = null;
 	activeIndex: number | null = null;
-	isPlaying: number | null = null;
 
 	Screen = Screen;
 
@@ -93,14 +92,12 @@ export class AppMediaBar extends Vue
 	{
 		this.activeIndex = index;
 		this.activeItem = this.mediaItems[ this.activeIndex ];
-		this.isPlaying = this.activeIndex;
 	}
 
 	clearActiveItem()
 	{
 		this.activeItem = null;
 		this.activeIndex = null;
-		this.isPlaying = null;
 		this.trackEvent( 'close' );
 	}
 
