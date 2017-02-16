@@ -109,6 +109,7 @@ export class WidgetCompiler
 		// Convert our compiled input into an element.
 		// Wrap in a div so we can do finds on it.
 		const compiledElement = document.createElement( 'div' );
+		compiledElement.className = 'widget-compiler';
 		compiledElement.innerHTML = compiledInput;
 
 		// If we've gathered any injections, let's put them in.

@@ -11,7 +11,7 @@ export class WidgetCompilerWidgetGameMedia extends WidgetCompilerWidget
 		return this.wrapComponent( AppMediaBar, () =>
 		{
 			return {
-				mediaItems: context['mediaItems'],
+				mediaItems: (context['mediaItems'] || []).slice( 0, 6 ),
 			};
 		} );
 	}
