@@ -1,4 +1,4 @@
-import { Component, Input, Inject, OnInit } from 'ng-metadata/core';
+import { Component, Input, Inject, OnInit, EventEmitter, Output } from 'ng-metadata/core';
 import * as template from '!html-loader!./editor.component.html';
 
 import { SiteContentBlock } from '../../site/content-block/content-block-model';
@@ -15,6 +15,8 @@ export class ContentBlockEditorComponent implements OnInit
 {
 	@Input( '@' ) windowId: string;
 	@Input( '<' ) contentBlock: SiteContentBlock;
+
+	@Output() private changed = new EventEmitter<string>();
 
 	isPreviewLoading = false;
 	private previewIndex = 0;
@@ -33,8 +35,12 @@ export class ContentBlockEditorComponent implements OnInit
 	{
 		this.fetchPreview = _.debounce( () => this._fetchPreview(), PREVIEW_DEBOUNCE );
 
-		this.$scope.$watch( '$ctrl.contentBlock.content_markdown', ( content: string ) =>
+		this.$scope.$watch( '$ctrl.contentBlock.content_markdown', ( content: string, oldContent: string ) =>
 		{
+			if ( content !== oldContent ) {
+				this.changed.emit( content );
+			}
+
 			if ( content ) {
 				this.isPreviewLoading = true;
 				this.fetchPreview();
