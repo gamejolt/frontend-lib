@@ -134,66 +134,71 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 		scope.formState.progress = undefined;
 
 		if ( this.onSubmit ) {
-			scope.formState.progress = this.onSubmit( scope ).then( function( _response )
-			{
-				if ( _response.success === false ) {
-					return $q.reject( _response );
-				}
+			scope.formState.progress = this.onSubmit( scope )
+				.then( function( _response )
+				{
+					if ( _response.success === false ) {
+						return $q.reject( _response );
+					}
 
-				response = _response;
-			} );
+					response = _response;
+				} );
 		}
 		else if ( this.modelClass && this.saveMethod ) {
-			scope.formState.progress = scope.formModel[ this.saveMethod ]().then( function( _response )
-			{
-				response = _response;
+			scope.formState.progress = scope.formModel[ this.saveMethod ]()
+				.then( function( _response )
+				{
+					response = _response;
 
-				// Copy it back to the base model.
-				if ( scope.baseModel ) {
-					angular.extend( scope.baseModel, scope.formModel );
-				}
-			} );
+					// Copy it back to the base model.
+					if ( scope.baseModel ) {
+						angular.extend( scope.baseModel, scope.formModel );
+					}
+				} );
 		}
 
-		return scope.formState.progress.then( function()
-		{
-			if ( _this.onSubmitSuccess ) {
-				_this.onSubmitSuccess( scope, response );
-			}
+		return scope.formState.progress
+			.then( function()
+			{
+				if ( _this.onSubmitSuccess ) {
+					_this.onSubmitSuccess( scope, response );
+				}
 
-			// Send the new model back into the submit handler.
-			if ( angular.isDefined( scope.submitHandler ) ) {
-				scope.submitHandler( { formModel: scope.formModel, $response: response } );
-			}
+				// Send the new model back into the submit handler.
+				if ( angular.isDefined( scope.submitHandler ) ) {
+					scope.submitHandler( { formModel: scope.formModel, $response: response } );
+				}
 
-			// Reset our processing state.
-			scope.formState.isProcessing = false;
+				// Reset our processing state.
+				scope.formState.isProcessing = false;
 
-			// Make sure that serverErrors is reset on a successful submit, just in case.
-			scope.formState.serverErrors = {};
+				// Make sure that serverErrors is reset on a successful submit, just in case.
+				scope.formState.serverErrors = {};
 
-			// After successful submit of the form, we broadcast the onSubmitted event.
-			// We will capture this in the gjForm directive to set the form to a pristine state.
-			scope.$broadcast( 'gjForm.onSubmitted', {} );
+				// After successful submit of the form, we broadcast the onSubmitted event.
+				// We will capture this in the gjForm directive to set the form to a pristine state.
+				scope.$broadcast( 'gjForm.onSubmitted', {} );
 
-			// Show successful form submission.
-			_this._showSuccess( scope );
+				// Show successful form submission.
+				_this._showSuccess( scope );
 
-			// If we should reset on successful submit, let's do that now.
-			if ( _this.resetOnSubmit ) {
-				_this._init( scope );
-			}
-		} )
-		.catch( function( response )
-		{
-			// Store the server validation errors.
-			if ( response && response.errors ) {
-				scope.formState.serverErrors = response.errors;
-			}
+				// If we should reset on successful submit, let's do that now.
+				if ( _this.resetOnSubmit ) {
+					_this._init( scope );
+				}
+			} )
+			.catch( function( response )
+			{
+				console.log( 'Form error', response );
 
-			// Reset our processing state.
-			scope.formState.isProcessing = false;
-		} );
+				// Store the server validation errors.
+				if ( response && response.errors ) {
+					scope.formState.serverErrors = response.errors;
+				}
+
+				// Reset our processing state.
+				scope.formState.isProcessing = false;
+			} );
 	};
 
 	Form.prototype._showSuccess = function( scope )
