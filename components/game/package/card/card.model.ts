@@ -88,27 +88,29 @@ export class GamePackageCardModel
 				checkDownloadables.unshift( os );
 			}
 
-			checkDownloadables.forEach( ( _os ) =>
+			checkDownloadables.every( ( _os ) =>
 			{
 				if ( !indexedBuilds[ _os ] ) {
-					return;
+					return true;
 				}
 
 				this.downloadableBuild = indexedBuilds[ _os ];
 				this.showcasedOs = _os;
 				this.showcasedOsIcon = this.platformSupportInfo[ _os ].icon;
+				return false;
 			} );
 
 			// Do the same with browser type. Pick the default browser one to
 			// show. We include ROMs in browser play.
-			[ 'html', 'flash', 'unity', 'applet', 'silverlight', 'rom' ].forEach( ( type ) =>
+			[ 'html', 'flash', 'unity', 'applet', 'silverlight', 'rom' ].every( ( type ) =>
 			{
 				if ( !indexedBuilds[ type ] ) {
-					return;
+					return true;
 				}
 
 				this.browserBuild = indexedBuilds[ type ];
 				this.showcasedBrowserIcon = this.platformSupportInfo[ type ].icon;
+				return false;
 			} );
 
 			// Pull the showcased release version.
