@@ -33,7 +33,10 @@ module.exports = function( config )
 	function stylesLoader( loaders, options )
 	{
 		if ( config.production ) {
-			return ExtractTextPlugin.extract( loaders );
+			return ExtractTextPlugin.extract( {
+				fallback: 'style-loader',
+				use: loaders,
+			 } );
 		}
 
 		loaders.unshift( 'style-loader' );
