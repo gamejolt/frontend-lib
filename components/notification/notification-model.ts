@@ -52,73 +52,76 @@ export class Notification extends Model
 	{
 		super( data );
 
-		if ( data.from_resource == 'User' ) {
+		if ( data.from_resource === 'User' && data.from_resource_id ) {
 			this.from_model = new User( data.from_resource_model );
 		}
 
-		if ( data.to_resource == 'Game' ) {
+		if ( data.to_resource === 'Game' ) {
 			this.to_model = new Game( data.to_resource_model );
 		}
-		else if ( data.to_resource == 'User' ) {
+		else if ( data.to_resource === 'User' ) {
 			this.to_model = new User( data.to_resource_model );
 		}
-		else if ( data.to_resource == 'Fireside_Post' ) {
+		else if ( data.to_resource === 'Fireside_Post' ) {
 			this.to_model = new FiresidePost( data.to_resource_model );
 		}
-		else if ( data.to_resource == 'Forum_Topic' ) {
+		else if ( data.to_resource === 'Forum_Topic' ) {
 			this.to_model = new (getProvider<any>( 'Forum_Topic' ))( data.to_resource_model );
 		}
+		else if ( data.to_resource === 'Sellable' ) {
+			this.to_model = new (getProvider<any>( 'Sellable' ))( data.to_resource_model );
+		}
 
-		if ( this.type == Notification.TYPE_COMMENT_ADD ) {
+		if ( this.type === Notification.TYPE_COMMENT_ADD ) {
 			this.action_model = new Comment( data.action_resource_model );
 			this.action_label = 'Comment Reply';
 			this.url = undefined;  // Must pull asynchronously when they click on the notification.
 			this.jolticon = 'jolticon-share';
 			this.is_user_based = true;
 		}
-		else if ( this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
+		else if ( this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
 			this.action_model = new Comment( data.action_resource_model );
 			this.action_label = 'New Comment';
 			this.url = undefined;  // Must pull asynchronously when they click on the notification.
 			this.jolticon = 'jolticon-add-comment';
 			this.is_user_based = true;
 		}
-		else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
+		else if ( this.type === Notification.TYPE_FORUM_POST_ADD ) {
 			this.action_model = new (getProvider<any>( 'Forum_Post' ))( data.action_resource_model );
 			this.action_label = 'New Forum Post';
 			this.url = undefined;
 			this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
 			this.is_user_based = true;
 		}
-		else if ( this.type == Notification.TYPE_FRIENDSHIP_REQUEST ) {
+		else if ( this.type === Notification.TYPE_FRIENDSHIP_REQUEST ) {
 			this.action_model = new (getProvider<any>( 'User_Friendship' ))( data.action_resource_model );
 			this.action_label = 'Friend Request';
 			this.url = getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
 			this.jolticon = 'jolticon-friend-add-1';
 			this.is_user_based = true;
 		}
-		else if ( this.type == Notification.TYPE_FRIENDSHIP_ACCEPT ) {
+		else if ( this.type === Notification.TYPE_FRIENDSHIP_ACCEPT ) {
 			this.action_model = new (getProvider<any>( 'User_Friendship' ))( data.action_resource_model );
 			this.action_label = 'New Friend';
 			this.url = getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
 			this.jolticon = 'jolticon-friend-add-2';
 			this.is_user_based = true;
 		}
-		else if ( this.type == Notification.TYPE_GAME_RATING_ADD ) {
+		else if ( this.type === Notification.TYPE_GAME_RATING_ADD ) {
 			this.action_model = new (getProvider<any>( 'Game_Rating' ))( data.action_resource_model );
 			this.action_label = 'Game Rating';
 			this.url = this.to_model.getUrl();
 			this.jolticon = 'jolticon-chart';
 			this.is_game_based = true;
 		}
-		else if ( this.type == Notification.TYPE_GAME_FOLLOW ) {
+		else if ( this.type === Notification.TYPE_GAME_FOLLOW ) {
 			this.action_model = new (getProvider<any>( 'GameLibrary_Game' ))( data.action_resource_model );
 			this.action_label = 'Game Follow';
 			this.url = this.from_model.url;
 			this.jolticon = 'jolticon-subscribe';
 			this.is_user_based = true;
 		}
-		else if ( this.type == Notification.TYPE_DEVLOG_POST_ADD ) {
+		else if ( this.type === Notification.TYPE_DEVLOG_POST_ADD ) {
 			this.action_model = new FiresidePost( data.action_resource_model );
 			this.action_label = 'Devlog Post';
 			this.url = getProvider<StateService>( '$state' ).href( 'discover.games.view.devlog.view', {
@@ -129,7 +132,7 @@ export class Notification extends Model
 			this.jolticon = 'jolticon-blog-article';
 			this.is_game_based = true;
 		}
-		else if ( this.type == Notification.TYPE_SELLABLE_SELL ) {
+		else if ( this.type === Notification.TYPE_SELLABLE_SELL ) {
 			this.action_model = new (getProvider<any>( 'Order_Item' ))( data.action_resource_model );
 			this.action_label = 'Sale';
 			this.url = getProvider<StateService>( '$state' ).href( 'dashboard.main.overview', {} );
@@ -156,17 +159,17 @@ export class Notification extends Model
 		}
 		// Need to fetch the URL first.
 		else if (
-			this.type == Notification.TYPE_COMMENT_ADD
-			|| this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER
-			|| this.type == Notification.TYPE_FORUM_POST_ADD
+			this.type === Notification.TYPE_COMMENT_ADD
+			|| this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER
+			|| this.type === Notification.TYPE_FORUM_POST_ADD
 		) {
 			let url: string;
 
 			try {
-				if ( this.type == Notification.TYPE_COMMENT_ADD || this.type == Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
+				if ( this.type === Notification.TYPE_COMMENT_ADD || this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
 					url = await Comment.getCommentUrl( this.action_resource_id );
 				}
-				else if ( this.type == Notification.TYPE_FORUM_POST_ADD ) {
+				else if ( this.type === Notification.TYPE_FORUM_POST_ADD ) {
 					url = await getProvider<any>( 'Forum_Post' ).getPostUrl( this.action_resource_id );
 				}
 				else {

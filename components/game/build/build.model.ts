@@ -275,12 +275,16 @@ export class GameBuild extends Model
 		return undefined;
 	}
 
-	getDownloadUrl( options: { key?: string } = {} )
+	getDownloadUrl( options: { key?: string, forceDownload?: boolean } = {} )
 	{
 		// This is a game key so you can access games that you have a key for.
 		let data: any = {};
 		if ( options.key ) {
 			data.key = options.key;
+		}
+
+		if ( options.forceDownload ) {
+			data.forceDownload = true;
 		}
 
 		return Api.sendRequest( '/web/discover/games/builds/get-download-url/' + this.id, data );

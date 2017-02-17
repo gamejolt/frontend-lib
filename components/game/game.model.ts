@@ -67,6 +67,8 @@ export class Game extends Model
 
 	has_active_builds: boolean;
 
+	sites_enabled: boolean;
+
 	// These are computed in the constructor.
 	_has_cover: boolean;
 	is_published = false;

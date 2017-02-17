@@ -40,7 +40,10 @@ angular.module( 'gj.Game.Downloader' ).service( 'Game_Downloader', function( $ro
 			// If they click away from the page before the download starts, then cancel the download redirect.
 			var shouldTransition = true;
 			var downloadUrl = null;
-			downloadPromise = build.getDownloadUrl( { key: (options.key || null) } )
+			downloadPromise = build.getDownloadUrl( {
+				key: (options.key || null),
+				forceDownload: true,
+			} )
 				.then( function( response )
 				{
 					downloadUrl = response.downloadUrl;

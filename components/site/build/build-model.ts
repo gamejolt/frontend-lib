@@ -12,26 +12,6 @@ export class SiteBuild extends Model
 	added_on: number;
 
 	file?: any;
-
-	$save()
-	{
-		if ( !this.id ) {
-			return this.$_save( '/web/dash/sites/upload-build/' + this.site_id, 'siteBuild', { file: this.file } );
-		}
-		else {
-			throw new Error( `Can't edit site builds.` );
-		}
-	}
-
-	$activate()
-	{
-		return this.$_save( '/web/dash/sites/activate-build/' + this.site_id + '/' + this.id, 'siteBuild' );
-	}
-
-	$remove()
-	{
-		return this.$_remove( '/web/dash/sites/remove-build/' + this.site_id + '/' + this.id );
-	}
 }
 
 Model.create( SiteBuild );
