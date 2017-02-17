@@ -16,6 +16,9 @@ export class Site extends Model
 	content_blocks: SiteContentBlock[];
 	is_static: boolean;
 	build?: SiteBuild;
+	title?: string;
+	description?: string;
+	ga_tracking_id?: string;
 	status: string;
 
 	constructor( data: any = {} )
@@ -32,6 +35,16 @@ export class Site extends Model
 
 		if ( data.build ) {
 			this.build = new SiteBuild( data.build );
+		}
+	}
+
+	$save()
+	{
+		if ( this.id ) {
+			return this.$_save( `/web/dash/sites/save/${this.id}`, 'site' );
+		}
+		else {
+			throw new Error( `Can't save new site.` );
 		}
 	}
 }
