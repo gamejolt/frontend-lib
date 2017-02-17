@@ -2,7 +2,7 @@
 	<div v-for="sellable of sellables" :key="sellable.id">
 
 		<iframe nwdisable nwfaketop
-			:src="`${widgetHost}/sale/v1?key=${sellable.key}`"
+			:src="`${widgetHost}/sale/v1?key=${sellable.key}&theme=${theme}`"
 			frameborder="0"
 			width="100%"
 			height="245"

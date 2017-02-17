@@ -6,7 +6,7 @@ export class WidgetCompilerWidgetYoutube extends WidgetCompilerWidget
 {
 	readonly name = 'youtube';
 
-	compile( _context: WidgetCompilerContext, params: any[] = [] )
+	compile( _context: WidgetCompilerContext, params: string[] = [] )
 	{
 		if ( !params || !params.length ) {
 			throw new Error( `Invalid params for widget.` );

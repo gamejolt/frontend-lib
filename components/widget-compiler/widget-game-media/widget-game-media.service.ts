@@ -6,12 +6,15 @@ export class WidgetCompilerWidgetGameMedia extends WidgetCompilerWidget
 {
 	readonly name = 'game-media';
 
-	compile( context: WidgetCompilerContext, _params: any[] = [] )
+	compile( context: WidgetCompilerContext, params: string[] = [] )
 	{
+		const namedParams = this.namedParams( params );
+
 		return this.wrapComponent( AppMediaBar, () =>
 		{
 			return {
-				mediaItems: (context['mediaItems'] || []).slice( 0, 6 ),
+				mediaItems: (context['mediaItems'] || [])
+					.slice( 0, parseInt( namedParams['num'], 10 ) || 6 ),
 			};
 		} );
 	}
