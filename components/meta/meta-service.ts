@@ -10,6 +10,8 @@ export class Meta extends MetaContainer
 	private static _twitter = TwitterMetaContainer;
 	private static _microdata = MicrodataContainer;
 
+	static titleSuffix = GJ_IS_CLIENT ? ' - Game Jolt' : ' on Game Jolt';
+
 	static initAngular( $rootScope: any )
 	{
 		$rootScope.$on( '$stateChangeSuccess', () =>
@@ -21,12 +23,7 @@ export class Meta extends MetaContainer
 	static set title( title: string | null )
 	{
 		if ( title ) {
-			if ( GJ_IS_CLIENT ) {
-				title += ' - Game Jolt';
-			}
-			else {
-				title += ' on Game Jolt';
-			}
+			title += this.titleSuffix;
 		}
 		else {
 			title = this._originalTitle;
