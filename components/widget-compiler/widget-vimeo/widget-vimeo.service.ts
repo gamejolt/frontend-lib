@@ -6,7 +6,7 @@ export class WidgetCompilerWidgetVimeo extends WidgetCompilerWidget
 {
 	readonly name = 'vimeo';
 
-	compile( _context: WidgetCompilerContext, params: any[] = [] )
+	compile( _context: WidgetCompilerContext, params: string[] = [] )
 	{
 		if ( !params || !params.length ) {
 			throw new Error( `Invalid params for widget.` );

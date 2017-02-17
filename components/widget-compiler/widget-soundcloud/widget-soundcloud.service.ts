@@ -6,7 +6,7 @@ export class WidgetCompilerWidgetSoundcloud extends WidgetCompilerWidget
 {
 	readonly name = 'soundcloud';
 
-	compile( _context: WidgetCompilerContext, params: any[] = [] )
+	compile( _context: WidgetCompilerContext, params: string[] = [] )
 	{
 		if ( !params || !params.length ) {
 			throw new Error( `Invalid params for widget.` );

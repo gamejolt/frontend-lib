@@ -47,6 +47,8 @@ export class AppWidgetCompiler extends Vue
 				this.$el.appendChild( compiledElem );
 			}
 		}
+
+		this.$emit( 'compiled' );
 	}
 
 	render( h: Vue.CreateElement )

@@ -119,6 +119,9 @@ export class WidgetCompiler
 			injectionElement.$mount( slot );
 		}
 
+		// Clean all empty tags out.
+		this.cleanEmptyContent( compiledElement );
+
 		return compiledElement;
 	}
 
@@ -151,6 +154,21 @@ export class WidgetCompiler
 
 		// Call the widget's service.
 		return this.widgets[ widgetName ].compile( context, params );
+	}
+
+	private static cleanEmptyContent( compiledElement: HTMLElement )
+	{
+		let emptyElems = compiledElement.querySelectorAll( 'p:empty' );
+		for ( let i = 0; i < emptyElems.length; ++i ) {
+			const elem = emptyElems[ i ];
+			elem.parentNode!.removeChild( elem );
+		}
+
+		emptyElems = compiledElement.querySelectorAll( 'div:empty' );
+		for ( let i = 0; i < emptyElems.length; ++i ) {
+			const elem = emptyElems[ i ];
+			elem.parentNode!.removeChild( elem );
+		}
 	}
 }
 
