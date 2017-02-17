@@ -30,6 +30,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit
 
 	constructor(
 		@Inject( '$element' ) private $element: ng.IAugmentedJQuery,
+		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
 		@Inject( '$scope' ) private $scope: ng.IScope,
 		@Inject( 'filterFilter' ) private filterFilter: ng.IFilterFilter,
 		@Inject( 'ngModel' ) @Self() private ngModel: ng.INgModelController,
@@ -47,7 +48,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit
 		};
 	}
 
-	toggleSelector()
+	async toggleSelector()
 	{
 		this.isSelectorShowing = !this.isSelectorShowing;
 		if ( !this.isSelectorShowing ) {
@@ -68,6 +69,8 @@ export class ThemeEditorFontSelectorComponent implements OnInit
 						this.filterFontList();
 					} );
 			}
+
+			await this.$timeout();
 
 			const fontListElement = angular.element( this.$element[0].querySelector( '.font-selector-font-list' ) as Element );
 			const liHeight = 38;
