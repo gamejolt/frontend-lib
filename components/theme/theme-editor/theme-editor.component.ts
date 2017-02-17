@@ -54,10 +54,10 @@ export class ThemeEditorComponent implements OnInit
 		this.selectedGroup = this.definition.styleGroups[0];
 
 		// Make sure we update the page with the current theme.
-		this.refresh();
+		this.refresh( true );
 	}
 
-	refresh()
+	refresh( initial = false )
 	{
 		const iframe = document.getElementById( this.windowId ) as HTMLIFrameElement;
 		if ( iframe ) {
@@ -70,6 +70,8 @@ export class ThemeEditorComponent implements OnInit
 			iframe.contentWindow.postMessage( msg, '*' );
 		}
 
-		this.changed.emit( this.theme );
+		if ( !initial ) {
+			this.changed.emit( this.theme );
+		}
 	}
 }
