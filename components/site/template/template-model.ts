@@ -13,7 +13,12 @@ export class SiteTemplate extends Model
 		super( data );
 
 		if ( data.data ) {
-			this.data = JSON.parse( data.data ) || {};
+			if ( typeof data.data === 'string' ) {
+				this.data = JSON.parse( data.data ) || {};
+			}
+			else {
+				this.data = data.data;
+			}
 		}
 	}
 }
