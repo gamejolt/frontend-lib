@@ -1,6 +1,18 @@
-import { provide } from 'ng-metadata/core';
-import { CardComponent } from './card-directive';
+import * as Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import * as View from '!view!./card.html';
 
-export default angular.module( 'gj.Card', [] )
-.directive( ...provide( CardComponent ) )
-.name;
+require( './card.styl' );
+
+@View
+@Component({
+	name: 'card',
+})
+export class AppCard extends Vue
+{
+	@Prop( { type: Boolean, default: false } ) isDraggable: boolean;
+	@Prop( { type: Boolean, default: false } ) isExpandable: boolean;
+	@Prop( { type: Boolean, default: false } ) isExpanded: boolean;
+	@Prop( { type: Boolean, default: false } ) isInactive: boolean;
+	@Prop( { type: Boolean, default: false } ) isDisabled: boolean;
+}
