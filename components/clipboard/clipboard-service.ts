@@ -1,30 +1,30 @@
-import { Injectable, Inject } from 'ng-metadata/core';
+import { getProvider } from '../../utils/utils';
 
-@Injectable( 'Clipboard' )
 export class Clipboard
 {
-	constructor(
-		@Inject( '$document' ) private $document: ng.IDocumentService,
-		@Inject( 'Growls' ) private growls: any
-	)
-	{
-	}
-
-	copy( url: string )
+	static copy( url: string )
 	{
 		// We have to add it into view, select, copy, then remove. Yeesh.
 		const rand = Math.random();
-		const clipboardElem: any = angular.element( `<input type="text" value="${url}" id="clipboard-${rand}">` );
-		angular.element( this.$document[0].body ).append( clipboardElem );
-		clipboardElem[0].select();
+		const clipboardElem = document.createElement( 'input' );
+		clipboardElem.type = 'text';
+		clipboardElem.value = url;
+		clipboardElem.id = `clipboard-${rand}`;
+		document.body.appendChild( clipboardElem );
+		clipboardElem.select();
 
-		if ( this.$document[0].execCommand( 'copy' ) ) {
-			this.growls.success( 'Copied to your clipboard.', 'Copied!' );
-		}
-		else {
-			this.growls.error( 'Could not copy to your clipboard. Dunno why. Sorry.', 'Copy Failed' );
+		const result = window.document.execCommand( 'copy' );
+
+		if ( GJ_IS_ANGULAR ) {
+			const Growls = getProvider<any>( 'Growls' );
+			if ( result ) {
+				Growls.success( 'Copied to your clipboard.', 'Copied!' );
+			}
+			else {
+				Growls.error( 'Could not copy to your clipboard. Dunno why. Sorry.', 'Copy Failed' );
+			}
 		}
 
-		clipboardElem.remove();
+		clipboardElem.parentNode!.removeChild( clipboardElem );
 	}
 }
