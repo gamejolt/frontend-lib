@@ -24,11 +24,7 @@ a
 	color: $text-muted
 
 .link-unstyled
-	color: inherit
-
-	&:hover
-	&:focus
-		text-decoration: underline
+	link-unstyled()
 
 .link-help
 	color: $text-muted
@@ -52,18 +48,6 @@ ui-view
 /**
  * Scrollable
  */
-scrollable()
-	overflow-y: auto
-	overflow-x: hidden
-	-webkit-overflow-scrolling: touch
-	will-change: scroll-position
-
-scrollable-x()
-	overflow-y: hidden
-	overflow-x: auto
-	-webkit-overflow-scrolling: touch
-	will-change: scroll-position
-
 .scrollable
 	scrollable()
 
@@ -74,23 +58,13 @@ scrollable-x()
  * Full Bleeds
  */
 .full-bleed
-	margin-left: -($grid-gutter-width-xs / 2)
-	margin-right: @margin-left
+	full-bleed()
 
-	@media $media-sm-up
-		margin-left: -($grid-gutter-width / 2)
-		margin-right: @margin-left
+.full-bleed-xs
+	full-bleed-xs()
 
-@media $media-xs
-	.full-bleed-xs
-		margin-left: -($grid-gutter-width-xs / 2)
-		margin-right: @margin-left
-
-@media $media-sm
-	.full-bleed-sm
-		margin-left: -($grid-gutter-width / 2)
-		margin-right: @margin-left
-
+.full-bleed-sm
+	full-bleed-sm()
 
 /**
  * Sans margin
