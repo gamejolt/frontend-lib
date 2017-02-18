@@ -40,12 +40,17 @@ export class Site extends Model
 
 	$save()
 	{
-		if ( this.id ) {
-			return this.$_save( `/web/dash/sites/save/${this.id}`, 'site' );
-		}
-		else {
-			throw new Error( `Can't save new site.` );
-		}
+		return this.$_save( `/web/dash/sites/save/${this.id}`, 'site' );
+	}
+
+	$activate()
+	{
+		return this.$_save( `/web/dash/sites/activate/${this.id}`, 'site' );
+	}
+
+	$deactivate()
+	{
+		return this.$_save( `/web/dash/sites/deactivate/${this.id}`, 'site' );
 	}
 }
 
