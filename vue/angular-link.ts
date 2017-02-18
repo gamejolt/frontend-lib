@@ -1,5 +1,5 @@
 import * as Vue from 'vue';
-import { Component, Inject, OnChanges, SimpleChanges, OnDestroy, AfterViewInit } from 'ng-metadata/core';
+import { Component, Inject, OnChanges, SimpleChanges, OnDestroy, OnInit } from 'ng-metadata/core';
 import { kebabCase } from '../utils/string';
 
 export function makeComponentProvider( component: typeof Vue )
@@ -21,30 +21,40 @@ export function makeComponentProvider( component: typeof Vue )
 			transclude: true,
 		}
 	})
-	class WrappedComponent implements OnChanges, OnDestroy
+	class WrappedComponent implements OnInit, OnChanges, OnDestroy
 	{
 		private el: HTMLElement;
 		private vueElement: Vue;
+
+		private initialized = false;
 
 		constructor(
 			@Inject( '$element' ) private $element: ng.IAugmentedJQuery
 		)
 		{
 			this.el = this.$element[ 0 ];
+		}
 
-			const rootElement = createVueElement( this.el, options );
+		ngOnInit()
+		{
+			const rootElement = createVueElement( this, options );
 			rootElement.el = this.el.children[ 0 ];
 
 			this.vueElement = new Vue( rootElement );
 			this.el.removeAttribute( 've-cloak' );
 			this.el.setAttribute( 've-ready', '' );
+			this.initialized = true;
 		}
 
 		ngOnChanges( changes: SimpleChanges )
 		{
+			if ( !this.initialized ) {
+				return;
+			}
+
 			for ( const key in changes ) {
 				if ( typeof changes[ key ].currentValue !== 'undefined' ) {
-					( this.vueElement as any )[ key ] = changes[ key ].currentValue;
+					(this.vueElement as any)[ key ] = changes[ key ].currentValue;
 				}
 			}
 		}
@@ -60,21 +70,23 @@ export function makeComponentProvider( component: typeof Vue )
 	return WrappedComponent;
 }
 
-function createVueElement( el: HTMLElement, componentDefinition: any )
+function createVueElement( ngComponent: any, componentDefinition: any )
 {
 	componentDefinition = Object.assign( {}, componentDefinition );
 	const props: string[] = componentDefinition.props || {};
 
 	// clone hack due to IE compatibility
-	const elOriginalChildren = el.cloneNode( true ).childNodes;
+	const elOriginalChildren = (ngComponent.el as HTMLElement).cloneNode( true ).childNodes;
 
 	const rootElement: Vue.ComponentOptions<Vue> = {
 		props,
+		// Pass the initial data in.
+		propsData: ngComponent,
 		computed: {
 			reactiveProps( this: any )
 			{
 				const reactivePropsList: any = {};
-				Object.keys( props ).forEach(( prop ) => reactivePropsList[ prop ] = this[ prop ] );
+				Object.keys( props ).forEach( ( prop ) => reactivePropsList[ prop ] = this[ prop ] );
 				return reactivePropsList;
 			}
 		},
