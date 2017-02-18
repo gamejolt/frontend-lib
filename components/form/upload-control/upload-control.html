@@ -46,8 +46,11 @@
 			<gj-card
 				ng-repeat="file in ngModel.$viewValue"
 				ui-tree-node
-				is-draggable="isSortable ? true : false"
+				[is-draggable]="isSortable ? true : false"
 				>
+
+				<gj-card-drag-handle ng-if="isSortable ? true : false"></gj-card-drag-handle>
+
 				<div class="row">
 					<div class="col-xs-3" ng-if="::isImage( file )">
 						<gj-form-upload-control-img-preview file="file"></gj-form-upload-control-img-preview>

@@ -1,11 +1,13 @@
 <gj-card class="editable-accordion-item"
 	ng-click="item.toggleVisible()"
-	is-expandable="!item.notExpandable"
-	is-draggable="item.shouldShowHandle"
-	is-expanded="accordion.activeItem == item.id"
-	is-inactive="item.isInactive"
+	[is-expandable]="!item.notExpandable"
+	[is-draggable]="item.shouldShowHandle"
+	[is-expanded]="accordion.activeItem == item.id"
+	[is-inactive]="item.isInactive"
 	gj-scroll-when="accordion.activeItem == item.id"
 	>
+
+	<gj-card-drag-handle ng-if="item.shouldShowHandle"></gj-card-drag-handle>
 
 	<div ng-transclude></div>
 
