@@ -7,6 +7,7 @@ import { GameBuild } from './build/build.model';
 import { Sellable } from '../sellable/sellable.model';
 import { getProvider } from '../../utils/utils';
 import { Registry } from '../registry/registry.service';
+import { Site } from '../site/site-model';
 
 export class Game extends Model
 {
@@ -68,6 +69,7 @@ export class Game extends Model
 	has_active_builds: boolean;
 
 	sites_enabled: boolean;
+	site?: Site;
 
 	// These are computed in the constructor.
 	_has_cover: boolean;
@@ -95,6 +97,10 @@ export class Game extends Model
 
 		if ( data.header_media_item ) {
 			this.header_media_item = new MediaItem( data.header_media_item );
+		}
+
+		if ( data.site ) {
+			this.site = new Site( data.site );
 		}
 
 		this._has_cover = !!this.header_media_item;
