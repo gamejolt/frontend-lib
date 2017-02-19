@@ -1,4 +1,6 @@
-<img
-	gj-img-responsive="{{ ::$ctrl.game.img_thumbnail }}"
-	alt="{{ ::$ctrl.game.title }}"
-	>
+<div class="game-thumbnail-img">
+	<img
+		v-app-img-responsive="game.img_thumbnail"
+		:alt="game.title"
+		>
+</div>
