@@ -109,7 +109,7 @@ export class AppThemeInjector extends Vue
 						continue;
 					}
 
-					const rule = `${injection.selector} { ${injection.property}: ${propertyValue} }`;
+					const rule = `${injection.selector} { ${injection.property}: ${propertyValue} !important }`;
 					styles.push( rule );
 				}
 			}
