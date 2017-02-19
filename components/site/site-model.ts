@@ -10,8 +10,6 @@ export class Site extends Model
 	static STATUS_REMOVED = 'removed';
 
 	url: string;
-	user: any;
-	game?: any;
 	theme: SiteTheme;
 	content_blocks: SiteContentBlock[];
 	is_static: boolean;
