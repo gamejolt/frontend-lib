@@ -49,6 +49,11 @@ export class WidgetCompiler
 		this.contentClass = contentClass;
 	}
 
+	static getContentClass()
+	{
+		return this.contentClass;
+	}
+
 	/**
 	 * Compiles any widgets in the content provided.
 	 * Creates isolate child scopes for each widget and attaches their scopes to the scope passed in.
