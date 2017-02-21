@@ -25,14 +25,14 @@ export class ThemeSelectorComponent
 	ngOnInit()
 	{
 		if ( this.currentTemplate ) {
-			this.current = _.find( this.templates, { id: this.currentTemplate } );
+			this.current = this.templates.find( ( t ) => t.id === this.currentTemplate );
 		}
 	}
 
 	select( id: number )
 	{
 		this.currentTemplate = id;
-		this.current = _.find( this.templates, { id: this.currentTemplate } );
+		this.current = this.templates.find( ( t ) => t.id === this.currentTemplate );
 		this.changed.emit( id );
 		this.popover.hideAll();
 	}
