@@ -19,10 +19,10 @@ interface StyleGroup {
 })
 export class ThemeEditorComponent implements OnInit
 {
-	@Input( '@' ) windowId: string;
-	@Input( '<' ) template: number;
-	@Input( '<' ) theme: any;
-	@Input( '<' ) resourceId: number;
+	@Input() windowId: string;
+	@Input() template: number;
+	@Input() theme: any;
+	@Input() resourceId: number;
 
 	@Output() private changed = new EventEmitter<any>();
 

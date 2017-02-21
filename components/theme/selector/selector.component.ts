@@ -9,8 +9,8 @@ import * as template from '!html-loader!./selector.component.html';
 })
 export class ThemeSelectorComponent
 {
-	@Input( '<' ) templates: SiteTemplate[];
-	@Input( '<' ) currentTemplate: number;
+	@Input() templates: SiteTemplate[];
+	@Input() currentTemplate: number;
 
 	@Output() private changed = new EventEmitter<number>();
 
