@@ -19,10 +19,10 @@ interface StyleGroup {
 })
 export class ThemeEditorComponent implements OnInit
 {
-	@Input( '@' ) windowId: string;
-	@Input( '<' ) template: number;
-	@Input( '<' ) theme: any;
-	@Input( '<' ) resourceId: number;
+	@Input() windowId: string;
+	@Input() template: number;
+	@Input() theme: any;
+	@Input() resourceId: number;
 
 	@Output() private changed = new EventEmitter<any>();
 
@@ -45,7 +45,9 @@ export class ThemeEditorComponent implements OnInit
 		// Save the initial content, as well.
 		this.initialTheme = angular.copy( this.theme );
 
-		const response = await Api.sendRequest( '/sites-io/get-template/' + this.template );
+		const response = await Api.sendRequest( '/sites-io/get-template/' + this.template, undefined, {
+			detach: true,
+		} );
 
 		this.isLoaded = true;
 

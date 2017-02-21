@@ -9,6 +9,8 @@ export class Site extends Model
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
+	user_id: number;
+	game_id: number;
 	url: string;
 	theme: SiteTheme;
 	content_blocks: SiteContentBlock[];

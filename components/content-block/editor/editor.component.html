@@ -11,36 +11,64 @@
 					<span class="text-muted small" translate>Widgets are pieces of placeholder code that are replaced by dynamic content.</span>
 				</p>
 
-				<a class="btn"
-					gj-tooltip="{{ 'Will show your game\'s media (screenshots, videos, etc).' | translate }}"
-					ng-click="$ctrl.insertAtCaret( '{% game-media %}' )"
-					translate
-					>
-					Game Media
-				</a>
-				<a class="btn"
-					gj-tooltip="{{ 'Will show your game\'s description.' | translate }}"
-					ng-click="$ctrl.insertAtCaret( '{% game-description %}' )"
-					translate
-					>
-					Game Description
-				</a>
-				<a class="btn"
-					gj-tooltip="{{ 'Will show your game\'s packages.' | translate }}"
-					ng-click="$ctrl.insertAtCaret( '{% game-packages %}' )"
-					translate
-					>
-					Game Packages
-				</a>
-				&nbsp;
-				&nbsp;
-				<a class="link-muted"
-					ng-href="{{ $ctrl.env.helpBaseUrl }}/widgets-sites"
-					target="_blank"
-					translate
-					>
-					View all...
-				</a>
+				<span ng-if="!$ctrl.site.game_id">
+					<a class="btn"
+						gj-tooltip="{{ 'Will show your profile bio.' | translate }}"
+						ng-click="$ctrl.insertAtCaret( '{% user-bio %}' )"
+						translate
+						>
+						User Bio
+					</a>
+					<a class="btn"
+						gj-tooltip="{{ 'Will show a grid of all your games.' | translate }}"
+						ng-click="$ctrl.insertAtCaret( '{% game-list %}' )"
+						translate
+						>
+						Game List
+					</a>
+					&nbsp;
+					&nbsp;
+					<a class="link-muted"
+						ng-href="{{ $ctrl.env.helpBaseUrl }}/widgets-user-site"
+						target="_blank"
+						translate
+						>
+						View all...
+					</a>
+				</span>
+
+				<span ng-if="$ctrl.site.game_id">
+					<a class="btn"
+						gj-tooltip="{{ 'Will show your game\'s media (screenshots, videos, etc).' | translate }}"
+						ng-click="$ctrl.insertAtCaret( '{% game-media num=6 %}' )"
+						translate
+						>
+						Game Media
+					</a>
+					<a class="btn"
+						gj-tooltip="{{ 'Will show your game\'s description.' | translate }}"
+						ng-click="$ctrl.insertAtCaret( '{% game-description %}' )"
+						translate
+						>
+						Game Description
+					</a>
+					<a class="btn"
+						gj-tooltip="{{ 'Will show your game\'s packages.' | translate }}"
+						ng-click="$ctrl.insertAtCaret( '{% game-packages %}' )"
+						translate
+						>
+						Game Packages
+					</a>
+					&nbsp;
+					&nbsp;
+					<a class="link-muted"
+						ng-href="{{ $ctrl.env.helpBaseUrl }}/widgets-game-site"
+						target="_blank"
+						translate
+						>
+						View all...
+					</a>
+				</span>
 
 			</div>
 			<div class="col-xs-3">

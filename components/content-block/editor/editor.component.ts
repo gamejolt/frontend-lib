@@ -4,6 +4,7 @@ import * as template from '!html-loader!./editor.component.html';
 import { SiteContentBlock } from '../../site/content-block/content-block-model';
 import { Environment } from '../../environment/environment.service';
 import { Api } from '../../api/api.service';
+import { Site } from '../../site/site-model';
 
 const PREVIEW_DEBOUNCE = 2000;
 
@@ -13,8 +14,9 @@ const PREVIEW_DEBOUNCE = 2000;
 })
 export class ContentBlockEditorComponent implements OnInit
 {
-	@Input( '@' ) windowId: string;
-	@Input( '<' ) contentBlock: SiteContentBlock;
+	@Input() site: Site;
+	@Input() windowId: string;
+	@Input() contentBlock: SiteContentBlock;
 
 	@Output() private changed = new EventEmitter<string>();
 

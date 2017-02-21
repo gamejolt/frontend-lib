@@ -20,9 +20,10 @@ create-animation( anim, to, direction = false )
 	.anim-{ _selector }
 		{ block }
 
-	// For angular based animations.
+	// For angular/vue based animations.
 	.anim-{ _ng-selector }
 		&.ng-{ _ng-to }
+		&.v-{ _ng-to }-active
 			{ block }
 
 /**

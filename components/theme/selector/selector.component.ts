@@ -9,8 +9,8 @@ import * as template from '!html-loader!./selector.component.html';
 })
 export class ThemeSelectorComponent
 {
-	@Input( '<' ) templates: SiteTemplate[];
-	@Input( '<' ) currentTemplate: number;
+	@Input() templates: SiteTemplate[];
+	@Input() currentTemplate: number;
 
 	@Output() private changed = new EventEmitter<number>();
 
@@ -25,14 +25,14 @@ export class ThemeSelectorComponent
 	ngOnInit()
 	{
 		if ( this.currentTemplate ) {
-			this.current = _.find( this.templates, { id: this.currentTemplate } );
+			this.current = this.templates.find( ( t ) => t.id === this.currentTemplate );
 		}
 	}
 
 	select( id: number )
 	{
 		this.currentTemplate = id;
-		this.current = _.find( this.templates, { id: this.currentTemplate } );
+		this.current = this.templates.find( ( t ) => t.id === this.currentTemplate );
 		this.changed.emit( id );
 		this.popover.hideAll();
 	}
