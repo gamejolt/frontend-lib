@@ -45,7 +45,9 @@ export class ThemeEditorComponent implements OnInit
 		// Save the initial content, as well.
 		this.initialTheme = angular.copy( this.theme );
 
-		const response = await Api.sendRequest( '/sites-io/get-template/' + this.template );
+		const response = await Api.sendRequest( '/sites-io/get-template/' + this.template, undefined, {
+			detach: true,
+		} );
 
 		this.isLoaded = true;
 
