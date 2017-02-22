@@ -88,6 +88,7 @@
 			This will create a new editor instance and refresh the block content.
 		-->
 		<gj-content-block-editor-form
+			mode="{{ $ctrl.site.game_id ? 'game' : 'user' }}"
 			gj-site-content-block="$ctrl.contentBlock"
 			>
 		</gj-content-block-editor-form>

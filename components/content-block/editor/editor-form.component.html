@@ -3,8 +3,10 @@
 	<form-group class="no-animate" name="content_markdown" label="{{ 'Content' | translate }}" hide-label="true">
 		<div
 			form-markdown-editor
-			markdown-mode="sites"
+			markdown-mode="{{ mode }}-site"
 			disable-preview="true"
+			html-support="true"
+			allow-code-editor="true"
 			show-media-items="true"
 			media-item-type="sites-content-image"
 			debounce="0"

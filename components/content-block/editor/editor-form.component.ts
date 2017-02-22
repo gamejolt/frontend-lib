@@ -9,6 +9,7 @@ export function ContentBlockEditorFormFactory(
 	} );
 
 	form.scope.compiled = '&';
+	form.scope.mode = '@';
 
 	form.onInit = function( scope: any )
 	{
