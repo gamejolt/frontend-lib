@@ -7,6 +7,38 @@ const CSS_SHOW_STYLES: any = {
 	display: 'block',
 };
 
+function getStyle( el: HTMLElement, prop: keyof CSSStyleDeclaration )
+{
+	// IE
+	if ( (el as any).currentStyle ) {
+		return (el as any).currentStyle[ prop ];
+	}
+	else if ( window.getComputedStyle ) {
+		return window.getComputedStyle( el )[ prop ];
+	}
+
+	// Finally try and get inline style.
+	return el.style[ prop ];
+}
+
+function isStaticPositioned( el: HTMLElement )
+{
+	return (getStyle( el, 'position' ) || 'static') === 'static';
+}
+
+function elementParentOffset( el: HTMLElement )
+{
+	let offsetParent = el.offsetParent as HTMLElement || document;
+	while ( offsetParent
+		&& (offsetParent !== document as any)
+		&& isStaticPositioned( offsetParent )
+	) {
+		offsetParent = offsetParent.offsetParent as HTMLElement;
+	}
+
+	return offsetParent || document;
+};
+
 export class Ruler
 {
 	static width( elem: HTMLElement | Document )
@@ -29,7 +61,41 @@ export class Ruler
 		return this.dimensions( 'offsetHeight', elem );
 	}
 
-	private static dimensions( baseProp: 'clientWidth' | 'clientHeight' | 'offsetWidth' | 'offsetHeight', _elem: HTMLElement | Document ): number
+	static position( el: HTMLElement )
+	{
+		const elOffset = this.offset( el );
+		let parentRect = { top: 0, left: 0 };
+		const offsetParentEl = elementParentOffset( el );
+		if ( offsetParentEl !== document as any ) {
+			parentRect = this.offset( offsetParentEl );
+			parentRect.top += offsetParentEl.clientTop - offsetParentEl.scrollTop;
+			parentRect.left += offsetParentEl.clientLeft - offsetParentEl.scrollLeft;
+		}
+
+		const boundingClientRect = el.getBoundingClientRect();
+		return {
+			width: boundingClientRect.width || el.offsetWidth,
+			height: boundingClientRect.height || el.offsetHeight,
+			top: elOffset.top - parentRect.top,
+			left: elOffset.left - parentRect.left
+		};
+	}
+
+	static offset( el: HTMLElement )
+	{
+		const rect = el.getBoundingClientRect();
+		return {
+			width: rect.width || el.offsetWidth,
+			height: rect.height || el.offsetHeight,
+			top: rect.top + (window.pageYOffset || document.documentElement.scrollTop),
+			left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft),
+		};
+	}
+
+	private static dimensions(
+		baseProp: 'clientWidth' | 'clientHeight' | 'offsetWidth' | 'offsetHeight',
+		_elem: HTMLElement | Document,
+	): number
 	{
 		let elem: HTMLElement;
 
