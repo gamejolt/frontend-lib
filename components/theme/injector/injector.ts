@@ -15,7 +15,6 @@ export class AppThemeInjector extends Vue
 	{
 		window.addEventListener( 'message', ( event: MessageEvent ) =>
 		{
-			// console.log( 'got msg', event.data );
 			switch ( event.data.type ) {
 				case 'theme-update':
 
@@ -40,6 +39,7 @@ export class AppThemeInjector extends Vue
 	{
 		let styles: string[] = [];
 		let fonts: string[] = [];
+		let css: string[] = [];
 
 		Object.keys( themeDefinition.definitions ).forEach( ( field: string ) =>
 		{
@@ -98,6 +98,10 @@ export class AppThemeInjector extends Vue
 					propertyValue = `'${currentTheme[field].family}'`;
 					fonts.push( '@import url(//fonts.googleapis.com/css?family=' + currentTheme[field].family.replace( / /g, '+' ) + ');' );
 				}
+				else if ( definition.type === 'css' ) {
+					css.push( currentTheme[field] );
+					return;
+				}
 				else {
 					propertyValue = currentTheme[field];
 				}
@@ -119,6 +123,9 @@ export class AppThemeInjector extends Vue
 
 		// Put in font imports first.
 		stylesCompiled = fonts.join( '' ) + stylesCompiled;
+
+		// Put CSS last.
+		stylesCompiled += ' ' + css.join( ' ' );
 
 		// Add it to the element.
 		this.$el.innerHTML = stylesCompiled;
