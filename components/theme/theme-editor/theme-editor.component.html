@@ -15,9 +15,15 @@
 					<h4>{{ section.section }}</h4>
 
 					<div class="theme-editor-definitions">
-						<div class="form-group" ng-repeat="definitionField in section.definitions track by $index">
 
-							<label class="control-label">{{ $ctrl.definition.definitions[definitionField].title }}</label>
+						<div class="form-group"
+							ng-repeat="definitionField in section.definitions track by $index"
+							ng-class="'theme-editor-definition-' + $ctrl.definition.definitions[definitionField].type"
+							>
+
+							<label class="control-label">
+								{{ $ctrl.definition.definitions[definitionField].title }}
+							</label>
 
 							<div ng-switch="$ctrl.definition.definitions[definitionField].type">
 
@@ -125,6 +131,22 @@
 										<option value="left">Left</option>
 										<option value="center">Center</option>
 									</select>
+								</div>
+
+								<!-- CSS Input -->
+								<div class="theme-editor-code"
+									ng-switch-when="css"
+									>
+									<gj-codemirror
+										[value]="$ctrl.theme[definitionField]"
+										[options]="{
+											mode: 'text/css',
+											lineNumbers: false,
+											tabSize: 2,
+										}"
+										(changed)="$ctrl.updateField( definitionField, $event )"
+										>
+									</gj-codemirror>
 								</div>
 
 							</div>
