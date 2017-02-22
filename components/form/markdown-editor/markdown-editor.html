@@ -25,7 +25,23 @@
 				</a>
 			</li>
 		</ul>
-		<div class="form-markdown-editor-helptext" ng-if="::(ctrl.shouldShowMarkdownHelp || ctrl.shouldShowWidgetHelp)">
+		<div class="form-markdown-editor-helptext" ng-if="::(ctrl.shouldShowMarkdownHelp || ctrl.shouldShowWidgetHelp || ctrl.htmlSupport || ctrl.allowCodeEditor)">
+			<span ng-if="::ctrl.allowCodeEditor" class="form-markdown-editor-helplink hidden-xs hidden-sm">
+				<a ng-show="ctrl.editorMode == 'textarea'"
+					ng-click="ctrl.editorMode = 'code-editor'"
+					tooltip="Switch to a code editor"
+					>
+					<span class="jolticon jolticon-brackets"></span>
+					<span translate>Code Editor</span>
+				</a>
+				<a ng-show="ctrl.editorMode == 'code-editor'"
+					ng-click="ctrl.editorMode = 'textarea'"
+					tooltip="Switch back to a simple text box"
+					>
+					<span class="jolticon jolticon-blog-article"></span>
+					<span translate>Basic Editor</span>
+				</a>
+			</span>
 			<span ng-if="::ctrl.shouldShowMarkdownHelp" class="form-markdown-editor-helplink">
 				<a href="{{ ::Environment.helpBaseUrl }}/{{ ::ctrl.markdownHelpUrl }}" target="_blank">
 					<span class="hidden-xs jolticon jolticon-markdown"></span>
@@ -40,10 +56,16 @@
 					<span class="hidden-xs" translate>Available Widgets</span>
 				</a>
 			</span>
+			<span ng-if="::ctrl.htmlSupport" class="form-markdown-editor-helplink">
+				<span class="hidden-xs jolticon jolticon-html5"></span>
+				<span class="hidden-sm hidden-md hidden-lg jolticon jolticon-html5 big"></span>
+				<span class="hidden-xs" translate>HTML Supported</span>
+			</span>
 		</div>
 	</nav>
 
 	<textarea
+		ng-if="ctrl.editorMode == 'textarea'"
 		class="form-control"
 		form-markdown-editor-control="textarea"
 		ng-model-options="{ updateOn: 'default blur', debounce: { 'default': ctrl.debounce || 500, 'blur': 0 } }"
@@ -54,6 +76,16 @@
 		msd-elastic
 		rows="1"
 		></textarea>
+
+	<gj-codemirror
+		ng-if="ctrl.editorMode == 'code-editor'"
+		ng-show="ctrl.currentTab == 'edit'"
+		[options]="{
+			mode: 'gfm',
+		}"
+		form-markdown-editor-control="codemirror"
+		>
+	</gj-codemirror>
 
 	<div ng-if="ctrl.showMediaItems" ng-show="ctrl.currentTab == 'edit'">
 		<form-markdown-editor-media-items

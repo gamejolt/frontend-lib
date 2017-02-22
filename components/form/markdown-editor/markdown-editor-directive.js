@@ -8,9 +8,11 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			placeholder: '@?',
 			markdownPreviewUrl: '@',
 			markdownMode: '@?',
+			htmlSupport: '<?',
 			isPreviewDisabled: '=?disablePreview',
 			showMediaItems: '<?',
 			mediaItemType: '@?',
+			allowCodeEditor: '<?',
 			debounce: '<?',
 		},
 		template: require( '!html-loader!./markdown-editor.html' ),
@@ -22,6 +24,7 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			$scope.Environment = Environment;
 
 			this.currentTab = 'edit';
+			this.editorMode = 'textarea';
 
 			if ( !this.markdownMode ) {
 				this.markdownMode = 'markdown';
@@ -48,6 +51,14 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			}
 
 			if ( this.markdownMode == 'forums' ) {
+				this.shouldShowWidgetHelp = true;
+			}
+
+			if ( this.markdownMode == 'game-site' ) {
+				this.shouldShowWidgetHelp = true;
+			}
+
+			if ( this.markdownMode == 'user-site' ) {
 				this.shouldShowWidgetHelp = true;
 			}
 		},
@@ -108,6 +119,11 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 				_this.previewContent = '';
 				_this.currentTab = 'edit';
 			} );
+
+			_this.codemirrorChange = function( newContent )
+			{
+				scope.$parent[ gjForm.formModel ][ formGroup.name ] = newContent;
+			};
 		}
 	};
 } )
@@ -127,19 +143,28 @@ angular.module( 'gj.Form.MarkdownEditor' ).directive( 'formMarkdownEditor', func
 			{
 				var gjForm = controllers[0] || undefined;
 				var formGroup = controllers[1] || undefined;
+				var type = attrs.formMarkdownEditorControl;
 
 				// Remove this directive so that we don't go in an infinite loop.
 				element.removeAttr( 'form-markdown-editor-control' );
 
 				// Set the ID/name from the form group data.
-				element.attr( 'name', formGroup.name );
+				element[0].setAttribute( 'name', formGroup.name );
 
-				// Set the ng-model variable for the form field.
-				// Since the markdown editor is an isolate scope, we have to pull from the parent.
-				element.attr( 'ng-model', '$parent.$parent["' + gjForm.formModel + '"]["' + formGroup.name + '"]' );
+				if ( type === 'textarea' ) {
 
-				// Server validation errors.
-				element.attr( 'gj-form-server-validation', 'formState.serverErrors' );
+					// Set the ng-model variable for the form field.
+					// Since the markdown editor is an isolate scope, we have to pull from the parent.
+					element[0].setAttribute( 'ng-model', '$parent.$parent["' + gjForm.formModel + '"]["' + formGroup.name + '"]' );
+
+					// Server validation errors.
+					element[0].setAttribute( 'gj-form-server-validation', 'formState.serverErrors' );
+				}
+				else if ( type === 'codemirror' ) {
+
+					element[0].setAttribute( 'value', '{{ $parent.$parent["' + gjForm.formModel + '"]["' + formGroup.name + '"] }}' );
+					element[0].setAttribute( 'changed', 'ctrl.codemirrorChange( $event )' );
+				}
 
 				// Recompile the element with the new attributes.
 				$compile( element )( scope );
