@@ -14,6 +14,7 @@ module.exports = function( config, projectBase )
 	config.noSourcemaps = config.noSourcemaps || false;
 	config.write = argv.write || false;
 	config.analyze = argv.analyze || false;
+	config.server = argv.server || false;
 
 	// Whether or not the environment of angular should be production or development.
 	// Even when not doing prod builds we use the prod environment by default.
@@ -33,6 +34,7 @@ module.exports = function( config, projectBase )
 	config.projectBase = projectBase;
 	config.buildBaseDir = process.env.BUILD_DIR || './';
 	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
+	config.buildDir += config.server ? '-server' : '';
 	config.libDir = 'src/lib/';
 	config.gjLibDir = 'src/lib/gj-lib-client/';
 	config.bowerDir = 'src/bower-lib/';
