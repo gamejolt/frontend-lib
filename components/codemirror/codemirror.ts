@@ -39,8 +39,6 @@ export class AppCodemirror extends Vue
 			await $import( 'codemirror/mode/gfm/gfm.js' );
 		}
 
-		console.log( this._options.mode );
-
 		this.editor = CodeMirror.fromTextArea( this.$el, this._options );
 		this.editor.setValue( this.value || '' );
 
