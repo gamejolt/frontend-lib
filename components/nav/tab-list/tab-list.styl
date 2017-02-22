@@ -8,10 +8,18 @@
 	padding-right: $line-height-computed
 	border-bottom: 2px solid $gray-darker
 
+	@media $media-xs
+		overflow-x: auto
+		overflow-y: hidden
+		white-space: nowrap
+
 	ul
 		display: inline-block
 		margin: 0
 		padding: 0
+
+		@media $media-xs
+			float: none !important
 
 		> li
 			display: inline-block
