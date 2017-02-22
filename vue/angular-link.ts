@@ -1,8 +1,8 @@
 import * as Vue from 'vue';
-import { Component, Inject, OnChanges, SimpleChanges, OnDestroy, OnInit } from 'ng-metadata/core';
+import { Component, Inject, OnChanges, SimpleChanges, OnDestroy, AfterViewInit, EventEmitter } from 'ng-metadata/core';
 import { kebabCase } from '../utils/string';
 
-export function makeComponentProvider( component: typeof Vue )
+export function makeComponentProvider( component: typeof Vue, outputs: string[] = [] )
 {
 	const instance = new component();
 	const options = instance.$options;
@@ -16,15 +16,20 @@ export function makeComponentProvider( component: typeof Vue )
 	@Component( {
 		selector: `gj-${kebabName}`,
 		inputs: options.props ? Object.keys( options.props ) : undefined,
-		template: '<div ng-transclude></div>',
+		outputs: outputs.length ? outputs : undefined,
+		template: `
+		<div ng-transclude></div>
+		<div></div>
+		`,
 		legacy: {
 			transclude: true,
 		}
 	})
-	class WrappedComponent implements OnInit, OnChanges, OnDestroy
+	class WrappedComponent implements AfterViewInit, OnChanges, OnDestroy
 	{
-		private el: HTMLElement;
-		private vueElement: Vue;
+		private ngEl: HTMLElement;
+		private vueEl: HTMLElement;
+		private vueComponent: Vue;
 
 		private initialized = false;
 
@@ -32,18 +37,37 @@ export function makeComponentProvider( component: typeof Vue )
 			@Inject( '$element' ) private $element: ng.IAugmentedJQuery
 		)
 		{
-			this.el = this.$element[ 0 ];
+			this.ngEl = this.$element[0].children[0] as HTMLElement;
+			this.vueEl = this.$element[0].children[1] as HTMLElement;
+			this.vueEl.className = this.vueEl.className + ' ' + this.$element[0].className;
+
+			for ( const output of outputs ) {
+				(this as any)[ output ] = new EventEmitter<any>();
+			}
 		}
 
-		ngOnInit()
+		ngAfterViewInit()
 		{
 			const rootElement = createVueElement( this, options );
-			rootElement.el = this.el.children[ 0 ];
+			rootElement.el = this.vueEl;
 
-			this.vueElement = new Vue( rootElement );
-			this.el.removeAttribute( 've-cloak' );
-			this.el.setAttribute( 've-ready', '' );
+			this.vueComponent = new Vue( rootElement );
 			this.initialized = true;
+
+			// For some reason this is undefined some times...
+			if ( this.vueComponent.$el.querySelector ) {
+				const slot = this.vueComponent.$el.querySelector( '.ng-slot' );
+				if ( slot ) {
+					slot.appendChild( this.ngEl );
+				}
+			}
+
+			for ( const output of outputs ) {
+				this.vueComponent.$el.addEventListener( output, ( e: CustomEvent ) =>
+				{
+					(this as any)[ output ].emit( e.detail );
+				} );
+			}
 		}
 
 		ngOnChanges( changes: SimpleChanges )
@@ -54,15 +78,15 @@ export function makeComponentProvider( component: typeof Vue )
 
 			for ( const key in changes ) {
 				if ( typeof changes[ key ].currentValue !== 'undefined' ) {
-					(this.vueElement as any)[ key ] = changes[ key ].currentValue;
+					(this.vueComponent as any)[ key ] = changes[ key ].currentValue;
 				}
 			}
 		}
 
 		ngOnDestroy()
 		{
-			if ( this.vueElement ) {
-				this.vueElement.$destroy();
+			if ( this.vueComponent ) {
+				this.vueComponent.$destroy();
 			}
 		}
 	}
@@ -74,9 +98,6 @@ function createVueElement( ngComponent: any, componentDefinition: any )
 {
 	componentDefinition = Object.assign( {}, componentDefinition );
 	const props: string[] = componentDefinition.props || {};
-
-	// clone hack due to IE compatibility
-	const elOriginalChildren = (ngComponent.el as HTMLElement).cloneNode( true ).childNodes;
 
 	const rootElement: Vue.ComponentOptions<Vue> = {
 		props,
@@ -96,60 +117,12 @@ function createVueElement( ngComponent: any, componentDefinition: any )
 				props: this.reactiveProps
 			};
 
-			const slots = getSlots( elOriginalChildren, createElement );
-
 			return createElement(
 				componentDefinition,
 				data,
-				slots,
 			);
 		}
 	};
 
 	return rootElement;
-}
-
-export function getAttributes( child: Node )
-{
-	const attributes: { [k: string]: string | null | undefined } = {};
-
-	for ( let i = 0; i < child.attributes.length; ++i ) {
-		const attribute = child.attributes[ i ];
-		attributes[ attribute.nodeName === 'vue-slot' ? 'slot' : attribute.nodeName ] = attribute.nodeValue;
-	}
-
-	return attributes;
-}
-
-export function getSlots( children: NodeList, createElement: Vue.CreateElement )
-{
-	const slots = [];
-
-	for ( let i = 0; i < children.length; ++i ) {
-		const child = children[ i ] as HTMLElement;
-
-		if ( child.nodeName === '#text' ) {
-			if ( child.nodeValue!.trim() ) {
-				slots.push( createElement( 'span', child.nodeValue as string ) );
-			}
-		}
-		else {
-			const attributes = getAttributes( child );
-			const elementOptions: any = {
-				attrs: attributes,
-				domProps: {
-					innerHTML: child.innerHTML,
-				}
-			};
-
-			if ( attributes['slot'] ) {
-				elementOptions.slot = attributes['slot'];
-				attributes['slot'] = undefined;
-			}
-
-			slots.push( createElement( child.tagName, elementOptions ) );
-		}
-	}
-
-	return slots;
 }
