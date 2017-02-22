@@ -4,6 +4,7 @@ import * as Vue from 'vue';
 import { Screen } from '../../screen/screen-service';
 import { Ruler } from '../../ruler/ruler-service';
 import { ImgHelper } from '../helper/helper-service';
+import { triggerEvent } from '../../../utils/event';
 
 const WIDTH_HEIGHT_REGEX = /\/(\d+)x(\d+)\//;
 const WIDTH_REGEX = /\/(\d+)\//;
@@ -78,8 +79,8 @@ async function updateSrc( el: HTMLImageElement, src: string )
 		el.src = newSrc;
 
 		// Keep the isLoaded state up to date?
-		el.dispatchEvent( new CustomEvent( 'imgloadchange', { detail: false } ) );
+		triggerEvent( el, 'imgloadchange', false );
 		await ImgHelper.loaded( newSrc );
-		el.dispatchEvent( new CustomEvent( 'imgloadchange', { detail: true } ) );
+		triggerEvent( el, 'imgloadchange', true );
 	}
 }

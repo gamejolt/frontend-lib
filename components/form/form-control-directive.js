@@ -6,6 +6,8 @@ angular.module( 'gj.Form' ).directive( 'formControl', function( $compile )
 		// Alphanumeric, hyphens.
 		urlPath: /^[\w\-]+$/,
 
+		domain: /^((?=[a-z0-9-]{1,63}\.)(xn--)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}$/,
+
 		// Alphanumeric, underscores.
 		hashtag: /^[\w\_]+$/,
 

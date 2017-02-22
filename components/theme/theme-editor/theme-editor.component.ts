@@ -76,4 +76,10 @@ export class ThemeEditorComponent implements OnInit
 			this.changed.emit( this.theme );
 		}
 	}
+
+	updateField( field: string, content: string )
+	{
+		this.theme[ field ] = content;
+		this.refresh();
+	}
 }

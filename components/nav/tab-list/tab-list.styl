@@ -1,13 +1,17 @@
-@import '~styles/variables'
+@require '~styles/variables'
+@require '../../../stylus/common/mixins'
 
 .tab-list
+	clearfix()
+	margin-bottom: $line-height-computed
+	padding-left: $line-height-computed
+	padding-right: $line-height-computed
+	border-bottom: 2px solid $gray-darker
 
 	ul
+		display: inline-block
 		margin: 0
 		padding: 0
-		margin-bottom: $line-height-computed
-		padding-left: $line-height-computed
-		border-bottom: 2px solid $gray-darker
 
 		> li
 			display: inline-block
