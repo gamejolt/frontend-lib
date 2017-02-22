@@ -98,11 +98,17 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 
 		function addMoney( add )
 		{
+			amount = scope.formModel.amount;
+			if ( !amount ) {
+				amount = add;
+			}
 			// Don't add if the form field is invalid.
 			// It will blank out the total amount.
-			if ( scope.paymentForm.amount.$valid ) {
-				scope.formModel.amount += add;
+			else if ( scope.paymentForm.amount.$valid ) {
+				amount += add;
+				amount = parseFloat( amount.toFixed( 2 ) );
 			}
+			scope.formModel.amount = amount;
 		}
 
 		function hasSufficientWalletFunds()
