@@ -12,6 +12,8 @@ module.exports = function( config, projectBase )
 	config.production = argv.production || false;
 	config.watching = argv._.indexOf( 'watch' ) !== -1 ? 'initial' : false;
 	config.noSourcemaps = config.noSourcemaps || false;
+	config.write = argv.write || false;
+	config.analyze = argv.analyze || false;
 
 	// Whether or not the environment of angular should be production or development.
 	// Even when not doing prod builds we use the prod environment by default.

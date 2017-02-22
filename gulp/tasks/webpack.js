@@ -9,17 +9,18 @@ var ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 var WebpackDevServer = require( 'webpack-dev-server' );
 var OptimizeCssPlugin = require( 'optimize-css-assets-webpack-plugin' );
 var ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
-var DashboardPlugin = require( 'webpack-dashboard/plugin' );
 var autoprefixer = require( 'autoprefixer' );
 var CleanCss = require( 'clean-css' );
-// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+var WriteFilePlugin = require( 'write-file-webpack-plugin' );
+var BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
 
 module.exports = function( config )
 {
 	var base = path.resolve( config.projectBase );
 
-	var devNoop = config.production ? undefined : function(){};
-	var prodNoop = !config.production ? undefined : function(){};
+	var noop = function(){};
+	var devNoop = config.production ? undefined : noop;
+	var prodNoop = !config.production ? undefined : noop;
 
 	var externals = {};
 	for ( var extern of [ 'nw.gui', 'client-voodoo', 'path', 'os', 'fs' ] ) {
@@ -62,6 +63,9 @@ module.exports = function( config )
 		webpackSectionConfigs[ section ] = {
 			entry: {
 				app: appEntries,
+			},
+			devServer: {
+				outputPath: path.resolve( base, config.buildDir ),
 			},
 			output: {
 				publicPath: (config.production ? config.staticCdn : '') + '/',
@@ -266,8 +270,8 @@ module.exports = function( config )
 					chunksSortMode: 'dependency',
 				} ),
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
-				// new BundleAnalyzerPlugin(),
-				// prodNoop || new DashboardPlugin(),
+				config.write ? new WriteFilePlugin() : noop,
+				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			]
 		};
 
