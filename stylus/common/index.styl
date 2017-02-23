@@ -13,67 +13,67 @@ $gj-exclude-common-responsive-utilities ?= false
 $gj-exclude-common-fills ?= false
 
 // Our common functions.
-@import './functions'
+@require './functions'
 
 // Normalize
 if ( !$gj-exclude-common-normalize )
-	@import '~bootstrap-stylus/stylus/normalize'
+	@require '~bootstrap-stylus/stylus/normalize'
 
 // Bootstrap core
-@import '~bootstrap-stylus/stylus/mixins'
+@require '~bootstrap-stylus/stylus/mixins'
 
 if ( !$gj-exclude-common-scaffolding )
-	@import '~bootstrap-stylus/stylus/scaffolding'
+	@require '~bootstrap-stylus/stylus/scaffolding'
 
 if ( !$gj-exclude-common-type )
-	@import '~bootstrap-stylus/stylus/type'
+	@require '~bootstrap-stylus/stylus/type'
 
 if ( !$gj-exclude-common-code )
-	@import '~bootstrap-stylus/stylus/code'
+	@require '~bootstrap-stylus/stylus/code'
 
 if ( !$gj-exclude-common-grid )
-	@import '~bootstrap-stylus/stylus/grid'
+	@require '~bootstrap-stylus/stylus/grid'
 
 if ( !$gj-exclude-common-forms )
-	@import '~bootstrap-stylus/stylus/forms'
+	@require '~bootstrap-stylus/stylus/forms'
 
 // Bootstrap components
 if ( !$gj-exclude-common-input-groups )
-	@import '~bootstrap-stylus/stylus/input-groups'
+	@require '~bootstrap-stylus/stylus/input-groups'
 
 if ( !$gj-exclude-common-tables )
-	@import '~bootstrap-stylus/stylus/tables'
+	@require '~bootstrap-stylus/stylus/tables'
 
 // Bootstrap utilities
 if ( !$gj-exclude-common-utilities )
-	@import '~bootstrap-stylus/stylus/utilities'
+	@require '~bootstrap-stylus/stylus/utilities'
 
 if ( !$gj-exclude-common-responsive-utilities )
-	@import '~bootstrap-stylus/stylus/responsive-utilities'
+	@require '~bootstrap-stylus/stylus/responsive-utilities'
 
 // ----------------------------------------
 
 // Our common components.
-@import '../animation'
-@import './mixins'
+@require './mixins'
+@require '../animation'
 
 if ( !$gj-exclude-common-scaffolding )
-	@import './scaffolding'
+	@require './scaffolding'
 
 if ( !$gj-exclude-common-type )
-	@import './type'
+	@require './type'
 
 if ( !$gj-exclude-common-utilities )
-	@import './utilities'
+	@require './utilities'
 
 if ( !$gj-exclude-common-grid )
-	@import './grid'
+	@require './grid'
 
 if ( !$gj-exclude-common-fills )
-	@import './fills'
+	@require './fills'
 
 if ( !$gj-exclude-common-forms )
-	@import './forms'
+	@require './forms'
 
 if ( !$gj-exclude-common-tables )
-	@import './tables'
+	@require './tables'
