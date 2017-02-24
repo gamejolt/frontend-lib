@@ -1,14 +1,25 @@
+@require '~styles/variables'
+
 ._game-list
-	margin-left: -20px
-	margin-right: -20px
 	text-align: center
 
+	@media $media-sm-up
+		margin-left: -20px
+		margin-right: -20px
+
 ._game
-	width: (100% / 3)
-	padding: 0 (20px / 2) 40px (20px / 2)
 	display: inline-block
 	vertical-align: top
 	text-align: left
+	width: 100%
+
+	@media $media-sm
+		width: (100% / 2)
+		padding: 0 (20px / 2) 40px (20px / 2)
+
+	@media $media-md-up
+		width: (100% / 3)
+		padding: 0 (20px / 2) 40px (20px / 2)
 
 ._title
 	margin: 10px 0 0 0
