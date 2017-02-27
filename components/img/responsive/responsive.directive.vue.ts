@@ -16,10 +16,12 @@ export const AppImgResponsive: Vue.DirectiveOptions = {
 	{
 		el.classList.add( 'img-responsive' );
 
+		const resizeChanges$ = Screen.resizeChanges.subscribe(
+			() => updateSrc( el, binding.value )
+		);
+
 		registeredDirectives.set( el, {
-			resizeChanges: Screen.resizeChanges.subscribe(
-				() => updateSrc( el, binding.value )
-			),
+			resizeChanges$,
 		} );
 
 		// Make sure the view is compiled.
@@ -34,9 +36,9 @@ export const AppImgResponsive: Vue.DirectiveOptions = {
 	},
 	unbind( el )
 	{
-		const elData = registeredDirectives.get( el );
-		if ( elData ) {
-			elData.resizeChanges.unsubscribe();
+		const dir = registeredDirectives.get( el );
+		if ( dir ) {
+			dir.resizeChanges$.unsubscribe();
 			registeredDirectives.delete( el );
 		}
 	}
