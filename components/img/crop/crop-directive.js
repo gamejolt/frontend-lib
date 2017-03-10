@@ -6,7 +6,7 @@ angular.module( 'gj.Img.Crop' ).directive( 'gjImgCrop', function()
 		scope: {},
 		bindToController: true,
 		controllerAs: 'ctrl',
-		controller: function( $scope, $element, $attrs, $rootScope, $parse, $window, Screen )
+		controller: function( $scope, $element, $attrs, $rootScope, $parse, $q, $window, Screen )
 		{
 			var _this = this;
 			var initialized = false;
@@ -46,54 +46,78 @@ angular.module( 'gj.Img.Crop' ).directive( 'gjImgCrop', function()
 				}
 			}
 
+			function disable()
+			{
+				setupJcrop().then( function( jcrop )
+				{
+					jcrop.disable();
+				} );
+			}
+
+			function enable()
+			{
+				setupJcrop().then( function( jcrop )
+				{
+					jcrop.enable();
+				} );
+			}
+
+			var setupPromise;
 			function setupJcrop()
 			{
-				if ( _this.jcrop ) {
-					return;
+				if ( setupPromise ) {
+					return setupPromise;
 				}
 
-				var jqueryElement = $window.jQuery( $element[0] );
-
-				jqueryElement.Jcrop( {
-
-					// We push the coordinates back onSelect.
-					onSelect: function onSelect( coords )
-					{
-						_this.ngModel.$setViewValue( angular.copy( coords ) );
-					},
-
-					// The aspect ratio to honor, if any.
-					aspectRatio: $attrs.imgCropAspectRatio ? $parse( $attrs.imgCropAspectRatio )( $scope.$parent ) : undefined,
-
-					// The min width/height pulled above.
-					minSize: minSize,
-
-					// By default set the boxWidth to be the full width of this element's container.
-					boxWidth: $element[0].parentNode.offsetWidth,
-				},
-				function()
+				setupPromise = new Promise( function( resolve )
 				{
-					_this.jcrop = this;
+					var jqueryElement = $window.jQuery( $element[0] );
 
-					var cropCoords = _this.ngModel.$isEmpty( _this.ngModel.$viewValue ) ? null : _this.ngModel.$viewValue;
-					if ( !cropCoords ) {
-						var bounds = this.getBounds();
-						this.setSelect( [
-							0,
-							0,
-							bounds[0],
-							bounds[1],
-						] );
-					}
-					else {
-						this.setSelect( [
-							cropCoords.x,
-							cropCoords.y,
-							cropCoords.x2,
-							cropCoords.y2,
-						] );
-					}
+					jqueryElement.Jcrop( {
+
+						// We push the coordinates back onSelect.
+						onSelect: function onSelect( coords )
+						{
+							_this.ngModel.$setViewValue( angular.copy( coords ) );
+						},
+
+						// The aspect ratio to honor, if any.
+						aspectRatio: $attrs.imgCropAspectRatio ? $parse( $attrs.imgCropAspectRatio )( $scope.$parent ) : undefined,
+
+						// The min width/height pulled above.
+						minSize: minSize,
+
+						// By default set the boxWidth to be the full width of this element's container.
+						boxWidth: $element[0].parentNode.offsetWidth,
+					},
+					function()
+					{
+						_this.jcrop = this;
+
+						var cropCoords = _this.ngModel.$isEmpty( _this.ngModel.$viewValue ) ? null : _this.ngModel.$viewValue;
+						if ( !cropCoords ) {
+							var bounds = this.getBounds();
+							this.setSelect( [
+								0,
+								0,
+								bounds[0],
+								bounds[1],
+							] );
+						}
+						else {
+							this.setSelect( [
+								cropCoords.x,
+								cropCoords.y,
+								cropCoords.x2,
+								cropCoords.y2,
+							] );
+						}
+
+						resolve( _this.jcrop );
+					} );
 				} );
+
+				return setupPromise;
 			}
 
 			function destroyJcrop()
@@ -101,6 +125,7 @@ angular.module( 'gj.Img.Crop' ).directive( 'gjImgCrop', function()
 				if ( _this.jcrop ) {
 					_this.jcrop.destroy();
 					_this.jcrop = undefined;
+					setupPromise = undefined;
 				}
 			}
 
@@ -128,6 +153,21 @@ angular.module( 'gj.Img.Crop' ).directive( 'gjImgCrop', function()
 				}
 
 				observedSrc = newSrc;
+			} );
+
+			var disabled;
+			$attrs.$observe( 'disabled', function( newDisabled )
+			{
+				if ( typeof newDisabled !== 'undefined' && newDisabled !== disabled ) {
+					disabled = newDisabled;
+
+					if ( disabled ) {
+						disable();
+					}
+					else {
+						enable();
+					}
+				}
 			} );
 		},
 		link: function( scope, element, attrs, ngModel )
