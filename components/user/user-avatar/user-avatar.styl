@@ -1,14 +1,9 @@
+@require '~styles/variables'
+@require '../../../stylus/common/mixins'
+
 .user-avatar
 	display: block
 	position: relative
-
-	img
-		@extend .img-responsive
-
-	.avatar-circle &
-	&.avatar-circle
-		img
-			@extend .img-circle
 
 	.avatar-name
 		text-overflow()

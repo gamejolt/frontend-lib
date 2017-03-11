@@ -1,0 +1,9 @@
+<span>
+	<span v-if="user" class="user-avatar-img">
+		<img :src="user.img_avatar" class="img-responsive" alt="">
+	</span>
+
+	<span v-else class="user-avatar-img">
+		<img src="../guest.png" class="img-responsive" alt="">
+	</span>
+</span>

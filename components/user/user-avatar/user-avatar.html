@@ -1,12 +1,12 @@
-<a ng-if="::user" class="user-avatar" href="{{ ::href }}" title="{{ ::user.display_name }}">
-	<img ng-src="{{ ::user.img_avatar }}" class="img-responsive" alt="">
-	<div class="avatar-name" ng-if="::avatarShowName">
-		{{ ::user.display_name }}
-		<br>
-		@{{ ::user.username }}
-	</div>
-</a>
+<span>
+	<a v-if="user" class="user-avatar" :href="href" :title="user.display_name">
+		<app-user-avatar-img :user="user" />
+		<div class="avatar-name" v-if="showName">
+			{{ user.display_name }}
+			<br>
+			@{{ user.username }}
+		</div>
+	</a>
 
-<span ng-if="::!user" class="user-avatar" title="Guest">
-	<img src="./guest.png" class="img-responsive" alt="Guest">
+	<app-user-avatar-img v-else title="Guest" />
 </span>
