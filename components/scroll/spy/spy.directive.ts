@@ -116,7 +116,7 @@ export const AppScrollSpy: Vue.DirectiveOptions = {
 	unbind( el )
 	{
 		const index = spies.findIndex( ( item ) => item.el === el );
-		if ( index ) {
+		if ( index !== -1 ) {
 			spies.splice( index, 1 );
 		}
 	},
