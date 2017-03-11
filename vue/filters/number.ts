@@ -1,4 +1,4 @@
 export function number( num: number )
 {
-	return num.toLocaleString();
+	return (num || 0).toLocaleString();
 }
