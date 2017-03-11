@@ -1,10 +1,9 @@
 import { NgModule } from 'ng-metadata/core';
 import { Api } from './api.service';
-import { makeProvider } from '../../utils/angular-facade';
 
 @NgModule({
 	providers: [
-		makeProvider( 'Api', Api ),
+		{ provide: 'Api', useFactory: () => Api },
 	],
 })
 export class ApiModule { }

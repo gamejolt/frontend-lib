@@ -1,5 +1,4 @@
 import { NgModule } from 'ng-metadata/core';
-import { makeProvider } from '../../utils/angular-facade';
 import { Ads } from './ads.service';
 
 angular.module( 'gj.Ad', [] );
@@ -11,7 +10,7 @@ require( './ad-directive' );
 		'gj.Ad',
 	],
 	providers: [
-		makeProvider( 'Ads', Ads ),
+		{ provide: 'Ads', useFactory: () => Ads },
 	],
 })
 export class AdModule { }

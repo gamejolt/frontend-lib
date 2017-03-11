@@ -1,10 +1,9 @@
 import { NgModule } from 'ng-metadata/core';
-import { makeProvider } from '../../utils/angular-facade';
 import { Referrer } from './referrer.service';
 
 @NgModule({
 	providers: [
-		makeProvider( 'Referrer', Referrer ),
+		{ provide: 'Referrer', useFactory: () => Referrer },
 	],
 })
 export class ReferrerModule { }

@@ -1,5 +1,4 @@
 import { NgModule } from 'ng-metadata/core';
-import { makeProvider } from '../../utils/angular-facade';
 import { Analytics } from './analytics.service';
 import { TrackEventDirective } from './track-event.directive';
 
@@ -8,7 +7,7 @@ import { TrackEventDirective } from './track-event.directive';
 		TrackEventDirective,
 	],
 	providers: [
-		makeProvider( 'Analytics', Analytics ),
+		{ provide: 'Analytics', useFactory: () => Analytics },
 	],
 })
 export class AnalyticsModule { }

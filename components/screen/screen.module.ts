@@ -1,6 +1,5 @@
 import * as angular from 'angular';
 import { NgModule } from 'ng-metadata/core';
-import { makeProvider } from '../../utils/angular-facade';
 import { Screen } from './screen-service';
 
 angular.module( 'gj.Screen', [] );
@@ -13,7 +12,7 @@ import './screen-context-directive';
 		'gj.Screen',
 	],
 	providers: [
-		makeProvider( 'Screen', Screen ),
+		{ provide: 'Screen', useFactory: () => Screen },
 	],
 })
 export class ScreenModule { }

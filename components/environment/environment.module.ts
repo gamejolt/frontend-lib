@@ -1,10 +1,9 @@
 import { NgModule } from 'ng-metadata/core';
 import { Environment } from './environment.service';
-import { makeProvider } from '../../utils/angular-facade';
 
 @NgModule({
 	providers: [
-		makeProvider( 'Environment', Environment ),
+		{ provide: 'Environment', useFactory: () => Environment },
 	],
 })
 export class EnvironmentModule { }

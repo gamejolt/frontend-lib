@@ -1,10 +1,9 @@
 import { NgModule } from 'ng-metadata/core';
-import { makeProvider } from '../../utils/angular-facade';
 import { HistoryTick } from './history-tick-service';
 
 @NgModule({
 	providers: [
-		makeProvider( 'HistoryTick', HistoryTick ),
+		{ provide: 'HistoryTick', useFactory: () => HistoryTick },
 	],
 })
 export class HistoryTickModule { }
