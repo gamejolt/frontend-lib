@@ -78,7 +78,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit
 
 			fontListElement.on( 'scroll', _.throttle( () =>
 			{
-				const scrollTop = fontListElement.scrollTop();
+				const scrollTop = fontListElement[0].scrollTop;
 				const scrolledItemsCalculated = (scrollTop + listHeight) / liHeight;
 
 				if ( this.visibleFontCount - scrolledItemsCalculated < 25 ) {
