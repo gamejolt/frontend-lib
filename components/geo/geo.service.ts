@@ -1,4 +1,4 @@
-import { Translate as gettextCatalog } from '../translate/translate';
+import { Translate as gettextCatalog } from '../translate/translate.service';
 
 interface Country
 {
