@@ -19,3 +19,10 @@ export function stringSort( a: string, b: string )
 	}
 	return 0;
 }
+
+export function arrayIndexBy<T>( values: T[], field: keyof T ): { [k: string]: T }
+{
+	const indexed: any = {};
+	values.forEach( ( item ) => indexed[ item[ field ] + '' ] = item );
+	return indexed;
+}
