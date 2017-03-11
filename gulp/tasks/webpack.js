@@ -84,7 +84,12 @@ module.exports = function( config )
 			externals: externals,
 			resolveLoader: {
 				alias: {
-					'view': 'vue-template-loader?scoped',
+					'view': 'vue-template-loader?' + JSON.stringify( {
+						scoped: true,
+						transformToRequire: {
+							img: 'src',
+						},
+					} ),
 				}
 			},
 			module: {
