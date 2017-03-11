@@ -1,5 +1,5 @@
 import * as angular from 'angular';
-import { Injectable, bundle } from 'ng-metadata/core';
+import { bundle } from 'ng-metadata/core';
 import { reflector } from 'ng-metadata/src/core/reflection/reflection';
 import { OutputMetadata, InputMetadata } from 'ng-metadata/src/core/directives/metadata_directives';
 import { ResolvePolicy } from 'angular-ui-router';
@@ -15,31 +15,6 @@ export function bootstrapFacade( $q: ng.IQService, $animate: ng.animate.IAnimate
 	if ( isPrerender ) {
 		$animate.enabled( false );
 	}
-}
-
-export function makeProvider( id: string, service: any ): any
-{
-	@Injectable( id )
-	class InjectableService
-	{
-	}
-
-	for ( const k in service ) {
-
-		if ( typeof service[ k ] === 'function' ) {
-			(InjectableService.prototype as any)[ k ] = function()
-			{
-				// console.log( 'patched method call', id, k, arguments );
-				return service[ k ].apply( service, arguments );
-			};
-
-			continue;
-		}
-
-		(InjectableService.prototype as any)[ k ] = service[ k ];
-	}
-
-	return InjectableService;
 }
 
 export function lazyBundle( moduleClass: any )
