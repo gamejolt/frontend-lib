@@ -9,4 +9,6 @@ import * as View from '!view?-scoped!./tab-list.html?style=./tab-list.styl';
 export class AppNavTabList extends Vue
 {
 	@Prop( Boolean ) center?: boolean;
+
+	@Prop( Number ) slotId: number;
 }

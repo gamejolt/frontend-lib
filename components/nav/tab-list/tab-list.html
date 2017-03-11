@@ -1,4 +1,4 @@
 <nav class="tab-list" :class="{ 'tab-list-centered': center }">
-	<div class="ng-slot"></div>
+	<div v-if="slotId" :class="`ng-slot-${slotId}`"></div>
 	<slot></slot>
 </nav>

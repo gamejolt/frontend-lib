@@ -15,4 +15,6 @@ export class AppCard extends Vue
 	@Prop( { type: Boolean, default: false } ) isExpanded: boolean;
 	@Prop( { type: Boolean, default: false } ) isInactive: boolean;
 	@Prop( { type: Boolean, default: false } ) isDisabled: boolean;
+
+	@Prop( Number ) slotId: number;
 }

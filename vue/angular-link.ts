@@ -2,6 +2,8 @@ import * as Vue from 'vue';
 import { Component, Inject, OnChanges, SimpleChanges, OnDestroy, AfterViewInit, EventEmitter } from 'ng-metadata/core';
 import { kebabCase } from '../utils/string';
 
+let componentCounter = 0;
+
 export function makeComponentProvider( component: typeof Vue, outputs: string[] = [] )
 {
 	const instance = new component();
@@ -18,8 +20,8 @@ export function makeComponentProvider( component: typeof Vue, outputs: string[] 
 		inputs: options.props ? Object.keys( options.props ) : undefined,
 		outputs: outputs.length ? outputs : undefined,
 		template: `
-		<div ng-transclude></div>
-		<div></div>
+		<span ng-transclude></span>
+		<span></span>
 		`,
 		legacy: {
 			transclude: true,
@@ -48,6 +50,7 @@ export function makeComponentProvider( component: typeof Vue, outputs: string[] 
 
 		ngAfterViewInit()
 		{
+			++componentCounter;
 			const rootElement = createVueElement( this, options );
 			rootElement.el = this.vueEl;
 
@@ -56,7 +59,7 @@ export function makeComponentProvider( component: typeof Vue, outputs: string[] 
 
 			// For some reason this is undefined some times...
 			if ( this.vueComponent.$el.querySelector ) {
-				const slot = this.vueComponent.$el.querySelector( '.ng-slot' );
+				const slot = this.vueComponent.$el.querySelector( `.ng-slot-${componentCounter}` );
 				if ( slot ) {
 					slot.appendChild( this.ngEl );
 				}
@@ -99,14 +102,17 @@ function createVueElement( ngComponent: any, componentDefinition: any )
 	componentDefinition = Object.assign( {}, componentDefinition );
 	const props: string[] = componentDefinition.props || {};
 
+	let slotId = componentCounter;
 	const rootElement: Vue.ComponentOptions<Vue> = {
 		props,
 		// Pass the initial data in.
-		propsData: ngComponent,
+		propsData: { ...ngComponent, slotId },
 		computed: {
 			reactiveProps( this: any )
 			{
-				const reactivePropsList: any = {};
+				const reactivePropsList: any = {
+					slotId,
+				};
 				Object.keys( props ).forEach( ( prop ) => reactivePropsList[ prop ] = this[ prop ] );
 				return reactivePropsList;
 			}
