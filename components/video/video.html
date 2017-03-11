@@ -1,3 +1,5 @@
-<div class="video-loader" ng-if="!$ctrl.isLoaded && $ctrl.showLoading">
-	<gj-loading hide-label="true" loading-no-color="true" loading-stationary="true"></gj-loading>
+<div class="video">
+	<div class="video-loader" v-if="!isLoaded && showLoading">
+		<app-loading :hide-label="true" :no-color="true" :stationary="true"></app-loading>
+	</div>
 </div>
