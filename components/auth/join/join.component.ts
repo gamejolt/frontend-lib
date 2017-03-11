@@ -13,9 +13,10 @@ export class AuthJoinComponent
 {
 	@Input( '<' ) darkVariant = false;
 
+	conn = Connection;
+
 	constructor(
 		@Inject( '$state' ) private $state: StateService,
-		@Inject( 'Connection' ) public conn: Connection,
 		@Inject( 'User_LinkedAccounts' ) private userLinkedAccounts: any,
 	)
 	{

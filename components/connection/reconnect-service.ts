@@ -1,4 +1,3 @@
-import { Environment } from '../environment/environment.service';
 import { getProvider } from '../../utils/utils';
 
 const TIMEOUT_INITIAL = 2000;
@@ -19,11 +18,7 @@ export class ConnectionReconnect
 	{
 		// We just hit the favicon from the CDN.
 		// Should be pretty lightweight.
-		this._checkUrl = 'https://s.gjcdn.net/app/img/favicon.png';
-
-		if ( Environment.env == 'development' ) {
-			this._checkUrl = 'http://development.gamejolt.com/app/img/favicon.png';
-		}
+		this._checkUrl = require( './check.png' );
 
 		this._failFn = failFn;
 		this._successFn = successFn;

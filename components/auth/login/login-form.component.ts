@@ -1,7 +1,8 @@
 import { Api } from '../../api/api.service';
+import { Connection } from '../../connection/connection-service';
 
-AuthLoginFormFactory.$inject = [ 'Form', 'Connection' ];
-export function AuthLoginFormFactory( Form: any, Connection: any )
+AuthLoginFormFactory.$inject = [ 'Form' ];
+export function AuthLoginFormFactory( Form: any )
 {
 	const form = new Form( {
 		template: require( './login-form.component.html' ),

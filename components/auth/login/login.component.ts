@@ -14,10 +14,11 @@ export class AuthLoginComponent
 {
 	@Input( '<' ) darkVariant = false;
 
+	conn = Connection;
+
 	constructor(
 		@Inject( '$stateParams' ) private $stateParams: StateParams,
 		@Inject( 'App' ) private app: App,
-		@Inject( 'Connection' ) public conn: Connection,
 		@Inject( 'User_LinkedAccounts' ) private userLinkedAccounts: any,
 	)
 	{

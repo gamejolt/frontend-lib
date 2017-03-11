@@ -1,7 +1,8 @@
 import { Api } from '../../api/api.service';
+import { Connection } from '../../connection/connection-service';
 
-AuthJoinFormFactory.$inject = [ 'Form', 'Connection' ];
-export function AuthJoinFormFactory( Form: any, Connection: any )
+AuthJoinFormFactory.$inject = [ 'Form' ];
+export function AuthJoinFormFactory( Form: any )
 {
 	const form = new Form( {
 		template: require( './join-form.component.html' ),
