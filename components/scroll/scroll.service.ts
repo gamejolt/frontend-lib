@@ -149,28 +149,29 @@ export class Scroll
 		}
 
 		// Just make sure that all dom compilation is over.
-		await Promise.resolve();
+		setTimeout( () =>
+		{
+			if ( element ) {
 
-		if ( element ) {
-
-			// We don't scroll the full way to down to the element.
-			// Do it based on the screen's height, so that mobile and stuff works well too.
-			// This is because I think it's kind of annoying when the edge hits the exact top of the browser.
-			if ( options.animate !== false ) {
-				this.scrollToElement( element, (Screen.height * 0.1) + this.offsetTop, { animate: true } );
+				// We don't scroll the full way to down to the element.
+				// Do it based on the screen's height, so that mobile and stuff works well too.
+				// This is because I think it's kind of annoying when the edge hits the exact top of the browser.
+				if ( options.animate !== false ) {
+					this.scrollToElement( element, (Screen.height * 0.1) + this.offsetTop, { animate: true } );
+				}
+				else {
+					this.scrollToElement( element, (Screen.height * 0.1) + this.offsetTop );
+				}
 			}
 			else {
-				this.scrollToElement( element, (Screen.height * 0.1) + this.offsetTop );
+				if ( options.animate !== false ) {
+					this.scrollTo( to, { animate: true } );
+				}
+				else {
+					this.scrollTo( to );
+				}
 			}
-		}
-		else {
-			if ( options.animate !== false ) {
-				this.scrollTo( to, { animate: true } );
-			}
-			else {
-				this.scrollTo( to );
-			}
-		}
+		}, 20 );
 	}
 
 	private static scrollToElement( element: HTMLElement, offset: number, options: { animate?: boolean } = {} )
