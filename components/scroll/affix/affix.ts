@@ -1,5 +1,5 @@
 import * as Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./affix.html?style=./affix.styl';
 
 import { getProvider } from '../../../utils/utils';
@@ -92,6 +92,12 @@ export class AppScrollAffix extends Vue
 		this.scrollChanges$.unsubscribe();
 	}
 
+	@Watch( 'shouldAffix' )
+	onShouldAffixChange()
+	{
+		this.check();
+	}
+
 	private getPlaceholder()
 	{
 		return this.$el.getElementsByClassName( 'gj-scroll-affix-placeholder' )[0] as HTMLElement;
@@ -173,7 +179,7 @@ export class AppScrollAffix extends Vue
 		}
 
 		// Pull from the correct scroll context.
-		const offset = Scroll.getScrollTop( Scroll.context );
+		const offset = Scroll.getScrollTop();
 
 		if ( !this.isAffixed && offset > this.curTop ) {
 			const width = Ruler.outerWidth( this.container );
@@ -184,13 +190,6 @@ export class AppScrollAffix extends Vue
 			this.width = width + 'px';
 
 			this.$emit( 'affixChanged', true );
-
-			// if ( isAffixedParsed && isAffixedParsed.assign ) {
-			// 	$rootScope.$apply( function()
-			// 	{
-			// 		isAffixedParsed.assign( scope, true );
-			// 	} );
-			// }
 		}
 		else if ( offset < this.curTop ) {
 			this.off();
@@ -204,13 +203,6 @@ export class AppScrollAffix extends Vue
 			this.width = '';
 
 			this.$emit( 'affixChanged', false );
-
-			// if ( isAffixedParsed && isAffixedParsed.assign ) {
-			// 	$rootScope.$apply( function()
-			// 	{
-			// 		isAffixedParsed.assign( scope, false );
-			// 	} );
-			// }
 		}
 	}
 }
