@@ -5,13 +5,6 @@ angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q
 		{
 			var startWatcher, successWatcher, stateWatcher, prevAnchor;
 
-			// If this element is the document body, then set the element to scroll to be the document.
-			// This is what the browser scrolls by default.
-			var scrollElem = element;
-			if ( scrollElem[0] == $document[0].body ) {
-				scrollElem = $document;
-			}
-
 			function doScroll( to )
 			{
 				// Only do this if a no-scroll wasn't set.
@@ -26,17 +19,10 @@ angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q
 						// TODO: This causes a flicker of content before scrolling. Would be great to somehow get rid of this flicker.
 						$timeout( function()
 						{
-							scrollElem.scrollTop( state.scroll );
+							Scroll.to( state.scroll, { animate: false } );
 						}, 0, false );
 					}
 					else {
-						// When this is the document body, we need to pull the Scroll services offset top.
-						// This is the height of any fixed elements in the shell.
-						var scrollOffsetTop = 0;
-						if ( scrollElem[0] === $document[0] ) {
-							scrollOffsetTop = Scroll.offsetTop;
-						}
-
 						$timeout( function()
 						{
 							var anchor = AutoScroll.anchor();
@@ -44,13 +30,12 @@ angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q
 
 								// We only scroll to the anchor if they're scrolled past it currently.
 								var offset = $position.offset( anchor );
-								if ( scrollElem.scrollTop() > offset.top - scrollOffsetTop ) {
-									scrollElem.scrollTop( offset.top - scrollOffsetTop );
+								if ( Scroll.getScrollTop() > offset.top - Scroll.offsetTop ) {
+									Scroll.to( offset.top, { animate: false } );
 								}
 							}
 							else {
-
-								scrollElem.scrollTop( 0 );
+								Scroll.to( 0, { animate: false } );
 							}
 						}, 0, false );
 					}
@@ -66,7 +51,7 @@ angular.module( 'gj.Scroll.AutoScroll' ).directive( 'gjAutoScroll', function( $q
 				{
 					prevAnchor = AutoScroll.anchor();
 					if ( trans.to() ) {
-						AutoScroll.pushState( $state.href( trans.from(), trans.params( 'from' ) ), scrollElem );
+						AutoScroll.pushState( $state.href( trans.from(), trans.params( 'from' ) ) );
 					}
 				} );
 

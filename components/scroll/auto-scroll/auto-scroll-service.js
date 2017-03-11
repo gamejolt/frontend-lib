@@ -11,7 +11,7 @@ angular.module( 'gj.Scroll.AutoScroll' ).service( 'AutoScroll', function( $rootS
 	{
 		var newState = {};
 
-		newState.scroll = element.scrollTop();
+		newState.scroll = Scroll.getScrollTop();
 		newState.changedOn = Date.now();
 
 		_states[ url ] = newState;
