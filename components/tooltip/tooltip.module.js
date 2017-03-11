@@ -6,3 +6,4 @@ angular.module( 'gj.Tooltip', [ 'ui.bootstrap.tooltip', 'ui.bootstrap.tooltip.tp
 } );
 
 require( './tooltip-directive' );
+require( './tooltip.styl' );
