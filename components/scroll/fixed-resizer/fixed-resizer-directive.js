@@ -7,7 +7,7 @@ angular.module( 'gj.Scroll.FixedResizer' ).directive( 'gjScrollFixedResizer', fu
 		}
 
 		var targetOffset = $position.offset( target );
-		var targetTop = targetOffset.top - $document.duScrollTop();
+		var targetTop = targetOffset.top - Scroll.getScrollTop();
 
 		if ( targetTop < Screen.windowHeight ) {
 

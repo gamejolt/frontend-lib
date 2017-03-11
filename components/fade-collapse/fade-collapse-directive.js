@@ -62,15 +62,15 @@ angular.module( 'gj.FadeCollapse' ).directive( 'gjFadeCollapse', function(
 
 					// We will scroll to the bottom of the element minus some extra padding.
 					// This keeps the element in view a bit.
-					var scrollTo = Scroll.getElementOffsetFromContext( fadeElem ) + collapseHeight - EXTRA_COLLAPSE_PADDING;
+					var scrollTo = Scroll.getElementOffsetFromContext( fadeElem[0] ) + collapseHeight - EXTRA_COLLAPSE_PADDING;
 
 					// Only if we're past where we would scroll.
-					if ( Scroll.context.duScrollTop() > scrollTo ) {
+					if ( Scroll.getScrollTop() > scrollTo ) {
 
 						// If we're on a tiny screen, don't animate the scroll.
 						// Just set it and move on.
 						if ( Screen.isXs ) {
-							Scroll.context.duScrollTop( scrollTo );
+							Scroll.to( scrollTo, { animate: false } );
 						}
 						// Otherwise set up a scroll animation to follow the bottom of the element as it collapses.
 						else {
@@ -123,13 +123,13 @@ angular.module( 'gj.FadeCollapse' ).directive( 'gjFadeCollapse', function(
 			{
 				// Bottom of element from the scroll context top.
 				// We then subtract some padding so that they still see some of the element while scrolling.
-				var curPos = Scroll.getElementOffsetFromContext( fadeElem ) + fadeElem[0].offsetHeight - EXTRA_COLLAPSE_PADDING;
+				var curPos = Scroll.getElementOffsetFromContext( fadeElem[0] ) + fadeElem[0].offsetHeight - EXTRA_COLLAPSE_PADDING;
 
 				// Only scroll if we have to.
 				// This will allow the element to collapse freely until our marker would go out of view.
 				// Then we scroll.
-				if ( Scroll.context.duScrollTop() > curPos ) {
-					Scroll.context.duScrollTop( curPos );
+				if ( Scroll.getScrollTop() > curPos ) {
+					Scroll.to( curPos, { animate: false } );
 				}
 
 				// Request another frame to loop again.

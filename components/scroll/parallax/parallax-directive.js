@@ -5,7 +5,7 @@ angular.module( 'gj.Scroll.Parallax' ).directive( 'gjParallaxScroll', function( 
 	 */
 	function _getElementTop( element, currentTransform )
 	{
-		var elementTop = Scroll.getElementOffsetFromContext( element );
+		var elementTop = Scroll.getElementOffsetFromContext( element[0] );
 
 		// If we've transformed the element already, we have to remove that transformation from the result.
 		// This is because transforming changes the value returned by offset().
@@ -71,10 +71,10 @@ angular.module( 'gj.Scroll.Parallax' ).directive( 'gjParallaxScroll', function( 
 				var css = {};
 
 				// The amount that we've scrolled on the page so far.
-				var currentScrollAmount = Scroll.context.scrollTop();
+				var currentScrollAmount = Scroll.getScrollTop();
 
 				// The height of the scroller viewport.
-				var scrollerHeight = Ruler.outerHeight( Scroll.context[0] );
+				var scrollerHeight = Ruler.outerHeight( Scroll.context );
 
 				// The height of the element.
 				var elementHeight = Ruler.outerHeight( element[0] );
