@@ -17,7 +17,6 @@ export class ThemeSelectorComponent
 	current: any;
 
 	constructor(
-		@Inject( 'Popover' ) private popover: Popover,
 	)
 	{
 	}
@@ -34,6 +33,6 @@ export class ThemeSelectorComponent
 		this.currentTemplate = id;
 		this.current = this.templates.find( ( t ) => t.id === this.currentTemplate );
 		this.changed.emit( id );
-		this.popover.hideAll();
+		Popover.hideAll();
 	}
 }

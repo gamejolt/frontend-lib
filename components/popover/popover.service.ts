@@ -1,42 +1,39 @@
-import { Injectable } from 'ng-metadata/core';
-import { PopoverComponent } from './popover.component';
+import { AppPopover } from './popover';
 
-@Injectable( 'Popover' )
 export class Popover
 {
-	popovers: { [k: string]: PopoverComponent } = {};
+	static popovers: { [k: string]: AppPopover } = {};
 
-	registerPopover( id: string, popover: PopoverComponent )
+	static registerPopover( id: string, popover: AppPopover )
 	{
 		this.popovers[ id ] = popover;
 	}
 
-	deregisterPopover( id: string )
+	static deregisterPopover( id: string )
 	{
 		delete this.popovers[ id ];
 	}
 
-	getPopover( id: string )
+	static getPopover( id: string )
 	{
 		return this.popovers[ id ] || undefined;
 	}
 
-	hideAll( options: { skip?: PopoverComponent } = {} )
+	static hideAll( options: { skip?: AppPopover } = {} )
 	{
-		angular.forEach( this.popovers, function( popover )
-		{
-			if ( options.skip && options.skip.id === popover.id ) {
-				return;
+		for ( const popover of Object.values( this.popovers ) ) {
+			if ( options.skip && options.skip.popoverId === popover.popoverId ) {
+				continue;
 			}
 
 			// If this is a manually triggered popover, skip it.
 			if ( popover.triggerManually ) {
-				return;
+				continue;
 			}
 
 			if ( popover.isVisible ) {
 				popover.hide();
 			}
-		} );
+		}
 	}
 }

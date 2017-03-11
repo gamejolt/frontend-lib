@@ -26,7 +26,7 @@
 <button class="btn btn-block-xs"
 	ng-if="::$ctrl.card.extraBuilds.length"
 	ng-class="{ 'btn-success-outline': $ctrl.card.otherOnly, 'btn-outline': !$ctrl.card.otherOnly }"
-	gj-popover-trigger="game-package-card-more-options-{{ $ctrl.package.id }}"
+	gj-popover-trigger="game-package-card-more-options-{{ ::$ctrl.package.id }}"
 	gj-track-event="game-package-card:more-options"
 	>
 	<span class="jolticon jolticon-ellipsis-h"></span>
@@ -38,7 +38,7 @@
 	<span ng-if="::!$ctrl.card.otherOnly" translate>more</span>
 </button>
 
-<gj-popover popover-id="game-package-card-more-options-{{ $ctrl.package.id }}">
+<gj-popover [popover-id]="::'game-package-card-more-options-' + $ctrl.package.id">
 	<gj-game-package-card-more-options
 		[card]="::$ctrl.card"
 		(click)="$ctrl._click( $event, true )"

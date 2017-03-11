@@ -1,19 +1,16 @@
 import { NgModule } from 'ng-metadata/core';
-import { PopoverTriggerComponent } from './popover-trigger.directive';
-import { PopoverBackdropComponent } from './backdrop.component';
-import { PopoverComponent } from './popover.component';
+import { PopoverTriggerDirective } from './popover-trigger.directive';
 import { Popover } from './popover.service';
-import { PopoverContextDirective } from './popover-context.directive';
+import { AppPopover } from './popover';
+import { makeComponentProvider } from '../../vue/angular-link';
 
 @NgModule({
 	declarations: [
-		PopoverContextDirective,
-		PopoverTriggerComponent,
-		PopoverBackdropComponent,
-		PopoverComponent,
+		PopoverTriggerDirective,
+		makeComponentProvider( AppPopover, [ 'focused', 'blurred' ] ),
 	],
 	providers: [
-		Popover,
+		{ provide: 'Popover', useFactory: () => Popover },
 	]
 })
 export class PopoverModule { }

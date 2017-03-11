@@ -30,15 +30,15 @@
 		<span class="jolticon jolticon-chevron-down"></span>
 	</a>
 
-	<gj-popover class="site-selector-popover popover-dark"
+	<gj-popover
 		popover-id="site-selector"
-		popover-append-to-body="true"
-		popover-position-by="position"
-		popover-on-focus="ctrl.isPopoverActive = true"
-		popover-on-blur="ctrl.isPopoverActive = false"
+		position-by="position"
+		[append-to-body]="true"
+		(focused)="ctrl.isPopoverActive = true"
+		(blurred)="ctrl.isPopoverActive = false"
 		>
 
-		<div class="site-selector-list">
+		<div class="well fill-darkest">
 
 			<!-- Site -->
 			<a class="site-selector-list-item" ng-href="{{ ::Environment.baseUrl }}" ng-if="::ctrl.currentSite != 'main'" title="Game Jolt - Indie games for the love of it">

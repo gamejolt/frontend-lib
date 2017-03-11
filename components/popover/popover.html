@@ -1,0 +1,32 @@
+<transition name="popover-anim"
+	@after-leave="_onLeft"
+	>
+	<div class="popover"
+		v-show="isVisible"
+		:class="[ this.position ]"
+		:style="{
+			position: positionBy === 'fixed' ? 'fixed' : 'absolute',
+		}"
+		>
+		<div class="arrow"
+			:style="{
+				left: arrowLeft,
+				top: arrowTop,
+			}"
+			>
+		</div>
+
+		<div class="popover-content scrollable"
+			:style="{ 'max-height': appendToBody && !noMaxHeight ? (Screen.windowHeight - 100) + 'px' : undefined }"
+			:class="{
+				'popover-no-max-height': noMaxHeight,
+			}"
+			@mouseenter="onMouseEnter"
+			@mouseleave="onMouseLeave"
+			@click="onClick"
+			>
+			<div v-if="slotId" :class="`ng-slot-${slotId}`"></div>
+			<slot></slot>
+		</div>
+	</div>
+</transition>

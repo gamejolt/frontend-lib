@@ -171,8 +171,8 @@
 
 								<gj-popover
 									ng-if="cards.length > 1"
-									popover-id="payment-form-card-selector-{{ sellable.id }}"
-									popover-position-horizontal="left"
+									[popover-id]="'payment-form-card-selector-' + sellable.id"
+									position-horizontal="left"
 									>
 									<div class="list-group list-group-dark">
 										<a class="list-group-item"

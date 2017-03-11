@@ -19,7 +19,6 @@ export class GamePlayModal
 		@Inject( '$compile' ) private $compile: ng.ICompileService,
 		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
 		@Inject( 'Growls' ) private growls: any,
-		@Inject( 'Popover' ) private popover: Popover,
 	)
 	{
 	}
@@ -53,7 +52,7 @@ export class GamePlayModal
 		} );
 
 		// If they clicked into this through a popover.
-		this.popover.hideAll();
+		Popover.hideAll();
 
 		// Will open the gameserver in their browser.
 		if ( GJ_IS_CLIENT && _build.type !== GameBuild.TYPE_HTML && _build.type !== GameBuild.TYPE_ROM ) {

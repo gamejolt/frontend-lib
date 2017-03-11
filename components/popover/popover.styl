@@ -1,19 +1,13 @@
-$popover-border-color = $gray-light
-$popover-bg-color = $gray-lightest
-$popover-bg-color-dark = $gray-darkest
-$popover-arrow-size = 8px
-$popover-size = 400px
-$popover-spacing = 5px
-
-// This will be used to push the popover away from the trigger by this amount.
-$popover-extra-margin = 3px
+@require '~styles/variables'
+@require '../../stylus/common/mixins'
+@require '../../stylus/animation/fade/fade-in'
+@require '../../stylus/animation/fade/fade-out-shrink'
 
 .popover
 	position: absolute
 	top: 0
 	left: 0
 	z-index: $zindex-popover
-	display: none
 	max-width: $popover-size
 	text-align: left // Reset given new insertion method
 
@@ -30,18 +24,18 @@ $popover-extra-margin = 3px
 		.popover-content
 			max-height: none
 
-	&.active-add
+	&.popover-anim-enter-active
 		// Make it a bit faster than normal on enter.
 		// This way they can interact with it sooner.
 		animation-duration: 250ms
 
-	&.active-remove
+	&.popover-anim-leave-active
 		@extend .anim-fade-out-shrink
 		display: block  // Force it visible while removing.
 		z-index: $zindex-popover - 1
 
 	// When active show it visible.
-	&.active
+	&.visible
 		display: block
 
 	&.top
@@ -49,7 +43,7 @@ $popover-extra-margin = 3px
 			caret( $popover-border-color, 'down', $popover-arrow-size )
 			bottom: -($popover-arrow-size - $popover-extra-margin)
 
-		&.active-add
+		&.popover-anim-enter-active
 			@extend .anim-fade-in-down
 
 	&.right
@@ -57,7 +51,7 @@ $popover-extra-margin = 3px
 			caret( $popover-border-color, 'left', $popover-arrow-size )
 			left: -($popover-arrow-size - $popover-extra-margin)
 
-		&.active-add
+		&.popover-anim-enter-active
 			@extend .anim-fade-in-right
 
 	&.bottom
@@ -65,7 +59,7 @@ $popover-extra-margin = 3px
 			caret( $popover-border-color, 'up', $popover-arrow-size )
 			top: -($popover-arrow-size - $popover-extra-margin)
 
-		&.active-add
+		&.popover-anim-enter-active
 			@extend .anim-fade-in-up
 
 	&.left
@@ -73,17 +67,20 @@ $popover-extra-margin = 3px
 			caret( $popover-border-color, 'right', $popover-arrow-size )
 			right: -($popover-arrow-size - $popover-extra-margin)
 
-		&.active-add
+		&.popover-anim-enter-active
 			@extend .anim-fade-in-left
 
 .popover-content
-	@extend .scrollable
 	max-height: 360px
 	min-width: 200px
 	background-color: $popover-bg-color
 	background-clip: padding-box
 	border: 2px solid $popover-border-color
 	box-shadow 5px 5px 10px rgba( 0, 0, 0, 0.1 )
+
+	&.popover-no-max-height
+		max-height: none
+		overflow: visible !important
 
 	.popover.top &
 		margin-bottom: $popover-extra-margin
@@ -108,34 +105,17 @@ $popover-extra-margin = 3px
 	.alert
 		margin-bottom: 0
 
-.popover-dark
-	border: 0
-	padding: 2px
-
-	.popover-content
-		@extend .fill-darkest
-		background-color: $popover-bg-color-dark
-
-	&.top > .arrow
-		caret( $popover-bg-color-dark, 'down', $popover-arrow-size )
-
-	&.right > .arrow
-		caret( $popover-bg-color-dark, 'left', $popover-arrow-size )
-
-	&.bottom > .arrow
-		caret( $popover-bg-color-dark, 'up', $popover-arrow-size )
-
-	&.left > .arrow
-		caret( $popover-bg-color-dark, 'right', $popover-arrow-size )
-
 .popover-no-collapse
 	@media $media-sm-up
 		width: $popover-size
 
 .popover-heading
-	margin: $popover-spacing
+	padding: $popover-spacing
 	white-space: nowrap
 	font-weight: bold
+
+.popover-backdrop
+	display: none
 
 /**
  * Mobile
@@ -145,6 +125,7 @@ $popover-extra-margin = 3px
 	// Shade the body when we open the popover.
 	// We only show the backdrop on XS displays.
 	.popover-backdrop
+		display: block
 		position: fixed
 		top: 0
 		right: 0
