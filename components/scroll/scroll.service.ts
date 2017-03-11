@@ -2,6 +2,14 @@ import { Subject } from 'rxjs/Subject';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
 
+const AnimatedScrollDuration = 800;
+const AnimatedScrollEasing = ( x: number ) =>
+{
+	// Easing functions: https://gist.github.com/gre/1650294
+	// easeOutQuart
+	return 1 - (--x) * x * x * x;
+};
+
 export class Scroll
 {
 	static context: HTMLElement | HTMLDocument = document;
@@ -193,14 +201,14 @@ export class Scroll
 	{
 		const startTop = this.getScrollTop( this.context );
 		const deltaTop = Math.round( to - startTop );
-		const duration = 500;
+		const duration = AnimatedScrollDuration;
 
 		const startTime = Date.now();
 		let progress = 0;
 		const step = ( timestamp: number ) =>
 		{
 			progress = timestamp - startTime;
-			const percent = progress >= duration ? 1 : this.ease( progress / duration );
+			const percent = progress >= duration ? 1 : AnimatedScrollEasing( progress / duration );
 
 			this.scrollTo( startTop + Math.ceil( deltaTop * percent ) );
 
@@ -213,14 +221,6 @@ export class Scroll
 		};
 
 		window.requestAnimationFrame( () => step( startTime ) );
-	}
-
-	private static ease( x: number )
-	{
-		if ( x < 0.5 ) {
-			return Math.pow( x * 2, 2 ) / 2;
-		}
-		return 1 - Math.pow( (1 - x) * 2, 2 ) / 2;
 	}
 }
 
@@ -237,17 +237,3 @@ Screen.resizeChanges.subscribe( () =>
 		Scroll.contextOffsetTop = Ruler.offset( Scroll.context as HTMLElement ).top;
 	}
 } );
-
-// angular.module( 'gj.Scroll' ).service( 'Scroll', function( $rootScope, $timeout, $document, $window, $position, duScrollDuration, duScrollEasing, Screen )
-// {
-// 	var _this = this;
-
-
-// } )
-// .value( 'duScrollDuration', 800 )
-// .value( 'duScrollEasing', function( t )
-// {
-// 	// Easing functions: https://gist.github.com/gre/1650294
-// 	// easeOutQuart
-// 	return 1-(--t)*t*t*t;
-// } );
