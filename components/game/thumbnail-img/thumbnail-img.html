@@ -1,4 +1,4 @@
-<div class="game-thumbnail-img">
+<div class="game-thumbnail-img" v-if="game.thumbnail_media_item">
 	<img
 		v-app-img-responsive="game.thumbnail_media_item.mediaserver_url"
 		:alt="game.title"
