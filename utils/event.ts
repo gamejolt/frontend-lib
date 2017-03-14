@@ -14,7 +14,7 @@ if ( typeof (window as any).CustomEvent !== 'function' ) {
 	(window as any).CustomEvent = _CustomEvent;
 }
 
-export function triggerEvent( el: HTMLElement, eventName: string, data: any )
+export function triggerEvent( el: HTMLElement, eventName: string, data?: any )
 {
 	const event = new CustomEvent( eventName, { detail: data } );
 	el.dispatchEvent( event );
