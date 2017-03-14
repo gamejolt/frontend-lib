@@ -70,7 +70,7 @@ export class AppMediaBar extends Vue
 
 	goNext()
 	{
-		if ( !this.activeIndex || this.activeIndex + 1 >= this.mediaItems.length ) {
+		if ( this.activeIndex === null || this.activeIndex + 1 >= this.mediaItems.length ) {
 			return;
 		}
 
@@ -80,7 +80,7 @@ export class AppMediaBar extends Vue
 
 	goPrev()
 	{
-		if ( !this.activeIndex || this.activeIndex - 1 < 0 ) {
+		if ( this.activeIndex === null || this.activeIndex - 1 < 0 ) {
 			return;
 		}
 
