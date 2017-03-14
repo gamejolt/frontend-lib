@@ -13,7 +13,9 @@ import { AppMediaBarLightboxSlider } from './slider';
 import { AppMediaBarLightboxItem } from './item/item';
 import { getProvider } from '../../../utils/utils';
 
-Vue.use( VueShortkey );
+Vue.use( VueShortkey, {
+	prevent: [ 'input', 'textarea' ],
+} );
 
 export const MediaBarLightboxConfig = {
 	opacityStart: 0.5,
