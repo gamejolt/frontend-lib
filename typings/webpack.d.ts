@@ -14,4 +14,4 @@ interface WebpackContext extends WebpackRequire {
 }
 
 declare var require: WebpackRequire;
-declare function $import<T>( path: string ): Promise<T>;
+declare function $import( path: string ): Promise<any>;
