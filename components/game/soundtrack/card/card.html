@@ -19,9 +19,9 @@
 			<div class="card-content">
 
 				<gj-fade-collapse
-					fade-collapse-height="250"
-					fade-collapse-is-open="ctrl.isShowingSoundtrack"
-					fade-collapse-is-required="ctrl.canToggleSoundtrack"
+					[collapse-height]="250"
+					[is-open]="ctrl.isShowingSoundtrack"
+					(required)="ctrl.canToggleSoundtrack = true"
 					>
 
 					<gj-audio-playlist

@@ -1,3 +1,9 @@
-<div class="fade-collapse">
-	<div ng-transclude></div>
+<div class="fade-collapse"
+	:class="{
+		'fade-collapse-collapsed': this.isCollapsed,
+	}"
+	@transitionend="afterTransition"
+	>
+	<slot></slot>
+	<div v-if="slotId" :class="`ng-slot-${slotId}`"></div>
 </div>

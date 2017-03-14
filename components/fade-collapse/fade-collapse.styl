@@ -1,9 +1,11 @@
+@require '~styles/variables'
+
 .fade-collapse
 	position: relative
 	overflow: hidden
 
 	@media $media-sm-up
-		transition: height 600ms $strong-ease-out
+		transition: max-height 600ms $strong-ease-out
 
 	&::before
 		position: absolute

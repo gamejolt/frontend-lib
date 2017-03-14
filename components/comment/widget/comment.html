@@ -24,9 +24,9 @@
 		</div>
 
 		<gj-fade-collapse
-			fade-collapse-height="300"
-			fade-collapse-is-open="commentState.showFullComment"
-			fade-collapse-is-required="commentState.canToggleComment"
+			[collapse-height]="300"
+			[is-open]="commentState.showFullComment"
+			(required)="commentState.canToggleComment = true"
 			>
 			<div class="comment-widget-comment-content"
 				ng-bind-html="ctrl.isShowingTranslations && ctrl.translations[ comment.id ].content ? ctrl.translations[ comment.id ].content : comment.comment_compiled"
