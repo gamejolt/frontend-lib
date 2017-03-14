@@ -7,6 +7,7 @@ import { StateService } from 'angular-ui-router';
 import { User } from '../user/user.model';
 import { Api } from '../api/api.service';
 import { Game } from '../game/game.model';
+import { Growls } from '../growls/growls.service';
 
 export class Notification extends Model
 {
@@ -193,7 +194,7 @@ export class Notification extends Model
 				}
 			}
 			catch ( _e ) {
-				getProvider<any>( 'Growls' ).error( 'Could not go to comment.' );
+				Growls.error( 'Could not go to comment.' );
 			}
 		}
 

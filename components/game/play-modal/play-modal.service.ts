@@ -8,6 +8,7 @@ import { Game } from '../game.model';
 import { GameBuild } from '../build/build.model';
 import { Analytics } from '../../analytics/analytics.service';
 import { Environment } from '../../environment/environment.service';
+import { Growls } from '../../growls/growls.service';
 
 @Injectable( 'Game_PlayModal' )
 export class GamePlayModal
@@ -18,7 +19,6 @@ export class GamePlayModal
 		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
 		@Inject( '$compile' ) private $compile: ng.ICompileService,
 		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
-		@Inject( 'Growls' ) private growls: any,
 	)
 	{
 	}
@@ -41,7 +41,7 @@ export class GamePlayModal
 		Analytics.trackEvent( 'game-play', 'play' );
 
 		if ( this.hasModal ) {
-			this.growls.error( 'You already have a browser game open. You can only have one running at a time.', 'Oh no!' );
+			Growls.error( 'You already have a browser game open. You can only have one running at a time.', 'Oh no!' );
 			return Promise.reject( undefined );
 		}
 

@@ -1,4 +1,4 @@
-import { getProvider } from '../../utils/utils';
+import { Growls } from '../growls/growls.service';
 
 export class Clipboard
 {
@@ -16,7 +16,6 @@ export class Clipboard
 		const result = window.document.execCommand( 'copy' );
 
 		if ( GJ_IS_ANGULAR ) {
-			const Growls = getProvider<any>( 'Growls' );
 			if ( result ) {
 				Growls.success( 'Copied to your clipboard.', 'Copied!' );
 			}

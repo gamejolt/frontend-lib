@@ -7,7 +7,7 @@ import { Analytics } from '../analytics/analytics.service';
 import { AppLoading } from '../../vue/components/loading/loading';
 import { AppMediaBarItem } from './item/item';
 import { AppMediaBarLightbox } from './lightbox/lightbox';
-import { getProvider } from '../../utils/utils';
+import { Growls } from '../growls/growls.service';
 
 @View
 @Component({
@@ -70,7 +70,7 @@ export class AppMediaBar extends Vue
 
 	goNext()
 	{
-		if ( this.activeIndex + 1 >= this.mediaItems.length ) {
+		if ( !this.activeIndex || this.activeIndex + 1 >= this.mediaItems.length ) {
 			return;
 		}
 
@@ -80,7 +80,7 @@ export class AppMediaBar extends Vue
 
 	goPrev()
 	{
-		if ( this.activeIndex - 1 < 0 ) {
+		if ( !this.activeIndex || this.activeIndex - 1 < 0 ) {
 			return;
 		}
 
@@ -130,7 +130,6 @@ export class AppMediaBar extends Vue
 					this.trackEvent( 'permalink' );
 				}
 				else if ( GJ_IS_ANGULAR) {
-					const Growls = getProvider<any>( 'Growls' );
 					if ( type === 'image' ) {
 						Growls.error(
 							`We couldn't find the image that was linked. It may have been removed.`,

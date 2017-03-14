@@ -1,3 +1,3 @@
-angular.module( 'gj.User.LinkedAccounts', [ 'gj.Growls' ] );
+angular.module( 'gj.User.LinkedAccounts', [] );
 
 require( './linked-accounts-service' );
