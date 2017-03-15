@@ -30,6 +30,10 @@ module.exports = function( config, projectBase )
 	config.sections.push( 'app' );
 	config.buildSection = argv['section'] || 'app';
 
+	if ( argv['section'] ) {
+		config.sections = [ argv['section'] ];
+	}
+
 	config.projectBase = projectBase;
 	config.buildBaseDir = process.env.BUILD_DIR || './';
 	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
