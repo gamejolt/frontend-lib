@@ -2,9 +2,9 @@ import { ConnectionReconnect } from './reconnect-service';
 
 export class Connection
 {
-	static isDeviceOffline: boolean;
-	static isClientOffline: boolean;
-	static isOnline: boolean;
+	static isDeviceOffline = false;
+	static isClientOffline = false;
+	static isOnline = true;
 
 	private static hasRequestFailure = false;
 	private static _reconnectChecker?: ConnectionReconnect;
