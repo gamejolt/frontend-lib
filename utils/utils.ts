@@ -7,6 +7,11 @@ export function importContext( r: WebpackContext )
 	return map;
 }
 
+export function asyncComponentLoader( loader: Promise<any> )
+{
+	return loader.then( ( mod ) => mod.default );
+}
+
 export function getProvider<T>( token: any ): T
 {
 	const injector = angular.element( window.document ).injector();
