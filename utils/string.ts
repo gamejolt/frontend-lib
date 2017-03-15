@@ -6,6 +6,21 @@ export function kebabCase( name: string )
 		(pos ? '-' : '') + letter.toLowerCase() );
 }
 
+export function titleCase( str: string )
+{
+	// Hyphen and underscore.
+	str = str.replace( /(\-|_)/g, ' ' );
+
+	// camelCase.
+	str = str.replace( /([a-z])([A-Z])/g, '$1 $2' );
+
+	// Uppercase words.
+	return str.replace( /\w\S*/g, ( txt ) =>
+	{
+		return txt.charAt( 0 ).toUpperCase() + txt.substr( 1 ).toLowerCase();
+	} );
+}
+
 // Pulled from: https://github.com/bevacqua/fuzzysearch
 export function fuzzysearch( query: string, text: string )
 {
