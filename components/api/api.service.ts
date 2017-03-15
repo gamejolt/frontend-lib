@@ -222,14 +222,14 @@ export class Api
 				throw new Error( `Vue can't upload files yet.` );
 			}
 
-			const request = require( 'superagent' );
-			const _request = request( method, url ).send( data );
+			const axios = require( 'axios' );
 
-			if ( options.withCredentials ) {
-				_request.withCredentials();
-			}
-
-			return _request;
+			return axios( {
+				method,
+				url,
+				data,
+				withCredentials: options.withCredentials,
+			} );
 		}
 	}
 }
