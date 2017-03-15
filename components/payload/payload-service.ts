@@ -71,11 +71,6 @@ export class Payload
 		try {
 			let response = await requestPromise;
 
-			if ( GJ_IS_VUE ) {
-				response = response || {};
-				response.data = JSON.parse( response.text );
-			}
-
 			if ( !response || !response.data ) {
 				if ( !options.noErrorRedirect ) {
 					throw {
