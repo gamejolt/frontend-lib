@@ -1,10 +1,99 @@
-import { NgModule } from 'ng-metadata/core';
+import Vue from 'vue';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 
-import { ImgResponsiveDirective } from './responsive-directive';
+import { Screen } from '../../screen/screen-service';
+import { Ruler } from '../../ruler/ruler-service';
+import { ImgHelper } from '../helper/helper-service';
 
-@NgModule({
-	declarations: [
-		ImgResponsiveDirective,
-	],
+const WIDTH_HEIGHT_REGEX = /\/(\d+)x(\d+)\//;
+const WIDTH_REGEX = /\/(\d+)\//;
+
+@Component({
+	name: 'img-responsive',
 })
-export class ImgResponsiveModule { }
+export class AppImgResponsive extends Vue
+{
+	@Prop( String ) src: string;
+
+	private processedSrc = '';
+	private resizeChanges$ = Screen.resizeChanges.subscribe(
+		() => this.updateSrc(),
+	);
+
+	created()
+	{
+		// Set the initial src for SSR.
+		this.processedSrc = this.src;
+	}
+
+	async mounted()
+	{
+		// Make sure the view is compiled.
+		await this.$nextTick();
+		this.updateSrc();
+	}
+
+	render( h: Vue.CreateElement )
+	{
+		return h( 'img', {
+			staticClass: 'img-responsive',
+			domProps: {
+				src: this.processedSrc,
+			},
+		} );
+	}
+
+	destroyed()
+	{
+		this.resizeChanges$.unsubscribe();
+	}
+
+	@Watch( 'src' )
+	srcWatch()
+	{
+		this.updateSrc();
+	}
+
+	private async updateSrc()
+	{
+		const containerWidth = Ruler.width( this.$el.parentNode as HTMLElement );
+
+		// Make sure we never do a 0 width, just in case.
+		// Seems to happen in some situations.
+		if ( containerWidth <= 0 ) {
+			return;
+		}
+
+		// Update width in the URL.
+		// We keep width within 100px increment bounds.
+		let newSrc = this.src;
+		let mediaserverWidth = containerWidth;
+		if ( Screen.isHiDpi ) {
+
+			// For high dpi, double the width.
+			mediaserverWidth = mediaserverWidth * 2;
+			mediaserverWidth = Math.ceil( mediaserverWidth / 100 ) * 100;
+		}
+		else {
+			mediaserverWidth = Math.ceil( mediaserverWidth / 100 ) * 100;
+		}
+
+		if ( newSrc.search( WIDTH_HEIGHT_REGEX ) !== -1 ) {
+			newSrc = newSrc.replace( WIDTH_HEIGHT_REGEX, '/' + mediaserverWidth + 'x2000/' );
+		}
+		else {
+			newSrc = newSrc.replace( WIDTH_REGEX, '/' + mediaserverWidth + '/' );
+		}
+
+		// Only if the src changed from previous runs.
+		// They may be the same if the user resized the window but image container didn't change dimensions.
+		if ( newSrc !== this.processedSrc ) {
+			this.processedSrc = newSrc;
+
+			// Keep the isLoaded state up to date?
+			this.$emit( 'imgloadchange', false );
+			await ImgHelper.loaded( newSrc );
+			this.$emit( 'imgloadchange', true );
+		}
+	}
+}

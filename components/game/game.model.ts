@@ -68,8 +68,25 @@ export class Game extends Model
 
 	has_active_builds: boolean;
 
+	avg_rating: number;
+	rating_count: number;
+
 	sites_enabled: boolean;
 	site?: Site;
+
+	tigrs_cartoon_violence: number;
+	tigrs_fantasy_violence: number;
+	tigrs_realistic_violence: number;
+	tigrs_bloodshed: number;
+	tigrs_sexual_violence: number;
+	tigrs_alcohol: number;
+	tigrs_drugs: number;
+	tigrs_tobacco: number;
+	tigrs_nudity: number;
+	tigrs_sexual_themes: number;
+	tigrs_language: number;
+	tigrs_humor: number;
+	tigrs_gambling: number;
 
 	// These are computed in the constructor.
 	_has_cover: boolean;

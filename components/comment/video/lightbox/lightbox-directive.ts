@@ -26,7 +26,6 @@ export class LightboxComponent implements OnInit
 		@Inject( '$scope' ) private $scope: ng.IScope,
 		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
 		@Inject( '$location' ) private $location: ng.ILocationService,
-		@Inject( 'hotkeys' ) hotkeys: ng.hotkeys.HotkeysProvider,
 		@Inject( 'App' ) app: App,
 	)
 	{
@@ -54,16 +53,16 @@ export class LightboxComponent implements OnInit
 			this.calcMaxDimensions();
 		} );
 
-		hotkeys.bindTo( $scope )
-			.add( {
-				combo: 'esc',
-				description: 'Close video lightbox.',
-				callback: ( $event: Event ) =>
-				{
-					this.close();
-					$event.preventDefault();
-				},
-			} );
+		// hotkeys.bindTo( $scope )
+		// 	.add( {
+		// 		combo: 'esc',
+		// 		description: 'Close video lightbox.',
+		// 		callback: ( $event: Event ) =>
+		// 		{
+		// 			this.close();
+		// 			$event.preventDefault();
+		// 		},
+		// 	} );
 	}
 
 	ngOnInit()

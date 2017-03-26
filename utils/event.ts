@@ -1,6 +1,6 @@
 
 // Polyfill CustomEvent for stupid <IE11
-if ( typeof (window as any).CustomEvent !== 'function' ) {
+if ( !GJ_IS_SSR && typeof (window as any).CustomEvent !== 'function' ) {
 
 	function _CustomEvent( event: any, params: any )
 	{
@@ -16,6 +16,8 @@ if ( typeof (window as any).CustomEvent !== 'function' ) {
 
 export function triggerEvent( el: HTMLElement, eventName: string, data?: any )
 {
-	const event = new CustomEvent( eventName, { detail: data } );
-	el.dispatchEvent( event );
+	if ( !GJ_IS_SSR ) {
+		const event = new CustomEvent( eventName, { detail: data } );
+		el.dispatchEvent( event );
+	}
 }

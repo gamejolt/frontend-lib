@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs/Subject';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
+import { supportsPassiveEvents } from '../../utils/detection';
 
 const AnimatedScrollDuration = 800;
 const AnimatedScrollEasing = ( x: number ) =>
@@ -10,14 +11,26 @@ const AnimatedScrollEasing = ( x: number ) =>
 	return 1 - (--x) * x * x * x;
 };
 
+export interface ScrollChange
+{
+	top: number;
+	left: number;
+	height: number;
+	width: number;
+}
+
 export class Scroll
 {
-	static context: HTMLElement | HTMLDocument = document;
+	static shouldAutoScroll = true;
+
+	// For SSR context we have to set this to undefined.
+	// No methods should be called that would use the context.
+	static context: HTMLElement | HTMLDocument = typeof document !== 'undefined' ? document : (undefined as any);
 	static contextOffsetTop = 0;
 	static offsetTop = 0;
 
 	private static scrollListener: any;
-	static scrollChanges = new Subject<void>();
+	static scrollChanges = new Subject<ScrollChange>();
 
 	/**
 	 * Sets the extra offset for scrolling.
@@ -35,7 +48,16 @@ export class Scroll
 	{
 		// We just bootstrap the scroll listener once.
 		if ( !this.scrollListener ) {
-			this.scrollListener = () => this.scrollChanges.next();
+			this.scrollListener = () => this.scrollChanges.next( {
+				top: this.getScrollTop(),
+				left: this.getScrollLeft(),
+				height: this.context === document
+					? window.innerHeight
+					: (this.context as HTMLElement).clientHeight,
+				width: this.context === document
+					? window.innerWidth
+					: (this.context as HTMLElement).clientWidth,
+			} );
 		}
 
 		// If we already have a context set, we gotta remove the scroll handler
@@ -53,7 +75,7 @@ export class Scroll
 			this.contextOffsetTop = Ruler.offset( element ).top;
 		}
 
-		this.context.addEventListener( 'scroll', this.scrollListener );
+		this.context.addEventListener( 'scroll', this.scrollListener, supportsPassiveEvents ? { passive: true } : false );
 	}
 
 	static getScrollTop( element?: HTMLElement | HTMLDocument ): number
@@ -93,6 +115,19 @@ export class Scroll
 		}
 
 		return element.scrollHeight;
+	}
+
+	static getScrollWidth( element?: HTMLElement | HTMLDocument ): number
+	{
+		if ( !element ) {
+			element = this.context;
+		}
+
+		if ( element instanceof HTMLDocument ) {
+			return Math.max( document.body.scrollWidth, document.documentElement.scrollWidth );
+		}
+
+		return element.scrollWidth;
 	}
 
 	/**
@@ -225,16 +260,19 @@ export class Scroll
 	}
 }
 
-// Sets the document as the scroll context.
-Scroll.setContext( undefined );
+if ( !GJ_IS_SSR ) {
 
-// Update the scroll context's offset top when we resize.
-Screen.resizeChanges.subscribe( () =>
-{
-	if ( Scroll.context === document ) {
-		Scroll.contextOffsetTop = 0;
-	}
-	else {
-		Scroll.contextOffsetTop = Ruler.offset( Scroll.context as HTMLElement ).top;
-	}
-} );
+	// Sets the document as the scroll context.
+	Scroll.setContext( undefined );
+
+	// Update the scroll context's offset top when we resize.
+	Screen.resizeChanges.subscribe( () =>
+	{
+		if ( Scroll.context === document ) {
+			Scroll.contextOffsetTop = 0;
+		}
+		else {
+			Scroll.contextOffsetTop = Ruler.offset( Scroll.context as HTMLElement ).top;
+		}
+	} );
+}

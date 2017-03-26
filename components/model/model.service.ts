@@ -29,7 +29,19 @@ export class Model
 			// Some times the model constructors add new fields when populating.
 			// This way we retain those fields.
 			const newObj = new self( other );
-			Object.assign( this, newObj );
+
+			// Vue needs to be alerted of data changes. Use the set method in
+			// Vue only so that it can be aware of changes.
+			if ( GJ_IS_VUE ) {
+				const Vue = require( 'vue' ).default;
+				const keys = Object.keys( newObj );
+				for ( const k of keys ) {
+					Vue.set( this, k, newObj[ k ] );
+				}
+			}
+			else {
+				Object.assign( this, newObj );
+			}
 		};
 
 		Object.assign( self.prototype, Model.prototype );

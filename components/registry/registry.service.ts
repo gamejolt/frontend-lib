@@ -41,6 +41,14 @@ export class Registry
 			id = parseInt( id, 10 );
 		}
 
-		return _.findLast( this.items[ type ], { id: id } );
+		// Reverse search.
+		for ( let i = this.items[ type ].length - 1; i >= 0; --i ) {
+			const item = this.items[ type ][ i ];
+			if ( item.id === id ) {
+				return item;
+			}
+		}
+
+		return undefined;
 	}
 }

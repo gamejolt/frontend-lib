@@ -1,0 +1,123 @@
+<div>
+
+	<!--
+		Number pagination type
+	-->
+	<div v-if="!pager && !Screen.isXs">
+		<ul class="pagination"
+			v-if="totalItems > itemsPerPage"
+			>
+
+			<li v-if="hasPrevious && currentPage !== 2" @click.capture="onPageClick( $event, 1 )">
+				<router-link
+					class="btn btn-outline"
+					:to="{ name: $route.name, query: getQuery( 1 ) }"
+					v-app-no-autoscroll
+					>
+					<translate>First</translate>
+				</router-link>
+			</li>
+			<li v-if="hasPrevious" @click.capture="onPageClick( $event, prevPage )">
+				<router-link
+					class="btn btn-outline"
+					:to="{ name: $route.name, query: getQuery( prevPage ) }"
+					v-app-no-autoscroll
+					>
+					<translate>Previous</translate>
+				</router-link>
+			</li>
+
+			<li v-if="prevChunkPage" @click.capture="onPageClick( $event, prevChunkPage )">
+				<router-link
+					class="btn btn-outline btn-sparse"
+					:to="{ name: $route.name, query: getQuery( prevChunkPage ) }"
+					v-app-no-autoscroll
+					>
+					...
+				</router-link>
+			</li>
+
+			<li
+				v-for="( page, i ) of pages"
+				:key="i"
+				:class="{ active: page === currentPage }"
+				@click.capture="onPageClick( $event, page )"
+				>
+				<router-link
+					class="btn btn-outline btn-sparse"
+					v-if="page !== currentPage"
+					:to="{ name: $route.name, query: getQuery( (page > 1 ? page : undefined) ) }"
+					v-app-no-autoscroll
+					>
+					{{ page }}
+				</router-link>
+				<span class="btn btn-outline btn-sparse active" v-if="page === currentPage">
+					{{ page }}
+				</span>
+			</li>
+
+			<li v-if="nextChunkPage" @click.capture="onPageClick( $event, nextChunkPage )">
+				<router-link
+					class="btn btn-outline btn-sparse"
+					:to="{ name: $route.name, query: getQuery( nextChunkPage ) }"
+					v-app-no-autoscroll
+					>
+					...
+				</router-link>
+			</li>
+
+			<li v-if="hasNext" @click.capture="onPageClick( $event, nextPage )">
+				<router-link
+					class="btn btn-outline"
+					:to="{ name: $route.name, query: getQuery( nextPage ) }"
+					v-app-no-autoscroll
+					>
+					<translate>Next</translate>
+				</router-link>
+			</li>
+			<li v-if="hasNext && currentPage !== totalPages - 1" @click.capture="onPageClick( $event, totalPages )">
+				<router-link
+					class="btn btn-outline"
+					:to="{ name: $route.name, query: getQuery( totalPages ) }"
+					v-app-no-autoscroll
+					>
+					<translate>Last</translate>
+				</router-link>
+			</li>
+		</ul>
+	</div>
+
+	<!--
+		Pager type
+	-->
+	<div v-if="pager || Screen.isXs">
+		<ul class="pager" :class="{ reverse: reverseButtons }">
+			<li class="previous" v-if="hasPrevious" @click.capture="onPageClick( $event, prevPage )">
+				<router-link
+					class="btn btn-outline"
+					:to="{ name: $route.name, query: getQuery( prevPage ) }"
+					v-app-no-autoscroll
+					>
+					{{ (previousText || '&laquo; Previous') }}
+				</router-link>
+				<span v-if="!hasPrevious">{{ (previousText || '&laquo; Previous') }}</span>
+			</li>
+			<li v-if="currentPage > 1">
+				<span class="btn btn-outline btn-sparse active">
+					{{ currentPage }}
+				</span>
+			</li>
+			<li class="next" v-if="hasNext" @click.capture="onPageClick( $event, nextPage )">
+				<router-link
+					class="btn btn-outline"
+					:to="{ name: $route.name, query: getQuery( nextPage ) }"
+					v-app-no-autoscroll
+					>
+					{{ (nextText || 'Next &raquo;') }}
+				</router-link>
+				<span v-if="!hasNext">{{ (nextText || 'Next &raquo;') }}</span>
+			</li>
+		</ul>
+	</div>
+
+</div>

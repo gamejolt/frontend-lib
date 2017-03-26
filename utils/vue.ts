@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 
 export function findVueParent( component: Vue, parentType: typeof Vue )
 {

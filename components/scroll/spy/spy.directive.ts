@@ -1,5 +1,5 @@
 import 'core-js/es6/map';
-import * as Vue from 'vue';
+import Vue from 'vue';
 
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
@@ -51,10 +51,10 @@ function activateSpy( spy: Spy )
 }
 
 let lastScrollHeight: number | undefined = undefined;
-Scroll.scrollChanges.subscribe( () =>
+Scroll.scrollChanges.subscribe( ( changes ) =>
 {
-	const scrollTop = Math.ceil( Scroll.getScrollTop() );
-	const scrollHeight = Scroll.getScrollHeight();
+	const scrollTop = Math.ceil( changes.top );
+	const scrollHeight = changes.height;
 	const maxScroll = scrollHeight - (
 		Scroll.context === document
 		? window.innerHeight

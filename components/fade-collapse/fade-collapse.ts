@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./fade-collapse.html?style=./fade-collapse.styl';
 
@@ -8,6 +8,12 @@ import { Screen } from '../screen/screen-service';
 import { triggerEvent } from '../../utils/event';
 
 const ExtraCollapsePadding = 200;
+
+/**
+ * If the collapsed version would only leave this much pixels to expand it won't
+ * collapse.
+ */
+const Threshold = 50;
 
 @View
 @Component({
@@ -35,7 +41,7 @@ export class AppFadeCollapse extends Vue
 		await this.$nextTick();
 
 		let isRequired = false;
-		if ( this.collapseHeight && this.$el.scrollHeight > this.collapseHeight ) {
+		if ( this.collapseHeight && this.$el.scrollHeight - Threshold > this.collapseHeight  ) {
 			isRequired = true;
 		}
 

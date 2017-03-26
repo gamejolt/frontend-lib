@@ -1,0 +1,43 @@
+@require '~styles/variables'
+@require '../../stylus/common/mixins'
+
+.pagination
+	display: inline-block
+	padding-left: 0
+	margin-bottom: $line-height-computed
+	user-select: none
+
+	> li
+		display: inline // Remove list-style and block-level defaults
+
+.pager
+	clearfix()
+	padding-left: 0
+	margin: $line-height-computed 0
+	list-style: none
+	text-align: center
+	user-select: none
+
+	li
+		display: inline
+
+	.next
+		> a
+		> span
+			float: right
+
+	.previous
+		> a
+		> span
+			float: left
+
+	&.reverse
+		.next
+			> a
+			> span
+				float: left
+
+		.previous
+			> a
+			> span
+				float: right

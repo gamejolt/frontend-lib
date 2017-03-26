@@ -9,7 +9,7 @@ export class Translate
 	private static sections: string[] = [];
 	private static loaded: { [k: string]: boolean } = {};
 
-	static lang = localStorage.getItem( LangStorageKey ) || 'en_US';
+	static lang = (typeof localStorage !== 'undefined' && localStorage.getItem( LangStorageKey )) || 'en_US';
 
 	static readonly langs = [
 		{

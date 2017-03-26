@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./affix.html?style=./affix.styl';
 
@@ -45,7 +45,9 @@ export class AppScrollAffix extends Vue
 		this.checkLoop();
 	} );
 
-	private scrollChanges$ = Scroll.scrollChanges.subscribe( () => this.checkScroll() );
+	private scrollChanges$ = Scroll.scrollChanges.subscribe(
+		( change ) => this.checkScroll( change.top ),
+	);
 
 	private clickHandler = () => this.checkLoop();
 
@@ -172,14 +174,14 @@ export class AppScrollAffix extends Vue
 		return top;
 	}
 
-	private checkScroll()
+	private checkScroll( offset?: number )
 	{
 		if ( !this.shouldAffix ) {
 			return;
 		}
 
 		// Pull from the correct scroll context.
-		const offset = Scroll.getScrollTop();
+		offset = offset || Scroll.getScrollTop();
 
 		if ( !this.isAffixed && offset > this.curTop ) {
 			const width = Ruler.outerWidth( this.container );

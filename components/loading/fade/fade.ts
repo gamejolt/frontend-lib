@@ -1,6 +1,18 @@
-import { provide } from 'ng-metadata/core';
-import { LoadingFadeComponent } from './fade.component';
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import * as View from '!view!./fade.html?style=./fade.styl';
 
-export default angular.module( 'gj.Loading.Fade', [] )
-.directive( ...provide( LoadingFadeComponent ) )
-.name;
+import { AppLoading } from '../../../vue/components/loading/loading';
+
+@View
+@Component({
+	name: 'loading-fade',
+	components: {
+		AppLoading,
+	},
+})
+export class AppLoadingFade extends Vue
+{
+	@Prop( Boolean ) isLoading: boolean;
+	@Prop( Number ) slotId: number;
+}

@@ -1,12 +1,14 @@
-<div class="media-bar-item">
+<div class="media-bar-item"
+	:style="{ width, height }"
+	>
 	<a class="media-bar-item-wrapper" @click="onClick">
 
-		<img
+		<app-img-responsive
 			v-if="item.media_type !== 'sketchfab'"
-			v-app-img-responsive="item.img_thumbnail"
+			:src="item.img_thumbnail"
 			:title="item.media_type == 'image' ? item.caption : item.title"
 			alt=""
-			>
+			/>
 
 		<img
 			v-else

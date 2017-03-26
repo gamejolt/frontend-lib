@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import * as View from '!view!./lang-selector.html?style=./lang-selector.styl';
 
@@ -21,7 +21,6 @@ export class AppTranslateLangSelector extends Vue
 
 	async onChange()
 	{
-		console.log( 'lang changed', this.lang );
 		await Analytics.trackEvent( 'translations', 'change', this.lang );
 
 		// We don't wait for the promise to resolve before firing the event.

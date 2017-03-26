@@ -1,56 +1,63 @@
-var gulp = require( 'gulp' );
-var gutil = require( 'gulp-util' );
-var path = require( 'path' );
+const gulp = require( 'gulp' );
+const gutil = require( 'gulp-util' );
+const path = require( 'path' );
 
-var webpack = require( 'webpack' );
-var HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-var FriendlyErrorsWebpackPlugin = require( 'friendly-errors-webpack-plugin' );
-var ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
-var WebpackDevServer = require( 'webpack-dev-server' );
-var OptimizeCssPlugin = require( 'optimize-css-assets-webpack-plugin' );
-var ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
-var autoprefixer = require( 'autoprefixer' );
-var CleanCss = require( 'clean-css' );
-var WriteFilePlugin = require( 'write-file-webpack-plugin' );
-var BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
+const webpack = require( 'webpack' );
+const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+const FriendlyErrorsWebpackPlugin = require( 'friendly-errors-webpack-plugin' );
+const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
+const WebpackDevServer = require( 'webpack-dev-server' );
+const OptimizeCssPlugin = require( 'optimize-css-assets-webpack-plugin' );
+const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
+const autoprefixer = require( 'autoprefixer' );
+const CleanCss = require( 'clean-css' );
+const WriteFilePlugin = require( 'write-file-webpack-plugin' );
+const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
+const VueSSRPlugin = require( 'vue-ssr-webpack-plugin' );
 
 module.exports = function( config )
 {
-	var base = path.resolve( config.projectBase );
+	let base = path.resolve( config.projectBase );
 
-	var noop = function(){};
-	var devNoop = config.production ? undefined : noop;
-	var prodNoop = !config.production ? undefined : noop;
+	let noop = function(){};
+	let devNoop = config.production ? undefined : noop;
+	let prodNoop = !config.production ? undefined : noop;
+	let serverNoop = !config.server ? undefined : noop;
 
-	var externals = {};
-	for ( var extern of [ 'nw.gui', 'client-voodoo', 'path', 'os', 'fs' ] ) {
+	let externals = {};
+	for ( let extern of [ 'nw.gui', 'client-voodoo', 'path', 'os', 'fs' ] ) {
 		externals[ extern ] = { commonjs: extern };
 	}
 
-	var cleanCss = new CleanCss( {
+	let cleanCss = new CleanCss( {
 		level: 2,
 	} );
 
 	function stylesLoader( loaders, options )
 	{
+		// Note: style-loader doesn't work on the server.
+
 		if ( config.production ) {
 			return ExtractTextPlugin.extract( {
-				fallback: 'style-loader',
+				fallback: !config.server ? 'style-loader' : undefined,
 				use: loaders,
 			 } );
 		}
 
-		loaders.unshift( 'style-loader' );
+		if ( !config.server ) {
+			loaders.unshift( 'style-loader' );
+		}
+
 		return loaders;
 	}
 
-	var webpackSectionConfigs = {};
-	var webpackSectionTasks = [];
+	let webpackSectionConfigs = {};
+	let webpackSectionTasks = [];
 	config.sections.forEach( function( section )
 	{
-		var indexHtml = section === 'app' ? 'index.html' : section + '.html';
+		let indexHtml = section === 'app' ? 'index.html' : section + '.html';
 
-		var appEntries = [
+		let appEntries = [
 			path.resolve( base, 'src/' + section + '/main.styl' ),
 			path.resolve( base, 'src/' + section + '/main.ts' ),
 		];
@@ -60,18 +67,30 @@ module.exports = function( config )
 			appEntries.push( 'webpack/hot/dev-server' );
 		}
 
+		let entry = {
+			app: appEntries,
+		};
+
+		if ( config.server ) {
+			entry = {
+				server: [
+					path.resolve( base, 'src/' + section + '/server.ts' ),
+				],
+			};
+		}
+
 		webpackSectionConfigs[ section ] = {
-			entry: {
-				app: appEntries,
-			},
+			entry,
+			target: config.server ? 'node' : 'web',
 			devServer: {
 				outputPath: path.resolve( base, config.buildDir ),
 			},
 			output: {
 				publicPath: (config.production ? config.staticCdn : '') + '/',
 				path: path.resolve( base, config.buildDir ),
-				filename: config.production ? section + '.[chunkhash:6].js' : section + '.js',
-				chunkFilename: config.production ? section + '.[id].[chunkhash:6].js' : undefined,
+				filename: config.production ? section + '.[name].[chunkhash:6].js' : section + '.[name].js',
+				chunkFilename: config.production ? section + '.[name].[id].[chunkhash:6].js' : undefined,
+				libraryTarget: config.server ? 'commonjs2' : 'var',
 			},
 			resolve: {
 				extensions: [ '.tsx', '.ts', '.js', '.styl' ],
@@ -143,7 +162,7 @@ module.exports = function( config )
 						exclude: /node_modules/,
 					},
 					// For vue we use the "view" alias.
-					config.framework === 'vue' ? {} : {
+					{
 						test: /\.html$/,
 						use: [
 							'file-loader?name=templates/[name].[hash:6].[ext]',
@@ -187,7 +206,7 @@ module.exports = function( config )
 			},
 			// Inline allows us to debug by setting breakpoints.
 			// Eval may be faster, but it doesn't allow setting breakpoints.
-			devtool: 'cheap-module-inline-source-map',
+			devtool: !config.server ? 'cheap-module-inline-source-map' : '#source-map',
 			plugins: [
 				new webpack.DefinePlugin({
 					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
@@ -195,6 +214,7 @@ module.exports = function( config )
 					GJ_IS_CLIENT: JSON.stringify( false ),
 					GJ_IS_ANGULAR: JSON.stringify( config.framework === 'angular' ),
 					GJ_IS_VUE: JSON.stringify( config.framework === 'vue' ),
+					GJ_IS_SSR: JSON.stringify( config.server ),
 
 					// This sets vue in production mode.
 					'process.env': {
@@ -227,7 +247,7 @@ module.exports = function( config )
 					}
 				}),
 				devNoop || new ImageminPlugin(),
-				prodNoop || new webpack.HotModuleReplacementPlugin(),
+				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
 				devNoop || new webpack.optimize.CommonsChunkPlugin( {
 					name: 'vendor',
 					filename: 'vendor.[hash:6].js',
@@ -247,14 +267,14 @@ module.exports = function( config )
 					filename: 'manifest.[hash:6].js',
 					chunks: [ 'vendor' ],
 				} ),
-				devNoop || new ExtractTextPlugin( '[name].[contenthash:6].css' ),
+				serverNoop || new ExtractTextPlugin( '[name].[contenthash:6].css' ),
 				devNoop || new OptimizeCssPlugin( {
 					cssProcessor: {
 						process: function( css )
 						{
 							return new Promise( function( resolve, reject )
 							{
-								var output = cleanCss.minify( css );
+								let output = cleanCss.minify( css );
 								if ( output.errors.length ) {
 									reject( output.errors );
 								}
@@ -267,14 +287,18 @@ module.exports = function( config )
 						}
 					},
 				} ),
-				new HtmlWebpackPlugin( {
+				serverNoop || new HtmlWebpackPlugin( {
 					filename: indexHtml,
 					template: '!!html-loader?interpolate=require!src/' + indexHtml,
 					favicon: path.resolve( base, 'src/app/img/favicon.png' ),
 					inject: true,
 					chunksSortMode: 'dependency',
+					excludeChunks: [ 'server' ],
 				} ),
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
+				!config.server ? noop : new VueSSRPlugin( {
+					entry: 'server',
+				} ),
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			]
@@ -282,7 +306,7 @@ module.exports = function( config )
 
 		gulp.task( 'compile:' + section, function( cb )
 		{
-			var compiler = webpack( webpackSectionConfigs[ section ] );
+			let compiler = webpack( webpackSectionConfigs[ section ] );
 			compiler.run( function( err, stats )
 			{
 				if ( err ) {
@@ -301,25 +325,27 @@ module.exports = function( config )
 		webpackSectionTasks.push( 'compile:' + section );
 	} );
 
-	gulp.task( 'watch', function( cb )
+	gulp.task( 'watch', gulp.series( 'clean:pre', function( cb )
 	{
-		var compiler = webpack( webpackSectionConfigs[ config.buildSection ] );
+		let compiler = webpack( webpackSectionConfigs[ config.buildSection ] );
 
-		var server = new WebpackDevServer( compiler, {
+		let server = new WebpackDevServer( compiler, {
 			historyApiFallback: {
 				rewrites: [
 					{ from: /./, to: (config.buildSection === 'app' ? '/index.html' : '/' + config.buildSection + '.html') },
 				],
 			},
 			quiet: true,
-			hot: true,
+			hot: !config.server,
 			watchOptions: {
 				aggregateTimeout: 300,
-			}
+			},
 		} );
 
-		server.listen( config.port, 'localhost' );
-	} );
+		if ( !config.server ) {
+			server.listen( config.port, 'localhost' );
+		}
+	} ) );
 
 	gulp.task( 'compile', gulp.series( webpackSectionTasks ) );
 	gulp.task( 'default', gulp.series( 'clean:pre', 'translations:compile', 'compile' ) );

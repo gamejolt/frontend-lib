@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Subscription } from 'rxjs/Subscription';
 import * as View from '!view!./embed.html';

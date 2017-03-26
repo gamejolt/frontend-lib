@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { WidgetCompilerContext } from './widget-compiler.service';
 
 export abstract class WidgetCompilerWidget

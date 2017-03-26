@@ -39,7 +39,11 @@ export class MediaItem extends Model
 
 	file?: any;
 
-	getDimensions( maxWidth: number, maxHeight: number, options: { force?: boolean } = {} )
+	getDimensions(
+		maxWidth: number | undefined,
+		maxHeight: number | undefined,
+		options: { force?: boolean } = {},
+	)
 	{
 		// Simple getter for dimensions.
 		if ( !maxWidth && !maxHeight ) {
@@ -57,12 +61,13 @@ export class MediaItem extends Model
 		}
 
 		const aspectRatio = this.height / this.width;
-		let width, height;
+		let width = 0;
+		let height = 0;
 
 		// Forcing one of the dimensions is easy.
 		if ( options && options.force ) {
-			width = maxWidth || height / aspectRatio;
-			height = maxHeight || width * aspectRatio;
+			width = maxWidth || (maxHeight ? maxHeight / aspectRatio : 0);
+			height = maxHeight || (maxWidth ? maxWidth * aspectRatio : 0);
 		}
 		else {
 			// Setting max for both.
@@ -86,8 +91,8 @@ export class MediaItem extends Model
 		}
 
 		return {
-			width: width,
-			height: height,
+			width,
+			height,
 		};
 	}
 
@@ -107,8 +112,9 @@ export class MediaItem extends Model
 
 	$save()
 	{
-		if ( this.type != MediaItem.TYPE_FIRESIDE_POST_IMAGE
-			&& this.type != MediaItem.TYPE_FIRESIDE_POST_HEADER ) {
+		if ( this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE
+			&& this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
+		) {
 			throw new Error( 'Can only save fireside media items.' );
 		}
 
@@ -119,8 +125,9 @@ export class MediaItem extends Model
 
 	$remove()
 	{
-		if ( this.type != MediaItem.TYPE_FIRESIDE_POST_IMAGE
-			&& this.type != MediaItem.TYPE_FIRESIDE_POST_HEADER ) {
+		if ( this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE
+			&& this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
+		) {
 			throw new Error( 'Can only save fireside media items.' );
 		}
 

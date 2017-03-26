@@ -13,14 +13,14 @@ export class Comment extends Model
 	parent_id: number;
 	resource: string;
 	resource_id: number;
-	user: any;
+	user: User;
 	comment_compiled: string;
 	votes: number;
 	user_vote?: CommentVote;
 	status: number;
 	posted_on: number;
 	lang: string;
-	videos: CommentVideo[];
+	videos: CommentVideo[] = [];
 
 	isVotePending: boolean = false;
 

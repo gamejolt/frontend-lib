@@ -1,5 +1,5 @@
 
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./item.html?style=./item.styl';
 
@@ -7,7 +7,7 @@ import { Screen } from '../../screen/screen-service';
 import { Analytics } from '../../analytics/analytics.service';
 
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppImgResponsive } from '../../img/responsive/responsive.directive.vue';
+import { AppImgResponsive } from '../../img/responsive/responsive';
 import { AppMediaBar } from '../media-bar';
 import { findVueParent } from '../../../utils/vue';
 
@@ -16,8 +16,6 @@ import { findVueParent } from '../../../utils/vue';
 	name: 'media-bar-item',
 	components: {
 		AppJolticon,
-	},
-	directives: {
 		AppImgResponsive,
 	},
 })
@@ -26,8 +24,10 @@ export class AppMediaBarItem extends Vue
 	@Prop( Object ) item: any;
 
 	mediaBar: AppMediaBar;
+	width = 'auto';
+	height = 'auto';
 
-	mounted()
+	created()
 	{
 		this.mediaBar = findVueParent( this, AppMediaBar ) as AppMediaBar;
 
@@ -35,17 +35,17 @@ export class AppMediaBarItem extends Vue
 		// This way we can size it correct before it loads.
 		if ( this.item.media_type === 'image' ) {
 			const dimensions = this.item.media_item.getDimensions( 400, 150 );
-			this.$el.style.width = dimensions.width + 'px';
-			this.$el.style.height = dimensions.height + 'px';
+			this.width = dimensions.width + 'px';
+			this.height = dimensions.height + 'px';
 		}
 		else if ( this.item.media_type === 'sketchfab' ) {
 			// Sketchfab thumbnails are hardcoded to this width.
-			this.$el.style.height = '150px';
-			this.$el.style.width = 150 / 0.5625 + 'px';
+			this.height = '150px';
+			this.width = 150 / 0.5625 + 'px';
 		}
 		else {
 			// Video thumbnails are hardcoded to this width.
-			this.$el.style.width = '200px';
+			this.width = '200px';
 		}
 	}
 

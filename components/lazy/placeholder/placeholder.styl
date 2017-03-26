@@ -1,3 +1,5 @@
+@require '~styles/variables'
+
 .lazy-placeholder
 	background-color: $gray-lightest
 
@@ -20,8 +22,8 @@
 		height: $font-size-h4 !important
 
 // For immediate transition between visibility of elements.
-.lazy-placeholder-resolving > ng-transclude > :not(.lazy-placeholder)
+.lazy-placeholder-resolving :not(.lazy-placeholder)
 	display: none
 
-.lazy-placeholder-resolved > ng-transclude > .lazy-placeholder
+.lazy-placeholder-resolved .lazy-placeholder
 	display: none

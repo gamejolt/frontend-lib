@@ -1,0 +1,13 @@
+<input
+	:class="{
+		'form-control': addControlClass,
+	}"
+	:type="type"
+	:id="id"
+	:name="group.name"
+	:value="value"
+	@input="onChange( $event.target.value )"
+	v-validate="{ rules: _rules }"
+	:data-vv-validate-on="validateOn"
+	:data-vv-delay="validateDelay"
+	>

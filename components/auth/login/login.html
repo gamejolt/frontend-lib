@@ -1,0 +1,48 @@
+<div class="auth-login">
+
+	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
+		:class="{ 'btn-dark-variant': darkVariant }"
+		:disabled="!Connection.isOnline"
+		@click="linkedAccountLogin( 'facebook' )"
+		>
+		<app-jolticon icon="facebook" />
+		<translate>Log In With Facebook</translate>
+	</button>
+
+	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
+		:class="{ 'btn-dark-variant': darkVariant }"
+		:disabled="!Connection.isOnline"
+		@click="linkedAccountLogin( 'google' )"
+		>
+		<app-jolticon icon="google-plus" />
+		<translate>Log In With Google+</translate>
+	</button>
+
+	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
+		:class="{ 'btn-dark-variant': darkVariant }"
+		:disabled="!Connection.isOnline"
+		@click="linkedAccountLogin( 'twitter' )"
+		>
+		<app-jolticon icon="twitter" />
+		<translate>Log In With Twitter</translate>
+	</button>
+
+	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
+		:class="{ 'btn-dark-variant': darkVariant }"
+		:disabled="!Connection.isOnline"
+		@click="linkedAccountLogin( 'twitch' )"
+		>
+		<app-jolticon icon="twitch" />
+		<translate>Log In With Twitch</translate>
+	</button>
+
+	<div class="auth-line-thru">
+		<translate>or</translate>
+	</div>
+
+	<app-auth-login-form
+		:dark-variant="darkVariant"
+		@submit="onLoggedIn"
+		/>
+
+</div>

@@ -1,0 +1,12 @@
+<div class="control-errors">
+
+	<app-expand :when="error">
+		<!--gj-expand-when="((ignoreDirty || ngFormField.$dirty) && ngFormField.$invalid && ngFormField.$error[ errorKey ])"-->
+
+		<p class="help-block error" :class="{ above: position === 'above' }">
+			{{ error }}
+		</p>
+	</app-expand>
+
+	<slot style="display: none" />
+</div>

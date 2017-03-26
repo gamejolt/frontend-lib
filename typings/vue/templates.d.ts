@@ -1,6 +1,6 @@
 declare module '!view*'
 {
-	import * as Vue from 'vue';
+	import Vue from 'vue';
 	interface WithRender
 	{
 		<V extends Vue>( options: Vue.ComponentOptions<V> ): Vue.ComponentOptions<V>;

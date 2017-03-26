@@ -1,4 +1,4 @@
-import { getProvider } from '../../utils/utils';
+import Axios from 'axios';
 
 export class Primus
 {
@@ -55,12 +55,11 @@ export class Primus
 
 	private static async queryForHost( host: string, resolve: Function )
 	{
-		const $http = getProvider<any>( '$http' );
 		try {
-			const response = await $http.get( host + '/_info', { ignoreLoadingBar: true } );
+			const response = await Axios.get( host + '/_info' );
 
 			const protocol = host.search( /^https/ ) === -1 ? 'http' : 'https';
-			if ( response.status != 200 ) {
+			if ( response.status !== 200 ) {
 				throw new Error( 'Could not find host.' );
 			}
 

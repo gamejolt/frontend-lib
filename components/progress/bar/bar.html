@@ -1,0 +1,11 @@
+<div
+	class="progress"
+	:class="[
+		thin ? 'progress-thin' : undefined,
+		variant ? 'progress-' + variant : undefined,
+	]"
+	>
+	<div class="progress-bar" :style="{ width: Math.max( 0, Math.min( 100, percent ) ) + '%' }">
+		<slot />
+	</div>
+</div>

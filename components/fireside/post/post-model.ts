@@ -4,13 +4,13 @@ import { FiresidePostLike } from './like/like-model';
 import { FiresidePostVideo } from './video/video-model';
 import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
 import { ModalConfirm } from '../../modal/confirm/confirm-service';
-import { App } from '../../../../../app/app-service';
 import { HistoryTick } from '../../history-tick/history-tick-service';
 import { Environment } from '../../environment/environment.service';
 import { getProvider } from '../../../utils/utils';
 import { MediaItem } from '../../media-item/media-item-model';
 import { Game } from '../../game/game.model';
 import { Api } from '../../api/api.service';
+import { appStore } from '../../../vue/services/app/app-store';
 
 export class FiresidePost extends Model
 {
@@ -130,16 +130,16 @@ export class FiresidePost extends Model
 
 	$viewed()
 	{
-		const App = getProvider<App>( 'App' );
-		if ( !App.user || this.user.id != App.user.id ) {
+		const app = appStore.state!;
+		if ( !app.user || this.user.id !== app.user.id ) {
 			HistoryTick.sendBeacon( 'fireside-post', this.id );
 		}
 	}
 
 	$expanded()
 	{
-		const App = getProvider<App>( 'App' );
-		if ( !App.user || this.user.id != App.user.id ) {
+		const app = appStore.state!;
+		if ( !app.user || this.user.id !== app.user.id ) {
 			HistoryTick.sendBeacon( 'fireside-post-expand', this.id );
 		}
 	}

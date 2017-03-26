@@ -1,13 +1,9 @@
-import { getProvider } from '../../utils/utils';
-
-export function currency( amount: number, currencySymbol: string ): string
+export function currency( amount: number, currencySymbol = '$', decimal = 2 ): string
 {
-	const currencyFilter = getProvider<any>( 'currencyFilter' );
-
 	// No fraction/decimal.
 	if ( amount % 100 === 0 ) {
-		return currencyFilter( amount / 100, currencySymbol, 0 );
+		return currencySymbol + (amount / 100).toFixed( 0 );
 	}
 
-	return currencyFilter( amount / 100, currencySymbol );
+	return currencySymbol + (amount / 100).toFixed( decimal );
 }

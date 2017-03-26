@@ -1,0 +1,13 @@
+<div class="loading-fade" :class="{ 'loading-fade-loading': isLoading }">
+	<div class="loading-fade-img" v-if="isLoading">
+		<app-loading
+			:centered="true"
+			:hide-label="true"
+			:stationary="true"
+			/>
+	</div>
+	<div class="loading-fade-content">
+		<slot />
+		<span v-if="slotId" :class="`ng-slot-${slotId}`"></span>
+	</div>
+</div>

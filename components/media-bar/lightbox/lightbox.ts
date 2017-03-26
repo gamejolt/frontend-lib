@@ -1,21 +1,25 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Subscription } from 'rxjs/Subscription';
-const VueShortkey = require( 'vue-shortkey' );
 import * as View from '!view!./lightbox.html?style=./lightbox.styl';
 
 import { Screen } from '../../screen/screen-service';
 import { AppMediaBar } from '../media-bar';
-import { Loader } from '../../loader/loader.service';
 import { Analytics } from '../../analytics/analytics.service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppMediaBarLightboxSlider } from './slider';
 import { AppMediaBarLightboxItem } from './item/item';
 import { getProvider } from '../../../utils/utils';
 
-Vue.use( VueShortkey, {
-	prevent: [ 'input', 'textarea' ],
-} );
+if ( !GJ_IS_SSR ) {
+	const VueShortkey = require( 'vue-shortkey' );
+	const VueTouch = require( 'vue-touch' );
+
+	Vue.use( VueTouch );
+	Vue.use( VueShortkey, {
+		prevent: [ 'input', 'textarea' ],
+	} );
+}
 
 export const MediaBarLightboxConfig = {
 	opacityStart: 0.5,
@@ -49,19 +53,15 @@ export class AppMediaBarLightbox extends Vue
 	isDragging = false;
 	waitingForFrame = false;
 
-	loaded = false;
 	resize$: Subscription;
 
-	async mounted()
+	mounted()
 	{
 		this.resize$ = Screen.resizeChanges.subscribe( () =>
 		{
 			this.calcMaxDimensions();
 			this.refreshSliderPosition();
 		} );
-
-		await Loader.load( 'hammer-vue' );
-		this.loaded = true;
 	}
 
 	destroy()
@@ -141,7 +141,7 @@ export class AppMediaBarLightbox extends Vue
 			newOffset = padding;
 		}
 		else {
-			newOffset = -(this.maxItemWidth * this.mediaBar.activeIndex - padding);
+			newOffset = -(this.maxItemWidth * this.mediaBar.activeIndex! - padding);
 		}
 
 		this.sliderElem.style.transform = `translate3d( ${newOffset}px, 0, 0 )`;

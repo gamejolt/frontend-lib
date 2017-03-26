@@ -1,6 +1,6 @@
 export const isClient = GJ_IS_CLIENT;
-export const isSecure = window && window.location.protocol === 'https:';
-export const isPrerender = window && window.navigator.userAgent.search( /PhantomJS/ ) !== -1;
+export const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
+export const isPrerender = typeof window !== 'undefined' && window.navigator.userAgent.search( /PhantomJS/ ) !== -1;
 
 export class Environment
 {

@@ -2,6 +2,8 @@ import { UAParser } from 'ua-parser-js';
 
 export class Device
 {
+	static ua?: string;
+
 	private static _result?: any;
 	private static _os?: string;
 	private static _arch?: string;
@@ -65,7 +67,7 @@ export class Device
 	private static _getResult()
 	{
 		if ( !this._result ) {
-			const parser = new UAParser();
+			const parser = new UAParser( this.ua );
 			this._result = parser.getResult();
 		}
 
@@ -77,13 +79,13 @@ export class Device
 		if ( GJ_IS_CLIENT ) {
 			const os = require( 'os' );
 			const type = os.type();
-			if ( type == 'Linux' ) {
+			if ( type === 'Linux' ) {
 				return 'linux';
 			}
-			else if ( type == 'Darwin' ) {
+			else if ( type === 'Darwin' ) {
 				return 'mac';
 			}
-			else if ( type == 'Windows_NT' ) {
+			else if ( type === 'Windows_NT' ) {
 				return 'windows';
 			}
 			else {
@@ -119,14 +121,14 @@ export class Device
 
 			// Because of a bug where 32-bit node versions will always report 32 instead of the OS arch.
 			// http://blog.differentpla.net/blog/2013/03/10/processor-architew6432/
-			if ( this.os() == 'windows' ) {
-				return arch == 'x64' || process.env.hasOwnProperty( 'PROCESSOR_ARCHITEW6432' ) ? '64' : '32';
+			if ( this.os() === 'windows' ) {
+				return arch === 'x64' || process.env.hasOwnProperty( 'PROCESSOR_ARCHITEW6432' ) ? '64' : '32';
 			}
 
-			if ( arch == 'x64' ) {
+			if ( arch === 'x64' ) {
 				return '64';
 			}
-			else if ( arch == 'ia32' ) {
+			else if ( arch === 'ia32' ) {
 				return '32';
 			}
 		}

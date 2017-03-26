@@ -1,8 +1,10 @@
+@require '~styles/variables'
+@require '../../../stylus/common/mixins'
+
 $comment-gutter-size = 100px
 $comment-gutter-size-xs = 40px
 
 .comment-widget-comment
-	@extend .clearfix
 
 	&.comment-widget-comment-highlighted
 		border-right: 5px solid $gj-blue
@@ -16,10 +18,6 @@ $comment-gutter-size-xs = 40px
 			padding-right: ($grid-gutter-width / 2)
 			margin-right: 0
 
-	// We use this helper class to attach to the ng-repeated divs to animate the comments into place.
-	&-animate
-		@extend .anim-fade-in, .no-animate-leave, .no-animate-xs
-
 	&-avatar
 		width: $comment-gutter-size - ($grid-gutter-width / 2)
 		float: left
@@ -28,7 +26,6 @@ $comment-gutter-size-xs = 40px
 		margin-left: $comment-gutter-size
 
 	&-title
-		@extend .h5
 		margin-top: 0
 		margin-bottom: $font-size-base * 0.5
 		font-weight: bold
@@ -151,7 +148,7 @@ $comment-gutter-size-xs = 40px
 
 		// Responsive images.
 		img
-			@extend .img-responsive
+			img-responsive()
 
 		// Make all headings just look like bold text.
 		h1, h2, h3, h4, h5, h6

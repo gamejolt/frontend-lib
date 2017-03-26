@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Analytics } from './analytics.service';
 
 export const AppTrackEvent: Vue.DirectiveOptions = {

@@ -1,83 +1,97 @@
-<div class="comment-widget" ng-class="{ 'comment-widget-translating': ctrl.isTranslating }">
-	<div ng-if="!ctrl.hasLoaded && !ctrl.hasError">
-		<gj-loading></gj-loading>
+<div
+	class="comment-widget"
+	:class="{ 'comment-widget-translating': isTranslating }"
+	:id="`comment-pagination-${id}`"
+	>
+	<div v-if="!hasLoaded && !hasError">
+		<app-loading />
 	</div>
 
-	<div ng-if="ctrl.hasError">
-		<div class="alert alert-warning" translate>Couldn't fetch comments for game.</div>
+	<div v-if="hasError">
+		<div class="alert alert-warning">
+			<translate>Couldn't fetch comments for game.</translate>
+		</div>
 	</div>
 
-	<div ng-if="ctrl.hasLoaded && !ctrl.hasError">
-		<div ng-if="!ctrl.noIntro">
-			<div ng-if="!ctrl.commentsCount">
+	<div v-if="hasLoaded && !hasError">
+		<div v-if="!noIntro">
+			<div v-if="!commentsCount">
 				<p>
-					<em translate>Let us know your thoughts and be the first to comment!</em>
+					<em><translate>Let us know your thoughts and be the first to comment!</translate></em>
 				</p>
 				<br>
 			</div>
 		</div>
 
 		<!-- Comment Add Form -->
-		<div ng-if="App.user">
-			<gj-comment-widget-add-form
-				comment-resource="{{ ctrl.resource }}"
-				comment-resource-id="ctrl.resourceId"
-				gj-form-submit-handler="ctrl.onCommentAdd( formModel, false )"
-				>
-			</gj-comment-widget-add-form>
+		<div v-if="app.user">
+			<app-comment-widget-add-form
+				:resource="resource"
+				:resource-id="resourceId"
+				@submit="onCommentAdd"
+				/>
 		</div>
 
-		<div ng-if="!App.user" class="alert alert-info">
-			<p>You must be <a gj-auth-required ng-href="{{ ::ctrl.loginUrl }}">logged in</a> to Game Jolt to post a comment.</p>
+		<div v-if="!app.user" class="alert alert-info">
+			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
-		<hr id="comment-pagination">
+		<hr>
 
-		<div class="comment-widget-translate-btn" ng-if="ctrl.allowTranslate">
+		<div class="comment-widget-translate-btn" v-if="allowTranslate">
 			<button class="btn btn-block btn-outline"
-				ng-click="ctrl.toggleTranslate()"
-				ng-if="!ctrl.isShowingTranslations"
-				ng-disabled="ctrl.isTranslating"
-				translate
-				translate-comment="{{ lang }} is passed in with the current language"
-				translate-params-lang="ctrl.getTranslationLabel( Translate.lang )"
+				v-if="!isShowingTranslations"
+				:disabled="isTranslating"
+				@click="toggleTranslate"
 				>
-				Translate comments to {{ lang }}
+				<translate translate-comment="%{ lang } is passed in with the current language">
+					Translate comments to %{ lang }
+				</translate>
 			</button>
 
-			<div ng-if="ctrl.isShowingTranslations">
+			<div v-if="isShowingTranslations">
 				<button class="btn btn-block btn-outline"
-					ng-click="ctrl.toggleTranslate()"
+					@click="toggleTranslate"
 					>
-					<span translate>Show original comments</span>
+					<translate>Show original comments</translate>
 					<span class="translate-button-branding">
-						<span translate>translated by</span>
+						<translate>translated by</translate>
 						<img src="./google-logo.png" alt="Google">
 					</span>
 				</button>
 
 				<br>
-				<div class="small text-muted text-center" translate>Automatic translations use Google Translate and may not be completely accurate.</div>
+				<div class="small text-muted text-center">
+					<translate>Automatic translations use Google Translate and may not be completely accurate.</translate>
+				</div>
 			</div>
 		</div>
 
 		<!-- Comments List -->
 		<div class="comment-widget-comments">
-			<div class="comment-widget-thread comment-widget-comment-animate"
-				ng-repeat="comment in ctrl.comments track by comment.id"
+			<div class="comment-widget-thread anim-fade-in no-animate-leave no-animate-xs"
+				v-for="comment of comments"
+				:key="comment.id"
 				>
 
 				<!-- Comment -->
-				<div gj-comment-widget-comment="comment"></div>
+				<app-comment-widget-comment
+					:comment="comment"
+					:is-highlighted="highlightedComment === comment.id"
+					/>
 
 				<!-- Child Comments -->
-				<div ng-if="ctrl.childComments[ comment.id ]">
+				<div v-if="childComments[ comment.id ]">
 
-					<div class="comment-widget-comment-animate"
-						ng-repeat="childComment in ctrl.childComments[ comment.id ] track by childComment.id"
-						gj-comment-widget-comment="childComment"
-						comment-is-child="true"
+					<div class="anim-fade-in no-animate-leave no-animate-xs"
+						v-for="child of childComments[ comment.id ]"
+						:key="child.id"
 						>
+						<app-comment-widget-comment
+							:comment="child"
+							:is-child="true"
+							:is-highlighted="highlightedComment === child.id"
+							/>
 					</div>
 
 				</div>
@@ -87,27 +101,27 @@
 					When the if is triggered, the scroll-when will trigger and we'll scroll to
 					the reply box.
 				-->
-				<div ng-if="ctrl.replyingTo == comment.id" gj-scroll-when>
-					<gj-comment-widget-add-form
-						comment-resource="{{ ctrl.resource }}"
-						comment-resource-id="ctrl.resourceId"
-						comment-parent-id="comment.id"
-						gj-form-submit-handler="ctrl.onCommentAdd( formModel, true )"
-						>
-					</gj-comment-widget-add-form>
+				<!--<div v-if="replyingTo == comment.id" gj-scroll-when>-->
+				<div v-if="replyingTo === comment.id">
+					<app-comment-widget-add-form
+						:resource="resource"
+						:resource-id="resourceId"
+						:parent-id="comment.id"
+						@submit="onReplyAdd"
+						/>
 				</div>
 			</div>
 		</div>
 
-		<gj-pagination
-			pager="true"
-			ng-if="ctrl.perPage && ctrl.parentCount"
-			items-per-page="ctrl.perPage"
-			total-items="ctrl.parentCount"
-			current-page="ctrl.currentPage"
+		<app-pagination
+			v-if="perPage && parentCount"
+			:pager="true"
+			:items-per-page="perPage"
+			:total-items="parentCount"
+			:current-page="currentPage"
+			:prevent-url-change="true"
 			query-param="comment_page"
-			(on-page-change)="ctrl.onPageChange( $event.event, $event.page, true )"
-			>
-		</gj-pagination>
+			@pagechange="onPageChange"
+			/>
 	</div>
 </div>

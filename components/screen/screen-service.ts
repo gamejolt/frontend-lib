@@ -16,57 +16,6 @@ const LG_WIDTH = 1200;
  */
 const HIDPI_BREAKPOINT = 1.5;
 
-// Set up the `mq` func.
-let mq: ( mq: string ) => boolean;
-const _window: any = window;
-
-/**
- * Checks a media query breakpoint.
- * https://github.com/paulirish/matchMedia.js/blob/master/matchMedia.js
- */
-const matchMedia = _window.matchMedia || _window.msMatchMedia;
-if ( matchMedia ) {
-	mq = ( _mq ) => matchMedia( _mq ) && matchMedia( _mq ).matches || false;
-}
-else {
-	// For browsers that support matchMedium api such as IE 9 and webkit
-	let styleMedia = (_window.styleMedia || _window.media);
-
-	// For those that don't support matchMedium
-	if ( !styleMedia ) {
-		const style = _window.document.createElement( 'style' );
-		const script = _window.document.getElementsByTagName( 'script' )[0];
-
-		style.type = 'text/css';
-		style.id = 'matchmediajs-test';
-
-		script.parentNode.insertBefore( style, script );
-
-		// 'style.currentStyle' is used by IE <= 8 and '_window.getComputedStyle' for all other browsers
-		const info = ('getComputedStyle' in _window) && _window.getComputedStyle( style, null ) || style.currentStyle;
-
-		styleMedia = {
-			matchMedium: function( media: any )
-			{
-				const text = '@media ' + media + '{ #matchmediajs-test { width: 1px; } }';
-
-				// 'style.styleSheet' is used by IE <= 8 and 'style.textContent' for all other browsers
-				if ( style.styleSheet ) {
-					style.styleSheet.cssText = text;
-				}
-				else {
-					style.textContent = text;
-				}
-
-				// Test if media query is true or false
-				return info.width === '1px';
-			}
-		};
-	}
-
-	mq = ( _mq ) => styleMedia.matchMedium( _mq || 'all' ) || false;
-}
-
 export class Screen
 {
 	/**
@@ -88,15 +37,15 @@ export class Screen
 	*/
 	static isXs = false;
 	static isSm = false;
-	static isMd = true;  // md is the default true state.
-	static isLg = false;
-	static breakpoint = 'md';
+	static isMd = false;
+	static isLg = true;  // lg is the default true state.
+	static breakpoint: 'xs' | 'sm' | 'md' | 'lg' = 'lg';
 
 	static isWindowXs = Screen.isXs;
 	static isWindowSm = Screen.isSm;
 	static isWindowMd = Screen.isMd;
 	static isWindowLg = Screen.isLg;
-	static windowBreakpoint = 'md';
+	static windowBreakpoint: 'xs' | 'sm' | 'md' | 'lg' = 'lg';
 
 	/**
 	 * Just some silly helpers.
@@ -116,7 +65,15 @@ export class Screen
 	/**
 	 * If it's Retina/HiDPI or not.
 	 */
-	static isHiDpi = mq( 'only screen and (-webkit-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + '), only screen and (min--moz-device-pixel-ratio: ' + HIDPI_BREAKPOINT + '), only screen and (-o-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ' / 1), only screen and (min-resolution: ' + HIDPI_BREAKPOINT + 'dppx), only screen and (min-resolution: ' + (HIDPI_BREAKPOINT * 96) + 'dpi)' );
+	static isHiDpi = GJ_IS_SSR
+		? false
+		: window.matchMedia(
+			'only screen and (-webkit-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ')'
+			+ ', only screen and (min--moz-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ')'
+			+ ', only screen and (-o-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ' / 1)'
+			+ ', only screen and (min-resolution: ' + HIDPI_BREAKPOINT + 'dppx)'
+			+ ', only screen and (min-resolution: ' + (HIDPI_BREAKPOINT * 96) + 'dpi)'
+		).matches;
 
 	static resizeChanges = new Subject<void>();
 
@@ -164,28 +121,28 @@ export class Screen
 		}
 
 		// Get everything for the window first.
-		if ( mq( 'only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)' ) ) {
+		if ( window.matchMedia( 'only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)' ).matches ) {
 			this.isWindowXs = true;
 			this.isWindowSm = false;
 			this.isWindowMd = false;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'xs';
 		}
-		else if ( mq( 'only screen and (min-width: ' + SM_WIDTH + 'px) and (max-width: ' + (MD_WIDTH - 1) + 'px)' ) ) {
+		else if ( window.matchMedia( 'only screen and (min-width: ' + SM_WIDTH + 'px) and (max-width: ' + (MD_WIDTH - 1) + 'px)' ).matches ) {
 			this.isWindowXs = false;
 			this.isWindowSm = true;
 			this.isWindowMd = false;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'sm';
 		}
-		else if ( mq( 'only screen and (min-width: ' + MD_WIDTH + 'px) and (max-width: ' + (LG_WIDTH - 1) + 'px)' ) ) {
+		else if ( window.matchMedia( 'only screen and (min-width: ' + MD_WIDTH + 'px) and (max-width: ' + (LG_WIDTH - 1) + 'px)' ).matches ) {
 			this.isWindowXs = false;
 			this.isWindowSm = false;
 			this.isWindowMd = true;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'md';
 		}
-		else if ( mq( 'only screen and (min-width: ' + LG_WIDTH + 'px)' ) ) {
+		else if ( window.matchMedia( 'only screen and (min-width: ' + LG_WIDTH + 'px)' ).matches ) {
 			this.isWindowXs = false;
 			this.isWindowSm = false;
 			this.isWindowMd = false;
@@ -270,13 +227,16 @@ export class Screen
 	}
 }
 
-// Check the breakpoints on app load.
-Screen._onResize();
+if ( !GJ_IS_SSR ) {
 
-/**
- * This is used internally to check things every time window resizes.
- * We debounce this and afterwards fire the resizeChanges for everyone else.
- */
-fromEvent( window, 'resize' )
-	.debounceTime( 250 )
-	.subscribe( () => Screen._onResize() );
+	// Check the breakpoints on app load.
+	Screen._onResize();
+
+	/**
+	 * This is used internally to check things every time window resizes.
+	 * We debounce this and afterwards fire the resizeChanges for everyone else.
+	 */
+	fromEvent( window, 'resize' )
+		.debounceTime( 250 )
+		.subscribe( () => Screen._onResize() );
+}

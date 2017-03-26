@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Scroll } from '../scroll.service';
 
 export const AppScrollTo: Vue.DirectiveOptions = {

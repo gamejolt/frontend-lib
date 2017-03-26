@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./video.html?style=./video.styl';
 
@@ -65,11 +65,14 @@ export class AppVideo extends Vue
 	 */
 	beforeDestroy()
 	{
-		// Empty all sources.
-		while ( this.video.firstChild ) {
-			this.video.removeChild( this.video.firstChild );
-		}
+		if ( this.video ) {
 
-		this.video.load();
+			// Empty all sources.
+			while ( this.video.firstChild ) {
+				this.video.removeChild( this.video.firstChild );
+			}
+
+			this.video.load();
+		}
 	}
 }

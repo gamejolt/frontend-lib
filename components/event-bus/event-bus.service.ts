@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { getProvider } from '../../utils/utils';
 
 const eventBus = new Vue();

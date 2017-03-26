@@ -1,7 +1,7 @@
 import { Environment } from '../environment/environment.service';
 import { getProvider } from '../../utils/utils';
 
-const ga: any = (window as any).ga || function(){};
+const ga: any = (typeof window !== 'undefined' && (window as any).ga) || function(){};
 
 // Force HTTPS tracking beacons.
 ga( 'set', 'forceSSL', true );
@@ -104,6 +104,10 @@ export class Analytics
 
 	private static ga( ...args: any[] )
 	{
+		if ( GJ_IS_SSR ) {
+			return;
+		}
+
 		return new Promise( ( resolve ) =>
 		{
 			let called = false;
@@ -137,6 +141,10 @@ export class Analytics
 
 	static trackPageview( path?: string )
 	{
+		if ( GJ_IS_SSR ) {
+			return;
+		}
+
 		// Gotta make sure the system has a chance to compile the title into the page.
 		window.setTimeout( () =>
 		{

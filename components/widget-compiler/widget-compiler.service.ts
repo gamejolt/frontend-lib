@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { WidgetCompilerWidget } from './widget';
 import { WidgetCompilerWidgetYoutube } from './widget-youtube/widget-youtube.service';
 import { WidgetCompilerWidgetVimeo } from './widget-vimeo/widget-vimeo.service';

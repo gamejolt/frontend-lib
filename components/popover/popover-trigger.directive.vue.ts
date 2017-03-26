@@ -1,7 +1,7 @@
-import 'core-js/es6/map';
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Popover } from './popover.service';
 import { PopoverTrigger } from './popover';
+import 'core-js/es6/map';
 
 const registeredDirectives = new Map<HTMLElement, VuePopoverTrigger>();
 

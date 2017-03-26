@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./popover.html';
 
@@ -290,6 +290,7 @@ export class AppPopover extends Vue
 
 		// If we need to hide it on state change as well.
 		if ( this.hideOnStateChange && !this.hideDeregister ) {
+			// TODO: Get this working for Vue
 			if ( GJ_IS_ANGULAR ) {
 				const $rootScope = getProvider<any>( '$rootScope' );
 				this.hideDeregister = $rootScope.$on( '$stateChangeStart', () => this.hide() );

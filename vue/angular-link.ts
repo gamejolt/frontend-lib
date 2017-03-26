@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Component, Inject, OnChanges, SimpleChanges, OnDestroy, AfterViewInit, EventEmitter } from 'ng-metadata/core';
 import { kebabCase } from '../utils/string';
 

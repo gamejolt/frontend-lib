@@ -1,3 +1,3 @@
-angular.module( 'gj.Game.Soundtrack.Card', [ 'gj.Game.Song' ] );
+angular.module( 'gj.Game.Soundtrack.Card', [] );
 
 require( './card-directive' );

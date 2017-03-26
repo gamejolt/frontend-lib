@@ -10,11 +10,11 @@
 				<!--
 					The min/max will be the actual dimensions for the image thumbnail.
 				-->
-				<img
-					v-app-img-responsive="item.img_thumbnail"
+				<app-img-responsive
+					:src="item.img_thumbnail"
 					:alt="item.caption"
 					:style="{ width: maxWidth + 'px', height: maxHeight + 'px' }"
-					>
+					/>
 			</div>
 
 			<div class="media-bar-lightbox-item-caption" v-if="item.caption">
@@ -34,8 +34,7 @@
 					:max-video-width="maxWidth"
 					:max-video-height="maxHeight"
 					:autoplay="true"
-					>
-				</app-video-embed>
+					/>
 			</div>
 
 			<div class="media-bar-lightbox-item-caption">
@@ -56,8 +55,7 @@
 					:max-width="maxWidth"
 					:max-height="maxHeight"
 					:autoplay="true"
-					>
-				</app-sketchfab-embed>
+					/>
 			</div>
 		</div>
 

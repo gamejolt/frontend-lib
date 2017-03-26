@@ -1,4 +1,4 @@
-import * as Vue from 'vue';
+import Vue from 'vue';
 import { Environment } from '../environment/environment.service';
 
 interface GrowlOptions

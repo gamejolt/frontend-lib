@@ -1,0 +1,8 @@
+<div
+	class="expand"
+	@transitionend="afterTransition"
+	>
+	<div v-if="inDom" class="clearfix">
+		<slot />
+	</div>
+</div>
