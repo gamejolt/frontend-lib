@@ -39,6 +39,8 @@ export class User extends Model
 	is_gamer = false;
 	is_developer = false;
 
+	level_next_percentage: number;
+
 	constructor( data: any = {} )
 	{
 		super( data );
