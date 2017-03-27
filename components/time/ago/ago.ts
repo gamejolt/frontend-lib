@@ -8,6 +8,7 @@ import { Component, Prop } from 'vue-property-decorator';
 export class AppTimeAgo extends Vue
 {
 	@Prop( [ Number, Date ] ) date: number | Date;
+	@Prop( Boolean ) withoutSuffix?: boolean;
 
 	private timeout?: number;
 	private timeAgo: string;
@@ -26,7 +27,17 @@ export class AppTimeAgo extends Vue
 
 	private refresh()
 	{
-		this.timeAgo = distance( this.date ) + ' ago';
+		const time = distance( this.date );
+
+		if ( this.withoutSuffix ) {
+			this.timeAgo = time;
+		}
+		else {
+			this.timeAgo = this.$gettextInterpolate(
+				'%{ time } ago',
+				{ time },
+			);
+		}
 
 		// In minutes.
 		const input = this.date instanceof Date ? this.date.getTime() : this.date;
