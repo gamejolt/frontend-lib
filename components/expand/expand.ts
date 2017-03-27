@@ -9,6 +9,7 @@ import * as View from '!view!./expand.html?style=./expand.styl';
 export class AppExpand extends Vue
 {
 	@Prop( Boolean ) when?: boolean;
+	@Prop( Boolean ) animateInitial?: boolean;
 
 	inDom = false;
 
@@ -18,9 +19,21 @@ export class AppExpand extends Vue
 	created()
 	{
 		this.inDom = !!this.when;
+	}
 
+	async mounted()
+	{
 		if ( this.inDom ) {
 			this.$el.style.height = 'auto';
+
+			// This simulates having it closed and then showing immediately to
+			// slide it out.
+			if ( this.animateInitial ) {
+				this.$el.style.height = '0';
+				this.inDom = false;
+				await this.$nextTick();
+				this.onWhenWatch();
+			}
 		}
 	}
 
@@ -43,7 +56,7 @@ export class AppExpand extends Vue
 			this.$el.style.height = this.$el.scrollHeight + 'px';
 
 			// This hack forces a browser reflow.
-			// THis way the change from explicit height to 0 is noticed.
+			// This way the change from explicit height to 0 is noticed.
 			this.reflow = this.$el.offsetWidth;
 
 			this.$el.classList.add( 'transition' );
