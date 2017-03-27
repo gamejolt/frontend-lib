@@ -1,0 +1,118 @@
+button-variant( background, color, icon-color, addon-color, outline-color, outline-addon-color, active-background, active-color )
+
+	$variant-default-rules =
+		background-color: background
+		color: color !important
+
+		.jolticon
+			color: icon-color
+
+		// Since sparse buttons only show a single icon, we have to change the color
+		// so that when we hover it changes.
+		&.btn-sparse .jolticon
+			color: color
+
+		.jolticon-addon
+		small
+			color: addon-color !important
+	$variant-outline-rules =
+		background-color: transparent
+		border-color: outline-color
+		color: $black !important
+
+		.jolticon
+		&.btn-sparse .jolticon
+			color: outline-color
+
+		.jolticon-addon
+		small
+			color: outline-addon-color !important
+
+	$variant-active-rules =
+		background-color: active-background
+		border-color: active-background
+		color: active-color !important
+
+		.jolticon
+		&.btn-sparse .jolticon
+			color: active-color
+
+		.jolticon-addon
+		small
+			color: addon-color !important
+
+	{$variant-default-rules}
+
+	// Disabled buttons should have the same coloring when active as when not active.
+	&.disabled
+	&[disabled]
+	fieldset[disabled] &
+		&:hover
+			{$variant-default-rules}
+
+	&-outline
+		{$variant-outline-rules}
+
+		&.disabled
+		&[disabled]
+		fieldset[disabled] &
+			&:hover
+				{$variant-outline-rules}
+
+	&:hover
+	&.active
+	&-outline:hover
+	&-outline.active
+		{$variant-active-rules}
+
+/**
+ * Button sizes
+ * It's a bit nuts since we have to override so many things...
+ */
+create-btn-size( size )
+	font-size: lookup( '$button-' + size + '-font-size' )
+	font-weight: lookup( '$button-' + size + '-font-weight' )
+	line-height: lookup( '$button-' + size + '-line-height' )
+	padding: 0 lookup( '$button-' + size + '-padding-horizontal' )
+
+	.jolticon
+		margin-right: lookup( '$button-' + size + '-icon-spacing-right' )
+
+	.btn-badge
+		padding: 0 (lookup( '$button-' + size + '-padding-horizontal' ) / 2)
+		margin-right: -(lookup( '$button-' + size + '-padding-horizontal' ))
+		margin-left: (lookup( '$button-' + size + '-padding-horizontal' ) / 2) * 1.5
+		font-size: lookup( '$button-' + size + '-font-size' )
+
+	&.btn-outline
+	&.btn-success-outline
+	&.btn-primary-outline
+	&.btn-danger-outline
+		border-width: lookup( '$button-' + size + '-outline-border-size' )
+		line-height: lookup( '$button-' + size + '-line-height' ) - (@border-width * 2)
+		padding-left: (lookup( '$button-' + size + '-padding-horizontal' ) - @border-width)
+		padding-right: @padding-left
+
+		.btn-badge
+			margin-right: -(lookup( '$button-' + size + '-padding-horizontal' ) - lookup( '$button-' + size + '-outline-border-size' ))
+
+	&.btn-sparse
+		$$btn-horizontal-padding = ((lookup( '$button-' + size + '-line-height' ) - $button-icon-size) / 2)
+		padding-left: $$btn-horizontal-padding
+		padding-right: $$btn-horizontal-padding
+
+		.btn-badge
+			margin-right -($$btn-horizontal-padding)
+			margin-left: ($$btn-horizontal-padding)
+
+		&.btn-outline
+		&.btn-success-outline
+		&.btn-primary-outline
+		&.btn-danger-outline
+			$$btn-horizontal-padding = lookup( '$button-' + size + '-padding-vertical' ) - lookup( '$button-' + size + '-outline-border-size' )
+			padding-left: $$btn-horizontal-padding
+			padding-right: $$btn-horizontal-padding
+
+			.btn-badge
+				margin-right -($$btn-horizontal-padding)
+				margin-left: ($$btn-horizontal-padding)
