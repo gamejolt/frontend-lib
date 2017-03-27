@@ -1,1 +1,8 @@
-<span class="jolticon" :class="'jolticon-' + icon"></span>
+<span
+	class="jolticon"
+	:class="[
+		'jolticon-' + icon,
+		big ? 'big' : undefined,
+	]"
+	>
+</span>
