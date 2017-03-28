@@ -119,7 +119,7 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 
 				next( async ( vm: Vue ) =>
 				{
-					// vm.routeLoading = true;
+					vm.routeLoading = true;
 					if ( promise ) {
 						payload = await promise;
 					}
