@@ -1,24 +1,7 @@
+@require '~styles/variables'
+@require '../../../../stylus/common/mixins'
+
 $zindex-comment-video-lightbox ?= 500
-
-gj-comment-video-lightbox
-	transition: opacity 300ms
-
-	&.ng-leave
-
-		// We want their pointer events to pass through so that they can interact with the page
-		// right away even while the overlay is animating out.
-		// This should make it less annoying for the user.
-		pointer-events: none
-
-		.comment-video-lightbox-content
-			transition: transform 250ms
-			transform: translateY( 0 )
-
-	&.ng-leave.ng-leave-active
-		opacity: 0
-
-		.comment-video-lightbox-content
-			transform: translateY( 200px )
 
 .comment-video-lightbox
 	position: fixed
@@ -40,11 +23,8 @@ gj-comment-video-lightbox
 		@media $media-sm-up
 			top: 100px
 
-		.video-embed iframe
-			margin: 0 auto
-
 	&-interaction
-		@extend .clearfix
+		clearfix()
 		padding: 20px
 
 		&-who
@@ -54,7 +34,7 @@ gj-comment-video-lightbox
 
 		.btn
 		.comment-video-lightbox-game
-		gj-social-youtube-subscribe
+		.social-youtube-subscribe
 			vertical-align: top
 
 		@media $media-xs
@@ -82,7 +62,7 @@ gj-comment-video-lightbox
 		opacity: 0.3
 
 	&-game
-		@extend .clearfix
+		clearfix()
 		display: block
 		margin-bottom: $line-height-computed
 		text-align: left

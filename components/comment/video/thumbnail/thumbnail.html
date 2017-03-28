@@ -1,39 +1,38 @@
 <div>
 	<div class="comment-video-thumbnail">
 		<a class="comment-video-thumbnail-inner"
-			ng-click="$ctrl.isLightboxActive = true"
-			gj-track-event="comment-video-thumbnail:click"
+			@click="isLightboxActive = true"
+			v-app-track-event="`comment-video-thumbnail:click`"
 			>
 			<div class="play-button-overlay play-button-overlay-small">
-				<span class="jolticon jolticon-play"></span>
+				<app-jolticon icon="play" />
 			</div>
 
-			<img class="img-responsive" ng-src="{{ ::$ctrl.video.img_thumbnail }}" alt="Video Comment">
+			<img class="img-responsive" :src="video.img_thumbnail" alt="Video Comment">
 		</a>
 
-		<a class="comment-video-thumbnail-game"
-			ng-if="::$ctrl.showGame"
-			ui-sref="discover.games.view.overview( { slug: $ctrl.video.game.slug, id: $ctrl.video.game.id } )"
-			gj-tooltip="{{ ::$ctrl.video.game.title }}"
-			gj-track-event="comment-video-thumbnail:game"
+		<router-link class="comment-video-thumbnail-game"
+			v-if="showGame"
+			:to="{ name: 'discover.games.view.overview', params: { slug: video.game.slug, id: video.game.id } }"
+			v-app-tooltip="video.game.title"
+			v-app-track-event="`comment-video-thumbnail:game`"
 			>
-			<gj-game-thumbnail-img [game]="::$ctrl.video.game"></gj-game-thumbnail-img>
-		</a>
+			<app-game-thumbnail-img :game="video.game" />
+		</router-link>
 
-		<a class="comment-video-thumbnail-user"
-			ng-if="::$ctrl.showUser"
-			ui-sref="profile.overview( { username: $ctrl.video.comment.user.username } )"
-			gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }} (@{{ ::$ctrl.video.comment.user.username }})"
-			gj-track-event="comment-video-thumbnail:user"
+		<router-link class="comment-video-thumbnail-user"
+			v-if="showUser"
+			:to="{ name: 'profile.overview', params: { username: video.comment.user.username } }"
+			v-app-tooltip="`${video.comment.user.display_name} (@${video.comment.user.username})`"
+			v-app-track-event="`comment-video-thumbnail:user`"
 			>
-			<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">
-		</a>
+			<img :src="video.comment.user.img_avatar" class="img-responsive" alt="">
+		</router-link>
 	</div>
 
-	<gj-comment-video-lightbox
-		ng-if="$ctrl.isLightboxActive"
-		video="::$ctrl.video"
-		on-close="$ctrl.isLightboxActive = false"
-		>
-	</gj-comment-video-lightbox>
+	<app-comment-video-lightbox
+		v-if="isLightboxActive"
+		:video="video"
+		@closed="isLightboxActive = false"
+		/>
 </div>

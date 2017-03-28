@@ -1,89 +1,94 @@
-<div class="comment-video-lightbox">
+<div>
+	<div ref="inner"
+		class="comment-video-lightbox"
+		v-shortkey="[ 'esc' ]"
+		@shortkey="close"
+		>
 
-	<div class="comment-video-lightbox-interaction">
-		<div class="comment-video-lightbox-interaction-who">
-			<a class="comment-video-lightbox-game"
-				ui-sref="discover.games.view.overview( { slug: $ctrl.video.game.slug, id: $ctrl.video.game.id } )"
-				ng-click="$ctrl.close()"
-				gj-track-event="comment-video-lightbox:game"
-				>
-				<img gj-img-responsive="{{ ::$ctrl.video.game.img_thumbnail }}" alt="">
-				<div class="comment-video-lightbox-game-content">
-					<div class="comment-video-lightbox-game-content-title">
-						<strong>{{ $ctrl.video.game.title }}</strong>
+		<div class="comment-video-lightbox-interaction">
+			<div class="comment-video-lightbox-interaction-who">
+				<router-link class="comment-video-lightbox-game"
+					:to="{ name: 'discover.games.view.overview', params: { slug: video.game.slug, id: video.game.id } }"
+					@click="close"
+					v-app-track-event="`comment-video-lightbox:game`"
+					>
+					<app-img-responsive :src="video.game.img_thumbnail" alt="" />
+					<div class="comment-video-lightbox-game-content">
+						<div class="comment-video-lightbox-game-content-title">
+							<strong>{{ video.game.title }}</strong>
+						</div>
+						<div class="comment-video-lightbox-game-content-dev">
+							<translate>by</translate>
+							{{ video.game.developer.display_name }}
+						</div>
 					</div>
-					<div class="comment-video-lightbox-game-content-dev">
-						<span translate>by</span>
-						{{ $ctrl.video.game.developer.display_name }}
-					</div>
-				</div>
-			</a>
+				</router-link>
 
-			<div class="separator hidden-xs"></div>
+				<div class="separator hidden-xs"></div>
 
-			<a class="comment-video-lightbox-user"
-				ui-sref="profile.overview( { username: $ctrl.video.comment.user.username } )"
-				gj-tooltip="{{ ::$ctrl.video.comment.user.display_name }} (@{{ ::$ctrl.video.comment.user.username }})"
-				tooltip-placement="bottom"
-				ng-click="$ctrl.close()"
-				gj-track-event="comment-video-lightbox:user"
-				>
-				<img ng-src="{{ ::$ctrl.video.comment.user.img_avatar }}" class="img-responsive" alt="">
-			</a>
+				<router-link class="comment-video-lightbox-user"
+					:to="{ name: 'profile.overview', params: { username: video.comment.user.username } }"
+					v-app-tooltip.bottom-center="`${video.comment.user.display_name} (@${video.comment.user.username})`"
+					v-app-track-event="`comment-video-lightbox:user`"
+					@click="close"
+					>
+					<img :src="video.comment.user.img_avatar" class="img-responsive" alt="">
+				</router-link>
 
-			<gj-social-youtube-subscribe
-				channel="{{ $ctrl.video.channel_id }}"
-				theme="dark"
-				>
-			</gj-social-youtube-subscribe>
+				<!--TODO-->
+				<!--<gj-social-youtube-subscribe
+					channel="{{ video.channel_id }}"
+					theme="dark"
+					>
+				</gj-social-youtube-subscribe>-->
+			</div>
+
+			<div class="comment-video-lightbox-interaction-actions">
+				<a class="btn btn-block-xs"
+					v-if="canVote"
+					:class="{
+						'btn-success active': !!video.comment.user_vote,
+						'btn-outline btn-overlay-variant': !video.comment.user_vote,
+					}"
+					@click="toggleVote"
+					v-app-track-event="`comment-video-lightbox:change-like`"
+					>
+					<span class="btn-badge hidden-xs" v-if="video.comment.votes > 0">
+						{{ video.comment.votes | number }}
+					</span>
+					<app-jolticon icon="thumbs-up" />
+					<translate v-if="!video.comment.user_vote">Like</translate>
+					<translate v-else>Liked!</translate>
+				</a>
+
+				<a class="btn btn-outline btn-overlay-variant btn-block-xs"
+					@click="reply"
+					v-app-track-event="`comment-video-lightbox:reply`"
+					>
+					<app-jolticon icon="reply" />
+					<translate>Reply</translate>
+				</a>
+
+				<a class="btn btn-danger-outline btn-overlay-variant btn-block-xs"
+					@click="close"
+					>
+					<app-jolticon icon="remove" />
+					<translate>Close</translate>
+				</a>
+			</div>
 		</div>
 
-		<div class="comment-video-lightbox-interaction-actions">
-			<a class="btn btn-block-xs"
-				ng-if="::$ctrl.canVote"
-				ng-class="{
-					'btn-success active': !!$ctrl.video.comment.user_vote,
-					'btn-outline btn-overlay-variant': !$ctrl.video.comment.user_vote,
-				}"
-				ng-click="$ctrl.toggleVote()"
-				gj-track-event="comment-video-lightbox:change-like"
-				>
-				<span class="btn-badge hidden-xs" ng-if="$ctrl.video.comment.votes > 0">
-					{{ $ctrl.video.comment.votes | number }}
-				</span>
-				<span class="jolticon jolticon-thumbs-up"></span>
-				<span ng-if="!$ctrl.video.comment.user_vote" translate>Like</span>
-				<span ng-if="!!$ctrl.video.comment.user_vote" translate>Liked!</span>
-			</a>
+		<div class="comment-video-lightbox-content">
 
-			<a class="btn btn-outline btn-overlay-variant btn-block-xs"
-				ng-click="$ctrl.reply()"
-				gj-track-event="comment-video-lightbox:reply"
-				>
-				<span class="jolticon jolticon-reply"></span>
-				<span translate>Reply</span>
-			</a>
+			<app-video-embed
+				video-provider="youtube"
+				:video-id="video.video_id"
+				:max-video-width="maxWidth"
+				:max-video-height="maxHeight"
+				:autoplay="true"
+				/>
 
-			<a class="btn btn-danger-outline btn-overlay-variant btn-block-xs"
-				ng-click="$ctrl.close()"
-				>
-				<span class="jolticon jolticon-remove"></span>
-				<span translate>Close</span>
-			</a>
 		</div>
-	</div>
-
-	<div class="comment-video-lightbox-content">
-
-		<gj-video-embed
-			video-provider="youtube"
-			[video-id]="$ctrl.video.video_id"
-			[max-video-width]="$ctrl.maxWidth"
-			[max-video-height]="$ctrl.maxHeight"
-			[autoplay]="true"
-			>
-		</gj-video-embed>
 
 	</div>
-
 </div>
