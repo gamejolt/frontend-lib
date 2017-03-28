@@ -1,9 +1,8 @@
 <div
 	class="comment-widget"
-	:class="{ 'comment-widget-translating': isTranslating }"
 	:id="`comment-pagination-${id}`"
 	>
-	<div v-if="!hasLoaded && !hasError">
+	<div v-if="!hasBootstrapped && !hasError">
 		<app-loading />
 	</div>
 
@@ -13,7 +12,7 @@
 		</div>
 	</div>
 
-	<div v-if="hasLoaded && !hasError">
+	<div v-if="hasBootstrapped && !hasError">
 		<div v-if="!noIntro">
 			<div v-if="!commentsCount">
 				<p>
@@ -41,10 +40,12 @@
 		<div class="comment-widget-translate-btn" v-if="allowTranslate">
 			<button class="btn btn-block btn-outline"
 				v-if="!isShowingTranslations"
-				:disabled="isTranslating"
 				@click="toggleTranslate"
 				>
-				<translate translate-comment="%{ lang } is passed in with the current language">
+				<translate
+					:translate-params="{ lang }"
+					translate-comment="%{ lang } is passed in with the current language"
+					>
 					Translate comments to %{ lang }
 				</translate>
 			</button>
@@ -67,51 +68,55 @@
 			</div>
 		</div>
 
-		<!-- Comments List -->
-		<div class="comment-widget-comments">
-			<div class="comment-widget-thread anim-fade-in no-animate-leave no-animate-xs"
-				v-for="comment of comments"
-				:key="comment.id"
-				>
+		<app-loading-fade :is-loading="isLoading || isTranslating">
 
-				<!-- Comment -->
-				<app-comment-widget-comment
-					:comment="comment"
-					:is-highlighted="highlightedComment === comment.id"
-					/>
+			<!-- Comments List -->
+			<div class="comment-widget-comments">
+				<div class="comment-widget-thread anim-fade-in no-animate-leave no-animate-xs"
+					v-for="comment of comments"
+					:key="comment.id"
+					>
 
-				<!-- Child Comments -->
-				<div v-if="childComments[ comment.id ]">
+					<!-- Comment -->
+					<app-comment-widget-comment
+						:comment="comment"
+						:is-highlighted="highlightedComment === comment.id"
+						/>
 
-					<div class="anim-fade-in no-animate-leave no-animate-xs"
-						v-for="child of childComments[ comment.id ]"
-						:key="child.id"
-						>
-						<app-comment-widget-comment
-							:comment="child"
-							:is-child="true"
-							:is-highlighted="highlightedComment === child.id"
-							/>
+					<!-- Child Comments -->
+					<div v-if="childComments[ comment.id ]">
+
+						<div class="anim-fade-in no-animate-leave no-animate-xs"
+							v-for="child of childComments[ comment.id ]"
+							:key="child.id"
+							>
+							<app-comment-widget-comment
+								:comment="child"
+								:is-child="true"
+								:is-highlighted="highlightedComment === child.id"
+								/>
+						</div>
+
 					</div>
 
-				</div>
-
-				<!--
-					Don't include the form in the DOM until we need it.
-					When the if is triggered, the scroll-when will trigger and we'll scroll to
-					the reply box.
-				-->
-				<!--<div v-if="replyingTo == comment.id" gj-scroll-when>-->
-				<div v-if="replyingTo === comment.id">
-					<app-comment-widget-add-form
-						:resource="resource"
-						:resource-id="resourceId"
-						:parent-id="comment.id"
-						@submit="onReplyAdd"
-						/>
+					<!--
+						Don't include the form in the DOM until we need it.
+						When the if is triggered, the scroll-when will trigger and we'll scroll to
+						the reply box.
+					-->
+					<!--<div v-if="replyingTo == comment.id" gj-scroll-when>-->
+					<div v-if="replyingTo === comment.id">
+						<app-comment-widget-add-form
+							:resource="resource"
+							:resource-id="resourceId"
+							:parent-id="comment.id"
+							@submit="onReplyAdd"
+							/>
+					</div>
 				</div>
 			</div>
-		</div>
+
+		</app-loading-fade>
 
 		<app-pagination
 			v-if="perPage && parentCount"

@@ -19,14 +19,16 @@ import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { AppCommentWidgetComment } from './comment';
 import { AppPagination } from '../../pagination/pagination';
 import { AppCommentWidgetAddForm } from './add-form';
+import { AppLoadingFade } from '../../loading/fade/fade';
 
-let incrementer =0;
+let incrementer = 0;
 
 @View
 @Component({
 	name: 'comment-widget',
 	components: {
 		AppLoading,
+		AppLoadingFade,
 		AppPagination,
 		AppCommentWidgetComment,
 		AppCommentWidgetAddForm,
@@ -44,8 +46,9 @@ export class AppCommentWidget extends Vue
 	@State app: AppState;
 
 	id = ++incrementer;
-	hasLoaded = false;
+	hasBootstrapped = false;
 	hasError = false;
+	isLoading = false;
 	currentPage = 1;
 	resourceOwner: User | null = null;
 	comments: Comment[] = [];
@@ -85,7 +88,7 @@ export class AppCommentWidget extends Vue
 			return;
 		}
 
-		this.hasLoaded = false;
+		this.hasBootstrapped = false;
 		this.hasError = false;
 		this.currentPage = this.$route.query.comment_page ? parseInt( this.$route.query.comment_page, 10 ) : 1;
 		await this.refreshComments();
@@ -102,13 +105,14 @@ export class AppCommentWidget extends Vue
 	{
 		// Pull in new comments, huzzah!
 		try {
-			console.log( 'fetch comments', this.resource, this.resourceId, this.currentPage );
+			this.isLoading = true;
 			const payload = await Comment.fetch( this.resource, this.resourceId, this.currentPage );
+			this.isLoading = false;
 
 			// Check the hash in the URL to see if we should autoscroll to a comment.
 			this.checkAutoScroll();
 
-			this.hasLoaded = true;
+			this.hasBootstrapped = true;
 			this.hasError = false;
 			this.comments = Comment.populate( payload.comments );
 			this.resourceOwner = new User( payload.resourceOwner );
@@ -192,7 +196,7 @@ export class AppCommentWidget extends Vue
 	onPageChange( page: number )
 	{
 		this.changePage( page );
-		Scroll.to( `comment-pagination-${this.id}` );
+		Scroll.to( `comment-pagination-${this.id}`, { animate: false } );
 	}
 
 	changePage( page: number )
@@ -215,7 +219,7 @@ export class AppCommentWidget extends Vue
 		}
 
 		// If they try translating again while one is already in process, skip it.
-		if ( this.isTranslating ) {
+		if ( this.isTranslating || this.isLoading ) {
 			return;
 		}
 

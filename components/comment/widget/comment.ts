@@ -18,6 +18,7 @@ import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppTooltip } from '../../tooltip/tooltip';
 import { AppPopover } from '../../popover/popover';
 import { AppPopoverTrigger } from '../../popover/popover-trigger.directive.vue';
+import { AppCommentVideoThumbnail } from '../video/thumbnail/thumbnail';
 
 @View
 @Component({
@@ -28,6 +29,7 @@ import { AppPopoverTrigger } from '../../popover/popover-trigger.directive.vue';
 		AppFadeCollapse,
 		AppJolticon,
 		AppPopover,
+		AppCommentVideoThumbnail,
 	},
 	directives: {
 		AppTrackEvent,

@@ -52,26 +52,31 @@
 
 			<div class="comment-widget-comment-videos" v-if="comment.videos.length">
 				<div class="row">
-					<!--<gj-comment-video-thumbnail
+					<div
 						class="col-xs-6"
-						ng-repeat="video in comment.videos | limitTo:@showAllVideos ? 10 : 2 track by video.id"
-						video="video"
+						v-for="video of comment.videos.slice( 0, showAllVideos ? 10 : 2)"
+						:key="video.id"
 						>
-					</gj-comment-video-thumbnail>-->
+						<app-comment-video-thumbnail :video="video" />
+					</div>
 				</div>
 
-				<!--<div class="comment-widget-comment-videos-more-link"
+				<div class="comment-widget-comment-videos-more-link"
 					v-if="comment.videos.length > 2 && !showAllVideos"
 					>
 					<a class="small link-muted"
-						ng-click="showAllVideos = true"
-						translate
-						translate-params-$count="comment.videos.length - 2"
-						gj-track-event="comment-widget:more-videos"
+						@click="showAllVideos = true"
+						v-app-track-event="`comment-widget:more-videos`"
 						>
-						+{{ $count }} more videos
+						<translate
+							:translate-n="comment.videos.length - 2"
+							:translate-params="{ count: comment.videos.length - 2 }"
+							translate-plural="+%{ count } more videos"
+							>
+							+1 more video
+						</translate>
 					</a>
-				</div>-->
+				</div>
 				<br>
 			</div>
 
