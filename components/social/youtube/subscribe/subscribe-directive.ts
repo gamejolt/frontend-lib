@@ -1,33 +1,35 @@
-import { Component, Input, Inject } from 'ng-metadata/core';
-import { YoutubeSdk } from '../sdk/sdk-service';
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+
+import { YoutubeSdk } from '../sdk/sdk.service';
 
 @Component({
-	selector: 'gj-social-youtube-subscribe',
-	template: `
-	<div class="g-ytsubscribe" data-channelid="{{ ::$ctrl.channel }}" data-layout="{{ ::$ctrl.layout }}" data-theme="{{ ::$ctrl.theme }}" data-count="default"></div>
-	`,
+	name: 'social-youtube-subscribe',
 })
-export class SubscribeComponent
+export class AppSocialYoutubeSubscribe extends Vue
 {
-	@Input( '@' ) channel: string;
-	@Input( '@' ) layout?: string;
-	@Input( '@' ) theme?: string;
+	@Prop( String ) channel: string;
+	@Prop( { type: String, default: 'default' } ) layout: string;
+	@Prop( { type: String, default: 'default' } ) theme: string;
 
-	constructor(
-		@Inject( 'Youtube_Sdk' ) private sdk: YoutubeSdk
-	)
+	render( h: Vue.CreateElement )
 	{
-		if ( !this.layout ) {
-			this.layout = 'default';
-		}
-
-		if ( !this.theme ) {
-			this.theme = 'default';
-		}
+		return h(
+			'div',
+			{
+				staticClass: 'g-ytsubscribe',
+				attrs: {
+					'data-channelid': this.channel,
+					'data-layout': this.layout,
+					'data-theme': this.theme,
+					'data-count': 'default',
+				},
+			},
+		);
 	}
 
-	$postLink()
+	mounted()
 	{
-		this.sdk.load();
+		YoutubeSdk.load();
 	}
 }

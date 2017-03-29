@@ -1,21 +1,12 @@
-import { Injectable, Inject } from 'ng-metadata/core';
 import { Environment } from '../../../environment/environment.service';
 
-@Injectable( 'Youtube_Sdk' )
 export class YoutubeSdk
 {
-	isBootstrapped = false;
+	private static isBootstrapped = false;
 
-	constructor(
-		@Inject( '$window' ) private $window: ng.IWindowService,
-		@Inject( '$timeout' ) private $timeout: ng.ITimeoutService,
-	)
+	static load()
 	{
-	}
-
-	load()
-	{
-		if ( Environment.isPrerender ) {
+		if ( Environment.isPrerender || GJ_IS_SSR ) {
 			return;
 		}
 
@@ -33,10 +24,10 @@ export class YoutubeSdk
 			bootstrapLib( document, 'script', 'youtube-sdk' );
 		}
 		else {
-			this.$timeout( () =>
+			setTimeout( () =>
 			{
-				if ( typeof this.$window.gapi != 'undefined' ) {
-					this.$window.gapi.ytsubscribe.go();
+				if ( typeof (window as any).gapi !== 'undefined' ) {
+					(window as any).gapi.ytsubscribe.go();
 				}
 			} );
 		}
