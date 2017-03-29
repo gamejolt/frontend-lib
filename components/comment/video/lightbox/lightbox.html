@@ -35,12 +35,10 @@
 					<img :src="video.comment.user.img_avatar" class="img-responsive" alt="">
 				</router-link>
 
-				<!--TODO-->
-				<!--<gj-social-youtube-subscribe
-					channel="{{ video.channel_id }}"
+				<app-social-youtube-subscribe
+					:channel="video.channel_id"
 					theme="dark"
-					>
-				</gj-social-youtube-subscribe>-->
+					/>
 			</div>
 
 			<div class="comment-video-lightbox-interaction-actions">

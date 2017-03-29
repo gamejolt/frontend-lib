@@ -17,6 +17,7 @@ import { AppImgResponsive } from '../../../img/responsive/responsive';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppVideoEmbed } from '../../../video/embed/embed';
 import { number } from '../../../../vue/filters/number';
+import { AppSocialYoutubeSubscribe } from '../../../social/youtube/subscribe/subscribe-directive';
 
 if ( !GJ_IS_SSR ) {
 	const VueShortkey = require( 'vue-shortkey' );
@@ -33,6 +34,7 @@ if ( !GJ_IS_SSR ) {
 		AppImgResponsive,
 		AppJolticon,
 		AppVideoEmbed,
+		AppSocialYoutubeSubscribe,
 	},
 	directives: {
 		AppTrackEvent,
@@ -71,17 +73,6 @@ export class AppCommentVideoLightbox extends Vue
 		else if ( this.video.game.developer.id === this.app.user.id ) {
 			this.canVote = false;
 		}
-
-		// hotkeys.bindTo( $scope )
-		// 	.add( {
-		// 		combo: 'esc',
-		// 		description: 'Close video lightbox.',
-		// 		callback: ( $event: Event ) =>
-		// 		{
-		// 			this.close();
-		// 			$event.preventDefault();
-		// 		},
-		// 	} );
 	}
 
 	mounted()
