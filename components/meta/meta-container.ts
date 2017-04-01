@@ -6,6 +6,7 @@ export class MetaField
 
 export class MetaContainer
 {
+	protected static _attr = 'name';
 	private static _document = window.document;
 	private static _head = MetaContainer._document.head;
 	private static _fields: { [key: string]: MetaField } = {};
@@ -14,7 +15,7 @@ export class MetaContainer
 	{
 		this._storeField( name, content );
 
-		let elem = this._head.querySelector( `meta[name="${name}"]` ) as HTMLMetaElement;
+		let elem = this._head.querySelector( `meta[${this._attr}="${name}"]` ) as HTMLMetaElement;
 
 		// Remove if we're nulling it out.
 		if ( !content ) {
@@ -27,7 +28,7 @@ export class MetaContainer
 		// Create if not exists.
 		if ( !elem ) {
 			elem = this._document.createElement( 'meta' );
-			elem.name = name;
+			elem.setAttribute( this._attr, name );
 			this._head.appendChild( elem );
 		}
 
@@ -44,7 +45,7 @@ export class MetaContainer
 		if ( !this._fields[ name ] ) {
 			const field = new MetaField();
 
-			const elem = this._head.querySelector( `meta[name="${name}"]` ) as HTMLMetaElement;
+			const elem = this._head.querySelector( `meta[${this._attr}="${name}"]` ) as HTMLMetaElement;
 			if ( elem ) {
 				field.original = elem.content;
 			}

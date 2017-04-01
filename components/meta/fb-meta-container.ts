@@ -2,6 +2,8 @@ import { MetaContainer } from './meta-container';
 
 export class FbMetaContainer extends MetaContainer
 {
+	protected static _attr = 'property';
+
 	static set title( value: string | null ) { this._set( 'og:title', value ); }
 	static get title() { return this._get( 'og:title' ); }
 
