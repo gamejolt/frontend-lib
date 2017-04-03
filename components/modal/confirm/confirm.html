@@ -1,22 +1,26 @@
-<div class="modal-header">
-	<h2 class="modal-title">
-		{{ ::$ctrl.options.title }}
-	</h2>
-</div>
+<app-modal :modal="modal">
 
-<div class="modal-body">
-	<p>{{ ::$ctrl.options.message }}</p>
-</div>
+	<div class="modal-header">
+		<h2 class="modal-title">
+			{{ title }}
+		</h2>
+	</div>
 
-<div class="modal-footer">
-	<button class="btn btn-success-outline" ng-click="$ctrl.ok()" ng-switch="::$ctrl.options.buttonType">
-		<span class="jolticon jolticon-check"></span>
-		<span ng-switch-when="ok" translate>OK</span>
-		<span ng-switch-when="yes" translate>Yes</span>
-	</button>
-	<button class="btn btn-danger-outline" ng-click="$ctrl.cancel()" ng-switch="::$ctrl.options.buttonType">
-		<span class="jolticon jolticon-remove"></span>
-		<span ng-switch-when="ok" translate>Cancel</span>
-		<span ng-switch-when="yes" translate>No</span>
-	</button>
-</div>
+	<div class="modal-body">
+		<p>{{ message }}</p>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success-outline" @click="ok">
+			<app-jolticon icon="check" />
+			<translate v-if="buttonType === 'ok'">OK</translate>
+			<translate v-else-if="buttonType === 'yes'">Yes</translate>
+		</button>
+		<button class="btn btn-danger-outline" @click="cancel">
+			<app-jolticon icon="remove" />
+			<translate v-if="buttonType === 'ok'">Cancel</translate>
+			<translate v-else-if="buttonType === 'yes'">No</translate>
+		</button>
+	</div>
+
+</app-modal>
