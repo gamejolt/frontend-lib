@@ -18,14 +18,9 @@ import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppVideoEmbed } from '../../../video/embed/embed';
 import { number } from '../../../../vue/filters/number';
 import { AppSocialYoutubeSubscribe } from '../../../social/youtube/subscribe/subscribe-directive';
+import { bootstrapShortkey } from '../../../../vue/shortkey';
 
-if ( !GJ_IS_SSR ) {
-	const VueShortkey = require( 'vue-shortkey' );
-
-	Vue.use( VueShortkey, {
-		prevent: [ 'input', 'textarea' ],
-	} );
-}
+bootstrapShortkey();
 
 @View
 @Component({

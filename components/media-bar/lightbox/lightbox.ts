@@ -10,15 +10,11 @@ import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppMediaBarLightboxSlider } from './slider';
 import { AppMediaBarLightboxItem } from './item/item';
 import { getProvider } from '../../../utils/utils';
+import { bootstrapShortkey } from '../../../vue/shortkey';
 
 if ( !GJ_IS_SSR ) {
-	const VueShortkey = require( 'vue-shortkey' );
 	const VueTouch = require( 'vue-touch' );
-
 	Vue.use( VueTouch );
-	Vue.use( VueShortkey, {
-		prevent: [ 'input', 'textarea' ],
-	} );
 }
 
 export const MediaBarLightboxConfig = {
@@ -27,6 +23,8 @@ export const MediaBarLightboxConfig = {
 	controlsHeight: 80,
 	itemPadding: 40,
 };
+
+bootstrapShortkey();
 
 @View
 @Component({
