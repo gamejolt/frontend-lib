@@ -1,0 +1,15 @@
+@require '~styles/variables'
+
+.loading-bar
+	position: fixed
+	top: 0
+	left: 0
+	right: 0
+	height: 3px
+	pointer-events: none
+	z-index: $zindex-loading-bar
+
+	&-bar
+		height: 3px
+		background: $gj-blue
+		transition: width 300ms $strong-ease-out
