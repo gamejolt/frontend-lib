@@ -1,7 +1,10 @@
+import Vue from 'vue';
 import { getProvider } from '../../utils/utils';
 import { arrayIndexBy } from '../../utils/array';
 
 const LangStorageKey = 'lang';
+
+const translator = new Vue();
 
 export class Translate
 {
@@ -158,14 +161,14 @@ export class Translate
 
 	static langsByCode = arrayIndexBy( Translate.langs, 'code' );
 
-	static getString( str: string )
+	static $gettext( msgid: string )
 	{
-		if ( GJ_IS_ANGULAR ) {
-			const gc = getProvider<any>( 'gettextCatalog' );
-			return gc.getString( str );
-		}
+		return translator.$gettext( msgid );
+	}
 
-		return str;
+	static $gettextInterpolate( msgid: string, context: any )
+	{
+		return translator.$gettextInterpolate( msgid, context );
 	}
 
 	static addLanguageUrls( urls: any )
