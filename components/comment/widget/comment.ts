@@ -19,6 +19,7 @@ import { AppTooltip } from '../../tooltip/tooltip';
 import { AppPopover } from '../../popover/popover';
 import { AppPopoverTrigger } from '../../popover/popover-trigger.directive.vue';
 import { AppCommentVideoThumbnail } from '../video/thumbnail/thumbnail';
+import { ReportModal } from '../../report/modal/modal.service';
 
 @View
 @Component({
@@ -189,8 +190,6 @@ export class AppCommentWidgetComment extends Vue
 
 	report( comment: Comment )
 	{
-		console.log( 'show report modal', comment );
-		// TODO
-		// Report_Modal.show( comment );
+		ReportModal.show( comment );
 	}
 }

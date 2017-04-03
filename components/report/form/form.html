@@ -1,90 +1,89 @@
-<form gj-form="formModel" name="reportForm">
+<app-form name="reportForm">
 
-	<form-group class="no-animate" name="reason" label="{{ 'Why are you reporting this?' | translate }}">
-		<div class="radio" ng-if="type == 'Game' || type == 'Comment' || type == 'Forum_Topic' || type == 'Forum_Post'">
+	<app-form-group name="reason" :label="$gettext( `Why are you reporting this?` )">
+		<div class="radio" v-if="type === 'Game' || type === 'Comment' || type === 'Forum_Topic' || type === 'Forum_Post'">
 			<label>
-				<input form-control="radio" value="spam">
-				<span translate translate-comment="Reporting reason.">It is spam or unwanted commercial content</span>
+				<app-form-control type="radio" value="spam" />
+				<translate>It is spam or unwanted commercial content</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Game'">
+		<div class="radio" v-if="type === 'Game'">
 			<label>
-				<input form-control="radio" value="abuse">
-				<span translate translate-comment="Reporting reason.">Incorrect maturity rating for the content in the game</span>
+				<app-form-control type="radio" value="abuse" />
+				<translate>Incorrect maturity rating for the content in the game</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Game'">
+		<div class="radio" v-if="type === 'Game'">
 			<label>
-				<input form-control="radio" value="stolen">
-				<span translate translate-comment="Reporting reason.">Game does not belong to this developer</span>
+				<app-form-control type="radio" value="stolen" />
+				<translate>Game does not belong to this developer</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Game'">
+		<div class="radio" v-if="type === 'Game'">
 			<label>
-				<input form-control="radio" value="not-game">
-				<span translate translate-comment="Reporting reason.">Not a game</span>
+				<app-form-control type="radio" value="not-game" />
+				<translate>Not a game</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Game'">
+		<div class="radio" v-if="type === 'Game'">
 			<label>
-				<input form-control="radio" value="no-info">
-				<span translate translate-comment="Reporting reason.">No information on game page (no screenshots, sparse description, placeholder page, etc.)</span>
+				<app-form-control type="radio" value="no-info" />
+				<translate>No information on game page (no screenshots, sparse description, placeholder page, etc.)</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Game'">
+		<div class="radio" v-if="type === 'Game'">
 			<label>
-				<input form-control="radio" value="external-link">
-				<span translate translate-comment="Reporting reason.">External link to play the game (not uploaded on site)</span>
+				<app-form-control type="radio" value="external-link" />
+				<translate>External link to play the game (not uploaded on site)</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Comment' || type == 'Forum_Post' || type == 'Forum_Topic'">
+		<div class="radio" v-if="type === 'Comment' || type === 'Forum_Post' || type === 'Forum_Topic'">
 			<label>
-				<input form-control="radio" value="abuse">
-				<span translate translate-comment="Reporting reason.">It is hate speech or contains graphic content</span>
+				<app-form-control type="radio" value="abuse" />
+				<translate>It is hate speech or contains graphic content</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Comment' || type == 'Forum_Topic' || type == 'Forum_Post'">
+		<div class="radio" v-if="type === 'Comment' || type === 'Forum_Topic' || type === 'Forum_Post'">
 			<label>
-				<input form-control="radio" value="explicit">
-				<span translate translate-comment="Reporting reason.">It is pornographic or contains sexually explicit material</span>
+				<app-form-control type="radio" value="explicit" />
+				<translate>It is pornographic or contains sexually explicit material</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Comment' || type == 'Forum_Topic' || type == 'Forum_Post'">
+		<div class="radio" v-if="type === 'Comment' || type === 'Forum_Topic' || type === 'Forum_Post'">
 			<label>
-				<input form-control="radio" value="harassment">
-				<span translate translate-comment="Reporting reason.">It is harassment or bullying</span>
+				<app-form-control type="radio" value="harassment" />
+				<translate>It is harassment or bullying</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'Comment'">
+		<div class="radio" v-if="type === 'Comment'">
 			<label>
-				<input form-control="radio" value="spoiler">
-				<span translate translate-comment="Reporting reason.">It contains spoilers and doesn't use spoiler tags (<code>&gt!</code>)</span>
+				<app-form-control type="radio" value="spoiler" />
+				<translate>It contains spoilers and doesn't use spoiler tags</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'User'">
+		<div class="radio" v-if="type === 'User'">
 			<label>
-				<input form-control="radio" value="spam">
-				<span translate translate-comment="Reporting reason.">Spammer</span>
+				<app-form-control type="radio" value="spam" />
+				<translate>Spammer</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'User'">
+		<div class="radio" v-if="type === 'User'">
 			<label>
-				<input form-control="radio" value="vote-manip">
-				<span translate translate-comment="Reporting reason.">Uprating / downrating</span>
+				<app-form-control type="radio" value="vote-manip" />
+				<translate>Uprating / downrating</translate>
 			</label>
 		</div>
-		<div class="radio" ng-if="type == 'User'">
+		<div class="radio" v-if="type === 'User'">
 			<label>
-				<input form-control="radio" value="explicit">
-				<span translate translate-comment="Reporting reason.">Profile or username contains explicit or sensitive material</span>
+				<app-form-control type="radio" value="explicit" />
+				<translate>Profile or username contains explicit or sensitive material</translate>
 			</label>
 		</div>
-		<control-errors></control-errors>
-	</form-group>
+		<app-form-control-errors label="reason" />
+	</app-form-group>
 
-	<button class="btn" ng-disabled="reportForm.$invalid" ng-click="onSubmit()">
-		<span class="jolticon jolticon-add"></span>
-		<span translate>Send Report</span>
-	</button>
+	<app-form-button icon="add">
+		<translate>Send Report</translate>
+	</app-form-button>
 
-</form>
+</app-form>
