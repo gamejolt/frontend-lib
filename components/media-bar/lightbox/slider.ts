@@ -6,9 +6,7 @@ import { AppMediaBarLightbox } from './lightbox';
 import { findVueParent } from '../../../utils/vue';
 
 @View
-@Component({
-	name: 'media-bar-lightbox-slider',
-})
+@Component({})
 export class AppMediaBarLightboxSlider extends Vue
 {
 	mounted()

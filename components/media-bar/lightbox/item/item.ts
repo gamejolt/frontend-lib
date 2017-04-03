@@ -13,7 +13,6 @@ import { Screen } from '../../../screen/screen-service';
 
 @View
 @Component({
-	name: 'media-bar-lightbox-item',
 	components: {
 		AppJolticon,
 		AppVideoEmbed,
