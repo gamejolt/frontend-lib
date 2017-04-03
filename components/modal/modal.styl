@@ -1,33 +1,8 @@
-$modal-backdrop-opacity = 0.7
-$modal-padding = ($grid-gutter-width / 2)
-$modal-padding-xs = ($grid-gutter-width-xs / 2)
-
-// Kill scroll on body.
-.modal-open
-	overflow: hidden
-
-// Modal background
-.modal-backdrop
-	position: fixed
-	top: 0
-	right: 0
-	bottom: 0
-	left: 0
-	z-index: ($zindex-modal-background - 10)
-	background-color: $modal-backdrop-bg
-	transition: opacity 300ms
-
-	// Fade for backdrop
-	&.fade
-	&.minimize.minimize
-		opacity: 0
-
-	&.in
-		opacity: $modal-backdrop-opacity
+@require '~styles/variables'
+@require '../../stylus/common/mixins'
 
 // Container that the modal scrolls within
 .modal
-	display: none
 	overflow: auto
 	overflow-y: scroll
 	position: fixed
@@ -42,27 +17,31 @@ $modal-padding-xs = ($grid-gutter-width-xs / 2)
 	// https://github.com/twbs/bootstrap/pull/10951.
 	outline: 0
 
-	// Tells angular that we want to animate for this long, basically.
-	transition-duration: 300ms
-
-	&.fade
-	&.minimize.minimize
+	// Animation stuff.
+	// Tells vue that we want to animate for this long, basically.
+	&.v-enter-active
+	&.v-leave-active
+		transition-duration: 300ms
 
 		.modal-dialog
-			opacity: 0
 			transition: opacity 300ms
 
 		.modal-content
-			transform: scale3d( 0.8, 0.8, 0.8 )
 			transition: transform 300ms $strong-ease-out
 
-	&.in
-
+	&.v-enter
+	&.v-leave-to
 		.modal-dialog
-			opacity: 1
+			opacity: 0
 
 		.modal-content
-			transform: none
+			transform: scale3d( 0.8, 0.8, 0.8 )
+
+	.modal-dialog
+		opacity: 1
+
+	.modal-content
+		transform: none
 
 // Shell div to position the modal with bottom padding
 .modal-dialog
@@ -85,50 +64,7 @@ $modal-padding-xs = ($grid-gutter-width-xs / 2)
 	background-color: $modal-content-bg
 	box-shadow: 0 5px 15px rgba( $black, 0.5 )
 
-.modal-header
-	padding: $modal-padding-xs
-	padding-bottom: 0
-	min-height: ($modal-title-padding + $modal-title-line-height)
-
-.modal-controls
-	@extend .clearfix
-	padding-right: ($grid-gutter-width-xs / 2)
-	text-align: right
-
-	.btn
-		border-top: 0
-
-// Title text within header
-.modal-title
-	margin-top: 0
-
-.modal-body
-	position: relative
-	padding: $modal-padding-xs
-
-.modal-footer
-	@extend .clearfix // clear it in case folks use .pull-* classes on buttons
-	padding: $modal-padding-xs
-	padding-top: 0
-	text-align: right // right align buttons
-
-.modal-dark
-	.modal-dialog
-		@extend .fill-darkest
-		border-color: $gray-light
-
 @media $media-sm-up
-
-	.modal-header
-		padding: $modal-padding
-		padding-bottom: 0
-
-	.modal-body
-		padding: $modal-padding
-
-	.modal-footer
-		padding: $modal-padding
-		padding-top: 0
 
 	.modal-sm.modal-dialog
 		width: 600px

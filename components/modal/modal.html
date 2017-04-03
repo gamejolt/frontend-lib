@@ -1,0 +1,24 @@
+<transition appear>
+	<div tabindex="-1" role="dialog" class="modal"
+		v-shortkey="[ 'esc' ]"
+		@shortkey="dismiss"
+		@click="dismiss"
+		>
+		<!--TODO-->
+		<!--:style="{ 'z-index': 1050 + index * 10 }"-->
+
+		<div class="modal-dialog"
+			:class="{
+				'modal-sm': modal.size === 'sm',
+				'modal-lg': modal.size === 'lg',
+			}"
+			>
+
+			<div class="modal-content" @click.stop>
+				<slot />
+			</div>
+
+		</div>
+
+	</div>
+</transition>
