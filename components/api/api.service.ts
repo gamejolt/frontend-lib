@@ -1,3 +1,4 @@
+import Axios from 'axios';
 import { Environment } from '../environment/environment.service';
 import { getProvider } from '../../utils/utils';
 import { Payload } from '../payload/payload-service';
@@ -130,16 +131,7 @@ export class Api
 		const method = sanitizedPostData ? 'POST' : 'GET';
 		const url = (options.apiHost || this.apiHost) + (options.apiPath || this.apiPath) + uri;
 
-		let requestPromise: Promise<any>;
-		if ( GJ_IS_ANGULAR ) {
-			requestPromise = this.createRequestAngular( method, url, sanitizedPostData, options );
-		}
-		else if ( GJ_IS_VUE ) {
-			requestPromise = this.createRequestVue( method, url, sanitizedPostData, options );
-		}
-		else {
-			throw new Error( 'Invalid environment.' );
-		}
+		const requestPromise = this.createRequest( method, url, sanitizedPostData, options );
 
 		// If we aren't processing the payload, then just return the promise.
 		if ( !options.processPayload ) {
@@ -149,7 +141,7 @@ export class Api
 		return await Payload.processResponse( requestPromise, options );
 	}
 
-	private static createRequestAngular( method: string, url: string, data: any, options: RequestOptions )
+	private static createRequest( method: string, url: string, data: any, options: RequestOptions )
 	{
 		// An upload request.
 		if ( options.file ) {
@@ -206,30 +198,12 @@ export class Api
 			return uploadPromise;
 		}
 
-		return getProvider<any>( '$http' )( {
+		return Axios( {
 			method,
 			url,
 			data,
 			withCredentials: options.withCredentials,
-			ignoreLoadingBar: options.ignoreLoadingBar
+			ignoreLoadingBar: options.ignoreLoadingBar,
 		} );
-	}
-
-	private static createRequestVue( method: string, url: string, data: any, options: RequestOptions )
-	{
-		if ( GJ_IS_VUE ) {
-			if ( options.file ) {
-				throw new Error( `Vue can't upload files yet.` );
-			}
-
-			const axios = require( 'axios' );
-
-			return axios( {
-				method,
-				url,
-				data,
-				withCredentials: options.withCredentials,
-			} );
-		}
 	}
 }
