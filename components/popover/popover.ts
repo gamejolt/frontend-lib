@@ -6,7 +6,6 @@ import { Popover } from './popover.service';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
 import { makeObservableService } from '../../utils/vue';
-import { getProvider } from '../../utils/utils';
 import { Scroll } from '../scroll/scroll.service';
 
 // Importing animations didn't work with scoped.
@@ -51,7 +50,6 @@ export class AppPopover extends Vue
 	private originalParent: HTMLElement;
 	private context: HTMLElement | null;
 	private backdropElem?: HTMLElement;
-	private hideDeregister?: any;
 
 	// We use the wrapped to generate an on/off click handler.
 	private hidePopoversWrapped?: any;
@@ -286,15 +284,6 @@ export class AppPopover extends Vue
 			document.body.appendChild( this.backdropElem );
 		}
 
-		// If we need to hide it on state change as well.
-		if ( this.hideOnStateChange && !this.hideDeregister ) {
-			// TODO: Get this working for Vue
-			if ( GJ_IS_ANGULAR ) {
-				const $rootScope = getProvider<any>( '$rootScope' );
-				this.hideDeregister = $rootScope.$on( '$stateChangeStart', () => this.hide() );
-			}
-		}
-
 		this.transitioning = false;
 	}
 
@@ -330,12 +319,6 @@ export class AppPopover extends Vue
 
 		if ( this.backdropElem ) {
 			this.backdropElem.parentNode!.removeChild( this.backdropElem );
-		}
-
-		// If we're hiding on state change as well.
-		if ( this.hideOnStateChange && this.hideDeregister ) {
-			this.hideDeregister();
-			this.hideDeregister = undefined;
 		}
 
 		if ( this.transitioning !== 'leave' ) {
