@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 
-@Component({
-	name: 'popover-context',
-})
+@Component({})
 export class AppPopoverContext extends Vue
 {
 	render( h: Vue.CreateElement )

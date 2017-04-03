@@ -7,9 +7,7 @@ import { AppFormGroup } from '../group/group';
 import { findVueParent } from '../../../utils/vue';
 
 @View
-@Component({
-	name: 'form-control',
-})
+@Component({})
 export class AppFormControl extends Vue
 {
 	@Prop( { type: String, default: 'text' } ) type: string;

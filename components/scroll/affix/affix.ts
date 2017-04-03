@@ -8,9 +8,7 @@ import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
 
 @View
-@Component({
-	name: 'scroll-affix',
-})
+@Component({})
 export class AppScrollAffix extends Vue
 {
 	@Prop( { type: String, default: 'gj-scroll-affixed' } )

@@ -22,7 +22,6 @@ import { AppCommentVideoThumbnail } from '../video/thumbnail/thumbnail';
 
 @View
 @Component({
-	name: 'comment-widget-comment',
 	components: {
 		AppUserAvatar,
 		AppTimeAgo,

@@ -6,7 +6,6 @@ import { AppLoading } from '../../../vue/components/loading/loading';
 
 @View
 @Component({
-	name: 'loading-fade',
 	components: {
 		AppLoading,
 	},

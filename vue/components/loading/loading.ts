@@ -5,9 +5,7 @@ import * as View from '!view!./loading.html?style=./loading.styl';
 import { importContext } from '../../../utils/utils';
 
 @View
-@Component({
-	name: 'loading',
-})
+@Component({})
 export class AppLoading extends Vue
 {
 	@Prop( { type: String, default: 'Loading...' } ) label: string;

@@ -5,9 +5,7 @@ import * as View from '!view!./card.html';
 require( './card.styl' );
 
 @View
-@Component({
-	name: 'card',
-})
+@Component({})
 export class AppCard extends Vue
 {
 	@Prop( { type: Boolean, default: false } ) isDraggable: boolean;

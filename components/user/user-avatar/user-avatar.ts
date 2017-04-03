@@ -8,7 +8,6 @@ import { AppUserAvatarImg } from './img/img';
 
 @View
 @Component({
-	name: 'user-avatar',
 	components: {
 		AppUserAvatarImg,
 	}

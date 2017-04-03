@@ -16,9 +16,7 @@ import { FormValidatorAvailability } from './validators/availability';
 Vue.use( VeeValidate );
 
 @View
-@Component({
-	name: 'form',
-})
+@Component({})
 export class AppForm extends Vue
 {
 	@Prop( String ) name: string;

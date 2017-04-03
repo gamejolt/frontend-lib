@@ -8,9 +8,7 @@ import { ImgHelper } from '../helper/helper-service';
 const WIDTH_HEIGHT_REGEX = /\/(\d+)x(\d+)\//;
 const WIDTH_REGEX = /\/(\d+)\//;
 
-@Component({
-	name: 'img-responsive',
-})
+@Component({})
 export class AppImgResponsive extends Vue
 {
 	@Prop( String ) src: string;

@@ -10,7 +10,6 @@ import { Api } from '../../api/api.service';
 
 @View
 @Component({
-	name: 'auth-login-form',
 	components: {
 		AppLoading,
 		...FormCommonComponents,

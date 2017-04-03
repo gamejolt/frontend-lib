@@ -4,9 +4,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { findVueParent } from '../../../utils/vue';
 import { AppFormControlErrors } from './control-errors';
 
-@Component({
-	name: 'form-control-error',
-})
+@Component({})
 export class AppFormControlError extends Vue
 {
 	@Prop( String ) when: string;

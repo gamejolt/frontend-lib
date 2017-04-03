@@ -16,7 +16,6 @@ const AdSlotHeight = 512;
 
 @View
 @Component({
-	name: 'ad-video',
 	filters: {
 		time,
 	},

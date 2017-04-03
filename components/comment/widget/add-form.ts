@@ -11,7 +11,6 @@ import { AppUserAvatar } from '../../user/user-avatar/user-avatar';
 
 @View
 @Component({
-	name: 'comment-widget-add-form',
 	components: {
 		...FormCommonComponents,
 		AppUserAvatar,

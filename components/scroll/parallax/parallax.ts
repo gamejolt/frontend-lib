@@ -21,9 +21,7 @@ function getElementTop( element: HTMLElement, currentTransform: number )
 	return elementTop;
 }
 
-@Component({
-	name: 'scroll-parallax',
-})
+@Component({})
 export class AppScrollParallax extends Vue
 {
 	@Prop( Number ) drag?: number;

@@ -14,9 +14,7 @@ const defaultOptions = {
 };
 
 @View
-@Component({
-	name: 'codemirror',
-})
+@Component({})
 export class AppCodemirror extends Vue
 {
 	$el: HTMLTextAreaElement;

@@ -5,9 +5,7 @@ import { Api } from '../../api/api.service';
 
 const PollInterval = 5000;
 
-@Component({
-	name: 'progress-poller',
-})
+@Component({})
 export class AppProgressPoller extends Vue
 {
 	@Prop( String ) url: string;

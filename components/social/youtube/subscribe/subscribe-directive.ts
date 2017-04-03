@@ -3,9 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 
 import { YoutubeSdk } from '../sdk/sdk.service';
 
-@Component({
-	name: 'social-youtube-subscribe',
-})
+@Component({})
 export class AppSocialYoutubeSubscribe extends Vue
 {
 	@Prop( String ) channel: string;

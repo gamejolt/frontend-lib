@@ -96,9 +96,7 @@ function _cleanupAds()
 }
 
 @View
-@Component({
-	name: 'ad',
-})
+@Component({})
 export class AppAd extends Vue
 {
 	@Prop( String ) size: string;

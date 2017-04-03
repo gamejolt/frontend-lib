@@ -9,9 +9,7 @@ import { ErrorBag } from 'vee-validate';
 import { AppFormControl } from '../control/control';
 
 @View
-@Component({
-	name: 'form-group',
-})
+@Component({})
 export class AppFormGroup extends Vue
 {
 	@Prop( String ) name: string;

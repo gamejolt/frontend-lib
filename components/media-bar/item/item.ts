@@ -13,7 +13,6 @@ import { findVueParent } from '../../../utils/vue';
 
 @View
 @Component({
-	name: 'media-bar-item',
 	components: {
 		AppJolticon,
 		AppImgResponsive,

@@ -12,7 +12,6 @@ require( './growl-content.styl' );
 
 @View
 @Component({
-	name: 'growl',
 	components: {
 		AppJolticon,
 		AppGrowlDynamic,

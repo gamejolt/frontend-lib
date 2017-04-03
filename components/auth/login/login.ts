@@ -11,7 +11,6 @@ import { Auth } from '../auth.service';
 
 @View
 @Component({
-	name: 'auth-login',
 	components: {
 		AppJolticon,
 		AppAuthLoginForm,

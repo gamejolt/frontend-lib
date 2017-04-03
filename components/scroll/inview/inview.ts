@@ -42,9 +42,7 @@ function onScroll( scroll: ScrollChange )
 	}
 }
 
-@Component({
-	name: 'scroll-inview',
-})
+@Component({})
 export class AppScrollInview extends Vue
 {
 	inView = false;

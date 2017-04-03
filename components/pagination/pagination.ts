@@ -10,7 +10,6 @@ const MaxPagesShown = 5;
 
 @View
 @Component({
-	name: 'pagination',
 	directives: {
 		AppNoAutoscroll,
 	},

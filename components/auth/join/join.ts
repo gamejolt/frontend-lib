@@ -11,7 +11,6 @@ import { Environment } from '../../environment/environment.service';
 
 @View
 @Component({
-	name: 'auth-join',
 	components: {
 		AppJolticon,
 		AppAuthJoinForm,

@@ -3,9 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./widget-soundcloud.html?style=./widget-soundcloud.styl';
 
 @View
-@Component({
-	name: 'widget-compiler-widget-soundcloud',
-})
+@Component({})
 export class AppWidgetCompilerWidgetSoundcloud extends Vue
 {
 	@Prop( { type: String, default: '' } ) trackId: string;

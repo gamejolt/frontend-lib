@@ -9,7 +9,6 @@ import { WidgetCompiler } from '../widget-compiler.service';
 
 @View
 @Component({
-	name: 'widget-compiler-widget-game-list',
 	components: {
 		AppGameThumbnailImg,
 	},

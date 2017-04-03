@@ -8,7 +8,6 @@ import { AppGrowl } from './growl';
 
 @View
 @Component({
-	name: 'growls',
 	components: {
 		AppGrowl,
 	}

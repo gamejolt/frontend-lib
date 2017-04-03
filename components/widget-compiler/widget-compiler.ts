@@ -3,9 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 
 import { WidgetCompiler, WidgetCompilerContext } from './widget-compiler.service';
 
-@Component({
-	name: 'widget-compiler',
-})
+@Component({})
 export class AppWidgetCompiler extends Vue
 {
 	@Prop( String ) content: string;

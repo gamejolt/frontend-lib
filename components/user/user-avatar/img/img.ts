@@ -5,9 +5,7 @@ import * as View from '!view!./img.html?style=./img.styl';
 import { User } from '../../user.model';
 
 @View
-@Component({
-	name: 'user-avatar-img',
-})
+@Component({})
 export class AppUserAvatarImg extends Vue
 {
 	@Prop( Object ) user?: User;

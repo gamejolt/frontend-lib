@@ -11,7 +11,6 @@ import { Growls } from '../growls/growls.service';
 
 @View
 @Component({
-	name: 'media-bar',
 	components: {
 		AppLoading,
 		AppMediaBarItem,

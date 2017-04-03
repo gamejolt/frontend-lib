@@ -25,7 +25,6 @@ let incrementer = 0;
 
 @View
 @Component({
-	name: 'comment-widget',
 	components: {
 		AppLoading,
 		AppLoadingFade,

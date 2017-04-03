@@ -2,9 +2,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import './placeholder.styl';
 
-@Component({
-	name: 'lazy-placeholder',
-})
+@Component({})
 export class AppLazyPlaceholder extends Vue
 {
 	@Prop() when: any;

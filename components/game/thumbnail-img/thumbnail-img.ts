@@ -7,7 +7,6 @@ import { Game } from '../game.model';
 
 @View
 @Component({
-	name: 'game-thumbnail-img',
 	components: {
 		AppImgResponsive,
 	},

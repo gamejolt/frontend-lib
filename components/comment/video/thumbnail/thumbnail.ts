@@ -11,7 +11,6 @@ import { AppCommentVideoLightbox } from '../lightbox/lightbox';
 
 @View
 @Component({
-	name: 'comment-video-thumbnail',
 	components: {
 		AppJolticon,
 		AppGameThumbnailImg,

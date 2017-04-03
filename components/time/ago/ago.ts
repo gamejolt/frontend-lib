@@ -2,9 +2,7 @@ import Vue from 'vue';
 import * as distance from 'date-fns/distance_in_words_to_now';
 import { Component, Prop } from 'vue-property-decorator';
 
-@Component({
-	name: 'time-ago',
-})
+@Component({})
 export class AppTimeAgo extends Vue
 {
 	@Prop( [ Number, Date ] ) date: number | Date;

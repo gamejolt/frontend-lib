@@ -29,7 +29,6 @@ if ( !GJ_IS_SSR ) {
 
 @View
 @Component({
-	name: 'comment-video-lightbox',
 	components: {
 		AppImgResponsive,
 		AppJolticon,

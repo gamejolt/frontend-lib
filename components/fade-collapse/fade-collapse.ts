@@ -16,9 +16,7 @@ const ExtraCollapsePadding = 200;
 const Threshold = 50;
 
 @View
-@Component({
-	name: 'fade-collapse',
-})
+@Component({})
 export class AppFadeCollapse extends Vue
 {
 	@Prop( Number ) collapseHeight: number;

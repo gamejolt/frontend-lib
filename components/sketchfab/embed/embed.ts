@@ -9,9 +9,7 @@ import { Screen } from '../../screen/screen-service';
 const RATIO = 0.5625; // 16:9
 
 @View
-@Component({
-	name: 'sketchfab-embed',
-})
+@Component({})
 export class AppSketchfabEmbed extends Vue
 {
 	@Prop( String ) sketchfabId: string;

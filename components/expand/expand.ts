@@ -3,9 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./expand.html?style=./expand.styl';
 
 @View
-@Component({
-	name: 'expand',
-})
+@Component({})
 export class AppExpand extends Vue
 {
 	@Prop( Boolean ) when?: boolean;

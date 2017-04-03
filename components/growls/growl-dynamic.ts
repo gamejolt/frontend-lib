@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
-@Component({
-	name: 'growl-dynamic',
-})
+@Component({})
 export class AppGrowlDynamic extends Vue
 {
 	@Prop( Function ) component: typeof Vue;

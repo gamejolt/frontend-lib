@@ -9,9 +9,7 @@ import { Screen } from '../../screen/screen-service';
 const VIDEO_RATIO = 0.5625;  // 16:9
 
 @View
-@Component({
-	name: 'video-embed',
-})
+@Component({})
 export class AppVideoEmbed extends Vue
 {
 	@Prop( String ) videoProvider: 'youtube' | 'vimeo';

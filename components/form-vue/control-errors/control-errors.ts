@@ -26,7 +26,6 @@ const ErrorMessagesBase: { [k: string]: string } = {
 
 @View
 @Component({
-	name: 'form-control-errors',
 	components: {
 		AppExpand,
 	},

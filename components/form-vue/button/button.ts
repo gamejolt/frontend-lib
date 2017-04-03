@@ -5,7 +5,6 @@ import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 
 @View
 @Component({
-	name: 'form-button',
 	components: {
 		AppJolticon,
 	}

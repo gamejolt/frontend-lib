@@ -24,9 +24,7 @@ interface PopoverTiggerEvent extends Event
 }
 
 @View
-@Component({
-	name: 'popover',
-})
+@Component({})
 export class AppPopover extends Vue
 {
 	@Prop( String) popoverId: string;

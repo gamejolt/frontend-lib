@@ -10,7 +10,6 @@ import { AppLoading } from '../../vue/components/loading/loading';
 
 @View
 @Component({
-	name: 'video',
 	components: {
 		AppLoading,
 	}

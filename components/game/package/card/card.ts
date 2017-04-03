@@ -27,7 +27,6 @@ import { AppCountdown } from '../../../countdown/countdown';
 
 @View
 @Component({
-	name: 'game-package-card',
 	components: {
 		AppCard,
 		AppJolticon,

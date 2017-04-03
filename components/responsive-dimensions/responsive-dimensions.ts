@@ -4,9 +4,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Screen } from '../screen/screen-service';
 import { Ruler } from '../ruler/ruler-service';
 
-@Component({
-	name: 'responsive-dimensions',
-})
+@Component({})
 export class AppResponsiveDimensions extends Vue
 {
 	@Prop( Number ) ratio: number;

@@ -6,9 +6,7 @@ import { Sellable } from '../../sellable/sellable.model';
 import { Environment } from '../../environment/environment.service';
 
 @View
-@Component({
-	name: 'widget-compiler-widget-game-packages',
-})
+@Component({})
 export class AppWidgetCompilerWidgetGamePackages extends Vue
 {
 	@Prop( { type: Array, default: () => [] } ) sellables: Sellable[];

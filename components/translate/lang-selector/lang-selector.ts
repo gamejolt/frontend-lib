@@ -7,9 +7,7 @@ import { Translate } from '../translate.service';
 import { stringSort } from '../../../utils/array';
 
 @View
-@Component({
-	name: 'translate-lang-selector',
-})
+@Component({})
 export class AppTranslateLangSelector extends Vue
 {
 	lang = Translate.lang;

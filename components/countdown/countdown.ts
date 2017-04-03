@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
-@Component({
-	name: 'countdown',
-})
+@Component({})
 export class AppCountdown extends Vue
 {
 	@Prop( Number ) end: number;

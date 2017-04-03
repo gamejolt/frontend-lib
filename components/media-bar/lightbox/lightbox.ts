@@ -30,7 +30,6 @@ export const MediaBarLightboxConfig = {
 
 @View
 @Component({
-	name: 'media-bar-lightbox',
 	components: {
 		AppJolticon,
 		AppMediaBarLightboxSlider,

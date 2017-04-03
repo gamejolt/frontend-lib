@@ -7,7 +7,6 @@ import { MediaItem } from '../../media-item/media-item-model';
 
 @View
 @Component({
-	name: 'widget-compiler-widget-game-media',
 	components: {
 		AppMediaBar,
 	},

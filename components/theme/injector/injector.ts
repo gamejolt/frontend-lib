@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
-@Component({
-	name: 'theme-injector',
-})
+@Component({})
 export class AppThemeInjector extends Vue
 {
 	@Prop( Object ) definition: any;
