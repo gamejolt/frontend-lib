@@ -1,4 +1,4 @@
-$zindex-backdrop ?= 20
+@require '~styles/variables'
 
 .backdrop-active
 	overflow: hidden !important
@@ -8,17 +8,19 @@ $zindex-backdrop ?= 20
 
 	// If it's attached to the body directly (the default) just use a fixed
 	// position so that it contains the whole screen.
-	body > gj-backdrop > &
+	body > &
 		position: fixed
 
 	top: 0
 	right: 0
 	bottom: 0
 	left: 0
-	background-color: $black
+	background-color: rgba( $black, 0.8 )
 	user-select: none
 	z-index: $zindex-backdrop
-	opacity: 0
 
-	&.in
-		opacity: 0.8
+	opacity: 0
+	transition: opacity 300ms
+
+	&.active
+		opacity: 1
