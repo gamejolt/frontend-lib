@@ -29,15 +29,22 @@ module.exports = function( config )
 		externals[ extern ] = { commonjs: extern };
 	}
 
-	let cleanCss = new CleanCss( {
+	const cleanCssOptions = {
 		level: 2,
-	} );
+	};
+
+	let cleanCss = new CleanCss( cleanCssOptions );
 
 	function stylesLoader( loaders, options )
 	{
 		// Note: style-loader doesn't work on the server.
 
 		if ( config.production ) {
+			loaders.push( {
+				loader: 'clean-css-loader',
+				options: cleanCssOptions,
+			} );
+
 			return ExtractTextPlugin.extract( {
 				fallback: !config.server ? 'style-loader' : undefined,
 				use: loaders,
