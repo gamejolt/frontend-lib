@@ -17,7 +17,7 @@ import { AppImgResponsive } from '../../../img/responsive/responsive';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppVideoEmbed } from '../../../video/embed/embed';
 import { number } from '../../../../vue/filters/number';
-import { AppSocialYoutubeSubscribe } from '../../../social/youtube/subscribe/subscribe-directive';
+import { AppSocialYoutubeSubscribe } from '../../../social/youtube/subscribe/subscribe';
 import { bootstrapShortkey } from '../../../../vue/shortkey';
 
 bootstrapShortkey();

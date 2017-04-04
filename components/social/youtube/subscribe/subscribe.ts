@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
+import '../../social.styl';
 
 import { YoutubeSdk } from '../sdk/sdk.service';
 
@@ -27,6 +28,19 @@ export class AppSocialYoutubeSubscribe extends Vue
 	}
 
 	mounted()
+	{
+		this.init();
+	}
+
+	@Watch( 'channel' )
+	@Watch( 'layout' )
+	@Watch( 'theme' )
+	changed()
+	{
+		this.init();
+	}
+
+	private init()
 	{
 		YoutubeSdk.load();
 	}
