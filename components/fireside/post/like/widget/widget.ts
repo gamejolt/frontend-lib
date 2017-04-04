@@ -1,6 +1,66 @@
-import { provide } from 'ng-metadata/core';
-import { WidgetComponent } from './widget-directive';
+import Vue from 'vue';
+import { State } from 'vuex-class';
+import { Component, Prop } from 'vue-property-decorator';
+import * as View from '!view!./widget.html?style=./widget.styl';
 
-export default angular.module( 'gj.Fireside.Post.Like.Widget', [] )
-.directive( ...provide( WidgetComponent ) )
-.name;
+import { FiresidePost } from '../../post-model';
+import { FiresidePostLike } from '../like-model';
+import { AppState } from '../../../../../vue/services/app/app-store';
+import { AppJolticon } from '../../../../../vue/components/jolticon/jolticon';
+import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
+import { AppTooltip } from '../../../../tooltip/tooltip';
+import { number } from '../../../../../vue/filters/number';
+
+@View
+@Component({
+	components: {
+		AppJolticon,
+	},
+	directives: {
+		AppAuthRequired,
+		AppTooltip,
+	},
+	filters: {
+		number,
+	},
+})
+export class AppFiresidePostLikeWidget extends Vue
+{
+	@Prop( FiresidePost ) post: FiresidePost;
+	@Prop( Boolean ) sparse?: boolean;
+
+	@State app: AppState;
+
+	get tooltip()
+	{
+		// No tooltip if showing label.
+		if ( !this.sparse ) {
+			return undefined;
+		}
+
+		if ( !this.post.user_like ) {
+			return this.$gettext( 'Like This Post' );
+		}
+		else {
+			return this.$gettext( 'Liked!' );
+		}
+	}
+
+	async toggleLike()
+	{
+		if ( !this.post.user_like ) {
+			const newLike = new FiresidePostLike( {
+				fireside_post_id: this.post.id
+			} );
+
+			await newLike.$save();
+			this.post.user_like = newLike;
+			++this.post.like_count;
+		}
+		else {
+			await this.post.user_like.$remove();
+			this.post.user_like = null;
+			--this.post.like_count;
+		}
+	}
+}

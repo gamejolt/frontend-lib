@@ -1,28 +1,26 @@
-<div class="fireside-post-like-widget">
+<div class="fireside-post-like-widget" v-if="app.user && app.user.id !== post.user.id">
 	<a class="btn"
-		ng-if="::$ctrl.app.user.id != $ctrl.post.user.id"
-		gj-auth-required
-		ng-click="$ctrl.toggleLike()"
-		ng-class="{
-			'btn-outline': !$ctrl.post.user_like,
-			'btn-success-outline active': $ctrl.post.user_like,
-			'btn-sparse': $ctrl.sparse,
+		v-app-auth-required
+		@click="toggleLike"
+		:class="{
+			'btn-outline': !post.user_like,
+			'btn-success-outline active': post.user_like,
+			'btn-sparse': sparse,
 		}"
-		gj-tooltip="{{ $ctrl.getTooltip() }}"
+		v-app-tooltip="tooltip"
 		>
-		<span class="btn-badge" ng-if="$ctrl.post.like_count">
-			{{ $ctrl.post.like_count | number }}
+		<span class="btn-badge" v-if="post.like_count">
+			{{ post.like_count | number }}
 		</span>
 
-		<span class="jolticon jolticon-heart"></span>
+		<app-jolticon icon="heart" />
+
 		<span class="hidden-xs">
-			<span ng-switch="!!$ctrl.post.user_like">
-				<span ng-switch-when="false">
-					<span ng-if="::!$ctrl.sparse" translate>Like This Post</span>
-					<span ng-if="::$ctrl.sparse" translate>Like</span>
-				</span>
-				<span ng-switch-when="true" translate>Liked!</span>
+			<span v-if="!post.user_like">
+				<translate v-if="!sparse">Like This Post</translate>
+				<translate v-if="sparse">Like</translate>
 			</span>
+			<translate v-else>Liked!</translate>
 		</span>
 	</a>
 </div>
