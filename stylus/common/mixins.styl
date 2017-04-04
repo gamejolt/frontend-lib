@@ -48,6 +48,9 @@ caret( color, direction = 'left', size = 3px )
 		border-top: size solid color
 		border-bottom: none
 
+/**
+ * Images
+ */
 img-circle()
 	border-radius: 50%
 
@@ -64,6 +67,9 @@ floating-img()
 	border: 1px solid rgba( 255, 255, 255, 0.10 )
 	box-shadow: 0 0 20px rgba( 0, 0, 0, 0.8 )
 
+/**
+ * Links
+ */
 $selection-color ?= #b4d5fe
 link-underlines( color, bg-color, bg-color-hover )
 
@@ -96,6 +102,9 @@ link-underlines( color, bg-color, bg-color-hover )
 	&:hover
 		background-image: linear-gradient(bg-color, bg-color), linear-gradient(bg-color, bg-color), linear-gradient(bg-color-hover, bg-color-hover)
 
+/**
+ * Clearfix
+ */
 clearfix()
 	&:before,
 	&:after
@@ -105,6 +114,9 @@ clearfix()
 	&:after
 		clear: both
 
+/**
+ * Bleeds
+ */
 full-bleed()
 	margin-left: -($grid-gutter-width-xs / 2)
 	margin-right: @margin-left
@@ -123,6 +135,9 @@ full-bleed-sm()
 		margin-left: -($grid-gutter-width / 2)
 		margin-right: @margin-left
 
+/**
+ * Scrollable
+ */
 scrollable()
 	overflow-y: auto
 	overflow-x: hidden
@@ -135,12 +150,24 @@ scrollable-x()
 	-webkit-overflow-scrolling: touch
 	will-change: scroll-position
 
+/**
+ * Lists
+ */
 link-unstyled()
 	color: inherit
 
 	&:hover
 	&:focus
 		text-decoration: underline
+
+/**
+ * Placeholders
+ */
+lazy-placeholder-text()
+	display: inline-block
+	vertical-align: middle
+	height: $font-size-base
+	background-color: $gray-lightest
 
 @require '../mixins/animations'
 @require '../mixins/play-button-overlay'
