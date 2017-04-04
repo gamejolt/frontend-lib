@@ -6,11 +6,12 @@ import './placeholder.styl';
 export class AppLazyPlaceholder extends Vue
 {
 	@Prop() when: any;
+	@Prop( { type: String, default: 'div' } ) tag: string;
 
 	render( h: Vue.CreateElement )
 	{
 		return h(
-			'div',
+			this.tag,
 			{
 				class: {
 					'lazy-placeholder-resolving': !this.when,
