@@ -248,25 +248,28 @@ module.exports = function( config )
 				}),
 				devNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
+
+				// Pull out vendor code from the main entry point.
 				devNoop || new webpack.optimize.CommonsChunkPlugin( {
 					name: 'vendor',
-					filename: 'vendor.[hash:6].js',
-					minChunks: function( module, count )
+					minChunks: function( module )
 					{
-						// Pull anything from node_modules or bower-lib into vendor.
-						return module.resource
-							&& /\.js$/.test( module.resource )
+						return module.context
 							&& (
-								/node_modules/.test( module.resource )
-								|| /bower\-lib/.test( module.resource )
-							);
-					}
+								module.context.indexOf( 'node_modules' ) !== -1
+								|| module.context.indexOf( 'bower-lib' ) !== -1
+							)
+							;
+					},
 				} ),
+
+				// This generates a manifest file that allows our vendor chunk
+				// to be cached longer if it doesn't change.
+				// More info: https://webpack.js.org/guides/code-splitting-libraries/#implicit-common-vendor-chunk
 				devNoop || new webpack.optimize.CommonsChunkPlugin( {
 					name: 'manifest',
-					filename: 'manifest.[hash:6].js',
-					chunks: [ 'vendor' ],
 				} ),
+
 				serverNoop || new ExtractTextPlugin( '[name].[contenthash:6].css' ),
 				devNoop || new OptimizeCssPlugin( {
 					cssProcessor: {
