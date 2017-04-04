@@ -5,6 +5,8 @@ export interface ModalOptions
 	size?: 'sm' | 'lg' | undefined;
 	component: typeof Vue;
 	props?: any;
+	noBackdropClose?: boolean;
+	noEscClose?: boolean;
 }
 
 export class Modal
@@ -15,6 +17,8 @@ export class Modal
 	size: 'sm' | 'lg' | undefined;
 	component: typeof Vue;
 	props?: any;
+	noBackdropClose?: boolean;
+	noEscClose?: boolean;
 
 	static show( options: ModalOptions )
 	{
@@ -44,6 +48,8 @@ export class Modal
 		this.size = options.size;
 		this.component = options.component;
 		this.props = options.props;
+		this.noBackdropClose = options.noBackdropClose;
+		this.noEscClose = options.noEscClose;
 	}
 
 	resolve( val?: any )

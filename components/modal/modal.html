@@ -1,8 +1,8 @@
 <transition appear>
 	<div tabindex="-1" role="dialog" class="modal"
 		v-shortkey="[ 'esc' ]"
-		@shortkey="dismiss"
-		@click="dismiss"
+		@shortkey="dismissEsc"
+		@click="dismissBackdrop"
 		>
 		<!--TODO-->
 		<!--:style="{ 'z-index': 1050 + index * 10 }"-->

@@ -32,6 +32,22 @@ export class AppModal extends Vue
 		}
 	}
 
+	dismissEsc()
+	{
+		if ( this.modal.noEscClose ) {
+			return;
+		}
+		this.dismiss();
+	}
+
+	dismissBackdrop()
+	{
+		if ( this.modal.noBackdropClose ) {
+			return;
+		}
+		this.dismiss();
+	}
+
 	dismiss()
 	{
 		this.modal.dismiss();
