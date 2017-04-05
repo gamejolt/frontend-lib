@@ -17,6 +17,7 @@ declare module 'vue/types/vue'
 		$payload: any;
 		routeDestroyed: boolean;
 		routeLoading: boolean;
+		routeBootstrapped: boolean;
 		routed?(): void;
 	}
 }

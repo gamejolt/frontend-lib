@@ -63,6 +63,7 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 			}
 
 			vm.routeLoading = false;
+			vm.routeBootstrapped = true;
 
 			// If we used cache, then we want to refresh the route again async.
 			// This allows cache to show really fast but still pull correct and
@@ -82,6 +83,7 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 				return {
 					routeDestroyed: false,
 					routeLoading: false,
+					routeBootstrapped: false,
 				};
 			},
 
