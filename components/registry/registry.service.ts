@@ -19,6 +19,10 @@ export class Registry
 			this.config[ type ] = new RegistryItemConfig();
 		}
 
+		if ( !this.config[ type ].maxItems ) {
+			return;
+		}
+
 		if ( typeof this.items[ type ] === 'undefined' ) {
 			this.items[ type ] = [];
 		}
@@ -27,28 +31,44 @@ export class Registry
 			newItems = [ newItems ];
 		}
 
+		// We remove new items from the current array so that they put at the
+		// end and don't get cleaned out.
+		const toRemove = [];
+		for ( const item of newItems ) {
+			for ( let i = 0; i < this.items[ type ].length; ++i ) {
+				if ( this.items[ type ][ i ].id === item.id ) {
+					toRemove.push( i );
+					break;
+				}
+			}
+		}
+
+		if ( toRemove.length ) {
+			for ( const index of toRemove ) {
+				this.items[ type ].splice( index, 1 );
+			}
+		}
+
 		this.items[ type ] = this.items[ type ].concat( newItems );
 		this.items[ type ] = this.items[ type ].slice( -this.config[ type ].maxItems );
 	}
 
-	static find( type: string, id: string | number )
+	static find( type: string, id: string | number, field = 'id' )
 	{
 		if ( typeof this.items[ type ] === 'undefined' ) {
 			this.items[ type ] = [];
 		}
 
-		if ( typeof id === 'string' ) {
+		if ( field === 'id' && typeof id === 'string' ) {
 			id = parseInt( id, 10 );
 		}
 
-		// Reverse search.
-		for ( let i = this.items[ type ].length - 1; i >= 0; --i ) {
-			const item = this.items[ type ][ i ];
-			if ( item.id === id ) {
+		for ( const item of this.items[ type ] ) {
+			if ( item[ field ] === id ) {
 				return item;
 			}
 		}
 
-		return undefined;
+		return null;
 	}
 }
