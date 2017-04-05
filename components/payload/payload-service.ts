@@ -1,9 +1,12 @@
+import Vuex from 'vuex';
+import VueRouter from 'vue-router';
 import { getProvider } from '../../utils/utils';
 import { RequestOptions } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
 import { Analytics } from '../analytics/analytics.service';
+import { AppState } from '../../vue/services/app/app-store';
 
-export class Payload
+export class PayloadError
 {
 	static readonly ERROR_NEW_VERSION = 'payload-new-version';
 	static readonly ERROR_NOT_LOGGED = 'payload-not-logged';
@@ -11,6 +14,24 @@ export class Payload
 	static readonly ERROR_HTTP_ERROR = 'payload-error';
 	static readonly ERROR_OFFLINE = 'payload-offline';
 
+	defaultPrevented = false;
+
+	constructor(
+		public type: string,
+		public response?: any,
+		public status?: number,
+	)
+	{
+	}
+
+	preventDefault()
+	{
+		this.defaultPrevented = true;
+	}
+}
+
+export class Payload
+{
 	static readonly httpErrors = [
 		400,
 		403,
@@ -18,36 +39,32 @@ export class Payload
 		500,
 	];
 
-	// For angular.
-	static App: any;
-
-	// For vue.
-	static store: any;
+	static store: Vuex.Store<any>;
+	static router?: VueRouter;
 
 	private static ver?: number = undefined;
 	private static errorHandlers: Function[] = [];
 
-	static initAngular( app: any, $transitions: any )
-	{
-		if ( GJ_IS_ANGULAR ) {
-			this.App = app;
+	// TODO: Does angular still work?
+	// static initAngular( app: any, $transitions: any )
+	// {
+	// 	if ( GJ_IS_ANGULAR ) {
+	// 		this.App = app;
 
-			// We have to set up a watch on stateChangeErrors.
-			// If the error is that we got a new version, then we need to refresh the whole window and follow the new URL.
-			// This will force an update of the whole page to pull in the new version's code.
-			$transitions.onError( {}, ( trans: any ) =>
-			{
-				this.handlePayloadError( trans );
-			} );
-		}
-	}
+	// 		// We have to set up a watch on stateChangeErrors.
+	// 		// If the error is that we got a new version, then we need to refresh the whole window and follow the new URL.
+	// 		// This will force an update of the whole page to pull in the new version's code.
+	// 		$transitions.onError( {}, ( trans: any ) =>
+	// 		{
+	// 			this.handlePayloadError( trans );
+	// 		} );
+	// 	}
+	// }
 
-	// TODO: Payload error handling for Vue.
-	static initVue( store: any )
+	static init( store: Vuex.Store<any>, router?: VueRouter )
 	{
-		if ( GJ_IS_VUE ) {
-			this.store = store;
-		}
+		this.store = store;
+		this.router = router;
 	}
 
 	static addErrorHandler( handler: Function )
@@ -57,7 +74,10 @@ export class Payload
 
 	static removeErrorHandler( handler: Function )
 	{
-		_.pull( this.errorHandlers, handler );
+		const index = this.errorHandlers.indexOf( handler );
+		if ( index !== -1 ) {
+			this.errorHandlers.splice( index, 1 );
+		}
 	}
 
 	static async processResponse( requestPromise: Promise<any>, options: RequestOptions = {} ): Promise<any>
@@ -73,11 +93,10 @@ export class Payload
 
 			if ( !response || !response.data ) {
 				if ( !options.noErrorRedirect ) {
-					throw {
-						type: 'payload',
-						error: this.ERROR_INVALID,
-						response: response ? (response.data || undefined) : undefined,
-					};
+					throw new PayloadError(
+						PayloadError.ERROR_INVALID,
+						response ? (response.data || undefined) : undefined
+					);
 				}
 				else {
 					throw response.data || undefined;
@@ -95,19 +114,23 @@ export class Payload
 			this.checkPayloadVersion( data, options );
 			this.checkAnalyticsExperiments( response, options );
 
+			// TODO: Still needed?
 			if ( GJ_IS_ANGULAR ) {
 				getProvider<any>( '$rootScope' ).$emit( 'Payload.responseSuccess', response );
 			}
 
 			return data.payload;
 		}
-		catch ( response ) {
+		catch ( error ) {
+			console.error( 'Payload error', error );
 
-			// Rethrow certain errors.
-			// This will fail the transition/api call and eventually call `handlePayloadError`.
-			const rethrowErrors = [ this.ERROR_INVALID, this.ERROR_NEW_VERSION ];
-			if ( response.type === 'payload' && rethrowErrors.indexOf( response.error ) !== -1 ) {
-				throw response;
+			if ( error instanceof PayloadError ) {
+				throw this.handlePayloadError( error );
+			}
+
+			let response: any = undefined;
+			if ( error.response ) {
+				response = error.response;
 			}
 
 			if ( this.checkRedirect( response ) ) {
@@ -117,47 +140,44 @@ export class Payload
 			this.checkPayloadUser( response, options );
 
 			// Send an event and let other services react.
-			if ( GJ_IS_ANGULAR ) {
-				const $rootScope = getProvider<any>( '$rootScope' );
-				const event = $rootScope.$emit( 'Payload.responseError', response, options );
+			// TODO: Still needed?
+			// if ( GJ_IS_ANGULAR ) {
+			// 	const $rootScope = getProvider<any>( '$rootScope' );
+			// 	const event = $rootScope.$emit( 'Payload.responseError', response, options );
 
-				// If the default was prevented, then we want to allow the response to resolve even though it failed.
-				if ( event.defaultPrevented ) {
-					return response;
-				}
-			}
+			// 	// If the default was prevented, then we want to allow the response to resolve even though it failed.
+			// 	if ( event.defaultPrevented ) {
+			// 		return response;
+			// 	}
+			// }
 
 			if ( !options.noErrorRedirect ) {
 
 				// If the response indicated a failed connection.
-				if ( response.status === -1 ) {
-					throw {
-						type: 'payload',
-						error: this.ERROR_OFFLINE,
-						response: null,
-					};
+				if ( response === undefined || response.status === -1 ) {
+					throw this.handlePayloadError( new PayloadError(
+						PayloadError.ERROR_OFFLINE,
+					) );
 				}
 				// If it was a 401 error, then they need to be logged in.
 				// Let's redirect them to the login page on the main site.
 				else if ( response.status === 401 ) {
-					throw {
-						type: 'payload',
-						error: this.ERROR_NOT_LOGGED,
-						response: response.data || null,
-					};
+					throw this.handlePayloadError( new PayloadError(
+						PayloadError.ERROR_NOT_LOGGED,
+						response.data || undefined,
+					) );
 				}
 				// Otherwise, show an error page.
 				else {
-					throw {
-						type: 'payload',
-						error: this.ERROR_HTTP_ERROR,
-						response: response.data || null,
-						status: response.status || undefined,
-					};
+					throw this.handlePayloadError( new PayloadError(
+						PayloadError.ERROR_HTTP_ERROR,
+						response.data || undefined,
+						response.status || undefined,
+					) );
 				}
 			}
 			else {
-				throw response;
+				throw error;
 			}
 		}
 	}
@@ -169,6 +189,7 @@ export class Payload
 		}
 
 		// Redirecting within the app.
+		// TODO: Get this working for Vue.
 		if ( GJ_IS_ANGULAR ) {
 			getProvider<any>( '$location' ).url( response.data.redirect );
 		}
@@ -183,9 +204,11 @@ export class Payload
 	{
 		// We ignore completely if we're in the client.
 		// We don't want the client refreshing when an update to site is pushed out.
-		if ( options.ignorePayloadVersion || GJ_IS_CLIENT || GJ_IS_VUE ) {
+		if ( options.ignorePayloadVersion || GJ_IS_CLIENT ) {
 			return;
 		}
+
+		console.log( 'set version', data.ver );
 
 		if ( data.ver !== this.ver ) {
 
@@ -197,20 +220,22 @@ export class Payload
 			// Otherwise a new version was released.
 			// We need to refresh the whole page.
 			else {
+				// if ( this.router ) {
+				// 	console.log( this.router.currentRoute.fullPath );
+				// }
 
 				// Reject with the ERROR_NEW_VERSION error.
 				// The $stateChangeError event will catch this and reload the page to the new route.
-				throw {
-					type: 'payload',
-					error: this.ERROR_NEW_VERSION,
-				};
+				throw new PayloadError(
+					PayloadError.ERROR_NEW_VERSION,
+				);
 			}
 		}
 	}
 
 	private static checkPayloadUser( response: any, options: RequestOptions )
 	{
-		if ( options.ignorePayloadUser || !response || !response.data || (!this.App && !this.store) ) {
+		if ( options.ignorePayloadUser || !response || !response.data || !this.store ) {
 			return;
 		}
 
@@ -222,12 +247,7 @@ export class Payload
 
 			// If they are logged out, we want to ensure the app user is nulled as well.
 			if ( data.user === null ) {
-				if ( GJ_IS_ANGULAR ) {
-					this.App.user = null;
-				}
-				else if ( GJ_IS_VUE ) {
-					this.store.commit( 'app/clearUser' );
-				}
+				this.store.commit( AppState.Mutations.clearUser );
 			}
 			// Otherwise we set up the user with the new data.
 			else {
@@ -236,20 +256,15 @@ export class Payload
 				// a circular reference some times. Something -> User -> Api -> Payload -> User...
 				const UserModel = require( '../user/user.model' ).User;
 				const user = new UserModel( data.user );
-
-				if ( GJ_IS_ANGULAR ) {
-					this.App.user = user;
-				}
-				else if ( GJ_IS_VUE ) {
-					this.store.commit( 'app/setUser', user );
-				}
+				this.store.commit( AppState.Mutations.setUser, user );
 			}
 		}
 
-		// Emit an event to the root scope that a payload has been received and the user has been set.
-		if ( GJ_IS_ANGULAR ) {
-			getProvider<any>( '$rootScope' ).$emit( 'Payload.userProcessed', !!this.App.user );
-		}
+		// TODO: Still needed?
+		// // Emit an event to the root scope that a payload has been received and the user has been set.
+		// if ( GJ_IS_ANGULAR ) {
+		// 	getProvider<any>( '$rootScope' ).$emit( 'Payload.userProcessed', !!this.App.user );
+		// }
 	}
 
 	private static checkAnalyticsExperiments( response: any, _options: RequestOptions )
@@ -264,61 +279,67 @@ export class Payload
 		}
 	}
 
-	static handlePayloadError( trans: any, error?: any )
+	private static handlePayloadError( error: PayloadError )
 	{
-		// They may pass in `error` if this API call wasn't done in the middle of a transition.
-		if ( !error ) {
-			error = trans.error();
-		}
+		// TODO
+		// // They may pass in `error` if this API call wasn't done in the middle of a transition.
+		// if ( !error ) {
+		// 	error = trans.error();
+		// }
 
-		let toState = trans.to();
-		let toParams = trans.params( 'to' );
-		let fromState = trans.from();
-		let fromParams = trans.params( 'from' );
+		// let toState = trans.to();
+		// let toParams = trans.params( 'to' );
+		// let fromState = trans.from();
+		// let fromParams = trans.params( 'from' );
 
-		const event = {
-			defaultPrevented: false,
-			preventDefault: () =>
-			{
-				event.defaultPrevented = true;
-			},
-		};
+		// const event = {
+		// 	defaultPrevented: false,
+		// 	preventDefault: () =>
+		// 	{
+		// 		event.defaultPrevented = true;
+		// 	},
+		// };
 
-		// Only process if it's a payload error.
-		if ( !error || !error.type || error.type !== 'payload' ) {
-			return;
-		}
+		// // Only process if it's a payload error.
+		// if ( !error || !error.type || error.type !== 'payload' ) {
+		// 	return;
+		// }
 
 		// Handlers can return false to stop processing other handlers set up.
 		// They can `.preventDefault()` to not do the default handling below.
 		if ( this.errorHandlers.length ) {
 			for ( const errorHandler of this.errorHandlers ) {
-				if ( errorHandler( event, toState, toParams, fromState, fromParams, error ) === false ) {
+				if ( errorHandler( error ) === false ) {
 					break;
 				}
 			}
 		}
 
-		if ( !event.defaultPrevented ) {
-			const $state = getProvider<any>( '$state' );
-			const $location = getProvider<any>( '$location' );
+		if ( !error.defaultPrevented ) {
 
-			if ( error.error === this.ERROR_NEW_VERSION ) {
-				window.location.href = $state.href( toState, toParams, { absolute: true } );
+			if ( error.type === PayloadError.ERROR_NEW_VERSION ) {
+				// Do nothing. Our BeforeRouteEnter util will catch this payload
+				// error and do a refresh of the page after it has the URL to
+				// reload.
 			}
-			else if ( error.error === this.ERROR_NOT_LOGGED ) {
-				window.location.href = Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent( $location.url() );
+			else if ( error.type === PayloadError.ERROR_NOT_LOGGED ) {
+				let redirect = '';
+				if ( this.router ) {
+					redirect = encodeURIComponent( this.router.currentRoute.fullPath );
+				}
+				window.location.href = Environment.authBaseUrl + '/login?redirect=' + redirect;
 			}
-			else if ( error.error === this.ERROR_INVALID ) {
-				$state.go( 'error-500' );
+			else if ( error.type === PayloadError.ERROR_INVALID ) {
+				this.store.commit( AppState.Mutations.setError, 500 );
 			}
-			else if ( error.error === this.ERROR_HTTP_ERROR && (!error.status || this.httpErrors.indexOf( error.status ) !== -1) ) {
-				$state.go( 'error-' + (error.status || 500) );
+			else if ( error.type === PayloadError.ERROR_HTTP_ERROR && (!error.status || this.httpErrors.indexOf( error.status ) !== -1) ) {
+				this.store.commit( AppState.Mutations.setError, (error.status || 500) );
 			}
 			else {
-				const retryUrl = $state.href( toState, toParams );
-				$state.go( 'error-offline', { retryUrl: retryUrl } );
+				this.store.commit( AppState.Mutations.setError, 'offline' );
 			}
 		}
+
+		return error;
 	}
 }

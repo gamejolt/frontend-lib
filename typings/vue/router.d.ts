@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Route } from 'vue-router';
 import { Store } from 'vuex';
+import { PayloadError } from '../../components/payload/payload-service';
 
 declare module 'vue/types/options'
 {
@@ -19,5 +20,6 @@ declare module 'vue/types/vue'
 		routeLoading: boolean;
 		routeBootstrapped: boolean;
 		routed?(): void;
+		routeError?( PayloadError ): void;
 	}
 }

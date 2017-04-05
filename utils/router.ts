@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { createDecorator } from 'vue-class-component';
 import { HistoryCache } from '../components/history/cache/cache.service';
+import { PayloadError } from '../components/payload/payload-service';
+import { appStore, AppState } from '../vue/services/app/app-store';
 
 interface BeforeRouteEnterOptions
 {
@@ -25,19 +27,27 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 		 * It will return a promise that will resolve with the data.
 		 * If we are caching, then we will try to return the cache data.
 		 */
-		function getPayload( route: VueRouter.Route, useCache = false )
+		async function getPayload( route: VueRouter.Route, useCache = false )
 		{
 			if ( useCache ) {
 				const cache = HistoryCache.get( route, options.cacheTag );
 				if ( cache ) {
-					return Promise.resolve( cache.data );
+					return cache.data;
 				}
 			}
 
-			return (componentOptions.methods as any)[ key ]( route );
+			try {
+				return await (componentOptions.methods as any)[ key ]( route );
+			}
+			catch ( e ) {
+				if ( e instanceof PayloadError ) {
+					return e;
+				}
+				throw e;
+			}
 		}
 
-		async function finalizeRoute( route: VueRouter.Route, vm: Vue, payload: any, shouldRefreshCache?: boolean )
+		async function finalizeRoute( route: VueRouter.Route, vm: Vue, payload: any | PayloadError, shouldRefreshCache?: boolean )
 		{
 			// We do a cache refresh if the cache was used for this route.
 			if ( shouldRefreshCache === undefined ) {
@@ -51,6 +61,24 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 			}
 
 			if ( payload ) {
+
+				// If the payload errored out.
+				if ( payload instanceof PayloadError ) {
+
+					// If it was a version change payload error, we want to
+					// refresh the page so that it gets the new code.
+					if ( payload.type === PayloadError.ERROR_NEW_VERSION ) {
+						window.location.reload();
+						return;
+					}
+
+					if ( vm.routeError ) {
+						vm.routeError( payload );
+					}
+
+					return;
+				}
+
 				vm.$payload = payload;
 
 				if ( options.cache ) {
@@ -60,6 +88,10 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 
 			if ( vm.routed ) {
 				vm.routed();
+			}
+
+			if ( appStore.state!.error ) {
+				vm.$store.commit( AppState.Mutations.clearError );
 			}
 
 			vm.routeLoading = false;
