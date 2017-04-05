@@ -1,5 +1,6 @@
 import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
+import { Registry } from '../registry/registry.service';
 
 export class User extends Model
 {
@@ -45,12 +46,14 @@ export class User extends Model
 	{
 		super( data );
 
-		if ( this.type == User.TYPE_GAMER ) {
+		if ( this.type === User.TYPE_GAMER ) {
 			this.is_gamer = true;
 		}
-		else if ( this.type == User.TYPE_DEVELOPER ) {
+		else if ( this.type === User.TYPE_DEVELOPER ) {
 			this.is_developer = true;
 		}
+
+		Registry.store( 'User', this );
 	}
 
 	static touch()

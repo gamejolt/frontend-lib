@@ -11,6 +11,7 @@ import { MediaItem } from '../../media-item/media-item-model';
 import { Game } from '../../game/game.model';
 import { Api } from '../../api/api.service';
 import { appStore } from '../../../vue/services/app/app-store';
+import { Registry } from '../../registry/registry.service';
 
 export class FiresidePost extends Model
 {
@@ -90,6 +91,8 @@ export class FiresidePost extends Model
 		}
 
 		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
+
+		Registry.store( 'FiresidePost', this );
 	}
 
 	static pullHashFromUrl( url: string )
