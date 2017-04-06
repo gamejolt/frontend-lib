@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop } from 'vue-property-decorator';
 
 import { Scroll } from '../scroll.service';
@@ -35,13 +36,8 @@ export class AppScrollParallax extends Vue
 	private posReset = false;
 	private dimReset = false;
 
-	private scroll$ = Scroll.scrollChanges.subscribe(
-		( change ) => this.onScroll( change.top ),
-	);
-
-	private resize$ = Screen.resizeChanges.subscribe(
-		() => this.onScroll( Scroll.getScrollTop() ),
-	);
+	private scroll$: Subscription | undefined;
+	private resize$: Subscription | undefined;
 
 	private elementHeight: number;
 	private elementTop: number;
@@ -49,6 +45,14 @@ export class AppScrollParallax extends Vue
 
 	async mounted()
 	{
+		this.scroll$ = Scroll.scrollChanges.subscribe(
+			( change ) => this.onScroll( change.top ),
+		);
+
+		this.resize$ = Screen.resizeChanges.subscribe(
+			() => this.onScroll( Scroll.getScrollTop() ),
+		);
+
 		const initialOpacity = this.$el.style.opacity;
 		if ( initialOpacity ) {
 			this.initialOpacity = parseFloat( initialOpacity );
@@ -65,8 +69,15 @@ export class AppScrollParallax extends Vue
 
 	destroyed()
 	{
-		this.scroll$.unsubscribe();
-		this.resize$.unsubscribe();
+		if ( this.scroll$ ) {
+			this.scroll$.unsubscribe();
+			this.scroll$ = undefined;
+		}
+
+		if ( this.resize$ ) {
+			this.resize$.unsubscribe();
+			this.resize$ = undefined;
+		}
 	}
 
 	private recalc()

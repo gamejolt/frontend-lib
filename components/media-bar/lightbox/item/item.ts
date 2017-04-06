@@ -35,7 +35,7 @@ export class AppMediaBarLightboxItem extends Vue
 	maxWidth = 0;
 	maxHeight = 0;
 
-	resize$: Subscription;
+	private resize$: Subscription | undefined;
 
 	mounted()
 	{
@@ -48,7 +48,10 @@ export class AppMediaBarLightboxItem extends Vue
 
 	destroyed()
 	{
-		this.resize$.unsubscribe();
+		if ( this.resize$ ) {
+			this.resize$.unsubscribe();
+			this.resize$ = undefined;
+		}
 	}
 
 	@Watch( 'activeIndex' )

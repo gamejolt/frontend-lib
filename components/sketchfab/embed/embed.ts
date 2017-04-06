@@ -21,7 +21,7 @@ export class AppSketchfabEmbed extends Vue
 	width = 0;
 	height = 0;
 
-	resize$: Subscription;
+	private resize$: Subscription | undefined;
 
 	mounted()
 	{
@@ -31,7 +31,10 @@ export class AppSketchfabEmbed extends Vue
 
 	destroyed()
 	{
-		this.resize$.unsubscribe();
+		if ( this.resize$ ) {
+			this.resize$.unsubscribe();
+			this.resize$ = undefined;
+		}
 	}
 
 	@Watch( 'sketchfabId', { immediate: true } )

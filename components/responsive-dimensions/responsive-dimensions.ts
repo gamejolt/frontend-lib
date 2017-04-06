@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
 import { Screen } from '../screen/screen-service';
@@ -9,17 +10,21 @@ export class AppResponsiveDimensions extends Vue
 {
 	@Prop( Number ) ratio: number;
 
-	private resized$ = Screen.resizeChanges.subscribe( () => this.updateDimensions() );
+	private resize$: Subscription | undefined;
 	private height = 'auto';
 
 	mounted()
 	{
+		this.resize$ = Screen.resizeChanges.subscribe( () => this.updateDimensions() );
 		this.updateDimensions();
 	}
 
 	destroyed()
 	{
-		this.resized$.unsubscribe();
+		if ( this.resize$ ) {
+			this.resize$.unsubscribe();
+			this.resize$ = undefined;
+		}
 	}
 
 	render( h: Vue.CreateElement )

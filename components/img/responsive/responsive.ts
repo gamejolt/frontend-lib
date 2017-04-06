@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
 import { Screen } from '../../screen/screen-service';
@@ -14,9 +15,7 @@ export class AppImgResponsive extends Vue
 	@Prop( String ) src: string;
 
 	private processedSrc = '';
-	private resizeChanges$ = Screen.resizeChanges.subscribe(
-		() => this.updateSrc(),
-	);
+	private resize$: Subscription | undefined;
 
 	created()
 	{
@@ -26,6 +25,8 @@ export class AppImgResponsive extends Vue
 
 	async mounted()
 	{
+		this.resize$ = Screen.resizeChanges.subscribe( () => this.updateSrc() );
+
 		// Make sure the view is compiled.
 		await this.$nextTick();
 		this.updateSrc();
@@ -43,7 +44,10 @@ export class AppImgResponsive extends Vue
 
 	destroyed()
 	{
-		this.resizeChanges$.unsubscribe();
+		if ( this.resize$ ) {
+			this.resize$.unsubscribe();
+			this.resize$ = undefined;
+		}
 	}
 
 	@Watch( 'src' )

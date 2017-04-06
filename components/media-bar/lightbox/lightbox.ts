@@ -50,7 +50,7 @@ export class AppMediaBarLightbox extends Vue
 	isDragging = false;
 	waitingForFrame = false;
 
-	resize$: Subscription;
+	private resize$: Subscription | undefined;
 
 	mounted()
 	{
@@ -61,9 +61,12 @@ export class AppMediaBarLightbox extends Vue
 		} );
 	}
 
-	destroy()
+	destroyed()
 	{
-		this.resize$.unsubscribe();
+		if ( this.resize$ ) {
+			this.resize$.unsubscribe();
+			this.resize$ = undefined;
+		}
 	}
 
 	setSlider( slider: HTMLElement )

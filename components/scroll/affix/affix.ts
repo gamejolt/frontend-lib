@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./affix.html?style=./affix.styl';
 
@@ -29,23 +30,8 @@ export class AppScrollAffix extends Vue
 	private ngStateChange: any;
 	private curTop: number;
 
-	private resizeChanges$ = Screen.resizeChanges.subscribe( () =>
-	{
-		// If we resized, then the element width most likely changed.
-		// Pull from the placeholder which should be the source of the true width now.
-		if ( this.isAffixed ) {
-			const placeholder = this.getPlaceholder();
-			if ( placeholder ) {
-				this.width = Ruler.outerWidth( placeholder ) + 'px';
-			}
-		}
-
-		this.checkLoop();
-	} );
-
-	private scrollChanges$ = Scroll.scrollChanges.subscribe(
-		( change ) => this.checkScroll( change.top ),
-	);
+	private resize$: Subscription | undefined;
+	private scroll$: Subscription | undefined;
 
 	private clickHandler = () => this.checkLoop();
 
@@ -57,6 +43,24 @@ export class AppScrollAffix extends Vue
 
 	mounted()
 	{
+		this.resize$ = Screen.resizeChanges.subscribe( () =>
+		{
+			// If we resized, then the element width most likely changed.
+			// Pull from the placeholder which should be the source of the true width now.
+			if ( this.isAffixed ) {
+				const placeholder = this.getPlaceholder();
+				if ( placeholder ) {
+					this.width = Ruler.outerWidth( placeholder ) + 'px';
+				}
+			}
+
+			this.checkLoop();
+		} );
+
+		this.scroll$ = Scroll.scrollChanges.subscribe(
+			( change ) => this.checkScroll( change.top ),
+		);
+
 		this.container = this.$el.getElementsByClassName( 'scroll-affix-container' )[0] as HTMLElement;
 		if ( !this.container ) {
 			throw new Error( `Couldn't find container.` );
@@ -88,8 +92,15 @@ export class AppScrollAffix extends Vue
 			this.timeoutCancel = undefined;
 		}
 
-		this.resizeChanges$.unsubscribe();
-		this.scrollChanges$.unsubscribe();
+		if ( this.resize$ ) {
+			this.resize$.unsubscribe();
+			this.resize$ = undefined;
+		}
+
+		if ( this.scroll$ ) {
+			this.scroll$.unsubscribe();
+			this.scroll$ = undefined;
+		}
 	}
 
 	@Watch( 'shouldAffix' )
