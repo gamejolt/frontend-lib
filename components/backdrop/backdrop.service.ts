@@ -4,10 +4,16 @@ export class Backdrop
 {
 	private static backdrops: AppBackdrop[] = [];
 
-	static push()
+	static push( context?: HTMLElement )
 	{
 		const el = document.createElement( 'div' );
-		document.body.appendChild( el );
+
+		if ( !context ) {
+			document.body.appendChild( el );
+		}
+		else {
+			context.appendChild( el );
+		}
 
 		const backdrop = new AppBackdrop();
 		backdrop.$mount( el );
