@@ -83,7 +83,7 @@ export class AppScrollInview extends Vue
 	check()
 	{
 		let inView = true;
-		if ( this.top > scrollTop + scrollHeight ) {
+		if ( this.top > scrollTop + scrollWindowHeight ) {
 			inView = false;
 		}
 		else if ( this.bottom < scrollTop ) {
