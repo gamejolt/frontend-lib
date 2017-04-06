@@ -17,6 +17,8 @@ export interface ScrollChange
 	left: number;
 	height: number;
 	width: number;
+	scrollHeight: number;
+	scrollWidth: number;
 }
 
 export class Scroll
@@ -57,6 +59,8 @@ export class Scroll
 				width: this.context === document
 					? window.innerWidth
 					: (this.context as HTMLElement).clientWidth,
+				scrollHeight: Scroll.getScrollHeight(),
+				scrollWidth: Scroll.getScrollWidth(),
 			} );
 		}
 
