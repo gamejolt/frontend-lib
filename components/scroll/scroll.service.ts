@@ -53,12 +53,8 @@ export class Scroll
 			this.scrollListener = () => this.scrollChanges.next( {
 				top: this.getScrollTop(),
 				left: this.getScrollLeft(),
-				height: this.context === document
-					? window.innerHeight
-					: (this.context as HTMLElement).clientHeight,
-				width: this.context === document
-					? window.innerWidth
-					: (this.context as HTMLElement).clientWidth,
+				height: this.getScrollWindowHeight(),
+				width: this.getScrollWindowWidth(),
 				scrollHeight: Scroll.getScrollHeight(),
 				scrollWidth: Scroll.getScrollWidth(),
 			} );
@@ -132,6 +128,28 @@ export class Scroll
 		}
 
 		return element.scrollWidth;
+	}
+
+	static getScrollWindowHeight( element?: HTMLElement | HTMLDocument ): number
+	{
+		if ( !element ) {
+			element = this.context;
+		}
+
+		return element === document
+			? window.innerHeight
+			: (element as HTMLElement).clientHeight;
+	}
+
+	static getScrollWindowWidth( element?: HTMLElement | HTMLDocument ): number
+	{
+		if ( !element ) {
+			element = this.context;
+		}
+
+		return element === document
+			? window.innerWidth
+			: (element as HTMLElement).clientWidth;
 	}
 
 	/**
