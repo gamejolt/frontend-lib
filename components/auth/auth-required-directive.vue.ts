@@ -11,7 +11,7 @@ export const AppAuthRequired: Vue.DirectiveOptions = {
 				return;
 			}
 
-			// Stop everything.y
+			// Stop everything.
 			e.stopPropagation();
 			e.stopImmediatePropagation();
 			e.preventDefault();

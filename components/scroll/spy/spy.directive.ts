@@ -9,8 +9,8 @@ interface Spy
 	id: string;
 	el: HTMLElement;
 	target?: HTMLElement;
-	targetTop?: number;
-	targetHeight?: number;
+	targetTop: number;
+	targetHeight: number;
 }
 
 const spies: Spy[] = [];
@@ -50,56 +50,59 @@ function activateSpy( spy: Spy )
 	activeSpy = spy;
 }
 
-let lastScrollHeight: number | undefined = undefined;
-Scroll.scrollChanges.subscribe( ( changes ) =>
-{
-	const scrollTop = Math.ceil( changes.top );
-	const scrollHeight = changes.height;
-	const maxScroll = scrollHeight - (
-		Scroll.context === document
-		? window.innerHeight
-		: (Scroll.context as HTMLElement).offsetHeight
-	);
-	let found = false;
+if ( !GJ_IS_SSR ) {
 
-	// Only refresh the spy data if the scroll offset has changed.
-	// We do this for perf reasons.
-	if ( lastScrollHeight !== scrollHeight ) {
-		lastScrollHeight = scrollHeight;
-		refreshSpies();
-	}
-
-	// If we've hit the bottom of the scroll container, then activate the last spy.
-	if ( scrollTop >= maxScroll ) {
-		const spy = spies[ spies.length - 1 ];
-		if ( spy && spy.target ) {
-			activateSpy( spy );
-		}
-		return;
-	}
-
-	// If we have an active spy and we are scrolled back up before it we want to
-	// clear it out. If the active spy's top position is the start of the
-	// window, then keep it active.
-	if ( activeSpy && scrollTop < activeSpy.targetTop && activeSpy.targetTop > 0 ) {
-		activeSpy.el.classList.remove( 'active' );
-		activeSpy = undefined;
-		return;
-	}
-
-	spies.forEach( ( spy ) =>
+	let lastScrollHeight: number | undefined = undefined;
+	Scroll.scrollChanges.subscribe( ( changes ) =>
 	{
-		if ( found ) {
+		const scrollTop = Math.ceil( changes.top );
+		const scrollHeight = changes.height;
+		const maxScroll = scrollHeight - (
+			Scroll.context === document
+			? window.innerHeight
+			: (Scroll.context as HTMLElement).offsetHeight
+		);
+		let found = false;
+
+		// Only refresh the spy data if the scroll offset has changed.
+		// We do this for perf reasons.
+		if ( lastScrollHeight !== scrollHeight ) {
+			lastScrollHeight = scrollHeight;
+			refreshSpies();
+		}
+
+		// If we've hit the bottom of the scroll container, then activate the last spy.
+		if ( scrollTop >= maxScroll ) {
+			const spy = spies[ spies.length - 1 ];
+			if ( spy && spy.target ) {
+				activateSpy( spy );
+			}
 			return;
 		}
 
-		if ( scrollTop >= spy.targetTop && scrollTop < spy.targetTop + spy.targetHeight ) {
-			spy.el.classList.add( 'active' );
-			activateSpy( spy );
-			found = true;
+		// If we have an active spy and we are scrolled back up before it we want to
+		// clear it out. If the active spy's top position is the start of the
+		// window, then keep it active.
+		if ( activeSpy && scrollTop < activeSpy.targetTop && activeSpy.targetTop > 0 ) {
+			activeSpy.el.classList.remove( 'active' );
+			activeSpy = undefined;
+			return;
 		}
+
+		spies.forEach( ( spy ) =>
+		{
+			if ( found ) {
+				return;
+			}
+
+			if ( scrollTop >= spy.targetTop && scrollTop < spy.targetTop + spy.targetHeight ) {
+				spy.el.classList.add( 'active' );
+				activateSpy( spy );
+				found = true;
+			}
+		} );
 	} );
-} );
+}
 
 export const AppScrollSpy: Vue.DirectiveOptions = {
 	bind( el, binding )
@@ -110,7 +113,7 @@ export const AppScrollSpy: Vue.DirectiveOptions = {
 			return;
 		}
 
-		spies.push( { id, el } );
+		spies.push( { id, el, targetTop: 0, targetHeight: 0 } );
 		refreshSpies();
 	},
 	unbind( el )

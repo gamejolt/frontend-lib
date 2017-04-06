@@ -208,8 +208,6 @@ export class Payload
 			return;
 		}
 
-		console.log( 'set version', data.ver );
-
 		if ( data.ver !== this.ver ) {
 
 			// If we didn't have a version, then it's the first payload.
