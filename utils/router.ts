@@ -4,6 +4,7 @@ import { createDecorator } from 'vue-class-component';
 import { HistoryCache } from '../components/history/cache/cache.service';
 import { PayloadError } from '../components/payload/payload-service';
 import { appStore, AppState } from '../vue/services/app/app-store';
+import { EventBus } from '../components/event-bus/event-bus.service';
 
 interface BeforeRouteEnterOptions
 {
@@ -123,6 +124,8 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 			// annotated function for fetching the data for the route.
 			async beforeRouteEnter( to, _from, next )
 			{
+				EventBus.emit( 'routeChangeBefore' );
+
 				let promise: Promise<any> | undefined;
 				let payload: any;
 				let hasCache = options.cache ? HistoryCache.has( to, options.cacheTag ) : false;
@@ -158,7 +161,8 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 						payload = await promise;
 					}
 
-					finalizeRoute( to, vm, payload );
+					await finalizeRoute( to, vm, payload );
+					EventBus.emit( 'routeChangeAfter' );
 				} );
 			},
 
@@ -167,9 +171,11 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 			watch: {
 				$route: async function routeChanged( this: Vue, route: VueRouter.Route )
 				{
+					EventBus.emit( 'routeChangeBefore' );
 					this.routeLoading = true;
 					const payload = await getPayload( route, options.cache );
-					finalizeRoute( route, this, payload );
+					await finalizeRoute( route, this, payload );
+					EventBus.emit( 'routeChangeAfter' );
 				},
 			},
 
