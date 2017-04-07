@@ -1,13 +1,20 @@
+import Vue from 'vue';
 import { Model } from '../model/model.service';
 import { Environment } from '../environment/environment.service';
 import { getProvider } from '../../utils/utils';
 import { FiresidePost } from '../fireside/post/post-model';
 import { Comment } from '../comment/comment-model';
-import { StateService } from 'angular-ui-router';
 import { User } from '../user/user.model';
 import { Api } from '../api/api.service';
 import { Game } from '../game/game.model';
 import { Growls } from '../growls/growls.service';
+import { ForumTopic } from '../forum/topic/topic.model';
+import { ForumPost } from '../forum/post/post.model';
+import { UserFriendship } from '../user/friendship/friendship.model';
+import { GameRating } from '../game/rating/rating.model';
+import { Sellable } from '../sellable/sellable.model';
+
+const vm = new Vue();
 
 export class Notification extends Model
 {
@@ -67,10 +74,10 @@ export class Notification extends Model
 			this.to_model = new FiresidePost( data.to_resource_model );
 		}
 		else if ( data.to_resource === 'Forum_Topic' ) {
-			this.to_model = new (getProvider<any>( 'Forum_Topic' ))( data.to_resource_model );
+			this.to_model = new ForumTopic( data.to_resource_model );
 		}
 		else if ( data.to_resource === 'Sellable' ) {
-			this.to_model = new (getProvider<any>( 'Sellable' ))( data.to_resource_model );
+			this.to_model = new Sellable( data.to_resource_model );
 		}
 
 		if ( this.type === Notification.TYPE_COMMENT_ADD ) {
@@ -88,55 +95,62 @@ export class Notification extends Model
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FORUM_POST_ADD ) {
-			this.action_model = new (getProvider<any>( 'Forum_Post' ))( data.action_resource_model );
+			this.action_model = new ForumPost( data.action_resource_model );
 			this.action_label = 'New Forum Post';
 			this.url = undefined;
 			this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FRIENDSHIP_REQUEST ) {
-			this.action_model = new (getProvider<any>( 'User_Friendship' ))( data.action_resource_model );
+			this.action_model = new UserFriendship( data.action_resource_model );
 			this.action_label = 'Friend Request';
-			this.url = getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
+			this.url = this.from_model.url;
+			// getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
 			this.jolticon = 'jolticon-friend-add-1';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FRIENDSHIP_ACCEPT ) {
-			this.action_model = new (getProvider<any>( 'User_Friendship' ))( data.action_resource_model );
+			this.action_model = new UserFriendship( data.action_resource_model );
 			this.action_label = 'New Friend';
-			this.url = getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
+			this.url = this.from_model.url;
+			// getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
 			this.jolticon = 'jolticon-friend-add-2';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_GAME_RATING_ADD ) {
-			this.action_model = new (getProvider<any>( 'Game_Rating' ))( data.action_resource_model );
+			this.action_model = new GameRating( data.action_resource_model );
 			this.action_label = 'Game Rating';
 			this.url = this.to_model.getUrl();
 			this.jolticon = 'jolticon-chart';
 			this.is_game_based = true;
 		}
 		else if ( this.type === Notification.TYPE_GAME_FOLLOW ) {
-			this.action_model = new (getProvider<any>( 'GameLibrary_Game' ))( data.action_resource_model );
+			// this.action_model = new (getProvider<any>( 'GameLibrary_Game' ))( data.action_resource_model );
 			this.action_label = 'Game Follow';
-			this.url = this.from_model.url;
+			this.url = '';
+			// this.url = this.from_model.url;
 			this.jolticon = 'jolticon-subscribe';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_DEVLOG_POST_ADD ) {
 			this.action_model = new FiresidePost( data.action_resource_model );
 			this.action_label = 'Devlog Post';
-			this.url = getProvider<StateService>( '$state' ).href( 'discover.games.view.devlog.view', {
-				slug: this.to_model.slug,
-				id: this.to_model.id,
-				postSlug: this.action_model.slug,
-			} );
+			this.url = vm.$router.resolve( {
+				name: 'discover.games.view.devlog.view',
+				params: {
+					slug: this.to_model.slug,
+					id: this.to_model.id,
+					postSlug: this.action_model.slug,
+				},
+			} ).href;
 			this.jolticon = 'jolticon-blog-article';
 			this.is_game_based = true;
 		}
 		else if ( this.type === Notification.TYPE_SELLABLE_SELL ) {
-			this.action_model = new (getProvider<any>( 'Order_Item' ))( data.action_resource_model );
+			// this.action_model = new (getProvider<any>( 'Order_Item' ))( data.action_resource_model );
 			this.action_label = 'Sale';
-			this.url = getProvider<StateService>( '$state' ).href( 'dashboard.main.overview', {} );
+			this.url = '';
+			// this.url = getProvider<StateService>( '$state' ).href( 'dashboard.main.overview', {} );
 			this.jolticon = 'jolticon-heart';
 			this.is_user_based = true;
 		}
