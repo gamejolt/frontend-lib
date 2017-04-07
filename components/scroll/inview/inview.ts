@@ -24,19 +24,19 @@ function onScroll( scroll?: {
 	// These values might come from the scrollChanges subscription, or manually
 	// when a check is queued.
 	const scrollTop = scroll ? scroll.top : Scroll.getScrollTop();
-	const windowHeight = scroll ? scroll.scrollHeight : Scroll.getScrollWindowHeight();
-	const scrollHeight = scroll ? scroll.height : Scroll.getScrollHeight();
+	const windowHeight = scroll ? scroll.height : Scroll.getScrollWindowHeight();
+	const scrollHeight = scroll ? scroll.scrollHeight : Scroll.getScrollHeight();
 
 	for ( const item of items ) {
 
 		// We only calculate the bounding box when scroll height changes. This
 		// reduces the amount of reflows and what not.
-		if ( lastScrollHeight !== windowHeight ) {
+		if ( lastScrollHeight !== scrollHeight ) {
 			item.recalcBox();
 		}
 
 		let inView = true;
-		if ( item.top > scrollTop + scrollHeight ) {
+		if ( item.top > scrollTop + windowHeight ) {
 			inView = false;
 		}
 		else if ( item.bottom < scrollTop ) {
