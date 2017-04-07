@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Component, Watch, Prop } from 'vue-property-decorator';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Scroll, ScrollChange } from '../scroll.service';
+import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
 
 // We set up a global listener instead of having each element setting up
@@ -15,21 +15,31 @@ if ( !GJ_IS_SSR ) {
 }
 
 let lastScrollHeight: number | undefined = undefined;
-function onScroll( scroll: ScrollChange )
+function onScroll( scroll?: {
+	scrollHeight: number;
+	top: number;
+	height: number;
+} )
 {
+	// These values might come from the scrollChanges subscription, or manually
+	// when a check is queued.
+	const scrollTop = scroll ? scroll.top : Scroll.getScrollTop();
+	const windowHeight = scroll ? scroll.scrollHeight : Scroll.getScrollWindowHeight();
+	const scrollHeight = scroll ? scroll.height : Scroll.getScrollHeight();
+
 	for ( const item of items ) {
 
 		// We only calculate the bounding box when scroll height changes. This
 		// reduces the amount of reflows and what not.
-		if ( lastScrollHeight !== scroll.scrollHeight ) {
+		if ( lastScrollHeight !== windowHeight ) {
 			item.recalcBox();
 		}
 
 		let inView = true;
-		if ( item.top > scroll.top + scroll.height ) {
+		if ( item.top > scrollTop + scrollHeight ) {
 			inView = false;
 		}
-		else if ( item.bottom < scroll.top ) {
+		else if ( item.bottom < scrollTop ) {
 			inView = false;
 		}
 
@@ -38,7 +48,24 @@ function onScroll( scroll: ScrollChange )
 		}
 	}
 
-	lastScrollHeight = scroll.scrollHeight;
+	lastScrollHeight = windowHeight;
+}
+
+let checkTimeout: number | undefined;
+
+/**
+ * Sets a timeout that will run a check some time in the future for all current
+ * inview elements on screen.
+ */
+function queueCheck()
+{
+	if ( !checkTimeout ) {
+		checkTimeout = setTimeout( () =>
+		{
+			onScroll();
+			checkTimeout = undefined;
+		} );
+	}
 }
 
 @Component({})
@@ -53,8 +80,12 @@ export class AppScrollInview extends Vue
 
 	mounted()
 	{
-		this.inViewChanged();
 		items.push( this );
+
+		// We queue up a check to see if it's in view at mount or not. We do it
+		// in a timeout so that if many elements are shown at once on screen, we
+		// still only do one check.
+		queueCheck();
 	}
 
 	destroyed()
