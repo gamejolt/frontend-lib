@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import { User } from '../../../components/user/user.model';
-import { StoreState } from '../../../../../app/store/index';
 
 export class AppState
 {
@@ -16,7 +15,7 @@ export class AppState
 	error?: number = undefined;
 }
 
-export const appStore: Vuex.Module<AppState, StoreState> = {
+export const appStore: Vuex.Module<AppState, any> = {
 	state: new AppState(),
 	mutations: {
 		[AppState.Mutations.setUser]( state, user: any )
