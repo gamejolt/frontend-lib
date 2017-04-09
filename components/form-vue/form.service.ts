@@ -1,11 +1,12 @@
 import Vue from 'vue';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Component } from 'vue-property-decorator';
 
 export interface FormOnSubmit
 {
 	onSubmit(): Promise<any>;
 }
 
+@Component({})
 export class BaseForm extends Vue
 {
 	@Prop( Object ) model?: any;
@@ -78,7 +79,7 @@ export class BaseForm extends Vue
 				response = _response;
 			}
 			else if ( this.modelClass && this.saveMethod ) {
-				response = await this.model[ this.saveMethod ]();
+				response = await this.formModel[ this.saveMethod ]();
 
 				// Copy it back to the base model.
 				if ( this.model ) {

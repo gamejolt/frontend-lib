@@ -28,8 +28,6 @@ export class AppCommentWidgetAddForm extends BaseForm
 
 	created()
 	{
-		super.created();
-
 		if ( this.parentId ) {
 			this.formModel.parent_id = this.parentId;
 		}
