@@ -26,3 +26,10 @@ export function arrayIndexBy<T>( values: T[], field: keyof T ): { [k: string]: T
 	values.forEach( ( item ) => indexed[ item[ field ] + '' ] = item );
 	return indexed;
 }
+
+export function arrayIndexByFunc<T>( values: T[], fn: ( item: T ) => any ): { [k: string]: T }
+{
+	const indexed: any = {};
+	values.forEach( ( item ) => indexed[ fn( item ) + '' ] = item );
+	return indexed;
+}
