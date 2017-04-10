@@ -1,6 +1,7 @@
 import { Model } from '../../model/model.service';
 import { User } from '../../user/user.model';
 import { Api } from '../../api/api.service';
+import { ForumPost } from '../post/post.model';
 
 export class ForumTopic extends Model
 {
