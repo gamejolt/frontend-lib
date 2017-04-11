@@ -19,6 +19,9 @@
 					color: $black
 					font-weight: bold
 
+				&:hover
+					text-decoration: none
+
 	&-tag
 		display: block
 		color: $text-muted
@@ -29,4 +32,17 @@
 
 	&-separator
 		color: $gray-light
-		margin: 0 12px 0 8px
+		margin: 2px 12px 0 8px
+
+		// Just to make it look a tad nicer?
+		position: relative
+		top: 1px
+
+	&.dark-variant
+		ul > li
+			> a
+			> span
+				color: $gray-light
+
+				&.active
+					color: $white
