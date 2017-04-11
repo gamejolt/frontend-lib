@@ -1,4 +1,5 @@
 import { Growls } from '../growls/growls.service';
+import { Translate } from '../translate/translate.service';
 
 export class Clipboard
 {
@@ -15,13 +16,17 @@ export class Clipboard
 
 		const result = window.document.execCommand( 'copy' );
 
-		if ( GJ_IS_ANGULAR ) {
-			if ( result ) {
-				Growls.success( 'Copied to your clipboard.', 'Copied!' );
-			}
-			else {
-				Growls.error( 'Could not copy to your clipboard. Dunno why. Sorry.', 'Copy Failed' );
-			}
+		if ( result ) {
+			Growls.success(
+				Translate.$gettext( 'Copied to your clipboard.' ),
+				Translate.$gettext( 'Copied!' ),
+			);
+		}
+		else {
+			Growls.error(
+				Translate.$gettext( 'Could not copy to your clipboard. Dunno why. Sorry.' ),
+				Translate.$gettext( 'Copy Failed' ),
+			);
 		}
 
 		clipboardElem.parentNode!.removeChild( clipboardElem );
