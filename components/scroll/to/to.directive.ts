@@ -4,8 +4,10 @@ import { Scroll } from '../scroll.service';
 export const AppScrollTo: Vue.DirectiveOptions = {
 	bind( el, binding )
 	{
-		el.addEventListener( 'click', () =>
+		el.addEventListener( 'click', ( e ) =>
 		{
+			e.preventDefault();
+
 			const to = binding.value || (el.getAttribute( 'href' ) || '').substring( 1 );
 			if ( !to ) {
 				console.error( new Error( `Couldn't get scroll to.` ) );
