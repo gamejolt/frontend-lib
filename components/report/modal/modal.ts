@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./modal.html';
 
@@ -6,24 +5,21 @@ import { Comment } from '../../comment/comment-model';
 import { User } from '../../user/user.model';
 import { Game } from '../../game/game.model';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppModal } from '../../modal/modal';
-import { Modal } from '../../modal/modal.service';
 import { Growls } from '../../growls/growls.service';
 import { AppReportForm } from '../form/form';
 import { ForumTopic } from '../../forum/topic/topic.model';
 import { ForumPost } from '../../forum/post/post.model';
+import { BaseModal } from '../../modal/base';
 
 @View
 @Component({
 	components: {
-		AppModal,
 		AppJolticon,
 		AppReportForm
 	},
 })
-export class AppReportModal extends Vue
+export default class AppReportModal extends BaseModal
 {
-	@Prop( Modal ) modal: Modal;
 	@Prop( Object ) resource: Comment | User | Game | ForumTopic | ForumPost;
 
 	get type()

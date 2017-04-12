@@ -1,32 +1,28 @@
-import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./confirm.html';
 
-import { AppModal } from '../modal';
-import { Modal } from '../modal.service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import { BaseModal } from '../base';
 
 @View
 @Component({
 	components: {
-		AppModal,
 		AppJolticon,
 	},
 })
-export class AppModalConfirm extends Vue
+export default class AppModalConfirm extends BaseModal
 {
-	@Prop( Modal ) modal: Modal;
 	@Prop( String ) message: string;
 	@Prop( String ) title: string;
 	@Prop( String ) buttonType: 'ok' | 'yes';
 
 	ok()
 	{
-		this.$emit( 'resolve' );
+		this.modal.resolve( true );
 	}
 
 	cancel()
 	{
-		this.$emit( 'dismiss' );
+		this.modal.resolve( false );
 	}
 }

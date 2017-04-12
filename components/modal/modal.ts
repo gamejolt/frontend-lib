@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import * as View from '!view!./modal.html?style=./modal.styl';
 import './modal-content.styl';
 
@@ -7,6 +7,8 @@ import { Modal } from './modal.service';
 import { AppBackdrop } from '../backdrop/backdrop';
 import { Backdrop } from '../backdrop/backdrop.service';
 import { bootstrapShortkey } from '../../vue/shortkey';
+import { findVueParent } from '../../utils/vue';
+import { BaseModal } from './base';
 
 bootstrapShortkey();
 
@@ -14,9 +16,18 @@ bootstrapShortkey();
 @Component({})
 export class AppModal extends Vue
 {
-	@Prop( Modal ) modal: Modal;
-
+	modal: Modal | null = null;
 	private backdrop?: AppBackdrop;
+
+	created()
+	{
+		const parent = findVueParent( this, BaseModal ) as BaseModal;
+		if ( !parent ) {
+			throw new Error( `Couldn't find base modal.` );
+		}
+
+		this.modal = parent.modal;
+	}
 
 	mounted()
 	{
@@ -34,7 +45,7 @@ export class AppModal extends Vue
 
 	dismissEsc()
 	{
-		if ( this.modal.noEscClose ) {
+		if ( this.modal!.noEscClose ) {
 			return;
 		}
 		this.dismiss();
@@ -42,7 +53,7 @@ export class AppModal extends Vue
 
 	dismissBackdrop()
 	{
-		if ( this.modal.noBackdropClose ) {
+		if ( this.modal!.noBackdropClose ) {
 			return;
 		}
 		this.dismiss();
@@ -50,6 +61,6 @@ export class AppModal extends Vue
 
 	dismiss()
 	{
-		this.modal.dismiss();
+		this.modal!.dismiss();
 	}
 }

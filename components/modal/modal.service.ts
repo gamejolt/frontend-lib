@@ -1,9 +1,11 @@
 import Vue from 'vue';
 
+type ModalComponent = typeof Vue | (() => Promise<Vue>);
+
 export interface ModalOptions
 {
 	size?: 'sm' | 'lg' | undefined;
-	component: typeof Vue;
+	component: ModalComponent;
 	props?: any;
 	noBackdropClose?: boolean;
 	noEscClose?: boolean;
@@ -15,17 +17,17 @@ export class Modal
 	static incrementer = 0;
 
 	size: 'sm' | 'lg' | undefined;
-	component: typeof Vue;
+	component: ModalComponent;
 	props?: any;
 	noBackdropClose?: boolean;
 	noEscClose?: boolean;
 
-	static show( options: ModalOptions )
+	static show<T>( options: ModalOptions )
 	{
-		return new Promise<any>( ( resolve, reject ) =>
+		return new Promise<T | undefined>( ( resolve ) =>
 		{
 			++this.incrementer;
-			const modal = new Modal( this.incrementer, resolve, reject, options );
+			const modal = new Modal( this.incrementer, resolve, options );
 			this.modals.push( modal );
 		} );
 	}
@@ -41,7 +43,6 @@ export class Modal
 	constructor(
 		public id: number,
 		private _resolve: Function,
-		private _reject: Function,
 		options: ModalOptions,
 	)
 	{
@@ -61,6 +62,6 @@ export class Modal
 	dismiss()
 	{
 		Modal.remove( this );
-		this._reject();
+		this._resolve( undefined );
 	}
 }

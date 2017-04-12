@@ -15,10 +15,6 @@ export class AppModalWrapper extends Vue
 				modal: this.modal,
 				...this.modal.props,
 			},
-			on: {
-				resolve: ( response: any ) => this.modal.resolve( response ),
-				dismiss: () => this.modal.dismiss(),
-			},
 		} );
 	}
 }

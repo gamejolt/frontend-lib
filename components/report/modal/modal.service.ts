@@ -1,18 +1,15 @@
 import { Modal } from '../../modal/modal.service';
-import { AppReportModal } from './modal';
 import { Model } from '../../model/model.service';
+import { asyncComponentLoader } from '../../../utils/utils';
 
 export class ReportModal
 {
 	static async show( resource: Model )
 	{
-		try {
-			await Modal.show( {
-				size: 'sm',
-				component: AppReportModal,
-				props: { resource },
-			} );
-		}
-		catch ( e ) {}
+		await Modal.show( {
+			size: 'sm',
+			component: () => asyncComponentLoader( $import( './modal' ) ),
+			props: { resource },
+		} );
 	}
 }
