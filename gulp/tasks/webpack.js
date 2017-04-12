@@ -36,6 +36,19 @@ module.exports = function( config )
 
 	let cleanCss = new CleanCss( cleanCssOptions );
 
+	let webpackTarget = 'web';
+	if ( config.server ) {
+		webpackTarget = 'node';
+	}
+	else if ( config.client ) {
+		webpackTarget = 'node-webkit';
+	}
+
+	let libraryTarget = 'var';
+	if ( config.server ) {
+		libraryTarget = 'commonjs';
+	}
+
 	function stylesLoader( loaders, options )
 	{
 		// Note: style-loader doesn't work on the server.
@@ -49,7 +62,7 @@ module.exports = function( config )
 			return ExtractTextPlugin.extract( {
 				fallback: !config.server ? 'style-loader' : undefined,
 				use: loaders,
-			 } );
+			} );
 		}
 
 		if ( !config.server ) {
@@ -89,7 +102,7 @@ module.exports = function( config )
 
 		webpackSectionConfigs[ section ] = {
 			entry,
-			target: config.server ? 'node' : 'web',
+			target: webpackTarget,
 			devServer: {
 				outputPath: path.resolve( base, config.buildDir ),
 			},
@@ -98,7 +111,7 @@ module.exports = function( config )
 				path: path.resolve( base, config.buildDir ),
 				filename: config.production ? section + '.[name].[chunkhash:6].js' : section + '.[name].js',
 				chunkFilename: config.production ? section + '.[name].[id].[chunkhash:6].js' : undefined,
-				libraryTarget: config.server ? 'commonjs2' : 'var',
+				libraryTarget: libraryTarget,
 			},
 			resolve: {
 				extensions: [ '.tsx', '.ts', '.js', '.styl' ],
@@ -248,12 +261,12 @@ module.exports = function( config )
 						],
 					}
 				}),
-				!config.client ? noop : new CopyWebpackPlugin([
-					{
-						from: path.resolve( base, 'client-package.json' ),
-						to: 'package.json',
-					},
-				]),
+				// !config.client ? noop : new CopyWebpackPlugin([
+				// 	{
+				// 		from: path.resolve( base, 'client-package.json' ),
+				// 		to: 'package.json',
+				// 	},
+				// ]),
 				devNoop || new webpack.optimize.UglifyJsPlugin({
 					compress: {
 						warnings: false,
