@@ -3,7 +3,6 @@ import * as View from '!view!./login-form.html';
 
 import { Connection } from '../../connection/connection-service';
 import { makeObservableService } from '../../../utils/vue';
-import { FormCommonComponents } from '../../form-vue/form';
 import { BaseForm, FormOnSubmit } from '../../form-vue/form.service';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { Api } from '../../api/api.service';
@@ -12,10 +11,9 @@ import { Api } from '../../api/api.service';
 @Component({
 	components: {
 		AppLoading,
-		...FormCommonComponents,
 	},
 })
-export class AppAuthLoginForm extends BaseForm implements FormOnSubmit
+export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit
 {
 	@Prop( Boolean ) darkVariant?: boolean;
 

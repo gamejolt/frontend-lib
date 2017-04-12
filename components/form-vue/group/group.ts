@@ -6,7 +6,7 @@ import { AppForm } from '../form';
 import { findVueParent } from '../../../utils/vue';
 import { titleCase } from '../../../utils/string';
 import { ErrorBag } from 'vee-validate';
-import { AppFormControl } from '../control/control';
+import { BaseFormControl } from '../control/base';
 
 @View
 @Component({})
@@ -19,7 +19,7 @@ export class AppFormGroup extends Vue
 	@Prop( String ) labelClass?: string;
 
 	form: AppForm;
-	control: AppFormControl;
+	control: BaseFormControl;
 	inputErrors: ErrorBag | null = null;
 
 	get humanLabel()

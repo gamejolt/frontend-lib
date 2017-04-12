@@ -76,7 +76,7 @@ export class AppFormControlErrors extends Vue
 	private processMessage( rule: string, label: string )
 	{
 		let message = '';
-		const data = this.group.control.rules && this.group.control.rules[ rule ];
+		const data = this.group.control.validationRules && this.group.control.validationRules[ rule ];
 		const errorMessages = Object.assign( {}, ErrorMessagesBase, this.errorMessageOverrides );
 
 		// Pull from the group's validation data to find out the rest of the messages.

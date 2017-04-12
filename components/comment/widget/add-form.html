@@ -6,21 +6,6 @@
 
 	<app-form name="commentAddForm">
 
-		<!--<form-group class="no-animate" name="comment" label="{{ 'Leave a Comment' | translate }}" hide-label="true">
-
-			<div
-				form-markdown-editor
-				preview-class="comment-widget-comment-content"
-				markdown-preview-url="/comments/preview"
-				markdown-mode="comments"
-				placeholder="{{ commentPlacholder }}"
-				>
-			</div>
-
-			<control-errors label="comment"></control-errors>
-
-		</form-group>-->
-
 		<app-form-group
 			class="no-animate"
 			name="comment"
@@ -28,8 +13,14 @@
 			:hide-label="true"
 			>
 
-			<app-form-control type="text" :placeholder="$gettext( 'Leave a comment...' )" />
+			<app-form-control-markdown
+				preview-class="comment-widget-comment-content"
+				preview-url="/comments/preview"
+				markdown-mode="comments"
+				:placeholder="$gettext( `Leave a comment...` )"
+				/>
 
+			<app-form-control-errors label="comment" />
 		</app-form-group>
 
 		<app-form-button icon="add-comment" class="btn-outline btn-block-xs">

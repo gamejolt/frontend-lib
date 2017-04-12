@@ -3,15 +3,11 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./form.html';
 import * as VeeValidate from 'vee-validate';
 
-import { AppFormControl } from './control/control';
-import { AppFormGroup } from './group/group';
 import { findVueParent } from '../../utils/vue';
 import { BaseForm } from './form.service';
-import { AppFormControlErrors } from './control-errors/control-errors';
-import { AppFormControlError } from './control-errors/control-error';
-import { AppFormButton } from './button/button';
 import { FormValidatorPattern } from './validators/pattern';
 import { FormValidatorAvailability } from './validators/availability';
+import { BaseFormControl } from './control/base';
 
 Vue.use( VeeValidate );
 
@@ -21,8 +17,8 @@ export class AppForm extends Vue
 {
 	@Prop( String ) name: string;
 
-	base: BaseForm;
-	controls: AppFormControl[] = [];
+	base: BaseForm<any>;
+	controls: BaseFormControl[] = [];
 
 	private static hasAddedValidators = false;
 
@@ -37,7 +33,7 @@ export class AppForm extends Vue
 
 	created()
 	{
-		this.base = findVueParent( this, BaseForm ) as BaseForm;
+		this.base = findVueParent( this, BaseForm ) as BaseForm<any>;
 		if ( !this.base ) {
 			throw new Error( `Couldn't find BaseForm in parent tree.` );
 		}
@@ -83,13 +79,9 @@ export class AppForm extends Vue
 
 		this.base._onSubmit();
 	}
-}
 
-export const FormCommonComponents = {
-	AppForm,
-	AppFormControl,
-	AppFormGroup,
-	AppFormControlErrors,
-	AppFormControlError,
-	AppFormButton,
-};
+	onChange()
+	{
+		this.$emit( 'changed', this.base.formModel );
+	}
+}

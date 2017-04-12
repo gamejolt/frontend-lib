@@ -14,6 +14,7 @@ export class Comment extends Model
 	resource: string;
 	resource_id: number;
 	user: User;
+	comment?: string;
 	comment_compiled: string;
 	votes: number;
 	user_vote?: CommentVote;

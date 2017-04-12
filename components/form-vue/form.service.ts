@@ -1,21 +1,37 @@
 import Vue from 'vue';
 import { Prop, Component } from 'vue-property-decorator';
 
+import { AppForm } from './form';
+import { AppFormControl } from './control/control';
+import { AppFormGroup } from './group/group';
+import { AppFormControlErrors } from './control-errors/control-errors';
+import { AppFormControlError } from './control-errors/control-error';
+import { AppFormButton } from './button/button';
+
 export interface FormOnSubmit
 {
 	onSubmit(): Promise<any>;
 }
 
-@Component({})
-export class BaseForm extends Vue
+@Component({
+	components: {
+		AppForm,
+		AppFormControl,
+		AppFormGroup,
+		AppFormControlErrors,
+		AppFormControlError,
+		AppFormButton,
+	},
+})
+export class BaseForm<T> extends Vue
 {
-	@Prop( Object ) model?: any;
+	@Prop( Object ) model?: T;
 
-	formModel?: any = {};
-	modelClass?: any = undefined;
+	formModel: T = {} as T;
+	modelClass?: { new( data?: T ): T } = undefined;
 	resetOnSubmit = false;
-	saveMethod = '$save';
-	method = 'add';
+	saveMethod?: keyof T;
+	method: 'add' | 'edit' = 'add';
 
 	state: { [k: string]: any } = {
 		isProcessing: false,
@@ -48,7 +64,7 @@ export class BaseForm extends Vue
 			}
 			// Otherwise, just use an empty object as the form's model.
 			else {
-				this.formModel = {};
+				this.formModel = {} as T;
 			}
 		}
 	}
@@ -78,8 +94,8 @@ export class BaseForm extends Vue
 
 				response = _response;
 			}
-			else if ( this.modelClass && this.saveMethod ) {
-				response = await this.formModel[ this.saveMethod ]();
+			else if ( this.modelClass ) {
+				response = await (this.formModel as any)[ this.saveMethod || '$save' ]();
 
 				// Copy it back to the base model.
 				if ( this.model ) {
