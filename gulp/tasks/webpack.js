@@ -14,6 +14,7 @@ const CleanCss = require( 'clean-css' );
 const WriteFilePlugin = require( 'write-file-webpack-plugin' );
 const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
 const VueSSRPlugin = require( 'vue-ssr-webpack-plugin' );
+const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 
 module.exports = function( config )
 {
@@ -218,9 +219,9 @@ module.exports = function( config )
 				new webpack.DefinePlugin({
 					GJ_ENVIRONMENT: JSON.stringify( !config.developmentEnv ? 'production' : 'development' ),
 					GJ_BUILD_TYPE: JSON.stringify( config.production ? 'production' : 'development' ),
-					GJ_IS_CLIENT: JSON.stringify( false ),
 					GJ_IS_ANGULAR: JSON.stringify( config.framework === 'angular' ),
 					GJ_IS_VUE: JSON.stringify( config.framework === 'vue' ),
+					GJ_IS_CLIENT: JSON.stringify( config.client ),
 					GJ_IS_SSR: JSON.stringify( config.server ),
 
 					// This sets vue in production mode.
@@ -247,6 +248,12 @@ module.exports = function( config )
 						],
 					}
 				}),
+				!config.client ? noop : new CopyWebpackPlugin([
+					{
+						from: path.resolve( base, 'client-package.json' ),
+						to: 'package.json',
+					},
+				]),
 				devNoop || new webpack.optimize.UglifyJsPlugin({
 					compress: {
 						warnings: false,

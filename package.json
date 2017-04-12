@@ -2,7 +2,8 @@
   "name": "game-jolt-frontend-lib",
   "version": "0.0.1",
   "dependencies": {
-    "clean-css": "4.0.11",
+    "copy-webpack-plugin": "4.0.1",
+    "clean-css": "4.0.12",
     "css-loader": "0.28.0",
     "extract-loader": "0.1.0",
     "extract-text-webpack-plugin": "2.1.0",
@@ -43,7 +44,7 @@
     "vue-template-loader": "0.3.0",
     "vue-template-compiler": "2.2.6",
     "write-file-webpack-plugin": "4.0.0",
-    "webpack-bundle-analyzer": "2.3.1",
+    "webpack-bundle-analyzer": "2.4.0",
     "clean-css-loader": "0.0.5"
   }
 }
