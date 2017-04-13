@@ -3,6 +3,7 @@ import { CommentVideo } from './video/video-model';
 import { CommentVote } from './vote/vote-model';
 import { User } from '../user/user.model';
 import { Api } from '../api/api.service';
+import { Environment } from '../environment/environment.service';
 
 export class Comment extends Model
 {
@@ -24,6 +25,11 @@ export class Comment extends Model
 	videos: CommentVideo[] = [];
 
 	isVotePending: boolean = false;
+
+	get permalink()
+	{
+		return Environment.baseUrl + '/x/permalink/comment/' + this.id;
+	}
 
 	constructor( data: any = {} )
 	{
