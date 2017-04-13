@@ -32,6 +32,7 @@ export class BaseForm<T> extends Vue
 	resetOnSubmit = false;
 	saveMethod?: keyof T;
 	method: 'add' | 'edit' = 'add';
+	changed = false;
 
 	state: { [k: string]: any } = {
 		isProcessing: false,
@@ -43,6 +44,8 @@ export class BaseForm<T> extends Vue
 
 	created()
 	{
+		this.changed = false;
+
 		// Is a base model defined? If so, then we're editing.
 		if ( this.model ) {
 			this.method = 'edit';

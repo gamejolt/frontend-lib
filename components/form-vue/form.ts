@@ -82,6 +82,7 @@ export class AppForm extends Vue
 
 	onChange()
 	{
+		this.base.changed = true;
 		this.$emit( 'changed', this.base.formModel );
 	}
 }
