@@ -1,0 +1,16 @@
+<div class="timeline-list-item"
+	:class="{ nested }"
+	>
+
+	<div class="timeline-list-item-icon">
+		<app-user-avatar-img class="avatar-circle" :user="app.user" />
+	</div>
+
+	<div class="timeline-list-item-main">
+		<div class="timeline-list-item-details">
+
+			<slot />
+
+		</div>
+	</div>
+</div>

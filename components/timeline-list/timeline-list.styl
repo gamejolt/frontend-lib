@@ -1,0 +1,169 @@
+@require '~styles/variables'
+@require '../../stylus/common/mixins'
+
+.timeline-list
+
+	// For doing a full-bleed within the content.
+	&-full-bleed
+
+		@media $media-xs
+			margin-left: -($grid-gutter-width-xs / 2)
+			margin-right: @margin-left
+
+		@media $media-sm-up
+			margin-left: -(($timeline-list-icon-size / 2) + $timeline-list-avatar-margin)
+
+	&-item
+		position: relative
+		display: block
+		color: $gray-dark
+
+		@media $media-xs
+			margin-bottom: $line-height-computed
+
+		&-icon
+			position: absolute
+			left: -($timeline-list-icon-size / 2)
+			top: 0
+			width: $timeline-list-icon-size
+			height: $timeline-list-icon-size
+			line-height: $timeline-list-icon-size
+			background-color: $white
+			border: 5px solid $white
+			border-radius: 50%
+			text-align: center
+			z-index: 1
+			color: $gray-light
+
+			@media $media-xs
+				display: none
+
+			> .jolticon
+				position: relative
+				top: -1px
+				margin: 0
+				vertical-align: middle
+
+		&-main
+			clearfix()
+			padding-bottom: $line-height-computed
+
+			@media $media-xs
+				padding-left: ($grid-gutter-width-xs / 2)
+				padding-right: @padding-left
+
+			@media $media-sm-up
+				border-left: 2px solid $black
+				padding-left: ($timeline-list-icon-size / 2) + $timeline-list-avatar-margin
+
+		&-meta
+			color: $text-muted
+			font-size: $font-size-tiny
+
+		&-title
+			font-weight: bold
+			color: $gray
+
+			strong
+			b
+				color: $black
+
+		&-header
+			display: block
+			background-color: $black
+			margin-bottom: $line-height-computed
+
+			@media $media-xs
+				margin-left: -($grid-gutter-width-xs / 2)
+				margin-right: @margin-left
+
+			@media $media-sm-up
+				margin-left: -(($timeline-list-icon-size / 2) + $timeline-list-avatar-margin)
+
+			&-content
+				clearfix()
+				padding: ($grid-gutter-width-xs / 2)
+
+				@media $media-sm-up
+					padding-top: ($grid-gutter-width / 2)
+					padding-bottom: @padding-top
+					padding-left: ($timeline-list-icon-size / 2) + $timeline-list-avatar-margin
+					padding-right: @padding-top
+
+				.timeline-list-item-meta
+					color: $white
+
+				.timeline-list-item-title
+					font-size: $font-size-h4
+					word-wrap: break-word
+					hyphens: auto
+
+					@media $media-sm-up
+						font-size: $font-size-h3
+
+					&
+					strong
+					b
+						color: $white
+
+		&-details
+			margin-top: 5px
+
+		&-content
+			color: $gray-dark
+
+			p:last-child
+				margin-bottom: 0
+
+		&-thumb
+		&-avatar
+			float: left
+			width: $timeline-list-avatar-size
+			height: $timeline-list-avatar-size
+			margin-right: $timeline-list-avatar-margin
+
+		&-thumb
+			background-color: $gray-lightest
+			background-repeat: no-repeat
+			background-position: center center
+			background-size: cover
+
+		&-mark
+			float: right
+			margin-left: $timeline-list-avatar-margin
+
+		/**
+		 * Active Item
+		 */
+		&.active
+			@media $media-xs
+				border-left: 3px solid $gj-blue
+
+		&.active &-icon
+			background-color: $gj-blue
+			border-color: $gj-blue
+			color: $white
+
+		&.active &-main
+			border-color: $gj-blue
+
+		/**
+		 * New Item
+		 */
+		&.new
+			@media $media-xs
+				border-left: 3px solid $gj-pink
+
+		&.new &-icon
+			background-color: $gj-pink
+			border-color: $gj-pink
+			color: $white
+
+		&.new &-main
+			border-color: $gj-pink
+
+		/**
+		 * Nested Item
+		 */
+		&.nested &-main
+			border-color: $gray-lighter

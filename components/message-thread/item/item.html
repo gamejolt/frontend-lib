@@ -1,0 +1,85 @@
+<div class="message-thread-item timeline-list-item"
+	:id="id"
+	:class="{
+		active: isActive,
+		nested: isNested,
+		'new': isNew,
+	}"
+	>
+
+	<div class="timeline-list-item-icon">
+		<app-user-avatar class="avatar-circle" :user="user" />
+	</div>
+
+	<div class="timeline-list-item-main">
+		<div class="timeline-list-item-details">
+
+			<div class="message-thread-item-meta">
+
+				<div class="message-thread-item-byline">
+					<span class="message-thread-item-author">
+						<router-link
+							:to="{
+								name: 'profile.overview',
+								params: { username: user.username },
+							}"
+							class="link-unstyled"
+							>
+							{{ user.display_name }}
+						</router-link>
+
+						<small class="text-muted">
+							@{{ user.username }}
+						</small>
+					</span>
+
+					<span v-if="repliedTo">
+						<app-jolticon icon="share" />
+
+						<span class="message-thread-item-author tiny">
+							<router-link
+								:to="{
+									name: 'profile.overview',
+									params: { username: repliedTo.username },
+								}"
+								class="link-unstyled"
+								>
+								{{ repliedTo.display_name }}
+							</router-link>
+
+							<span class="text-muted">
+								@{{ repliedTo.username }}
+							</span>
+						</span>
+					</span>
+
+					<slot name="authors" />
+				</div>
+
+				<div class="message-thread-item-meta-sub">
+					<slot name="tags" />
+
+					<small class="text-muted"
+						:title="dateFilter( date, 'medium' )"
+						>
+						<app-time-ago :date="date" />
+					</small>
+
+					<slot name="meta" />
+				</div>
+			</div>
+
+			<slot />
+
+			<div class="message-thread-item-controls">
+				<slot name="controls" />
+			</div>
+
+			<div class="message-thread-item-replies">
+				<slot name="replies" />
+			</div>
+
+		</div>
+	</div>
+
+</div>

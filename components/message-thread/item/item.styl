@@ -1,0 +1,41 @@
+@require '~styles/variables'
+@require '../../../stylus/common/mixins'
+
+.message-thread-item
+
+	&-meta
+		margin-bottom: 1em
+
+	&-byline
+		text-overflow()
+
+	&-author
+		margin-right: 2px
+
+		a
+			font-weight: bold
+
+	&-meta-sub
+
+		a
+			margin-right: 2px
+
+		.tag
+			margin-right: 5px
+
+	&-controls
+
+		.btn-circle
+			margin-right: 5px
+
+		// Silly, but we gotta move these back into place.
+		.blip
+			position: relative
+			left: -5px
+
+	// Target the div within so that the slot doesn't take up any space until
+	// there's content within it
+	&-replies > div
+		margin-top: $line-height-computed * 2
+		margin-bottom: $line-height-computed
+		margin-left: ($timeline-list-icon-size / 2) - $timeline-list-avatar-margin
