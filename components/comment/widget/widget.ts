@@ -16,10 +16,11 @@ import { Api } from '../../api/api.service';
 import { Translation } from '../../translation/translation.model';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
-import { AppCommentWidgetComment } from './comment';
+import { AppCommentWidgetComment } from './comment/comment';
 import { AppPagination } from '../../pagination/pagination';
-import { AppCommentWidgetAddForm } from './add-form';
 import { AppLoadingFade } from '../../loading/fade/fade';
+import { AppMessageThread } from '../../message-thread/message-thread';
+import { AppCommentWidgetAdd } from './add/add';
 
 let incrementer = 0;
 
@@ -29,8 +30,9 @@ let incrementer = 0;
 		AppLoading,
 		AppLoadingFade,
 		AppPagination,
+		AppMessageThread,
 		AppCommentWidgetComment,
-		AppCommentWidgetAddForm,
+		AppCommentWidgetAdd,
 	},
 	directives: {
 		AppAuthRequired,
@@ -56,8 +58,6 @@ export class AppCommentWidget extends Vue
 	parentCount = 0;
 	perPage = 10;
 	numPages = 0;
-	replyingTo = 0;
-	highlightedComment = 0;
 
 	lang = this.getTranslationLabel( Translate.lang );
 	allowTranslate = false;
@@ -68,10 +68,10 @@ export class AppCommentWidget extends Vue
 
 	subscriptions: { [k: string]: Subscription } = {};
 
-	loginUrl = '';
-
-	// Translate = Translate;
-	// Analytics = Analytics;
+	get loginUrl()
+	{
+		return Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent( this.$route.fullPath );
+	}
 
 	async created()
 	{
@@ -93,13 +93,6 @@ export class AppCommentWidget extends Vue
 		await this.refreshComments();
 	}
 
-	mounted()
-	{
-		if ( !this.app.user ) {
-			// this.loginUrl = Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent( $location.absUrl() );
-		}
-	}
-
 	private async refreshComments()
 	{
 		// Pull in new comments, huzzah!
@@ -107,9 +100,6 @@ export class AppCommentWidget extends Vue
 			this.isLoading = true;
 			const payload = await Comment.fetch( this.resource, this.resourceId, this.currentPage );
 			this.isLoading = false;
-
-			// Check the hash in the URL to see if we should autoscroll to a comment.
-			this.checkAutoScroll();
 
 			this.hasBootstrapped = true;
 			this.hasError = false;
@@ -158,11 +148,6 @@ export class AppCommentWidget extends Vue
 		}
 	}
 
-	replyToComment( comment: Comment )
-	{
-		this.replyingTo = comment.id;
-	}
-
 	onCommentAdd( formModel: Comment, isReplying: boolean )
 	{
 		Analytics.trackEvent( 'comment-widget', 'add' );
@@ -185,11 +170,6 @@ export class AppCommentWidget extends Vue
 			// If they replied to a comment, obviously don't want to change back to the first page.
 			this.changePage( isReplying ? this.currentPage : 1 );
 		}
-	}
-
-	onReplyAdd( formModel: Comment )
-	{
-		this.onCommentAdd( formModel, true );
 	}
 
 	onPageChange( page: number )
@@ -302,67 +282,27 @@ export class AppCommentWidget extends Vue
 		return Translate.langsByCode[ lang ].label;
 	}
 
-	// private updateUrl( commentId?: number )
-	// {
-	// 	let query: any = {
-	// 		comment_page: this.currentPage > 1 ? this.currentPage : undefined,
-	// 	};
-
-	// 	let hash = undefined;
-	// 	if ( commentId ) {
-	// 		hash = 'comment-' + commentId;
-	// 		this.highlightedComment = commentId;
-	// 	}
-	// 	else {
-	// 		this.highlightedComment = 0;
-	// 	}
-
-	// 	// We replace the URL and don't notify so that the controller doesn't reload.
-	// 	// this.$router.replace( { name: this.$route.name, query, hash } );
-	// 	// $state.go( $state.current, params, { location: 'replace', notify: false } );
-	// }
-
-	private checkPermalink()
+	private async checkPermalink()
 	{
-		// var hash = $location.hash();
-		// if ( !hash || hash.indexOf( 'comment-' ) !== 0 ) {
-		// 	return;
-		// }
+		const hash = this.$route.hash;
+		if ( !hash || hash.indexOf( '#comment-' ) !== 0 ) {
+			return;
+		}
 
-		// var id = parseInt( hash.substring( 'comment-'.length ) );
-		// if ( !id ) {
-		// 	return;
-		// }
+		const id = parseInt( hash.substring( '#comment-'.length ), 10 );
+		if ( !id ) {
+			return;
+		}
 
-		// Comment.getCommentPage( id )
-		// 	.then( function( page )
-		// 	{
-		// 		this._currentPage = page;
-		// 		refreshComments();
-		// 		updateUrl( id );
-
-		// 		if ( Analytics ) {
-		// 			Analytics.trackEvent( 'comment-widget:permalink' );
-		// 		}
-		// 	} )
-		// 	.catch( function()
-		// 	{
-		// 		Growls.error( 'Invalid comment passed in.' );
-
-		// 		// TODO: Track this error.
-		// 	} );
-	}
-
-	private checkAutoScroll()
-	{
-		// var hash = $location.hash();
-		// if ( hash && hash.indexOf( 'comment-' ) === 0 ) {
-		// 	$timeout( function()
-		// 	{
-		// 		if ( $window.document.getElementById( hash ) ) {
-		// 			Scroll.to( hash );
-		// 		}
-		// 	}, 0, false );
-		// }
+		try {
+			const page = await Comment.getCommentPage( id );
+			this.changePage( page );
+			Analytics.trackEvent( 'comment-widget', 'permalink' );
+		}
+		catch ( e ) {
+			Growls.error(
+				this.$gettext( `Invalid comment passed in. It may have been removed.` ),
+			);
+		}
 	}
 }

@@ -23,19 +23,18 @@
 		</div>
 
 		<!-- Comment Add Form -->
-		<div v-if="app.user">
-			<app-comment-widget-add-form
+		<div>
+			<app-comment-widget-add
+				v-if="app.user"
 				:resource="resource"
 				:resource-id="resourceId"
 				@submit="onCommentAdd"
 				/>
-		</div>
 
-		<div v-if="!app.user" class="alert alert-info">
-			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
+			<div v-else class="alert alert-info">
+				<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
+			</div>
 		</div>
-
-		<hr>
 
 		<div class="comment-widget-translate-btn" v-if="allowTranslate">
 			<button class="btn btn-block btn-outline"
@@ -71,50 +70,14 @@
 		<app-loading-fade :is-loading="isLoading || isTranslating">
 
 			<!-- Comments List -->
-			<div class="comment-widget-comments">
-				<div class="comment-widget-thread anim-fade-in no-animate-leave no-animate-xs"
+			<app-message-thread>
+				<app-comment-widget-comment
 					v-for="comment of comments"
 					:key="comment.id"
-					>
-
-					<!-- Comment -->
-					<app-comment-widget-comment
-						:comment="comment"
-						:is-highlighted="highlightedComment === comment.id"
-						/>
-
-					<!-- Child Comments -->
-					<div v-if="childComments[ comment.id ]">
-
-						<div class="anim-fade-in no-animate-leave no-animate-xs"
-							v-for="child of childComments[ comment.id ]"
-							:key="child.id"
-							>
-							<app-comment-widget-comment
-								:comment="child"
-								:is-child="true"
-								:is-highlighted="highlightedComment === child.id"
-								/>
-						</div>
-
-					</div>
-
-					<!--
-						Don't include the form in the DOM until we need it.
-						When the if is triggered, the scroll-when will trigger and we'll scroll to
-						the reply box.
-					-->
-					<!--<div v-if="replyingTo == comment.id" gj-scroll-when>-->
-					<div v-if="replyingTo === comment.id">
-						<app-comment-widget-add-form
-							:resource="resource"
-							:resource-id="resourceId"
-							:parent-id="comment.id"
-							@submit="onReplyAdd"
-							/>
-					</div>
-				</div>
-			</div>
+					:comment="comment"
+					:children="childComments[ comment.id ]"
+					/>
+			</app-message-thread>
 
 		</app-loading-fade>
 

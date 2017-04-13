@@ -1,0 +1,230 @@
+<app-message-thread-item
+	:id="`comment-${comment.id}`"
+	:user="comment.user"
+	:date="comment.posted_on"
+	:is-active="isHighlighted"
+	:is-nested="isChild"
+	:replied-to="parent ? parent.user : undefined"
+	>
+
+	<span slot="tags" v-if="isOwner">
+
+		<span class="tag tag-active">
+			<translate>Dev</translate>
+		</span>
+
+	</span>
+
+	<span slot="meta">
+
+		<span v-if="app.user && (app.user.id !== comment.user || app.user.permissionLevel >= 3)">
+			<span class="dot-separator"></span>
+
+			<a class="link-muted"
+				@click="copyPermalink"
+				v-app-tooltip="$gettext( `Copy Link to Clipboard` )"
+				>
+				<app-jolticon icon="link" class="middle" />
+			</a>
+
+			<a
+				class="link-muted"
+				v-app-tooltip="$gettext( 'More Options' )"
+				v-app-popover-trigger="`comment-more-options-${comment.id}`"
+				>
+				<app-jolticon icon="ellipsis-h" />
+			</a>
+		</span>
+
+		<app-popover
+			v-if="app.user"
+			:popover-id="`comment-more-options-${comment.id}`"
+			:append-to-body="true"
+			>
+			<div class="list-group list-group-dark">
+				<a class="list-group-item has-icon"
+					v-if="app.user.id !== comment.user"
+					@click="report"
+					>
+					<app-jolticon icon="flag warning" />
+					<translate>Report Comment</translate>
+				</a>
+				<a class="list-group-item has-icon"
+					v-if="app.user.permission_level >= 3"
+					:href="`${Environment.baseUrl}/moderate/comments/remove/${ comment.id}`"
+					target="_blank"
+					>
+					<app-jolticon icon="remove warning" />
+					<translate>Remove Comment</translate>
+				</a>
+			</div>
+		</app-popover>
+
+	</span>
+
+	<app-fade-collapse
+		:collapse-height="300"
+		:is-open="showFullContent"
+		@required="canToggleContent = true"
+		>
+		<div class="comment-content"
+			v-html="widget.isShowingTranslations && widget.translations[ comment.id ]
+				? widget.translations[ comment.id ].content
+				: comment.comment_compiled
+			"
+			>
+		</div>
+	</app-fade-collapse>
+
+	<a class="hidden-text-expander"
+		v-if="canToggleContent"
+		@click="showFullContent = !showFullContent"
+		v-app-track-event="`comment-widget:toggle-full-content`"
+		>
+	</a>
+
+	<div class="comment-videos" v-if="comment.videos.length">
+
+		<div class="row">
+			<div
+				class="col-xs-6 col-sm-4"
+				v-for="video of comment.videos.slice( 0, showAllVideos ? 10 : 2)"
+				:key="video.id"
+				>
+				<app-comment-video-thumbnail :video="video" />
+			</div>
+		</div>
+
+		<p class="comment-videos-more-link"
+			v-if="comment.videos.length > 2 && !showAllVideos"
+			>
+			<a class="small link-muted"
+				@click="showAllVideos = true"
+				v-app-track-event="`comment-widget:more-videos`"
+				>
+				<translate
+					:translate-n="comment.videos.length - 2"
+					:translate-params="{ count: comment.videos.length - 2 }"
+					translate-plural="+%{ count } more videos"
+					>
+					+1 more video
+				</translate>
+			</a>
+		</p>
+	</div>
+
+	<div slot="controls">
+
+		<span class="comment-vote-btn">
+			<button
+				class="btn btn-outline btn-sparse btn-circle"
+				:class="{
+					'active btn-success': comment.user_vote
+				}"
+				@click="onVoteClick"
+				:disabled="!canVote"
+				v-app-tooltip="votingTooltip"
+				v-app-track-event="`comment-widget:vote-click`"
+				>
+				<app-jolticon icon="heart" />
+			</button>
+			<span class="blip light filled" v-if="comment.votes > 0">
+				<span class="blip-caret"></span>
+				<span class="blip-count">{{ comment.votes }}</span>
+			</span>
+		</span>
+
+		<!--
+			Only show the reply if isn't a child.
+			We only show it on the parent comments.
+		-->
+		<span v-if="!isChild">
+			<button
+				class="btn btn-outline btn-sparse btn-circle"
+				@click="isReplying = !isReplying"
+				v-app-tooltip="$gettext( 'Reply' )"
+				v-app-track-event="`comment-widget:reply-click`"
+				>
+				<app-jolticon icon="reply" />
+			</button>
+
+		</span>
+
+		<span v-if="canFollow">
+			<button
+				v-if="!widget.subscriptions[ comment.id ]"
+				class="btn btn-outline btn-sparse btn-circle"
+				@click="onFollowClick"
+				v-app-tooltip="$gettext( `Get notifications when people post new replies to this thread.` )"
+				v-app-track-event="`comment-widget:follow-click`"
+				>
+				<app-jolticon icon="subscribe" />
+			</button>
+
+			<button
+				v-else
+				class="btn btn-success active btn-sparse btn-circle"
+				@click="onFollowClick"
+				v-app-tooltip="$gettext( `You're following this comment thread and will be notified of replies.` )"
+				v-app-track-event="`comment-widget:follow-click`"
+				>
+				<app-jolticon icon="subscribed" />
+			</button>
+		</span>
+
+		&nbsp;
+		&nbsp;
+
+		<span v-if="children && children.length">
+			<a class="btn btn-outline btn-sm"
+				@click="isShowingChildren = !isShowingChildren"
+				>
+				<span class="btn-badge">
+					{{ children.length || 0 | number }}
+				</span>
+				<app-jolticon
+					:icon="isShowingChildren
+						? 'chevron-down'
+						: 'chevron-right'
+					"
+					/>
+				<translate v-if="!isShowingChildren">
+					Show Replies
+				</translate>
+				<translate v-else>
+					Hide Replies
+				</translate>
+			</a>
+		</span>
+
+	</div>
+
+	<!-- Child Comments -->
+	<div v-if="(children && children.length && isShowingChildren) || isReplying" slot="replies">
+
+		<div v-if="isShowingChildren">
+			<app-comment-widget-comment
+				v-for="child of children"
+				:key="child.id"
+				:comment="child"
+				:parent="comment"
+				/>
+		</div>
+
+		<!--
+			Don't include the form in the DOM until we need it. When the if is
+			triggered, the scroll-when will trigger and we'll scroll to the
+			reply box.
+		-->
+		<app-comment-widget-add
+			v-if="isReplying"
+			v-app-scroll-when="true"
+			:resource="resource"
+			:resource-id="resourceId"
+			:parent-id="comment.id"
+			@submit="onReplyAdd"
+			/>
+
+	</div>
+
+</app-message-thread-item>

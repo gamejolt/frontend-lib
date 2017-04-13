@@ -2,61 +2,88 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import * as View from '!view!./comment.html?style=./comment.styl';
+import './comment-content.styl';
 
-import { Environment } from '../../environment/environment.service';
-import { AppCommentWidget } from './widget';
-import { findVueParent } from '../../../utils/vue';
-import { Comment } from '../comment-model';
-import { AppState } from '../../../vue/services/app/app-store';
-import { Subscription } from '../../subscription/subscription.model';
-import { CommentVideo } from '../video/video-model';
-import { AppUserAvatar } from '../../user/user-avatar/user-avatar';
-import { AppTimeAgo } from '../../time/ago/ago';
-import { AppFadeCollapse } from '../../fade-collapse/fade-collapse';
-import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppTooltip } from '../../tooltip/tooltip';
-import { AppPopover } from '../../popover/popover';
-import { AppPopoverTrigger } from '../../popover/popover-trigger.directive.vue';
-import { AppCommentVideoThumbnail } from '../video/thumbnail/thumbnail';
-import { ReportModal } from '../../report/modal/modal.service';
+import { Environment } from '../../../environment/environment.service';
+import { AppCommentWidget } from '../widget';
+import { findVueParent } from '../../../../utils/vue';
+import { Comment } from '../../comment-model';
+import { AppState } from '../../../../vue/services/app/app-store';
+import { Subscription } from '../../../subscription/subscription.model';
+import { CommentVideo } from '../../video/video-model';
+import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
+import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import { AppTooltip } from '../../../tooltip/tooltip';
+import { AppPopover } from '../../../popover/popover';
+import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vue';
+import { AppCommentVideoThumbnail } from '../../video/thumbnail/thumbnail';
+import { ReportModal } from '../../../report/modal/modal.service';
+import { date } from '../../../../vue/filters/date';
+import { AppMessageThreadItem } from '../../../message-thread/item/item';
+import { number } from '../../../../vue/filters/number';
+import { AppExpand } from '../../../expand/expand';
+import { AppScrollWhen } from '../../../scroll/scroll-when.directive.vue';
+import { AppCommentWidgetAdd } from '../add/add';
+import { Clipboard } from '../../../clipboard/clipboard-service';
+import { Scroll } from '../../../scroll/scroll.service';
 
 @View
 @Component({
 	components: {
-		AppUserAvatar,
-		AppTimeAgo,
+		AppMessageThreadItem,
 		AppFadeCollapse,
 		AppJolticon,
 		AppPopover,
 		AppCommentVideoThumbnail,
+		AppExpand,
+		AppCommentWidgetAdd,
 	},
 	directives: {
 		AppTrackEvent,
 		AppTooltip,
 		AppPopoverTrigger,
+		AppScrollWhen,
+	},
+	filters: {
+		number,
 	},
 })
 export class AppCommentWidgetComment extends Vue
 {
 	@Prop( Comment ) comment: Comment;
-	@Prop( Boolean ) isChild?: boolean;
-	@Prop( Boolean ) isHighlighted?: boolean;
+	@Prop( Array ) children?: Comment[];
+	@Prop( Comment ) parent?: Comment;
 
 	@State app: AppState;
 
-	canToggleComment = false;
-	showFullComment = false;
+	canToggleContent = false;
+	showFullContent = false;
 	selectedVideo: CommentVideo | null = null;
 	showAllVideos = false;
 	isFollowPending = false;
+	isShowingChildren = false;
+	isReplying = false;
+	isHighlighted = false;
 
 	widget: AppCommentWidget;
+
+	date = date;
 	Environment = Environment;
 
 	created()
 	{
 		this.widget = findVueParent( this, AppCommentWidget ) as AppCommentWidget;
+	}
+
+	mounted()
+	{
+		this.checkPermalink();
+	}
+
+	get isChild()
+	{
+		return !!this.parent;
 	}
 
 	get isOwner()
@@ -109,37 +136,43 @@ export class AppCommentWidgetComment extends Vue
 	get votingTooltip()
 	{
 		const userHasVoted = !!this.comment.user_vote;
-		const voteCount = this.comment.votes;
+		const count = this.comment.votes;
 
-		if ( voteCount <= 0 ) {
+		if ( count <= 0 ) {
 			if ( this.canVote ) {
 				return this.$gettext( 'Give this comment some love!' );
 			}
 		}
 		else if ( userHasVoted ) {
-			if ( voteCount === 1 ) {
+			if ( count === 1 ) {
 				return this.$gettext( 'You like this comment' );
 			}
 			else {
-				return this.$ngettext(
-					'You and another person like this comment.',
-					'You and %{ $count } people like this comment.',
-					(voteCount - 1),
+				return this.$gettextInterpolate(
+					this.$ngettext(
+						'You and another person like this comment.',
+						'You and %{ count } people like this comment.',
+						(count - 1),
+					),
+					{ count },
 				);
 			}
 		}
 		else {
-			return this.$ngettext(
-				'One person likes this comment.',
-				'%{ $count } people like this comment.',
-				voteCount,
+			return this.$gettextInterpolate(
+				this.$ngettext(
+					'One person likes this comment.',
+					'%{ count } people like this comment.',
+					count,
+				),
+				{ count },
 			);
 		}
 	}
 
-	onReplyClick()
+	onReplyAdd( formModel: Comment )
 	{
-		this.widget.replyToComment( this.comment );
+		this.widget.onCommentAdd( formModel, true );
 	}
 
 	onVoteClick()
@@ -188,8 +221,22 @@ export class AppCommentWidgetComment extends Vue
 		}
 	}
 
-	report( comment: Comment )
+	copyPermalink()
 	{
-		ReportModal.show( comment );
+		Clipboard.copy( this.comment.permalink );
+	}
+
+	report()
+	{
+		ReportModal.show( this.comment );
+	}
+
+	private checkPermalink()
+	{
+		const hash = this.$route.hash;
+		if ( hash === '#comment-' + this.comment.id ) {
+			this.isHighlighted = true;
+			Scroll.to( 'comment-' + this.comment.id );
+		}
 	}
 }

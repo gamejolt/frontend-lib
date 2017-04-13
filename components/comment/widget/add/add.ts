@@ -1,0 +1,35 @@
+import { Component, Prop } from 'vue-property-decorator';
+import * as View from '!view!./add.html';
+
+import { BaseForm } from '../../../form-vue/form.service';
+import { Comment } from '../../comment-model';
+import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markdown';
+import { AppMessageThreadAdd } from '../../../message-thread/add/add';
+
+@View
+@Component({
+	components: {
+		AppMessageThreadAdd,
+		AppFormControlMarkdown,
+	}
+})
+export class AppCommentWidgetAdd extends BaseForm<Comment>
+{
+	@Prop( String ) resource: string;
+	@Prop( Number ) resourceId: number;
+	@Prop( Number ) parentId?: number;
+
+	modelClass = Comment;
+	resetOnSubmit = true;
+
+	created()
+	{
+		this.formModel.comment = '';
+		this.formModel.resource = this.resource;
+		this.formModel.resource_id = this.resourceId;
+
+		if ( this.parentId ) {
+			this.formModel.parent_id = this.parentId;
+		}
+	}
+}
