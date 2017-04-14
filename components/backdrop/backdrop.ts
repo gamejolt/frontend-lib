@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import * as View from '!view!./backdrop.html?style=./backdrop.styl';
+import './backdrop-global.styl';
 
 import { Backdrop } from './backdrop.service';
 

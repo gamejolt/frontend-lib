@@ -19,6 +19,7 @@ export class Backdrop
 		backdrop.$mount( el );
 
 		this.backdrops.push( backdrop );
+		document.body.classList.add( 'backdrop-active' );
 
 		return backdrop;
 	}
@@ -31,6 +32,10 @@ export class Backdrop
 		const index = this.backdrops.indexOf( backdrop );
 		if ( index !== -1 ) {
 			this.backdrops.splice( index, 1 );
+		}
+
+		if ( this.backdrops.length === 0 ) {
+			document.body.classList.remove( 'backdrop-active' );
 		}
 	}
 }
