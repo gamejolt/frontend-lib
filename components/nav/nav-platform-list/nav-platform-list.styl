@@ -76,16 +76,17 @@ nav.platform-list
 			@extend .anim-back-in-up
 			@extend .anim-fade-leave
 			float: left
+			margin-right: ($grid-gutter-width / 2)
+
+			@media $media-xs
+				margin-right: ($grid-gutter-width-xs / 2)
 
 		a
 			display: inline-block
 			border-left: 0
 			border-bottom-width: 3px
 			padding: 0 5px ($line-height-computed / 2) 0
-			margin: 0 ($grid-gutter-width / 2) 0 0
-
-			@media $media-xs
-				margin-right: ($grid-gutter-width-xs / 2)
+			margin: 0
 
 			&:hover
 				border-color: $gray-lighter
