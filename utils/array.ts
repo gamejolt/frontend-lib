@@ -1,4 +1,4 @@
-export function arrayUnique( values: any[] )
+export function arrayUnique<T>( values: T[] )
 {
 	return values.filter( ( value, index ) =>
 	{

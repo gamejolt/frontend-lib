@@ -175,27 +175,19 @@
 		&nbsp;
 		&nbsp;
 
-		<span v-if="children && children.length">
-			<a class="btn btn-outline btn-sm"
-				@click="isShowingChildren = !isShowingChildren"
+		<a
+			v-if="children && children.length"
+			class="small"
+			@click="isShowingChildren = !isShowingChildren"
+			>
+			<translate
+				:translate-n="children.length"
+				:translate-params="{ count: children.length }"
+				translate-plural="+%{ count } replies"
 				>
-				<span class="btn-badge">
-					{{ children.length || 0 | number }}
-				</span>
-				<app-jolticon
-					:icon="isShowingChildren
-						? 'chevron-down'
-						: 'chevron-right'
-					"
-					/>
-				<translate v-if="!isShowingChildren">
-					Show Replies
-				</translate>
-				<translate v-else>
-					Hide Replies
-				</translate>
-			</a>
-		</span>
+				+1 reply
+			</translate>
+		</a>
 
 	</div>
 
