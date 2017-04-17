@@ -16,6 +16,9 @@ var BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPl
 
 module.exports = function( config )
 {
+	// We use this to version assets so we can purge all easily by bumping it.
+	var v = 1;
+
 	var base = path.resolve( config.projectBase );
 
 	var noop = function(){};
@@ -70,8 +73,8 @@ module.exports = function( config )
 			output: {
 				publicPath: (config.production ? config.staticCdn : '') + '/',
 				path: path.resolve( base, config.buildDir ),
-				filename: config.production ? section + '.[chunkhash:6].js' : section + '.js',
-				chunkFilename: config.production ? section + '.[id].[chunkhash:6].js' : undefined,
+				filename: config.production ? section + `.[chunkhash:6]-${v}.js` : section + '.js',
+				chunkFilename: config.production ? section + `.[id].[chunkhash:6]-${v}.js` : undefined,
 			},
 			resolve: {
 				extensions: [ '.tsx', '.ts', '.js', '.styl' ],
@@ -141,7 +144,7 @@ module.exports = function( config )
 					config.framework === 'vue' ? {} : {
 						test: /\.html$/,
 						use: [
-							'file-loader?name=templates/[name].[hash:6].[ext]',
+							`file-loader?name=templates/[name].[hash:6]-${v}.[ext]`,
 							'extract-loader',
 							'html-loader',
 						],
@@ -163,7 +166,7 @@ module.exports = function( config )
 					{
 						test: /\.md$/,
 						use: [
-							'file-loader?name=templates/[name].[hash:6].html',
+							`file-loader?name=templates/[name].[hash:6]-${v}.html`,
 							'extract-loader',
 							'html-loader',
 							'markdown-loader',
@@ -171,12 +174,12 @@ module.exports = function( config )
 					},
 					{
 						test: /\.(png|jpe?g|gif|svg|json|ogg|mp4)(\?.*)?$/,
-						loader: 'file-loader?name=assets/[name].[hash:6].[ext]',
+						loader: `file-loader?name=assets/[name].[hash:6]-${v}.[ext]`,
 						exclude: /node_modules/,
 					},
 					{
 						test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-						loader: 'file-loader?name=assets/[name].[hash:6].[ext]',
+						loader: `file-loader?name=assets/[name].[hash:6]-${v}.[ext]`,
 					},
 				]
 			},
@@ -225,7 +228,7 @@ module.exports = function( config )
 				prodNoop || new webpack.HotModuleReplacementPlugin(),
 				devNoop || new webpack.optimize.CommonsChunkPlugin( {
 					name: 'vendor',
-					filename: 'vendor.[hash:6].js',
+					filename: `vendor.[hash:6]-${v}.js`,
 					minChunks: function( module, count )
 					{
 						// Pull anything from node_modules or bower-lib into vendor.
@@ -239,10 +242,10 @@ module.exports = function( config )
 				} ),
 				devNoop || new webpack.optimize.CommonsChunkPlugin( {
 					name: 'manifest',
-					filename: 'manifest.[hash:6].js',
+					filename: `manifest.[hash:6]-${v}.js`,
 					chunks: [ 'vendor' ],
 				} ),
-				devNoop || new ExtractTextPlugin( '[name].[contenthash:6].css' ),
+				devNoop || new ExtractTextPlugin( `[name].[contenthash:6]-${v}.css` ),
 				devNoop || new OptimizeCssPlugin( {
 					cssProcessor: {
 						process: function( css )
