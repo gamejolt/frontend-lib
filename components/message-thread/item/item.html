@@ -2,12 +2,11 @@
 	:id="id"
 	:class="{
 		active: isActive,
-		nested: isNested,
 		'new': isNew,
 	}"
 	>
 
-	<div class="timeline-list-item-icon">
+	<div class="timeline-list-item-bubble">
 		<app-user-avatar class="avatar-circle" :user="user" />
 	</div>
 
@@ -71,7 +70,7 @@
 
 			<slot />
 
-			<div class="message-thread-item-controls">
+			<div class="timeline-list-item-controls">
 				<slot name="controls" />
 			</div>
 

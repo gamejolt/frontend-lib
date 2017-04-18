@@ -28,13 +28,14 @@ export class AppFiresidePostLikeWidget extends Vue
 {
 	@Prop( FiresidePost ) post: FiresidePost;
 	@Prop( Boolean ) sparse?: boolean;
+	@Prop( Boolean ) circle?: boolean;
 
 	@State app: AppState;
 
 	get tooltip()
 	{
 		// No tooltip if showing label.
-		if ( !this.sparse ) {
+		if ( !this.isSparse ) {
 			return undefined;
 		}
 
@@ -44,6 +45,14 @@ export class AppFiresidePostLikeWidget extends Vue
 		else {
 			return this.$gettext( 'Liked!' );
 		}
+	}
+
+	/**
+	 * Combined sparse or circle option.
+	 */
+	get isSparse()
+	{
+		return this.sparse || this.circle;
 	}
 
 	async toggleLike()

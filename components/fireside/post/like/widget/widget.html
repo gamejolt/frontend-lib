@@ -1,26 +1,31 @@
 <div class="fireside-post-like-widget" v-if="app.user && app.user.id !== post.user.id">
-	<a class="btn"
+	<button
+		class="btn"
 		v-app-auth-required
 		@click="toggleLike"
 		:class="{
 			'btn-outline': !post.user_like,
 			'btn-success-outline active': post.user_like,
-			'btn-sparse': sparse,
+			'btn-sparse': isSparse,
+			'btn-circle': circle,
 		}"
 		v-app-tooltip="tooltip"
 		>
-		<span class="btn-badge" v-if="post.like_count">
+		<span class="btn-badge" v-if="!isSparse && post.like_count">
 			{{ post.like_count | number }}
 		</span>
 
 		<app-jolticon icon="heart" />
 
-		<span class="hidden-xs">
-			<span v-if="!post.user_like">
-				<translate v-if="!sparse">Like This Post</translate>
-				<translate v-if="sparse">Like</translate>
-			</span>
+		<span class="hidden-xs" v-if="!isSparse">
+			<translate v-if="!post.user_like">
+				Like This Post
+			</translate>
 			<translate v-else>Liked!</translate>
 		</span>
-	</a>
+	</button>
+	<span class="blip light filled" v-if="isSparse && post.like_count">
+		<span class="blip-caret"></span>
+		<span class="blip-count">{{ post.like_count | number }}</span>
+	</span>
 </div>

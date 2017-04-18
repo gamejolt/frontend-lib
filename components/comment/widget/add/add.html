@@ -1,11 +1,10 @@
-<app-message-thread-add
-	:nested="!!parentId"
-	>
+<app-message-thread-add>
 
 	<app-form name="commentAddForm">
 
 		<app-form-group
 			class="no-animate"
+			:class="{ 'sans-margin-bottom': !changed }"
 			name="comment"
 			:label="$gettext( 'Leave a Comment' )"
 			:hide-label="true"

@@ -1,7 +1,6 @@
-import Vue from 'vue';
+import VueRouter from 'vue-router';
 import { Model } from '../model/model.service';
 import { Environment } from '../environment/environment.service';
-import { getProvider } from '../../utils/utils';
 import { FiresidePost } from '../fireside/post/post-model';
 import { Comment } from '../comment/comment-model';
 import { User } from '../user/user.model';
@@ -13,8 +12,7 @@ import { ForumPost } from '../forum/post/post.model';
 import { UserFriendship } from '../user/friendship/friendship.model';
 import { GameRating } from '../game/rating/rating.model';
 import { Sellable } from '../sellable/sellable.model';
-
-const vm = new Vue();
+import { Translate } from '../translate/translate.service';
 
 export class Notification extends Model
 {
@@ -46,7 +44,6 @@ export class Notification extends Model
 	to_model: any;
 
 	// Generated.
-	url: string | undefined = '';
 	action_label = '';
 	jolticon = '';
 
@@ -83,74 +80,54 @@ export class Notification extends Model
 		if ( this.type === Notification.TYPE_COMMENT_ADD ) {
 			this.action_model = new Comment( data.action_resource_model );
 			this.action_label = 'Comment Reply';
-			this.url = undefined;  // Must pull asynchronously when they click on the notification.
 			this.jolticon = 'jolticon-share';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
 			this.action_model = new Comment( data.action_resource_model );
 			this.action_label = 'New Comment';
-			this.url = undefined;  // Must pull asynchronously when they click on the notification.
 			this.jolticon = 'jolticon-add-comment';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FORUM_POST_ADD ) {
 			this.action_model = new ForumPost( data.action_resource_model );
 			this.action_label = 'New Forum Post';
-			this.url = undefined;
 			this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FRIENDSHIP_REQUEST ) {
 			this.action_model = new UserFriendship( data.action_resource_model );
 			this.action_label = 'Friend Request';
-			this.url = this.from_model.url;
-			// getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
 			this.jolticon = 'jolticon-friend-add-1';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FRIENDSHIP_ACCEPT ) {
 			this.action_model = new UserFriendship( data.action_resource_model );
 			this.action_label = 'New Friend';
-			this.url = this.from_model.url;
-			// getProvider<StateService>( '$state' ).href( 'profile.overview', { username: this.from_model.username } );
 			this.jolticon = 'jolticon-friend-add-2';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_GAME_RATING_ADD ) {
 			this.action_model = new GameRating( data.action_resource_model );
 			this.action_label = 'Game Rating';
-			this.url = this.to_model.getUrl();
 			this.jolticon = 'jolticon-chart';
 			this.is_game_based = true;
 		}
 		else if ( this.type === Notification.TYPE_GAME_FOLLOW ) {
 			// this.action_model = new (getProvider<any>( 'GameLibrary_Game' ))( data.action_resource_model );
 			this.action_label = 'Game Follow';
-			this.url = '';
-			// this.url = this.from_model.url;
 			this.jolticon = 'jolticon-subscribe';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_DEVLOG_POST_ADD ) {
 			this.action_model = new FiresidePost( data.action_resource_model );
 			this.action_label = 'Devlog Post';
-			this.url = vm.$router.resolve( {
-				name: 'discover.games.view.devlog.view',
-				params: {
-					slug: this.to_model.slug,
-					id: this.to_model.id,
-					postSlug: this.action_model.slug,
-				},
-			} ).href;
 			this.jolticon = 'jolticon-blog-article';
 			this.is_game_based = true;
 		}
 		else if ( this.type === Notification.TYPE_SELLABLE_SELL ) {
 			// this.action_model = new (getProvider<any>( 'Order_Item' ))( data.action_resource_model );
 			this.action_label = 'Sale';
-			this.url = '';
-			// this.url = getProvider<StateService>( '$state' ).href( 'dashboard.main.overview', {} );
 			this.jolticon = 'jolticon-heart';
 			this.is_user_based = true;
 		}
@@ -167,10 +144,44 @@ export class Notification extends Model
 		return Api.sendRequest( '/web/dash/activity/count', null, { detach: true } );
 	}
 
-	async go()
+	get routeLocation()
 	{
-		if ( this.url ) {
-			getProvider<ng.ILocationService>( '$location' ).url( this.url.replace( '#!', '' ) );
+		switch ( this.type )
+		{
+			case Notification.TYPE_FRIENDSHIP_REQUEST:
+			case Notification.TYPE_FRIENDSHIP_ACCEPT:
+				return this.from_model.url;
+
+			case Notification.TYPE_GAME_RATING_ADD:
+				return this.to_model.routeLoaction;
+
+			case Notification.TYPE_GAME_FOLLOW:
+				return this.from_model.url;
+
+			case Notification.TYPE_DEVLOG_POST_ADD:
+				return {
+					name: 'discover.games.view.devlog.view',
+					params: {
+						slug: this.to_model.slug,
+						id: this.to_model.id,
+						postSlug: this.action_model.slug,
+					},
+				};
+
+			case Notification.TYPE_SELLABLE_SELL:
+				return {
+					name: 'dashboard.main.overview',
+				};
+		}
+
+		// Must pull asynchronously when they click on the notification.
+		return '';
+	}
+
+	async go( router: VueRouter )
+	{
+		if ( this.routeLocation ) {
+			router.push( this.routeLocation );
 		}
 		// Need to fetch the URL first.
 		else if (
@@ -185,34 +196,36 @@ export class Notification extends Model
 					url = await Comment.getCommentUrl( this.action_resource_id );
 				}
 				else if ( this.type === Notification.TYPE_FORUM_POST_ADD ) {
-					url = await getProvider<any>( 'Forum_Post' ).getPostUrl( this.action_resource_id );
+					url = await ForumPost.getPostUrl( this.action_resource_id );
 				}
 				else {
 					throw new Error( 'Invalid type.' );
 				}
 
+				console.log( 'got', url );
+
 				// If we're going to a URL within this domain, then we want to strip off the domain stuff
 				// and go to the URL. Otherwise we need to do a full-page change to the domain/url.
 				const search = Environment.baseUrl;
+				console.log( 'search', search );
 				if ( url.search( search ) === 0 ) {
 					url = url.replace( search, '' );
-					getProvider<any>( '$location' ).url( url );
+					router.push( url );
+				}
+				else if ( GJ_IS_CLIENT ) {
+					require( 'nw.gui' ).Shell.openExternal( url );
 				}
 				else {
-					if ( GJ_IS_CLIENT ) {
-						require( 'nw.gui' ).Shell.openExternal( url );
-					}
-					else {
-						window.location.href = url;
-					}
+					window.location.href = url;
 				}
 			}
-			catch ( _e ) {
-				Growls.error( 'Could not go to comment.' );
+			catch ( e ) {
+				console.error( e );
+				Growls.error(
+					Translate.$gettext( `Couldn't go to notification.` ),
+				);
 			}
 		}
-
-		throw new Error( 'No URL to go to for notification.' );
 	}
 
 	$read()

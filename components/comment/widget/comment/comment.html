@@ -3,7 +3,6 @@
 	:user="comment.user"
 	:date="comment.posted_on"
 	:is-active="isHighlighted"
-	:is-nested="isChild"
 	:replied-to="parent ? parent.user : undefined"
 	>
 
@@ -130,7 +129,7 @@
 			</button>
 			<span class="blip light filled" v-if="comment.votes > 0">
 				<span class="blip-caret"></span>
-				<span class="blip-count">{{ comment.votes }}</span>
+				<span class="blip-count">{{ comment.votes | number }}</span>
 			</span>
 		</span>
 

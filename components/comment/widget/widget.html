@@ -36,34 +36,40 @@
 			</div>
 		</div>
 
-		<div class="comment-widget-translate-btn" v-if="allowTranslate">
-			<button class="btn btn-block btn-outline"
-				v-if="!isShowingTranslations"
-				@click="toggleTranslate"
-				>
-				<translate
-					:translate-params="{ lang }"
-					translate-comment="%{ lang } is passed in with the current language"
-					>
-					Translate comments to %{ lang }
-				</translate>
-			</button>
+		<div class="timeline-list-item" v-if="allowTranslate">
+			<div class="timeline-list-item-main">
 
-			<div v-if="isShowingTranslations">
-				<button class="btn btn-block btn-outline"
-					@click="toggleTranslate"
-					>
-					<translate>Show original comments</translate>
-					<span class="translate-button-branding">
-						<translate>translated by</translate>
-						<img src="./google-logo.png" alt="Google">
-					</span>
-				</button>
+				<div class="comment-widget-translate-btn">
+					<button class="btn btn-block btn-outline"
+						v-if="!isShowingTranslations"
+						@click="toggleTranslate"
+						>
+						<translate
+							:translate-params="{ lang }"
+							translate-comment="%{ lang } is passed in with the current language"
+							>
+							Translate comments to %{ lang }
+						</translate>
+					</button>
 
-				<br>
-				<div class="small text-muted text-center">
-					<translate>Automatic translations use Google Translate and may not be completely accurate.</translate>
+					<div v-if="isShowingTranslations">
+						<button class="btn btn-block btn-outline"
+							@click="toggleTranslate"
+							>
+							<translate>Show original comments</translate>
+							<span class="translate-button-branding">
+								<translate>translated by</translate>
+								<img src="./google-logo.png" alt="Google">
+							</span>
+						</button>
+
+						<br>
+						<div class="small text-muted text-center">
+							<translate>Automatic translations use Google Translate and may not be completely accurate.</translate>
+						</div>
+					</div>
 				</div>
+
 			</div>
 		</div>
 

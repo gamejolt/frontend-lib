@@ -167,6 +167,14 @@ export class Game extends Model
 		Registry.store( 'Game', this );
 	}
 
+	get routeLocation()
+	{
+		return {
+			name: 'discover.games.view.overview',
+			params: this.getSrefParams(),
+		};
+	}
+
 	getSref( page = '', includeParams = false )
 	{
 		let sref = '';
