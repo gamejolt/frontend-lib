@@ -13,6 +13,8 @@ import { UserFriendship } from '../user/friendship/friendship.model';
 import { GameRating } from '../game/rating/rating.model';
 import { Sellable } from '../sellable/sellable.model';
 import { Translate } from '../translate/translate.service';
+import { OrderItem } from '../order/item/item.model';
+import { GameLibraryGame } from '../game-library/game/game.model';
 
 export class Notification extends Model
 {
@@ -33,20 +35,18 @@ export class Notification extends Model
 
 	from_resource: string;
 	from_resource_id: number;
-	from_model: any;
+	from_model?: User;
 
 	action_resource: string;
 	action_resource_id: number;
-	action_model: any;
+	action_model: Comment | ForumPost | UserFriendship | GameRating | GameLibraryGame | FiresidePost | OrderItem;
 
 	to_resource: string;
 	to_resource_id: number;
-	to_model: any;
+	to_model: Game | User | FiresidePost | ForumTopic | Sellable;
 
-	// Generated.
-	action_label = '';
+	// Generated in constructor.
 	jolticon = '';
-
 	is_user_based = false;
 	is_game_based = false;
 
@@ -79,55 +79,46 @@ export class Notification extends Model
 
 		if ( this.type === Notification.TYPE_COMMENT_ADD ) {
 			this.action_model = new Comment( data.action_resource_model );
-			this.action_label = 'Comment Reply';
 			this.jolticon = 'jolticon-share';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
 			this.action_model = new Comment( data.action_resource_model );
-			this.action_label = 'New Comment';
 			this.jolticon = 'jolticon-add-comment';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FORUM_POST_ADD ) {
 			this.action_model = new ForumPost( data.action_resource_model );
-			this.action_label = 'New Forum Post';
 			this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FRIENDSHIP_REQUEST ) {
 			this.action_model = new UserFriendship( data.action_resource_model );
-			this.action_label = 'Friend Request';
 			this.jolticon = 'jolticon-friend-add-1';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_FRIENDSHIP_ACCEPT ) {
 			this.action_model = new UserFriendship( data.action_resource_model );
-			this.action_label = 'New Friend';
 			this.jolticon = 'jolticon-friend-add-2';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_GAME_RATING_ADD ) {
 			this.action_model = new GameRating( data.action_resource_model );
-			this.action_label = 'Game Rating';
 			this.jolticon = 'jolticon-chart';
 			this.is_game_based = true;
 		}
 		else if ( this.type === Notification.TYPE_GAME_FOLLOW ) {
-			// this.action_model = new (getProvider<any>( 'GameLibrary_Game' ))( data.action_resource_model );
-			this.action_label = 'Game Follow';
+			this.action_model = new GameLibraryGame( data.action_resource_model );
 			this.jolticon = 'jolticon-subscribe';
 			this.is_user_based = true;
 		}
 		else if ( this.type === Notification.TYPE_DEVLOG_POST_ADD ) {
 			this.action_model = new FiresidePost( data.action_resource_model );
-			this.action_label = 'Devlog Post';
 			this.jolticon = 'jolticon-blog-article';
 			this.is_game_based = true;
 		}
 		else if ( this.type === Notification.TYPE_SELLABLE_SELL ) {
-			// this.action_model = new (getProvider<any>( 'Order_Item' ))( data.action_resource_model );
-			this.action_label = 'Sale';
+			this.action_model = new OrderItem( data.action_resource_Model );
 			this.jolticon = 'jolticon-heart';
 			this.is_user_based = true;
 		}
@@ -150,21 +141,21 @@ export class Notification extends Model
 		{
 			case Notification.TYPE_FRIENDSHIP_REQUEST:
 			case Notification.TYPE_FRIENDSHIP_ACCEPT:
-				return this.from_model.url;
+				return this.from_model!.url;
 
 			case Notification.TYPE_GAME_RATING_ADD:
-				return this.to_model.routeLoaction;
+				return (this.to_model as Game).routeLocation;
 
 			case Notification.TYPE_GAME_FOLLOW:
-				return this.from_model.url;
+				return this.from_model!.url;
 
 			case Notification.TYPE_DEVLOG_POST_ADD:
 				return {
 					name: 'discover.games.view.devlog.view',
 					params: {
-						slug: this.to_model.slug,
-						id: this.to_model.id,
-						postSlug: this.action_model.slug,
+						slug: (this.to_model as Game).slug,
+						id: this.to_model.id + '',
+						postSlug: (this.action_model as FiresidePost).slug,
 					},
 				};
 
