@@ -1,53 +1,39 @@
-import * as angular from 'angular';
-import { Injectable, Inject } from 'ng-metadata/core';
+import { Modal } from '../../modal/modal.service';
+import { asyncComponentLoader } from '../../../utils/utils';
 import { HistoryTick } from '../../history-tick/history-tick-service';
 import { Popover } from '../../popover/popover.service';
 import { Device } from '../../device/device.service';
-import { hasProvider, getProvider } from '../../../utils/utils';
 import { Game } from '../game.model';
 import { GameBuild } from '../build/build.model';
 import { Analytics } from '../../analytics/analytics.service';
 import { Environment } from '../../environment/environment.service';
 import { Growls } from '../../growls/growls.service';
+import { Translate } from '../../translate/translate.service';
 
-@Injectable( 'Game_PlayModal' )
 export class GamePlayModal
 {
-	hasModal = false;
+	static hasModal = false;
+	static canMinimize = false;
 
-	constructor(
-		@Inject( '$rootScope' ) private $rootScope: ng.IRootScopeService,
-		@Inject( '$compile' ) private $compile: ng.ICompileService,
-		@Inject( '$animate' ) private $animate: ng.animate.IAnimateService,
-	)
+	static init( options: { canMinimize?: boolean } )
 	{
+		this.canMinimize = options.canMinimize || false;
 	}
 
-	private async getDownloadUrl( build: GameBuild, options: { key?: string } )
-	{
-		const payload = await build.getDownloadUrl( { key: options.key } );
-		let url = payload.url;
-
-		// TODO: Get rid of this once we switch to https-only.
-		if ( !Environment.isSecure ) {
-			url = url.replace( 'https://', 'http://' );
-		}
-
-		return url;
-	}
-
-	async show( _game: Game, _build: GameBuild, options: { key?: string } = {} )
+	static async show( game: Game, build: GameBuild, options: { key?: string } = {} )
 	{
 		Analytics.trackEvent( 'game-play', 'play' );
 
 		if ( this.hasModal ) {
-			Growls.error( 'You already have a browser game open. You can only have one running at a time.', 'Oh no!' );
-			return Promise.reject( undefined );
+			Growls.error(
+				Translate.$gettext( `You already have a browser game open. You can only have one running at a time.` ),
+			);
+			return;
 		}
 
-		HistoryTick.sendBeacon( 'game-build', _build.id, {
+		HistoryTick.sendBeacon( 'game-build', build.id, {
 			sourceResource: 'Game',
-			sourceResourceId: _game.id,
+			sourceResourceId: game.id,
 			key: options.key,
 		} );
 
@@ -55,9 +41,9 @@ export class GamePlayModal
 		Popover.hideAll();
 
 		// Will open the gameserver in their browser.
-		if ( GJ_IS_CLIENT && _build.type !== GameBuild.TYPE_HTML && _build.type !== GameBuild.TYPE_ROM ) {
+		if ( GJ_IS_CLIENT && build.type !== GameBuild.TYPE_HTML && build.type !== GameBuild.TYPE_ROM ) {
 			const gui = require( 'nw.gui' );
-			const url = await this.getDownloadUrl( _build, { key: options.key } );
+			const url = await this.getDownloadUrl( build, { key: options.key } );
 			gui.Shell.openExternal( url );
 			return;
 		}
@@ -72,86 +58,36 @@ export class GamePlayModal
 			// onclick handler. Once we have the download URL we can direct the
 			// window that we now have the reference to.
 			const win = window.open( '' );
-			const url = await this.getDownloadUrl( _build, { key: options.key } );
+			const url = await this.getDownloadUrl( build, { key: options.key } );
 			win.location.href = url;
 			return;
 		}
 
 		this.hasModal = true;
-		const url = await this.getDownloadUrl( _build, { key: options.key } );
+		const url = await this.getDownloadUrl( build, { key: options.key } );
+		const canMinimize = this.canMinimize;
 
-		const modalScope = this.$rootScope.$new( true );
-		modalScope['url'] = url;
-		modalScope['canMinimize'] = hasProvider( 'Minbar' );
-		modalScope['minimize'] = minimize;
-		modalScope['close'] = close;
+		await Modal.show( {
+			component: () => asyncComponentLoader( $import( './play-modal' ) ),
+			props: { game, build, url, canMinimize },
+			noBackdrop: true,
+			noBackdropClose: true,
+			noEscClose: true,
+		} );
 
-		const body: HTMLElement = document.body;
-		const modalElemTemplate = angular.element( `
-			<gj-game-play-modal
-				[url]="url"
-				[can-minimize]="canMinimize"
-				(minimize)="minimize()"
-				(close)="close()"
-				>
-			</gj-game-play-modal>`
-		);
-		const modalElem = this.$compile( modalElemTemplate )( modalScope );
+		this.hasModal = false;
+	}
 
-		this.$animate.enter( modalElem, angular.element( body ) );
-		body.classList.add( 'game-play-modal-open' );
+	private static async getDownloadUrl( build: GameBuild, options: { key?: string } )
+	{
+		const payload = await build.getDownloadUrl( { key: options.key } );
+		let url = payload.url;
 
-		// Pull into this scope.
-		const $animate = this.$animate;
-
-		function minimize()
-		{
-			// We basically animate it out but keep it in the DOM.
-			// This is so we don't lose the game when closing it.
-			body.classList.remove( 'game-play-modal-open' );
-			modalElem[0].style.display = 'none';
-
-			// When this minbar item is clicked, it basically shows this modal again.
-			const Minbar = getProvider<any>( 'Minbar' );
-			const minbarItem = Minbar.add( {
-				title: _game.title,
-				thumb: _game.img_thumbnail,
-				isActive: true,  // Only one game open at a time, so make it active.
-				onClick: () =>
-				{
-					// We remove the item from the minbar.
-					Minbar.remove( minbarItem );
-
-					// Then we show the modal again.
-					maximize();
-				}
-			} );
+		// TODO: Get rid of this once we switch to https-only.
+		if ( !Environment.isSecure ) {
+			url = url.replace( 'https://', 'http://' );
 		}
 
-		function maximize()
-		{
-			// Add everything back in!
-			body.classList.add( 'game-play-modal-open' );
-			modalElem[0].style.display = 'block';
-		}
-
-		const self = this;
-		function close()
-		{
-			$animate.leave( modalElem ).then( () =>
-			{
-				modalScope.$destroy();
-				body.classList.remove( 'game-play-modal-open' );
-
-				self.hasModal = false;
-			} );
-
-			// Show a rating growl when they close the game play modal.
-			// This will urge them to rate the game after playing it, but only if they haven't
-			// rated it yet.
-			if ( hasProvider( 'Game_RatingGrowl' ) ) {
-				getProvider<any>( 'Game_RatingGrowl' ).show( _game );
-			}
-		}
-	};
+		return url;
+	}
 }
