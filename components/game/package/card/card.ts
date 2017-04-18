@@ -7,8 +7,6 @@ import { GamePackage } from '../package.model';
 import { Sellable } from '../../../sellable/sellable.model';
 import { GameRelease } from '../../release/release.model';
 import { GameBuild } from '../../build/build.model';
-// import { GamePlayModal } from '../../play-modal/play-modal.service';
-import { Environment } from '../../../environment/environment.service';
 import { GamePackageCardModel } from './card.model';
 import { SellablePricing } from '../../../sellable/pricing/pricing.model';
 import { Analytics } from '../../../analytics/analytics.service';
@@ -24,6 +22,9 @@ import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppExpand } from '../../../expand/expand';
 import { filesize } from '../../../../vue/filters/filesize';
 import { AppCountdown } from '../../../countdown/countdown';
+import { GameDownloader } from '../../downloader/downloader.service';
+import { AppGamePackageCardButtons } from './buttons';
+import { GamePlayModal } from '../../play-modal/play-modal.service';
 
 @View
 @Component({
@@ -34,6 +35,7 @@ import { AppCountdown } from '../../../countdown/countdown';
 		AppFadeCollapse,
 		AppExpand,
 		AppCountdown,
+		AppGamePackageCardButtons,
 	},
 	directives: {
 		AppTooltip,
@@ -70,7 +72,6 @@ export class AppGamePackageCard extends Vue
 	saleOldPricing: SellablePricing | null = null;
 	hasPaymentWell = false;
 
-	Environment = Environment;
 
 	get card()
 	{
@@ -87,7 +88,8 @@ export class AppGamePackageCard extends Vue
 
 		this.isOwned = this.sellable && this.sellable.is_owned ? true : false;
 
-		// If there is a key on the package, then we should show it as being "owned".
+		// If there is a key on the package, then we should show it as being
+		// "owned".
 		if ( this.accessKey ) {
 			this.isOwned = true;
 		}
@@ -118,21 +120,21 @@ export class AppGamePackageCard extends Vue
 
 	buildClick( build: GameBuild, fromExtraSection = false )
 	{
-		// For client, if they clicked in the "options" section, then skip showing payment form.
-		// Just take them directly to site.
-		if ( Environment.isClient && fromExtraSection ) {
-			this._doBuildClick( build, fromExtraSection );
+		// For client, if they clicked in the "options" section, then skip
+		// showing payment form. Just take them directly to site.
+		if ( GJ_IS_CLIENT && fromExtraSection ) {
+			this.doBuildClick( build, fromExtraSection );
 		}
 		// This will show the payment form if we're supposed to.
 		else if ( this.sellable.type === 'pwyw' && this.showPayment( build ) ) {
 		}
 		// Otherwise direct to the build.
 		else {
-			this._doBuildClick( build, fromExtraSection );
+			this.doBuildClick( build, fromExtraSection );
 		}
 	}
 
-	private _doBuildClick( build: GameBuild, fromExtraSection = false )
+	private doBuildClick( build: GameBuild, fromExtraSection = false )
 	{
 		let operation = build.type === GameBuild.TYPE_DOWNLOADABLE ? 'download' : 'play';
 		if ( build.type === GameBuild.TYPE_ROM && fromExtraSection ) {
@@ -140,17 +142,18 @@ export class AppGamePackageCard extends Vue
 		}
 
 		if ( operation === 'download' ) {
-			this._download( build );
+			this.download( build );
 		}
 		else if ( operation === 'play' ) {
-			this._showBrowserModal( build );
+			this.showBrowserModal( build );
 		}
 	}
 
 	showPayment( build: GameBuild )
 	{
-		// If this isn't a free game, then we want to slide the payment open.
-		// If it's pay what you want, when the payment is open and they click a build again, just take them to it.
+		// If this isn't a free game, then we want to slide the payment open. If
+		// it's pay what you want, when the payment is open and they click a
+		// build again, just take them to it.
 		if ( this.hasPaymentWell ) {
 			if ( !this.isPaymentOpen ) {
 				this.isPaymentOpen = true;
@@ -164,9 +167,9 @@ export class AppGamePackageCard extends Vue
 
 	skipPayment()
 	{
-		// When they skip a pwyw payment form, on client we need to start the install.
-		// On site we treat it like a normal build click.
-		if ( Environment.isClient ) {
+		// When they skip a pwyw payment form, on client we need to start the
+		// install. On site we treat it like a normal build click.
+		if ( GJ_IS_CLIENT ) {
 			// this.startInstall( this.clickedBuild );
 		}
 		else {
@@ -174,24 +177,24 @@ export class AppGamePackageCard extends Vue
 		}
 	}
 
-	private _download( build: GameBuild )
+	private download( build: GameBuild )
 	{
 		Analytics.trackEvent( 'game-package-card', 'download', 'download' );
 
-		// this.Game_Downloader.download( this.game, build, {
-		// 	isOwned: (this.sellable && this.isOwned) || this.isPartner,
-		// 	key: this.key,
-		// } );
+		GameDownloader.download( this.$router, this.game, build, {
+			isOwned: (this.sellable && this.isOwned) || this.isPartner,
+			key: this.accessKey,
+		} );
 	}
 
-	private _showBrowserModal( build: GameBuild )
+	private showBrowserModal( build: GameBuild )
 	{
 		Analytics.trackEvent( 'game-package-card', 'download', 'play' );
 
-		// this.Game_PlayModal.show( this.game, build, {
-		// 	// isOwned: (this.sellable && this.isOwned) || this.isPartner,
-		// 	key: this.key,
-		// } );
+		GamePlayModal.show( this.game, build, {
+			// isOwned: (this.sellable && this.isOwned) || this.isPartner,
+			key: this.accessKey,
+		} );
 	}
 
 	integer( pricing: SellablePricing )

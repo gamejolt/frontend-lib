@@ -164,8 +164,8 @@
 					<a class="link-unstyled small"
 						@click="skipPayment"
 						>
-						<translate v-if="!Environment.isClient">No thanks, take to me to the download.</translate>
-						<translate v-if="Environment.isClient">No thanks, just install it.</translate>
+						<translate v-if="!GJ_IS_CLIENT">No thanks, take to me to the download.</translate>
+						<translate v-else>No thanks, just install it.</translate>
 					</a>
 				</div>
 			</div>
@@ -180,18 +180,16 @@
 				The buttons are so different for client that we put them in a child component.
 				They will only be available on WTTF since they're pushed in the client component there.'
 			-->
-			<div v-if="Environment.isClient">
+			<div v-if="GJ_IS_CLIENT">
 				<!--<gj-client-package-card-buttons></gj-client-package-card-buttons>-->
 			</div>
 
-			<div v-if="!Environment.isClient">
-				<!--<gj-game-package-card-buttons
-					[package]="package"
-					[card]="card"
-					(click)="buildClick( $event.build, $event.fromExtraSection )"
-					>
-				</gj-game-package-card-buttons>-->
-			</div>
+			<app-game-package-card-buttons
+				v-else
+				:package="package"
+				:card="card"
+				@click="buildClick( $event.build, $event.fromExtraSection )"
+				/>
 
 			<div v-if="isPartner && sellable.type === 'paid'">
 				<br>
