@@ -16,7 +16,7 @@ bootstrapShortkey();
 @Component({})
 export class AppModal extends Vue
 {
-	modal: Modal | null = null;
+	modal: Modal = null as any;
 	private backdrop?: AppBackdrop;
 
 	created()
@@ -31,7 +31,9 @@ export class AppModal extends Vue
 
 	mounted()
 	{
-		this.backdrop = Backdrop.push();
+		if ( !this.modal.noBackdrop ) {
+			this.backdrop = Backdrop.push();
+		}
 	}
 
 	destroyed()
@@ -45,7 +47,7 @@ export class AppModal extends Vue
 
 	dismissEsc()
 	{
-		if ( this.modal!.noEscClose ) {
+		if ( this.modal.noEscClose ) {
 			return;
 		}
 		this.dismiss();
@@ -53,7 +55,7 @@ export class AppModal extends Vue
 
 	dismissBackdrop()
 	{
-		if ( this.modal!.noBackdropClose ) {
+		if ( this.modal.noBackdropClose ) {
 			return;
 		}
 		this.dismiss();
@@ -61,6 +63,6 @@ export class AppModal extends Vue
 
 	dismiss()
 	{
-		this.modal!.dismiss();
+		this.modal.dismiss();
 	}
 }

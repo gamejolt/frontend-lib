@@ -22,8 +22,12 @@ export class AppModals extends Vue
 	@Watch( 'Modal.modals.length' )
 	watchModalLength()
 	{
+		// We only count modals that have backdrops. If all the modals don't
+		// have backdrops, then we don't add `modal-open`.
+		const backdropModals = Modal.modals.filter( ( item ) => !item.noBackdrop );
+
 		if ( !GJ_IS_SSR ) {
-			if ( Modal.modals.length ) {
+			if ( backdropModals.length ) {
 				document.body.classList.add( 'modal-open' );
 			}
 			else {

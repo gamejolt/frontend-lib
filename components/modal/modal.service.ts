@@ -7,6 +7,7 @@ export interface ModalOptions
 	size?: 'sm' | 'lg' | undefined;
 	component: ModalComponent;
 	props?: any;
+	noBackdrop?: boolean;
 	noBackdropClose?: boolean;
 	noEscClose?: boolean;
 }
@@ -19,6 +20,7 @@ export class Modal
 	size: 'sm' | 'lg' | undefined;
 	component: ModalComponent;
 	props?: any;
+	noBackdrop?: boolean;
 	noBackdropClose?: boolean;
 	noEscClose?: boolean;
 
@@ -49,6 +51,7 @@ export class Modal
 		this.size = options.size;
 		this.component = options.component;
 		this.props = options.props;
+		this.noBackdrop = options.noBackdrop;
 		this.noBackdropClose = options.noBackdropClose;
 		this.noEscClose = options.noEscClose;
 	}
