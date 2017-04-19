@@ -53,7 +53,7 @@ export class Registry
 		this.items[ type ] = this.items[ type ].slice( -this.config[ type ].maxItems );
 	}
 
-	static find( type: string, id: string | number, field = 'id' )
+	static find<T>( type: string, id: string | number, field = 'id' ): T | null
 	{
 		if ( typeof this.items[ type ] === 'undefined' ) {
 			this.items[ type ] = [];
