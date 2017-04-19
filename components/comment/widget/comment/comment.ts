@@ -27,11 +27,13 @@ import { AppScrollWhen } from '../../../scroll/scroll-when.directive.vue';
 import { AppCommentWidgetAdd } from '../add/add';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 import { Scroll } from '../../../scroll/scroll.service';
+import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 
 @View
 @Component({
 	components: {
 		AppMessageThreadItem,
+		AppMessageThreadAdd,
 		AppFadeCollapse,
 		AppJolticon,
 		AppPopover,

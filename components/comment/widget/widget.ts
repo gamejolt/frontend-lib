@@ -21,6 +21,7 @@ import { AppPagination } from '../../pagination/pagination';
 import { AppLoadingFade } from '../../loading/fade/fade';
 import { AppMessageThread } from '../../message-thread/message-thread';
 import { AppCommentWidgetAdd } from './add/add';
+import { AppMessageThreadAdd } from '../../message-thread/add/add';
 
 let incrementer = 0;
 
@@ -31,6 +32,7 @@ let incrementer = 0;
 		AppLoadingFade,
 		AppPagination,
 		AppMessageThread,
+		AppMessageThreadAdd,
 		AppCommentWidgetComment,
 		AppCommentWidgetAdd,
 	},

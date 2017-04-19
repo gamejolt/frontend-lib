@@ -4,12 +4,10 @@ import * as View from '!view!./add.html';
 import { BaseForm } from '../../../form-vue/form.service';
 import { Comment } from '../../comment-model';
 import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markdown';
-import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 
 @View
 @Component({
 	components: {
-		AppMessageThreadAdd,
 		AppFormControlMarkdown,
 	}
 })

@@ -207,14 +207,15 @@
 			triggered, the scroll-when will trigger and we'll scroll to the
 			reply box.
 		-->
-		<app-comment-widget-add
-			v-if="isReplying"
-			v-app-scroll-when="true"
-			:resource="resource"
-			:resource-id="resourceId"
-			:parent-id="comment.id"
-			@submit="onReplyAdd"
-			/>
+		<app-message-thread-add v-if="isReplying">
+			<app-comment-widget-add
+				v-app-scroll-when="true"
+				:resource="resource"
+				:resource-id="resourceId"
+				:parent-id="comment.id"
+				@submit="onReplyAdd"
+				/>
+		</app-message-thread-add>
 
 	</div>
 

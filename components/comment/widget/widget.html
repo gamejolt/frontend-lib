@@ -24,12 +24,13 @@
 
 		<!-- Comment Add Form -->
 		<div>
-			<app-comment-widget-add
-				v-if="app.user"
-				:resource="resource"
-				:resource-id="resourceId"
-				@submit="onCommentAdd"
-				/>
+			<app-message-thread-add v-if="app.user">
+				<app-comment-widget-add
+					:resource="resource"
+					:resource-id="resourceId"
+					@submit="onCommentAdd"
+					/>
+			</app-message-thread-add>
 
 			<div v-else class="alert alert-info">
 				<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
