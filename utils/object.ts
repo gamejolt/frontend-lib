@@ -16,3 +16,13 @@ export function objectEquals( a: any, b: any )
 
 	return true;
 }
+
+export function objectPick<T>( source: T, fields: (keyof T)[] )
+{
+	const obj: any = {};
+	for ( const field of fields ) {
+		obj[ field ] = source[ field ];
+	}
+
+	return obj;
+}
