@@ -159,7 +159,6 @@ module.exports = function( config )
 								}
 							},
 						],
-						exclude: /node_modules/,
 					},
 					{
 						test: /\.js$/,
