@@ -2,8 +2,9 @@
 	<v-touch
 		class="media-bar-lightbox"
 		@panstart="panStart"
-		@pan="pan"
+		@panmove="pan"
 		@panend="panEnd"
+		:pan-options="{ direction: 'horizontal' }"
 		>
 
 		<span v-shortkey="[ 'arrowleft' ]" @shortkey="goPrev"></span>
