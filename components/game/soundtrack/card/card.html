@@ -1,60 +1,71 @@
-<gj-card class="soundtrack-package-card">
+<app-card class="soundtrack-package-card">
 
 	<div class="row">
 		<div class="col-sm-9">
 
 			<div class="card-title">
 				<h4>
-					<span translate>Game Soundtrack</span>
-					<span class="jolticon jolticon-musical-note-double big pull-right text-muted"></span>
+					<translate>Game Soundtrack</translate>
+					<app-jolticon
+						icon="musical-note-double"
+						:big="true"
+						class="big pull-right text-muted"
+						/>
 				</h4>
 			</div>
 
 			<div class="card-meta">
-				{{ ctrl.songs.length | number }} songs
+				<translate
+					:translate-n="songs.length"
+					:translate-params="{ count: number( songs.length ) }"
+					translate-plural="%{ count } songs"
+					>
+					1 song
+				</translate>
 			</div>
 
 			<br>
 
 			<div class="card-content">
 
-				<gj-fade-collapse
-					[collapse-height]="250"
-					[is-open]="ctrl.isShowingSoundtrack"
-					(required)="ctrl.canToggleSoundtrack = true"
+				<app-fade-collapse
+					:collapse-height="250"
+					:is-open="isShowingSoundtrack"
+					@required="canToggleSoundtrack = true"
 					>
 
-					<gj-audio-playlist
-						audio-playlist-songs="::ctrl.songs"
-						audio-playlist-is-playing="ctrl.isPlaying"
-						>
-					</gj-audio-playlist>
+					<app-audio-playlist
+						ref="playlist"
+						:songs="songs"
+						@play="isPlaying = true"
+						@stop="isPlaying = false"
+						/>
 
-				</gj-fade-collapse>
+				</app-fade-collapse>
 
 			</div>
 
 			<a class="hidden-text-expander"
-				ng-if="ctrl.canToggleSoundtrack"
-				ng-click="ctrl.isShowingSoundtrack = !ctrl.isShowingSoundtrack"
-				gj-track-event="game-soundtrack-card:show-all-songs"
-				></a>
+				v-if="canToggleSoundtrack"
+				@click="isShowingSoundtrack = !isShowingSoundtrack"
+				v-app-track-event="`game-soundtrack-card:show-all-songs`"
+				>
+			</a>
 
 		</div>
 		<div class="col-sm-3 hidden-xs">
 
 			<div class="card-thumb"
-				ng-style="{ 'background-image': 'url(\'' + ctrl.game.img_thumbnail + '\')' }"
+				:style="{ 'background-image': `url('${ game.img_thumbnail }')` }"
 				>
 
 				<a class="play-button-overlay play-button-overlay-small hidden-xs"
-					ng-class="{ active: ctrl.isPlaying }"
-					ng-click="ctrl.isPlaying = !ctrl.isPlaying"
-					gj-track-event="game-soundtrack-card:play:cover-art"
+					:class="{ active: isPlaying }"
+					@click="play"
+					v-app-track-event="`game-soundtrack-card:play:cover-art`"
 					>
 
-					<span class="jolticon"
-						ng-class="!ctrl.isPlaying ? 'jolticon-play' : 'jolticon-stop'"></span>
+					<app-jolticon :icon="!isPlaying ? 'play' : 'stop'" />
 				</a>
 
 			</div>
@@ -64,13 +75,13 @@
 
 	<div class="card-controls">
 		<a class="btn btn-success-outline btn-block-xs"
-			ng-click="ctrl.download()"
-			gj-track-event="game-soundtrack-card:download"
+			@click="download"
+			v-app-track-event="`game-soundtrack-card:download`"
 			>
-			<span class="jolticon jolticon-download"></span>
-			<span translate>Download</span>
-			<span class="jolticon-addon jolticon jolticon-musical-note-double"></span>
+			<app-jolticon icon="download" />
+			<translate>Download</translate>
+			<app-jolticon icon="musical-note-double" class="jolticon-addon" />
 		</a>
 	</div>
 
-</gj-card>
+</app-card>

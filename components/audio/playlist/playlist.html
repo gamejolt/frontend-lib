@@ -1,43 +1,73 @@
-<div class="audio-playlist-player">
+<div>
 
-	<gj-audio-player
-		song="ctrl.currentSong"
-		song-duration="ctrl.currentSongDuration"
-		song-current-time="ctrl.currentSongTime"
-		on-song-ended="ctrl.onSongEnded()">
-	</gj-audio-player>
+	<div class="audio-playlist-player clearfix">
 
-	<button class="audio-playlist-player-play btn btn-sparse" ng-click="ctrl.mainSongButton()" gj-track-event="audio-playlist:click:button">
-		<span class="jolticon"
-			ng-class="{ 'jolticon-play': !ctrl.currentSong, 'jolticon-stop': ctrl.currentSong }"></span>
-	</button>
+		<app-audio-player
+			v-if="currentSong"
+			ref="player"
+			:song="currentSong"
+			@duration="durationEvent"
+			@end="onSongEnded"
+			/>
 
-	<div class="audio-playlist-player-track-info">
-		<span class="audio-playlist-player-title">{{ ctrl.currentSong.title || ctrl.songs[0].title }}</span>
+		<button
+			class="audio-playlist-player-play btn btn-sparse"
+			@click="mainSongButton"
+			v-app-track-event="`audio-playlist:click:button`"
+			>
+			<app-jolticon :icon="currentSong ? 'stop' : 'play'" />
+		</button>
 
-		<span class="audio-playlist-player-playtime text-muted anim-fade-in anim-fade-leave" ng-if="ctrl.currentSongTime && ctrl.currentSongDuration">
-			{{ (ctrl.currentSongTime || 0) | time }}
-			/
-			{{ (ctrl.currentSongDuration || 0) | time }}
-		</span>
+		<div class="audio-playlist-player-track-info">
+			<span class="audio-playlist-player-title">
+				{{ currentSong ? currentSong.title : songs[0].title }}
+			</span>
+
+			<transition mode="out-in">
+				<span class="audio-playlist-player-playtime text-muted anim-fade-enter anim-fade-leave"
+					v-if="currentTime && duration"
+					>
+					{{ (currentTime || 0) | time }}
+					/
+					{{ (duration || 0) | time }}
+				</span>
+			</transition>
+		</div>
+
+		<app-audio-scrubber
+			:duration="duration"
+			:current-time="currentTime"
+			@seek="seek"
+			/>
 	</div>
 
-	<gj-audio-scrubber
-		song-duration="ctrl.currentSongDuration"
-		song-current-time="ctrl.currentSongTime">
-	</gj-audio-scrubber>
-</div>
-
-<ul class="audio-playlist">
-	<li ng-repeat="song in ctrl.songs track by song.id"
-		ng-class="{ active: song.id == ctrl.currentSong.id }">
-
-		<span class="audio-playlist-play" ng-click="ctrl.toggleSong( song )">
-			<a class="btn btn-sparse btn-sm" gj-track-event="audio-playlist:click:icon">
-				<span class="jolticon" ng-class="'jolticon-' + (song.id == ctrl.currentSong.id ? 'stop' : 'play-small')"></span>
+	<ul class="audio-playlist list-unstyled">
+		<li
+			v-for="( song, i ) of songs"
+			:key="song.id"
+			:class="{ active: currentSong && song.id === currentSong.id }"
+			>
+			<span
+				class="audio-playlist-play"
+				@click="toggleSong( song )"
+				>
+				<a class="btn btn-sparse btn-sm" v-app-track-event="`audio-playlist:click:icon`">
+					<app-jolticon
+						:icon="currentSong && song.id === currentSong.id ? 'stop' : 'play-small'"
+						/>
+				</a>
+			</span>
+			<span class="audio-playlist-number text-muted">
+				{{ (i + 1) }}.
+			</span>
+			<a
+				class="audio-playlist-song-title link-unstyled"
+				@click="toggleSong( song )"
+				v-app-track-event="`audio-playlist:click:title`"
+				>
+				{{ song.title }}
 			</a>
-		</span>
-		<span class="audio-playlist-number text-muted">{{ ::($index + 1) }}.</span>
-		<a class="audio-playlist-song-title link-unstyled" ng-click="ctrl.toggleSong( song )" gj-track-event="audio-playlist:click:title">{{ ::song.title }}</a>
-	</li>
-</ul>
+		</li>
+	</ul>
+
+</div>

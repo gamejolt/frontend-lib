@@ -1,8 +1,9 @@
+@require '~styles/variables'
+
 /**
  * Audio Playlist Player
  */
 .audio-playlist-player
-	@extend .clearfix
 	margin-bottom: $line-height-computed
 
 	&-play
@@ -26,7 +27,6 @@
  * Audio Playlist
  */
 .audio-playlist
-	@extend .list-unstyled
 
 	&-number
 		display: inline-block
@@ -35,6 +35,9 @@
 		font-size: $font-size-small
 		text-align: right
 
-	> li.active
-		.audio-playlist-song-title
-			font-weight: bold
+	> li
+		margin-bottom: 5px
+
+		&.active
+			.audio-playlist-song-title
+				font-weight: bold

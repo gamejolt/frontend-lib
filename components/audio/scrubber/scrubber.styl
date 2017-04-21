@@ -1,29 +1,43 @@
-.audio-scrubber-timebar
-	position: relative
+@require '~styles/variables'
 
-.audio-scrubber-timebar-unfilled
-	position: absolute
-	width: 100%
-	top: 50%
-	margin-top: -2px
-	height: 5px
-	background-color: $gray-dark
+.audio-scrubber
+	user-select: none
 
-.audio-scrubber-timebar-filled
-	position: absolute
-	top: 0
-	left: 0
-	bottom: 0
-	right: 0
-	background-color: $gj-blue
+	&-timebar
+		position: relative
 
-.audio-scrubber-timebar-handle
-	position: absolute
-	width: 13px
-	height: @width
-	top: 50%
-	margin-top: -(@width / 2)
-	margin-right: -(@width / 2)
-	background-color: $gray-lighter
-	border-radius: 50%
-	z-index: 11
+	&-timebar-unfilled
+		position: absolute
+		width: 100%
+		top: 50%
+		margin-top: -2px
+		height: 5px
+		background-color: $gray-dark
+
+	&-timebar-filled
+		position: absolute
+		top: 0
+		left: 0
+		bottom: 0
+		right: 0
+		background-color: $gj-blue
+
+	&-timebar-handle
+		position: absolute
+		width: 13px
+		height: @width
+		top: 50%
+		margin-top: -(@width / 2)
+		margin-right: -(@width / 2)
+		background-color: $gray-lighter
+		border-radius: 50%
+		cursor: pointer
+		transition: width 200ms, height 200ms, margin-top 200ms, margin-right 200ms
+		z-index: 11
+
+		.audio-scrubber.dragging &
+			width: 17px
+			height: @width
+			margin-top: -(@width / 2)
+			margin-right: -(@width / 2)
+			background-color: $white
