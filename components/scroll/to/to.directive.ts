@@ -13,7 +13,7 @@ export const AppScrollTo: Vue.DirectiveOptions = {
 				console.error( new Error( `Couldn't get scroll to.` ) );
 			}
 
-			Scroll.to( to, { animate: true } );
+			Scroll.to( to );
 		} );
 	},
 };

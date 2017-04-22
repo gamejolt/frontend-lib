@@ -3,13 +3,8 @@ import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
 import { supportsPassiveEvents } from '../../utils/detection';
 
-const AnimatedScrollDuration = 800;
-const AnimatedScrollEasing = ( x: number ) =>
-{
-	// Easing functions: https://gist.github.com/gre/1650294
-	// easeOutQuart
-	return 1 - (--x) * x * x * x;
-};
+// Polyfill smooth scrolling.
+require( 'smoothscroll-polyfill' ).polyfill();
 
 export interface ScrollChange
 {
@@ -25,8 +20,8 @@ export class Scroll
 {
 	static shouldAutoScroll = true;
 
-	// For SSR context we have to set this to undefined.
-	// No methods should be called that would use the context.
+	// For SSR context we have to set this to undefined. No methods should be
+	// called that would use the context.
 	static context: HTMLElement | HTMLDocument = typeof document !== 'undefined' ? document : (undefined as any);
 	static contextOffsetTop = 0;
 	static offsetTop = 0;
@@ -35,8 +30,8 @@ export class Scroll
 	static scrollChanges = new Subject<ScrollChange>();
 
 	/**
-	 * Sets the extra offset for scrolling.
-	 * This can be used if there is a fixed nav on the top that we need to always offset from.
+	 * Sets the extra offset for scrolling. This can be used if there is a fixed
+	 * nav on the top that we need to always offset from.
 	 */
 	static setOffsetTop( offset: number )
 	{
@@ -157,22 +152,25 @@ export class Scroll
 	 */
 	static getElementOffsetFromContext( element: HTMLElement )
 	{
-		// When there is a specific scroll context element, the offset() values will be the offsets from the "document" element.
-		// We have to subtract the scroll context offset from the element offset to get the correct offset within the scolling viewport.
-		// We then have to negate the scrolling of the viewport since the offset value is also taking that into account.
+		// When there is a specific scroll context element, the offset() values
+		// will be the offsets from the "document" element. We have to subtract
+		// the scroll context offset from the element offset to get the correct
+		// offset within the scolling viewport. We then have to negate the
+		// scrolling of the viewport since the offset value is also taking that
+		// into account.
 		if ( this.context !== document ) {
 			return Ruler.offset( element ).top - this.contextOffsetTop - this.offsetTop + this.getScrollTop( this.context );
 		}
 
-		// Otherwise it's the "document" element.
-		// In this case it's safe to just use the element's top offset value.
+		// Otherwise it's the "document" element. In this case it's safe to just
+		// use the element's top offset value.
 		return Ruler.offset( element ).top - this.offsetTop;
 	}
 
 	/**
-	 * Sets up a "spy" on the scroll event of the current scroll context.
-	 * Will remember to remove the handler when the scope is destroyed.
-	 * Also resets the handler when the context changes.
+	 * Sets up a "spy" on the scroll event of the current scroll context. Will
+	 * remember to remove the handler when the scope is destroyed. Also resets
+	 * the handler when the context changes.
 	 */
 	static setScrollSpy( scope: any, onScroll: Function )
 	{
@@ -192,6 +190,10 @@ export class Scroll
 		let to = 0;
 		let element: HTMLElement | null = null;
 
+		if ( options.animate === undefined ) {
+			options.animate = true;
+		}
+
 		if ( typeof input === 'number' ) {
 			to = input;
 		}
@@ -210,23 +212,14 @@ export class Scroll
 		{
 			if ( element ) {
 
-				// We don't scroll the full way to down to the element.
-				// Do it based on the screen's height, so that mobile and stuff works well too.
-				// This is because I think it's kind of annoying when the edge hits the exact top of the browser.
-				if ( options.animate !== false ) {
-					this.scrollToElement( element, (Screen.height * 0.1) + this.offsetTop, { animate: true } );
-				}
-				else {
-					this.scrollToElement( element, (Screen.height * 0.1) + this.offsetTop );
-				}
+				// We don't scroll the full way to down to the element. Do it
+				// based on the screen's height, so that mobile and stuff works
+				// well too. This is because I think it's kind of annoying when
+				// the edge hits the exact top of the browser.
+				this.scrollToElement( element, (Screen.height * 0.1) + this.offsetTop, options );
 			}
 			else {
-				if ( options.animate !== false ) {
-					this.scrollTo( to, { animate: true } );
-				}
-				else {
-					this.scrollTo( to );
-				}
+				this.scrollTo( to, options );
 			}
 		}, 20 );
 	}
@@ -243,42 +236,11 @@ export class Scroll
 
 	private static scrollTo( to: number, options: { animate?: boolean } = {} )
 	{
-		if ( options.animate ) {
-			return this.scrollToAnimate( to );
-		}
+		let el = this.context instanceof HTMLDocument
+			? window
+			: this.context;
 
-		if ( this.context instanceof HTMLDocument ) {
-			window.scrollTo( window.scrollX, to );
-			return;
-		}
-
-		this.context.scrollTop = to;
-	}
-
-	private static scrollToAnimate( to: number )
-	{
-		const startTop = this.getScrollTop( this.context );
-		const deltaTop = Math.round( to - startTop );
-		const duration = AnimatedScrollDuration;
-
-		const startTime = Date.now();
-		let progress = 0;
-		const step = ( timestamp: number ) =>
-		{
-			progress = timestamp - startTime;
-			const percent = progress >= duration ? 1 : AnimatedScrollEasing( progress / duration );
-
-			this.scrollTo( startTop + Math.ceil( deltaTop * percent ) );
-
-			if ( percent < 1 ) {
-				window.requestAnimationFrame( () => step( Date.now() ) );
-			}
-			else {
-				// do something
-			}
-		};
-
-		window.requestAnimationFrame( () => step( startTime ) );
+		el.scrollTo( { top: to, behavior: options.animate ? 'smooth' : 'auto' } );
 	}
 }
 
