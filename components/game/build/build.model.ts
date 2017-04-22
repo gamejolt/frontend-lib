@@ -275,7 +275,7 @@ export class GameBuild extends Model
 		return undefined;
 	}
 
-	getDownloadUrl( options: { key?: string, forceDownload?: boolean } = {} )
+	static getDownloadUrl( id: number, options: { key?: string, forceDownload?: boolean } = {} )
 	{
 		// This is a game key so you can access games that you have a key for.
 		let data: any = {};
@@ -287,7 +287,12 @@ export class GameBuild extends Model
 			data.forceDownload = true;
 		}
 
-		return Api.sendRequest( '/web/discover/games/builds/get-download-url/' + this.id, data );
+		return Api.sendRequest( '/web/discover/games/builds/get-download-url/' + id, data );
+	}
+
+	getDownloadUrl( options: { key?: string, forceDownload?: boolean } = {} )
+	{
+		return GameBuild.getDownloadUrl( this.id, options );
 	}
 
 	$save()
