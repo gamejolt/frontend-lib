@@ -2,16 +2,31 @@
 @require '../../../stylus/common/mixins'
 
 .tab-list
-	clearfix()
+	full-bleed-xs()
+	position: relative
 	margin-bottom: $line-height-computed
 	padding-left: $line-height-computed
 	padding-right: $line-height-computed
-	border-bottom: 2px solid $gray-darker
+
+	&::after
+		content: ''
+		position: absolute
+		left: 0
+		right: 0
+		bottom: 0
+		height: 2px
+		background-color: $black
+		z-index: 1
 
 	@media $media-xs
 		overflow-x: auto
 		overflow-y: hidden
 		white-space: nowrap
+		padding-left: 0
+		padding-right: 0
+
+		// XS size will default to centered.
+		text-align: center
 
 	ul
 		display: inline-block
@@ -29,9 +44,9 @@
 				display: inline-block
 				padding: $tab-list-padding-v $tab-list-padding-h
 				margin: 0 3px
-				margin-bottom: -2px
 				cursor: pointer
 				border: 2px solid $black
+				border-bottom: 0
 				font-weight: bold
 				color: $black
 
@@ -42,10 +57,32 @@
 					background-color: $gray-lightest
 
 				&.active
-					border-bottom: 0
+					position: relative
 					background-color: $white
-					padding-bottom: 9px
+					z-index: 2
 
 	&-centered
 		text-align: center
 		margin-left: 0
+
+	&-addons
+		float: right
+
+	&-meta
+		color: $text-muted
+		font-size: $font-size-small
+		margin-bottom: $line-height-computed
+
+		@media $media-md-up
+			float: left
+			margin-top: 7px
+			margin-bottom: 0
+
+	&-input
+		margin-bottom: $line-height-computed
+
+		@media $media-md-up
+			float: right
+			margin-left: 20px
+			margin-bottom: 0
+			max-width: 250px
