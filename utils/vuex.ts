@@ -16,7 +16,8 @@ export type VuexWatch<S> = <T>(
 
 export class VuexStore<S, A, M>
 {
-	state: S;
+	readonly state: S;
+	readonly getters: any;
 
 	dispatch: VuexDispatch<A>;
 	commit: VuexCommit<M>;
@@ -178,6 +179,11 @@ function getActionScope( store: any )
 			scope[ key ] = ( ...args: any[] ) => store.dispatch( key, ...args );
 		}
 
+		// Pull these into the scope so that parent modules can call into their
+		// nested namespaced modules.
+		scope.commit = ( ...args: any[] ) => store.commit( ...args );
+		scope.dispatch = ( ...args: any[] ) => store.dispatch( ...args );
+
 		store.state.__vuexActionScope = scope;
 	}
 
@@ -204,8 +210,8 @@ function getMutationScope( state: any )
  */
 function scopeNoStateChange( caller: string, scope: any, state: any )
 {
-	// Make a passthrough for all state to get. This allows us to throw an
-	// error when they try setting within the action.
+	// Make a passthrough for all state to get. This allows us to throw an error
+	// when they try setting within the action.
 	for ( const key of Object.getOwnPropertyNames( state ) ) {
 		const desc = Object.getOwnPropertyDescriptor( state, key );
 		if ( !desc.get ) {
@@ -223,8 +229,8 @@ function scopeNoStateChange( caller: string, scope: any, state: any )
  */
 function scopeNoCallers( caller: string, scope: any, state: any )
 {
-	// Define these as properties so that we don't ovewrite the prototype's
-	// data for these methods.
+	// Define these as properties so that we don't ovewrite the prototype's data
+	// for these methods.
 	for ( const key of state.__vuexMutations ) {
 		Object.defineProperty( scope, key, {
 			get: () => () => mutationError( caller, key ),
