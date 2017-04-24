@@ -76,9 +76,6 @@ export function VuexModule( options: VuexModuleOptions = {} )
 			}
 		}
 
-		// This will be instantiated at the end as the store instance.
-		let store: any;
-
 		// Copy over getters.
 		for ( const key of Object.getOwnPropertyNames( target.prototype ) ) {
 			if ( key in Vuex.Store.prototype ) {
@@ -105,9 +102,7 @@ export function VuexModule( options: VuexModuleOptions = {} )
 
 		// Create the store instance. If it's the main store, we create it, if
 		// it's not the main store we just use our options object.
-		store = options.store ? new Vuex.Store( storeOptions ) : storeOptions;
-
-		return store;
+		return options.store ? new Vuex.Store( storeOptions ) : storeOptions;
 	};
 }
 
