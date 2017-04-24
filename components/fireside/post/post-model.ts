@@ -6,12 +6,12 @@ import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
 import { ModalConfirm } from '../../modal/confirm/confirm-service';
 import { HistoryTick } from '../../history-tick/history-tick-service';
 import { Environment } from '../../environment/environment.service';
-import { getProvider } from '../../../utils/utils';
 import { MediaItem } from '../../media-item/media-item-model';
 import { Game } from '../../game/game.model';
 import { Api } from '../../api/api.service';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Registry } from '../../registry/registry.service';
+import { Translate } from '../../translate/translate.service';
 
 export class FiresidePost extends Model
 {
@@ -133,16 +133,14 @@ export class FiresidePost extends Model
 
 	$viewed()
 	{
-		const app = appStore.state!;
-		if ( !app.user || this.user.id !== app.user.id ) {
+		if ( !appStore.state.user || this.user.id !== appStore.state.user.id ) {
 			HistoryTick.sendBeacon( 'fireside-post', this.id );
 		}
 	}
 
 	$expanded()
 	{
-		const app = appStore.state!;
-		if ( !app.user || this.user.id !== app.user.id ) {
+		if ( !appStore.state.user || this.user.id !== appStore.state.user.id ) {
 			HistoryTick.sendBeacon( 'fireside-post-expand', this.id );
 		}
 	}
@@ -163,16 +161,15 @@ export class FiresidePost extends Model
 
 	async remove()
 	{
-		const gettextCatalog = getProvider<ng.gettext.gettextCatalog>( 'gettextCatalog' );
+		const result = await ModalConfirm.show(
+			Translate.$gettext( `Are you sure you want to remove this post?` ),
+			undefined,
+			'yes'
+		);
 
-		await getProvider<ModalConfirm>( 'ModalConfirm' )
-			.show(
-				gettextCatalog.getString( 'Are you sure you want to remove this post?' ),
-				undefined,
-				'yes'
-			);
-
-		return this.$remove();
+		if ( result ) {
+			return this.$remove();
+		}
 	}
 
 	$remove()

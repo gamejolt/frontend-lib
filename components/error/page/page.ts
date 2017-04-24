@@ -3,14 +3,14 @@ import { State } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import * as View from '!view!./page.html?style=./page.styl';
 
-import { AppState } from '../../../vue/services/app/app-store';
+import { AppStore } from '../../../vue/services/app/app-store';
 import { ErrorPages } from './page-components';
 
 @View
 @Component({})
 export class AppErrorPage extends Vue
 {
-	@State app: AppState;
+	@State app: AppStore;
 
 	get page()
 	{

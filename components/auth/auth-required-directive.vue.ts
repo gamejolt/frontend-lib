@@ -7,7 +7,7 @@ export const AppAuthRequired: Vue.DirectiveOptions = {
 	{
 		el.addEventListener( 'click', ( e ) =>
 		{
-			if ( appStore.state!.user ) {
+			if ( appStore.state.user ) {
 				return;
 			}
 

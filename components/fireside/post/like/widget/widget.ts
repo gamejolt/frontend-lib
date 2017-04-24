@@ -5,7 +5,7 @@ import * as View from '!view!./widget.html?style=./widget.styl';
 
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
-import { AppState } from '../../../../../vue/services/app/app-store';
+import { AppStore } from '../../../../../vue/services/app/app-store';
 import { AppJolticon } from '../../../../../vue/components/jolticon/jolticon';
 import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
 import { AppTooltip } from '../../../../tooltip/tooltip';
@@ -30,7 +30,7 @@ export class AppFiresidePostLikeWidget extends Vue
 	@Prop( Boolean ) sparse?: boolean;
 	@Prop( Boolean ) circle?: boolean;
 
-	@State app: AppState;
+	@State app: AppStore;
 
 	get tooltip()
 	{

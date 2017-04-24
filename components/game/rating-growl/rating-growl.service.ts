@@ -8,10 +8,8 @@ export class GameRatingGrowl
 {
 	static async show( game: Game )
 	{
-		const app = appStore.state!;
-
 		// Don't show when not logged in.
-		if ( !app.user ) {
+		if ( !appStore.state.user ) {
 			return;
 		}
 
@@ -21,7 +19,7 @@ export class GameRatingGrowl
 		}
 
 		// Don't show when this is the developer of the game.
-		if ( app.user.id === game.developer.id ) {
+		if ( appStore.state.user.id === game.developer.id ) {
 			return;
 		}
 

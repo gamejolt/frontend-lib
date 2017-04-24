@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import * as View from '!view!./widget.html?style=./widget.styl';
 
-import { AppState } from '../../../vue/services/app/app-store';
+import { AppStore } from '../../../vue/services/app/app-store';
 import { User } from '../../user/user.model';
 import { Comment } from '../comment-model';
 import { Subscription } from '../../subscription/subscription.model';
@@ -47,7 +47,7 @@ export class AppCommentWidget extends Vue
 	@Prop( Boolean ) noIntro?: boolean;
 	@Prop( Boolean ) onlyAdd?: boolean;
 
-	@State app: AppState;
+	@State app: AppStore;
 
 	id = ++incrementer;
 	hasBootstrapped = false;

@@ -7,7 +7,7 @@ import * as View500 from '!view!./page-500.html';
 import * as View404 from '!view!./page-404.html';
 import * as ViewOffline from '!view!./page-offline.html';
 
-import { AppState } from '../../../vue/services/app/app-store';
+import { AppStore } from '../../../vue/services/app/app-store';
 
 @View400
 @Component({})
@@ -37,7 +37,7 @@ export class AppErrorPage500 extends Vue
 @Component({})
 export class AppErrorPageOffline extends Vue
 {
-	@State app: AppState;
+	@State app: AppStore;
 
 	retry()
 	{

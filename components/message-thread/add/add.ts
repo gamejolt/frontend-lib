@@ -3,7 +3,7 @@ import { State } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import * as View from '!view!./add.html';
 
-import { AppState } from '../../../vue/services/app/app-store';
+import { AppStore } from '../../../vue/services/app/app-store';
 import { AppUserAvatarImg } from '../../user/user-avatar/img/img';
 
 @View
@@ -14,5 +14,5 @@ import { AppUserAvatarImg } from '../../user/user-avatar/img/img';
 })
 export class AppMessageThreadAdd extends Vue
 {
-	@State app: AppState;
+	@State app: AppStore;
 }

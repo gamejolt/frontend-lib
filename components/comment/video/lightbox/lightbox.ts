@@ -9,7 +9,7 @@ import { HistoryTick } from '../../../history-tick/history-tick-service';
 import { Comment } from '../../comment-model';
 import { CommentVideo } from '../video-model';
 import { Environment } from '../../../environment/environment.service';
-import { AppState } from '../../../../vue/services/app/app-store';
+import { AppStore } from '../../../../vue/services/app/app-store';
 import { makeObservableService } from '../../../../utils/vue';
 import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppTooltip } from '../../../tooltip/tooltip';
@@ -42,7 +42,7 @@ export class AppCommentVideoLightbox extends Vue
 {
 	@Prop( CommentVideo ) video: CommentVideo;
 
-	@State app: AppState;
+	@State app: AppStore;
 
 	canVote = true;
 

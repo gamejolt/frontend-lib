@@ -8,7 +8,7 @@ import { Environment } from '../../../environment/environment.service';
 import { AppCommentWidget } from '../widget';
 import { findVueParent } from '../../../../utils/vue';
 import { Comment } from '../../comment-model';
-import { AppState } from '../../../../vue/services/app/app-store';
+import { AppStore } from '../../../../vue/services/app/app-store';
 import { Subscription } from '../../../subscription/subscription.model';
 import { CommentVideo } from '../../video/video-model';
 import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
@@ -57,7 +57,7 @@ export class AppCommentWidgetComment extends Vue
 	@Prop( Array ) children?: Comment[];
 	@Prop( Comment ) parent?: Comment;
 
-	@State app: AppState;
+	@State app: AppStore;
 
 	canToggleContent = false;
 	showFullContent = false;

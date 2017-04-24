@@ -4,7 +4,6 @@ import { getProvider } from '../../utils/utils';
 import { RequestOptions } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
 import { Analytics } from '../analytics/analytics.service';
-import { AppState } from '../../vue/services/app/app-store';
 
 export class PayloadError
 {
@@ -245,7 +244,7 @@ export class Payload
 
 			// If they are logged out, we want to ensure the app user is nulled as well.
 			if ( data.user === null ) {
-				this.store.commit( AppState.Mutations.clearUser );
+				this.store.commit( 'app/clearUser' );
 			}
 			// Otherwise we set up the user with the new data.
 			else {
@@ -254,7 +253,7 @@ export class Payload
 				// a circular reference some times. Something -> User -> Api -> Payload -> User...
 				const UserModel = require( '../user/user.model' ).User;
 				const user = new UserModel( data.user );
-				this.store.commit( AppState.Mutations.setUser, user );
+				this.store.commit( 'app/setUser', user );
 			}
 		}
 
@@ -328,13 +327,13 @@ export class Payload
 				window.location.href = Environment.authBaseUrl + '/login?redirect=' + redirect;
 			}
 			else if ( error.type === PayloadError.ERROR_INVALID ) {
-				this.store.commit( AppState.Mutations.setError, 500 );
+				this.store.commit( 'app/setError', 500 );
 			}
 			else if ( error.type === PayloadError.ERROR_HTTP_ERROR && (!error.status || this.httpErrors.indexOf( error.status ) !== -1) ) {
-				this.store.commit( AppState.Mutations.setError, (error.status || 500) );
+				this.store.commit( 'app/setError', (error.status || 500) );
 			}
 			else {
-				this.store.commit( AppState.Mutations.setError, 'offline' );
+				this.store.commit( 'app/setError', 'offline' );
 			}
 		}
 

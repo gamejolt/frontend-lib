@@ -1,5 +1,5 @@
 import { Environment } from '../environment/environment.service';
-import { getProvider } from '../../utils/utils';
+import { appStore } from '../../vue/services/app/app-store';
 
 const ga: any = (typeof window !== 'undefined' && (window as any).ga) || function(){};
 
@@ -57,15 +57,7 @@ export class Analytics
 
 	private static getAppUser()
 	{
-		if ( GJ_IS_ANGULAR ) {
-			const App = getProvider<any>( 'App' );
-			return App.user;
-		}
-
-		if ( GJ_IS_VUE ) {
-			const store = require( '../../vue/services/app/app-store' ).appStore;
-			return store.state.user;
-		}
+		return appStore.state.user;
 	}
 
 	private static ensureUserId()

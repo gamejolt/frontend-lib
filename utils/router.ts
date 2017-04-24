@@ -3,8 +3,8 @@ import VueRouter from 'vue-router';
 import { createDecorator } from 'vue-class-component';
 import { HistoryCache } from '../components/history/cache/cache.service';
 import { PayloadError } from '../components/payload/payload-service';
-import { appStore, AppState } from '../vue/services/app/app-store';
 import { EventBus } from '../components/event-bus/event-bus.service';
+import { appStore } from '../vue/services/app/app-store';
 
 interface BeforeRouteEnterOptions
 {
@@ -91,8 +91,8 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 				vm.routed();
 			}
 
-			if ( appStore.state!.error ) {
-				vm.$store.commit( AppState.Mutations.clearError );
+			if ( vm.$store.state.app.error ) {
+				vm.$store.commit( 'app/clearError' );
 			}
 
 			vm.routeLoading = false;
