@@ -17,11 +17,11 @@ import { Translation } from '../../translation/translation.model';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { AppCommentWidgetComment } from './comment/comment';
-import { AppPagination } from '../../pagination/pagination';
 import { AppLoadingFade } from '../../loading/fade/fade';
 import { AppMessageThread } from '../../message-thread/message-thread';
 import { AppCommentWidgetAdd } from './add/add';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
+import { AppMessageThreadPagination } from '../../message-thread/pagination/pagination';
 
 let incrementer = 0;
 
@@ -30,9 +30,9 @@ let incrementer = 0;
 	components: {
 		AppLoading,
 		AppLoadingFade,
-		AppPagination,
 		AppMessageThread,
 		AppMessageThreadAdd,
+		AppMessageThreadPagination,
 		AppCommentWidgetComment,
 		AppCommentWidgetAdd,
 	},

@@ -88,15 +88,15 @@
 
 		</app-loading-fade>
 
-		<app-pagination
+		<app-message-thread-pagination
 			v-if="perPage && parentCount"
 			:pager="true"
 			:items-per-page="perPage"
 			:total-items="parentCount"
 			:current-page="currentPage"
 			:prevent-url-change="true"
-			query-param="comment_page"
 			@pagechange="onPageChange"
 			/>
+
 	</div>
 </div>
