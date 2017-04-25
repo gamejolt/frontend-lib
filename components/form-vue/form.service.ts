@@ -13,6 +13,11 @@ export interface FormOnSubmit
 	onSubmit(): Promise<any>;
 }
 
+export interface FormOnSubmitSuccess
+{
+	onSubmitSuccess( response: any ): void;
+}
+
 @Component({
 	components: {
 		AppForm,
@@ -106,9 +111,9 @@ export class BaseForm<T> extends Vue
 				}
 			}
 
-			// if ( _this.onSubmitSuccess ) {
-			// 	_this.onSubmitSuccess( scope, response );
-			// }
+			if ( (this as any).onSubmitSuccess ) {
+				(this as any).onSubmitSuccess( response );
+			}
 
 			// Send the new model back into the submit handler.
 			this.$emit( 'submit', this.formModel, response );
