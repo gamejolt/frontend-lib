@@ -41,7 +41,7 @@
 
 	<div ng-if="formState.isLoaded">
 		<div ng-if="formState.checkoutStep == 'primary'" class="anim-fade-in no-animate-leave" ng-class="{ 'form-horizontal': !Screen.isXs, row: Screen.isXs }">
-			<form-group name="amount" label="{{ 'Name your price:' | translate }}" label-class="col-sm-4" class="no-animate">
+			<form-group name="amount" label="{{ 'Name your price:' | translate }}" label-class="col-sm-4">
 				<div class="col-sm-8">
 
 					<span class="game-package-card-payment-form-amount-input">
@@ -88,14 +88,14 @@
 				</div>
 			</form-group>
 
-			<form-group name="email_address" label="{{ 'Email Address:' | translate }}" label-class="col-sm-4" class="no-animate" ng-if="!App.user">
+			<form-group name="email_address" label="{{ 'Email Address:' | translate }}" label-class="col-sm-4" ng-if="!App.user">
 				<div class="col-sm-8">
 					<input form-control="text">
 					<control-errors label="{{ 'email address' | translate }}"></control-errors>
 				</div>
 			</form-group>
 
-			<div class="form-group no-animate">
+			<div class="form-group">
 				<label class="col-sm-4 control-label" translate>Checkout with:</label>
 				<div class="col-sm-8">
 
@@ -228,7 +228,7 @@
 
 			<div class="row">
 				<div class="col-sm-6">
-					<form-group name="country" label="{{ 'Country' | translate }}" class="no-animate">
+					<form-group name="country" label="{{ 'Country' | translate }}">
 						<select form-control>
 							<option ng-repeat="country in ::formState.countries track by country.code" value="{{ ::country.code }}">
 								{{ country.name }}
@@ -239,18 +239,18 @@
 				</div>
 			</div>
 
-			<form-group name="street1" label="{{ 'Street Address' | translate }}" class="no-animate">
+			<form-group name="street1" label="{{ 'Street Address' | translate }}">
 				<input form-control="text">
 				<control-errors></control-errors>
 			</form-group>
 
 			<div class="row">
 				<div class="col-sm-6">
-					<form-group name="region" label="{{ 'State/Province/County' | translate }}" class="no-animate">
+					<form-group name="region" label="{{ 'State/Province/County' | translate }}">
 
-						<input class="no-animate-leave" form-control="text" ng-if="!formState.regions" ng-model-options="{ updateOn: 'blur default', debounce: { blur: 0, default: 1000 } }">
+						<input form-control="text" ng-if="!formState.regions" ng-model-options="{ updateOn: 'blur default', debounce: { blur: 0, default: 1000 } }">
 
-						<select class="no-animate-leave" form-control ng-if="formState.regions">
+						<select form-control ng-if="formState.regions">
 							<option ng-repeat="region in ::formState.regions track by region.code" value="{{ ::region.code }}">
 								{{ region.name }}
 							</option>
@@ -260,14 +260,14 @@
 					</form-group>
 				</div>
 				<div class="col-sm-6">
-					<form-group name="postcode" label="{{ 'Zip/Postal Code' | translate }}" class="no-animate">
+					<form-group name="postcode" label="{{ 'Zip/Postal Code' | translate }}">
 						<input form-control="text">
 						<control-errors></control-errors>
 					</form-group>
 				</div>
 			</div>
 
-			<div class="form-group no-animate">
+			<div class="form-group">
 
 				<!--
 					For some reason the tax amount goes on top of this. Gotta manually hoist it on top.
