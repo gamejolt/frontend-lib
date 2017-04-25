@@ -1,24 +1,14 @@
-import { Injectable, Inject } from 'ng-metadata/core';
-import * as template from '!html-loader!./auth-modal.component.html';
+import { Modal } from '../modal/modal.service';
+import { asyncComponentLoader } from '../../utils/utils';
 
-@Injectable( 'AuthModal' )
 export class AuthModal
 {
-	constructor(
-		@Inject( '$modal' ) private $modal: any
-	)
+	static async show()
 	{
-	}
-
-	show(): Promise<undefined>
-	{
-		const modalInstance = this.$modal.open( {
-			controller: 'AuthModalCtrl',
-			controllerAs: '$ctrl',
-			template,
+		return await Modal.show<void>( {
+			component: () => asyncComponentLoader( $import( './auth-modal' ) ),
 			size: 'sm',
+			props: {},
 		} );
-
-		return modalInstance.result;
 	}
 }

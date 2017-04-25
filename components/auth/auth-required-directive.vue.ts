@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { appStore } from '../../vue/services/app/app-store';
 import { Analytics } from '../analytics/analytics.service';
+import { AuthModal } from './auth-modal.service';
 
 export const AppAuthRequired: Vue.DirectiveOptions = {
 	bind( el )
@@ -16,8 +17,7 @@ export const AppAuthRequired: Vue.DirectiveOptions = {
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			// TODO
-			console.log( 'show modal!' );
+			AuthModal.show();
 			Analytics.trackEvent( 'auth-required-modal', 'shown' );
 		} );
 	},
