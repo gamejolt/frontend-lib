@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import * as distance from 'date-fns/distance_in_words_to_now';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 
 @Component({})
 export class AppTimeAgo extends Vue
@@ -9,7 +9,7 @@ export class AppTimeAgo extends Vue
 	@Prop( Boolean ) withoutSuffix?: boolean;
 
 	private timeout?: number;
-	private timeAgo: string;
+	private timeAgo = '';
 
 	created()
 	{
@@ -18,8 +18,21 @@ export class AppTimeAgo extends Vue
 
 	destroyed()
 	{
+		this.clearTimeout();
+	}
+
+	@Watch( 'date' )
+	onDateChanged()
+	{
+		this.clearTimeout();
+		this.refresh();
+	}
+
+	private clearTimeout()
+	{
 		if ( this.timeout ) {
 			clearTimeout( this.timeout );
+			this.timeout = undefined;
 		}
 	}
 
