@@ -31,6 +31,8 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 
 @View
 @Component({
+	// Name is needed since this component will recursively call itself.
+	name: 'app-comment-widget-comment',
 	components: {
 		AppMessageThreadItem,
 		AppMessageThreadAdd,
