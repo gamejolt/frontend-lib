@@ -56,4 +56,4 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations>
 	}
 }
 
-export const appStore = new AppStore() as VuexStore<AppStore, Actions, Mutations>;
+export const appStore = new AppStore();

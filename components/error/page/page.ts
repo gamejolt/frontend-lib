@@ -1,21 +1,32 @@
 import Vue from 'vue';
-import { State } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import * as View from '!view!./page.html?style=./page.styl';
 
-import { AppStore } from '../../../vue/services/app/app-store';
+import { AppStore, AppMutation, AppState } from '../../../vue/services/app/app-store';
 import { ErrorPages } from './page-components';
 
 @View
 @Component({})
 export class AppErrorPage extends Vue
 {
-	@State app: AppStore;
+	@AppState error: AppStore['error'];
+	@AppMutation clearError: AppStore['clearError'];
+
+	created()
+	{
+		this.$router.beforeResolve( ( _to, _from, next ) =>
+		{
+			if ( this.error ) {
+				this.clearError();
+			}
+			next();
+		} );
+	}
 
 	get page()
 	{
-		if ( this.app.error ) {
-			return ErrorPages[ this.app.error ];
+		if ( this.error ) {
+			return ErrorPages[ this.error ];
 		}
 	}
 }
