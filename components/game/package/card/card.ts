@@ -199,7 +199,7 @@ export class AppGamePackageCard extends Vue
 
 	integer( pricing: SellablePricing )
 	{
-		return Math.floor( pricing.amount / 100 );
+		return pricing.amount;
 	}
 
 	decimal( pricing: SellablePricing )
