@@ -1,11 +1,10 @@
 import { User } from '../../../components/user/user.model';
 import { VuexStore, VuexModule, VuexMutation } from '../../../utils/vuex';
-import { namespace, State, Action, Mutation, Getter } from 'vuex-class';
+import { namespace, State, Action, Mutation } from 'vuex-class';
 
 export const AppState = namespace( 'app', State );
 export const AppAction = namespace( 'app', Action );
 export const AppMutation = namespace( 'app', Mutation );
-export const AppGetter = namespace( 'app', Getter );
 
 export type Actions = {
 };
