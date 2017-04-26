@@ -17,7 +17,7 @@ var BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPl
 module.exports = function( config )
 {
 	// We use this to version assets so we can purge all easily by bumping it.
-	var v = 1;
+	var v = 2;
 
 	var base = path.resolve( config.projectBase );
 
