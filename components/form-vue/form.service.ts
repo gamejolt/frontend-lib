@@ -8,6 +8,11 @@ import { AppFormControlErrors } from './control-errors/control-errors';
 import { AppFormControlError } from './control-errors/control-error';
 import { AppFormButton } from './button/button';
 
+export interface FormOnInit
+{
+	onInit(): void;
+}
+
 export interface FormOnSubmit
 {
 	onSubmit(): Promise<any>;
@@ -49,6 +54,11 @@ export class BaseForm<T> extends Vue
 
 	created()
 	{
+		this._init();
+	}
+
+	private _init()
+	{
 		this.changed = false;
 
 		// Is a base model defined? If so, then we're editing.
@@ -74,6 +84,11 @@ export class BaseForm<T> extends Vue
 			else {
 				this.formModel = {} as T;
 			}
+		}
+
+		// This is the main way for forms to initialize.
+		if ( (this as any).onInit ) {
+			(this as any).onInit();
 		}
 	}
 
@@ -134,10 +149,9 @@ export class BaseForm<T> extends Vue
 			// Show successful form submission.
 			// _this._showSuccess( scope );
 
-			// TODO: Test this!
 			// If we should reset on successful submit, let's do that now.
 			if ( this.resetOnSubmit ) {
-				this.created();
+				this._init();
 			}
 		}
 		catch ( _response ) {

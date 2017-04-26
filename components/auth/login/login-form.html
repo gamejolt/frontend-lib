@@ -10,7 +10,7 @@
 				type="text"
 				:placeholder="$gettext( 'Username' )"
 				:rules="{ max: 30, pattern: 'username' }"
-				@changed="changed"
+				@changed="onChanged"
 				/>
 
 			<app-form-control-errors />
@@ -21,7 +21,7 @@
 				type="password"
 				:placeholder="$gettext( 'Password' )"
 				:rules="{ max: 300 }"
-				@changed="changed"
+				@changed="onChanged"
 				/>
 
 			<app-form-control-errors />

@@ -19,7 +19,7 @@ export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit
 
 	Connection = makeObservableService( Connection );
 
-	changed()
+	onChanged()
 	{
 		this.resetErrors();
 	}
