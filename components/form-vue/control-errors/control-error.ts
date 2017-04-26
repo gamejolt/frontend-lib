@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 
 import { findVueParent } from '../../../utils/vue';
 import { AppFormControlErrors } from './control-errors';
@@ -8,15 +8,23 @@ import { AppFormControlErrors } from './control-errors';
 export class AppFormControlError extends Vue
 {
 	@Prop( String ) when: string;
+	@Prop( String ) message: string;
 
 	mounted()
 	{
-		const defaultSlot = this.$slots.default[0];
-		const errors = findVueParent( this, AppFormControlErrors ) as AppFormControlErrors;
+		this.setOverride();
+	}
 
-		if ( defaultSlot.text ) {
-			errors.setMessageOverride( this.when, defaultSlot.text );
-		}
+	@Watch( 'message' )
+	onMessageChange()
+	{
+		this.setOverride();
+	}
+
+	private setOverride()
+	{
+		const errors = findVueParent( this, AppFormControlErrors ) as AppFormControlErrors;
+		errors.setMessageOverride( this.when, this.message );
 	}
 
 	render( h: Vue.CreateElement )
