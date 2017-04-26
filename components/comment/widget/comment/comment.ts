@@ -31,8 +31,6 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 
 @View
 @Component({
-	// Name is needed since this component will recursively call itself.
-	name: 'app-comment-widget-comment',
 	components: {
 		AppMessageThreadItem,
 		AppMessageThreadAdd,
@@ -42,6 +40,9 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 		AppCommentVideoThumbnail,
 		AppExpand,
 		AppCommentWidgetAdd,
+
+		// Since it's recursive it needs to be able to resolve itself.
+		AppCommentWidgetComment: () => Promise.resolve( AppCommentWidgetComment ),
 	},
 	directives: {
 		AppTrackEvent,
