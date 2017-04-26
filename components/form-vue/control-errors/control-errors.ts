@@ -54,6 +54,11 @@ export class AppFormControlErrors extends Vue
 		return (ourLabel || groupLabel || '').toLowerCase();
 	}
 
+	get hasServerError(): boolean
+	{
+		return !!this.form.base.serverErrors[ this.group.name ];
+	}
+
 	get error()
 	{
 		const label = this._label;
@@ -63,6 +68,10 @@ export class AppFormControlErrors extends Vue
 			if ( errors.length ) {
 				return this.processMessage( errors[0].rule, label );
 			}
+		}
+
+		if ( this.hasServerError ) {
+			return this.processMessage( 'server', label );
 		}
 
 		return undefined;

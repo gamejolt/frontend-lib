@@ -48,9 +48,10 @@ export class BaseForm<T> extends Vue
 		isProcessing: false,
 		isShowingSuccess: false,
 		// isShowingSuccess: isShowingSuccess,
-		serverErrors: {},
 		// progress: undefined,
 	};
+
+	serverErrors: { [k: string]: boolean } = {};
 
 	created()
 	{
@@ -140,7 +141,7 @@ export class BaseForm<T> extends Vue
 			this.state.isProcessing = false;
 
 			// Make sure that serverErrors is reset on a successful submit, just in case.
-			this.state.serverErrors = {};
+			this.serverErrors = {};
 
 			// After successful submit of the form, we broadcast the onSubmitted event.
 			// We will capture this in the gjForm directive to set the form to a pristine state.
@@ -160,7 +161,7 @@ export class BaseForm<T> extends Vue
 
 			// Store the server validation errors.
 			if ( _response && _response.errors ) {
-				Vue.set( this.state, 'serverErrors', _response.errors );
+				this.serverErrors = _response.errors;
 			}
 
 			// Reset our processing state.
