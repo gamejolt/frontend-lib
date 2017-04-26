@@ -62,7 +62,7 @@ export class AppPopover extends Vue
 		this.context = document.getElementById( 'popover-context' );
 
 		// Track this popover.
-		Popover.registerPopover( this.popoverId, this );
+		Popover.registerPopover( this.$router, this.popoverId, this );
 	}
 
 	destroyed()

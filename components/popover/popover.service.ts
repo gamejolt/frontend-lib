@@ -1,5 +1,4 @@
 import { AppPopover } from './popover';
-import { router } from '../../../../app/bootstrap';
 import { getProvider } from '../../utils/utils';
 
 export class Popover
@@ -7,7 +6,7 @@ export class Popover
 	static popovers: { [k: string]: AppPopover } = {};
 	static stateChangeRegistered = false;
 
-	static registerPopover( id: string, popover: AppPopover )
+	static registerPopover( router: any, id: string, popover: AppPopover )
 	{
 		this.popovers[ id ] = popover;
 
@@ -16,11 +15,13 @@ export class Popover
 		if ( !this.stateChangeRegistered ) {
 			this.stateChangeRegistered = true;
 
-			router.beforeEach( ( _to, _from, next ) =>
-			{
-				this.hideStateChange();
-				next();
-			} );
+			if ( router ) {
+				router.beforeEach( ( _to: any, _from: any, next: Function ) =>
+				{
+					this.hideStateChange();
+					next();
+				} );
+			}
 
 			if ( GJ_IS_ANGULAR ) {
 				getProvider<any>( '$rootScope' ).$on(
