@@ -2,7 +2,7 @@
 	<fieldset :disabled="!Connection.isOnline">
 
 		<!--
-			Minlength not needed since the login will fail if incorrect anyway.
+			Min not needed since the login will fail if incorrect anyway.
 		-->
 
 		<app-form-group name="username" :label="$gettext( 'Username' )" :hide-label="true">
@@ -29,13 +29,13 @@
 
 		<br>
 
-		<div class="alert alert-warning anim-fade-in-enlarge no-animate-leave" v-if="state.invalidLogin">
+		<div class="alert alert-warning anim-fade-in-enlarge no-animate-leave" v-if="invalidLogin">
 			<p><translate>Incorrect username or password.</translate></p>
 			<p><translate>Please note, after 5 incorrect login attempts you will be locked out of your account for 1 hour.</translate></p>
 			<p><translate>If you've forgotten your username or password, you can retrieve them below.</translate></p>
 		</div>
 
-		<div class="alert alert-warning anim-fade-in-enlarge no-animate-leave" v-if="state.blockedLogin">
+		<div class="alert alert-warning anim-fade-in-enlarge no-animate-leave" v-if="blockedLogin">
 			<p><translate>Whoa, there! You've tried to log in too many times and just straight up failed. You'll have to cool down a bit before trying again.</translate></p>
 		</div>
 
