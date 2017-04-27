@@ -28,7 +28,7 @@
     "string-replace-loader": "1.2.0",
     "style-loader": "0.16.1",
     "stylus": "0.54.5",
-    "stylus-relative-loader": "gamejolt/stylus-relative-loader#global-import-cache",
+    "stylus-loader": "3.0.1",
     "ts-loader": "2.0.3",
     "tslib": "1.6.0",
     "typescript": "2.2.2",
