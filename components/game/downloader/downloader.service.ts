@@ -7,6 +7,7 @@ import { Growls } from '../../growls/growls.service';
 import { Translate } from '../../translate/translate.service';
 import { Popover } from '../../popover/popover.service';
 import { EventBus } from '../../event-bus/event-bus.service';
+import { Environment } from '../../environment/environment.service';
 
 export interface GameDownloaderOptions
 {
@@ -35,12 +36,15 @@ export class GameDownloader
 
 		// Client needs to download externally.
 		if ( GJ_IS_CLIENT ) {
-			// const gui = require( 'nw.gui' );
-			// gui.Shell.openExternal( Environment.baseUrl + $state.href( 'discover.games.view.download.build', {
-			// 	slug: game.slug,
-			// 	id: game.id,
-			// 	buildId: build.id,
-			// } ) );
+			const gui = require( 'nw.gui' );
+			gui.Shell.openExternal( Environment.baseUrl + router.resolve( {
+				name: 'discover.games.view.download.build',
+				query: {
+					slug: game.slug,
+					id: game.id + '',
+					buildId: build.id + '',
+				},
+			} ).href );
 		}
 		// Bundle-only games can only live in a person's library, or as a key.
 		// So if it's bundle-only, or if a key was passed in, go direct. Or, uh,

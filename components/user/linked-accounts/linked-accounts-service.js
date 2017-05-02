@@ -5,7 +5,7 @@ angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', funct
 	this.login = function( provider )
 	{
 		// Client flow is a bit different...
-		if ( Environment.isClient ) {
+		if ( GJ_IS_CLIENT ) {
 			return this.loginClient( provider );
 		}
 
@@ -34,7 +34,7 @@ angular.module( 'gj.User.LinkedAccounts' ).service( 'User_LinkedAccounts', funct
 	this.link = function( provider )
 	{
 		// Client flow is a bit different...
-		if ( Environment.isClient ) {
+		if ( GJ_IS_CLIENT ) {
 			return this.linkClient( provider );
 		}
 
