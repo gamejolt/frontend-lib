@@ -34,12 +34,12 @@ export class Environment
 }
 
 if ( Environment.env === 'development' ) {
-	Environment.baseUrl = 'http://development.gamejolt.com';
-	Environment.secureBaseUrl = 'http://development.gamejolt.com';
+	Environment.baseUrl = 'http://localhost:8080';
+	Environment.secureBaseUrl = 'http://localhost:8080';
 
-	Environment.wttfBaseUrl = 'http://development.gamejolt.com';
-	Environment.authBaseUrl = 'http://development.gamejolt.com';
-	Environment.checkoutBaseUrl = 'http://development.gamejolt.com';
+	Environment.wttfBaseUrl = 'http://localhost:8080';
+	Environment.authBaseUrl = 'http://localhost:8080';
+	Environment.checkoutBaseUrl = 'http://localhost:8080';
 
 	Environment.jamsBaseUrl = 'http://jams.development.gamejolt.com';
 	Environment.jamsIoBaseUrl = 'http://jams.development.gamejolt.io';

@@ -1,7 +1,7 @@
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./add.html';
 
-import { BaseForm } from '../../../form-vue/form.service';
+import { BaseForm, FormOnInit } from '../../../form-vue/form.service';
 import { Comment } from '../../comment-model';
 import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markdown';
 
@@ -11,7 +11,7 @@ import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markd
 		AppFormControlMarkdown,
 	}
 })
-export class AppCommentWidgetAdd extends BaseForm<Comment>
+export class AppCommentWidgetAdd extends BaseForm<Comment> implements FormOnInit
 {
 	@Prop( String ) resource: string;
 	@Prop( Number ) resourceId: number;
@@ -20,7 +20,7 @@ export class AppCommentWidgetAdd extends BaseForm<Comment>
 	modelClass = Comment;
 	resetOnSubmit = true;
 
-	created()
+	onInit()
 	{
 		this.formModel.comment = '';
 		this.formModel.resource = this.resource;

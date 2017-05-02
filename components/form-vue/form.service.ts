@@ -8,9 +8,19 @@ import { AppFormControlErrors } from './control-errors/control-errors';
 import { AppFormControlError } from './control-errors/control-error';
 import { AppFormButton } from './button/button';
 
+export interface FormOnInit
+{
+	onInit(): void;
+}
+
 export interface FormOnSubmit
 {
 	onSubmit(): Promise<any>;
+}
+
+export interface FormOnSubmitSuccess
+{
+	onSubmitSuccess( response: any ): void;
 }
 
 @Component({
@@ -38,11 +48,17 @@ export class BaseForm<T> extends Vue
 		isProcessing: false,
 		isShowingSuccess: false,
 		// isShowingSuccess: isShowingSuccess,
-		serverErrors: {},
 		// progress: undefined,
 	};
 
+	serverErrors: { [k: string]: boolean } = {};
+
 	created()
+	{
+		this._init();
+	}
+
+	private _init()
 	{
 		this.changed = false;
 
@@ -69,6 +85,11 @@ export class BaseForm<T> extends Vue
 			else {
 				this.formModel = {} as T;
 			}
+		}
+
+		// This is the main way for forms to initialize.
+		if ( (this as any).onInit ) {
+			(this as any).onInit();
 		}
 	}
 
@@ -106,9 +127,9 @@ export class BaseForm<T> extends Vue
 				}
 			}
 
-			// if ( _this.onSubmitSuccess ) {
-			// 	_this.onSubmitSuccess( scope, response );
-			// }
+			if ( (this as any).onSubmitSuccess ) {
+				(this as any).onSubmitSuccess( response );
+			}
 
 			// Send the new model back into the submit handler.
 			this.$emit( 'submit', this.formModel, response );
@@ -120,7 +141,7 @@ export class BaseForm<T> extends Vue
 			this.state.isProcessing = false;
 
 			// Make sure that serverErrors is reset on a successful submit, just in case.
-			this.state.serverErrors = {};
+			this.serverErrors = {};
 
 			// After successful submit of the form, we broadcast the onSubmitted event.
 			// We will capture this in the gjForm directive to set the form to a pristine state.
@@ -129,10 +150,9 @@ export class BaseForm<T> extends Vue
 			// Show successful form submission.
 			// _this._showSuccess( scope );
 
-			// TODO: Test this!
 			// If we should reset on successful submit, let's do that now.
 			if ( this.resetOnSubmit ) {
-				this.created();
+				this._init();
 			}
 		}
 		catch ( _response ) {
@@ -141,7 +161,7 @@ export class BaseForm<T> extends Vue
 
 			// Store the server validation errors.
 			if ( _response && _response.errors ) {
-				Vue.set( this.state, 'serverErrors', _response.errors );
+				this.serverErrors = _response.errors;
 			}
 
 			// Reset our processing state.

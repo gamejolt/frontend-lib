@@ -42,6 +42,14 @@ export class User extends Model
 
 	level_next_percentage: number;
 
+	// Fireside.
+	can_manage: boolean;
+	fireside_ga_tracking_id: string;
+	fireside_profile: string;
+	compiled_fireside_profile: string;
+	fireside_about: string;
+	compiled_fireside_about: string;
+
 	constructor( data: any = {} )
 	{
 		super( data );

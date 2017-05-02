@@ -16,7 +16,8 @@ export type VuexWatch<S> = <T>(
 
 export class VuexStore<S, A, M>
 {
-	state: S;
+	readonly state: S;
+	readonly getters: any;
 
 	dispatch: VuexDispatch<A>;
 	commit: VuexCommit<M>;
@@ -48,25 +49,30 @@ export function VuexModule( options: VuexModuleOptions = {} )
 	const decorators = queuedDecorators;
 	queuedDecorators = [];
 
-	const storeOptions: Vuex.Module<any, any> = {
-		modules: options.modules || {},
-		namespaced: !options.store,
-		state: {
-			__vuexMutations: [],
-			__vuexActions: [],
-			__vuexGetterScope: undefined,
-			__vuexActionScope: undefined,
-			__vuexMutationScope: undefined,
-		},
-		getters: {},
-		actions: {},
-		mutations: {},
-	};
-
 	// A function that returns a function. Will be used as a constructor
 	// function.
 	return ( target: any ): any => () =>
 	{
+		const state: any = {};
+
+		// These are private helpers. Don't want them to show in vue-devtools.
+		Object.defineProperties( state, {
+			__vuexArgGetters: { enumerable: false, writable: true, value: [] },
+			__vuexMutations: { enumerable: false, writable: true, value: [] },
+			__vuexActions: { enumerable: false, writable: true, value: [] },
+			__vuexGetterScope: { enumerable: false, writable: true },
+			__vuexActionScope: { enumerable: false, writable: true },
+			__vuexMutationScope: { enumerable: false, writable: true },
+		} );
+
+		const storeOptions: Vuex.Module<any, any> = {
+			modules: options.modules || {},
+			namespaced: !options.store,
+			state,
+			actions: {},
+			mutations: {},
+		};
+
 		// Copy over state.
 		const instance = new target();
 		for ( const key of Object.getOwnPropertyNames( instance ) ) {
@@ -74,9 +80,6 @@ export function VuexModule( options: VuexModuleOptions = {} )
 				storeOptions.state[ key ] = instance[ key ];
 			}
 		}
-
-		// This will be instantiated at the end as the store instance.
-		let store: any;
 
 		// Copy over getters.
 		for ( const key of Object.getOwnPropertyNames( target.prototype ) ) {
@@ -90,11 +93,19 @@ export function VuexModule( options: VuexModuleOptions = {} )
 				continue;
 			}
 
-			storeOptions.getters![ key ] = ( state, getters ) =>
-			{
-				const scope = getGetterScope( state, getters );
-				return getter.apply( scope );
-			};
+			// We define getters on the state. We don't put them into vuex
+			// getters. This way they're available from any scope for any other
+			// getter, action, mutation, etc. Vuex getters are a bit mad to work
+			// with and can only be used in certain vuex scopes so they have
+			// limited usefulness.
+			Object.defineProperty( storeOptions.state, key, {
+				enumerable: true,
+				get: () =>
+				{
+					const scope = getGetterScope( storeOptions.state );
+					return getter.apply( scope );
+				},
+			} );
 		}
 
 		// Apply the mutation and action decorators.
@@ -104,10 +115,32 @@ export function VuexModule( options: VuexModuleOptions = {} )
 
 		// Create the store instance. If it's the main store, we create it, if
 		// it's not the main store we just use our options object.
-		store = options.store ? new Vuex.Store( storeOptions ) : storeOptions;
-
-		return store;
+		return options.store ? new Vuex.Store( storeOptions ) : storeOptions;
 	};
+}
+
+/**
+ * Creates a getter function that can take parameters. Will be accessible in
+ * getters, actions, and mutations. Can't modify the state in any way, though.
+ */
+export function VuexGetter( target: any, name: string, )
+{
+	const method = target[ name ];
+	queuedDecorators.push( ( store ) =>
+	{
+		store.state.__vuexArgGetters.push( name );
+
+		// We set this as non-enumerable so that it doesn't show up in
+		// vue-devtools and similar state freezing events.
+		Object.defineProperty( store.state, name, {
+			enumerable: false,
+			get: () => ( ...args: any[] ) =>
+			{
+				const scope = getGetterScope( store.state );
+				return method.apply( scope, args );
+			},
+		} );
+	} );
 }
 
 export function VuexMutation( target: any, name: string, )
@@ -138,21 +171,13 @@ export function VuexAction( target: any, name: string, )
 	} );
 }
 
-function getGetterScope( state: any, getters: any )
+function getGetterScope( state: any )
 {
 	if ( !state.__vuexGetterScope ) {
 
 		const scope: any = {};
 		scopeNoStateChange( 'getter', scope, state );
 		scopeNoCallers( 'getter', scope, state );
-
-		// Attach getters on the scope so that getters can call other getters
-		// and it still funnels through vuex.
-		for ( const key of Object.getOwnPropertyNames( getters ) ) {
-			Object.defineProperty( scope, key, {
-				get: () => getters[ key ],
-			} );
-		}
 
 		state.__vuexGetterScope = scope;
 	}
@@ -177,6 +202,11 @@ function getActionScope( store: any )
 		for ( const key of store.state.__vuexActions ) {
 			scope[ key ] = ( ...args: any[] ) => store.dispatch( key, ...args );
 		}
+
+		// Pull these into the scope so that parent modules can call into their
+		// nested namespaced modules.
+		scope.commit = ( ...args: any[] ) => store.commit( ...args );
+		scope.dispatch = ( ...args: any[] ) => store.dispatch( ...args );
 
 		store.state.__vuexActionScope = scope;
 	}
@@ -204,8 +234,8 @@ function getMutationScope( state: any )
  */
 function scopeNoStateChange( caller: string, scope: any, state: any )
 {
-	// Make a passthrough for all state to get. This allows us to throw an
-	// error when they try setting within the action.
+	// Make a passthrough for all state to get. This allows us to throw an error
+	// when they try setting within the action.
 	for ( const key of Object.getOwnPropertyNames( state ) ) {
 		const desc = Object.getOwnPropertyDescriptor( state, key );
 		if ( !desc.get ) {
@@ -223,8 +253,8 @@ function scopeNoStateChange( caller: string, scope: any, state: any )
  */
 function scopeNoCallers( caller: string, scope: any, state: any )
 {
-	// Define these as properties so that we don't ovewrite the prototype's
-	// data for these methods.
+	// Define these as properties so that we don't ovewrite the prototype's data
+	// for these methods.
 	for ( const key of state.__vuexMutations ) {
 		Object.defineProperty( scope, key, {
 			get: () => () => mutationError( caller, key ),

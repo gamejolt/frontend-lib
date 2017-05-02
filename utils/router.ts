@@ -4,7 +4,6 @@ import { createDecorator } from 'vue-class-component';
 import { HistoryCache } from '../components/history/cache/cache.service';
 import { PayloadError } from '../components/payload/payload-service';
 import { EventBus } from '../components/event-bus/event-bus.service';
-import { appStore } from '../vue/services/app/app-store';
 
 interface BeforeRouteEnterOptions
 {
@@ -91,10 +90,6 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 				vm.routed();
 			}
 
-			if ( vm.$store.state.app.error ) {
-				vm.$store.commit( 'app/clearError' );
-			}
-
 			vm.routeLoading = false;
 			vm.routeBootstrapped = true;
 
@@ -124,7 +119,7 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 			// annotated function for fetching the data for the route.
 			async beforeRouteEnter( to, _from, next )
 			{
-				EventBus.emit( 'routeChangeBefore' );
+				EventBus.emit( 'routeChangeBefore', to );
 
 				let promise: Promise<any> | undefined;
 				let payload: any;
@@ -168,15 +163,14 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 
 			// In the browser, for when the component stays the same but the
 			// route changes. We basically have to duplicate the above.
-			watch: {
-				$route: async function routeChanged( this: Vue, route: VueRouter.Route )
-				{
-					EventBus.emit( 'routeChangeBefore' );
-					this.routeLoading = true;
-					const payload = await getPayload( route, options.cache );
-					await finalizeRoute( route, this, payload );
-					EventBus.emit( 'routeChangeAfter' );
-				},
+			async beforeRouteUpdate( this: Vue, to, _from, next )
+			{
+				EventBus.emit( 'routeChangeBefore', to );
+				this.routeLoading = true;
+				const payload = await getPayload( to, options.cache );
+				await finalizeRoute( to, this, payload );
+				EventBus.emit( 'routeChangeAfter' );
+				next();
 			},
 
 			// This gets called both in the server and the browser.

@@ -1,29 +1,22 @@
 <div class="container">
 	<nav class="user-bar navbar">
 
-		<div class="navbar-left" ng-if="hideSiteSelector !== true">
-			<gj-site-selector site-selector-current="{{ site }}"></gj-site-selector>
-		</div>
-
 		<div class="navbar-center">
-			<div class="links" ng-transclude></div>
+			<div class="links">
+				<slot />
+			</div>
 		</div>
 
-		<div class="navbar-right">
+		<div class="navbar-right" v-if="user">
 			<ul class="navbar-items">
 				<li>
-					<a class="user-bar-user" ng-href="{{ userLink }}" ng-if="user">
+					<a class="user-bar-user" :href="userLink">
 
-						<!--
-							We manually output the user-avatar HTML instead of using the directive
-							so that it updates when our user changes. The user-avatar directive does
-							one time binding since it needs to be fast.
-						-->
-						<span class="user-bar-avatar">
-							<img ng-src="{{ user.img_avatar }}" class="img-responsive" alt="Your Avatar">
+						<app-user-avatar-img class="user-bar-avatar avatar-circle" :user="user" />
+
+						<span class="user-bar-username">
+							{{ user.username }}
 						</span>
-
-						<span class="user-bar-username">{{ user.username }}</span>
 
 					</a>
 				</li>

@@ -1,4 +1,4 @@
-const UNITS = [
+const Units = [
 	'bytes',
 	'KB',
 	'MB',
@@ -7,13 +7,13 @@ const UNITS = [
 	'PB'
 ];
 
-export function filesize( bytes: number )
+export function filesize( bytes: number, precision = 0 )
 {
 	if ( !isFinite( bytes ) ) {
 		return '?';
 	}
 	else if ( bytes < 1024 ) {
-		return bytes + ' ' + UNITS[0];
+		return bytes + ' ' + Units[0];
 	}
 
 	let unit = 0;
@@ -22,5 +22,5 @@ export function filesize( bytes: number )
 		++unit;
 	}
 
-	return bytes.toFixed( 2 ) + ' ' + UNITS[unit];
+	return bytes.toFixed( precision ) + ' ' + Units[ unit ];
 }

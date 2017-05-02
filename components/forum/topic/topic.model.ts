@@ -26,6 +26,9 @@ export class ForumTopic extends Model
 	notifications: Notification[] = [];
 	latest_post: ForumPost;
 
+	// When saving.
+	content_markdown?: string;
+
 	constructor( data: any = {} )
 	{
 		super( data );

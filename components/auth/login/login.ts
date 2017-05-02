@@ -8,6 +8,8 @@ import { makeObservableService } from '../../../utils/vue';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppAuthLoginForm } from './login-form';
 import { Auth } from '../auth.service';
+import { UserLinkedAccounts } from '../../user/linked-accounts/linked-accounts.service';
+import { Environment } from '../../environment/environment.service';
 
 @View
 @Component({
@@ -19,34 +21,36 @@ import { Auth } from '../auth.service';
 export class AppAuthLogin extends Vue
 {
 	@Prop( Boolean ) darkVariant?: boolean;
+	@Prop( String ) redirectTo: string;
 
 	Connection = makeObservableService( Connection );
 
 	onLoggedIn()
 	{
-		// if ( this.$stateParams['redirect'] ) {
+		if ( this.redirectTo ) {
 
-		// 	// We don't want them to be able to put in an offsite link as the redirect URL.
-		// 	// So we only open up certain domains.
-		// 	// Otherwise we simply attach it to the main domain.
+			// We don't want them to be able to put in an offsite link as the
+			// redirect URL. So we only open up certain domains. Otherwise we
+			// simply attach it to the main domain.
 
-		// 	// Subdomain redirect: jams.gamejolt.io, fireside.gamejolt.com, etc.
-		// 	if ( this.$stateParams['redirect'].search( /^https?:\/\/([a-zA-Z\.]+\.)gamejolt.(com|io)/ ) !== -1 ) {
-		// 		window.location.href = this.$stateParams['redirect'];
-		// 		return;
-		// 	}
+			// Subdomain redirect: jams.gamejolt.io, fireside.gamejolt.com, etc.
+			// This also handles main domain.
+			if ( this.redirectTo.search( /^https?:\/\/([a-zA-Z\.]+\.)?gamejolt.(com|io)/ ) !== -1 ) {
+				window.location.href = this.redirectTo;
+				return;
+			}
 
-		// 	// Normal redirect, within the gamejolt.com domain.
-		// 	// Since that's the case, we can set through $location so it doesn't have to reload the scripts.
-		// 	window.location.href = Environment.baseUrl + this.$stateParams['redirect'];
-		// 	return;
-		// }
+			// Normal redirect, within the gamejolt.com domain.
+			// This is domain-less so we we'll redirect to the path.
+			window.location.href = Environment.baseUrl + this.redirectTo;
+			return;
+		}
 
 		Auth.redirectDashboard();
 	}
 
-	// linkedAccountLogin( provider: string )
-	// {
-	// 	// this.userLinkedAccounts.login( provider );
-	// }
+	linkedAccountLogin( provider: any )
+	{
+		UserLinkedAccounts.login( this.$router, provider );
+	}
 }

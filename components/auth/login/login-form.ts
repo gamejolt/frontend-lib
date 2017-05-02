@@ -17,17 +17,20 @@ export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit
 {
 	@Prop( Boolean ) darkVariant?: boolean;
 
+	invalidLogin = false;
+	blockedLogin = false;
+
 	Connection = makeObservableService( Connection );
 
-	changed()
+	onChanged()
 	{
 		this.resetErrors();
 	}
 
 	resetErrors()
 	{
-		this.setState( 'invalidLogin', false );
-		this.setState( 'blockedLogin', false );
+		this.invalidLogin = false;
+		this.blockedLogin = false;
 	}
 
 	async onSubmit()
@@ -39,10 +42,10 @@ export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit
 		if ( response.success === false ) {
 			if ( response.reason ) {
 				if ( response.reason === 'invalid-login' ) {
-					this.setState( 'invalidLogin', true );
+					this.invalidLogin = true;
 				}
 				else if ( response.reason === 'blocked' ) {
-					this.setState( 'blockedLogin', true );
+					this.blockedLogin = true;
 				}
 			}
 		}

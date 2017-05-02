@@ -40,6 +40,9 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 		AppCommentVideoThumbnail,
 		AppExpand,
 		AppCommentWidgetAdd,
+
+		// Since it's recursive it needs to be able to resolve itself.
+		AppCommentWidgetComment: () => Promise.resolve( AppCommentWidgetComment ),
 	},
 	directives: {
 		AppTrackEvent,

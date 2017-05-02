@@ -196,7 +196,7 @@ module.exports = function( config )
 					{
 						enforce: 'pre',
 						test: /\.styl$/,
-						use: 'stylus-relative-loader?paths[]=src/&resolve url&include css',
+						use: 'stylus-loader?paths[]=src/&resolve url&include css',
 					},
 					{
 						enforce: 'post',
@@ -256,6 +256,7 @@ module.exports = function( config )
 							ignoreCustomFragments: [ /\{\{.*?}}/ ],
 						},
 						stylus: {
+							use: [],
 							preferPathResolver: 'webpack'
 						},
 						postcss: [

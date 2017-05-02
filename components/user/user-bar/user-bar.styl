@@ -1,6 +1,5 @@
 .user-bar
 	$avatar-size = 30px
-	$avatar-size-xs = 30px
 
 	@media $media-xs
 		.container
@@ -13,14 +12,9 @@
 
 	&-avatar
 		display: inline-block
-
-		img
-			@extend .img-circle
-			display: inline-block
-			width: $avatar-size-xs
-
-			@media $media-sm-up
-				width: $avatar-size
+		width: $avatar-size
+		height: $avatar-size
+		vertical-align: middle
 
 	&-username
 		display: inline-block

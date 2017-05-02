@@ -2,13 +2,15 @@
 @require '../../stylus/common/mixins'
 
 .pagination
+	clearfix()
 	display: inline-block
 	padding-left: 0
 	margin-bottom: $line-height-computed
 	user-select: none
 
-	> li
-		display: inline // Remove list-style and block-level defaults
+	&-item
+		float: left
+		margin-right: 3px
 
 .pager
 	clearfix()
@@ -18,26 +20,18 @@
 	text-align: center
 	user-select: none
 
-	li
-		display: inline
+	.pagination-item
+		float: none
 
-	.next
-		> a
-		> span
+		&.next
 			float: right
 
-	.previous
-		> a
-		> span
+		&.previous
 			float: left
 
 	&.reverse
-		.next
-			> a
-			> span
-				float: left
+		.pagination-item.next
+			float: left
 
-		.previous
-			> a
-			> span
-				float: right
+		.pagination-item.previous
+			float: right
