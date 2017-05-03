@@ -57,8 +57,6 @@ export class AdComponent implements OnInit, OnDestroy
 		if ( this.slot ) {
 			this.slot.isUsed = true;
 		}
-
-		console.log( 'tried getting unused slot', this.slot );
 	}
 
 	ngOnDestroy()
