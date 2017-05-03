@@ -1,0 +1,11 @@
+<div class="ad"
+	ng-if="$ctrl.slot"
+	ng-class="::{
+		'ad-leaderboard': $ctrl.size === 'leaderboard',
+		'ad-rectangle': $ctrl.size === 'rectangle',
+	}"
+	>
+	<div class="ad-inner">
+		<div ng-dfp-ad="{{ $ctrl.slot.id }}"></div>
+	</div>
+</div>

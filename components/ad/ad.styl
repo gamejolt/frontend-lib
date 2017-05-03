@@ -1,4 +1,7 @@
+@require '~styles/variables'
+
 .ad-leaderboard
+.ad-rectangle
 	text-align: center
 
 	.ad-inner
@@ -31,11 +34,7 @@
 	width: 160px
 	height: 600px
 
-.ad-section
-	@extend .section
-	padding-top: ($grid-gutter-width / 4)
-	padding-bottom: ($grid-gutter-width / 4)
-	background-color: $gray-lightest
-
-	&.dark
-		background-color: $gray-dark
+.ad-label
+	color: $text-muted
+	font-size: $font-size-small
+	text-transform: uppercase
