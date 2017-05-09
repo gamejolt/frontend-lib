@@ -137,7 +137,7 @@ export class AppAd extends Vue
 		googlePlaceholderElem.id = 'div-gpt-ad-' + this.globalTagId + '-' + this.adId;
 		adElem.appendChild( googlePlaceholderElem );
 
-		if ( Environment.env === 'production' && !Environment.isClient ) {
+		if ( GJ_ENVIRONMENT === 'production' && !GJ_IS_CLIENT ) {
 			_bootstrapAds();
 
 			const scriptElem = document.createElement( 'script' );

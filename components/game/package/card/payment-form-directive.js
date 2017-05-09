@@ -308,7 +308,7 @@ angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentFor
 			{
 				if ( response.success !== false ) {
 
-					if ( Environment.isClient ) {
+					if ( GJ_IS_CLIENT ) {
 
 						// Our checkout can be done in client.
 						if ( data.payment_method == Order_Payment.METHOD_CC_STRIPE ) {

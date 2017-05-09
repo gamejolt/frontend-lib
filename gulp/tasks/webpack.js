@@ -25,8 +25,10 @@ module.exports = function( config )
 	let prodNoop = !config.production ? undefined : noop;
 	let serverNoop = !config.server ? undefined : noop;
 
-	let externals = {};
-	for ( let extern of [ 'nw.gui', 'client-voodoo', 'path', 'os', 'fs' ] ) {
+	let externals = {
+		'gui': { commonjs: 'nw.gui' },
+	};
+	for ( let extern of [ 'client-voodoo' ] ) {
 		externals[ extern ] = { commonjs: extern };
 	}
 
@@ -235,6 +237,7 @@ module.exports = function( config )
 					GJ_IS_VUE: JSON.stringify( config.framework === 'vue' ),
 					GJ_IS_CLIENT: JSON.stringify( config.client ),
 					GJ_IS_SSR: JSON.stringify( config.server ),
+					GJ_VERSION: JSON.stringify( require( path.resolve( process.cwd(), 'package.json' ) ).version ),
 
 					// This sets vue in production mode.
 					'process.env': {

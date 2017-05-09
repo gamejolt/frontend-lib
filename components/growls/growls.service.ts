@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { Environment } from '../environment/environment.service';
 
 interface GrowlOptions
 {
@@ -72,7 +71,7 @@ export class Growls
 
 		// If we're a client, we want to instead show this as a system notification.
 		// We don't do this if the growl is a component-type.
-		if ( Environment.isClient && !options.component ) {
+		if ( GJ_IS_CLIENT && !options.component ) {
 			return this.createSystemNotification( options );
 		}
 
