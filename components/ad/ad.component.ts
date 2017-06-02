@@ -39,8 +39,8 @@ export class AdComponent implements OnInit, OnDestroy
 			return;
 		}
 
-		let resource = undefined;
-		let resourceId = undefined;
+		let resource: string = undefined as any;
+		let resourceId: number = undefined as any;
 
 		if ( this.resource instanceof Game ) {
 			resource = 'Game';
@@ -55,11 +55,10 @@ export class AdComponent implements OnInit, OnDestroy
 			resourceId = this.resource.id;
 		}
 
-		Ads.sendBeacon( Ads.TYPE_DISPLAY, resource, resourceId );
-
 		this.slot = Ads.getUnusedAdSlot( this.size );
 		if ( this.slot ) {
 			this.slot.isUsed = true;
+			Ads.sendBeacon( Ads.TYPE_DISPLAY, resource, resourceId );
 		}
 
 		// When the state changes we want to refresh this ad if the scope hasn't
@@ -77,6 +76,7 @@ export class AdComponent implements OnInit, OnDestroy
 				}
 
 				this.DoubleClick.refreshAds( this.slot.id );
+				Ads.sendBeacon( Ads.TYPE_DISPLAY, resource, resourceId );
 			}, 0 );
 		} );
 	}
