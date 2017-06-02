@@ -65,7 +65,7 @@ export class AdComponent implements OnInit, OnDestroy
 		// When the state changes we want to refresh this ad if the scope hasn't
 		// been destroyed. This is for ads that are in a parent state outside
 		// the changed view.
-		this.$scope.$on( '$stateChangeSuccess', () =>
+		this.$scope.$on( '$adsRefreshed', () =>
 		{
 			// We need the destroyed event to trigger first. Setting a timeout
 			// to 0 will cause it to run on next loop which will push this event
