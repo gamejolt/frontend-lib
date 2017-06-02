@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from 'ng-metadata/core';
+import { Component, Input, OnInit, OnDestroy, Inject } from 'ng-metadata/core';
 import * as template from '!html-loader!./ad.component.html';
 import './ad.styl';
 
@@ -20,8 +20,12 @@ export class AdComponent implements OnInit, OnDestroy
 	@Input() resource?: Model;
 
 	slot?: AdSlot;
+	private isDestroyed = false;
 
-	constructor()
+	constructor(
+		@Inject( '$scope' ) public $scope: ng.IScope,
+		@Inject( 'DoubleClick' ) public DoubleClick: any,
+	)
 	{
 	}
 
@@ -57,6 +61,24 @@ export class AdComponent implements OnInit, OnDestroy
 		if ( this.slot ) {
 			this.slot.isUsed = true;
 		}
+
+		// When the state changes we want to refresh this ad if the scope hasn't
+		// been destroyed. This is for ads that are in a parent state outside
+		// the changed view.
+		this.$scope.$on( '$stateChangeSuccess', () =>
+		{
+			// We need the destroyed event to trigger first. Setting a timeout
+			// to 0 will cause it to run on next loop which will push this event
+			// past any destroyed event that may happen.
+			setTimeout( () =>
+			{
+				if ( this.isDestroyed || !this.slot ) {
+					return;
+				}
+
+				this.DoubleClick.refreshAds( this.slot.id );
+			}, 0 );
+		} );
 	}
 
 	ngOnDestroy()
@@ -64,5 +86,6 @@ export class AdComponent implements OnInit, OnDestroy
 		if ( this.slot ) {
 			this.slot.isUsed = false;
 		}
+		this.isDestroyed = true;
 	}
 }
