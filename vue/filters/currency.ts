@@ -1,9 +1,16 @@
-export function currency( amount: number, currencySymbol = '$', decimal = 2 ): string
+export function currency( amount: number, currencyCode = 'USD', fractionDigits = 2 ): string
 {
-	// No fraction/decimal.
-	if ( amount % 100 === 0 || decimal === 0 ) {
-		return currencySymbol + Math.floor( amount / 100 );
+	// No fraction if it's evenly divisible by 100.
+	if ( amount % 100 === 0 ) {
+		fractionDigits = 0;
 	}
 
-	return currencySymbol + (amount / 100).toFixed( decimal );
+	// Undefined locale should choose their default locale.
+	const formatter = new Intl.NumberFormat( undefined, {
+		style: 'currency',
+		currency: currencyCode,
+		maximumFractionDigits: fractionDigits,
+	} );
+
+	return formatter.format( amount / 100 );
 }

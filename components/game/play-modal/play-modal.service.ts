@@ -1,3 +1,4 @@
+import * as nwGui from 'nw.gui';
 import { Modal } from '../../modal/modal.service';
 import { asyncComponentLoader } from '../../../utils/utils';
 import { HistoryTick } from '../../history-tick/history-tick-service';
@@ -42,7 +43,7 @@ export class GamePlayModal
 
 		// Will open the gameserver in their browser.
 		if ( GJ_IS_CLIENT && build.type !== GameBuild.TYPE_HTML && build.type !== GameBuild.TYPE_ROM ) {
-			const gui = require( 'nw.gui' );
+			const gui = require( 'nw.gui' ) as typeof nwGui;
 			const url = await this.getDownloadUrl( build, { key: options.key } );
 			gui.Shell.openExternal( url );
 			return;

@@ -10,7 +10,7 @@ export class GameSong extends Model
 	sort: number;
 	url: string;
 
-	file?: any;
+	file?: File;
 
 	static getSoundtrackDownloadUrl( gameId: number )
 	{

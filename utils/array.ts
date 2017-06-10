@@ -20,6 +20,17 @@ export function stringSort( a: string, b: string )
 	return 0;
 }
 
+export function numberSort( a: number, b: number )
+{
+	if ( a < b ) {
+		return -1;
+	}
+	else if ( a > b ) {
+		return 1;
+	}
+	return 0;
+}
+
 export function arrayIndexBy<T>( values: T[], field: keyof T ): { [k: string]: T }
 {
 	const indexed: any = {};

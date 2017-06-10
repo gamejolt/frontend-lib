@@ -1,0 +1,87 @@
+<div class="form-control-upload"
+	:class="{
+		'drop-active': isDropActive,
+	}"
+	@dragover="dragOver"
+	@dragleave="dragLeave"
+	@drop="drop"
+	>
+	<div v-if="!value">
+		<!--
+			If we have a label, then we show the upload "button" as a link instead.
+			We hide the button and use it to simulate a click on it.
+		-->
+		<div class="small" v-if="!!uploadLinkLabel">
+			<a class="link-muted" @click="showFileSelect">
+				{{ uploadLinkLabel }}
+			</a>
+		</div>
+
+		<input
+			type="file"
+			ref="input"
+			@change="onChange"
+			v-validate="{ rules: validationRules }"
+			:data-vv-validate-on="validateOn"
+			:data-vv-delay="validateDelay"
+			:accept="accept"
+			:multiple="multiple ? 'multiple' : undefined"
+			>
+	</div>
+	<div v-else class="form-upload-control-files">
+		<app-card-list :items="files">
+		<!--<div
+			ui-tree
+			ui-tree-nodes
+			drag-enabled="isSortable ? true : false"
+			ng-model="ngModel.$viewValue"
+			>-->
+			<app-card-list-draggable
+				:disabled="!(multiple && sortable)"
+				@change="sortItems"
+				>
+				<app-card-list-item
+					v-for="file of files"
+					:key="file"
+					:item="file"
+					>
+					<!--ui-tree-node-->
+
+					<!--<app-card-drag-handle ng-if="isSortable ? true : false" />-->
+
+					<app-form-control-upload-file-preview
+						:file="file"
+						@clear="clearFile( file )"
+						/>
+				</app-card-list-item>
+			</app-card-list-draggable>
+
+		</app-card-list>
+	</div>
+
+	<!--<div class="progress" ng-if="progress !== false">
+		<div class="progress-bar"
+			role="progressbar"
+			ng-attr-aria-valuenow="{{ progress }}"
+			aria-valuemin="0"
+			aria-valuemax="100"
+			ng-style="{ width: progress + '%' }"
+			>
+			<span ng-if="progress < 99">
+				{{ progress }}%
+			</span>
+			<span ng-if="progress >= 99" translate>
+				Processing...
+			</span>
+		</div>
+	</div>
+
+	<div ng-if="progress >= 99">
+		<br>
+		<div class="alert alert-info">
+			<p translate>
+				Upload complete! Please wait while we process your file(s). This may take a few minutes, so don't close or refresh the page.
+			</p>
+		</div>
+	</div>-->
+</div>

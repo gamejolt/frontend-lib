@@ -1,5 +1,6 @@
 import { Environment } from '../environment/environment.service';
 import { appStore } from '../../vue/services/app/app-store';
+import { EventBus } from '../event-bus/event-bus.service';
 
 const ga: any = (typeof window !== 'undefined' && (window as any).ga) || function(){};
 
@@ -30,27 +31,15 @@ export class Analytics
 	private static additionalPageTracker?: string;
 	private static recordedPageView = true;
 
-	static initAngular( $rootScope: any )
+	static initRouter()
 	{
-		$rootScope.$on( '$stateChangeStart', () =>
+		EventBus.on( 'routeChangeBefore', () =>
 		{
 			this.recordedPageView = false;
 		} );
 
-		$rootScope.$on( '$stateChangeSuccess', ( _event: any, current: any ) =>
+		EventBus.on( 'routeChangeAfter', () =>
 		{
-			// If we are redirecting to a new page, don't track the route.
-			// This happens (for example) when there is a trailing slash at the end of the URL.
-			if ( current && current.redirectTo ) {
-				return;
-			}
-
-			// If the state is set to not track the pageview, skip.
-			if ( current && current.skipTrackPageview ) {
-				return;
-			}
-
-			// Track the page view.
 			this.trackPageview();
 		} );
 	}

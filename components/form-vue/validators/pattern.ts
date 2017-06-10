@@ -20,9 +20,17 @@ const Patterns: { [k: string]: RegExp } = {
 	semver: /^v?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i,
 };
 
-export function FormValidatorPattern( value: string, args: [ string ] )
+export function FormValidatorPattern( value: string, args: [ string | RegExp ] )
 {
-	const pattern = Patterns[ args[0] ];
+	const arg = args[0];
+	let pattern: RegExp;
+	if ( arg instanceof RegExp ) {
+		pattern = arg;
+	}
+	else {
+		pattern = Patterns[ arg ];
+	}
+
 	if ( !pattern ) {
 		throw new Error( `Invalid pattern passed in.` );
 	}

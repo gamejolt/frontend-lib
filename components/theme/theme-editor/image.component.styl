@@ -1,3 +1,5 @@
+@require '../../../stylus/common/mixins'
+
 .theme-editor-image
 	padding: 8px 15px
 
@@ -12,6 +14,6 @@
 		clear: both
 
 	&-img
-		@extend .img-responsive
+		img-responsive()
 		max-height: 200px
 		margin-bottom: $line-height-computed

@@ -15,7 +15,7 @@ const ErrorMessagesBase: { [k: string]: string } = {
 	server: 'The {} you\'ve entered is invalid.',
 	pattern: 'Please enter a valid {}.',
 	url: 'Please enter a valid URL.',
-	filetype: 'The chosen {} is the wrong type of file.',
+	accept: 'The chosen {} is the wrong type of file.',
 	email: 'Please enter a valid email address.',
 	number: 'Please enter a valid number.',
 	currency: 'Please enter a valid amount.',
@@ -34,6 +34,8 @@ export class AppFormControlErrors extends Vue
 {
 	@Prop( String ) label?: string;
 	@Prop( String ) position?: string;
+
+	// TODO
 	@Prop( Boolean ) ignoreDirty?: boolean;
 
 	form: AppForm;
@@ -88,6 +90,7 @@ export class AppFormControlErrors extends Vue
 		const data = this.group.control.validationRules && this.group.control.validationRules[ rule ];
 		const errorMessages = Object.assign( {}, ErrorMessagesBase, this.errorMessageOverrides );
 
+
 		// Pull from the group's validation data to find out the rest of the messages.
 		// When an input has validations like maxlength, we register the attribute's value.
 		// This way we can message on it better.
@@ -116,74 +119,71 @@ export class AppFormControlErrors extends Vue
 				message = 'The chosen {} exceeds the maximum file size of ' + number( data / 1024 / 1024 ) + 'MB.';
 				break;
 
-			// case 'width':
-			// case 'height': {
-			// 	const width = validationData['width'];
-			// 	const height = validationData['height'];
+			case 'img_dimensions': {
+				const width = data[0];
+				const height = data[1];
 
-			// 	if ( width && height ) {
-			// 		message = 'The dimensions of your {} must be exactly ' + number( width ) + 'x' + number( height ) + 'px.';
-			// 	}
-			// 	else if ( width ) {
-			// 		message = 'The width of your {} must be exactly ' + number( width ) + 'px.';
-			// 	}
-			// 	else if ( height ) {
-			// 		message = 'The height of your {} must be exactly ' + number( height ) + 'px.';
-			// 	}
-			// }
-			// break;
+				if ( width && height ) {
+					message = 'The dimensions of your {} must be exactly ' + number( width ) + 'x' + number( height ) + 'px.';
+				}
+				else if ( width ) {
+					message = 'The width of your {} must be exactly ' + number( width ) + 'px.';
+				}
+				else if ( height ) {
+					message = 'The height of your {} must be exactly ' + number( height ) + 'px.';
+				}
+			}
+			break;
 
-			// case 'min-width':
-			// case 'min-height': {
-			// 	const width = validationData['min-width'];
-			// 	const height = validationData['min-height'];
+			case 'min_img_dimensions': {
+				const width = data[0];
+				const height = data[1];
 
-			// 	if ( width && height ) {
-			// 		message = 'What is this, a center for ants!? '
-			// 			+ 'The dimensions of your {} must be at least ' + number( width ) + 'x' + number( height ) + 'px.';
-			// 	}
-			// 	else if ( width ) {
-			// 		message = 'What is this, a center for ants!? '
-			// 			+ 'The width of your {} must be at least ' + number( width ) + 'px.';
-			// 	}
-			// 	else if ( height ) {
-			// 		message = 'What is this, a center for ants!? '
-			// 			+ 'The height of your {} must be at least ' + number( height ) + 'px.';
-			// 	}
-			// }
-			// break;
+				if ( width && height ) {
+					message = 'What is this, a center for ants!? '
+						+ 'The dimensions of your {} must be at least ' + number( width ) + 'x' + number( height ) + 'px.';
+				}
+				else if ( width ) {
+					message = 'What is this, a center for ants!? '
+						+ 'The width of your {} must be at least ' + number( width ) + 'px.';
+				}
+				else if ( height ) {
+					message = 'What is this, a center for ants!? '
+						+ 'The height of your {} must be at least ' + number( height ) + 'px.';
+				}
+			}
+			break;
 
-			// case 'max-width':
-			// case 'max-height': {
-			// 	const width = validationData['max-width'];
-			// 	const height = validationData['max-height'];
+			case 'max_img_dimensions': {
+				const width = data[0];
+				const height = data[1];
 
-			// 	if ( width && height ) {
-			// 		message = 'Your {} is too large. '
-			// 			+ 'The dimensions must be no greater than ' + number( width ) + 'x' + number( height ) + 'px.';
-			// 	}
-			// 	else if ( width ) {
-			// 		message = 'Your {} is too wide. '
-			// 			+ 'The width must be no greater than ' + number( width ) + 'px.';
-			// 	}
-			// 	else if ( height ) {
-			// 		message = 'Your {} is too tall. '
-			// 			+ 'The height must be no greater than ' + number( height ) + 'px.';
-			// 	}
-			// }
-			// break;
+				if ( width && height ) {
+					message = 'Your {} is too large. '
+						+ 'The dimensions must be no greater than ' + number( width ) + 'x' + number( height ) + 'px.';
+				}
+				else if ( width ) {
+					message = 'Your {} is too wide. '
+						+ 'The width must be no greater than ' + number( width ) + 'px.';
+				}
+				else if ( height ) {
+					message = 'Your {} is too tall. '
+						+ 'The height must be no greater than ' + number( height ) + 'px.';
+				}
+			}
+			break;
 
-			case 'ratio':
+			case 'img_ratio':
 				message = 'Your {} has an incorrect aspect ratio. '
 					+ 'Its width divided by height must be exactly ' + number( data ) + '.';
 				break;
 
-			case 'ratio_min':
+			case 'min_img_ratio':
 				message = 'Your {} has an incorrect aspect ratio. '
 					+ 'Its width divided by height must be at least ' + number( data ) + '.';
 				break;
 
-			case 'ratio_max':
+			case 'max_img_ratio':
 				message = 'Your {} has an incorrect aspect ratio. '
 					+ 'Its width divided by height must be no greater than ' + number( data ) + '.';
 				break;

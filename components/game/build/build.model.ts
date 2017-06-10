@@ -174,7 +174,7 @@ export class GameBuild extends Model
 	_release?: GameRelease;
 	_launch_options?: GameBuildLaunchOption[];
 
-	file?: any;
+	file?: File;
 
 	static pluckOsSupport( build: GameBuild )
 	{

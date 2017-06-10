@@ -8,6 +8,7 @@ import { Sellable } from '../sellable/sellable.model';
 import { getProvider } from '../../utils/utils';
 import { Registry } from '../registry/registry.service';
 import { Site } from '../site/site-model';
+import { appStore } from '../../vue/services/app/app-store';
 
 export class Game extends Model
 {
@@ -98,7 +99,7 @@ export class Game extends Model
 	_should_show_ads = true;
 	_can_buy_primary_sellable = false;
 
-	file?: any;
+	file?: File;
 
 	constructor( data: any = {} )
 	{
@@ -150,13 +151,8 @@ export class Game extends Model
 
 		// Should show as owned for the dev of the game.
 		if ( this.sellable && this.sellable.type !== 'free' && this.developer ) {
-
-			// TODO: Get this working for Vue.
-			if ( GJ_IS_ANGULAR ) {
-				const App = getProvider<any>( 'App' );
-				if ( App.user && App.user.id === this.developer.id ) {
-					this.sellable.is_owned = true;
-				}
+			if ( appStore.state.user && appStore.state.user.id === this.developer.id ) {
+				this.sellable.is_owned = true;
 			}
 		}
 
@@ -180,10 +176,10 @@ export class Game extends Model
 		let sref = '';
 
 		if ( page === 'dashboard' ) {
-			sref = 'dashboard.developer.games.manage.game.overview';
+			sref = 'dash.games.manage.game.overview';
 		}
 		else if ( page === 'edit' ) {
-			sref = 'dashboard.developer.games.manage.game.details';
+			sref = 'dash.games.manage.game.details';
 		}
 		else {
 			sref = 'discover.games.view.overview';

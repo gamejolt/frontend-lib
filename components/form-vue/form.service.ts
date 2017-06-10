@@ -7,6 +7,8 @@ import { AppFormGroup } from './group/group';
 import { AppFormControlErrors } from './control-errors/control-errors';
 import { AppFormControlError } from './control-errors/control-error';
 import { AppFormButton } from './button/button';
+import { AppFormControlSelect } from './control/select/select';
+import { AppFormControlTextarea } from './control/textarea/textarea';
 
 export interface FormOnInit
 {
@@ -27,6 +29,8 @@ export interface FormOnSubmitSuccess
 	components: {
 		AppForm,
 		AppFormControl,
+		AppFormControlSelect,
+		AppFormControlTextarea,
 		AppFormGroup,
 		AppFormControlErrors,
 		AppFormControlError,
@@ -47,10 +51,10 @@ export class BaseForm<T> extends Vue
 	state: { [k: string]: any } = {
 		isProcessing: false,
 		isShowingSuccess: false,
-		// isShowingSuccess: isShowingSuccess,
 		// progress: undefined,
 	};
 
+	successClearTimeout?: NodeJS.Timer;
 	serverErrors: { [k: string]: boolean } = {};
 
 	created()
@@ -133,9 +137,6 @@ export class BaseForm<T> extends Vue
 
 			// Send the new model back into the submit handler.
 			this.$emit( 'submit', this.formModel, response );
-			// if ( angular.isDefined( scope.submitHandler ) ) {
-			// scope.submitHandler( { formModel: scope.formModel, $response: response } );
-			// }
 
 			// Reset our processing state.
 			this.state.isProcessing = false;
@@ -143,12 +144,8 @@ export class BaseForm<T> extends Vue
 			// Make sure that serverErrors is reset on a successful submit, just in case.
 			this.serverErrors = {};
 
-			// After successful submit of the form, we broadcast the onSubmitted event.
-			// We will capture this in the gjForm directive to set the form to a pristine state.
-			// scope.$broadcast( 'gjForm.onSubmitted', {} );
-
 			// Show successful form submission.
-			// _this._showSuccess( scope );
+			this._showSuccess();
 
 			// If we should reset on successful submit, let's do that now.
 			if ( this.resetOnSubmit ) {
@@ -167,5 +164,21 @@ export class BaseForm<T> extends Vue
 			// Reset our processing state.
 			this.state.isProcessing = false;
 		}
+	}
+
+	private _showSuccess()
+	{
+		// Reset the timeout if it's already showing.
+		if ( this.successClearTimeout ) {
+			clearTimeout( this.successClearTimeout );
+		}
+
+		this.state.isShowingSuccess = true;
+
+		this.successClearTimeout = setTimeout( () =>
+		{
+			this.state.isShowingSuccess = false;
+			this.successClearTimeout = undefined;
+		}, 2000 );
 	}
 }

@@ -176,7 +176,7 @@ export class Translate
 		this.languageUrls = urls;
 	}
 
-	static loadSection( section: string, lang: string )
+	static loadSection( gettextCatalog: any, section: string, lang?: string )
 	{
 		lang = lang || this.lang;
 
@@ -199,11 +199,10 @@ export class Translate
 
 		this.loaded[ lang + section ] = true;
 
-		const gettextCatalog = getProvider<any>( 'gettextCatalog' );
 		return gettextCatalog.loadRemote( this.languageUrls[ section ][ lang ] );
 	}
 
-	static async setLanguage( lang: string )
+	static async setLanguage( gettextCatalog: any, lang: string )
 	{
 		localStorage.setItem( LangStorageKey, lang );
 		this.lang = lang;
@@ -213,7 +212,6 @@ export class Translate
 		const loadSections = this.sections.map( ( section ) => this.loadSection( section, lang ) );
 		await Promise.all( loadSections );
 
-		const gettextCatalog = getProvider<any>( 'gettextCatalog' );
 		gettextCatalog.setCurrentLanguage( lang );
 	}
 }

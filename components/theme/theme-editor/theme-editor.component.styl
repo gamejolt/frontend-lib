@@ -1,3 +1,5 @@
+@require '../../../stylus/common/mixins'
+
 .theme-editor .CodeMirror
 	border-color: $gray-dark
 	height: 400px
@@ -6,10 +8,9 @@
 		border-color: $gray
 
 .theme-editor-definitions
-	@extend .fill-white
 
 	.form-group
-		@extend .clearfix
+		clearfix()
 		animation-duration: 0
 		margin-bottom: 0
 		border-bottom: 1px solid $gray-lightest

@@ -12,13 +12,14 @@ export class Meta extends MetaContainer
 
 	static titleSuffix = GJ_IS_CLIENT ? ' - Game Jolt' : ' on Game Jolt';
 
-	static initAngular( $rootScope: any )
-	{
-		$rootScope.$on( '$stateChangeSuccess', () =>
-		{
-			this.clear();
-		} );
-	}
+	// TODO
+	// static initAngular( $rootScope: any )
+	// {
+	// 	$rootScope.$on( '$stateChangeSuccess', () =>
+	// 	{
+	// 		this.clear();
+	// 	} );
+	// }
 
 	static set title( title: string | null )
 	{

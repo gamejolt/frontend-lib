@@ -1,3 +1,8 @@
+@require '~styles/variables'
+@require '../../stylus/common/mixins'
+@require '../../stylus/common/fills'
+@require '../well/well'
+
 gj-editable-accordion
 gj-editable-accordion-item
 gj-editable-accordion-add
@@ -13,13 +18,8 @@ gj-editable-accordion-add
 .editable-accordion-item-edit
 .editable-accordion-button
 .editable-accordion-item-add
-	@extend .clearfix
+	clearfix()
 	margin-bottom: $line-height-computed
-
-// Animate in and out.
-.editable-accordion-item-container
-	@extend .anim-fade-enter-right, .stagger-enter
-	@extend .anim-fade-leave-enlarge
 
 /**
  * Add/Edit Stuff
@@ -77,7 +77,6 @@ gj-editable-accordion-add
 
 			.help-block
 				margin-bottom: 0
-
 
 /**
  * Adding

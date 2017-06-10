@@ -19,14 +19,16 @@
 		z-index: 1
 
 	@media $media-xs
-		overflow-x: auto
-		overflow-y: hidden
-		white-space: nowrap
 		padding-left: 0
 		padding-right: 0
 
 		// XS size will default to centered.
 		text-align: center
+
+		&-content
+			overflow-x: auto
+			overflow-y: hidden
+			white-space: nowrap
 
 	ul
 		display: inline-block

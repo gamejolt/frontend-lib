@@ -1,0 +1,14 @@
+@require '~styles/variables'
+
+.graph
+	padding: ($grid-gutter-width-xs / 2)
+	margin-bottom: $line-height-computed
+
+	@media $media-sm-up
+		padding: 10px
+
+.graph-background-variant
+	background-color: inherit !important
+
+@require './line'
+@require './pie'

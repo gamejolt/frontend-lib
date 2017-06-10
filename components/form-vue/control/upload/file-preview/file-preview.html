@@ -1,0 +1,17 @@
+<div class="row">
+	<div class="col-xs-3" v-if="isImage">
+		<canvas ref="preview" class="img-responsive"></canvas>
+		<!--<gj-form-upload-control-img-preview file="file"></gj-form-upload-control-img-preview>-->
+	</div>
+	<div :class="isImage ? 'col-xs-9' : 'col-xs-12'">
+		<a class="card-remove" @click="clearFile">
+			<app-jolticon icon="remove" />
+		</a>
+
+		<div class="card-title">
+			<h5>
+				{{ file.name }}
+			</h5>
+		</div>
+	</div>
+</div>

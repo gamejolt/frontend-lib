@@ -9,7 +9,6 @@ const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 const WebpackDevServer = require( 'webpack-dev-server' );
 const OptimizeCssPlugin = require( 'optimize-css-assets-webpack-plugin' );
 const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
-const autoprefixer = require( 'autoprefixer' );
 const CleanCss = require( 'clean-css' );
 const WriteFilePlugin = require( 'write-file-webpack-plugin' );
 const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
@@ -25,11 +24,9 @@ module.exports = function( config )
 	let prodNoop = !config.production ? undefined : noop;
 	let serverNoop = !config.server ? undefined : noop;
 
-	let externals = {
-		'gui': { commonjs: 'nw.gui' },
-	};
-	for ( let extern of [ 'client-voodoo' ] ) {
-		externals[ extern ] = { commonjs: extern };
+	let externals = {};
+	for ( let extern of [ 'nw.gui', 'client-voodoo' ] ) {
+		externals[ extern ] = extern;
 	}
 
 	const cleanCssOptions = {
@@ -117,6 +114,10 @@ module.exports = function( config )
 			},
 			resolve: {
 				extensions: [ '.tsx', '.ts', '.js', '.styl' ],
+				modules: [
+					path.resolve( base, 'src/vendor' ),
+					'node_modules',
+				],
 				alias: {
 					// Always "app" base img.
 					'img': path.resolve( base, 'src/app/img' ),
@@ -203,7 +204,7 @@ module.exports = function( config )
 						test: /\.styl$/,
 						use: stylesLoader( [
 							'css-loader?-minimize',
-							'postcss-loader',
+							{ loader: 'postcss-loader', options: { sourceMap: true } },
 						] )
 					},
 					{
@@ -259,9 +260,6 @@ module.exports = function( config )
 							use: [],
 							preferPathResolver: 'webpack'
 						},
-						postcss: [
-							autoprefixer(),
-						],
 					}
 				}),
 				// !config.client ? noop : new CopyWebpackPlugin([

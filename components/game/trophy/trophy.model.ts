@@ -34,7 +34,7 @@ export class GameTrophy extends Model
 	img_thumbnail: string;
 	has_thumbnail: boolean;
 
-	file?: any;
+	file?: File;
 
 	constructor( data: any = {} )
 	{

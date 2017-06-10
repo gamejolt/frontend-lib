@@ -45,7 +45,7 @@ angular.module( 'gj.EditableAccordion' ).directive( 'gjEditableAccordionItem', f
 		},
 		compile: function( element )
 		{
-			element.addClass( 'editable-accordion-item-container' );
+			element.addClass( 'editable-accordion-item-container anim-fade-enter-right stagger-enter animfade-leave-enlarge' );
 
 			return function( scope, element, attrs, ctrls )
 			{

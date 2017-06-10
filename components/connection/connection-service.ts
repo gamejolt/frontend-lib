@@ -10,50 +10,50 @@ export class Connection
 	private static _reconnectChecker?: ConnectionReconnect;
 
 	// TODO
-	static initAngular( $rootScope: any )
-	{
-		// This attribute isn't perfect.
-		// The browser will set this when they are absolutely disconnected to the internet through their
-		// network card, but it won't catch things like their router saying they're connected even though
-		// it has no connection.
-		// We have to do our own request checking for that.
-		this.isDeviceOffline = !window.navigator.onLine;
-		this.isOnline = !this.isDeviceOffline && !this.hasRequestFailure;
+	// static initAngular( $rootScope: any )
+	// {
+	// 	// This attribute isn't perfect.
+	// 	// The browser will set this when they are absolutely disconnected to the internet through their
+	// 	// network card, but it won't catch things like their router saying they're connected even though
+	// 	// it has no connection.
+	// 	// We have to do our own request checking for that.
+	// 	this.isDeviceOffline = !window.navigator.onLine;
+	// 	this.isOnline = !this.isDeviceOffline && !this.hasRequestFailure;
 
-		// Convenience var to make it easier to hide things offline just in client.
-		this.isClientOffline = GJ_IS_CLIENT && !this.isOnline;
+	// 	// Convenience var to make it easier to hide things offline just in client.
+	// 	this.isClientOffline = GJ_IS_CLIENT && !this.isOnline;
 
-		$rootScope.$on( 'Payload.responseError', ( _event: any, response: any ) =>
-		{
-			// Usually offline, timed out, or aborted request.
-			// Set that a request has failed.
-			if ( response.status === -1 ) {
-				this._setRequestFailure( true );
-			}
-		} );
+	// 	$rootScope.$on( 'Payload.responseError', ( _event: any, response: any ) =>
+	// 	{
+	// 		// Usually offline, timed out, or aborted request.
+	// 		// Set that a request has failed.
+	// 		if ( response.status === -1 ) {
+	// 			this._setRequestFailure( true );
+	// 		}
+	// 	} );
 
-		// Clear out our request errors when a successful response comes through.
-		$rootScope.$on( 'Payload.responseSuccess', () => this._setRequestFailure( false ) );
+	// 	// Clear out our request errors when a successful response comes through.
+	// 	$rootScope.$on( 'Payload.responseSuccess', () => this._setRequestFailure( false ) );
 
-		// We hook into browser events to know right away if they lost connection to their router.
-		document.addEventListener( 'online', () =>
-		{
-			this.isDeviceOffline = false;
-			this._refreshIsOnline();
+	// 	// We hook into browser events to know right away if they lost connection to their router.
+	// 	document.addEventListener( 'online', () =>
+	// 	{
+	// 		this.isDeviceOffline = false;
+	// 		this._refreshIsOnline();
 
-			// While connection was offline, we may have tried making a request that failed.
-			// Let's recheck for connectivity right away if that is the case.
-			if ( this._reconnectChecker ) {
-				this._reconnectChecker.check();
-			}
-		} );
+	// 		// While connection was offline, we may have tried making a request that failed.
+	// 		// Let's recheck for connectivity right away if that is the case.
+	// 		if ( this._reconnectChecker ) {
+	// 			this._reconnectChecker.check();
+	// 		}
+	// 	} );
 
-		document.addEventListener( 'offline', () =>
-		{
-			this.isDeviceOffline = true;
-			this._refreshIsOnline();
-		} );
-	}
+	// 	document.addEventListener( 'offline', () =>
+	// 	{
+	// 		this.isDeviceOffline = true;
+	// 		this._refreshIsOnline();
+	// 	} );
+	// }
 
 	private static _setupReconnectChecker()
 	{

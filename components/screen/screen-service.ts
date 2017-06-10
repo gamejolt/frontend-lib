@@ -96,10 +96,6 @@ export class Screen
 	 */
 	static setResizeSpy( scope: any, onResize: Function )
 	{
-		if ( !GJ_IS_ANGULAR ) {
-			throw new Error( `You can only set a resize spy in angular.` );
-		}
-
 		const resizeChange$ = this.resizeChanges.subscribe( () => onResize() );
 		scope.$on( '$destroy', () => resizeChange$.unsubscribe() );
 	}

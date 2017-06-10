@@ -1,4 +1,4 @@
-import { Api, RequestOptions, ProgressEvent } from '../api/api.service';
+import { Api, RequestOptions } from '../api/api.service';
 
 export class Model
 {

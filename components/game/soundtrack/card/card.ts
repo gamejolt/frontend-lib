@@ -1,3 +1,5 @@
+import * as nwGui from 'nw.gui';
+
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./card.html';
@@ -63,7 +65,7 @@ export class AppGameSoundtrackCard extends Vue
 		};
 
 		if ( GJ_IS_CLIENT ) {
-			const gui = require( 'nw.gui' );
+			const gui = require( 'nw.gui' ) as typeof nwGui;
 			gui.Shell.openExternal( Environment.baseUrl + this.$router.resolve( location ).href );
 		}
 

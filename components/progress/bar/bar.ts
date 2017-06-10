@@ -9,4 +9,5 @@ export class AppProgressBar extends Vue
 	@Prop( Number ) percent: number;
 	@Prop( Boolean ) thin?: boolean;
 	@Prop( String ) variant?: string;
+	@Prop( Boolean ) active?: boolean;
 }

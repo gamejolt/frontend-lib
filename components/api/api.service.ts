@@ -1,6 +1,5 @@
 import Axios from 'axios';
 import { Environment } from '../environment/environment.service';
-import { getProvider } from '../../utils/utils';
 import { Payload } from '../payload/payload-service';
 
 export interface RequestOptions
@@ -8,7 +7,7 @@ export interface RequestOptions
 	/**
 	 * Files to upload can be passed in through here.
 	 */
-	file?: any;
+	file?: File | File[];
 
 	/**
 	 * Progress handler. Will only be used when uploading a file.
@@ -70,12 +69,6 @@ export interface RequestOptions
 	// You can change the default api host/path used through these.
 	apiHost?: string;
 	apiPath?: string;
-}
-
-export interface ProgressEvent
-{
-	current: number;
-	total: number;
 }
 
 export class Api
@@ -145,57 +138,76 @@ export class Api
 	{
 		// An upload request.
 		if ( options.file ) {
-			const Upload = getProvider<any>( 'Upload' );
+			// const Upload = getProvider<any>( 'Upload' );
 
 			// Copy over since we'll modify.
-			let _options: any = { ...{}, ...options };
+			// let _options: any = { ...{}, ...options };
 
-			// NOTE: Got rid of this for now since we don't use it from what I know.
-			// You can pass in an object of files if you want to upload multiple.
-			// Otherwise file should be the single file to upload.
-			// For multiple upload, the key should be the name of the form field, the value should be the file.
-			// Example: { file: file1, file_other: file2 }
-			// if ( !Array.isArray( options.file ) ) {
-			// 	_options.fileFormDataName = Object.keys( _options.file );
-			// 	_options.file = _.flatten( _.values( _options.file ) );
-			// }
-			// else {
-				// Multi file upload in same form control.
-				if ( Array.isArray( _options.file ) && _options.file.length <= 1 ) {
-					_options.file = _options.file[0];
-				}
+			// if ( Array.isArray( _options.file ) && _options.file.length <= 1 ) {
+			// 	_options.file = _options.file[0];
 			// }
 
-			const uploadPromise = Upload.upload( {
-				method: 'POST',
+			// We have to send it over as form data instead of JSON data.
+			data = { ...data, file: options.file };
+			const formData = new FormData();
+			for ( const key in data ) {
+				formData.append( key, data[ key ] );
+			}
+
+			const request = Axios( {
+				method,
 				url,
-				data: { ...data, file: _options.file },
-				withCredentials: _options.withCredentials,
-
-				// Force ignore in upload.
-				// We show a form upload progress bar instead.
-				ignoreLoadingBar: true,
+				data: formData,
+				withCredentials: options.withCredentials,
+				ignoreLoadingBar: options.ignoreLoadingBar,
+				onUploadProgress: ( e: ProgressEvent ) =>
+				{
+					if ( options.progress && e.lengthComputable ) {
+						options.progress( e );
+					}
+				},
+			} )
+			.then( () =>
+			{
+				// When the request is done, send one last progress event of
+				// nothing to indicate that the transfer is complete.
+				if ( options.progress ) {
+					options.progress( undefined );
+				}
 			} );
 
-			// Set up progress events.
-			uploadPromise
-				.then( null, null, ( event: any ) =>
-				{
-					if ( options.progress && event.lengthComputable ) {
-						options.progress( {
-							current: event.loaded,
-							total: event.total,
-						} );
-					}
-				} )
-				.then( () =>
-				{
-					if ( options.progress ) {
-						options.progress( undefined );
-					}
-				} );
+			// const uploadPromise = Upload.upload( {
+			// 	method: 'POST',
+			// 	url,
+			// 	data: { ...data, file: options.file },
+			// 	withCredentials: options.withCredentials,
 
-			return uploadPromise;
+			// 	// Force ignore in upload.
+			// 	// We show a form upload progress bar instead.
+			// 	ignoreLoadingBar: true,
+			// } );
+
+			// // Set up progress events.
+			// uploadPromise
+			// 	.then( null, null, ( event: any ) =>
+			// 	{
+			// 		if ( options.progress && event.lengthComputable ) {
+			// 			options.progress( {
+			// 				current: event.loaded,
+			// 				total: event.total,
+			// 			} );
+			// 		}
+			// 	} )
+			// 	.then( () =>
+			// 	{
+			// 		if ( options.progress ) {
+			// 			options.progress( undefined );
+			// 		}
+			// 	} );
+
+			// return uploadPromise;
+
+			return request;
 		}
 
 		return Axios( {

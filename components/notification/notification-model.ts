@@ -1,3 +1,5 @@
+import * as nwGui from 'nw.gui';
+
 import VueRouter from 'vue-router';
 import { Model } from '../model/model.service';
 import { Environment } from '../environment/environment.service';
@@ -161,7 +163,7 @@ export class Notification extends Model
 
 			case Notification.TYPE_SELLABLE_SELL:
 				return {
-					name: 'dashboard.main.overview',
+					name: 'dash.main.overview',
 				};
 		}
 
@@ -204,7 +206,8 @@ export class Notification extends Model
 					router.push( url );
 				}
 				else if ( GJ_IS_CLIENT ) {
-					require( 'nw.gui' ).Shell.openExternal( url );
+					const gui = require( 'nw.gui' ) as typeof nwGui;
+					gui.Shell.openExternal( url );
 				}
 				else {
 					window.location.href = url;

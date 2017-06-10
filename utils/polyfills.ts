@@ -8,4 +8,5 @@ import 'core-js/es6/map';
 import 'core-js/es6/set';
 import 'core-js/es6/promise';
 import 'core-js/modules/es7.object.values';
+import 'core-js/modules/es7.object.entries';
 import 'reflect-metadata';

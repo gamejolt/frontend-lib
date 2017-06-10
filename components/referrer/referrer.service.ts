@@ -32,40 +32,40 @@ export class Referrer
 		}
 	}
 
-	static initAngular( $rootScope: any )
-	{
-		if ( !GJ_IS_ANGULAR ) {
-			return;
-		}
+	// static initAngular( $rootScope: any )
+	// {
+	// 	if ( !GJ_IS_ANGULAR ) {
+	// 		return;
+	// 	}
 
-		this.init();
+	// 	this.init();
 
-		$rootScope.$on( '$stateChangeStart', () =>
-		{
-			// Don't track until we've tracked on full page view.
-			if ( this.firstPass ) {
-				return;
-			}
+	// 	$rootScope.$on( '$stateChangeStart', () =>
+	// 	{
+	// 		// Don't track until we've tracked on full page view.
+	// 		if ( this.firstPass ) {
+	// 			return;
+	// 		}
 
-			// Store the current one so we can rollback if the state change fails.
-			this.prev = this.referrer;
-			this.referrer = this.currentUrl;
-		} );
+	// 		// Store the current one so we can rollback if the state change fails.
+	// 		this.prev = this.referrer;
+	// 		this.referrer = this.currentUrl;
+	// 	} );
 
-		$rootScope.$on( '$stateChangeSuccess', () =>
-		{
-			// We have finished the first state change.
-			// We will now begin tracking new referrers.
-			this.firstPass = false;
-			this.currentUrl = window.location.href;
-		} );
+	// 	$rootScope.$on( '$stateChangeSuccess', () =>
+	// 	{
+	// 		// We have finished the first state change.
+	// 		// We will now begin tracking new referrers.
+	// 		this.firstPass = false;
+	// 		this.currentUrl = window.location.href;
+	// 	} );
 
-		$rootScope.$on( '$stateChangeError', () =>
-		{
-			// Rollback.
-			this.referrer = this.prev;
-		} );
-	}
+	// 	$rootScope.$on( '$stateChangeError', () =>
+	// 	{
+	// 		// Rollback.
+	// 		this.referrer = this.prev;
+	// 	} );
+	// }
 
 	static get()
 	{

@@ -6,35 +6,20 @@ import { Ads } from './ads.service';
 import { Environment } from '../environment/environment.service';
 
 let _globalTagId = '1437670388518';
+let _isBootstrapped = false;
+
+if ( !GJ_IS_SSR ) {
+
+
+}
 
 function _bootstrapAds()
 {
-	if ( Ads.isBootstrapped ) {
-		return;
-	}
-
-	Ads.isBootstrapped = true;
-
 	const _window = window as any;
 
-	_window.googletag = {};  // We always start from scratch on every bootstrap.
+	// _window.googletag = {};  // We always start from scratch on every bootstrap.
+	_window.googletag = _window.googletag || {};
 	_window.googletag.cmd = _window.googletag.cmd || [];
-
-	(function() {
-		let oldScript = null;
-		if ( oldScript = document.getElementById( 'ads-script-bootsrapper' ) ) {
-			oldScript.parentNode!.removeChild( oldScript );
-		}
-
-		const gads = document.createElement('script');
-		gads.id = 'ads-script-bootsrapper';
-		gads.async = true;
-		gads.type = 'text/javascript';
-		gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
-
-		const node = document.getElementsByTagName( 'script' )[0];
-		node.parentNode!.insertBefore( gads, node );
-	})();
 
 	_window.googletag.cmd.push( function()
 	{
@@ -88,11 +73,40 @@ function _bootstrapAds()
 
 		_window.googletag.enableServices();
 	} );
+
+	if ( _isBootstrapped ) {
+		// console.log( window.googletag );
+		(window as any).googletag.pubads().updateCorrelator();
+		(window as any).googletag.pubads().refresh();
+		return;
+	}
+
+	_isBootstrapped = true;
+
+	const gads = document.createElement('script');
+	gads.id = 'ads-script-bootsrapper';
+	gads.async = true;
+	gads.type = 'text/javascript';
+	gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
+
+	const node = document.getElementsByTagName( 'script' )[0];
+	node.parentNode!.insertBefore( gads, node );
 }
 
 function _cleanupAds()
 {
-	Ads.isBootstrapped = false;
+	console.log( 'cleaning up' );
+	_isBootstrapped = false;
+
+	const _window = window as any;
+	if ( _window.googletag.pubads ) {
+		_window.googletag.destroySlots();
+	}
+
+	// let oldScript = null;
+	// if ( oldScript = document.getElementById( 'ads-script-bootsrapper' ) ) {
+	// 	oldScript.parentNode!.removeChild( oldScript );
+	// }
 }
 
 @View
@@ -108,6 +122,7 @@ export class AppAd extends Vue
 
 	mounted()
 	{
+		return;
 		++Ads.numActive;
 
 		// Send the beacon saying that we've viewed this ad.
@@ -131,14 +146,20 @@ export class AppAd extends Vue
 			return;
 		}
 
-		const adElem = this.$refs['ad'] as Element;
+		const adElem = this.$el.querySelector( '.ad-inner' );
+		if ( !adElem ) {
+			return;
+		}
 
 		const googlePlaceholderElem = document.createElement( 'div' );
 		googlePlaceholderElem.id = 'div-gpt-ad-' + this.globalTagId + '-' + this.adId;
 		adElem.appendChild( googlePlaceholderElem );
 
 		if ( GJ_ENVIRONMENT === 'production' && !GJ_IS_CLIENT ) {
-			_bootstrapAds();
+
+			if ( Ads.numActive === 1 ) {
+				_bootstrapAds();
+			}
 
 			const scriptElem = document.createElement( 'script' );
 			scriptElem.type = 'text/javascript';
@@ -149,6 +170,7 @@ export class AppAd extends Vue
 
 	destroyed()
 	{
+		return;
 		--Ads.numActive;
 
 		if ( this.size === 'leaderboard' ) {

@@ -2,6 +2,7 @@ import { Subject } from 'rxjs/Subject';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
 import { supportsPassiveEvents } from '../../utils/detection';
+import { AppAutoscrollAnchor } from './auto-scroll/anchor';
 
 // Polyfill smooth scrolling.
 require( 'smoothscroll-polyfill' ).polyfill();
@@ -19,6 +20,7 @@ export interface ScrollChange
 export class Scroll
 {
 	static shouldAutoScroll = true;
+	static autoscrollAnchor?: AppAutoscrollAnchor;
 
 	// For SSR context we have to set this to undefined. No methods should be
 	// called that would use the context.

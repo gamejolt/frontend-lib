@@ -1,0 +1,10 @@
+<div class="graph full-bleed-xs"
+	:class="[
+		'graph-' + type,
+		(backgroundVariant ? 'graph-background-variant' : ''),
+	]"
+	>
+	<div class="chart">
+		<canvas ref="canvas"></canvas>
+	</div>
+</div>

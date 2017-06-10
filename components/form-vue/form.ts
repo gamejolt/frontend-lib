@@ -8,6 +8,14 @@ import { BaseForm } from './form.service';
 import { FormValidatorPattern } from './validators/pattern';
 import { FormValidatorAvailability } from './validators/availability';
 import { BaseFormControl } from './control/base';
+import { FormValidatorFilesize } from './validators/filesize';
+import { FormValidatorImgRatio } from './validators/img_ratio';
+import { FormValidatorMinImgRatio } from './validators/min_img_ratio';
+import { FormValidatorMaxImgRatio } from './validators/max_img_ratio';
+import { FormValidatorImgDimensions } from './validators/img_dimensions';
+import { FormValidatorMinImgDimensions } from './validators/min_img_dimensions';
+import { FormValidatorMaxImgDimensions } from './validators/max_img_dimensions';
+import { FormValidatorAccept } from './validators/accept';
 
 Vue.use( VeeValidate );
 
@@ -27,6 +35,14 @@ export class AppForm extends Vue
 		if ( !AppForm.hasAddedValidators ) {
 			this.$validator.extend( 'pattern', FormValidatorPattern );
 			this.$validator.extend( 'availability', FormValidatorAvailability );
+			this.$validator.extend( 'filesize', FormValidatorFilesize );
+			this.$validator.extend( 'accept', FormValidatorAccept );
+			this.$validator.extend( 'img_ratio', FormValidatorImgRatio );
+			this.$validator.extend( 'min_img_ratio', FormValidatorMinImgRatio );
+			this.$validator.extend( 'max_img_ratio', FormValidatorMaxImgRatio );
+			this.$validator.extend( 'img_dimensions', FormValidatorImgDimensions );
+			this.$validator.extend( 'min_img_dimensions', FormValidatorMinImgDimensions );
+			this.$validator.extend( 'max_img_dimensions', FormValidatorMaxImgDimensions );
 			AppForm.hasAddedValidators = true;
 		}
 	}

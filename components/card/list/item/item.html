@@ -1,0 +1,24 @@
+<div
+	class="card-list-item"
+	:class="{ active: isActive }"
+	>
+	<app-card
+		:is-expandable="isExpandable"
+		:is-expanded="isActive"
+		:is-draggable="isDraggable"
+		@click.native="onClick"
+		>
+		<div class="card-drag-handle" v-if="isDraggable">
+			<app-jolticon icon="arrows-v" />
+		</div>
+		<slot />
+	</app-card>
+
+	<div class="card-list-item-body">
+		<app-expand :when="isActive">
+			<div class="well fill-lightest">
+				<slot name="body" />
+			</div>
+		</app-expand>
+	</div>
+</div>

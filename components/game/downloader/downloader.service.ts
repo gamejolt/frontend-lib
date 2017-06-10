@@ -1,3 +1,4 @@
+import * as nwGui from 'nw.gui';
 import VueRouter from 'vue-router';
 import { Game } from '../game.model';
 import { GameBuild } from '../build/build.model';
@@ -36,7 +37,7 @@ export class GameDownloader
 
 		// Client needs to download externally.
 		if ( GJ_IS_CLIENT ) {
-			const gui = require( 'nw.gui' );
+			const gui = require( 'nw.gui' ) as typeof nwGui;
 			gui.Shell.openExternal( Environment.baseUrl + router.resolve( {
 				name: 'discover.games.view.download.build',
 				query: {

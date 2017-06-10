@@ -1,0 +1,12 @@
+<select
+	:id="id"
+	:name="group.name"
+	class="form-control"
+	:value="value"
+	@input="onChange( $event.target.value )"
+	v-validate="{ rules: validationRules }"
+	:data-vv-validate-on="validateOn"
+	:data-vv-delay="validateDelay"
+	>
+	<slot />
+</select>

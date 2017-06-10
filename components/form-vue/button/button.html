@@ -1,4 +1,11 @@
 <button class="btn">
 	<app-jolticon v-if="icon" :icon="icon" />
 	<slot />
+	<transition>
+		<app-jolticon
+			v-if="form.base.state.isShowingSuccess"
+			class="form-success-icon"
+			icon="check"
+			/>
+	</transition>
 </button>

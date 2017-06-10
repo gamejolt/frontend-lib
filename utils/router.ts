@@ -163,14 +163,15 @@ export function BeforeRouteEnter( options: BeforeRouteEnterOptions = {} )
 
 			// In the browser, for when the component stays the same but the
 			// route changes. We basically have to duplicate the above.
-			async beforeRouteUpdate( this: Vue, to, _from, next )
-			{
-				EventBus.emit( 'routeChangeBefore', to );
-				this.routeLoading = true;
-				const payload = await getPayload( to, options.cache );
-				await finalizeRoute( to, this, payload );
-				EventBus.emit( 'routeChangeAfter' );
-				next();
+			watch: {
+				$route: async function routeChanged( this: Vue, route: VueRouter.Route )
+				{
+					EventBus.emit( 'routeChangeBefore' );
+					this.routeLoading = true;
+					const payload = await getPayload( route, options.cache );
+					await finalizeRoute( route, this, payload );
+					EventBus.emit( 'routeChangeAfter' );
+				},
 			},
 
 			// This gets called both in the server and the browser.

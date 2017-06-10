@@ -1,0 +1,18 @@
+<span
+	:id="id"
+	role="checkbox"
+	class="toggle"
+	:class="{
+		'toggle-checked': !!value,
+	}"
+	:tabindex="disabled ? -1 : 0"
+	@click="toggle"
+	@keypress.space.prevent="toggle"
+	@keypress.enter.prevent="toggle"
+	>
+	<span class="toggle-inner">
+		<span class="toggle-on">{{ _onLabel }}</span>
+		<span class="toggle-knob"></span>
+		<span class="toggle-off">{{ _offLabel }}</span>
+	</span>
+</span>

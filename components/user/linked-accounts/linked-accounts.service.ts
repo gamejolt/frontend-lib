@@ -1,3 +1,5 @@
+import * as nwGui from 'nw.gui';
+
 import VueRouter from 'vue-router';
 import { Api } from '../../api/api.service';
 import { User } from '../user.model';
@@ -24,7 +26,7 @@ export class UserLinkedAccounts
 		const response = await Api.sendRequest( '/web/auth/' + provider + '?client', {} );
 
 		// Gotta open a browser window for them to complete the sign up/login.
-		const gui = require( 'nw.gui' );
+		const gui = require( 'nw.gui' ) as typeof nwGui;
 		gui.Shell.openExternal( response.redirectLocation );
 
 		// Now redirect them to the page that will continuously check if they
@@ -52,14 +54,14 @@ export class UserLinkedAccounts
 		const response = await Api.sendRequest( '/web/dash/linked-accounts/link/' + provider + '?client', {} );
 
 		// Gotta open a browser window for them to complete the sign up/login.
-		const gui = require( 'nw.gui' );
+		const gui = require( 'nw.gui' ) as typeof nwGui;
 		gui.Shell.openExternal( response.redirectLocation );
 
 		// Now redirect them to the page that will continuously check if they
 		// are linked yet. We pass in the request token returned since this is
 		// what tells us our oauth state.
 		router.push( {
-			name: 'dashboard.account.linked-accounts.linking',
+			name: 'dash.account.linked-accounts.linking',
 			params: { token: response.token },
 		} );
 	}
@@ -107,7 +109,6 @@ export class UserLinkedAccounts
 					{ provider: providerUpper },
 				),
 			);
-			// TODO: Reject promise
 			throw e;
 		}
 	}
