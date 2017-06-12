@@ -9,6 +9,7 @@ export function currency( amount: number, currencyCode = 'USD', fractionDigits =
 	const formatter = new Intl.NumberFormat( undefined, {
 		style: 'currency',
 		currency: currencyCode,
+		minimumFractionDigits: fractionDigits,
 		maximumFractionDigits: fractionDigits,
 	} );
 
