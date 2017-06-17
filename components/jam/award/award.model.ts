@@ -1,18 +1,24 @@
-angular.module('gj.Jam.Award').factory('Jam_Award', function(Model, Api) {
-	function Jam_Award(data) {
-		if (data) {
-			angular.extend(this, data);
-		}
+import { Model } from '../../model/model.service';
+import { Api } from '../../api/api.service';
+
+export class JamAward extends Model {
+	jam_id: number;
+	name: string;
+	description: string;
+	sort: number;
+
+	constructor(data: any = {}) {
+		super(data);
 	}
 
-	Jam_Award.$saveSort = function(jamId, sortedIds) {
+	static $saveSort(jamId: number, sortedIds: number[]) {
 		return Api.sendRequest(
 			'/jams/manage/jams/awards/save-sort/' + jamId,
 			sortedIds
 		);
-	};
+	}
 
-	Jam_Award.prototype.$save = function() {
+	$save() {
 		// Are we adding or saving?
 		if (!this.id) {
 			return this.$_save(
@@ -25,11 +31,11 @@ angular.module('gj.Jam.Award').factory('Jam_Award', function(Model, Api) {
 				'jamAward'
 			);
 		}
-	};
+	}
 
-	Jam_Award.prototype.$remove = function() {
+	$remove() {
 		return this.$_remove('/jams/manage/jams/awards/remove/' + this.id);
-	};
+	}
+}
 
-	return Model.create(Jam_Award);
-});
+Model.create(JamAward);
