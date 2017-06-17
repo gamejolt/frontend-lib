@@ -10,9 +10,6 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 	components: {
 		AppJolticon,
 		AppAuthJoin,
-	}
+	},
 })
-export default class AppAuthModal extends BaseModal
-{
-
-}
+export default class AppAuthModal extends BaseModal {}

@@ -7,32 +7,27 @@ import { Backdrop } from './backdrop.service';
 
 @View
 @Component({})
-export class AppBackdrop extends Vue
-{
+export class AppBackdrop extends Vue {
 	active = false;
 
-	async created()
-	{
+	async created() {
 		await this.$nextTick();
 		this.active = true;
 	}
 
-	remove()
-	{
+	remove() {
 		// This will start a transition.
 		// At the end of the leave transition it will call `_transitionend`.
 		this.active = false;
 	}
 
-	_clicked()
-	{
-		this.$emit( 'clicked' );
+	_clicked() {
+		this.$emit('clicked');
 	}
 
-	_transitionend()
-	{
-		if ( !this.active ) {
-			Backdrop.remove( this );
+	_transitionend() {
+		if (!this.active) {
+			Backdrop.remove(this);
 		}
 	}
 }

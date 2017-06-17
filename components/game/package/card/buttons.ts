@@ -27,13 +27,11 @@ import { AppGamePackageCardMoreOptions } from './more-options';
 		filesize,
 	},
 })
-export class AppGamePackageCardButtons extends Vue
-{
-	@Prop( GamePackage ) package: GamePackage;
-	@Prop( GamePackageCardModel ) card: GamePackageCardModel;
+export class AppGamePackageCardButtons extends Vue {
+	@Prop(GamePackage) package: GamePackage;
+	@Prop(GamePackageCardModel) card: GamePackageCardModel;
 
-	click( build: GameBuild, fromExtraSection = false )
-	{
-		this.$emit( 'click', { build, fromExtraSection } );
+	click(build: GameBuild, fromExtraSection = false) {
+		this.$emit('click', { build, fromExtraSection });
 	}
 }

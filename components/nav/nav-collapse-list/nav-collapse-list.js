@@ -1,3 +1,3 @@
-angular.module( 'gj.Nav.NavCollapseList', [] );
+angular.module('gj.Nav.NavCollapseList', []);
 
-require( './nav-collapse-list-directive' );
+require('./nav-collapse-list-directive');

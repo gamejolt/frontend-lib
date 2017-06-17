@@ -20,11 +20,10 @@ import { Screen } from '../../../screen/screen-service';
 		AppImgResponsive,
 	},
 })
-export class AppMediaBarLightboxItem extends Vue
-{
-	@Prop( Object ) item: any;
-	@Prop( Number ) itemIndex: number;
-	@Prop( Number ) activeIndex: number;
+export class AppMediaBarLightboxItem extends Vue {
+	@Prop(Object) item: any;
+	@Prop(Number) itemIndex: number;
+	@Prop(Number) activeIndex: number;
 
 	lightbox: AppMediaBarLightbox;
 
@@ -37,67 +36,69 @@ export class AppMediaBarLightboxItem extends Vue
 
 	private resize$: Subscription | undefined;
 
-	mounted()
-	{
-		this.lightbox = findVueParent( this, AppMediaBarLightbox ) as AppMediaBarLightbox;
+	mounted() {
+		this.lightbox = findVueParent(
+			this,
+			AppMediaBarLightbox,
+		) as AppMediaBarLightbox;
 		this.calcActive();
 		this.calcDimensions();
 
-		this.resize$ = Screen.resizeChanges.subscribe( () => this.calcDimensions() );
+		this.resize$ = Screen.resizeChanges.subscribe(() => this.calcDimensions());
 	}
 
-	destroyed()
-	{
-		if ( this.resize$ ) {
+	destroyed() {
+		if (this.resize$) {
 			this.resize$.unsubscribe();
 			this.resize$ = undefined;
 		}
 	}
 
-	@Watch( 'activeIndex' )
-	activeIndexChange()
-	{
+	@Watch('activeIndex')
+	activeIndexChange() {
 		this.calcActive();
 	}
 
-	async calcDimensions()
-	{
+	async calcDimensions() {
 		await this.$nextTick();
 
-		this.maxWidth = this.lightbox.maxItemWidth - MediaBarLightboxConfig.itemPadding;
+		this.maxWidth =
+			this.lightbox.maxItemWidth - MediaBarLightboxConfig.itemPadding;
 		this.maxHeight = this.lightbox.maxItemHeight;
 
-		const captionElement = this.$el.getElementsByClassName( 'media-bar-lightbox-item-caption' )[0] as HTMLElement;
-		if ( captionElement ) {
+		const captionElement = this.$el.getElementsByClassName(
+			'media-bar-lightbox-item-caption',
+		)[0] as HTMLElement;
+		if (captionElement) {
 			this.maxHeight -= captionElement.offsetHeight;
 		}
 
-		if ( this.item.media_type === 'image' ) {
-			const dimensions = this.item.media_item.getDimensions( this.maxWidth, this.maxHeight );
+		if (this.item.media_type === 'image') {
+			const dimensions = this.item.media_item.getDimensions(
+				this.maxWidth,
+				this.maxHeight,
+			);
 			this.maxWidth = dimensions.width;
 			this.maxHeight = dimensions.height;
 		}
 	}
 
-	async calcActive()
-	{
+	async calcActive() {
 		this.isActive = this.activeIndex === this.itemIndex;
 		this.isNext = this.activeIndex + 1 === this.itemIndex;
 		this.isPrev = this.activeIndex - 1 === this.itemIndex;
 
-		this.$el.classList.remove( 'active', 'next', 'prev' );
+		this.$el.classList.remove('active', 'next', 'prev');
 
-		if ( this.isActive ) {
-			this.$el.classList.add( 'active' );
-		}
-		else if ( this.isPrev ) {
-			this.$el.classList.add( 'prev' );
-		}
-		else if ( this.isNext ) {
-			this.$el.classList.add( 'next' );
+		if (this.isActive) {
+			this.$el.classList.add('active');
+		} else if (this.isPrev) {
+			this.$el.classList.add('prev');
+		} else if (this.isNext) {
+			this.$el.classList.add('next');
 		}
 
-		if ( this.isActive || this.isNext || this.isPrev ) {
+		if (this.isActive || this.isNext || this.isPrev) {
 			this.calcDimensions();
 		}
 	}

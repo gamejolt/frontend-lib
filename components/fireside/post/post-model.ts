@@ -13,8 +13,7 @@ import { appStore } from '../../../vue/services/app/app-store';
 import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
 
-export class FiresidePost extends Model
-{
+export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';
 	static TYPE_VIDEO = 'video';
@@ -58,129 +57,134 @@ export class FiresidePost extends Model
 	// For uploads.
 	file: any;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.header ) {
-			this.header = new MediaItem( data.header );
+		if (data.header) {
+			this.header = new MediaItem(data.header);
 		}
 
-		if ( data.game ) {
-			this.game = new Game( data.game );
+		if (data.game) {
+			this.game = new Game(data.game);
 		}
 
-		if ( data.tags ) {
-			this.tags = FiresidePostTag.populate( data.tags );
+		if (data.tags) {
+			this.tags = FiresidePostTag.populate(data.tags);
 		}
 
-		if ( data.media ) {
-			this.media = MediaItem.populate( data.media );
+		if (data.media) {
+			this.media = MediaItem.populate(data.media);
 		}
 
-		if ( data.videos ) {
-			this.videos = FiresidePostVideo.populate( data.videos );
+		if (data.videos) {
+			this.videos = FiresidePostVideo.populate(data.videos);
 		}
 
-		if ( data.sketchfabs ) {
-			this.sketchfabs = FiresidePostSketchfab.populate( data.sketchfabs );
+		if (data.sketchfabs) {
+			this.sketchfabs = FiresidePostSketchfab.populate(data.sketchfabs);
 		}
 
-		if ( data.user_like ) {
-			this.user_like = new FiresidePostLike( data.user_like );
+		if (data.user_like) {
+			this.user_like = new FiresidePostLike(data.user_like);
 		}
 
 		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
 
-		Registry.store( 'FiresidePost', this );
+		Registry.store('FiresidePost', this);
 	}
 
-	static pullHashFromUrl( url: string )
-	{
-		return url.substring( url.lastIndexOf( '-' ) + 1 );
+	static pullHashFromUrl(url: string) {
+		return url.substring(url.lastIndexOf('-') + 1);
 	}
 
-	async fetchLikes(): Promise<FiresidePostLike[]>
-	{
-		const response = await Api.sendRequest( `/fireside/posts/likes/${this.id}` );
-		return FiresidePostLike.populate( response.likes );
+	async fetchLikes(): Promise<FiresidePostLike[]> {
+		const response = await Api.sendRequest(`/fireside/posts/likes/${this.id}`);
+		return FiresidePostLike.populate(response.likes);
 	}
 
-	$save()
-	{
-		if ( this.game ) {
+	$save() {
+		if (this.game) {
 			const options = {
-				allowComplexData: [ 'keyGroups' ],
+				allowComplexData: ['keyGroups'],
 				file: this.file,
 			};
 
-			if ( !this.id ) {
-				return this.$_save( `/web/dash/developer/games/devlog/save/${this.game.id}`, 'firesidePost', options );
+			if (!this.id) {
+				return this.$_save(
+					`/web/dash/developer/games/devlog/save/${this.game.id}`,
+					'firesidePost',
+					options,
+				);
+			} else {
+				return this.$_save(
+					`/web/dash/developer/games/devlog/save/${this.game.id}/${this.id}`,
+					'firesidePost',
+					options,
+				);
 			}
-			else {
-				return this.$_save( `/web/dash/developer/games/devlog/save/${this.game.id}/${this.id}`, 'firesidePost', options );
+		} else {
+			if (!this.id) {
+				return this.$_save('/fireside/dash/posts/add', 'firesidePost');
+			} else {
+				return this.$_save(
+					`/fireside/dash/posts/save/${this.id}`,
+					'firesidePost',
+				);
 			}
 		}
-		else {
-			if ( !this.id ) {
-				return this.$_save( '/fireside/dash/posts/add', 'firesidePost' );
-			}
-			else {
-				return this.$_save( `/fireside/dash/posts/save/${this.id}`, 'firesidePost' );
-			}
+	}
+
+	$viewed() {
+		if (!appStore.state.user || this.user.id !== appStore.state.user.id) {
+			HistoryTick.sendBeacon('fireside-post', this.id);
 		}
 	}
 
-	$viewed()
-	{
-		if ( !appStore.state.user || this.user.id !== appStore.state.user.id ) {
-			HistoryTick.sendBeacon( 'fireside-post', this.id );
+	$expanded() {
+		if (!appStore.state.user || this.user.id !== appStore.state.user.id) {
+			HistoryTick.sendBeacon('fireside-post-expand', this.id);
 		}
 	}
 
-	$expanded()
-	{
-		if ( !appStore.state.user || this.user.id !== appStore.state.user.id ) {
-			HistoryTick.sendBeacon( 'fireside-post-expand', this.id );
-		}
+	$clearHeader() {
+		return this.$_save(
+			`/fireside/dash/posts/clear-header/${this.id}`,
+			'firesidePost',
+		);
 	}
 
-	$clearHeader()
-	{
-		return this.$_save( `/fireside/dash/posts/clear-header/${this.id}`, 'firesidePost' );
-	}
-
-	$publish()
-	{
-		if ( this.game ) {
-			return this.$_save( `/web/dash/developer/games/devlog/publish/${this.game.id}/${this.id}`, 'firesidePost' );
+	$publish() {
+		if (this.game) {
+			return this.$_save(
+				`/web/dash/developer/games/devlog/publish/${this.game.id}/${this.id}`,
+				'firesidePost',
+			);
 		}
 
-		throw new Error( 'Must be attached to a game to publish.' );
+		throw new Error('Must be attached to a game to publish.');
 	}
 
-	async remove()
-	{
+	async remove() {
 		const result = await ModalConfirm.show(
-			Translate.$gettext( `Are you sure you want to remove this post?` ),
+			Translate.$gettext(`Are you sure you want to remove this post?`),
 			undefined,
-			'yes'
+			'yes',
 		);
 
-		if ( result ) {
+		if (result) {
 			return this.$remove();
 		}
 	}
 
-	$remove()
-	{
-		if ( this.game ) {
-			return this.$_remove( `/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}` );
-		}
-		else {
-			return this.$_remove( `/fireside/dash/posts/remove/${this.id}` );
+	$remove() {
+		if (this.game) {
+			return this.$_remove(
+				`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`,
+			);
+		} else {
+			return this.$_remove(`/fireside/dash/posts/remove/${this.id}`);
 		}
 	}
 }
 
-Model.create( FiresidePost );
+Model.create(FiresidePost);

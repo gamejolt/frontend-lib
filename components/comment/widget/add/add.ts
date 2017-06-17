@@ -9,24 +9,23 @@ import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markd
 @Component({
 	components: {
 		AppFormControlMarkdown,
-	}
+	},
 })
-export class AppCommentWidgetAdd extends BaseForm<Comment> implements FormOnInit
-{
-	@Prop( String ) resource: string;
-	@Prop( Number ) resourceId: number;
-	@Prop( Number ) parentId?: number;
+export class AppCommentWidgetAdd extends BaseForm<Comment>
+	implements FormOnInit {
+	@Prop(String) resource: string;
+	@Prop(Number) resourceId: number;
+	@Prop(Number) parentId?: number;
 
 	modelClass = Comment;
 	resetOnSubmit = true;
 
-	onInit()
-	{
+	onInit() {
 		this.formModel.comment = '';
 		this.formModel.resource = this.resource;
 		this.formModel.resource_id = this.resourceId;
 
-		if ( this.parentId ) {
+		if (this.parentId) {
 			this.formModel.parent_id = this.parentId;
 		}
 	}

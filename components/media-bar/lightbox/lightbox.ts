@@ -12,9 +12,9 @@ import { AppMediaBarLightboxItem } from './item/item';
 import { getProvider } from '../../../utils/utils';
 import { bootstrapShortkey } from '../../../vue/shortkey';
 
-if ( !GJ_IS_SSR ) {
-	const VueTouch = require( 'vue-touch' );
-	Vue.use( VueTouch );
+if (!GJ_IS_SSR) {
+	const VueTouch = require('vue-touch');
+	Vue.use(VueTouch);
 }
 
 export const MediaBarLightboxConfig = {
@@ -32,11 +32,10 @@ bootstrapShortkey();
 		AppJolticon,
 		AppMediaBarLightboxSlider,
 		AppMediaBarLightboxItem,
-	}
+	},
 })
-export class AppMediaBarLightbox extends Vue
-{
-	@Prop( Object ) mediaBar: AppMediaBar;
+export class AppMediaBarLightbox extends Vue {
+	@Prop(Object) mediaBar: AppMediaBar;
 
 	sliderElem: HTMLElement;
 
@@ -52,95 +51,82 @@ export class AppMediaBarLightbox extends Vue
 
 	private resize$: Subscription | undefined;
 
-	mounted()
-	{
-		this.resize$ = Screen.resizeChanges.subscribe( () =>
-		{
+	mounted() {
+		this.resize$ = Screen.resizeChanges.subscribe(() => {
 			this.calcMaxDimensions();
 			this.refreshSliderPosition();
-		} );
+		});
 	}
 
-	destroyed()
-	{
-		if ( this.resize$ ) {
+	destroyed() {
+		if (this.resize$) {
 			this.resize$.unsubscribe();
 			this.resize$ = undefined;
 		}
 	}
 
-	setSlider( slider: HTMLElement )
-	{
+	setSlider(slider: HTMLElement) {
 		this.sliderElem = slider;
 		this.calcMaxDimensions();
 		this.refreshSliderPosition();
 		this.syncUrl();
 	}
 
-	calcMaxDimensions()
-	{
-		this.maxItemWidth = (Screen.windowWidth * 0.8);
-		this.maxItemHeight = Screen.windowHeight - (MediaBarLightboxConfig.controlsHeight * 2);
+	calcMaxDimensions() {
+		this.maxItemWidth = Screen.windowWidth * 0.8;
+		this.maxItemHeight =
+			Screen.windowHeight - MediaBarLightboxConfig.controlsHeight * 2;
 	}
 
-	goNext()
-	{
+	goNext() {
 		this.mediaBar.goNext();
 		this.refreshSliderPosition();
 		this.syncUrl();
 	}
 
-	goPrev()
-	{
+	goPrev() {
 		this.mediaBar.goPrev();
 		this.refreshSliderPosition();
 		this.syncUrl();
 	}
 
-	close()
-	{
+	close() {
 		this.mediaBar.clearActiveItem();
 		this.syncUrl();
 	}
 
-	syncUrl()
-	{
+	syncUrl() {
 		let hash = '';
 
-		if ( this.mediaBar.activeItem ) {
-			if ( this.mediaBar.activeItem.media_type === 'image' ) {
+		if (this.mediaBar.activeItem) {
+			if (this.mediaBar.activeItem.media_type === 'image') {
 				hash = 'screenshot-';
-			}
-			else if ( this.mediaBar.activeItem.media_type === 'video' ) {
+			} else if (this.mediaBar.activeItem.media_type === 'video') {
 				hash = 'video-';
-			}
-			else if ( this.mediaBar.activeItem.media_type === 'sketchfab' ) {
+			} else if (this.mediaBar.activeItem.media_type === 'sketchfab') {
 				hash = 'sketchfab-';
 			}
 			hash += this.mediaBar.activeItem.id;
-		}
-		else {
+		} else {
 			// TODO: Remove this once angular fixes its business.
 			hash = 'close';
 		}
 
 		// Replace the URL. This way people can link to it by pulling from the browser bar,
 		// but we don't want it to mess up their history navigation after closing.
-		if ( GJ_IS_ANGULAR ) {
-			const $location = getProvider<any>( '$location' );
-			$location.hash( hash ).replace();
+		if (GJ_IS_ANGULAR) {
+			const $location = getProvider<any>('$location');
+			$location.hash(hash).replace();
 		}
 	}
 
-	refreshSliderPosition()
-	{
+	refreshSliderPosition() {
 		const padding = Screen.windowWidth * 0.1;
 
 		let newOffset: number;
-		if ( this.mediaBar.activeIndex === 0 ) {
+		if (this.mediaBar.activeIndex === 0) {
 			newOffset = padding;
-		}
-		else {
+		} else {
 			newOffset = -(this.maxItemWidth * this.mediaBar.activeIndex! - padding);
 		}
 
@@ -148,93 +134,96 @@ export class AppMediaBarLightbox extends Vue
 		this.currentSliderOffset = newOffset;
 	}
 
-	panStart()
-	{
+	panStart() {
 		this.isDragging = true;
 
-		this.activeElem = this.$el.getElementsByClassName( 'active' )[0] as HTMLElement;
-		this.nextElem = this.$el.getElementsByClassName( 'next' )[0] as HTMLElement;
-		this.prevElem = this.$el.getElementsByClassName( 'prev' )[0] as HTMLElement;
+		this.activeElem = this.$el.getElementsByClassName(
+			'active',
+		)[0] as HTMLElement;
+		this.nextElem = this.$el.getElementsByClassName('next')[0] as HTMLElement;
+		this.prevElem = this.$el.getElementsByClassName('prev')[0] as HTMLElement;
 
-		this.$el.classList.add( 'dragging' );
+		this.$el.classList.add('dragging');
 	}
 
-	pan( event: HammerInput )
-	{
-		if ( !this.waitingForFrame ) {
+	pan(event: HammerInput) {
+		if (!this.waitingForFrame) {
 			this.waitingForFrame = true;
-			window.requestAnimationFrame( () => this.panTick( event ) );
+			window.requestAnimationFrame(() => this.panTick(event));
 		}
 	}
 
-	panTick( event: HammerInput )
-	{
+	panTick(event: HammerInput) {
 		this.waitingForFrame = false;
 
 		// In case the animation frame was retrieved after we stopped dragging.
-		if ( !this.isDragging ) {
+		if (!this.isDragging) {
 			return;
 		}
 
-		this.sliderElem.style.transform = `translate3d( ${this.currentSliderOffset + event.deltaX}px, 0, 0 )`;
+		this.sliderElem.style.transform = `translate3d( ${this.currentSliderOffset +
+			event.deltaX}px, 0, 0 )`;
 
-		const slidePercent = Math.abs( event.deltaX ) / (Screen.windowWidth * 0.8);
-		const opacity = MediaBarLightboxConfig.opacityStart + (slidePercent * (1 - MediaBarLightboxConfig.opacityStart));
-		const scale = MediaBarLightboxConfig.scaleStart + (slidePercent * (1 - MediaBarLightboxConfig.scaleStart));
+		const slidePercent = Math.abs(event.deltaX) / (Screen.windowWidth * 0.8);
+		const opacity =
+			MediaBarLightboxConfig.opacityStart +
+			slidePercent * (1 - MediaBarLightboxConfig.opacityStart);
+		const scale =
+			MediaBarLightboxConfig.scaleStart +
+			slidePercent * (1 - MediaBarLightboxConfig.scaleStart);
 
-		if ( this.nextElem ) {
+		if (this.nextElem) {
 			this.nextElem.style.opacity = opacity + '';
 			this.nextElem.style.transform = `scale( ${scale}, ${scale} )`;
 		}
 
-		if ( this.prevElem ) {
+		if (this.prevElem) {
 			this.prevElem.style.opacity = opacity + '';
 			this.prevElem.style.transform = `scale( ${scale}, ${scale} )`;
 		}
 
 		// Do the inverse of what we do with the adjacent siblings.
-		if ( this.activeElem ) {
-			const scaleX = (1 + MediaBarLightboxConfig.scaleStart) - scale;
-			const scaleY = (1 + MediaBarLightboxConfig.scaleStart) - scale;
-			this.activeElem.style.opacity = ((1 + MediaBarLightboxConfig.opacityStart) - opacity) + '';
+		if (this.activeElem) {
+			const scaleX = 1 + MediaBarLightboxConfig.scaleStart - scale;
+			const scaleY = 1 + MediaBarLightboxConfig.scaleStart - scale;
+			this.activeElem.style.opacity =
+				1 + MediaBarLightboxConfig.opacityStart - opacity + '';
 			this.activeElem.style.transform = `scale( ${scaleX}, ${scaleY} )`;
 		}
 	}
 
-	panEnd( event: HammerInput )
-	{
+	panEnd(event: HammerInput) {
 		this.isDragging = false;
 
-		this.$el.classList.remove( 'dragging' );
+		this.$el.classList.remove('dragging');
 
 		this.activeElem!.style.opacity = '';
-		if ( this.prevElem ) {
+		if (this.prevElem) {
 			this.prevElem.style.opacity = '';
 		}
 
-		if ( this.nextElem ) {
+		if (this.nextElem) {
 			this.nextElem.style.opacity = '';
 		}
 
 		this.activeElem!.style.transform = '';
-		if ( this.prevElem ) {
+		if (this.prevElem) {
 			this.prevElem.style.transform = '';
 		}
 
-		if ( this.nextElem ) {
+		if (this.nextElem) {
 			this.nextElem.style.transform = '';
 		}
 
 		// Make sure we moved at a high enough velocity and distance to register the "swipe".
 		const velocity = event.velocityX;
-		if ( Math.abs( velocity ) > 0.65 && event.distance > 10 ) {
-			if ( velocity < 0 ) {
+		if (Math.abs(velocity) > 0.65 && event.distance > 10) {
+			if (velocity < 0) {
 				this.goNext();
-				Analytics.trackEvent( 'media-bar', 'swiped-next' );
-			}
-			else {
+				Analytics.trackEvent('media-bar', 'swiped-next');
+			} else {
 				this.goPrev();
-				Analytics.trackEvent( 'media-bar', 'swiped-prev' );
+				Analytics.trackEvent('media-bar', 'swiped-prev');
 			}
 			return;
 		}

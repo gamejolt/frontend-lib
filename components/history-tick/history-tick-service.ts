@@ -3,15 +3,13 @@ import { Environment } from '../environment/environment.service';
 import { Device } from '../device/device.service';
 import { Referrer } from '../referrer/referrer.service';
 
-export interface BeaconOptions
-{
+export interface BeaconOptions {
 	sourceResource?: string;
 	sourceResourceId?: number;
 	key?: string;
 }
 
-export class HistoryTick
-{
+export class HistoryTick {
 	private static _sources: { [key: string]: string | undefined } = {};
 
 	/**
@@ -24,80 +22,87 @@ export class HistoryTick
 	 * If you get to this resource through different means we'll still just
 	 * track the initial way of getting there.
 	 */
-	static trackSource( resource: string, resourceId: number )
-	{
+	static trackSource(resource: string, resourceId: number) {
 		// Look specifically for undefined and not just null.
 		// There may have been a null referrer if we got here through a direct page hit.
-		if ( typeof this._sources[ resource + ':' + resourceId ] === 'undefined' ) {
-			this._sources[ resource + ':' + resourceId ] = Referrer.get();
+		if (typeof this._sources[resource + ':' + resourceId] === 'undefined') {
+			this._sources[resource + ':' + resourceId] = Referrer.get();
 		}
 	}
 
-	static getSource( resource: string, resourceId: number )
-	{
-		return this._sources[ resource + ':' + resourceId ];
+	static getSource(resource: string, resourceId: number) {
+		return this._sources[resource + ':' + resourceId];
 	}
 
-	static sendBeacon( type: string, resourceId: number, options: BeaconOptions = {} )
-	{
-		if ( Environment.isPrerender ) {
+	static sendBeacon(
+		type: string,
+		resourceId: number,
+		options: BeaconOptions = {},
+	) {
+		if (Environment.isPrerender) {
 			return;
 		}
 
-		return new Promise( ( resolve ) =>
-		{
+		return new Promise(resolve => {
 			const queryParams: string[] = [];
 
 			// Cache busting.
-			queryParams.push( 'cb=' + Date.now() );
+			queryParams.push('cb=' + Date.now());
 
 			// Device info.
-			queryParams.push( 'os=' + Device.os() );
+			queryParams.push('os=' + Device.os());
 			const arch = Device.arch();
-			if ( arch ) {
-				queryParams.push( 'arch=' + arch );
+			if (arch) {
+				queryParams.push('arch=' + arch);
 			}
 
 			// Source/referrer.
-			if ( options.sourceResource && options.sourceResourceId ) {
-				const source = this.getSource( options.sourceResource, options.sourceResourceId );
-				if ( source ) {
-					queryParams.push( 'source=' + source );
+			if (options.sourceResource && options.sourceResourceId) {
+				const source = this.getSource(
+					options.sourceResource,
+					options.sourceResourceId,
+				);
+				if (source) {
+					queryParams.push('source=' + source);
 				}
 
-				const ref = PartnerReferral.getReferrer( options.sourceResource, options.sourceResourceId );
-				if ( ref ) {
-					queryParams.push( 'ref=' + ref );
+				const ref = PartnerReferral.getReferrer(
+					options.sourceResource,
+					options.sourceResourceId,
+				);
+				if (ref) {
+					queryParams.push('ref=' + ref);
 				}
 			}
 
 			// Key.
-			if ( options.key ) {
-				queryParams.push( 'key=' + options.key );
+			if (options.key) {
+				queryParams.push('key=' + options.key);
 			}
 
 			// This is enough to send the beacon.
 			// No need to add it to the page.
-			const img = window.document.createElement( 'img' );
+			const img = window.document.createElement('img');
 			img.width = 1;
 			img.height = 1;
-			img.src = `${Environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join( '&' )}`;
+			img.src = `${Environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join(
+				'&',
+			)}`;
 
 			// Always resolve.
-			img.onload = img.onerror = () =>
-			{
+			img.onload = img.onerror = () => {
 				delete img.onload;
 				delete img.onerror;
 				resolve();
 			};
 
-			if ( Environment.env === 'development' ) {
-				console.log( 'Tracking history tick.', {
+			if (Environment.env === 'development') {
+				console.log('Tracking history tick.', {
 					type: type,
 					resourceId: resourceId,
-					queryString: queryParams.join( '&' ),
-				} );
+					queryString: queryParams.join('&'),
+				});
 			}
-		} );
+		});
 	}
 }

@@ -9,7 +9,6 @@ import { AppModal } from './modal';
 		AppModal,
 	},
 })
-export class BaseModal extends Vue
-{
-	@Prop( Modal ) modal: Modal;
+export class BaseModal extends Vue {
+	@Prop(Modal) modal: Modal;
 }

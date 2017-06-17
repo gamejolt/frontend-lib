@@ -5,8 +5,7 @@ import { Api } from '../../api/api.service';
 import { GameRelease } from '../release/release.model';
 import { Sellable } from '../../sellable/sellable.model';
 
-export class GamePackage extends Model
-{
+export class GamePackage extends Model {
 	static readonly STATUS_HIDDEN = 'hidden';
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_REMOVED = 'removed';
@@ -35,38 +34,52 @@ export class GamePackage extends Model
 	_builds?: GameBuild[];
 	_sellable?: Sellable;
 
-	static $saveSort( gameId: number, packagesSort: any )
-	{
-		return Api.sendRequest( '/web/dash/developer/games/packages/save-sort/' + gameId, packagesSort );
+	static $saveSort(gameId: number, packagesSort: any) {
+		return Api.sendRequest(
+			'/web/dash/developer/games/packages/save-sort/' + gameId,
+			packagesSort,
+		);
 	}
 
-	shouldShowNamePrice()
-	{
-		return this._sellable
-			&& this._sellable.type === 'pwyw'
-			&& !this._sellable.is_owned;
+	shouldShowNamePrice() {
+		return (
+			this._sellable &&
+			this._sellable.type === 'pwyw' &&
+			!this._sellable.is_owned
+		);
 	}
 
-	$save()
-	{
-		if ( !this.id ) {
-			return this.$_save( '/web/dash/developer/games/packages/save/' + this.game_id, 'gamePackage' );
+	$save() {
+		if (!this.id) {
+			return this.$_save(
+				'/web/dash/developer/games/packages/save/' + this.game_id,
+				'gamePackage',
+			);
+		} else {
+			return this.$_save(
+				'/web/dash/developer/games/packages/save/' +
+					this.game_id +
+					'/' +
+					this.id,
+				'gamePackage',
+			);
 		}
-		else {
-			return this.$_save( '/web/dash/developer/games/packages/save/' + this.game_id + '/' + this.id, 'gamePackage' );
-		}
 	}
 
-	async $remove( game: Game )
-	{
-		const response = await this.$_remove( '/web/dash/developer/games/packages/remove/' + this.game_id + '/' + this.id );
+	async $remove(game: Game) {
+		const response = await this.$_remove(
+			'/web/dash/developer/games/packages/remove/' +
+				this.game_id +
+				'/' +
+				this.id,
+		);
 
-		if ( game && response.game ) {
-			game.assign( response.game );
+		if (game && response.game) {
+			game.assign(response.game);
 		}
 
 		return response;
 	}
 }
 
-Model.create( GamePackage );
+Model.create(GamePackage);

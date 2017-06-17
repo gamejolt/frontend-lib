@@ -16,39 +16,33 @@ import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 		AppJolticon,
 	},
 })
-export class AppCardListItem extends Vue
-{
+export class AppCardListItem extends Vue {
 	@Prop() item: any;
 
 	list: AppCardList = null as any;
 
-	get isActive()
-	{
+	get isActive() {
 		return this.list.activeItem === this.item;
 	}
 
-	get isExpandable()
-	{
+	get isExpandable() {
 		return !!this.$slots.body;
 	}
 
-	get isDraggable()
-	{
+	get isDraggable() {
 		return this.list.isDraggable;
 	}
 
-	created()
-	{
-		this.list = findVueParent( this, AppCardList ) as AppCardList;
-		if ( !this.list ) {
-			throw new Error( `Couldn't find parent card.` );
+	created() {
+		this.list = findVueParent(this, AppCardList) as AppCardList;
+		if (!this.list) {
+			throw new Error(`Couldn't find parent card.`);
 		}
 	}
 
-	onClick()
-	{
-		if ( this.isExpandable ) {
-			this.list.activate( this.isActive ? null : this.item );
+	onClick() {
+		if (this.isExpandable) {
+			this.list.activate(this.isActive ? null : this.item);
 		}
 	}
 }

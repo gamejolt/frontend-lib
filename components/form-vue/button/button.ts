@@ -12,14 +12,12 @@ import { findVueParent } from '../../../utils/vue';
 		AppJolticon,
 	},
 })
-export class AppFormButton extends Vue
-{
-	@Prop( String ) icon?: string;
+export class AppFormButton extends Vue {
+	@Prop(String) icon?: string;
 
 	form: AppForm;
 
-	created()
-	{
-		this.form = findVueParent( this, AppForm ) as AppForm;
+	created() {
+		this.form = findVueParent(this, AppForm) as AppForm;
 	}
 }

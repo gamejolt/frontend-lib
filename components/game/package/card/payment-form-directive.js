@@ -1,333 +1,352 @@
-angular.module( 'gj.Game.Package.Card' ).directive( 'gjGamePackageCardPaymentForm', function( $window, $state, App, Screen, Form, Environment, Api, Geo, Sellable, Order_Payment, Growls, Device, HistoryTick, gjCurrencyFilter, gettextCatalog )
-{
-	var form = new Form( {
-		template: require( './payment-form.html' ),
-	} );
+angular
+	.module('gj.Game.Package.Card')
+	.directive('gjGamePackageCardPaymentForm', function(
+		$window,
+		$state,
+		App,
+		Screen,
+		Form,
+		Environment,
+		Api,
+		Geo,
+		Sellable,
+		Order_Payment,
+		Growls,
+		Device,
+		HistoryTick,
+		gjCurrencyFilter,
+		gettextCatalog,
+	) {
+		var form = new Form({
+			template: require('./payment-form.html'),
+		});
 
-	form.scope.game = '=';
-	form.scope.package = '=';
-	form.scope.sellable = '=';
-	form.scope.pricing = '=';
+		form.scope.game = '=';
+		form.scope.package = '=';
+		form.scope.sellable = '=';
+		form.scope.pricing = '=';
 
-	form.scope.partnerReferredKey = '=?';
-	form.scope.partnerReferredBy = '=?';
-	form.scope.partnerNoCut = '=?';
+		form.scope.partnerReferredKey = '=?';
+		form.scope.partnerReferredBy = '=?';
+		form.scope.partnerNoCut = '=?';
 
-	form.scope.onBought = '&';
+		form.scope.onBought = '&';
 
-	form.onInit = function( scope )
-	{
-		scope.$state = $state;
-		scope.Screen = Screen;
-		scope.App = App;
-		scope.gjCurrencyFilter = gjCurrencyFilter;
+		form.onInit = function(scope) {
+			scope.$state = $state;
+			scope.Screen = Screen;
+			scope.App = App;
+			scope.gjCurrencyFilter = gjCurrencyFilter;
 
-		scope.formState.isLoaded = false;
-		scope.formState.isLoadingMethods = true;
-		scope.formState.checkoutType = 'cc-stripe';
-		scope.formState.checkoutStep = 'primary';
+			scope.formState.isLoaded = false;
+			scope.formState.isLoadingMethods = true;
+			scope.formState.checkoutType = 'cc-stripe';
+			scope.formState.checkoutStep = 'primary';
 
-		scope.formModel.amount = scope.pricing.amount ? scope.pricing.amount / 100 : null;
-		scope.formModel.country = 'us';
+			scope.formModel.amount = scope.pricing.amount
+				? scope.pricing.amount / 100
+				: null;
+			scope.formModel.country = 'us';
 
-		scope.cards = [];
-		scope.cardsTax = {}
-		scope.addresses = [];
-		scope.walletBalance = 0;
-		scope.walletTax = 0;
+			scope.cards = [];
+			scope.cardsTax = {};
+			scope.addresses = [];
+			scope.walletBalance = 0;
+			scope.walletTax = 0;
 
-		scope.addMoney = addMoney;
-		scope.collectAddress = collectAddress;
-		scope.checkoutCard = checkoutCard;
-		scope.checkoutPaypal = checkoutPaypal;
-		scope.startOver = startOver;
-		scope.checkoutSavedCard = checkoutSavedCard;
-		scope.checkoutWallet = checkoutWallet;
-		scope.hasSufficientWalletFunds = hasSufficientWalletFunds;
+			scope.addMoney = addMoney;
+			scope.collectAddress = collectAddress;
+			scope.checkoutCard = checkoutCard;
+			scope.checkoutPaypal = checkoutPaypal;
+			scope.startOver = startOver;
+			scope.checkoutSavedCard = checkoutSavedCard;
+			scope.checkoutWallet = checkoutWallet;
+			scope.hasSufficientWalletFunds = hasSufficientWalletFunds;
 
-		load();
+			load();
 
-		scope.$watch( 'formModel.country', function( country )
-		{
-			scope.formState.regions = Geo.getRegions( country );
-			if ( scope.formState.regions ) {
-				scope.formModel.region = scope.formState.regions[0].code;  // Default to first.
-			}
-			else {
-				scope.formModel.region = '';
-			}
-		} );
+			scope.$watch('formModel.country', function(country) {
+				scope.formState.regions = Geo.getRegions(country);
+				if (scope.formState.regions) {
+					scope.formModel.region = scope.formState.regions[0].code; // Default to first.
+				} else {
+					scope.formModel.region = '';
+				}
+			});
 
-		// Tax changes when amount changes.
-		// Gotta repull all methods to get new tax info.
-		var debouncedLoad = _.debounce( load, 1000 );
-		scope.$watch( 'formModel.amount', function( newVal, oldVal )
-		{
-			if ( newVal != oldVal ) {
-				scope.formState.isLoadingMethods = true;
-				debouncedLoad();
-			}
-		} );
+			// Tax changes when amount changes.
+			// Gotta repull all methods to get new tax info.
+			var debouncedLoad = _.debounce(load, 1000);
+			scope.$watch('formModel.amount', function(newVal, oldVal) {
+				if (newVal != oldVal) {
+					scope.formState.isLoadingMethods = true;
+					debouncedLoad();
+				}
+			});
 
-		scope.$watchGroup( [ 'formModel.country', 'formModel.region' ], getAddressTax );
+			scope.$watchGroup(
+				['formModel.country', 'formModel.region'],
+				getAddressTax,
+			);
 
-		function load()
-		{
-			Api.sendRequest( '/web/checkout/methods?amount=' + (scope.formModel.amount * 100), null, { detach: true } )
-				.then( function( response )
-				{
+			function load() {
+				Api.sendRequest(
+					'/web/checkout/methods?amount=' + scope.formModel.amount * 100,
+					null,
+					{ detach: true },
+				).then(function(response) {
 					scope.formState.isLoadingMethods = false;
 					scope.formState.isLoaded = true;
 					scope.minOrderAmount = response.minOrderAmount || 50;
 
-					if ( response && response.cards && response.cards.length ) {
+					if (response && response.cards && response.cards.length) {
 						scope.cards = response.cards;
-						scope.cardsTax = _.indexBy( response.cardsTax, 'id' );
+						scope.cardsTax = _.indexBy(response.cardsTax, 'id');
 					}
 
-					if ( response && response.billingAddresses && response.billingAddresses.length ) {
+					if (
+						response &&
+						response.billingAddresses &&
+						response.billingAddresses.length
+					) {
 						scope.addresses = response.billingAddresses;
 					}
 
-					if ( response && response.walletBalance && response.walletBalance > 0 ) {
+					if (
+						response &&
+						response.walletBalance &&
+						response.walletBalance > 0
+					) {
 						scope.walletBalance = response.walletBalance;
 						scope.walletTax = response.walletTax;
 					}
-				} );
-		}
-
-		function addMoney( add )
-		{
-			amount = scope.formModel.amount;
-			if ( !amount ) {
-				amount = add;
+				});
 			}
-			// Don't add if the form field is invalid.
-			// It will blank out the total amount.
-			else if ( scope.paymentForm.amount.$valid ) {
-				amount += add;
-				amount = parseFloat( amount.toFixed( 2 ) );
-			}
-			scope.formModel.amount = amount;
-		}
 
-		function hasSufficientWalletFunds()
-		{
-			if ( !scope.formModel.amount || scope.formModel.amount <= 0 ) {
+			function addMoney(add) {
+				amount = scope.formModel.amount;
+				if (!amount) {
+					amount = add;
+				} else if (scope.paymentForm.amount.$valid) {
+					// Don't add if the form field is invalid.
+					// It will blank out the total amount.
+					amount += add;
+					amount = parseFloat(amount.toFixed(2));
+				}
+				scope.formModel.amount = amount;
+			}
+
+			function hasSufficientWalletFunds() {
+				if (!scope.formModel.amount || scope.formModel.amount <= 0) {
+					return true;
+				}
+
+				// When we're filling in the address, pull that tax.
+				// Otherwise, when we're on the main page, check the wallet tax amount for their saved address.
+				var taxAmount = scope.formState.checkoutStep == 'address'
+					? scope.formState.addressTaxAmount
+					: scope.walletTax;
+				var sellableAmount = scope.pricing.amount;
+				var currentAmount = scope.formModel.amount * 100; // The formModel amount is a decimal.
+
+				// Paid games have to be more than the amount of the game base price.
+				if (
+					scope.sellable.type == Sellable.TYPE_PAID &&
+					scope.walletBalance < sellableAmount + taxAmount
+				) {
+					return false;
+				}
+
+				// All games have to be more than they've entered into the box.
+				if (scope.walletBalance < currentAmount + taxAmount) {
+					return false;
+				}
+
 				return true;
 			}
 
-			// When we're filling in the address, pull that tax.
-			// Otherwise, when we're on the main page, check the wallet tax amount for their saved address.
-			var taxAmount = scope.formState.checkoutStep == 'address' ? scope.formState.addressTaxAmount : scope.walletTax;
-			var sellableAmount = scope.pricing.amount;
-			var currentAmount = scope.formModel.amount * 100; // The formModel amount is a decimal.
+			function collectAddress(checkoutType) {
+				if (scope.addresses.length) {
+					if (checkoutType == 'paypal') {
+						checkoutPaypal();
+						return;
+					} else if (checkoutType == 'wallet') {
+						checkoutWallet();
+						return;
+					}
+				}
 
-			// Paid games have to be more than the amount of the game base price.
-			if ( scope.sellable.type == Sellable.TYPE_PAID && scope.walletBalance < sellableAmount + taxAmount ) {
-				return false;
+				scope.formState.checkoutStep = 'address';
+				scope.formState.checkoutType = checkoutType;
+				scope.formState.countries = Geo.getCountries();
+				scope.formState.calculatedAddressTax = false;
+				scope.formState.addressTaxAmount = 0;
 			}
 
-			// All games have to be more than they've entered into the box.
-			if ( scope.walletBalance < currentAmount + taxAmount ) {
-				return false;
-			}
-
-			return true;
-		}
-
-		function collectAddress( checkoutType )
-		{
-			if ( scope.addresses.length ) {
-				if ( checkoutType == 'paypal' ) {
-					checkoutPaypal();
+			function getAddressTax() {
+				scope.formState.calculatedAddressTax = false;
+				if (!scope.formModel.country || !scope.formModel.region) {
 					return;
 				}
-				else if ( checkoutType == 'wallet' ) {
-					checkoutWallet();
-					return;
-				}
-			}
 
-			scope.formState.checkoutStep = 'address';
-			scope.formState.checkoutType = checkoutType;
-			scope.formState.countries = Geo.getCountries();
-			scope.formState.calculatedAddressTax = false;
-			scope.formState.addressTaxAmount = 0;
-		}
+				var data = {
+					amount: scope.formModel.amount * 100,
+					country: scope.formModel.country,
+					region: scope.formModel.region,
+				};
 
-		function getAddressTax()
-		{
-			scope.formState.calculatedAddressTax = false;
-			if ( !scope.formModel.country || !scope.formModel.region ) {
-				return;
-			}
-
-			var data = {
-				amount: scope.formModel.amount * 100,
-				country: scope.formModel.country,
-				region: scope.formModel.region,
-			};
-
-			return Api.sendRequest( '/web/checkout/taxes', data, { detach: true } )
-				.then( function( response )
-				{
+				return Api.sendRequest('/web/checkout/taxes', data, {
+					detach: true,
+				}).then(function(response) {
 					scope.formState.calculatedAddressTax = true;
 					scope.formState.addressTaxAmount = response.amount;
-				} );
-		}
-
-		function checkoutCard()
-		{
-			scope.formState.checkoutType = 'cc-stripe';
-			scope.onSubmit();
-		}
-
-		function checkoutPaypal()
-		{
-			scope.formState.checkoutType = 'paypal';
-			scope.onSubmit();
-		}
-
-		function startOver()
-		{
-			scope.formState.checkoutStep = 'primary';
-		}
-
-		function checkoutSavedCard( card )
-		{
-			var data = {
-				payment_method: 'cc-stripe',
-				sellable_id: scope.sellable.id,
-				pricing_id: scope.pricing.id,
-				amount: scope.formModel.amount * 100,
-			};
-
-			return _doCheckout( data, { payment_source: card.id } );
-		}
-
-		function checkoutWallet()
-		{
-			var data = {
-				payment_method: 'wallet',
-				sellable_id: scope.sellable.id,
-				pricing_id: scope.pricing.id,
-				amount: scope.formModel.amount * 100,
-			};
-
-			if ( scope.addresses.length ) {
-				data.address_id = scope.addresses[0].id;
-			}
-			else {
-				data.country = scope.formModel.country;
-				data.street1 = scope.formModel.street1;
-				data.region = scope.formModel.region;
-				data.postcode = scope.formModel.postcode;
+				});
 			}
 
-			return _doCheckout( data, { wallet: true } );
-		}
+			function checkoutCard() {
+				scope.formState.checkoutType = 'cc-stripe';
+				scope.onSubmit();
+			}
 
-		/**
+			function checkoutPaypal() {
+				scope.formState.checkoutType = 'paypal';
+				scope.onSubmit();
+			}
+
+			function startOver() {
+				scope.formState.checkoutStep = 'primary';
+			}
+
+			function checkoutSavedCard(card) {
+				var data = {
+					payment_method: 'cc-stripe',
+					sellable_id: scope.sellable.id,
+					pricing_id: scope.pricing.id,
+					amount: scope.formModel.amount * 100,
+				};
+
+				return _doCheckout(data, { payment_source: card.id });
+			}
+
+			function checkoutWallet() {
+				var data = {
+					payment_method: 'wallet',
+					sellable_id: scope.sellable.id,
+					pricing_id: scope.pricing.id,
+					amount: scope.formModel.amount * 100,
+				};
+
+				if (scope.addresses.length) {
+					data.address_id = scope.addresses[0].id;
+				} else {
+					data.country = scope.formModel.country;
+					data.street1 = scope.formModel.street1;
+					data.region = scope.formModel.region;
+					data.postcode = scope.formModel.postcode;
+				}
+
+				return _doCheckout(data, { wallet: true });
+			}
+
+			/**
 		 * This is for checkouts outside the normal form submit flow.
 		 * We need to manually handle processing and errors.
 		 */
-		function _doCheckout( setupData, chargeData )
-		{
-			if ( scope.formState.isLoadingMethods || scope.formState.isProcessing ) {
-				return;
+			function _doCheckout(setupData, chargeData) {
+				if (scope.formState.isLoadingMethods || scope.formState.isProcessing) {
+					return;
+				}
+
+				scope.formState.isProcessing = true;
+
+				setupData['source'] =
+					HistoryTick.getSource('Game', scope.package.game_id) || null;
+				setupData['os'] = Device.os();
+				setupData['arch'] = Device.arch();
+				setupData['ref'] = scope.partnerReferredKey || null;
+
+				return Api.sendRequest('/web/checkout/setup-order', setupData)
+					.then(function(response) {
+						if (response.success === false) {
+							return $q.reject();
+						}
+
+						return Api.sendRequest(
+							'/web/checkout/charge/' + response.cart.id,
+							chargeData,
+						);
+					})
+					.then(function(response) {
+						if (response.success === false) {
+							return $q.reject();
+						}
+
+						// Notify that we've bought this package.
+						scope.onBought({});
+					})
+					.catch(function() {
+						scope.formState.isProcessing = false;
+
+						// This should always succeed, so let's throw a generic message if it fails.
+						Growls.error({
+							sticky: true,
+							message: gettextCatalog.getString(
+								'There was a problem processing your payment method.',
+							),
+						});
+					});
 			}
-
-			scope.formState.isProcessing = true;
-
-			setupData['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
-			setupData['os'] = Device.os();
-			setupData['arch'] = Device.arch();
-			setupData['ref'] = scope.partnerReferredKey || null;
-
-			return Api.sendRequest( '/web/checkout/setup-order', setupData )
-				.then( function( response )
-				{
-					if ( response.success === false ) {
-						return $q.reject();
-					}
-
-					return Api.sendRequest( '/web/checkout/charge/' + response.cart.id, chargeData );
-				} )
-				.then( function( response )
-				{
-					if ( response.success === false ) {
-						return $q.reject();
-					}
-
-					// Notify that we've bought this package.
-					scope.onBought( {} );
-				} )
-				.catch( function()
-				{
-					scope.formState.isProcessing = false;
-
-					// This should always succeed, so let's throw a generic message if it fails.
-					Growls.error( {
-						sticky: true,
-						message: gettextCatalog.getString( 'There was a problem processing your payment method.' ),
-					} );
-				} );
-		}
-	};
-
-	form.onSubmit = function( scope )
-	{
-		var data = {
-			payment_method: scope.formState.checkoutType,
-			sellable_id: scope.sellable.id,
-			pricing_id: scope.pricing.id,
-			amount: scope.formModel.amount * 100,
-
-			country: scope.formModel.country,
-			street1: scope.formModel.street1,
-			region: scope.formModel.region,
-			postcode: scope.formModel.postcode,
 		};
 
-		if ( !App.user ) {
-			data.email_address = scope.formModel.email_address;
-		}
+		form.onSubmit = function(scope) {
+			var data = {
+				payment_method: scope.formState.checkoutType,
+				sellable_id: scope.sellable.id,
+				pricing_id: scope.pricing.id,
+				amount: scope.formModel.amount * 100,
 
-		if ( scope.addresses.length ) {
-			data.address_id = scope.addresses[0].id;
-		}
+				country: scope.formModel.country,
+				street1: scope.formModel.street1,
+				region: scope.formModel.region,
+				postcode: scope.formModel.postcode,
+			};
 
-		data['source'] = HistoryTick.getSource( 'Game', scope.package.game_id ) || null;
-		data['os'] = Device.os();
-		data['arch'] = Device.arch();
-		data['ref'] = scope.partnerReferredKey || null;
+			if (!App.user) {
+				data.email_address = scope.formModel.email_address;
+			}
 
-		return Api.sendRequest( '/web/checkout/setup-order', data )
-			.then( function( response )
-			{
-				if ( response.success !== false ) {
+			if (scope.addresses.length) {
+				data.address_id = scope.addresses[0].id;
+			}
 
-					if ( GJ_IS_CLIENT ) {
+			data['source'] =
+				HistoryTick.getSource('Game', scope.package.game_id) || null;
+			data['os'] = Device.os();
+			data['arch'] = Device.arch();
+			data['ref'] = scope.partnerReferredKey || null;
 
+			return Api.sendRequest('/web/checkout/setup-order', data).then(function(
+				response,
+			) {
+				if (response.success !== false) {
+					if (GJ_IS_CLIENT) {
 						// Our checkout can be done in client.
-						if ( data.payment_method == Order_Payment.METHOD_CC_STRIPE ) {
-							$window.location.href = Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
+						if (data.payment_method == Order_Payment.METHOD_CC_STRIPE) {
+							$window.location.href =
+								Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
+						} else {
+							// Otherwise we have to open in browser.
+							require('nw.gui').Shell.openExternal(response.redirectUrl);
 						}
-						// Otherwise we have to open in browser.
-						else {
-							require( 'nw.gui' ).Shell.openExternal( response.redirectUrl );
-						}
-					}
-					// For site we have to replace the URL completely since we are switching to https.
-					else {
+					} else {
+						// For site we have to replace the URL completely since we are switching to https.
 						$window.location.href = response.redirectUrl;
 					}
 				}
 
 				return response;
-			} );
-	};
+			});
+		};
 
-	return form;
-} );
+		return form;
+	});

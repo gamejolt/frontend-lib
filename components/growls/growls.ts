@@ -10,9 +10,8 @@ import { AppGrowl } from './growl';
 @Component({
 	components: {
 		AppGrowl,
-	}
+	},
 })
-export class AppGrowls extends Vue
-{
-	Growls = makeObservableService( Growls );
+export class AppGrowls extends Vue {
+	Growls = makeObservableService(Growls);
 }

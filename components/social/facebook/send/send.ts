@@ -5,36 +5,28 @@ import '../../social.styl';
 import { FacebookSdk } from '../sdk/sdk.service';
 
 @Component({})
-export class AppSocialFacebookSend extends Vue
-{
-	@Prop( String ) url: string;
+export class AppSocialFacebookSend extends Vue {
+	@Prop(String) url: string;
 
-	render( h: Vue.CreateElement )
-	{
-		return h(
-			'div',
-			{
-				staticClass: 'fb-send',
-				attrs: {
-					'data-href': this.url,
-				},
+	render(h: Vue.CreateElement) {
+		return h('div', {
+			staticClass: 'fb-send',
+			attrs: {
+				'data-href': this.url,
 			},
-		);
+		});
 	}
 
-	mounted()
-	{
+	mounted() {
 		this.init();
 	}
 
-	@Watch( 'url' )
-	changed()
-	{
+	@Watch('url')
+	changed() {
 		this.init();
 	}
 
-	private init()
-	{
+	private init() {
 		FacebookSdk.load();
 	}
 }

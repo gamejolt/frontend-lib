@@ -7,16 +7,14 @@ import { Game } from '../game.model';
 import { GamePackage } from '../package/package.model';
 import { GameRelease } from '../release/release.model';
 
-interface PlatformSupport
-{
+interface PlatformSupport {
 	icon: string;
 	tooltip: string;
 	sort: number;
 	arch?: string;
 }
 
-export class GameBuild extends Model
-{
+export class GameBuild extends Model {
 	static readonly TYPE_DOWNLOADABLE = 'downloadable';
 	static readonly TYPE_HTML = 'html';
 	static readonly TYPE_FLASH = 'flash';
@@ -128,18 +126,18 @@ export class GameBuild extends Model
 	};
 
 	static readonly emulatorInfo: { [k: string]: string } = {
-		[ GameBuild.EMULATOR_GB ]: 'Game Boy',
-		[ GameBuild.EMULATOR_GBC ]: 'Game Boy Color',
-		[ GameBuild.EMULATOR_GBA ]: 'Game Boy Advance',
-		[ GameBuild.EMULATOR_NES ]: 'NES',
-		[ GameBuild.EMULATOR_SNES ]: 'SNES',
-		[ GameBuild.EMULATOR_VBOY ]: 'Virtual Boy',
-		[ GameBuild.EMULATOR_GENESIS ]: 'Genesis/Mega Drive',
-		[ GameBuild.EMULATOR_ATARI2600 ]: 'Atari 2600',
-		[ GameBuild.EMULATOR_ZX ]: 'ZX Spectrum',
-		[ GameBuild.EMULATOR_C64 ]: 'Commodore 64',
-		[ GameBuild.EMULATOR_CPC ]: 'Amstrad CPC',
-		[ GameBuild.EMULATOR_MSX ]: 'MSX',
+		[GameBuild.EMULATOR_GB]: 'Game Boy',
+		[GameBuild.EMULATOR_GBC]: 'Game Boy Color',
+		[GameBuild.EMULATOR_GBA]: 'Game Boy Advance',
+		[GameBuild.EMULATOR_NES]: 'NES',
+		[GameBuild.EMULATOR_SNES]: 'SNES',
+		[GameBuild.EMULATOR_VBOY]: 'Virtual Boy',
+		[GameBuild.EMULATOR_GENESIS]: 'Genesis/Mega Drive',
+		[GameBuild.EMULATOR_ATARI2600]: 'Atari 2600',
+		[GameBuild.EMULATOR_ZX]: 'ZX Spectrum',
+		[GameBuild.EMULATOR_C64]: 'Commodore 64',
+		[GameBuild.EMULATOR_CPC]: 'Amstrad CPC',
+		[GameBuild.EMULATOR_MSX]: 'MSX',
 	};
 
 	primary_file: GameBuildFile;
@@ -176,149 +174,154 @@ export class GameBuild extends Model
 
 	file?: File;
 
-	static pluckOsSupport( build: GameBuild )
-	{
+	static pluckOsSupport(build: GameBuild) {
 		let support = [];
 
 		// We only include the 64-bit versions if the build doesn't have 32bit and 64bit
 		// on the same build. That basically just means it's a universal build.
 
-		if ( build.os_windows ) {
-			support.push( 'windows' );
+		if (build.os_windows) {
+			support.push('windows');
 		}
 
-		if ( build.os_windows_64 && !build.os_windows ) {
-			support.push( 'windows_64' );
+		if (build.os_windows_64 && !build.os_windows) {
+			support.push('windows_64');
 		}
 
-		if ( build.os_mac ) {
-			support.push( 'mac' );
+		if (build.os_mac) {
+			support.push('mac');
 		}
 
-		if ( build.os_mac_64 && !build.os_mac ) {
-			support.push( 'mac_64' );
+		if (build.os_mac_64 && !build.os_mac) {
+			support.push('mac_64');
 		}
 
-		if ( build.os_linux ) {
-			support.push( 'linux' );
+		if (build.os_linux) {
+			support.push('linux');
 		}
 
-		if ( build.os_linux_64 && !build.os_linux ) {
-			support.push( 'linux_64' );
+		if (build.os_linux_64 && !build.os_linux) {
+			support.push('linux_64');
 		}
 
-		if ( build.os_other ) {
-			support.push( 'other' );
+		if (build.os_other) {
+			support.push('other');
 		}
 
 		return support;
 	}
 
-	static checkPlatformSupport( support: string[], type: string )
-	{
-		return support.indexOf( type ) !== -1;
+	static checkPlatformSupport(support: string[], type: string) {
+		return support.indexOf(type) !== -1;
 	}
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.primary_file ) {
-			this.primary_file = new GameBuildFile( data.primary_file );
+		if (data.primary_file) {
+			this.primary_file = new GameBuildFile(data.primary_file);
 		}
 
 		this.params = [];
-		if ( data.params && Array.isArray( data.params ) && data.params.length ) {
-			this.params = GameBuildParam.populate( data.params );
+		if (data.params && Array.isArray(data.params) && data.params.length) {
+			this.params = GameBuildParam.populate(data.params);
 		}
 
-		if ( data.errors && typeof data.errors === 'string' ) {
-			this.errors = data.errors.split( ',' );
+		if (data.errors && typeof data.errors === 'string') {
+			this.errors = data.errors.split(',');
 		}
 	}
 
-	isPlatform( os: string, arch?: string )
-	{
-		if ( os === 'windows' ) {
+	isPlatform(os: string, arch?: string) {
+		if (os === 'windows') {
 			return arch === '64' ? !!this.os_windows_64 : !!this.os_windows;
-		}
-		else if ( os === 'mac' ) {
+		} else if (os === 'mac') {
 			return arch === '64' ? !!this.os_mac_64 : !!this.os_mac;
-		}
-		else if ( os === 'linux' ) {
+		} else if (os === 'linux') {
 			return arch === '64' ? !!this.os_linux_64 : !!this.os_linux;
 		}
 		return false;
 	}
 
-	isBrowserBased()
-	{
-		return GameBuild.browserTypes.indexOf( this.type ) !== -1;
+	isBrowserBased() {
+		return GameBuild.browserTypes.indexOf(this.type) !== -1;
 	}
 
-	isRom()
-	{
+	isRom() {
 		return this.type === GameBuild.TYPE_ROM;
 	}
 
-	hasError( error: string )
-	{
-		return !!this.errors && this.errors.indexOf( error ) !== -1;
+	hasError(error: string) {
+		return !!this.errors && this.errors.indexOf(error) !== -1;
 	}
 
-	getUrl( game: Game, page: string )
-	{
-		if ( page === 'download' ) {
+	getUrl(game: Game, page: string) {
+		if (page === 'download') {
 			return `/games/${game.slug}/${game.id}/download/build/${this.id}`;
 		}
 
 		return undefined;
 	}
 
-	static getDownloadUrl( id: number, options: { key?: string, forceDownload?: boolean } = {} )
-	{
+	static getDownloadUrl(
+		id: number,
+		options: { key?: string; forceDownload?: boolean } = {},
+	) {
 		// This is a game key so you can access games that you have a key for.
 		let data: any = {};
-		if ( options.key ) {
+		if (options.key) {
 			data.key = options.key;
 		}
 
-		if ( options.forceDownload ) {
+		if (options.forceDownload) {
 			data.forceDownload = true;
 		}
 
-		return Api.sendRequest( '/web/discover/games/builds/get-download-url/' + id, data );
+		return Api.sendRequest(
+			'/web/discover/games/builds/get-download-url/' + id,
+			data,
+		);
 	}
 
-	getDownloadUrl( options: { key?: string, forceDownload?: boolean } = {} )
-	{
-		return GameBuild.getDownloadUrl( this.id, options );
+	getDownloadUrl(options: { key?: string; forceDownload?: boolean } = {}) {
+		return GameBuild.getDownloadUrl(this.id, options);
 	}
 
-	$save()
-	{
-		let params = [ this.game_id, this.game_package_id, this.game_release_id ];
-		if ( !this.id ) {
-			return this.$_save( '/web/dash/developer/games/builds/save/' + params.join( '/' ), 'gameBuild', { file: this.file } );
-		}
-		else {
+	$save() {
+		let params = [this.game_id, this.game_package_id, this.game_release_id];
+		if (!this.id) {
+			return this.$_save(
+				'/web/dash/developer/games/builds/save/' + params.join('/'),
+				'gameBuild',
+				{ file: this.file },
+			);
+		} else {
 			// May or may not have an upload file on an edit.
-			params.push( this.id );
-			return this.$_save( '/web/dash/developer/games/builds/save/' + params.join( '/' ), 'gameBuild' );
+			params.push(this.id);
+			return this.$_save(
+				'/web/dash/developer/games/builds/save/' + params.join('/'),
+				'gameBuild',
+			);
 		}
 	}
 
-	async $remove( game: Game )
-	{
-		const params = [ this.game_id, this.game_package_id, this.game_release_id, this.id ];
-		const response = await this.$_remove( '/web/dash/developer/games/builds/remove/' + params.join( '/' ) );
+	async $remove(game: Game) {
+		const params = [
+			this.game_id,
+			this.game_package_id,
+			this.game_release_id,
+			this.id,
+		];
+		const response = await this.$_remove(
+			'/web/dash/developer/games/builds/remove/' + params.join('/'),
+		);
 
-		if ( game && response.game ) {
-			game.assign( response.game );
+		if (game && response.game) {
+			game.assign(response.game);
 		}
 
 		return response;
 	}
 }
 
-Model.create( GameBuild );
+Model.create(GameBuild);

@@ -1,3 +1,3 @@
-angular.module( 'gj.Alert.Dismissable', [] );
+angular.module('gj.Alert.Dismissable', []);
 
-require( './dismissable-directive' );
+require('./dismissable-directive');

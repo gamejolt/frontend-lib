@@ -7,10 +7,8 @@ import { makeComponentProvider } from '../../vue/angular-link';
 @NgModule({
 	declarations: [
 		PopoverTriggerDirective,
-		makeComponentProvider( AppPopover, [ 'focused', 'blurred' ] ),
+		makeComponentProvider(AppPopover, ['focused', 'blurred']),
 	],
-	providers: [
-		{ provide: 'Popover', useFactory: () => Popover },
-	]
+	providers: [{ provide: 'Popover', useFactory: () => Popover }],
 })
-export class PopoverModule { }
+export class PopoverModule {}

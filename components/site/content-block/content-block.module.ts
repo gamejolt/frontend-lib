@@ -6,4 +6,4 @@ import { SiteContentBlock } from './content-block-model';
 		{ provide: 'SiteContentBlock', useFactory: () => SiteContentBlock },
 	],
 })
-export class SiteContentBlockModule { }
+export class SiteContentBlockModule {}

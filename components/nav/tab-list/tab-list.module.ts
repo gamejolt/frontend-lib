@@ -3,8 +3,6 @@ import { makeComponentProvider } from '../../../vue/angular-link';
 import { AppNavTabList } from './tab-list';
 
 @NgModule({
-	declarations: [
-		makeComponentProvider( AppNavTabList ),
-	],
+	declarations: [makeComponentProvider(AppNavTabList)],
 })
-export class NavTabListModule { }
+export class NavTabListModule {}

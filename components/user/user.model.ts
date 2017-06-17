@@ -2,8 +2,7 @@ import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
 import { Registry } from '../registry/registry.service';
 
-export class User extends Model
-{
+export class User extends Model {
 	static readonly TYPE_GAMER = 'User';
 	static readonly TYPE_DEVELOPER = 'Developer';
 
@@ -50,51 +49,43 @@ export class User extends Model
 	fireside_about: string;
 	compiled_fireside_about: string;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( this.type === User.TYPE_GAMER ) {
+		if (this.type === User.TYPE_GAMER) {
 			this.is_gamer = true;
-		}
-		else if ( this.type === User.TYPE_DEVELOPER ) {
+		} else if (this.type === User.TYPE_DEVELOPER) {
 			this.is_developer = true;
 		}
 
-		Registry.store( 'User', this );
+		Registry.store('User', this);
 	}
 
-	static touch()
-	{
-		return Api.sendRequest( '/web/touch' );
+	static touch() {
+		return Api.sendRequest('/web/touch');
 	}
 
-	$save()
-	{
+	$save() {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
-		return this.$_save( '/web/dash/profile/save', 'user' );
+		return this.$_save('/web/dash/profile/save', 'user');
 	}
 
-	$saveEmailPreferences()
-	{
+	$saveEmailPreferences() {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
-		return this.$_save( '/web/dash/email-preferences/save', 'user' );
+		return this.$_save('/web/dash/email-preferences/save', 'user');
 	}
 
-	$saveFireside()
-	{
-		return this.$_save( '/fireside/dash/profile/save', 'user' );
+	$saveFireside() {
+		return this.$_save('/fireside/dash/profile/save', 'user');
 	}
 
-	$saveFiresideSettings()
-	{
-		return this.$_save( '/fireside/dash/settings/save', 'user' );
+	$saveFiresideSettings() {
+		return this.$_save('/fireside/dash/settings/save', 'user');
 	}
 
-	$unlinkAccount( provider: string )
-	{
-		return this.$_save( '/web/dash/linked-accounts/unlink/' + provider, 'user' );
+	$unlinkAccount(provider: string) {
+		return this.$_save('/web/dash/linked-accounts/unlink/' + provider, 'user');
 	}
 }
 
-Model.create( User );
+Model.create(User);

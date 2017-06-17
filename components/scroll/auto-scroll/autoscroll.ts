@@ -16,14 +16,13 @@ import { makeObservableService } from '../../../utils/vue';
 // }
 
 @Component({})
-export class AppAutoscroll extends Vue
-{
+export class AppAutoscroll extends Vue {
 	// private prevAnchor?: AppAutoscrollAnchor;
 	// private states: AutoscrollState[] = [];
 
 	// private height: string | null = null;
 
-	Autoscroll = makeObservableService( Autoscroll );
+	Autoscroll = makeObservableService(Autoscroll);
 
 	// mounted()
 	// {
@@ -51,8 +50,7 @@ export class AppAutoscroll extends Vue
 	// 	// );
 	// }
 
-	render( h: Vue.CreateElement )
-	{
+	render(h: Vue.CreateElement) {
 		return h(
 			'div',
 			{
@@ -60,7 +58,7 @@ export class AppAutoscroll extends Vue
 					height: this.Autoscroll.height,
 				},
 			},
-			this.$slots.default
+			this.$slots.default,
 		);
 	}
 

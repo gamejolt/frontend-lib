@@ -1,12 +1,20 @@
 interface WebpackRequireEnsureCallback {
-	(req: WebpackRequire): void
+	(req: WebpackRequire): void;
 }
 
 interface WebpackRequire {
 	(id: string): any;
 	(paths: string[], callback: (...modules: any[]) => void): void;
-	ensure(ids: string[], callback: WebpackRequireEnsureCallback, chunkName?: string): Promise<void>;
-	context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
+	ensure(
+		ids: string[],
+		callback: WebpackRequireEnsureCallback,
+		chunkName?: string,
+	): Promise<void>;
+	context(
+		directory: string,
+		useSubDirectories?: boolean,
+		regExp?: RegExp,
+	): WebpackContext;
 }
 
 interface WebpackContext extends WebpackRequire {
@@ -14,4 +22,4 @@ interface WebpackContext extends WebpackRequire {
 }
 
 declare var require: WebpackRequire;
-declare function $import( path: string ): Promise<any>;
+declare function $import(path: string): Promise<any>

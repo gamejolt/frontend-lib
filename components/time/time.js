@@ -1,3 +1,3 @@
-angular.module( 'gj.Time', [] );
+angular.module('gj.Time', []);
 
-require( './time-filter' );
+require('./time-filter');

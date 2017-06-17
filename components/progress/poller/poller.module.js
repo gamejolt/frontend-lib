@@ -1,3 +1,3 @@
-angular.module( 'gj.Progress.Poller', [] );
+angular.module('gj.Progress.Poller', []);
 
-require( './poller-directive' );
+require('./poller-directive');

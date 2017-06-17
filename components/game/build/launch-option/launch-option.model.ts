@@ -1,7 +1,6 @@
 import { Model } from '../../../model/model.service';
 
-export class GameBuildLaunchOption extends Model
-{
+export class GameBuildLaunchOption extends Model {
 	static readonly OS_WINDOWS = 'windows';
 	static readonly OS_WINDOWS_64 = 'windows_64';
 	static readonly OS_MAC = 'mac';
@@ -23,4 +22,4 @@ export class GameBuildLaunchOption extends Model
 	executable_path: string;
 }
 
-Model.create( GameBuildLaunchOption );
+Model.create(GameBuildLaunchOption);

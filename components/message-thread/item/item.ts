@@ -14,16 +14,15 @@ import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 		AppUserAvatar,
 		AppTimeAgo,
 		AppJolticon,
-	}
+	},
 })
-export class AppMessageThreadItem extends Vue
-{
-	@Prop( User ) user: User;
-	@Prop( User ) repliedTo?: User;
-	@Prop( Number ) date: number;
-	@Prop( String ) id?: string;
-	@Prop( Boolean ) isActive?: boolean;
-	@Prop( Boolean ) isNew?: boolean;
+export class AppMessageThreadItem extends Vue {
+	@Prop(User) user: User;
+	@Prop(User) repliedTo?: User;
+	@Prop(Number) date: number;
+	@Prop(String) id?: string;
+	@Prop(Boolean) isActive?: boolean;
+	@Prop(Boolean) isNew?: boolean;
 
 	dateFilter = date;
 }

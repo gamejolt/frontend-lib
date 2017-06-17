@@ -24,49 +24,43 @@ import { number } from '../../../../../vue/filters/number';
 		number,
 	},
 })
-export class AppFiresidePostLikeWidget extends Vue
-{
-	@Prop( FiresidePost ) post: FiresidePost;
-	@Prop( Boolean ) sparse?: boolean;
-	@Prop( Boolean ) circle?: boolean;
+export class AppFiresidePostLikeWidget extends Vue {
+	@Prop(FiresidePost) post: FiresidePost;
+	@Prop(Boolean) sparse?: boolean;
+	@Prop(Boolean) circle?: boolean;
 
 	@State app: AppStore;
 
-	get tooltip()
-	{
+	get tooltip() {
 		// No tooltip if showing label.
-		if ( !this.isSparse ) {
+		if (!this.isSparse) {
 			return undefined;
 		}
 
-		if ( !this.post.user_like ) {
-			return this.$gettext( 'Like This Post' );
-		}
-		else {
-			return this.$gettext( 'Liked!' );
+		if (!this.post.user_like) {
+			return this.$gettext('Like This Post');
+		} else {
+			return this.$gettext('Liked!');
 		}
 	}
 
 	/**
 	 * Combined sparse or circle option.
 	 */
-	get isSparse()
-	{
+	get isSparse() {
 		return this.sparse || this.circle;
 	}
 
-	async toggleLike()
-	{
-		if ( !this.post.user_like ) {
-			const newLike = new FiresidePostLike( {
-				fireside_post_id: this.post.id
-			} );
+	async toggleLike() {
+		if (!this.post.user_like) {
+			const newLike = new FiresidePostLike({
+				fireside_post_id: this.post.id,
+			});
 
 			await newLike.$save();
 			this.post.user_like = newLike;
 			++this.post.like_count;
-		}
-		else {
+		} else {
 			await this.post.user_like.$remove();
 			this.post.user_like = null;
 			--this.post.like_count;

@@ -1,3 +1,3 @@
-angular.module( 'gj.Utils', [] );
+angular.module('gj.Utils', []);
 
-require( './array-service' );
+require('./array-service');

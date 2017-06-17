@@ -3,51 +3,42 @@ import * as distance from 'date-fns/distance_in_words_to_now';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
 @Component({})
-export class AppTimeAgo extends Vue
-{
-	@Prop( [ Number, Date ] ) date: number | Date;
-	@Prop( Boolean ) withoutSuffix?: boolean;
+export class AppTimeAgo extends Vue {
+	@Prop([Number, Date])
+	date: number | Date;
+	@Prop(Boolean) withoutSuffix?: boolean;
 
 	private timeout?: number;
 	private timeAgo = '';
 
-	created()
-	{
+	created() {
 		this.refresh();
 	}
 
-	destroyed()
-	{
+	destroyed() {
 		this.clearTimeout();
 	}
 
-	@Watch( 'date' )
-	onDateChanged()
-	{
+	@Watch('date')
+	onDateChanged() {
 		this.clearTimeout();
 		this.refresh();
 	}
 
-	private clearTimeout()
-	{
-		if ( this.timeout ) {
-			clearTimeout( this.timeout );
+	private clearTimeout() {
+		if (this.timeout) {
+			clearTimeout(this.timeout);
 			this.timeout = undefined;
 		}
 	}
 
-	private refresh()
-	{
-		const time = distance( this.date );
+	private refresh() {
+		const time = distance(this.date);
 
-		if ( this.withoutSuffix ) {
+		if (this.withoutSuffix) {
 			this.timeAgo = time;
-		}
-		else {
-			this.timeAgo = this.$gettextInterpolate(
-				'%{ time } ago',
-				{ time },
-			);
+		} else {
+			this.timeAgo = this.$gettextInterpolate('%{ time } ago', { time });
 		}
 
 		// In minutes.
@@ -55,17 +46,15 @@ export class AppTimeAgo extends Vue
 		const diff = (Date.now() - input) / 1000 / 60;
 
 		let secondsUntilUpdate = 3600;
-		if ( diff < 1 ) {
+		if (diff < 1) {
 			secondsUntilUpdate = 1;
-		}
-		else if ( diff < 60 ) {
+		} else if (diff < 60) {
 			secondsUntilUpdate = 30;
-		}
-		else if ( diff < 180 ) {
+		} else if (diff < 180) {
 			secondsUntilUpdate = 300;
 		}
 
-		if ( !GJ_IS_SSR ) {
+		if (!GJ_IS_SSR) {
 			this.timeout = window.setTimeout(
 				() => this.refresh(),
 				secondsUntilUpdate * 1000,
@@ -73,11 +62,7 @@ export class AppTimeAgo extends Vue
 		}
 	}
 
-	render( h: Vue.CreateElement )
-	{
-		return h(
-			'span',
-			this.timeAgo,
-		);
+	render(h: Vue.CreateElement) {
+		return h('span', this.timeAgo);
 	}
 }

@@ -20,14 +20,12 @@ import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 		filesize,
 	},
 })
-export class AppGamePackageCardMoreOptions extends Vue
-{
-	@Prop( GamePackageCardModel ) card: GamePackageCardModel;
+export class AppGamePackageCardMoreOptions extends Vue {
+	@Prop(GamePackageCardModel) card: GamePackageCardModel;
 
 	emulatorInfo = GameBuild.emulatorInfo;
 
-	click( build: GameBuild )
-	{
-		this.$emit( 'click', build );
+	click(build: GameBuild) {
+		this.$emit('click', build);
 	}
 }

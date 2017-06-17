@@ -7,67 +7,58 @@ const CSS_SHOW_STYLES: any = {
 	display: 'block',
 };
 
-function getStyle( el: HTMLElement, prop: keyof CSSStyleDeclaration )
-{
+function getStyle(el: HTMLElement, prop: keyof CSSStyleDeclaration) {
 	// IE
-	if ( (el as any).currentStyle ) {
-		return (el as any).currentStyle[ prop ];
-	}
-	else if ( window.getComputedStyle ) {
-		return window.getComputedStyle( el )[ prop ];
+	if ((el as any).currentStyle) {
+		return (el as any).currentStyle[prop];
+	} else if (window.getComputedStyle) {
+		return window.getComputedStyle(el)[prop];
 	}
 
 	// Finally try and get inline style.
-	return el.style[ prop ];
+	return el.style[prop];
 }
 
-function isStaticPositioned( el: HTMLElement )
-{
-	return (getStyle( el, 'position' ) || 'static') === 'static';
+function isStaticPositioned(el: HTMLElement) {
+	return (getStyle(el, 'position') || 'static') === 'static';
 }
 
-function elementParentOffset( el: HTMLElement )
-{
-	let offsetParent = el.offsetParent as HTMLElement || document;
-	while ( offsetParent
-		&& (offsetParent !== document as any)
-		&& isStaticPositioned( offsetParent )
+function elementParentOffset(el: HTMLElement) {
+	let offsetParent = (el.offsetParent as HTMLElement) || document;
+	while (
+		offsetParent &&
+		offsetParent !== (document as any) &&
+		isStaticPositioned(offsetParent)
 	) {
 		offsetParent = offsetParent.offsetParent as HTMLElement;
 	}
 
 	return offsetParent || document;
-};
+}
 
-export class Ruler
-{
-	static width( elem: HTMLElement | Document )
-	{
-		return this.dimensions( 'clientWidth', elem );
+export class Ruler {
+	static width(elem: HTMLElement | Document) {
+		return this.dimensions('clientWidth', elem);
 	}
 
-	static height( elem: HTMLElement | Document )
-	{
-		return this.dimensions( 'clientHeight', elem );
+	static height(elem: HTMLElement | Document) {
+		return this.dimensions('clientHeight', elem);
 	}
 
-	static outerWidth( elem: HTMLElement | Document )
-	{
-		return this.dimensions( 'offsetWidth', elem );
+	static outerWidth(elem: HTMLElement | Document) {
+		return this.dimensions('offsetWidth', elem);
 	}
 
-	static outerHeight( elem: HTMLElement | Document )
-	{
-		return this.dimensions( 'offsetHeight', elem );
+	static outerHeight(elem: HTMLElement | Document) {
+		return this.dimensions('offsetHeight', elem);
 	}
 
-	static position( el: HTMLElement )
-	{
-		const elOffset = this.offset( el );
+	static position(el: HTMLElement) {
+		const elOffset = this.offset(el);
 		let parentRect = { top: 0, left: 0 };
-		const offsetParentEl = elementParentOffset( el );
-		if ( offsetParentEl !== document as any ) {
-			parentRect = this.offset( offsetParentEl );
+		const offsetParentEl = elementParentOffset(el);
+		if (offsetParentEl !== (document as any)) {
+			parentRect = this.offset(offsetParentEl);
 			parentRect.top += offsetParentEl.clientTop - offsetParentEl.scrollTop;
 			parentRect.left += offsetParentEl.clientLeft - offsetParentEl.scrollLeft;
 		}
@@ -77,68 +68,75 @@ export class Ruler
 			width: boundingClientRect.width || el.offsetWidth,
 			height: boundingClientRect.height || el.offsetHeight,
 			top: elOffset.top - parentRect.top,
-			left: elOffset.left - parentRect.left
+			left: elOffset.left - parentRect.left,
 		};
 	}
 
-	static offset( el: HTMLElement )
-	{
+	static offset(el: HTMLElement) {
 		const rect = el.getBoundingClientRect();
 		return {
 			width: rect.width || el.offsetWidth,
 			height: rect.height || el.offsetHeight,
-			top: rect.top + (window.pageYOffset || document.documentElement.scrollTop),
-			left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft),
+			top:
+				rect.top + (window.pageYOffset || document.documentElement.scrollTop),
+			left:
+				rect.left + (window.pageXOffset || document.documentElement.scrollLeft),
 		};
 	}
 
 	private static dimensions(
 		baseProp: 'clientWidth' | 'clientHeight' | 'offsetWidth' | 'offsetHeight',
 		_elem: HTMLElement | Document,
-	): number
-	{
+	): number {
 		let elem: HTMLElement;
 
-		if ( _elem === window.document ) {
+		if (_elem === window.document) {
 			elem = window.document.body;
-		}
-		else {
+		} else {
 			elem = <HTMLElement>_elem;
 		}
 
-		const styles = window.getComputedStyle( elem );
+		const styles = window.getComputedStyle(elem);
 
 		// Certain elements can have dimension info if we invisibly show them,
 		// but it must have a current display style that would benefit.
 		// This only matters for currently hidden elements that wouldn't return dimensions.
 		let swappedStyles = false;
 		const oldStyles: any = {};
-		if ( DISPLAY_SWAP_REGEX.test( styles.display || '' ) && elem.offsetWidth === 0 ) {
+		if (
+			DISPLAY_SWAP_REGEX.test(styles.display || '') &&
+			elem.offsetWidth === 0
+		) {
 			swappedStyles = true;
 
-			for ( const name in CSS_SHOW_STYLES ) {
-				oldStyles[ name ] = (elem.style as any)[ name ];
-				(elem.style as any)[ name ] = CSS_SHOW_STYLES[ name ];
+			for (const name in CSS_SHOW_STYLES) {
+				oldStyles[name] = (elem.style as any)[name];
+				(elem.style as any)[name] = CSS_SHOW_STYLES[name];
 			}
 		}
 
-		let val = elem[ baseProp ];
-		if ( baseProp === 'clientWidth' ) {
-			val -= parseFloat( styles.paddingLeft || '' ) + parseFloat( styles.paddingRight || '' );
-		}
-		else if ( baseProp === 'clientHeight') {
-			val -= parseFloat( styles.paddingTop || '' ) + parseFloat( styles.paddingBottom || '' );
-		}
-		else if ( baseProp === 'offsetWidth' ) {
-			val += parseFloat( styles.marginLeft || '' ) + parseFloat( styles.marginRight || '' );
-		}
-		else if ( baseProp === 'offsetHeight') {
-			val += parseFloat( styles.marginTop || '' ) + parseFloat( styles.marginBottom || '' );
+		let val = elem[baseProp];
+		if (baseProp === 'clientWidth') {
+			val -=
+				parseFloat(styles.paddingLeft || '') +
+				parseFloat(styles.paddingRight || '');
+		} else if (baseProp === 'clientHeight') {
+			val -=
+				parseFloat(styles.paddingTop || '') +
+				parseFloat(styles.paddingBottom || '');
+		} else if (baseProp === 'offsetWidth') {
+			val +=
+				parseFloat(styles.marginLeft || '') +
+				parseFloat(styles.marginRight || '');
+		} else if (baseProp === 'offsetHeight') {
+			val +=
+				parseFloat(styles.marginTop || '') +
+				parseFloat(styles.marginBottom || '');
 		}
 
-		if ( swappedStyles ) {
-			for ( const name in CSS_SHOW_STYLES ) {
-				(elem.style as any)[ name ] = oldStyles[ name ];
+		if (swappedStyles) {
+			for (const name in CSS_SHOW_STYLES) {
+				(elem.style as any)[name] = oldStyles[name];
 			}
 		}
 

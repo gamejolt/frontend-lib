@@ -8,6 +8,4 @@ import { Component } from 'ng-metadata/core';
 	</div>
 	`,
 })
-export class CardDragHandleComponent
-{
-}
+export class CardDragHandleComponent {}

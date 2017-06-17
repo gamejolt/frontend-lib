@@ -1,5 +1,4 @@
-export function fuzzynumber( num: number )
-{
+export function fuzzynumber(num: number) {
 	// For testing.
 	// number = 2900;
 	// number = 2090;
@@ -40,16 +39,16 @@ export function fuzzynumber( num: number )
 	// number = 209000000;
 	// number = 290000000;
 
-	if ( num >= 1000000000 ) {
-		return (num / 1000000000).toFixed( 1 ).replace( /\.0$/, '' ) + 'g';
+	if (num >= 1000000000) {
+		return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'g';
 	}
 
-	if ( num >= 1000000 ) {
-		return (num / 1000000).toFixed( 1 ).replace( /\.0$/, '' ) + 'm';
+	if (num >= 1000000) {
+		return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
 	}
 
-	if ( num >= 1000 ) {
-		return (num / 1000).toFixed( 1 ).replace( /\.0$/, '' ) + 'k';
+	if (num >= 1000) {
+		return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
 	}
 
 	return num;

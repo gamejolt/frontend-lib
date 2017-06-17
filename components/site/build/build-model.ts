@@ -1,7 +1,6 @@
 import { Model } from '../../model/model.service';
 
-export class SiteBuild extends Model
-{
+export class SiteBuild extends Model {
 	static STATUS_ACTIVE = 'active';
 	static STATUS_INACTIVE = 'inactive';
 	static STATUS_REMOVED = 'removed';
@@ -14,4 +13,4 @@ export class SiteBuild extends Model
 	file?: any;
 }
 
-Model.create( SiteBuild );
+Model.create(SiteBuild);

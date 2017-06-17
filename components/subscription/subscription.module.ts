@@ -5,8 +5,6 @@ import { Subscription } from './subscription.model';
 	imports: [],
 	exports: [],
 	declarations: [],
-	providers: [
-		{ provide: 'Subscription', useFactory: () => Subscription },
-	],
+	providers: [{ provide: 'Subscription', useFactory: () => Subscription }],
 })
-export class SubscriptionModule { }
+export class SubscriptionModule {}

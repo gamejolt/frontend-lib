@@ -10,42 +10,38 @@ import { BaseFormControl } from '../control/base';
 
 @View
 @Component({})
-export class AppFormGroup extends Vue
-{
-	@Prop( String ) name: string;
-	@Prop( String ) label?: string;
-	@Prop( Boolean ) optional?: boolean;
-	@Prop( Boolean ) hideLabel?: boolean;
-	@Prop( String ) labelClass?: string;
+export class AppFormGroup extends Vue {
+	@Prop(String) name: string;
+	@Prop(String) label?: string;
+	@Prop(Boolean) optional?: boolean;
+	@Prop(Boolean) hideLabel?: boolean;
+	@Prop(String) labelClass?: string;
 
 	form: AppForm;
 	control: BaseFormControl;
 	inputErrors: ErrorBag | null = null;
 
-	get humanLabel()
-	{
+	get humanLabel() {
 		const name = this.name;
 
-		if ( !this.label ) {
-			return titleCase( name );
+		if (!this.label) {
+			return titleCase(name);
 		}
 
 		return this.label;
 	}
 
-	get labelClasses()
-	{
+	get labelClasses() {
 		let labelClass = this.labelClass || '';
 
-		if ( this.hideLabel ) {
+		if (this.hideLabel) {
 			labelClass += ' sr-only';
 		}
 
 		return labelClass;
 	}
 
-	created()
-	{
-		this.form = findVueParent( this, AppForm ) as AppForm;
+	created() {
+		this.form = findVueParent(this, AppForm) as AppForm;
 	}
 }

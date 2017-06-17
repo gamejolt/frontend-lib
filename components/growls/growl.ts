@@ -8,44 +8,40 @@ import { Screen } from '../screen/screen-service';
 import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 import { AppGrowlDynamic } from './growl-dynamic';
 
-require( './growl-content.styl' );
+require('./growl-content.styl');
 
 @View
 @Component({
 	components: {
 		AppJolticon,
 		AppGrowlDynamic,
-	}
+	},
 })
-export class AppGrowl extends Vue
-{
-	@Prop( Number ) index: number;
-	@Prop( Object ) growl: Growl;
+export class AppGrowl extends Vue {
+	@Prop(Number) index: number;
+	@Prop(Object) growl: Growl;
 
-	Screen = makeObservableService( Screen );
+	Screen = makeObservableService(Screen);
 
 	private leaveTimer?: NodeJS.Timer;
 
-	mounted()
-	{
-		if ( !this.growl.sticky ) {
+	mounted() {
+		if (!this.growl.sticky) {
 			this.setLeaveTimer();
 		}
 	}
 
 	// When they click on the element, never auto-leave again.
 	// They must explictly close it after that.
-	onClick( event: Event )
-	{
-		if ( this.growl.onclick ) {
-			this.growl.onclick( event );
-			this.remove( event );
+	onClick(event: Event) {
+		if (this.growl.onclick) {
+			this.growl.onclick(event);
+			this.remove(event);
 		}
 	}
 
-	remove( event?: Event )
-	{
-		if ( event ) {
+	remove(event?: Event) {
+		if (event) {
 			event.stopPropagation();
 		}
 
@@ -56,29 +52,26 @@ export class AppGrowl extends Vue
 	/**
 	 * After a certain amount of time has elapsed, we want to remove the growl message.
 	 */
-	setLeaveTimer()
-	{
-		if ( this.growl.sticky || this.leaveTimer ) {
+	setLeaveTimer() {
+		if (this.growl.sticky || this.leaveTimer) {
 			return;
 		}
 
 		// We store the promise so we can cancel.
-		this.leaveTimer = setTimeout( () =>
-		{
+		this.leaveTimer = setTimeout(() => {
 			this.remove();
-		}, 2500 );
+		}, 2500);
 	}
 
 	/**
 	 * Cancel the leave timer if there is one set.
 	 */
-	cancelLeave()
-	{
-		if ( this.growl.sticky || !this.leaveTimer ) {
+	cancelLeave() {
+		if (this.growl.sticky || !this.leaveTimer) {
 			return;
 		}
 
-		clearTimeout( this.leaveTimer );
+		clearTimeout(this.leaveTimer);
 		this.leaveTimer = undefined;
 	}
 }

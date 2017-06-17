@@ -11,28 +11,23 @@ import { MediaItem } from '../../media-item/media-item-model';
 		AppMediaBar,
 	},
 })
-export class AppWidgetCompilerWidgetGameMedia extends Vue
-{
-	@Prop( Array ) items: MediaItem[];
-	@Prop( Number ) num: number;
+export class AppWidgetCompilerWidgetGameMedia extends Vue {
+	@Prop(Array) items: MediaItem[];
+	@Prop(Number) num: number;
 
 	// We trim based on their `num` param.
 	_items: MediaItem[] = [];
 
-	created()
-	{
+	created() {
 		this.trim();
 	}
 
-	@Watch( 'items' )
-	onItemsUpdate()
-	{
+	@Watch('items')
+	onItemsUpdate() {
 		this.trim();
 	}
 
-	private trim()
-	{
-		this._items = (this.items || [])
-			.slice( 0, this.num || 6 );
+	private trim() {
+		this._items = (this.items || []).slice(0, this.num || 6);
 	}
 }

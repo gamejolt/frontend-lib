@@ -10,19 +10,16 @@ import { BaseModal } from '../base';
 		AppJolticon,
 	},
 })
-export default class AppModalConfirm extends BaseModal
-{
-	@Prop( String ) message: string;
-	@Prop( String ) title: string;
-	@Prop( String ) buttonType: 'ok' | 'yes';
+export default class AppModalConfirm extends BaseModal {
+	@Prop(String) message: string;
+	@Prop(String) title: string;
+	@Prop(String) buttonType: 'ok' | 'yes';
 
-	ok()
-	{
-		this.modal.resolve( true );
+	ok() {
+		this.modal.resolve(true);
 	}
 
-	cancel()
-	{
-		this.modal.resolve( false );
+	cancel() {
+		this.modal.resolve(false);
 	}
 }

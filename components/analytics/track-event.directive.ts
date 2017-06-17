@@ -4,16 +4,14 @@ import { Analytics } from './analytics.service';
 @Directive({
 	selector: '[gj-track-event]',
 })
-export class TrackEventDirective
-{
-	@Input( '@gjTrackEvent' ) event: string;
+export class TrackEventDirective {
+	@Input('@gjTrackEvent') event: string;
 
-	@HostListener( 'click' )
-	click()
-	{
-		if ( this.event ) {
-			const pieces = this.event.split( ':' );
-			Analytics.trackEvent( pieces[0], pieces[1], pieces[2], pieces[3] );
+	@HostListener('click')
+	click() {
+		if (this.event) {
+			const pieces = this.event.split(':');
+			Analytics.trackEvent(pieces[0], pieces[1], pieces[2], pieces[3]);
 		}
 	}
 }

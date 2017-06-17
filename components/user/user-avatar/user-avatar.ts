@@ -10,26 +10,22 @@ import { AppUserAvatarImg } from './img/img';
 @Component({
 	components: {
 		AppUserAvatarImg,
-	}
+	},
 })
-export class AppUserAvatar extends Vue
-{
-	@Prop( Object ) user: User;
-	@Prop( String ) link?: string;
-	@Prop( Boolean ) showName?: boolean;
+export class AppUserAvatar extends Vue {
+	@Prop(Object) user: User;
+	@Prop(String) link?: string;
+	@Prop(Boolean) showName?: boolean;
 
 	href = '';
 
-	created()
-	{
-		if ( this.user ) {
-			if ( !this.link ) {
+	created() {
+		if (this.user) {
+			if (!this.link) {
 				this.href = Environment.wttfBaseUrl + this.user.url;
-			}
-			else if ( this.link === 'dashboard' ) {
+			} else if (this.link === 'dashboard') {
 				this.href = Environment.wttfBaseUrl + '/dashboard';
-			}
-			else if ( this.link === 'fireside' ) {
+			} else if (this.link === 'fireside') {
 				this.href = Environment.firesideBaseUrl + '/@' + this.user.username;
 			}
 		}

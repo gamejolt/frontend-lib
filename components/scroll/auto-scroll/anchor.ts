@@ -3,22 +3,19 @@ import { Component, Prop } from 'vue-property-decorator';
 import { Scroll } from '../scroll.service';
 
 @Component({})
-export class AppAutoscrollAnchor extends Vue
-{
-	@Prop( { required: true } ) scrollKey: any;
+export class AppAutoscrollAnchor extends Vue {
+	@Prop({ required: true })
+	scrollKey: any;
 
-	mounted()
-	{
+	mounted() {
 		Scroll.autoscrollAnchor = this;
 	}
 
-	destroyed()
-	{
+	destroyed() {
 		Scroll.autoscrollAnchor = undefined;
 	}
 
-	render( h: Vue.CreateElement )
-	{
-		return h( 'div', this.$slots.default );
+	render(h: Vue.CreateElement) {
+		return h('div', this.$slots.default);
 	}
 }

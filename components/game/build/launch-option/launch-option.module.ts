@@ -3,7 +3,10 @@ import { GameBuildLaunchOption } from './launch-option.model';
 
 @NgModule({
 	providers: [
-		{ provide: 'Game_Build_LaunchOption', useFactory: () => GameBuildLaunchOption }
+		{
+			provide: 'Game_Build_LaunchOption',
+			useFactory: () => GameBuildLaunchOption,
+		},
 	],
 })
-export class GameBuildLaunchOptionModule { }
+export class GameBuildLaunchOptionModule {}

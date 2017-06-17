@@ -1,3 +1,3 @@
-angular.module( 'gj.DateHelper', [] );
+angular.module('gj.DateHelper', []);
 
-require( './date-helper-service' );
+require('./date-helper-service');

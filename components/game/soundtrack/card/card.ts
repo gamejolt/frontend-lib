@@ -28,47 +28,45 @@ import { number } from '../../../../vue/filters/number';
 		AppTrackEvent,
 	},
 })
-export class AppGameSoundtrackCard extends Vue
-{
-	@Prop( Game ) game: Game;
-	@Prop( Array ) songs: GameSong[];
+export class AppGameSoundtrackCard extends Vue {
+	@Prop(Game) game: Game;
+	@Prop(Array) songs: GameSong[];
 
 	isPlaying = false;
 	isShowingSoundtrack = false;
 	canToggleSoundtrack = false;
 
 	number = number;
-	Screen = makeObservableService( Screen );
+	Screen = makeObservableService(Screen);
 
-	@Watch( 'isPlaying' )
-	onPlayingChanged()
-	{
+	@Watch('isPlaying')
+	onPlayingChanged() {
 		// If we're playing, make sure the full soundtrack is open.
-		if ( this.isPlaying ) {
+		if (this.isPlaying) {
 			this.isShowingSoundtrack = true;
 		}
 	}
 
-	play()
-	{
+	play() {
 		const playlist = this.$refs.playlist as AppAudioPlaylist;
-		if ( playlist ) {
+		if (playlist) {
 			playlist.mainSongButton();
 		}
 	}
 
-	download()
-	{
+	download() {
 		const location = {
 			name: 'discover.games.view.download.soundtrack',
 			params: { slug: this.game.slug, id: this.game.id + '' },
 		};
 
-		if ( GJ_IS_CLIENT ) {
-			const gui = require( 'nw.gui' ) as typeof nwGui;
-			gui.Shell.openExternal( Environment.baseUrl + this.$router.resolve( location ).href );
+		if (GJ_IS_CLIENT) {
+			const gui = require('nw.gui') as typeof nwGui;
+			gui.Shell.openExternal(
+				Environment.baseUrl + this.$router.resolve(location).href,
+			);
 		}
 
-		this.$router.push( location );
+		this.$router.push(location);
 	}
 }

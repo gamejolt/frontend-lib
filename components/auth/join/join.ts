@@ -15,29 +15,26 @@ import { UserLinkedAccounts } from '../../user/linked-accounts/linked-accounts.s
 	components: {
 		AppJolticon,
 		AppAuthJoinForm,
-	}
+	},
 })
-export class AppAuthJoin extends Vue
-{
-	@Prop( Boolean ) darkVariant?: boolean;
-	@Prop( Boolean ) shouldRedirect?: boolean;
+export class AppAuthJoin extends Vue {
+	@Prop(Boolean) darkVariant?: boolean;
+	@Prop(Boolean) shouldRedirect?: boolean;
 
-	Connection = makeObservableService( Connection );
+	Connection = makeObservableService(Connection);
 
 	/**
 	 * Sign up is just login without an account. It'll direct to the correct
 	 * page when it figures out if they have an account in the callback URL.
 	 */
-	linkedAccountLogin( provider: any )
-	{
-		UserLinkedAccounts.login( this.$router, provider );
+	linkedAccountLogin(provider: any) {
+		UserLinkedAccounts.login(this.$router, provider);
 	}
 
-	onJoined( formModel: any )
-	{
-		this.$emit( 'joined', formModel );
+	onJoined(formModel: any) {
+		this.$emit('joined', formModel);
 
-		if ( this.shouldRedirect ) {
+		if (this.shouldRedirect) {
 			window.location.href = Environment.authBaseUrl + '/join/almost';
 		}
 	}

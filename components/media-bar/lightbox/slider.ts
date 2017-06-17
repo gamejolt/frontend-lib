@@ -7,11 +7,12 @@ import { findVueParent } from '../../../utils/vue';
 
 @View
 @Component({})
-export class AppMediaBarLightboxSlider extends Vue
-{
-	mounted()
-	{
-		const mediaBar = findVueParent( this, AppMediaBarLightbox ) as AppMediaBarLightbox;
-		mediaBar.setSlider( this.$el );
+export class AppMediaBarLightboxSlider extends Vue {
+	mounted() {
+		const mediaBar = findVueParent(
+			this,
+			AppMediaBarLightbox,
+		) as AppMediaBarLightbox;
+		mediaBar.setSlider(this.$el);
 	}
 }

@@ -1,3 +1,3 @@
-angular.module( 'gj.ToggleSwitch', [] );
+angular.module('gj.ToggleSwitch', []);
 
-require( './toggle-switch-directive' );
+require('./toggle-switch-directive');

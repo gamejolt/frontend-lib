@@ -10,8 +10,7 @@ import { AppLoading } from '../../../vue/components/loading/loading';
 		AppLoading,
 	},
 })
-export class AppLoadingFade extends Vue
-{
-	@Prop( Boolean ) isLoading: boolean;
-	@Prop( Number ) slotId: number;
+export class AppLoadingFade extends Vue {
+	@Prop(Boolean) isLoading: boolean;
+	@Prop(Number) slotId: number;
 }

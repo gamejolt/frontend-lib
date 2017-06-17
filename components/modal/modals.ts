@@ -15,23 +15,20 @@ import { AppModalWrapper } from './modal-wrapper';
 		AppBackdrop,
 	},
 })
-export class AppModals extends Vue
-{
-	Modal = makeObservableService( Modal );
+export class AppModals extends Vue {
+	Modal = makeObservableService(Modal);
 
-	@Watch( 'Modal.modals.length' )
-	watchModalLength()
-	{
+	@Watch('Modal.modals.length')
+	watchModalLength() {
 		// We only count modals that have backdrops. If all the modals don't
 		// have backdrops, then we don't add `modal-open`.
-		const backdropModals = Modal.modals.filter( ( item ) => !item.noBackdrop );
+		const backdropModals = Modal.modals.filter(item => !item.noBackdrop);
 
-		if ( !GJ_IS_SSR ) {
-			if ( backdropModals.length ) {
-				document.body.classList.add( 'modal-open' );
-			}
-			else {
-				document.body.classList.remove( 'modal-open' );
+		if (!GJ_IS_SSR) {
+			if (backdropModals.length) {
+				document.body.classList.add('modal-open');
+			} else {
+				document.body.classList.remove('modal-open');
 			}
 		}
 	}

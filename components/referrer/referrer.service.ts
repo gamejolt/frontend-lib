@@ -4,8 +4,7 @@
  * The initial referrer from the Document should be correct when we first hit the page.
  * If it's "null" then there was no referrer when hitting the initial page.
  */
-export class Referrer
-{
+export class Referrer {
 	private static isInitialized = false;
 
 	/**
@@ -23,11 +22,10 @@ export class Referrer
 	private static prev?: string;
 	private static referrer?: string;
 
-	static init()
-	{
+	static init() {
 		this.isInitialized = true;
 
-		if ( window.document.referrer ) {
+		if (window.document.referrer) {
 			this.referrer = window.document.referrer;
 		}
 	}
@@ -67,10 +65,9 @@ export class Referrer
 	// 	} );
 	// }
 
-	static get()
-	{
-		if ( !this.isInitialized ) {
-			throw new Error( `Using Referrer before it's initialized.` );
+	static get() {
+		if (!this.isInitialized) {
+			throw new Error(`Using Referrer before it's initialized.`);
 		}
 
 		return this.referrer;

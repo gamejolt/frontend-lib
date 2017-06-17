@@ -1,8 +1,7 @@
 import { Model } from '../../model/model.service';
 import { User } from '../user.model';
 
-export class UserGameScore extends Model
-{
+export class UserGameScore extends Model {
 	user_id: number;
 	user: User;
 	game_id: number;
@@ -13,23 +12,23 @@ export class UserGameScore extends Model
 	extra_data: string;
 	logged_on: number;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.user ) {
-			this.user = new User( data.user );
+		if (data.user) {
+			this.user = new User(data.user);
 		}
 	}
 
-	$remove()
-	{
+	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/api/scores/remove-score'
-			+ '/' + this.game_id
-			+ '/' + this.id
+			'/web/dash/developer/games/api/scores/remove-score' +
+				'/' +
+				this.game_id +
+				'/' +
+				this.id,
 		);
 	}
 }
 
-Model.create( UserGameScore );
+Model.create(UserGameScore);

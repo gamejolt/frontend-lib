@@ -1,14 +1,12 @@
-var _ = require( 'lodash' );
-var gulp = require( 'gulp' );
-var gutil = require( 'gulp-util' );
-var plugins = require( 'gulp-load-plugins' )();
-var path = require( 'path' );
+var _ = require('lodash');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var plugins = require('gulp-load-plugins')();
+var path = require('path');
 
-module.exports = function( config )
-{
-	gulp.task( 'inject', function( cb )
-	{
-		if ( !config.production || config.noInject ) {
+module.exports = function(config) {
+	gulp.task('inject', function(cb) {
+		if (!config.production || config.noInject) {
 			cb();
 			return;
 		}
@@ -19,30 +17,31 @@ module.exports = function( config )
 			dontRenameFile: [
 				// Examples: /index.html, /chat.html, index.html
 				// Not: /app/views/something.html
-				/^\/?[^\/]*\.html$/ig,
+				/^\/?[^\/]*\.html$/gi,
 
 				// Other common things that have to be static filenames.
 				/^\/robots\.txt$/,
 				/^\/crossdomain\.xml$/,
 			],
 			dontSearchFile: [
-				/.*\.pdf$/i,  // Don't want to rename any PDFs.
+				/.*\.pdf$/i, // Don't want to rename any PDFs.
 			],
-			transformPath: function( rev, source, path )
-			{
+			transformPath: function(rev, source, path) {
 				return config.staticCdn + rev;
 			},
-			transformFilename: function( file, hash )
-			{
-				var ext = path.extname( file.path );
-				return path.basename( file.path, ext ) + '.' + hash + '-' + injectVersion + ext;
+			transformFilename: function(file, hash) {
+				var ext = path.extname(file.path);
+				return (
+					path.basename(file.path, ext) + '.' + hash + '-' + injectVersion + ext
+				);
 			},
 		};
 
-		var revAll = new plugins.revAll( options );
+		var revAll = new plugins.revAll(options);
 
-		return gulp.src( [ config.buildDir + '/**' ] )
-			.pipe( revAll.revision() )
-			.pipe( gulp.dest( config.buildDir ) );
-	} );
+		return gulp
+			.src([config.buildDir + '/**'])
+			.pipe(revAll.revision())
+			.pipe(gulp.dest(config.buildDir));
+	});
 };

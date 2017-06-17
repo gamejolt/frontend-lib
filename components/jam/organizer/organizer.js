@@ -1,3 +1,3 @@
-angular.module( 'gj.Jam.Organizer', [ 'gj.Jam' ] );
+angular.module('gj.Jam.Organizer', ['gj.Jam']);
 
-require( './organizer-model' );
+require('./organizer-model');

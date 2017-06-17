@@ -1,3 +1,3 @@
-angular.module( 'gj.Loading', [] );
+angular.module('gj.Loading', []);
 
-require( './loading-directive' );
+require('./loading-directive');

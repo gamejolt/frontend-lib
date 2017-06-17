@@ -10,59 +10,52 @@ const WIDTH_HEIGHT_REGEX = /\/(\d+)x(\d+)\//;
 const WIDTH_REGEX = /\/(\d+)\//;
 
 @Component({})
-export class AppImgResponsive extends Vue
-{
-	@Prop( String ) src: string;
+export class AppImgResponsive extends Vue {
+	@Prop(String) src: string;
 
 	private processedSrc = '';
 	private resize$: Subscription | undefined;
 
-	created()
-	{
+	created() {
 		// Set the initial src for SSR.
 		this.processedSrc = this.src;
 	}
 
-	async mounted()
-	{
-		this.resize$ = Screen.resizeChanges.subscribe( () => this.updateSrc() );
+	async mounted() {
+		this.resize$ = Screen.resizeChanges.subscribe(() => this.updateSrc());
 
 		// Make sure the view is compiled.
 		await this.$nextTick();
 		this.updateSrc();
 	}
 
-	render( h: Vue.CreateElement )
-	{
-		return h( 'img', {
+	render(h: Vue.CreateElement) {
+		return h('img', {
 			staticClass: 'img-responsive',
 			domProps: {
 				src: this.processedSrc,
 			},
-		} );
+		});
 	}
 
-	destroyed()
-	{
-		if ( this.resize$ ) {
+	destroyed() {
+		if (this.resize$) {
 			this.resize$.unsubscribe();
 			this.resize$ = undefined;
 		}
 	}
 
-	@Watch( 'src' )
-	srcWatch()
-	{
+	@Watch('src')
+	srcWatch() {
 		this.updateSrc();
 	}
 
-	private async updateSrc()
-	{
-		const containerWidth = Ruler.width( this.$el.parentNode as HTMLElement );
+	private async updateSrc() {
+		const containerWidth = Ruler.width(this.$el.parentNode as HTMLElement);
 
 		// Make sure we never do a 0 width, just in case.
 		// Seems to happen in some situations.
-		if ( containerWidth <= 0 ) {
+		if (containerWidth <= 0) {
 			return;
 		}
 
@@ -70,32 +63,32 @@ export class AppImgResponsive extends Vue
 		// We keep width within 100px increment bounds.
 		let newSrc = this.src;
 		let mediaserverWidth = containerWidth;
-		if ( Screen.isHiDpi ) {
-
+		if (Screen.isHiDpi) {
 			// For high dpi, double the width.
 			mediaserverWidth = mediaserverWidth * 2;
-			mediaserverWidth = Math.ceil( mediaserverWidth / 100 ) * 100;
-		}
-		else {
-			mediaserverWidth = Math.ceil( mediaserverWidth / 100 ) * 100;
+			mediaserverWidth = Math.ceil(mediaserverWidth / 100) * 100;
+		} else {
+			mediaserverWidth = Math.ceil(mediaserverWidth / 100) * 100;
 		}
 
-		if ( newSrc.search( WIDTH_HEIGHT_REGEX ) !== -1 ) {
-			newSrc = newSrc.replace( WIDTH_HEIGHT_REGEX, '/' + mediaserverWidth + 'x2000/' );
-		}
-		else {
-			newSrc = newSrc.replace( WIDTH_REGEX, '/' + mediaserverWidth + '/' );
+		if (newSrc.search(WIDTH_HEIGHT_REGEX) !== -1) {
+			newSrc = newSrc.replace(
+				WIDTH_HEIGHT_REGEX,
+				'/' + mediaserverWidth + 'x2000/',
+			);
+		} else {
+			newSrc = newSrc.replace(WIDTH_REGEX, '/' + mediaserverWidth + '/');
 		}
 
 		// Only if the src changed from previous runs.
 		// They may be the same if the user resized the window but image container didn't change dimensions.
-		if ( newSrc !== this.processedSrc ) {
+		if (newSrc !== this.processedSrc) {
 			this.processedSrc = newSrc;
 
 			// Keep the isLoaded state up to date?
-			this.$emit( 'imgloadchange', false );
-			await ImgHelper.loaded( newSrc );
-			this.$emit( 'imgloadchange', true );
+			this.$emit('imgloadchange', false);
+			await ImgHelper.loaded(newSrc);
+			this.$emit('imgloadchange', true);
 		}
 	}
 }

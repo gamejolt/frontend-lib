@@ -2,8 +2,6 @@ import { NgModule } from 'ng-metadata/core';
 import { Comment } from './comment-model';
 
 @NgModule({
-	providers: [
-		{ provide: 'Comment', useFactory: () => Comment }
-	],
+	providers: [{ provide: 'Comment', useFactory: () => Comment }],
 })
-export class CommentModule { }
+export class CommentModule {}

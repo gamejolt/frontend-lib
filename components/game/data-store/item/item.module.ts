@@ -3,7 +3,7 @@ import { GameDataStoreItem } from './item.model';
 
 @NgModule({
 	providers: [
-		{ provide: 'Game_DataStore_Item', useFactory: () => GameDataStoreItem }
+		{ provide: 'Game_DataStore_Item', useFactory: () => GameDataStoreItem },
 	],
 })
-export class GameDataStoreItemModule { }
+export class GameDataStoreItemModule {}

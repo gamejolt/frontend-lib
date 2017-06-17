@@ -12,46 +12,40 @@ import { Ruler } from '../../../../ruler/ruler-service';
 		AppJolticon,
 	},
 })
-export class AppFormControlUploadFilePreview extends Vue
-{
+export class AppFormControlUploadFilePreview extends Vue {
 	@Prop() file: File;
 
-	get isImage()
-	{
-		return isImage( this.file );
+	get isImage() {
+		return isImage(this.file);
 	}
 
-	mounted()
-	{
-		if ( !FileReader || !CanvasRenderingContext2D || !this.isImage ) {
+	mounted() {
+		if (!FileReader || !CanvasRenderingContext2D || !this.isImage) {
 			return;
 		}
 
 		const reader = new FileReader();
-		reader.onload = ( e ) => this.onLoadFile( e );
-		reader.readAsDataURL( this.file );
+		reader.onload = e => this.onLoadFile(e);
+		reader.readAsDataURL(this.file);
 	}
 
-	clearFile()
-	{
-		this.$emit( 'clear' );
+	clearFile() {
+		this.$emit('clear');
 	}
 
-	onLoadFile( e: any )
-	{
+	onLoadFile(e: any) {
 		const img = new Image();
-		img.onload = () => this.onLoadImage( img );
+		img.onload = () => this.onLoadImage(img);
 		img.src = e.target.result;
 	}
 
-	onLoadImage( img: HTMLImageElement )
-	{
+	onLoadImage(img: HTMLImageElement) {
 		const canvas = this.$refs.preview as HTMLCanvasElement;
-		const elementWidth = Ruler.outerWidth( canvas );
+		const elementWidth = Ruler.outerWidth(canvas);
 		const width = elementWidth;
 		const height = img.height / img.width * elementWidth;
 		canvas.width = width;
 		canvas.height = height;
-		canvas.getContext( '2d' )!.drawImage( img, 0, 0, width, height );
+		canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
 	}
 }

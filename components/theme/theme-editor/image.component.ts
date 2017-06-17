@@ -5,27 +5,24 @@ import * as template from '!html-loader!./image.component.html';
 	selector: 'gj-theme-editor-image',
 	template,
 })
-export class ThemeEditorImageComponent
-{
-	@Input( '@' ) type: string;
-	@Input( '<' ) parentId: number;
+export class ThemeEditorImageComponent {
+	@Input('@') type: string;
+	@Input('<') parentId: number;
 
 	isLoaded = false;
 	mediaItem: any;
 
 	constructor(
-		@Inject( 'ngModel' ) @Self() private ngModel: ng.INgModelController,
-	)
-	{
+		@Inject('ngModel')
+		@Self()
+		private ngModel: ng.INgModelController,
+	) {}
+
+	onImageAdded(response: any) {
+		this.ngModel.$setViewValue(response.mediaItem);
 	}
 
-	onImageAdded( response: any )
-	{
-		this.ngModel.$setViewValue( response.mediaItem );
-	}
-
-	clear()
-	{
-		this.ngModel.$setViewValue( undefined );
+	clear() {
+		this.ngModel.$setViewValue(undefined);
 	}
 }

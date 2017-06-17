@@ -14,55 +14,48 @@ bootstrapShortkey();
 
 @View
 @Component({})
-export class AppModal extends Vue
-{
+export class AppModal extends Vue {
 	modal: Modal = null as any;
 	private backdrop?: AppBackdrop;
 
-	created()
-	{
-		const parent = findVueParent( this, BaseModal ) as BaseModal;
-		if ( !parent ) {
-			throw new Error( `Couldn't find base modal.` );
+	created() {
+		const parent = findVueParent(this, BaseModal) as BaseModal;
+		if (!parent) {
+			throw new Error(`Couldn't find base modal.`);
 		}
 
 		this.modal = parent.modal;
 	}
 
-	mounted()
-	{
-		if ( !this.modal.noBackdrop ) {
+	mounted() {
+		if (!this.modal.noBackdrop) {
 			this.backdrop = Backdrop.push();
 		}
 	}
 
-	destroyed()
-	{
+	destroyed() {
 		// Make sure we clear the reference to it.
-		if ( this.backdrop ) {
+		if (this.backdrop) {
 			this.backdrop.remove();
 			this.backdrop = undefined;
 		}
 	}
 
-	dismissEsc()
-	{
-		if ( this.modal.noEscClose ) {
+	dismissEsc() {
+		if (this.modal.noEscClose) {
 			return;
 		}
 		this.dismiss();
 	}
 
-	dismissBackdrop()
-	{
-		if ( this.modal.noBackdropClose ) {
+	dismissBackdrop() {
+		if (this.modal.noBackdropClose) {
 			return;
 		}
 		this.dismiss();
 	}
 
-	dismiss()
-	{
+	dismiss() {
 		this.modal.dismiss();
 	}
 }

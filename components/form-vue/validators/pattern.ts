@@ -1,6 +1,5 @@
 // Since they get set as ng-pattern attributes, we have to double backslash.
 const Patterns: { [k: string]: RegExp } = {
-
 	// Alphanumeric, hyphens.
 	urlPath: /^[\w\-]+$/,
 
@@ -20,20 +19,18 @@ const Patterns: { [k: string]: RegExp } = {
 	semver: /^v?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i,
 };
 
-export function FormValidatorPattern( value: string, args: [ string | RegExp ] )
-{
+export function FormValidatorPattern(value: string, args: [string | RegExp]) {
 	const arg = args[0];
 	let pattern: RegExp;
-	if ( arg instanceof RegExp ) {
+	if (arg instanceof RegExp) {
 		pattern = arg;
-	}
-	else {
-		pattern = Patterns[ arg ];
-	}
-
-	if ( !pattern ) {
-		throw new Error( `Invalid pattern passed in.` );
+	} else {
+		pattern = Patterns[arg];
 	}
 
-	return pattern.test( value );
+	if (!pattern) {
+		throw new Error(`Invalid pattern passed in.`);
+	}
+
+	return pattern.test(value);
 }

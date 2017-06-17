@@ -1,42 +1,43 @@
-angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
-{
-	function Form( options )
-	{
+angular.module('gj.Form').factory('Form', function($injector, $timeout, $q) {
+	function Form(options) {
 		var _this = this;
 
 		this.modelName = undefined;
 		this.modelClass = undefined;
-		this.resetOnSubmit = angular.isDefined( options.resetOnSubmit ) ? options.resetOnSubmit : false;
+		this.resetOnSubmit = angular.isDefined(options.resetOnSubmit)
+			? options.resetOnSubmit
+			: false;
 		this.saveMethod = '$save';
 		this.controllerAs = options.controllerAs || '$ctrl';
 
 		this.scope = {
 			formModel: '=?gjFormModel',
-			submitHandler: '&gjFormSubmitHandler'
+			submitHandler: '&gjFormSubmitHandler',
 		};
 
-		if ( options.template ) {
+		if (options.template) {
 			this.templateUrl = options.template;
 		}
 
-		if ( options.model ) {
+		if (options.model) {
 			this.modelName = options.model;
-			this.modelClass = $injector.get( options.model );
+			this.modelClass = $injector.get(options.model);
 
-			var attributeName = '=?gj' + options.model.replace( /_/g, '' );
+			var attributeName = '=?gj' + options.model.replace(/_/g, '');
 			this.scope.baseModel = attributeName;
 		}
 
-		if ( angular.isDefined( options.saveMethod ) ) {
+		if (angular.isDefined(options.saveMethod)) {
 			this.saveMethod = options.saveMethod;
 		}
 
 		this.link = {};
 
-		this.link.pre = function( scope )
-		{
+		this.link.pre = function(scope) {
 			// If they have reloaded on submit, we want to keep the showing success form state around.
-			var isShowingSuccess = scope.formState && scope.formState.isShowingSuccess ? true : false;
+			var isShowingSuccess = scope.formState && scope.formState.isShowingSuccess
+				? true
+				: false;
 
 			scope.formState = {
 				isProcessing: false,
@@ -48,26 +49,24 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 
 			// Add the model class onto the scope.
 			// Makes it easy to include any constants on it.
-			if ( _this.modelName && _this.modelClass ) {
+			if (_this.modelName && _this.modelClass) {
 				scope[_this.modelName] = _this.modelClass;
 			}
 
 			// Make sure that when this scope is destroyed we clean up any timeouts and stuff.
-			scope.$on( '$destroy', function()
-			{
-				if ( _this.successShowPromise ) {
-					$timeout.cancel( _this.successShowPromise );
+			scope.$on('$destroy', function() {
+				if (_this.successShowPromise) {
+					$timeout.cancel(_this.successShowPromise);
 					_this.successShowPromise = undefined;
 				}
-			} );
+			});
 
 			// Initialize the form.
-			_this._init( scope );
+			_this._init(scope);
 
 			// On submit of the form, just funnel off to the form's onSubmit function.
-			scope.onSubmit = function()
-			{
-				return _this._onSubmit( scope );
+			scope.onSubmit = function() {
+				return _this._onSubmit(scope);
 			};
 		};
 	}
@@ -78,38 +77,33 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 	/**
 	 * Called to initialize the form.
 	 */
-	Form.prototype._init = function( scope )
-	{
+	Form.prototype._init = function(scope) {
 		// Is a base model defined? If so, then we're editing.
-		if ( scope.baseModel ) {
+		if (scope.baseModel) {
 			scope.method = 'edit';
 
 			// If a model class was assigned to this form, then create a copy of it on the scope.
 			// Otherwise just copy the object.
-			if ( this.modelClass ) {
-				scope.formModel = new this.modelClass( scope.baseModel );
+			if (this.modelClass) {
+				scope.formModel = new this.modelClass(scope.baseModel);
+			} else {
+				scope.formModel = angular.copy(scope.baseModel);
 			}
-			else {
-				scope.formModel = angular.copy( scope.baseModel );
-			}
-		}
-		// If no base model...
-		else {
-
+		} else {
+			// If no base model...
 			// If we have a model class, then create a new one.
-			if ( this.modelClass ) {
+			if (this.modelClass) {
 				scope.formModel = new this.modelClass();
-			}
-			// Otherwise, just use an empty object as the form's model.
-			else {
+			} else {
+				// Otherwise, just use an empty object as the form's model.
 				scope.formModel = {};
 			}
 		}
 
 		// If there is an onInit handler attached, call it now.
 		// This is where the user can set up the scope.
-		if ( this.onInit ) {
-			this.onInit( scope );
+		if (this.onInit) {
+			this.onInit(scope);
 		}
 	};
 
@@ -117,8 +111,7 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 	 * Called when the form is submitted.
 	 * Attaches to the scope.onSubmit() function.
 	 */
-	Form.prototype._onSubmit = function( scope )
-	{
+	Form.prototype._onSubmit = function(scope) {
 		var _this = this;
 		var response;
 
@@ -126,47 +119,46 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 		// Chances are the ng-model-options just haven't had a chance to update the model yet.
 		// Also don't submit if the form is processing.
 		// Most of the time this is prevented, but just to be sure.
-		if ( !scope[ scope.gjFormCtrl.name ].$valid || scope.formState.isProcessing ) {
+		if (!scope[scope.gjFormCtrl.name].$valid || scope.formState.isProcessing) {
 			return;
 		}
 
 		scope.formState.isProcessing = true;
 		scope.formState.progress = undefined;
 
-		if ( this.onSubmit ) {
-			scope.formState.progress = this.onSubmit( scope )
-				.then( function( _response )
-				{
-					if ( _response.success === false ) {
-						return $q.reject( _response );
-					}
+		if (this.onSubmit) {
+			scope.formState.progress = this.onSubmit(scope).then(function(_response) {
+				if (_response.success === false) {
+					return $q.reject(_response);
+				}
 
-					response = _response;
-				} );
-		}
-		else if ( this.modelClass && this.saveMethod ) {
-			scope.formState.progress = scope.formModel[ this.saveMethod ]()
-				.then( function( _response )
-				{
+				response = _response;
+			});
+		} else if (this.modelClass && this.saveMethod) {
+			scope.formState.progress = scope.formModel
+				[this.saveMethod]()
+				.then(function(_response) {
 					response = _response;
 
 					// Copy it back to the base model.
-					if ( scope.baseModel ) {
-						angular.extend( scope.baseModel, scope.formModel );
+					if (scope.baseModel) {
+						angular.extend(scope.baseModel, scope.formModel);
 					}
-				} );
+				});
 		}
 
 		return scope.formState.progress
-			.then( function()
-			{
-				if ( _this.onSubmitSuccess ) {
-					_this.onSubmitSuccess( scope, response );
+			.then(function() {
+				if (_this.onSubmitSuccess) {
+					_this.onSubmitSuccess(scope, response);
 				}
 
 				// Send the new model back into the submit handler.
-				if ( angular.isDefined( scope.submitHandler ) ) {
-					scope.submitHandler( { formModel: scope.formModel, $response: response } );
+				if (angular.isDefined(scope.submitHandler)) {
+					scope.submitHandler({
+						formModel: scope.formModel,
+						$response: response,
+					});
 				}
 
 				// Reset our processing state.
@@ -177,45 +169,42 @@ angular.module( 'gj.Form' ).factory( 'Form', function( $injector, $timeout, $q )
 
 				// After successful submit of the form, we broadcast the onSubmitted event.
 				// We will capture this in the gjForm directive to set the form to a pristine state.
-				scope.$broadcast( 'gjForm.onSubmitted', {} );
+				scope.$broadcast('gjForm.onSubmitted', {});
 
 				// Show successful form submission.
-				_this._showSuccess( scope );
+				_this._showSuccess(scope);
 
 				// If we should reset on successful submit, let's do that now.
-				if ( _this.resetOnSubmit ) {
-					_this._init( scope );
+				if (_this.resetOnSubmit) {
+					_this._init(scope);
 				}
-			} )
-			.catch( function( response )
-			{
-				console.log( 'Form error', response );
+			})
+			.catch(function(response) {
+				console.log('Form error', response);
 
 				// Store the server validation errors.
-				if ( response && response.errors ) {
+				if (response && response.errors) {
 					scope.formState.serverErrors = response.errors;
 				}
 
 				// Reset our processing state.
 				scope.formState.isProcessing = false;
-			} );
+			});
 	};
 
-	Form.prototype._showSuccess = function( scope )
-	{
+	Form.prototype._showSuccess = function(scope) {
 		// Reset the timeout if it's already showing.
-		if ( this.successShowPromise ) {
-			$timeout.cancel( this.successShowPromise );
+		if (this.successShowPromise) {
+			$timeout.cancel(this.successShowPromise);
 		}
 
 		scope.formState.isShowingSuccess = true;
 
-		this.successShowPromise = $timeout( function()
-		{
+		this.successShowPromise = $timeout(function() {
 			scope.formState.isShowingSuccess = false;
 			this.successShowPromise = undefined;
-		}, 1000 );
+		}, 1000);
 	};
 
 	return Form;
-} );
+});

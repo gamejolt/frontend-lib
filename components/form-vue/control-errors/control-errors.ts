@@ -12,7 +12,7 @@ import { AppExpand } from '../../expand/expand';
 // They are also common enough to be applied to all elements.
 const ErrorMessagesBase: { [k: string]: string } = {
 	required: 'You must enter a {}.',
-	server: 'The {} you\'ve entered is invalid.',
+	server: "The {} you've entered is invalid.",
 	pattern: 'Please enter a valid {}.',
 	url: 'Please enter a valid URL.',
 	accept: 'The chosen {} is the wrong type of file.',
@@ -30,169 +30,210 @@ const ErrorMessagesBase: { [k: string]: string } = {
 		AppExpand,
 	},
 })
-export class AppFormControlErrors extends Vue
-{
-	@Prop( String ) label?: string;
-	@Prop( String ) position?: string;
+export class AppFormControlErrors extends Vue {
+	@Prop(String) label?: string;
+	@Prop(String) position?: string;
 
 	// TODO
-	@Prop( Boolean ) ignoreDirty?: boolean;
+	@Prop(Boolean) ignoreDirty?: boolean;
 
 	form: AppForm;
 	group: AppFormGroup;
 
 	private errorMessageOverrides: { [k: string]: string } = {};
 
-	created()
-	{
-		this.form = findVueParent( this, AppForm ) as AppForm;
-		this.group = findVueParent( this, AppFormGroup ) as AppFormGroup;
+	created() {
+		this.form = findVueParent(this, AppForm) as AppForm;
+		this.group = findVueParent(this, AppFormGroup) as AppFormGroup;
 	}
 
-	get _label()
-	{
+	get _label() {
 		const ourLabel = this.label;
 		const groupLabel = this.group.label;
 		return (ourLabel || groupLabel || '').toLowerCase();
 	}
 
-	get hasServerError(): boolean
-	{
-		return !!this.form.base.serverErrors[ this.group.name ];
+	get hasServerError(): boolean {
+		return !!this.form.base.serverErrors[this.group.name];
 	}
 
-	get error()
-	{
+	get error() {
 		const label = this._label;
 
-		if ( this.group.inputErrors ) {
+		if (this.group.inputErrors) {
 			const errors = (this.group.inputErrors as any).errors;
-			if ( errors.length ) {
-				return this.processMessage( errors[0].rule, label );
+			if (errors.length) {
+				return this.processMessage(errors[0].rule, label);
 			}
 		}
 
-		if ( this.hasServerError ) {
-			return this.processMessage( 'server', label );
+		if (this.hasServerError) {
+			return this.processMessage('server', label);
 		}
 
 		return undefined;
 	}
 
-	setMessageOverride( when: string, message: string )
-	{
-		this.errorMessageOverrides[ when ] = message;
+	setMessageOverride(when: string, message: string) {
+		this.errorMessageOverrides[when] = message;
 	}
 
-	private processMessage( rule: string, label: string )
-	{
+	private processMessage(rule: string, label: string) {
 		let message = '';
-		const data = this.group.control.validationRules && this.group.control.validationRules[ rule ];
-		const errorMessages = Object.assign( {}, ErrorMessagesBase, this.errorMessageOverrides );
-
+		const data =
+			this.group.control.validationRules &&
+			this.group.control.validationRules[rule];
+		const errorMessages = Object.assign(
+			{},
+			ErrorMessagesBase,
+			this.errorMessageOverrides,
+		);
 
 		// Pull from the group's validation data to find out the rest of the messages.
 		// When an input has validations like maxlength, we register the attribute's value.
 		// This way we can message on it better.
-		switch ( rule ) {
+		switch (rule) {
 			case 'max':
-				message = 'Please enter a {} shorter than or equal to ' + number( data ) + ' characters.';
+				message =
+					'Please enter a {} shorter than or equal to ' +
+					number(data) +
+					' characters.';
 				break;
 
 			case 'min':
-				message = 'Please enter a {} longer than or equal to ' + number( data ) + ' characters.';
+				message =
+					'Please enter a {} longer than or equal to ' +
+					number(data) +
+					' characters.';
 				break;
 
 			case 'pattern':
-				if ( data === 'urlPath' ) {
+				if (data === 'urlPath') {
 					message = 'Please use only letters, numbers, and hyphens (-).';
-				}
-				else if ( data === 'hashtag' ) {
+				} else if (data === 'hashtag') {
 					message = 'Please use only letters, numbers, and underscores (_).';
-				}
-				else if ( data === 'username' ) {
-					message = 'Please use only letters, numbers, hyphens (-), and underscores (_).';
+				} else if (data === 'username') {
+					message =
+						'Please use only letters, numbers, hyphens (-), and underscores (_).';
 				}
 				break;
 
 			case 'filesize':
-				message = 'The chosen {} exceeds the maximum file size of ' + number( data / 1024 / 1024 ) + 'MB.';
+				message =
+					'The chosen {} exceeds the maximum file size of ' +
+					number(data / 1024 / 1024) +
+					'MB.';
 				break;
 
-			case 'img_dimensions': {
-				const width = data[0];
-				const height = data[1];
+			case 'img_dimensions':
+				{
+					const width = data[0];
+					const height = data[1];
 
-				if ( width && height ) {
-					message = 'The dimensions of your {} must be exactly ' + number( width ) + 'x' + number( height ) + 'px.';
+					if (width && height) {
+						message =
+							'The dimensions of your {} must be exactly ' +
+							number(width) +
+							'x' +
+							number(height) +
+							'px.';
+					} else if (width) {
+						message =
+							'The width of your {} must be exactly ' + number(width) + 'px.';
+					} else if (height) {
+						message =
+							'The height of your {} must be exactly ' + number(height) + 'px.';
+					}
 				}
-				else if ( width ) {
-					message = 'The width of your {} must be exactly ' + number( width ) + 'px.';
-				}
-				else if ( height ) {
-					message = 'The height of your {} must be exactly ' + number( height ) + 'px.';
-				}
-			}
-			break;
+				break;
 
-			case 'min_img_dimensions': {
-				const width = data[0];
-				const height = data[1];
+			case 'min_img_dimensions':
+				{
+					const width = data[0];
+					const height = data[1];
 
-				if ( width && height ) {
-					message = 'What is this, a center for ants!? '
-						+ 'The dimensions of your {} must be at least ' + number( width ) + 'x' + number( height ) + 'px.';
+					if (width && height) {
+						message =
+							'What is this, a center for ants!? ' +
+							'The dimensions of your {} must be at least ' +
+							number(width) +
+							'x' +
+							number(height) +
+							'px.';
+					} else if (width) {
+						message =
+							'What is this, a center for ants!? ' +
+							'The width of your {} must be at least ' +
+							number(width) +
+							'px.';
+					} else if (height) {
+						message =
+							'What is this, a center for ants!? ' +
+							'The height of your {} must be at least ' +
+							number(height) +
+							'px.';
+					}
 				}
-				else if ( width ) {
-					message = 'What is this, a center for ants!? '
-						+ 'The width of your {} must be at least ' + number( width ) + 'px.';
-				}
-				else if ( height ) {
-					message = 'What is this, a center for ants!? '
-						+ 'The height of your {} must be at least ' + number( height ) + 'px.';
-				}
-			}
-			break;
+				break;
 
-			case 'max_img_dimensions': {
-				const width = data[0];
-				const height = data[1];
+			case 'max_img_dimensions':
+				{
+					const width = data[0];
+					const height = data[1];
 
-				if ( width && height ) {
-					message = 'Your {} is too large. '
-						+ 'The dimensions must be no greater than ' + number( width ) + 'x' + number( height ) + 'px.';
+					if (width && height) {
+						message =
+							'Your {} is too large. ' +
+							'The dimensions must be no greater than ' +
+							number(width) +
+							'x' +
+							number(height) +
+							'px.';
+					} else if (width) {
+						message =
+							'Your {} is too wide. ' +
+							'The width must be no greater than ' +
+							number(width) +
+							'px.';
+					} else if (height) {
+						message =
+							'Your {} is too tall. ' +
+							'The height must be no greater than ' +
+							number(height) +
+							'px.';
+					}
 				}
-				else if ( width ) {
-					message = 'Your {} is too wide. '
-						+ 'The width must be no greater than ' + number( width ) + 'px.';
-				}
-				else if ( height ) {
-					message = 'Your {} is too tall. '
-						+ 'The height must be no greater than ' + number( height ) + 'px.';
-				}
-			}
-			break;
+				break;
 
 			case 'img_ratio':
-				message = 'Your {} has an incorrect aspect ratio. '
-					+ 'Its width divided by height must be exactly ' + number( data ) + '.';
+				message =
+					'Your {} has an incorrect aspect ratio. ' +
+					'Its width divided by height must be exactly ' +
+					number(data) +
+					'.';
 				break;
 
 			case 'min_img_ratio':
-				message = 'Your {} has an incorrect aspect ratio. '
-					+ 'Its width divided by height must be at least ' + number( data ) + '.';
+				message =
+					'Your {} has an incorrect aspect ratio. ' +
+					'Its width divided by height must be at least ' +
+					number(data) +
+					'.';
 				break;
 
 			case 'max_img_ratio':
-				message = 'Your {} has an incorrect aspect ratio. '
-					+ 'Its width divided by height must be no greater than ' + number( data ) + '.';
+				message =
+					'Your {} has an incorrect aspect ratio. ' +
+					'Its width divided by height must be no greater than ' +
+					number(data) +
+					'.';
 				break;
 		}
 
-		if ( !message ) {
-			message = errorMessages[ rule ];
+		if (!message) {
+			message = errorMessages[rule];
 		}
 
-		return message.replace( /\{\}/g, label );
+		return message.replace(/\{\}/g, label);
 	}
 }

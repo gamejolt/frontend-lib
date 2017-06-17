@@ -8,22 +8,19 @@ import { stringSort } from '../../../utils/array';
 
 @View
 @Component({})
-export class AppTranslateLangSelector extends Vue
-{
+export class AppTranslateLangSelector extends Vue {
 	lang = Translate.lang;
 
-	get langs()
-	{
-		return Translate.langs.sort( ( a, b ) => stringSort( a.label, b.label ) );
+	get langs() {
+		return Translate.langs.sort((a, b) => stringSort(a.label, b.label));
 	}
 
-	async onChange()
-	{
-		await Analytics.trackEvent( 'translations', 'change', this.lang );
+	async onChange() {
+		await Analytics.trackEvent('translations', 'change', this.lang);
 
 		// We don't wait for the promise to resolve before firing the event.
 		// This way they can reload the window without any language flicker.
-		Translate.setLanguage( this.lang );
-		this.$emit( 'changed', this.lang );
+		Translate.setLanguage(this.lang);
+		this.$emit('changed', this.lang);
 	}
 }

@@ -17,88 +17,84 @@ import { FormValidatorMinImgDimensions } from './validators/min_img_dimensions';
 import { FormValidatorMaxImgDimensions } from './validators/max_img_dimensions';
 import { FormValidatorAccept } from './validators/accept';
 
-Vue.use( VeeValidate );
+Vue.use(VeeValidate);
 
 @View
 @Component({})
-export class AppForm extends Vue
-{
-	@Prop( String ) name: string;
+export class AppForm extends Vue {
+	@Prop(String) name: string;
 
 	base: BaseForm<any>;
 	controls: BaseFormControl[] = [];
 
 	private static hasAddedValidators = false;
 
-	mounted()
-	{
-		if ( !AppForm.hasAddedValidators ) {
-			this.$validator.extend( 'pattern', FormValidatorPattern );
-			this.$validator.extend( 'availability', FormValidatorAvailability );
-			this.$validator.extend( 'filesize', FormValidatorFilesize );
-			this.$validator.extend( 'accept', FormValidatorAccept );
-			this.$validator.extend( 'img_ratio', FormValidatorImgRatio );
-			this.$validator.extend( 'min_img_ratio', FormValidatorMinImgRatio );
-			this.$validator.extend( 'max_img_ratio', FormValidatorMaxImgRatio );
-			this.$validator.extend( 'img_dimensions', FormValidatorImgDimensions );
-			this.$validator.extend( 'min_img_dimensions', FormValidatorMinImgDimensions );
-			this.$validator.extend( 'max_img_dimensions', FormValidatorMaxImgDimensions );
+	mounted() {
+		if (!AppForm.hasAddedValidators) {
+			this.$validator.extend('pattern', FormValidatorPattern);
+			this.$validator.extend('availability', FormValidatorAvailability);
+			this.$validator.extend('filesize', FormValidatorFilesize);
+			this.$validator.extend('accept', FormValidatorAccept);
+			this.$validator.extend('img_ratio', FormValidatorImgRatio);
+			this.$validator.extend('min_img_ratio', FormValidatorMinImgRatio);
+			this.$validator.extend('max_img_ratio', FormValidatorMaxImgRatio);
+			this.$validator.extend('img_dimensions', FormValidatorImgDimensions);
+			this.$validator.extend(
+				'min_img_dimensions',
+				FormValidatorMinImgDimensions,
+			);
+			this.$validator.extend(
+				'max_img_dimensions',
+				FormValidatorMaxImgDimensions,
+			);
 			AppForm.hasAddedValidators = true;
 		}
 	}
 
-	created()
-	{
-		this.base = findVueParent( this, BaseForm ) as BaseForm<any>;
-		if ( !this.base ) {
-			throw new Error( `Couldn't find BaseForm in parent tree.` );
+	created() {
+		this.base = findVueParent(this, BaseForm) as BaseForm<any>;
+		if (!this.base) {
+			throw new Error(`Couldn't find BaseForm in parent tree.`);
 		}
 	}
 
-	async validate()
-	{
-		const promises = this.controls.map( async ( control ) =>
-		{
+	async validate() {
+		const promises = this.controls.map(async control => {
 			// vee-validate throws an error for failed validation
 			try {
 				await control.$validator.validateAll();
-			}
-			catch ( _e ) {}
-		} );
+			} catch (_e) {}
+		});
 
-		await Promise.all( promises );
+		await Promise.all(promises);
 	}
 
-	get hasErrors()
-	{
+	get hasErrors() {
 		let hasErrors = false;
 
-		this.controls.forEach( ( control ) =>
-		{
-			if ( control.$validator.getErrors().count() > 0 ) {
+		this.controls.forEach(control => {
+			if (control.$validator.getErrors().count() > 0) {
 				hasErrors = true;
 			}
-		} );
+		});
 
 		return hasErrors;
 	}
 
-	async onSubmit()
-	{
+	async onSubmit() {
 		// Gotta validate all controls first.
 		await this.validate();
 
 		// If we have validation errors, don't let it pass through.
-		if ( this.hasErrors ) {
+		if (this.hasErrors) {
 			return;
 		}
 
 		this.base._onSubmit();
 	}
 
-	onChange()
-	{
+	onChange() {
 		this.base.changed = true;
-		this.$emit( 'changed', this.base.formModel );
+		this.$emit('changed', this.base.formModel);
 	}
 }

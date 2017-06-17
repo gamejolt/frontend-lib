@@ -11,14 +11,12 @@ import { Game } from '../game.model';
 		AppImgResponsive,
 	},
 })
-export class AppGameThumbnailImg extends Vue
-{
-	@Prop( Object ) game: Game;
+export class AppGameThumbnailImg extends Vue {
+	@Prop(Object) game: Game;
 
-	imgLoadChange( isLoaded: boolean )
-	{
-		if ( isLoaded ) {
-			this.$emit( 'loaded' );
+	imgLoadChange(isLoaded: boolean) {
+		if (isLoaded) {
+			this.$emit('loaded');
 		}
 	}
 }

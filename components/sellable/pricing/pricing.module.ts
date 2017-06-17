@@ -3,7 +3,7 @@ import { SellablePricing } from './pricing.model';
 
 @NgModule({
 	providers: [
-		{ provide: 'Sellable_Pricing', useFactory: () => SellablePricing }
+		{ provide: 'Sellable_Pricing', useFactory: () => SellablePricing },
 	],
 })
-export class SellablePricingModule { }
+export class SellablePricingModule {}

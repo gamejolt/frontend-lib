@@ -1,3 +1,3 @@
-angular.module( 'gj.Img.Crop', [] );
+angular.module('gj.Img.Crop', []);
 
-require( './crop-directive' );
+require('./crop-directive');

@@ -1,7 +1,6 @@
 import { Model } from '../../../model/model.service';
 
-export class FiresidePostVideo extends Model
-{
+export class FiresidePostVideo extends Model {
 	static PROVIDER_YOUTUBE = 'youtube';
 
 	fireside_post_id: number;
@@ -10,4 +9,4 @@ export class FiresidePostVideo extends Model
 	thumbnail_url: string;
 }
 
-Model.create( FiresidePostVideo );
+Model.create(FiresidePostVideo);

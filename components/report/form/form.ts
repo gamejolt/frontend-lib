@@ -6,19 +6,17 @@ import { Api } from '../../api/api.service';
 
 @View
 @Component({})
-export class AppReportForm extends BaseForm<any> implements FormOnSubmit
-{
-	@Prop( String ) type: string;
-	@Prop( Object ) resource: any;
+export class AppReportForm extends BaseForm<any> implements FormOnSubmit {
+	@Prop(String) type: string;
+	@Prop(Object) resource: any;
 
-	onSubmit()
-	{
+	onSubmit() {
 		const data = {
 			resourceName: this.type,
 			resourceId: this.resource.id,
 			reason: this.formModel.reason,
 		};
 
-		return Api.sendRequest( '/web/report/submit', data );
+		return Api.sendRequest('/web/report/submit', data);
 	}
 }

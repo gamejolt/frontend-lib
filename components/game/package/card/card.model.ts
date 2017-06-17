@@ -3,8 +3,7 @@ import { GameRelease } from '../../release/release.model';
 import { Device } from '../../../device/device.service';
 import { arrayUnique } from '../../../../utils/array';
 
-interface ExtraBuild
-{
+interface ExtraBuild {
 	type: string;
 	icon: string;
 	build: GameBuild;
@@ -12,9 +11,8 @@ interface ExtraBuild
 	arch: string | null;
 }
 
-export class GamePackageCardModel
-{
-	platformSupportInfo = Object.assign( {}, GameBuild.platformSupportInfo );
+export class GamePackageCardModel {
+	platformSupportInfo = Object.assign({}, GameBuild.platformSupportInfo);
 	platformSupport: string[] = [];
 	downloadableBuild: GameBuild | null = null;
 	browserBuild: GameBuild | null = null;
@@ -25,10 +23,8 @@ export class GamePackageCardModel
 	showcasedBrowserIcon = '';
 	otherOnly = false;
 
-	constructor( releases: GameRelease[], builds: GameBuild[] )
-	{
-		if ( builds ) {
-
+	constructor(releases: GameRelease[], builds: GameBuild[]) {
+		if (builds) {
 			const os = Device.os();
 			const arch = Device.arch();
 
@@ -36,160 +32,160 @@ export class GamePackageCardModel
 			// While looping we also gather all OS/browser support for this complete package.
 			let indexedBuilds: { [k: string]: GameBuild } = {};
 			let otherBuilds: GameBuild[] = [];
-			builds.forEach( ( build ) =>
-			{
-				if ( build.isBrowserBased() ) {
-					indexedBuilds[ build.type ] = build;
-					this.platformSupport.push( build.type );
+			builds.forEach(build => {
+				if (build.isBrowserBased()) {
+					indexedBuilds[build.type] = build;
+					this.platformSupport.push(build.type);
+				} else if (build.type === GameBuild.TYPE_ROM) {
+					indexedBuilds[build.type] = build;
+					this.platformSupport.push(build.type);
+					otherBuilds.push(build);
+				} else if (build.os_other) {
+					otherBuilds.push(build);
+				} else {
+					GameBuild.pluckOsSupport(build).forEach(platform => {
+						indexedBuilds[platform] = build;
+						this.platformSupport.push(this.platformSupportInfo[platform].icon);
+					});
 				}
-				else if ( build.type === GameBuild.TYPE_ROM ) {
-					indexedBuilds[ build.type ] = build;
-					this.platformSupport.push( build.type );
-					otherBuilds.push( build );
-				}
-				else if ( build.os_other ) {
-					otherBuilds.push( build );
-				}
-				else {
-					GameBuild.pluckOsSupport( build ).forEach( ( platform ) =>
-					{
-						indexedBuilds[ platform ] = build;
-						this.platformSupport.push( this.platformSupportInfo[ platform ].icon );
-					} );
-				}
-			} );
+			});
 
-			this.platformSupport = arrayUnique( this.platformSupport );
+			this.platformSupport = arrayUnique(this.platformSupport);
 
 			// At this point we should have all the OS/browser support, so let's sort it.
 			// The sort values are defined above, but we want to push their detected OS at
 			// the front. This is because you'd probably want to see [linux] first if you're
 			// on a linux machine, before windows, etc.
 			// We change the sort for their detected OS to be the first before sorting.
-			this.platformSupportInfo[ os ].sort = 0;
-			this.platformSupport.sort( ( a, b ) =>
-			{
-				return this.platformSupportInfo[ a ].sort - this.platformSupportInfo[ b ].sort;
-			} );
+			this.platformSupportInfo[os].sort = 0;
+			this.platformSupport.sort((a, b) => {
+				return (
+					this.platformSupportInfo[a].sort - this.platformSupportInfo[b].sort
+				);
+			});
 
 			// Now that we have all the builds indexed by the platform they support
 			// we need to try to pick one to showcase as the default download. We put
 			// their detected OS first so that it tries to pick that one first.
-			let checkDownloadables = [ 'windows', 'windows_64', 'mac', 'mac_64', 'linux', 'linux_64' ];
+			let checkDownloadables = [
+				'windows',
+				'windows_64',
+				'mac',
+				'mac_64',
+				'linux',
+				'linux_64',
+			];
 
 			// This will put the 64 bit version as higher priority.
-			if ( arch === '64' ) {
-				checkDownloadables.unshift( os );
-				checkDownloadables.unshift( os + '_64' );
-			}
-			// If we don't have a detected arch that is 64, we prioritize the universal version.
-			else {
-				checkDownloadables.unshift( os + '_64' );
-				checkDownloadables.unshift( os );
+			if (arch === '64') {
+				checkDownloadables.unshift(os);
+				checkDownloadables.unshift(os + '_64');
+			} else {
+				// If we don't have a detected arch that is 64, we prioritize the universal version.
+				checkDownloadables.unshift(os + '_64');
+				checkDownloadables.unshift(os);
 			}
 
-			checkDownloadables.every( ( _os ) =>
-			{
-				if ( !indexedBuilds[ _os ] ) {
+			checkDownloadables.every(_os => {
+				if (!indexedBuilds[_os]) {
 					return true;
 				}
 
-				this.downloadableBuild = indexedBuilds[ _os ];
+				this.downloadableBuild = indexedBuilds[_os];
 				this.showcasedOs = _os;
-				this.showcasedOsIcon = this.platformSupportInfo[ _os ].icon;
+				this.showcasedOsIcon = this.platformSupportInfo[_os].icon;
 				return false;
-			} );
+			});
 
 			// Do the same with browser type. Pick the default browser one to
 			// show. We include ROMs in browser play.
-			[ 'html', 'flash', 'unity', 'applet', 'silverlight', 'rom' ].every( ( type ) =>
-			{
-				if ( !indexedBuilds[ type ] ) {
+			['html', 'flash', 'unity', 'applet', 'silverlight', 'rom'].every(type => {
+				if (!indexedBuilds[type]) {
 					return true;
 				}
 
-				this.browserBuild = indexedBuilds[ type ];
-				this.showcasedBrowserIcon = this.platformSupportInfo[ type ].icon;
+				this.browserBuild = indexedBuilds[type];
+				this.showcasedBrowserIcon = this.platformSupportInfo[type].icon;
 				return false;
-			} );
+			});
 
 			// Pull the showcased release version.
 			// It should be the greater one for either the downloadable or browser build chosen.
-			if ( this.downloadableBuild ) {
+			if (this.downloadableBuild) {
 				this.showcasedRelease = this.downloadableBuild._release || null;
 			}
 
 			// Lower sort value is a "newer" version.
-			if ( this.browserBuild
-				&& (!this.showcasedRelease || this.browserBuild._release!.sort < this.showcasedRelease.sort)
+			if (
+				this.browserBuild &&
+				(!this.showcasedRelease ||
+					this.browserBuild._release!.sort < this.showcasedRelease.sort)
 			) {
 				this.showcasedRelease = this.browserBuild._release || null;
 			}
 
-			const addExtraBuild = ( build: GameBuild, type: string ) =>
-			{
+			const addExtraBuild = (build: GameBuild, type: string) => {
 				// Whether or not we stored this build in extra builds yet.
 				let alreadyAdded = false;
-				this.extraBuilds.forEach( ( extraBuild ) =>
-				{
-					if ( extraBuild.build.id === build.id ) {
+				this.extraBuilds.forEach(extraBuild => {
+					if (extraBuild.build.id === build.id) {
 						alreadyAdded = true;
 					}
-				} );
+				});
 
-				if ( alreadyAdded ) {
+				if (alreadyAdded) {
 					return;
 				}
 
-				this.extraBuilds.push( {
+				this.extraBuilds.push({
 					type: build.type,
-					icon: this.platformSupportInfo[ type ].icon,
+					icon: this.platformSupportInfo[type].icon,
 					build: build,
-					arch: this.platformSupportInfo[ type ].arch || null,
+					arch: this.platformSupportInfo[type].arch || null,
 					platform: type,
-				} );
+				});
 			};
 
 			// Now pull the extra builds (ones that aren't default).
-			Object.keys( indexedBuilds ).forEach( ( type ) =>
-			{
-				const build = indexedBuilds[ type ];
+			Object.keys(indexedBuilds).forEach(type => {
+				const build = indexedBuilds[type];
 
-				if ( build === this.downloadableBuild && type === this.showcasedOs ) {
+				if (build === this.downloadableBuild && type === this.showcasedOs) {
 					return;
 				}
 
-				if ( build.type !== GameBuild.TYPE_DOWNLOADABLE ) {
-					if ( this.browserBuild && this.browserBuild.id === build.id ) {
+				if (build.type !== GameBuild.TYPE_DOWNLOADABLE) {
+					if (this.browserBuild && this.browserBuild.id === build.id) {
 						return;
 					}
 				}
 
-				addExtraBuild( build, type );
-			} );
+				addExtraBuild(build, type);
+			});
 
 			// Add all the "Other" builds onto the end of extra.
-			if ( otherBuilds.length ) {
-				otherBuilds.forEach( ( build ) =>
-				{
+			if (otherBuilds.length) {
+				otherBuilds.forEach(build => {
 					let supportKey = 'other';
-					if ( build.type === GameBuild.TYPE_ROM ) {
+					if (build.type === GameBuild.TYPE_ROM) {
 						supportKey = 'rom';
 					}
 
-					addExtraBuild( build, supportKey );
-				} );
+					addExtraBuild(build, supportKey);
+				});
 			}
 
 			// Sort extra builds if there are any.
-			if ( this.extraBuilds.length ) {
-				this.extraBuilds.sort( ( a, b ) =>
-				{
-					return this.platformSupportInfo[ a.platform ].sort - this.platformSupportInfo[ b.platform ].sort;
-				} );
+			if (this.extraBuilds.length) {
+				this.extraBuilds.sort((a, b) => {
+					return (
+						this.platformSupportInfo[a.platform].sort -
+						this.platformSupportInfo[b.platform].sort
+					);
+				});
 			}
 
-			if ( !this.downloadableBuild && !this.browserBuild && otherBuilds.length ) {
+			if (!this.downloadableBuild && !this.browserBuild && otherBuilds.length) {
 				this.otherOnly = true;
 				this.showcasedRelease = releases[0];
 			}

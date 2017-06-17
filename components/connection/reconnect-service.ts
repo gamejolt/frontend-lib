@@ -4,8 +4,7 @@ const TIMEOUT_INITIAL = 2000;
 const TIMEOUT_GROW = 1.5;
 const TIMEOUT_MAX = 30000;
 
-export class ConnectionReconnect
-{
+export class ConnectionReconnect {
 	private _checkUrl: string;
 
 	private _failFn: Function;
@@ -14,11 +13,10 @@ export class ConnectionReconnect
 	private _timeoutMs = TIMEOUT_INITIAL;
 	private _timeoutPromise?: ng.IPromise<void>;
 
-	constructor( failFn: Function, successFn: Function )
-	{
+	constructor(failFn: Function, successFn: Function) {
 		// We just hit the favicon from the CDN.
 		// Should be pretty lightweight.
-		this._checkUrl = require( './check.png' );
+		this._checkUrl = require('./check.png');
 
 		this._failFn = failFn;
 		this._successFn = successFn;
@@ -27,53 +25,47 @@ export class ConnectionReconnect
 		this.check();
 	}
 
-	private _setTimeout()
-	{
-		const $timeout = getProvider<ng.ITimeoutService>( '$timeout' );
+	private _setTimeout() {
+		const $timeout = getProvider<ng.ITimeoutService>('$timeout');
 
-		this._timeoutPromise = $timeout( () =>
-		{
+		this._timeoutPromise = $timeout(() => {
 			// Before checking reset the timeout details.
-			this._timeoutMs = Math.min( TIMEOUT_MAX, this._timeoutMs * TIMEOUT_GROW );
+			this._timeoutMs = Math.min(TIMEOUT_MAX, this._timeoutMs * TIMEOUT_GROW);
 			this._timeoutPromise = undefined;
 
 			// Now check to see if we're back online.
 			this.check();
-		}, this._timeoutMs );
+		}, this._timeoutMs);
 	}
 
-	check()
-	{
-		const $http = getProvider<ng.IHttpService>( '$http' );
+	check() {
+		const $http = getProvider<ng.IHttpService>('$http');
 
 		// Make sure we don't cache the call.
-		$http.head( this._checkUrl + '?cb=' + Date.now() )
-			.then( () =>
-			{
+		$http
+			.head(this._checkUrl + '?cb=' + Date.now())
+			.then(() => {
 				this.finish();
-			} )
-			.catch( ( response: any ) =>
-			{
+			})
+			.catch((response: any) => {
 				// Just as long as the response doesn't have a status code of -1.
 				// After all, a 404 still means that we are connected to the internet.
-				if ( response.status !== -1 ) {
+				if (response.status !== -1) {
 					this.finish();
-				}
-				else {
+				} else {
 					// Still failing, so keep going.
 					this._failFn();
 					this._setTimeout();
 				}
-			} );
+			});
 	}
 
-	finish()
-	{
-		const $timeout = getProvider<ng.ITimeoutService>( '$timeout' );
+	finish() {
+		const $timeout = getProvider<ng.ITimeoutService>('$timeout');
 
 		// If this was called when we're currently waiting on a timeout we need to clean it up.
-		if ( this._timeoutPromise ) {
-			$timeout.cancel( this._timeoutPromise );
+		if (this._timeoutPromise) {
+			$timeout.cancel(this._timeoutPromise);
 		}
 
 		this._successFn();

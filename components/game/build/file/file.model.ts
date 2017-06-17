@@ -1,7 +1,6 @@
 import { Model } from '../../../model/model.service';
 
-export class GameBuildFile extends Model
-{
+export class GameBuildFile extends Model {
 	game_build_id: number;
 	filename: string;
 	filesize: string;
@@ -9,4 +8,4 @@ export class GameBuildFile extends Model
 	is_archive: boolean;
 }
 
-Model.create( GameBuildFile );
+Model.create(GameBuildFile);

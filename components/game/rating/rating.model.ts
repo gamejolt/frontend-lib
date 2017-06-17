@@ -1,24 +1,27 @@
 import { Model } from '../../model/model.service';
 
-export class GameRating extends Model
-{
+export class GameRating extends Model {
 	game_id: number;
 	rating: number;
 	posted_on: number;
 	type: string;
 
-	$save()
-	{
+	$save() {
 		// This is an upsert.
-		return this.$_save( '/web/discover/games/ratings/save/' + this.game_id, 'gameRating', { ignoreLoadingBar: true } );
+		return this.$_save(
+			'/web/discover/games/ratings/save/' + this.game_id,
+			'gameRating',
+			{ ignoreLoadingBar: true },
+		);
 	}
 
-	$remove()
-	{
+	$remove() {
 		// This is a clear.
 		// Doesn't depend on the rating ID, only the game ID.
-		return this.$_remove( '/web/discover/games/ratings/clear/' + this.game_id, { ignoreLoadingBar: true } );
+		return this.$_remove('/web/discover/games/ratings/clear/' + this.game_id, {
+			ignoreLoadingBar: true,
+		});
 	}
 }
 
-Model.create( GameRating );
+Model.create(GameRating);

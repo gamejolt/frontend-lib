@@ -1,15 +1,16 @@
 import { Modal } from '../modal.service';
 import { asyncComponentLoader } from '../../../utils/utils';
 
-export class ModalConfirm
-{
-	static async show( message: string, title = 'Confirm...', buttonType: 'ok' | 'yes' = 'ok' )
-	{
-		return await Modal.show<boolean>( {
+export class ModalConfirm {
+	static async show(
+		message: string,
+		title = 'Confirm...',
+		buttonType: 'ok' | 'yes' = 'ok',
+	) {
+		return await Modal.show<boolean>({
 			size: 'sm',
-			component: () => asyncComponentLoader( $import( './confirm' ) ),
+			component: () => asyncComponentLoader($import('./confirm')),
 			props: { message, title, buttonType },
-		} );
+		});
 	}
 }
-

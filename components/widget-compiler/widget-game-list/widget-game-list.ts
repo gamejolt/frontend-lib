@@ -13,17 +13,15 @@ import { WidgetCompiler } from '../widget-compiler.service';
 		AppGameThumbnailImg,
 	},
 })
-export class AppWidgetCompilerWidgetGameList extends Vue
-{
-	@Prop( { type: Array, default: () => [] } ) games: Game[];
+export class AppWidgetCompilerWidgetGameList extends Vue {
+	@Prop({ type: Array, default: () => [] })
+	games: Game[];
 
-	get contentClass()
-	{
+	get contentClass() {
 		return WidgetCompiler.getContentClass();
 	}
 
-	url( game: Game )
-	{
+	url(game: Game) {
 		return game.site ? game.site.url : Environment.baseUrl + game.getUrl();
 	}
 }

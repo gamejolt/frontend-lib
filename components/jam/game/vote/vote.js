@@ -1,3 +1,3 @@
-angular.module( 'gj.Jam.Game.Vote', [ 'gj.Jam', 'gj.Jam.Game' ] );
+angular.module('gj.Jam.Game.Vote', ['gj.Jam', 'gj.Jam.Game']);
 
-require( './vote-model' );
+require('./vote-model');

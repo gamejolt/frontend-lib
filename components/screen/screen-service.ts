@@ -16,8 +16,7 @@ const LG_WIDTH = 1200;
  */
 const HIDPI_BREAKPOINT = 1.5;
 
-export class Screen
-{
+export class Screen {
 	/**
 	 * The actual width of the browser/screen context.
 	 * Either in actual pixels, or device pixels if we can.
@@ -38,7 +37,7 @@ export class Screen
 	static isXs = false;
 	static isSm = false;
 	static isMd = false;
-	static isLg = true;  // lg is the default true state.
+	static isLg = true; // lg is the default true state.
 	static breakpoint: 'xs' | 'sm' | 'md' | 'lg' = 'lg';
 
 	static isWindowXs = Screen.isXs;
@@ -51,7 +50,7 @@ export class Screen
 	 * Just some silly helpers.
 	 */
 	static isMobile = false;
-	static isDesktop = true;  // Desktop is default true state.
+	static isDesktop = true; // Desktop is default true state.
 
 	static isWindowMobile = Screen.isMobile;
 	static isWindowDesktop = Screen.isDesktop;
@@ -68,24 +67,32 @@ export class Screen
 	static isHiDpi = GJ_IS_SSR
 		? false
 		: window.matchMedia(
-			'only screen and (-webkit-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ')'
-			+ ', only screen and (min--moz-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ')'
-			+ ', only screen and (-o-min-device-pixel-ratio: ' + HIDPI_BREAKPOINT + ' / 1)'
-			+ ', only screen and (min-resolution: ' + HIDPI_BREAKPOINT + 'dppx)'
-			+ ', only screen and (min-resolution: ' + (HIDPI_BREAKPOINT * 96) + 'dpi)'
-		).matches;
+				'only screen and (-webkit-min-device-pixel-ratio: ' +
+					HIDPI_BREAKPOINT +
+					')' +
+					', only screen and (min--moz-device-pixel-ratio: ' +
+					HIDPI_BREAKPOINT +
+					')' +
+					', only screen and (-o-min-device-pixel-ratio: ' +
+					HIDPI_BREAKPOINT +
+					' / 1)' +
+					', only screen and (min-resolution: ' +
+					HIDPI_BREAKPOINT +
+					'dppx)' +
+					', only screen and (min-resolution: ' +
+					HIDPI_BREAKPOINT * 96 +
+					'dpi)',
+			).matches;
 
 	static resizeChanges = new Subject<void>();
 
 	/**
 	 * Sets the Screen's context.
 	 */
-	static setContext( element: ng.IRootElementService )
-	{
-		if ( !element ) {
+	static setContext(element: ng.IRootElementService) {
+		if (!element) {
 			this.context = null;
-		}
-		else {
+		} else {
 			this.context = element[0];
 		}
 	}
@@ -94,51 +101,67 @@ export class Screen
 	 * Sets up a "spy" on the resize event.
 	 * Will remember to remove the handler when the scope is destroyed.
 	 */
-	static setResizeSpy( scope: any, onResize: Function )
-	{
-		const resizeChange$ = this.resizeChanges.subscribe( () => onResize() );
-		scope.$on( '$destroy', () => resizeChange$.unsubscribe() );
+	static setResizeSpy(scope: any, onResize: Function) {
+		const resizeChange$ = this.resizeChanges.subscribe(() => onResize());
+		scope.$on('$destroy', () => resizeChange$.unsubscribe());
 	}
 
 	/**
 	 * Simply recalculates the breakpoint checks.
 	 * Shouldn't need to call this often.
 	 */
-	static recalculate()
-	{
+	static recalculate() {
 		this._onResize();
 	}
 
-	static async _onResize()
-	{
+	static async _onResize() {
 		// This will force angular to digest if needed.
-		if ( GJ_IS_ANGULAR ) {
+		if (GJ_IS_ANGULAR) {
 			await Promise.resolve();
 		}
 
 		// Get everything for the window first.
-		if ( window.matchMedia( 'only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)' ).matches ) {
+		if (
+			window.matchMedia('only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)')
+				.matches
+		) {
 			this.isWindowXs = true;
 			this.isWindowSm = false;
 			this.isWindowMd = false;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'xs';
-		}
-		else if ( window.matchMedia( 'only screen and (min-width: ' + SM_WIDTH + 'px) and (max-width: ' + (MD_WIDTH - 1) + 'px)' ).matches ) {
+		} else if (
+			window.matchMedia(
+				'only screen and (min-width: ' +
+					SM_WIDTH +
+					'px) and (max-width: ' +
+					(MD_WIDTH - 1) +
+					'px)',
+			).matches
+		) {
 			this.isWindowXs = false;
 			this.isWindowSm = true;
 			this.isWindowMd = false;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'sm';
-		}
-		else if ( window.matchMedia( 'only screen and (min-width: ' + MD_WIDTH + 'px) and (max-width: ' + (LG_WIDTH - 1) + 'px)' ).matches ) {
+		} else if (
+			window.matchMedia(
+				'only screen and (min-width: ' +
+					MD_WIDTH +
+					'px) and (max-width: ' +
+					(LG_WIDTH - 1) +
+					'px)',
+			).matches
+		) {
 			this.isWindowXs = false;
 			this.isWindowSm = false;
 			this.isWindowMd = true;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'md';
-		}
-		else if ( window.matchMedia( 'only screen and (min-width: ' + LG_WIDTH + 'px)' ).matches ) {
+		} else if (
+			window.matchMedia('only screen and (min-width: ' + LG_WIDTH + 'px)')
+				.matches
+		) {
 			this.isWindowXs = false;
 			this.isWindowSm = false;
 			this.isWindowMd = false;
@@ -146,21 +169,24 @@ export class Screen
 			this.windowBreakpoint = 'lg';
 		}
 
-		if ( this.isWindowXs || this.isWindowSm ) {
+		if (this.isWindowXs || this.isWindowSm) {
 			this.isWindowMobile = true;
 			this.isWindowDesktop = false;
-		}
-		else {
+		} else {
 			this.isWindowMobile = false;
 			this.isWindowDesktop = true;
 		}
 
-		this.windowWidth = window.innerWidth > 0 ? window.innerWidth : (window as any)['width'];
-		this.windowHeight = window.innerHeight > 0 ? window.innerHeight : (window as any)['height'];
+		this.windowWidth = window.innerWidth > 0
+			? window.innerWidth
+			: (window as any)['width'];
+		this.windowHeight = window.innerHeight > 0
+			? window.innerHeight
+			: (window as any)['height'];
 
 		// Now if we have a Screen context set, let's get settings for that.
 		// Othwerise we simply use the $indow dimensions.
-		if ( !this.context ) {
+		if (!this.context) {
 			this.isXs = this.isWindowXs;
 			this.isSm = this.isWindowSm;
 			this.isMd = this.isWindowMd;
@@ -170,37 +196,32 @@ export class Screen
 			this.width = this.windowWidth;
 			this.height = this.windowHeight;
 			this.breakpoint = this.windowBreakpoint;
-		}
-		else {
-
+		} else {
 			// Pull dimensions from the Screen context.
 			// Not sure if media queries include the scrollbar in calculation or not.
 			// inner dimensions seem to not take into account any scrollbars.
 			this.width = this.context.clientWidth;
 			this.height = this.context.clientHeight;
 
-			if ( this.width < SM_WIDTH ) {
+			if (this.width < SM_WIDTH) {
 				this.isXs = true;
 				this.isSm = false;
 				this.isMd = false;
 				this.isLg = false;
 				this.breakpoint = 'xs';
-			}
-			else if ( this.width >= SM_WIDTH && this.width < MD_WIDTH ) {
+			} else if (this.width >= SM_WIDTH && this.width < MD_WIDTH) {
 				this.isXs = false;
 				this.isSm = true;
 				this.isMd = false;
 				this.isLg = false;
 				this.breakpoint = 'sm';
-			}
-			else if ( this.width >= MD_WIDTH && this.width < LG_WIDTH ) {
+			} else if (this.width >= MD_WIDTH && this.width < LG_WIDTH) {
 				this.isXs = false;
 				this.isSm = false;
 				this.isMd = true;
 				this.isLg = false;
 				this.breakpoint = 'md';
-			}
-			else if ( this.width >= LG_WIDTH ) {
+			} else if (this.width >= LG_WIDTH) {
 				this.isXs = false;
 				this.isSm = false;
 				this.isMd = false;
@@ -208,11 +229,10 @@ export class Screen
 				this.breakpoint = 'lg';
 			}
 
-			if ( this.isXs || this.isSm ) {
+			if (this.isXs || this.isSm) {
 				this.isMobile = true;
 				this.isDesktop = false;
-			}
-			else {
+			} else {
 				this.isMobile = false;
 				this.isDesktop = true;
 			}
@@ -223,8 +243,7 @@ export class Screen
 	}
 }
 
-if ( !GJ_IS_SSR ) {
-
+if (!GJ_IS_SSR) {
 	// Check the breakpoints on app load.
 	Screen._onResize();
 
@@ -232,7 +251,7 @@ if ( !GJ_IS_SSR ) {
 	 * This is used internally to check things every time window resizes.
 	 * We debounce this and afterwards fire the resizeChanges for everyone else.
 	 */
-	fromEvent( window, 'resize' )
-		.debounceTime( 250 )
-		.subscribe( () => Screen._onResize() );
+	fromEvent(window, 'resize')
+		.debounceTime(250)
+		.subscribe(() => Screen._onResize());
 }

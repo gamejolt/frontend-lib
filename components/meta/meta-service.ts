@@ -3,8 +3,7 @@ import { FbMetaContainer } from './fb-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
 import { MicrodataContainer } from './microdata-container';
 
-export class Meta extends MetaContainer
-{
+export class Meta extends MetaContainer {
 	private static _originalTitle = window.document.title;
 	private static _fb = FbMetaContainer;
 	private static _twitter = TwitterMetaContainer;
@@ -21,50 +20,62 @@ export class Meta extends MetaContainer
 	// 	} );
 	// }
 
-	static set title( title: string | null )
-	{
-		if ( title ) {
+	static set title(title: string | null) {
+		if (title) {
 			title += this.titleSuffix;
-		}
-		else {
+		} else {
 			title = this._originalTitle;
 		}
 
 		window.document.title = title;
 	}
 
-	static get title() { return window.document.title; }
-
-	static set description( value: string | null ) { this._set( 'description', value ); }
-	static get description() { return this._get( 'description' ); }
-
-	static set redirect( value: string | null ) { this._set( 'redirect', value ); }
-	static get redirect() { return this._get( 'redirect' ); }
-
-	static set responseCode( value: string | null ) { this._set( 'responseCode', value ); }
-	static get responseCode() { return this._get( 'responseCode' ); }
-
-	static set fb( values: any )
-	{
-		Object.assign( this._fb, values );
+	static get title() {
+		return window.document.title;
 	}
 
-	static get fb() { return this._fb; }
-
-	static set twitter( values: any )
-	{
-		Object.assign( this._twitter, values );
+	static set description(value: string | null) {
+		this._set('description', value);
+	}
+	static get description() {
+		return this._get('description');
 	}
 
-	static get twitter() { return this._twitter; }
-
-	static set microdata( microdata: Object )
-	{
-		this._microdata.set( microdata );
+	static set redirect(value: string | null) {
+		this._set('redirect', value);
+	}
+	static get redirect() {
+		return this._get('redirect');
 	}
 
-	static clear()
-	{
+	static set responseCode(value: string | null) {
+		this._set('responseCode', value);
+	}
+	static get responseCode() {
+		return this._get('responseCode');
+	}
+
+	static set fb(values: any) {
+		Object.assign(this._fb, values);
+	}
+
+	static get fb() {
+		return this._fb;
+	}
+
+	static set twitter(values: any) {
+		Object.assign(this._twitter, values);
+	}
+
+	static get twitter() {
+		return this._twitter;
+	}
+
+	static set microdata(microdata: Object) {
+		this._microdata.set(microdata);
+	}
+
+	static clear() {
 		this.description = null;
 		this.redirect = null;
 		this.responseCode = null;

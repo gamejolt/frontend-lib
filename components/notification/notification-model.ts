@@ -18,8 +18,7 @@ import { Translate } from '../translate/translate.service';
 import { OrderItem } from '../order/item/item.model';
 import { GameLibraryGame } from '../game-library/game/game.model';
 
-export class Notification extends Model
-{
+export class Notification extends Model {
 	static TYPE_COMMENT_ADD = 'comment-add';
 	static TYPE_COMMENT_ADD_OBJECT_OWNER = 'comment-add-object-owner';
 	static TYPE_FORUM_POST_ADD = 'forum-post-add';
@@ -41,7 +40,14 @@ export class Notification extends Model
 
 	action_resource: string;
 	action_resource_id: number;
-	action_model: Comment | ForumPost | UserFriendship | GameRating | GameLibraryGame | FiresidePost | OrderItem;
+	action_model:
+		| Comment
+		| ForumPost
+		| UserFriendship
+		| GameRating
+		| GameLibraryGame
+		| FiresidePost
+		| OrderItem;
 
 	to_resource: string;
 	to_resource_id: number;
@@ -55,72 +61,59 @@ export class Notification extends Model
 	// For feeds.
 	scroll_id?: string;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.from_resource === 'User' && data.from_resource_id ) {
-			this.from_model = new User( data.from_resource_model );
-		}
-
-		if ( data.to_resource === 'Game' ) {
-			this.to_model = new Game( data.to_resource_model );
-		}
-		else if ( data.to_resource === 'User' ) {
-			this.to_model = new User( data.to_resource_model );
-		}
-		else if ( data.to_resource === 'Fireside_Post' ) {
-			this.to_model = new FiresidePost( data.to_resource_model );
-		}
-		else if ( data.to_resource === 'Forum_Topic' ) {
-			this.to_model = new ForumTopic( data.to_resource_model );
-		}
-		else if ( data.to_resource === 'Sellable' ) {
-			this.to_model = new Sellable( data.to_resource_model );
+		if (data.from_resource === 'User' && data.from_resource_id) {
+			this.from_model = new User(data.from_resource_model);
 		}
 
-		if ( this.type === Notification.TYPE_COMMENT_ADD ) {
-			this.action_model = new Comment( data.action_resource_model );
+		if (data.to_resource === 'Game') {
+			this.to_model = new Game(data.to_resource_model);
+		} else if (data.to_resource === 'User') {
+			this.to_model = new User(data.to_resource_model);
+		} else if (data.to_resource === 'Fireside_Post') {
+			this.to_model = new FiresidePost(data.to_resource_model);
+		} else if (data.to_resource === 'Forum_Topic') {
+			this.to_model = new ForumTopic(data.to_resource_model);
+		} else if (data.to_resource === 'Sellable') {
+			this.to_model = new Sellable(data.to_resource_model);
+		}
+
+		if (this.type === Notification.TYPE_COMMENT_ADD) {
+			this.action_model = new Comment(data.action_resource_model);
 			this.jolticon = 'jolticon-share';
 			this.is_user_based = true;
-		}
-		else if ( this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
-			this.action_model = new Comment( data.action_resource_model );
+		} else if (this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER) {
+			this.action_model = new Comment(data.action_resource_model);
 			this.jolticon = 'jolticon-add-comment';
 			this.is_user_based = true;
-		}
-		else if ( this.type === Notification.TYPE_FORUM_POST_ADD ) {
-			this.action_model = new ForumPost( data.action_resource_model );
-			this.jolticon = 'jolticon-pencil-box';  // TODO: needs-icon
+		} else if (this.type === Notification.TYPE_FORUM_POST_ADD) {
+			this.action_model = new ForumPost(data.action_resource_model);
+			this.jolticon = 'jolticon-pencil-box'; // TODO: needs-icon
 			this.is_user_based = true;
-		}
-		else if ( this.type === Notification.TYPE_FRIENDSHIP_REQUEST ) {
-			this.action_model = new UserFriendship( data.action_resource_model );
+		} else if (this.type === Notification.TYPE_FRIENDSHIP_REQUEST) {
+			this.action_model = new UserFriendship(data.action_resource_model);
 			this.jolticon = 'jolticon-friend-add-1';
 			this.is_user_based = true;
-		}
-		else if ( this.type === Notification.TYPE_FRIENDSHIP_ACCEPT ) {
-			this.action_model = new UserFriendship( data.action_resource_model );
+		} else if (this.type === Notification.TYPE_FRIENDSHIP_ACCEPT) {
+			this.action_model = new UserFriendship(data.action_resource_model);
 			this.jolticon = 'jolticon-friend-add-2';
 			this.is_user_based = true;
-		}
-		else if ( this.type === Notification.TYPE_GAME_RATING_ADD ) {
-			this.action_model = new GameRating( data.action_resource_model );
+		} else if (this.type === Notification.TYPE_GAME_RATING_ADD) {
+			this.action_model = new GameRating(data.action_resource_model);
 			this.jolticon = 'jolticon-chart';
 			this.is_game_based = true;
-		}
-		else if ( this.type === Notification.TYPE_GAME_FOLLOW ) {
-			this.action_model = new GameLibraryGame( data.action_resource_model );
+		} else if (this.type === Notification.TYPE_GAME_FOLLOW) {
+			this.action_model = new GameLibraryGame(data.action_resource_model);
 			this.jolticon = 'jolticon-subscribe';
 			this.is_user_based = true;
-		}
-		else if ( this.type === Notification.TYPE_DEVLOG_POST_ADD ) {
-			this.action_model = new FiresidePost( data.action_resource_model );
+		} else if (this.type === Notification.TYPE_DEVLOG_POST_ADD) {
+			this.action_model = new FiresidePost(data.action_resource_model);
 			this.jolticon = 'jolticon-blog-article';
 			this.is_game_based = true;
-		}
-		else if ( this.type === Notification.TYPE_SELLABLE_SELL ) {
-			this.action_model = new OrderItem( data.action_resource_Model );
+		} else if (this.type === Notification.TYPE_SELLABLE_SELL) {
+			this.action_model = new OrderItem(data.action_resource_Model);
 			this.jolticon = 'jolticon-heart';
 			this.is_user_based = true;
 		}
@@ -132,15 +125,12 @@ export class Notification extends Model
 		delete that['to_resource_model'];
 	}
 
-	static fetchNotificationsCount()
-	{
-		return Api.sendRequest( '/web/dash/activity/count', null, { detach: true } );
+	static fetchNotificationsCount() {
+		return Api.sendRequest('/web/dash/activity/count', null, { detach: true });
 	}
 
-	get routeLocation()
-	{
-		switch ( this.type )
-		{
+	get routeLocation() {
+		switch (this.type) {
 			case Notification.TYPE_FRIENDSHIP_REQUEST:
 			case Notification.TYPE_FRIENDSHIP_ACCEPT:
 				return this.from_model!.url;
@@ -171,61 +161,58 @@ export class Notification extends Model
 		return '';
 	}
 
-	async go( router: VueRouter )
-	{
-		if ( this.routeLocation ) {
-			router.push( this.routeLocation );
-		}
-		// Need to fetch the URL first.
-		else if (
-			this.type === Notification.TYPE_COMMENT_ADD
-			|| this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER
-			|| this.type === Notification.TYPE_FORUM_POST_ADD
+	async go(router: VueRouter) {
+		if (this.routeLocation) {
+			router.push(this.routeLocation);
+		} else if (
+			this.type === Notification.TYPE_COMMENT_ADD ||
+			this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ||
+			this.type === Notification.TYPE_FORUM_POST_ADD
 		) {
+			// Need to fetch the URL first.
 			let url: string;
 
 			try {
-				if ( this.type === Notification.TYPE_COMMENT_ADD || this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ) {
-					url = await Comment.getCommentUrl( this.action_resource_id );
-				}
-				else if ( this.type === Notification.TYPE_FORUM_POST_ADD ) {
-					url = await ForumPost.getPostUrl( this.action_resource_id );
-				}
-				else {
-					throw new Error( 'Invalid type.' );
+				if (
+					this.type === Notification.TYPE_COMMENT_ADD ||
+					this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER
+				) {
+					url = await Comment.getCommentUrl(this.action_resource_id);
+				} else if (this.type === Notification.TYPE_FORUM_POST_ADD) {
+					url = await ForumPost.getPostUrl(this.action_resource_id);
+				} else {
+					throw new Error('Invalid type.');
 				}
 
-				console.log( 'got', url );
+				console.log('got', url);
 
 				// If we're going to a URL within this domain, then we want to strip off the domain stuff
 				// and go to the URL. Otherwise we need to do a full-page change to the domain/url.
 				const search = Environment.baseUrl;
-				console.log( 'search', search );
-				if ( url.search( search ) === 0 ) {
-					url = url.replace( search, '' );
-					router.push( url );
-				}
-				else if ( GJ_IS_CLIENT ) {
-					const gui = require( 'nw.gui' ) as typeof nwGui;
-					gui.Shell.openExternal( url );
-				}
-				else {
+				console.log('search', search);
+				if (url.search(search) === 0) {
+					url = url.replace(search, '');
+					router.push(url);
+				} else if (GJ_IS_CLIENT) {
+					const gui = require('nw.gui') as typeof nwGui;
+					gui.Shell.openExternal(url);
+				} else {
 					window.location.href = url;
 				}
-			}
-			catch ( e ) {
-				console.error( e );
-				Growls.error(
-					Translate.$gettext( `Couldn't go to notification.` ),
-				);
+			} catch (e) {
+				console.error(e);
+				Growls.error(Translate.$gettext(`Couldn't go to notification.`));
 			}
 		}
 	}
 
-	$read()
-	{
-		return this.$_save( '/web/dash/activity/mark-read/' + this.id, 'notification', { detach: true } );
+	$read() {
+		return this.$_save(
+			'/web/dash/activity/mark-read/' + this.id,
+			'notification',
+			{ detach: true },
+		);
 	}
 }
 
-Model.create( Notification );
+Model.create(Notification);

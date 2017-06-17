@@ -2,8 +2,7 @@ import Axios from 'axios';
 import { Environment } from '../environment/environment.service';
 import { Payload } from '../payload/payload-service';
 
-export interface RequestOptions
-{
+export interface RequestOptions {
 	/**
 	 * Files to upload can be passed in through here.
 	 */
@@ -12,7 +11,7 @@ export interface RequestOptions
 	/**
 	 * Progress handler. Will only be used when uploading a file.
 	 */
-	progress?: ( event: ProgressEvent | undefined ) => void;
+	progress?: (event: ProgressEvent | undefined) => void;
 
 	/**
 	 * Whether or not to show the loading bar.
@@ -71,24 +70,29 @@ export interface RequestOptions
 	apiPath?: string;
 }
 
-export class Api
-{
+export class Api {
 	static apiHost: string = Environment.apiHost;
 	static apiPath = '/site-api';
 
-	static async sendRequest( uri: string, postData?: any, options: RequestOptions = {} ): Promise<any>
-	{
-		options = { ...<RequestOptions>{
-			ignoreLoadingBar: false,
-			processPayload: true,
-			withCredentials: true,
-			sanitizeComplexData: true,
-			allowComplexData: [],
-			detach: false,
-		}, ...options };
+	static async sendRequest(
+		uri: string,
+		postData?: any,
+		options: RequestOptions = {},
+	): Promise<any> {
+		options = {
+			...<RequestOptions>{
+				ignoreLoadingBar: false,
+				processPayload: true,
+				withCredentials: true,
+				sanitizeComplexData: true,
+				allowComplexData: [],
+				detach: false,
+			},
+			...options,
+		};
 
 		// Set up the detachment options if detach is set.
-		if ( options.detach ) {
+		if (options.detach) {
 			options.ignoreLoadingBar = true;
 			options.ignorePayloadUser = true;
 			options.ignorePayloadVersion = true;
@@ -96,48 +100,63 @@ export class Api
 		}
 
 		let sanitizedPostData: any = undefined;
-		if ( postData ) {
+		if (postData) {
 			sanitizedPostData = {};
-			for ( const key of Object.keys( postData ) ) {
-				const value = postData[ key ];
+			for (const key of Object.keys(postData)) {
+				const value = postData[key];
 				const valueType = typeof value;
 
-				if ( valueType === 'undefined' ) {
+				if (valueType === 'undefined') {
 					continue;
 				}
 
 				// Complex data allows certain known objects to pass through to the server.
 				// It must be set explicitly if you want to send in an object as a value.
-				if ( options.sanitizeComplexData ) {
-					if ( (options.allowComplexData && options.allowComplexData.indexOf( key ) !== -1)
-						|| (valueType !== 'function' && valueType !== 'object' && !Array.isArray( value ))
+				if (options.sanitizeComplexData) {
+					if (
+						(options.allowComplexData &&
+							options.allowComplexData.indexOf(key) !== -1) ||
+						(valueType !== 'function' &&
+							valueType !== 'object' &&
+							!Array.isArray(value))
 					) {
-						sanitizedPostData[ key ] = value;
+						sanitizedPostData[key] = value;
 					}
-				}
-				else {
-					sanitizedPostData[ key ] = value;
+				} else {
+					sanitizedPostData[key] = value;
 				}
 			}
 		}
 
 		const method = sanitizedPostData ? 'POST' : 'GET';
-		const url = (options.apiHost || this.apiHost) + (options.apiPath || this.apiPath) + uri;
+		const url =
+			(options.apiHost || this.apiHost) +
+			(options.apiPath || this.apiPath) +
+			uri;
 
-		const requestPromise = this.createRequest( method, url, sanitizedPostData, options );
+		const requestPromise = this.createRequest(
+			method,
+			url,
+			sanitizedPostData,
+			options,
+		);
 
 		// If we aren't processing the payload, then just return the promise.
-		if ( !options.processPayload ) {
+		if (!options.processPayload) {
 			return await requestPromise;
 		}
 
-		return await Payload.processResponse( requestPromise, options );
+		return await Payload.processResponse(requestPromise, options);
 	}
 
-	private static createRequest( method: string, url: string, data: any, options: RequestOptions )
-	{
+	private static createRequest(
+		method: string,
+		url: string,
+		data: any,
+		options: RequestOptions,
+	) {
 		// An upload request.
-		if ( options.file ) {
+		if (options.file) {
 			// const Upload = getProvider<any>( 'Upload' );
 
 			// Copy over since we'll modify.
@@ -150,31 +169,28 @@ export class Api
 			// We have to send it over as form data instead of JSON data.
 			data = { ...data, file: options.file };
 			const formData = new FormData();
-			for ( const key in data ) {
-				formData.append( key, data[ key ] );
+			for (const key in data) {
+				formData.append(key, data[key]);
 			}
 
-			const request = Axios( {
+			const request = Axios({
 				method,
 				url,
 				data: formData,
 				withCredentials: options.withCredentials,
 				ignoreLoadingBar: options.ignoreLoadingBar,
-				onUploadProgress: ( e: ProgressEvent ) =>
-				{
-					if ( options.progress && e.lengthComputable ) {
-						options.progress( e );
+				onUploadProgress: (e: ProgressEvent) => {
+					if (options.progress && e.lengthComputable) {
+						options.progress(e);
 					}
 				},
-			} )
-			.then( () =>
-			{
+			}).then(() => {
 				// When the request is done, send one last progress event of
 				// nothing to indicate that the transfer is complete.
-				if ( options.progress ) {
-					options.progress( undefined );
+				if (options.progress) {
+					options.progress(undefined);
 				}
-			} );
+			});
 
 			// const uploadPromise = Upload.upload( {
 			// 	method: 'POST',
@@ -210,12 +226,12 @@ export class Api
 			return request;
 		}
 
-		return Axios( {
+		return Axios({
 			method,
 			url,
 			data,
 			withCredentials: options.withCredentials,
 			ignoreLoadingBar: options.ignoreLoadingBar,
-		} );
+		});
 	}
 }

@@ -1,3 +1,3 @@
-angular.module( 'gj.Typography', [] );
+angular.module('gj.Typography', []);
 
-require( './typography-test-directive' );
+require('./typography-test-directive');

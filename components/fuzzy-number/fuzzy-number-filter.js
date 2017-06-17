@@ -1,7 +1,5 @@
-angular.module( 'gj.FuzzyNumber' ).filter( 'fuzzyNumber', function()
-{
-	return function( number )
-	{
+angular.module('gj.FuzzyNumber').filter('fuzzyNumber', function() {
+	return function(number) {
 		// For resting.
 		// number = 2900;
 		// number = 2090;
@@ -42,18 +40,18 @@ angular.module( 'gj.FuzzyNumber' ).filter( 'fuzzyNumber', function()
 		// number = 209000000;
 		// number = 290000000;
 
-		if ( number >= 1000000000 ) {
-			return (number / 1000000000).toFixed( 1 ).replace( /\.0$/, '' ) + 'g';
+		if (number >= 1000000000) {
+			return (number / 1000000000).toFixed(1).replace(/\.0$/, '') + 'g';
 		}
 
-		if ( number >= 1000000 ) {
-			return (number / 1000000).toFixed( 1 ).replace( /\.0$/, '' ) + 'm';
+		if (number >= 1000000) {
+			return (number / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
 		}
 
-		if ( number >= 1000 ) {
-			return (number / 1000).toFixed( 1 ).replace( /\.0$/, '' ) + 'k';
+		if (number >= 1000) {
+			return (number / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
 		}
 
 		return number;
 	};
-} );
+});

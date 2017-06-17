@@ -3,8 +3,7 @@ import { SiteTheme } from './theme/theme-model';
 import { SiteContentBlock } from './content-block/content-block-model';
 import { SiteBuild } from './build/build-model';
 
-export class Site extends Model
-{
+export class Site extends Model {
 	static STATUS_INACTIVE = 'inactive';
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
@@ -21,37 +20,33 @@ export class Site extends Model
 	ga_tracking_id?: string;
 	status: string;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.theme ) {
-			this.theme = new SiteTheme( data.theme );
+		if (data.theme) {
+			this.theme = new SiteTheme(data.theme);
 		}
 
-		if ( data.content_blocks ) {
-			this.content_blocks = SiteContentBlock.populate( data.content_blocks );
+		if (data.content_blocks) {
+			this.content_blocks = SiteContentBlock.populate(data.content_blocks);
 		}
 
-		if ( data.build ) {
-			this.build = new SiteBuild( data.build );
+		if (data.build) {
+			this.build = new SiteBuild(data.build);
 		}
 	}
 
-	$save()
-	{
-		return this.$_save( `/web/dash/sites/save/${this.id}`, 'site' );
+	$save() {
+		return this.$_save(`/web/dash/sites/save/${this.id}`, 'site');
 	}
 
-	$activate()
-	{
-		return this.$_save( `/web/dash/sites/activate/${this.id}`, 'site' );
+	$activate() {
+		return this.$_save(`/web/dash/sites/activate/${this.id}`, 'site');
 	}
 
-	$deactivate()
-	{
-		return this.$_save( `/web/dash/sites/deactivate/${this.id}`, 'site' );
+	$deactivate() {
+		return this.$_save(`/web/dash/sites/deactivate/${this.id}`, 'site');
 	}
 }
 
-Model.create( Site );
+Model.create(Site);

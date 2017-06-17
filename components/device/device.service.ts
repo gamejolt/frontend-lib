@@ -1,7 +1,6 @@
 import { UAParser } from 'ua-parser-js';
 
-export class Device
-{
+export class Device {
 	static ua?: string;
 
 	private static _result?: any;
@@ -10,15 +9,9 @@ export class Device
 	private static _browser?: string;
 
 	// Keep all these lowercase.
-	static readonly OS_WINDOWS = [
-		'windows',
-		'windows phone',
-		'windows mobile',
-	];
+	static readonly OS_WINDOWS = ['windows', 'windows phone', 'windows mobile'];
 
-	static readonly OS_MAC = [
-		'mac os',
-	];
+	static readonly OS_MAC = ['mac os'];
 
 	static readonly OS_LINUX = [
 		'linux',
@@ -64,49 +57,41 @@ export class Device
 		'sparc64',
 	];
 
-	private static _getResult()
-	{
-		if ( !this._result ) {
-			const parser = new UAParser( this.ua );
+	private static _getResult() {
+		if (!this._result) {
+			const parser = new UAParser(this.ua);
 			this._result = parser.getResult();
 		}
 
 		return this._result;
 	}
 
-	static os()
-	{
-		if ( GJ_IS_CLIENT ) {
-			const os = require( 'os' );
+	static os() {
+		if (GJ_IS_CLIENT) {
+			const os = require('os');
 			const type = os.type();
-			if ( type === 'Linux' ) {
+			if (type === 'Linux') {
 				return 'linux';
-			}
-			else if ( type === 'Darwin' ) {
+			} else if (type === 'Darwin') {
 				return 'mac';
-			}
-			else if ( type === 'Windows_NT' ) {
+			} else if (type === 'Windows_NT') {
 				return 'windows';
-			}
-			else {
+			} else {
 				return 'other';
 			}
 		}
 
-		if ( !this._os ) {
+		if (!this._os) {
 			const result = this._getResult();
 			const osName = result.os.name.toLowerCase();
 
-			if ( Device.OS_WINDOWS.indexOf( osName ) !== -1 ) {
+			if (Device.OS_WINDOWS.indexOf(osName) !== -1) {
 				this._os = 'windows';
-			}
-			else if ( Device.OS_MAC.indexOf( osName ) !== -1 ) {
+			} else if (Device.OS_MAC.indexOf(osName) !== -1) {
 				this._os = 'mac';
-			}
-			else if ( Device.OS_LINUX.indexOf( osName ) !== -1 ) {
+			} else if (Device.OS_LINUX.indexOf(osName) !== -1) {
 				this._os = 'linux';
-			}
-			else {
+			} else {
 				this._os = 'other';
 			}
 		}
@@ -114,38 +99,37 @@ export class Device
 		return this._os;
 	}
 
-	static arch()
-	{
-		if ( GJ_IS_CLIENT ) {
-			const arch = require( 'os' ).arch();
+	static arch() {
+		if (GJ_IS_CLIENT) {
+			const arch = require('os').arch();
 
 			// Because of a bug where 32-bit node versions will always report 32 instead of the OS arch.
 			// http://blog.differentpla.net/blog/2013/03/10/processor-architew6432/
-			if ( this.os() === 'windows' ) {
-				return arch === 'x64' || process.env.hasOwnProperty( 'PROCESSOR_ARCHITEW6432' ) ? '64' : '32';
+			if (this.os() === 'windows') {
+				return arch === 'x64' ||
+					process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432')
+					? '64'
+					: '32';
 			}
 
-			if ( arch === 'x64' ) {
+			if (arch === 'x64') {
 				return '64';
-			}
-			else if ( arch === 'ia32' ) {
+			} else if (arch === 'ia32') {
 				return '32';
 			}
 		}
 
-		if ( typeof this._arch === 'undefined' ) {
+		if (typeof this._arch === 'undefined') {
 			const result = this._getResult();
 			const arch = result.cpu && result.cpu.architecture
 				? result.cpu.architecture.toLowerCase()
 				: null;
 
-			if ( Device.ARCH_64.indexOf( arch ) !== -1 ) {
+			if (Device.ARCH_64.indexOf(arch) !== -1) {
 				this._arch = '64';
-			}
-			else if ( Device.ARCH_32.indexOf( arch ) !== -1 ) {
+			} else if (Device.ARCH_32.indexOf(arch) !== -1) {
 				this._arch = '32';
-			}
-			else {
+			} else {
 				this._arch = undefined;
 			}
 		}
@@ -153,13 +137,12 @@ export class Device
 		return this._arch;
 	}
 
-	static browser()
-	{
-		if ( GJ_IS_CLIENT ) {
+	static browser() {
+		if (GJ_IS_CLIENT) {
 			return 'Client';
 		}
 
-		if ( typeof this._browser === 'undefined' ) {
+		if (typeof this._browser === 'undefined') {
 			const result = this._getResult();
 			this._browser = result.browser.name as string;
 		}

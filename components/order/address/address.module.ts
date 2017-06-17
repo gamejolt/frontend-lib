@@ -2,8 +2,6 @@ import { NgModule } from 'ng-metadata/core';
 import { OrderAddress } from './address.model';
 
 @NgModule({
-	providers: [
-		{ provide: 'Order_Address', useFactory: () => OrderAddress }
-	],
+	providers: [{ provide: 'Order_Address', useFactory: () => OrderAddress }],
 })
-export class OrderAddressModule { }
+export class OrderAddressModule {}

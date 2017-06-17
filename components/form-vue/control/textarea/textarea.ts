@@ -5,22 +5,19 @@ import { BaseFormControl } from '../base';
 
 @View
 @Component({})
-export class AppFormControlTextarea extends BaseFormControl
-{
-	@Prop( Array ) validateOn: string[];
-	@Prop( Number ) validateDelay: number;
+export class AppFormControlTextarea extends BaseFormControl {
+	@Prop(Array) validateOn: string[];
+	@Prop(Number) validateDelay: number;
 
 	value: string = '';
 
-	get validationRules()
-	{
+	get validationRules() {
 		return {
 			...this.baseRules,
 		};
 	}
 
-	onChange( value: string )
-	{
-		this.applyValue( value );
+	onChange(value: string) {
+		this.applyValue(value);
 	}
 }

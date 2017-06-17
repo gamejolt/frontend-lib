@@ -1,3 +1,3 @@
-angular.module( 'gj.SiteSelector', [] );
+angular.module('gj.SiteSelector', []);
 
-require( './site-selector-directive' );
+require('./site-selector-directive');

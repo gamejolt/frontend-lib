@@ -1,4 +1,10 @@
-import { Component, Input, Output, Inject, EventEmitter } from 'ng-metadata/core';
+import {
+	Component,
+	Input,
+	Output,
+	Inject,
+	EventEmitter,
+} from 'ng-metadata/core';
 import { Popover } from '../../popover/popover.service';
 import { SiteTemplate } from '../../site/template/template-model';
 import * as template from '!html-loader!./selector.component.html';
@@ -7,8 +13,7 @@ import * as template from '!html-loader!./selector.component.html';
 	selector: 'gj-theme-selector',
 	template,
 })
-export class ThemeSelectorComponent
-{
+export class ThemeSelectorComponent {
 	@Input() templates: SiteTemplate[];
 	@Input() currentTemplate: number;
 
@@ -16,23 +21,18 @@ export class ThemeSelectorComponent
 
 	current: any;
 
-	constructor(
-	)
-	{
-	}
+	constructor() {}
 
-	ngOnInit()
-	{
-		if ( this.currentTemplate ) {
-			this.current = this.templates.find( ( t ) => t.id === this.currentTemplate );
+	ngOnInit() {
+		if (this.currentTemplate) {
+			this.current = this.templates.find(t => t.id === this.currentTemplate);
 		}
 	}
 
-	select( id: number )
-	{
+	select(id: number) {
 		this.currentTemplate = id;
-		this.current = this.templates.find( ( t ) => t.id === this.currentTemplate );
-		this.changed.emit( id );
+		this.current = this.templates.find(t => t.id === this.currentTemplate);
+		this.changed.emit(id);
 		Popover.hideAll();
 	}
 }

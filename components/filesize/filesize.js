@@ -1,3 +1,3 @@
-angular.module( 'gj.Filesize', [] );
+angular.module('gj.Filesize', []);
 
-require( './filesize-filter' );
+require('./filesize-filter');

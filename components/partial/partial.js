@@ -1,3 +1,3 @@
-angular.module( 'gj.Partial', [] );
+angular.module('gj.Partial', []);
 
-require( './partial-directive' );
+require('./partial-directive');

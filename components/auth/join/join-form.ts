@@ -13,14 +13,12 @@ import { Api } from '../../api/api.service';
 		AppLoading,
 	},
 })
-export class AppAuthJoinForm extends BaseForm<any> implements FormOnSubmit
-{
-	@Prop( Boolean ) darkVariant?: boolean;
+export class AppAuthJoinForm extends BaseForm<any> implements FormOnSubmit {
+	@Prop(Boolean) darkVariant?: boolean;
 
-	Connection = makeObservableService( Connection );
+	Connection = makeObservableService(Connection);
 
-	onSubmit()
-	{
-		return Api.sendRequest( '/web/auth/join', this.formModel );
+	onSubmit() {
+		return Api.sendRequest('/web/auth/join', this.formModel);
 	}
 }

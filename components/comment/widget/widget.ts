@@ -40,12 +40,11 @@ let incrementer = 0;
 		AppAuthRequired,
 	},
 })
-export class AppCommentWidget extends Vue
-{
-	@Prop( String ) resource: string;
-	@Prop( Number ) resourceId: number;
-	@Prop( Boolean ) noIntro?: boolean;
-	@Prop( Boolean ) onlyAdd?: boolean;
+export class AppCommentWidget extends Vue {
+	@Prop(String) resource: string;
+	@Prop(Number) resourceId: number;
+	@Prop(Boolean) noIntro?: boolean;
+	@Prop(Boolean) onlyAdd?: boolean;
 
 	@State app: AppStore;
 
@@ -62,7 +61,7 @@ export class AppCommentWidget extends Vue
 	perPage = 10;
 	numPages = 0;
 
-	lang = this.getTranslationLabel( Translate.lang );
+	lang = this.getTranslationLabel(Translate.lang);
 	allowTranslate = false;
 	isTranslating = false;
 	isShowingTranslations = false;
@@ -71,68 +70,78 @@ export class AppCommentWidget extends Vue
 
 	subscriptions: { [k: string]: Subscription } = {};
 
-	get loginUrl()
-	{
-		return Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent( this.$route.fullPath );
+	get loginUrl() {
+		return (
+			Environment.authBaseUrl +
+			'/login?redirect=' +
+			encodeURIComponent(this.$route.fullPath)
+		);
 	}
 
-	async created()
-	{
+	async created() {
 		await this.init();
 		this.checkPermalink();
 	}
 
-	@Watch( 'resourceId' )
-	@Watch( 'resourceName' )
-	async init()
-	{
-		if ( !this.resource || !this.resourceId ) {
+	@Watch('resourceId')
+	@Watch('resourceName')
+	async init() {
+		if (!this.resource || !this.resourceId) {
 			return;
 		}
 
 		this.hasBootstrapped = false;
 		this.hasError = false;
-		this.currentPage = this.$route.query.comment_page ? parseInt( this.$route.query.comment_page, 10 ) : 1;
+		this.currentPage = this.$route.query.comment_page
+			? parseInt(this.$route.query.comment_page, 10)
+			: 1;
 		await this.refreshComments();
 	}
 
-	private async refreshComments()
-	{
+	private async refreshComments() {
 		// Pull in new comments, huzzah!
 		try {
 			this.isLoading = true;
-			const payload = await Comment.fetch( this.resource, this.resourceId, this.currentPage );
+			const payload = await Comment.fetch(
+				this.resource,
+				this.resourceId,
+				this.currentPage,
+			);
 			this.isLoading = false;
 
 			this.hasBootstrapped = true;
 			this.hasError = false;
-			this.comments = Comment.populate( payload.comments );
-			this.resourceOwner = new User( payload.resourceOwner );
+			this.comments = Comment.populate(payload.comments);
+			this.resourceOwner = new User(payload.resourceOwner);
 			this.perPage = payload.perPage || 10;
 			this.commentsCount = payload.count || 0;
 			this.parentCount = payload.parentCount || 0;
 
 			// Child comments.
 			this.childComments = {};
-			if ( payload.childComments ) {
-				const childComments: Comment[] = Comment.populate( payload.childComments );
+			if (payload.childComments) {
+				const childComments: Comment[] = Comment.populate(
+					payload.childComments,
+				);
 				const grouped: any = {};
-				for ( const child of childComments ) {
-					if ( !grouped[ child.parent_id ] ) {
-						grouped[ child.parent_id ] = [];
+				for (const child of childComments) {
+					if (!grouped[child.parent_id]) {
+						grouped[child.parent_id] = [];
 					}
-					grouped[ child.parent_id ].push( child );
+					grouped[child.parent_id].push(child);
 				}
 				this.childComments = grouped;
 			}
 
 			// User subscriptions to comment threads.
 			this.subscriptions = {};
-			if ( payload.subscriptions ) {
-				const subscriptions: Subscription[] = Subscription.populate( payload.subscriptions );
+			if (payload.subscriptions) {
+				const subscriptions: Subscription[] = Subscription.populate(
+					payload.subscriptions,
+				);
 				const indexed: any = {};
-				for ( const subscription of subscriptions ) {
-					indexed[ subscription.resource_id ] = subscription;
+				for (const subscription of subscriptions) {
+					indexed[subscription.resource_id] = subscription;
 				}
 				this.subscriptions = indexed;
 			}
@@ -143,72 +152,71 @@ export class AppCommentWidget extends Vue
 			this.translationsLoaded = false;
 			this.allowTranslate = this.gatherTranslatable().length > 0;
 
-			this.$emit( 'count', this.commentsCount );
-		}
-		catch ( e ) {
-			console.error( e );
+			this.$emit('count', this.commentsCount);
+		} catch (e) {
+			console.error(e);
 			this.hasError = true;
 		}
 	}
 
-	onCommentAdd( formModel: Comment, isReplying: boolean )
-	{
-		Analytics.trackEvent( 'comment-widget', 'add' );
+	onCommentAdd(formModel: Comment, isReplying: boolean) {
+		Analytics.trackEvent('comment-widget', 'add');
 
 		// Was it marked as possible spam?
-		if ( formModel.status === Comment.STATUS_SPAM ) {
+		if (formModel.status === Comment.STATUS_SPAM) {
 			Growls.success(
-				this.$gettext( 'Your comment has been marked for review. Please allow some time for it to show on the site.' ),
-				this.$gettext( 'Almost there...' ),
+				this.$gettext(
+					'Your comment has been marked for review. Please allow some time for it to show on the site.',
+				),
+				this.$gettext('Almost there...'),
 			);
 
-			if ( Analytics ) {
-				Analytics.trackEvent( 'comment-widget', 'spam' );
+			if (Analytics) {
+				Analytics.trackEvent('comment-widget', 'spam');
 			}
-		}
-		// Otherwise refresh.
-		else {
-
+		} else {
+			// Otherwise refresh.
 			// Force us back to the first page, but only if we weren't replying.
 			// If they replied to a comment, obviously don't want to change back to the first page.
-			this.changePage( isReplying ? this.currentPage : 1 );
+			this.changePage(isReplying ? this.currentPage : 1);
 		}
 	}
 
-	onPageChange( page: number )
-	{
-		this.changePage( page );
-		Scroll.to( `comment-pagination-${this.id}`, { animate: false } );
+	onPageChange(page: number) {
+		this.changePage(page);
+		Scroll.to(`comment-pagination-${this.id}`, { animate: false });
 	}
 
-	changePage( page: number )
-	{
+	changePage(page: number) {
 		// Update the page and refresh the comments list.
 		this.currentPage = page || 1;
 		this.refreshComments();
 
-		if ( Analytics ) {
-			Analytics.trackEvent( 'comment-widget', 'change-page', this.currentPage + '' );
+		if (Analytics) {
+			Analytics.trackEvent(
+				'comment-widget',
+				'change-page',
+				this.currentPage + '',
+			);
 		}
 	}
 
-	async toggleTranslate()
-	{
+	async toggleTranslate() {
 		// If we already loaded translations, just toggle back and forth.
-		if ( this.translationsLoaded ) {
+		if (this.translationsLoaded) {
 			this.isShowingTranslations = !this.isShowingTranslations;
 			return;
 		}
 
 		// If they try translating again while one is already in process, skip it.
-		if ( this.isTranslating || this.isLoading ) {
+		if (this.isTranslating || this.isLoading) {
 			return;
 		}
 
 		this.isTranslating = true;
 
 		try {
-			const commentIds = this.gatherTranslatable().map( ( item ) => item.id );
+			const commentIds = this.gatherTranslatable().map(item => item.id);
 			const response = await Api.sendRequest(
 				'/comments/translate',
 				{ lang: Translate.lang, resources: commentIds },
@@ -217,21 +225,21 @@ export class AppCommentWidget extends Vue
 
 			// This may happen if they changed the page while translating.
 			// In that case, skip doing anything.
-			if ( !this.isTranslating ) {
+			if (!this.isTranslating) {
 				return;
 			}
 
-			const translations: Translation[] = Translation.populate( response.translations );
+			const translations: Translation[] = Translation.populate(
+				response.translations,
+			);
 
 			const indexed: any = {};
-			for ( const translation of translations ) {
-				indexed[ translation.resource_id ] = translation;
+			for (const translation of translations) {
+				indexed[translation.resource_id] = translation;
 			}
 
 			this.translations = indexed;
-
-		}
-		catch ( e ) {
+		} catch (e) {
 			this.translations = {};
 		}
 
@@ -240,32 +248,28 @@ export class AppCommentWidget extends Vue
 		this.translationsLoaded = true;
 	}
 
-	gatherTranslatable()
-	{
-		let comments = ([] as Comment[]).concat( this.comments );
-		for ( const child of Object.values( this.childComments ) ) {
-			comments.push( child );
+	gatherTranslatable() {
+		let comments = ([] as Comment[]).concat(this.comments);
+		for (const child of Object.values(this.childComments)) {
+			comments.push(child);
 		}
 
-		const translationCode = this.getTranslationCode( Translate.lang );
-		const translatable = comments.filter( ( comment ) =>
-		{
-			if ( comment.lang && comment.lang !== translationCode ) {
+		const translationCode = this.getTranslationCode(Translate.lang);
+		const translatable = comments.filter(comment => {
+			if (comment.lang && comment.lang !== translationCode) {
 				return true;
 			}
 			return false;
-		} );
+		});
 
 		return translatable;
 	}
 
 	// Just a conversion.
-	getTranslationCode( lang: string )
-	{
-		if ( lang === 'en_US' ) {
+	getTranslationCode(lang: string) {
+		if (lang === 'en_US') {
 			return 'en';
-		}
-		else if ( lang === 'pt_BR' ) {
+		} else if (lang === 'pt_BR') {
 			return 'pt';
 		}
 
@@ -273,38 +277,34 @@ export class AppCommentWidget extends Vue
 	}
 
 	// Just a conversion.
-	getTranslationLabel( lang: string )
-	{
-		if ( lang === 'en_US' || lang === 'en' ) {
+	getTranslationLabel(lang: string) {
+		if (lang === 'en_US' || lang === 'en') {
 			return 'English';
-		}
-		else if ( lang === 'pt_BR' || lang === 'pt' ) {
+		} else if (lang === 'pt_BR' || lang === 'pt') {
 			return 'Português';
 		}
 
-		return Translate.langsByCode[ lang ].label;
+		return Translate.langsByCode[lang].label;
 	}
 
-	private async checkPermalink()
-	{
+	private async checkPermalink() {
 		const hash = this.$route.hash;
-		if ( !hash || hash.indexOf( '#comment-' ) !== 0 ) {
+		if (!hash || hash.indexOf('#comment-') !== 0) {
 			return;
 		}
 
-		const id = parseInt( hash.substring( '#comment-'.length ), 10 );
-		if ( !id ) {
+		const id = parseInt(hash.substring('#comment-'.length), 10);
+		if (!id) {
 			return;
 		}
 
 		try {
-			const page = await Comment.getCommentPage( id );
-			this.changePage( page );
-			Analytics.trackEvent( 'comment-widget', 'permalink' );
-		}
-		catch ( e ) {
+			const page = await Comment.getCommentPage(id);
+			this.changePage(page);
+			Analytics.trackEvent('comment-widget', 'permalink');
+		} catch (e) {
 			Growls.error(
-				this.$gettext( `Invalid comment passed in. It may have been removed.` ),
+				this.$gettext(`Invalid comment passed in. It may have been removed.`),
 			);
 		}
 	}

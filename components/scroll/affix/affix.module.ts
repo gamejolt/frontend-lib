@@ -3,8 +3,6 @@ import { makeComponentProvider } from '../../../vue/angular-link';
 import { AppScrollAffix } from './affix';
 
 @NgModule({
-	declarations: [
-		makeComponentProvider( AppScrollAffix ),
-	],
+	declarations: [makeComponentProvider(AppScrollAffix)],
 })
-export class ScrollAffixModule { }
+export class ScrollAffixModule {}

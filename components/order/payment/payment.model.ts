@@ -1,8 +1,7 @@
 import { Model } from '../../model/model.service';
 import { OrderPaymentRefund } from './refund/refund.model';
 
-export class OrderPayment extends Model
-{
+export class OrderPayment extends Model {
 	static readonly METHOD_CC_STRIPE = 'cc-stripe';
 	static readonly METHOD_PAYPAL = 'paypal';
 	static readonly METHOD_AMAZON = 'amazon';
@@ -16,14 +15,13 @@ export class OrderPayment extends Model
 	paypal_email_address: string;
 	refunds: OrderPaymentRefund[];
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.refunds ) {
-			this.refunds = OrderPaymentRefund.populate( data.refunds );
+		if (data.refunds) {
+			this.refunds = OrderPaymentRefund.populate(data.refunds);
 		}
 	}
 }
 
-Model.create( OrderPayment );
+Model.create(OrderPayment);

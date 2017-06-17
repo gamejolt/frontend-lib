@@ -1,3 +1,3 @@
-angular.module( 'gj.FuzzyNumber', [] );
+angular.module('gj.FuzzyNumber', []);
 
-require( './fuzzy-number-filter' );
+require('./fuzzy-number-filter');

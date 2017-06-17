@@ -1,3 +1,3 @@
-angular.module( 'gj.Currency', [] );
+angular.module('gj.Currency', []);
 
-require( './currency-filter' );
+require('./currency-filter');

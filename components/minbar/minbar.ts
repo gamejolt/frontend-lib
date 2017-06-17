@@ -13,14 +13,12 @@ import { Minbar, MinbarItem } from './minbar.service';
 		AppTooltip,
 	},
 })
-export class AppMinbar extends Vue
-{
-	Minbar = makeObservableService( Minbar );
-	Screen = makeObservableService( Screen );
+export class AppMinbar extends Vue {
+	Minbar = makeObservableService(Minbar);
+	Screen = makeObservableService(Screen);
 
-	onItemClick( item: MinbarItem )
-	{
-		if ( item.onClick ) {
+	onItemClick(item: MinbarItem) {
+		if (item.onClick) {
 			item.onClick();
 		}
 	}

@@ -1,5 +1,5 @@
-angular.module( 'gj.Alert.Dismissable' ).component( 'gjAlertDismissable', {
-	template: require( '!html-loader!./dismissable.html' ),
+angular.module('gj.Alert.Dismissable').component('gjAlertDismissable', {
+	template: require('!html-loader!./dismissable.html'),
 	bindings: {
 		alertType: '@',
 		dismissKey: '@',
@@ -7,24 +7,22 @@ angular.module( 'gj.Alert.Dismissable' ).component( 'gjAlertDismissable', {
 		onDismiss: '&?',
 	},
 	transclude: true,
-	controller: function()
-	{
+	controller: function() {
 		var STORAGE_KEY_PREFIX = 'dismiss-alert:';
 
 		this.shouldShow = false;
 
-		if ( !localStorage.getItem( STORAGE_KEY_PREFIX + this.dismissKey ) ) {
+		if (!localStorage.getItem(STORAGE_KEY_PREFIX + this.dismissKey)) {
 			this.shouldShow = true;
 		}
 
-		this.dismiss = function()
-		{
-			localStorage.setItem( STORAGE_KEY_PREFIX + this.dismissKey, '1' );
+		this.dismiss = function() {
+			localStorage.setItem(STORAGE_KEY_PREFIX + this.dismissKey, '1');
 			this.shouldShow = false;
 
-			if ( this.onDismiss ) {
+			if (this.onDismiss) {
 				this.onDismiss();
 			}
 		};
 	},
-} );
+});

@@ -2,8 +2,6 @@ import { NgModule } from 'ng-metadata/core';
 import { LinkedKey } from './linked-key.model';
 
 @NgModule({
-	providers: [
-		{ provide: 'LinkedKey', useFactory: () => LinkedKey },
-	],
+	providers: [{ provide: 'LinkedKey', useFactory: () => LinkedKey }],
 })
-export class LinkedKeyModule { }
+export class LinkedKeyModule {}

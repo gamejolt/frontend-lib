@@ -5,30 +5,28 @@ import { findVueParent } from '../../../utils/vue';
 import { AppFormControlErrors } from './control-errors';
 
 @Component({})
-export class AppFormControlError extends Vue
-{
-	@Prop( String ) when: string;
-	@Prop( String ) message: string;
+export class AppFormControlError extends Vue {
+	@Prop(String) when: string;
+	@Prop(String) message: string;
 
-	mounted()
-	{
+	mounted() {
 		this.setOverride();
 	}
 
-	@Watch( 'message' )
-	onMessageChange()
-	{
+	@Watch('message')
+	onMessageChange() {
 		this.setOverride();
 	}
 
-	private setOverride()
-	{
-		const errors = findVueParent( this, AppFormControlErrors ) as AppFormControlErrors;
-		errors.setMessageOverride( this.when, this.message );
+	private setOverride() {
+		const errors = findVueParent(
+			this,
+			AppFormControlErrors,
+		) as AppFormControlErrors;
+		errors.setMessageOverride(this.when, this.message);
 	}
 
-	render( h: Vue.CreateElement )
-	{
-		return h( 'span' );
+	render(h: Vue.CreateElement) {
+		return h('span');
 	}
 }

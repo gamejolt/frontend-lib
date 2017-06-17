@@ -1,7 +1,6 @@
 import { ConnectionReconnect } from './reconnect-service';
 
-export class Connection
-{
+export class Connection {
 	static isDeviceOffline = false;
 	static isClientOffline = false;
 	static isOnline = true;
@@ -55,32 +54,29 @@ export class Connection
 	// 	} );
 	// }
 
-	private static _setupReconnectChecker()
-	{
+	private static _setupReconnectChecker() {
 		// We don't want to set that we have a request failure until we do a first check that fails.
 		// When we come back online, we just want to set that we no longer have a request failure.
 		this._reconnectChecker = new ConnectionReconnect(
-			() =>
-			{
+			() => {
 				// If we were marked as no request failure, let's put us in that mode.
-				if ( !this.hasRequestFailure ) {
+				if (!this.hasRequestFailure) {
 					this.hasRequestFailure = true;
 					this._refreshIsOnline();
 				}
 			},
-			() =>
-			{
+			() => {
 				// We are connected back to the server.
 				// Let's set that we're good to go.
 				this._reconnectChecker = undefined;
 
 				// Only toggle back to no failure if we were set as having a failure.
 				// This ensures we don't reload the page if we don't have to.
-				if ( this.hasRequestFailure ) {
+				if (this.hasRequestFailure) {
 					this.hasRequestFailure = false;
 					this._refreshIsOnline();
 				}
-			}
+			},
 		);
 	}
 
@@ -88,35 +84,32 @@ export class Connection
 	 * Can be used to tell us that a request has failed due to a connection error
 	 * or when a request has went through successfully so we can reset.
 	 */
-	private static _setRequestFailure( failed: boolean )
-	{
+	private static _setRequestFailure(failed: boolean) {
 		// Do nothing if we're not switch states.
-		if ( this.hasRequestFailure === failed ) {
+		if (this.hasRequestFailure === failed) {
 			return;
 		}
 
 		// If we went into request failure mode let's start checking for a reconnection.
-		if ( failed ) {
+		if (failed) {
 			this._setupReconnectChecker();
 		}
 
 		// If we got a successful request, go back into a good request state right away.
-		if ( !failed && this._reconnectChecker ) {
+		if (!failed && this._reconnectChecker) {
 			this._reconnectChecker.finish();
 		}
-	};
+	}
 
 	/**
 	 * Does all the required checks to see if the connection is down.
 	 * This way we can access it through one simple variable, even though we store
 	 * different statuses for different types of connection errors.
 	 */
-	private static _refreshIsOnline()
-	{
-		if ( this.hasRequestFailure || this.isDeviceOffline ) {
+	private static _refreshIsOnline() {
+		if (this.hasRequestFailure || this.isDeviceOffline) {
 			this.isOnline = false;
-		}
-		else {
+		} else {
 			this.isOnline = true;
 		}
 

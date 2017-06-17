@@ -1,3 +1,3 @@
-angular.module( 'gj.Jam.ContentBlock', [] );
+angular.module('gj.Jam.ContentBlock', []);
 
-require( './content-block-model' );
+require('./content-block-model');

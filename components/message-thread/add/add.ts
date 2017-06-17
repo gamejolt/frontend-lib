@@ -12,7 +12,6 @@ import { AppUserAvatarImg } from '../../user/user-avatar/img/img';
 		AppUserAvatarImg,
 	},
 })
-export class AppMessageThreadAdd extends Vue
-{
+export class AppMessageThreadAdd extends Vue {
 	@State app: AppStore;
 }

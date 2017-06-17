@@ -7,25 +7,26 @@ import { Scroll } from '../scroll.service';
 // is set to disable scrolling, we do so. It may also be more performant since
 // it doesn't have to register many click handlers.
 
-if ( !GJ_IS_SSR ) {
-
+if (!GJ_IS_SSR) {
 	// We use capturing so that we get it before it goes through the DOM.
-	document.addEventListener( 'click', ( e ) =>
-	{
-		const target = e.target as HTMLElement;
-		if ( !target ) {
-			return;
-		}
+	document.addEventListener(
+		'click',
+		e => {
+			const target = e.target as HTMLElement;
+			if (!target) {
+				return;
+			}
 
-		if ( target.dataset.gjAutoscroll ) {
-			Scroll.shouldAutoScroll = false;
-		}
-	}, true );
+			if (target.dataset.gjAutoscroll) {
+				Scroll.shouldAutoScroll = false;
+			}
+		},
+		true,
+	);
 }
 
 export const AppNoAutoscroll: Vue.DirectiveOptions = {
-	bind( el )
-	{
+	bind(el) {
 		el.dataset.gjAutoscroll = 'disabled';
 	},
 };

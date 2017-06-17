@@ -1,7 +1,6 @@
 import { Model } from '../../model/model.service';
 
-export class GameSketchfab extends Model
-{
+export class GameSketchfab extends Model {
 	media_type: 'sketchfab';
 	game_id: number;
 	sketchfab_id: string;
@@ -11,25 +10,35 @@ export class GameSketchfab extends Model
 	img_thumbnail_med: string;
 	img_thumbnail_large: string;
 
-	getUrl( game: any )
-	{
+	getUrl(game: any) {
 		return game.getUrl() + '#sketchfab-' + this.id;
 	}
 
-	$save()
-	{
-		if ( !this.id ) {
-			return this.$_save( '/web/dash/developer/games/media/save/sketchfab/' + this.game_id, 'gameSketchfab' );
-		}
-		else {
-			return this.$_save( '/web/dash/developer/games/media/save/sketchfab/' + this.game_id + '/' + this.id, 'gameSketchfab' );
+	$save() {
+		if (!this.id) {
+			return this.$_save(
+				'/web/dash/developer/games/media/save/sketchfab/' + this.game_id,
+				'gameSketchfab',
+			);
+		} else {
+			return this.$_save(
+				'/web/dash/developer/games/media/save/sketchfab/' +
+					this.game_id +
+					'/' +
+					this.id,
+				'gameSketchfab',
+			);
 		}
 	}
 
-	$remove()
-	{
-		return this.$_remove( '/web/dash/developer/games/media/remove/sketchfab/' + this.game_id + '/' + this.id );
+	$remove() {
+		return this.$_remove(
+			'/web/dash/developer/games/media/remove/sketchfab/' +
+				this.game_id +
+				'/' +
+				this.id,
+		);
 	}
 }
 
-Model.create( GameSketchfab );
+Model.create(GameSketchfab);

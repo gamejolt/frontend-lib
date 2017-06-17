@@ -2,8 +2,6 @@ import { NgModule } from 'ng-metadata/core';
 import { Ruler } from './ruler-service';
 
 @NgModule({
-	providers: [
-		{ provide: 'Ruler', useFactory: () => Ruler },
-	],
+	providers: [{ provide: 'Ruler', useFactory: () => Ruler }],
 })
-export class RulerModule { }
+export class RulerModule {}

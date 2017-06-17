@@ -1,5 +1,4 @@
-export abstract class LoaderBase
-{
+export abstract class LoaderBase {
 	isReady = false;
 	abstract name: string;
 
@@ -7,14 +6,11 @@ export abstract class LoaderBase
 
 	protected abstract _load(): Promise<void>;
 
-	load()
-	{
-		if ( !this.loadPromise ) {
-			this.loadPromise = this._load()
-				.then( () =>
-				{
-					this.isReady = true;
-				} );
+	load() {
+		if (!this.loadPromise) {
+			this.loadPromise = this._load().then(() => {
+				this.isReady = true;
+			});
 		}
 
 		return this.loadPromise;

@@ -3,11 +3,7 @@ import { Analytics } from './analytics.service';
 import { TrackEventDirective } from './track-event.directive';
 
 @NgModule({
-	declarations: [
-		TrackEventDirective,
-	],
-	providers: [
-		{ provide: 'Analytics', useFactory: () => Analytics },
-	],
+	declarations: [TrackEventDirective],
+	providers: [{ provide: 'Analytics', useFactory: () => Analytics }],
 })
-export class AnalyticsModule { }
+export class AnalyticsModule {}

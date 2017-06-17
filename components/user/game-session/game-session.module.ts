@@ -3,7 +3,7 @@ import { UserGameSession } from './session.model';
 
 @NgModule({
 	providers: [
-		{ provide: 'User_GameSession', useFactory: () => UserGameSession }
+		{ provide: 'User_GameSession', useFactory: () => UserGameSession },
 	],
 })
-export class UserGameSessionModule { }
+export class UserGameSessionModule {}

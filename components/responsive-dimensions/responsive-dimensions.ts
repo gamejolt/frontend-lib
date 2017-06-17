@@ -6,40 +6,33 @@ import { Screen } from '../screen/screen-service';
 import { Ruler } from '../ruler/ruler-service';
 
 @Component({})
-export class AppResponsiveDimensions extends Vue
-{
-	@Prop( Number ) ratio: number;
+export class AppResponsiveDimensions extends Vue {
+	@Prop(Number) ratio: number;
 
 	private resize$: Subscription | undefined;
 	private height = 'auto';
 
-	mounted()
-	{
-		this.resize$ = Screen.resizeChanges.subscribe( () => this.updateDimensions() );
+	mounted() {
+		this.resize$ = Screen.resizeChanges.subscribe(() =>
+			this.updateDimensions(),
+		);
 		this.updateDimensions();
 	}
 
-	destroyed()
-	{
-		if ( this.resize$ ) {
+	destroyed() {
+		if (this.resize$) {
 			this.resize$.unsubscribe();
 			this.resize$ = undefined;
 		}
 	}
 
-	render( h: Vue.CreateElement )
-	{
-		return h(
-			'div',
-			{ style: { height: this.height } },
-			this.$slots.default,
-		);
+	render(h: Vue.CreateElement) {
+		return h('div', { style: { height: this.height } }, this.$slots.default);
 	}
 
-	@Watch( 'ratio' )
-	private updateDimensions()
-	{
-		const containerWidth = Ruler.width( this.$el.parentNode as HTMLElement );
+	@Watch('ratio')
+	private updateDimensions() {
+		const containerWidth = Ruler.width(this.$el.parentNode as HTMLElement);
 		this.height = `${containerWidth / this.ratio}px`;
 	}
 }

@@ -6,4 +6,4 @@ import { UserLinkedAccounts } from './linked-accounts.service';
 		{ provide: 'UserLinkedAccounts', useFactory: () => UserLinkedAccounts },
 	],
 })
-export class UserLinkedAccountsModule { }
+export class UserLinkedAccountsModule {}

@@ -3,7 +3,7 @@ import { GameBuildParam } from './param.model';
 
 @NgModule({
 	providers: [
-		{ provide: 'Game_Build_Param', useFactory: () => GameBuildParam }
+		{ provide: 'Game_Build_Param', useFactory: () => GameBuildParam },
 	],
 })
-export class GameBuildParamModule { }
+export class GameBuildParamModule {}

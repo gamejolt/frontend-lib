@@ -11,21 +11,17 @@ import { AppLoading } from '../../../vue/components/loading/loading';
 		AppLoading,
 	},
 })
-export class AppFormLoader extends Vue
-{
-	@Prop( String ) url: string;
+export class AppFormLoader extends Vue {
+	@Prop(String) url: string;
 
 	isLoaded = false;
 
-	async mounted()
-	{
-		const payload = await Api.sendRequest(
-			this.url,
-			undefined,
-			{ detach: true },
-		);
+	async mounted() {
+		const payload = await Api.sendRequest(this.url, undefined, {
+			detach: true,
+		});
 
 		this.isLoaded = true;
-		this.$emit( 'loaded', payload );
+		this.$emit('loaded', payload);
 	}
 }

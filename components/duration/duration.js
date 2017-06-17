@@ -1,3 +1,3 @@
-angular.module( 'gj.Duration', [] );
+angular.module('gj.Duration', []);
 
-require( './duration-filter' );
+require('./duration-filter');

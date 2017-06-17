@@ -3,8 +3,7 @@ import { GameBuild } from '../build/build.model';
 import { GamePackage } from '../package/package.model';
 import { Game } from '../game.model';
 
-export class GameRelease extends Model
-{
+export class GameRelease extends Model {
 	static readonly STATUS_HIDDEN = 'hidden';
 	static readonly STATUS_PUBLISHED = 'published';
 	static readonly STATUS_REMOVED = 'removed';
@@ -27,48 +26,80 @@ export class GameRelease extends Model
 	_package?: GamePackage;
 	_builds?: GameBuild[];
 
-	$save()
-	{
-		if ( !this.id ) {
-			return this.$_save( '/web/dash/developer/games/releases/save/' + this.game_id + '/' + this.game_package_id, 'gameRelease' );
-		}
-		else {
-			return this.$_save( '/web/dash/developer/games/releases/save/' + this.game_id + '/' + this.game_package_id + '/' + this.id, 'gameRelease' );
+	$save() {
+		if (!this.id) {
+			return this.$_save(
+				'/web/dash/developer/games/releases/save/' +
+					this.game_id +
+					'/' +
+					this.game_package_id,
+				'gameRelease',
+			);
+		} else {
+			return this.$_save(
+				'/web/dash/developer/games/releases/save/' +
+					this.game_id +
+					'/' +
+					this.game_package_id +
+					'/' +
+					this.id,
+				'gameRelease',
+			);
 		}
 	}
 
-	async $publish( game: Game )
-	{
-		const response = await this.$_save( '/web/dash/developer/games/releases/publish/' + this.game_id + '/' + this.game_package_id + '/' + this.id, 'gameRelease' );
+	async $publish(game: Game) {
+		const response = await this.$_save(
+			'/web/dash/developer/games/releases/publish/' +
+				this.game_id +
+				'/' +
+				this.game_package_id +
+				'/' +
+				this.id,
+			'gameRelease',
+		);
 
-		if ( game && response.game ) {
-			game.assign( response.game );
+		if (game && response.game) {
+			game.assign(response.game);
 		}
 
 		return response;
 	}
 
-	async $unpublish( game: Game )
-	{
-		const response = await this.$_save( '/web/dash/developer/games/releases/unpublish/' + this.game_id + '/' + this.game_package_id + '/' + this.id, 'gameRelease' );
+	async $unpublish(game: Game) {
+		const response = await this.$_save(
+			'/web/dash/developer/games/releases/unpublish/' +
+				this.game_id +
+				'/' +
+				this.game_package_id +
+				'/' +
+				this.id,
+			'gameRelease',
+		);
 
-		if ( game && response.game ) {
-			game.assign( response.game );
+		if (game && response.game) {
+			game.assign(response.game);
 		}
 
 		return response;
-	};
+	}
 
-	async $remove( game: Game )
-	{
-		const response = await this.$_remove( '/web/dash/developer/games/releases/remove/' + this.game_id + '/' + this.game_package_id + '/' + this.id );
+	async $remove(game: Game) {
+		const response = await this.$_remove(
+			'/web/dash/developer/games/releases/remove/' +
+				this.game_id +
+				'/' +
+				this.game_package_id +
+				'/' +
+				this.id,
+		);
 
-		if ( game && response.game ) {
-			game.assign( response.game );
+		if (game && response.game) {
+			game.assign(response.game);
 		}
 
 		return response;
 	}
 }
 
-Model.create( GameRelease );
+Model.create(GameRelease);

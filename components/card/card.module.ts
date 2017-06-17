@@ -4,9 +4,6 @@ import { AppCard } from './card';
 import { CardDragHandleComponent } from './drag-handle.component';
 
 @NgModule({
-	declarations: [
-		makeComponentProvider( AppCard ),
-		CardDragHandleComponent,
-	],
+	declarations: [makeComponentProvider(AppCard), CardDragHandleComponent],
 })
-export class CardModule { }
+export class CardModule {}

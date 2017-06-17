@@ -4,11 +4,9 @@ import { Analytics } from '../analytics/analytics.service';
 import { AuthModal } from './auth-modal.service';
 
 export const AppAuthRequired: Vue.DirectiveOptions = {
-	bind( el )
-	{
-		el.addEventListener( 'click', ( e ) =>
-		{
-			if ( appStore.state.user ) {
+	bind(el) {
+		el.addEventListener('click', e => {
+			if (appStore.state.user) {
 				return;
 			}
 
@@ -18,7 +16,7 @@ export const AppAuthRequired: Vue.DirectiveOptions = {
 			e.preventDefault();
 
 			AuthModal.show();
-			Analytics.trackEvent( 'auth-required-modal', 'shown' );
-		} );
+			Analytics.trackEvent('auth-required-modal', 'shown');
+		});
 	},
 };

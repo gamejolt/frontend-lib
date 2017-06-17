@@ -1,4 +1,3 @@
-
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./item.html?style=./item.styl';
@@ -18,44 +17,38 @@ import { findVueParent } from '../../../utils/vue';
 		AppImgResponsive,
 	},
 })
-export class AppMediaBarItem extends Vue
-{
-	@Prop( Object ) item: any;
+export class AppMediaBarItem extends Vue {
+	@Prop(Object) item: any;
 
 	mediaBar: AppMediaBar;
 	width = 'auto';
 	height = 'auto';
 
-	created()
-	{
-		this.mediaBar = findVueParent( this, AppMediaBar ) as AppMediaBar;
+	created() {
+		this.mediaBar = findVueParent(this, AppMediaBar) as AppMediaBar;
 
 		// We set the dimensions on the thumbnails manually.
 		// This way we can size it correct before it loads.
-		if ( this.item.media_type === 'image' ) {
-			const dimensions = this.item.media_item.getDimensions( 400, 150 );
+		if (this.item.media_type === 'image') {
+			const dimensions = this.item.media_item.getDimensions(400, 150);
 			this.width = dimensions.width + 'px';
 			this.height = dimensions.height + 'px';
-		}
-		else if ( this.item.media_type === 'sketchfab' ) {
+		} else if (this.item.media_type === 'sketchfab') {
 			// Sketchfab thumbnails are hardcoded to this width.
 			this.height = '150px';
 			this.width = 150 / 0.5625 + 'px';
-		}
-		else {
+		} else {
 			// Video thumbnails are hardcoded to this width.
 			this.width = '200px';
 		}
 	}
 
-	onClick()
-	{
+	onClick() {
 		// Lightbox is turned off on mobile.
-		if ( !Screen.isXs ) {
-			this.mediaBar.setActiveItem( this.item );
-		}
-		else {
-			Analytics.trackEvent( 'media-bar', 'item-click-mobile' );
+		if (!Screen.isXs) {
+			this.mediaBar.setActiveItem(this.item);
+		} else {
+			Analytics.trackEvent('media-bar', 'item-click-mobile');
 		}
 	}
 }

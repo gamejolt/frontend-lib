@@ -1,9 +1,11 @@
 export const isClient = GJ_IS_CLIENT;
-export const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
-export const isPrerender = typeof window !== 'undefined' && window.navigator.userAgent.search( /PhantomJS/ ) !== -1;
+export const isSecure =
+	typeof window !== 'undefined' && window.location.protocol === 'https:';
+export const isPrerender =
+	typeof window !== 'undefined' &&
+	window.navigator.userAgent.search(/PhantomJS/) !== -1;
 
-export class Environment
-{
+export class Environment {
 	static env: 'production' | 'development' = GJ_ENVIRONMENT;
 	static buildType: 'production' | 'development' = GJ_BUILD_TYPE;
 	static isClient = GJ_IS_CLIENT;
@@ -33,7 +35,7 @@ export class Environment
 	static widgetHost = 'https://widgets.gamejolt.com';
 }
 
-if ( Environment.env === 'development' ) {
+if (Environment.env === 'development') {
 	Environment.baseUrl = 'http://localhost:8080';
 	Environment.secureBaseUrl = 'http://localhost:8080';
 
@@ -56,15 +58,17 @@ if ( Environment.env === 'development' ) {
 	Environment.widgetHost = 'http://localhost:8086';
 }
 
-if ( GJ_IS_CLIENT ) {
-
+if (GJ_IS_CLIENT) {
 	// When it gets packaged up for production, the URL changes.
-	if ( window.location.href.search( /^app\:\/\/game\-jolt\-client\/package\// ) !== -1 ) {
+	if (
+		window.location.href.search(/^app\:\/\/game\-jolt\-client\/package\//) !==
+		-1
+	) {
 		Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#!';
 		Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#!';
-		Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#!';
-	}
-	else {
+		Environment.checkoutBaseUrl =
+			'app://game-jolt-client/package/checkout.html#!';
+	} else {
 		Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#!';
 		Environment.authBaseUrl = 'app://game-jolt-client/auth.html#!';
 		Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#!';

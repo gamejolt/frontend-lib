@@ -1,16 +1,15 @@
-var argv = require( 'minimist' )( process.argv );
-var gulp = require( 'gulp' );
-var shell = require( 'gulp-shell' );
-var FwdRef = require( 'undertaker-forward-reference' );
+var argv = require('minimist')(process.argv);
+var gulp = require('gulp');
+var shell = require('gulp-shell');
+var FwdRef = require('undertaker-forward-reference');
 
 // https://github.com/gulpjs/undertaker-forward-reference
 // https://github.com/gulpjs/gulp/issues/802
-gulp.registry( FwdRef() );
+gulp.registry(FwdRef());
 
-module.exports = function( config, projectBase )
-{
+module.exports = function(config, projectBase) {
 	config.production = argv.production || false;
-	config.watching = argv._.indexOf( 'watch' ) !== -1 ? 'initial' : false;
+	config.watching = argv._.indexOf('watch') !== -1 ? 'initial' : false;
 	config.noSourcemaps = config.noSourcemaps || false;
 	config.write = argv.write || false;
 	config.analyze = argv.analyze || false;
@@ -29,21 +28,22 @@ module.exports = function( config, projectBase )
 	config.sections = config.sections || [];
 	config.translationSections = config.translationSections || [];
 
-	config.sections.push( 'app' );
+	config.sections.push('app');
 	config.buildSection = argv['section'] || 'app';
 
-	if ( argv['section'] ) {
-		config.sections = [ argv['section'] ];
+	if (argv['section']) {
+		config.sections = [argv['section']];
 	}
 
 	config.projectBase = projectBase;
 	config.buildBaseDir = process.env.BUILD_DIR || './';
-	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
+	config.buildDir =
+		config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
 	config.libDir = 'src/lib/';
 	config.gjLibDir = 'src/lib/gj-lib-client/';
 	config.bowerDir = 'src/bower-lib/';
 
-	if ( config.server ) {
+	if (config.server) {
 		config.buildDir += '-server';
 	}
 
@@ -53,10 +53,10 @@ module.exports = function( config, projectBase )
 	// require( './fonts.js' )( config );
 	// require( './markdown.js' )( config );
 	// require( './images.js' )( config );
-	require( './translations.js' )( config );
-	require( './webpack.js' )( config );
+	require('./translations.js')(config);
+	require('./webpack.js')(config);
 	// require( './inject.js' )( config );
-	require( './clean.js' )( config );
+	require('./clean.js')(config);
 
 	// gulp.task( 'extra', function()
 	// {
@@ -73,22 +73,20 @@ module.exports = function( config, projectBase )
 	// 	.pipe( gulp.dest( config.buildDir ) );
 	// } );
 
-	function noop( cb )
-	{
+	function noop(cb) {
 		cb();
 	}
 
 	// This will probably break eventually.
 	// unwrap exists in gulp, but not in the forward ref thing
 	// That's why this works, but it could easily not work in future.
-	function checkHooks( cb )
-	{
-		if ( !gulp.task( 'pre' ).unwrap ) {
-			gulp.task( 'pre', noop );
+	function checkHooks(cb) {
+		if (!gulp.task('pre').unwrap) {
+			gulp.task('pre', noop);
 		}
 
-		if ( !gulp.task( 'post' ).unwrap ) {
-			gulp.task( 'post', noop );
+		if (!gulp.task('post').unwrap) {
+			gulp.task('post', noop);
 		}
 
 		cb();
@@ -115,15 +113,21 @@ module.exports = function( config, projectBase )
 
 	// require( './watch.js' )( config );
 
-	gulp.task( 'update-lib', shell.task( [
-		'cd ' + config.gjLibDir + ' && git pull',
-		'git add ' + config.gjLibDir,
-		'git commit -m "Update GJ lib."'
-	] ) );
+	gulp.task(
+		'update-lib',
+		shell.task([
+			'cd ' + config.gjLibDir + ' && git pull',
+			'git add ' + config.gjLibDir,
+			'git commit -m "Update GJ lib."',
+		]),
+	);
 
-	gulp.task( 'commit-build', shell.task( [
-		'git add --all build/prod',
-		'git commit -m "New build."',
-		'git push'
-	] ) );
+	gulp.task(
+		'commit-build',
+		shell.task([
+			'git add --all build/prod',
+			'git commit -m "New build."',
+			'git push',
+		]),
+	);
 };

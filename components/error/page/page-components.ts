@@ -11,36 +11,26 @@ import { AppStore } from '../../../vue/services/app/app-store';
 
 @View400
 @Component({})
-export class AppErrorPage400 extends Vue
-{
-}
+export class AppErrorPage400 extends Vue {}
 
 @View403
 @Component({})
-export class AppErrorPage403 extends Vue
-{
-}
+export class AppErrorPage403 extends Vue {}
 
 @View404
 @Component({})
-export class AppErrorPage404 extends Vue
-{
-}
+export class AppErrorPage404 extends Vue {}
 
 @View500
 @Component({})
-export class AppErrorPage500 extends Vue
-{
-}
+export class AppErrorPage500 extends Vue {}
 
 @ViewOffline
 @Component({})
-export class AppErrorPageOffline extends Vue
-{
+export class AppErrorPageOffline extends Vue {
 	@State app: AppStore;
 
-	retry()
-	{
+	retry() {
 		window.location.reload();
 	}
 }

@@ -3,8 +3,6 @@ import { makeComponentProvider } from '../../../vue/angular-link';
 import { AppCommentWidget } from './widget';
 
 @NgModule({
-	declarations: [
-		makeComponentProvider( AppCommentWidget ),
-	],
+	declarations: [makeComponentProvider(AppCommentWidget)],
 })
-export class CommentWidgetModule { }
+export class CommentWidgetModule {}

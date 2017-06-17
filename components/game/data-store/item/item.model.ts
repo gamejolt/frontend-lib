@@ -1,8 +1,7 @@
 import { Model } from '../../../model/model.service';
 import { User } from '../../../user/user.model';
 
-export class GameDataStoreItem extends Model
-{
+export class GameDataStoreItem extends Model {
 	user_id: number;
 	user: User;
 	game_id: number;
@@ -11,19 +10,22 @@ export class GameDataStoreItem extends Model
 	posted_on: number;
 	status: number;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.user ) {
-			this.user = new User( data.user );
+		if (data.user) {
+			this.user = new User(data.user);
 		}
 	}
 
-	$remove()
-	{
-		return this.$_remove( '/web/dash/developer/games/api/data-storage/remove-item/' + this.game_id + '/' + this.id );
+	$remove() {
+		return this.$_remove(
+			'/web/dash/developer/games/api/data-storage/remove-item/' +
+				this.game_id +
+				'/' +
+				this.id,
+		);
 	}
 }
 
-Model.create( GameDataStoreItem );
+Model.create(GameDataStoreItem);

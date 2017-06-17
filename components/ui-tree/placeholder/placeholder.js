@@ -1,3 +1,3 @@
-angular.module( 'gj.UiTree.Placeholder', [] );
+angular.module('gj.UiTree.Placeholder', []);
 
-require( './placeholder-directive' );
+require('./placeholder-directive');

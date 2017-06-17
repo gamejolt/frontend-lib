@@ -1,7 +1,6 @@
 import { Environment } from '../environment/environment.service';
 
-export class Ads
-{
+export class Ads {
 	static readonly TYPE_DISPLAY = 'display';
 	static readonly TYPE_VIDEO = 'video';
 
@@ -16,9 +15,8 @@ export class Ads
 	static numRectangles = 0;
 	static numSkyscrapers = 0;
 
-	static sendBeacon( type: string, resource: string, resourceId: number )
-	{
-		if ( Environment.isPrerender ) {
+	static sendBeacon(type: string, resource: string, resourceId: number) {
+		if (Environment.isPrerender) {
 			return;
 		}
 
@@ -27,16 +25,14 @@ export class Ads
 		// Cache busting.
 		queryString += 'cb=' + Date.now();
 
-		if ( resource ) {
-			if ( resource === 'Game' ) {
+		if (resource) {
+			if (resource === 'Game') {
 				queryString += '&resource_type=' + this.RESOURCE_TYPE_GAME;
 				queryString += '&resource_id=' + resourceId;
-			}
-			else if ( resource === 'User' ) {
+			} else if (resource === 'User') {
 				queryString += '&resource_type=' + this.RESOURCE_TYPE_USER;
 				queryString += '&resource_id=' + resourceId;
-			}
-			else if ( resource === 'Fireside_Post' ) {
+			} else if (resource === 'Fireside_Post') {
 				queryString += '&resource_type=' + this.RESOURCE_TYPE_FIRESIDE_POST;
 				queryString += '&resource_id=' + resourceId;
 			}
@@ -44,7 +40,7 @@ export class Ads
 
 		// This is enough to send the beacon.
 		// No need to add it to the page.
-		let img = window.document.createElement( 'img' );
+		let img = window.document.createElement('img');
 		img.src = `${Environment.apiHost}/adserver/log/${type}?${queryString}`;
 	}
 }

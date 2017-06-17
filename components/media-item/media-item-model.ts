@@ -1,7 +1,6 @@
 import { Model } from '../model/model.service';
 
-export class MediaItem extends Model
-{
+export class MediaItem extends Model {
 	static readonly TYPE_GAME_THUMBNAIL = 'game-thumbnail';
 	static readonly TYPE_GAME_HEADER = 'game-header';
 	static readonly TYPE_GAME_SCREENSHOT = 'game-screenshot';
@@ -43,17 +42,15 @@ export class MediaItem extends Model
 		maxWidth: number | undefined,
 		maxHeight: number | undefined,
 		options: { force?: boolean } = {},
-	)
-	{
+	) {
 		// Simple getter for dimensions.
-		if ( !maxWidth && !maxHeight ) {
+		if (!maxWidth && !maxHeight) {
 			return {
 				width: this.width,
 				height: this.height,
 			};
-		}
-		// This case is a bit silly, but whatever.
-		else if ( options && options.force && maxWidth && maxHeight ) {
+		} else if (options && options.force && maxWidth && maxHeight) {
+			// This case is a bit silly, but whatever.
 			return {
 				width: maxWidth,
 				height: maxHeight,
@@ -65,27 +62,24 @@ export class MediaItem extends Model
 		let height = 0;
 
 		// Forcing one of the dimensions is easy.
-		if ( options && options.force ) {
+		if (options && options.force) {
 			width = maxWidth || (maxHeight ? maxHeight / aspectRatio : 0);
 			height = maxHeight || (maxWidth ? maxWidth * aspectRatio : 0);
-		}
-		else {
+		} else {
 			// Setting max for both.
-			if ( maxWidth && maxHeight ) {
-				width = Math.min( this.width, maxWidth );
+			if (maxWidth && maxHeight) {
+				width = Math.min(this.width, maxWidth);
 				height = width * aspectRatio;
 
-				if ( height > maxHeight ) {
+				if (height > maxHeight) {
 					height = maxHeight;
 					width = height / aspectRatio;
 				}
-			}
-			else if ( maxWidth && !maxHeight ) {
-				width = Math.min( this.width, maxWidth );
+			} else if (maxWidth && !maxHeight) {
+				width = Math.min(this.width, maxWidth);
 				height = width * aspectRatio;
-			}
-			else if ( !maxWidth && maxHeight ) {
-				height = Math.min( this.height, maxHeight );
+			} else if (!maxWidth && maxHeight) {
+				height = Math.min(this.height, maxHeight);
 				width = height / aspectRatio;
 			}
 		}
@@ -96,9 +90,8 @@ export class MediaItem extends Model
 		};
 	}
 
-	getCrop()
-	{
-		if ( !this.crop_end_x || !this.crop_end_y ) {
+	getCrop() {
+		if (!this.crop_end_x || !this.crop_end_y) {
 			return undefined;
 		}
 
@@ -110,29 +103,33 @@ export class MediaItem extends Model
 		};
 	}
 
-	$save()
-	{
-		if ( this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE
-			&& this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
+	$save() {
+		if (
+			this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE &&
+			this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
 		) {
-			throw new Error( 'Can only save fireside media items.' );
+			throw new Error('Can only save fireside media items.');
 		}
 
-		if ( !this.id ) {
-			return this.$_save( '/fireside/dash/posts/media/upload/' + this.post_id + '/' + this.type, 'mediaItem', { file: this.file } );
+		if (!this.id) {
+			return this.$_save(
+				'/fireside/dash/posts/media/upload/' + this.post_id + '/' + this.type,
+				'mediaItem',
+				{ file: this.file },
+			);
 		}
 	}
 
-	$remove()
-	{
-		if ( this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE
-			&& this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
+	$remove() {
+		if (
+			this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE &&
+			this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
 		) {
-			throw new Error( 'Can only save fireside media items.' );
+			throw new Error('Can only save fireside media items.');
 		}
 
-		return this.$_remove( '/fireside/dash/posts/media/remove/' + this.id );
+		return this.$_remove('/fireside/dash/posts/media/remove/' + this.id);
 	}
 }
 
-Model.create( MediaItem );
+Model.create(MediaItem);

@@ -1,7 +1,6 @@
 import { Model } from '../../model/model.service';
 
-export class OrderAddress extends Model
-{
+export class OrderAddress extends Model {
 	static readonly TYPE_BILLING = 'billing';
 	static readonly TYPE_SHIPPING = 'shipping';
 
@@ -15,10 +14,9 @@ export class OrderAddress extends Model
 	postcode: string;
 	country: string;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 	}
 }
 
-Model.create( OrderAddress );
+Model.create(OrderAddress);

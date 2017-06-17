@@ -7,10 +7,11 @@ import { Environment } from '../../environment/environment.service';
 
 @View
 @Component({})
-export class AppWidgetCompilerWidgetGamePackages extends Vue
-{
-	@Prop( { type: Array, default: () => [] } ) sellables: Sellable[];
-	@Prop( { type: String, default: 'dark' } ) theme: string;
+export class AppWidgetCompilerWidgetGamePackages extends Vue {
+	@Prop({ type: Array, default: () => [] })
+	sellables: Sellable[];
+	@Prop({ type: String, default: 'dark' })
+	theme: string;
 
 	widgetHost = Environment.widgetHost;
 }

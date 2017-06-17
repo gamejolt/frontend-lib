@@ -1,3 +1,3 @@
-angular.module( 'gj.Animation.Disabled', [] );
+angular.module('gj.Animation.Disabled', []);
 
-require( './disabled-directive' );
+require('./disabled-directive');

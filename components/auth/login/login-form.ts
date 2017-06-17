@@ -13,38 +13,33 @@ import { Api } from '../../api/api.service';
 		AppLoading,
 	},
 })
-export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit
-{
-	@Prop( Boolean ) darkVariant?: boolean;
+export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
+	@Prop(Boolean) darkVariant?: boolean;
 
 	invalidLogin = false;
 	blockedLogin = false;
 
-	Connection = makeObservableService( Connection );
+	Connection = makeObservableService(Connection);
 
-	onChanged()
-	{
+	onChanged() {
 		this.resetErrors();
 	}
 
-	resetErrors()
-	{
+	resetErrors() {
 		this.invalidLogin = false;
 		this.blockedLogin = false;
 	}
 
-	async onSubmit()
-	{
+	async onSubmit() {
 		this.resetErrors();
 
-		const response = await Api.sendRequest( '/web/auth/login', this.formModel );
+		const response = await Api.sendRequest('/web/auth/login', this.formModel);
 
-		if ( response.success === false ) {
-			if ( response.reason ) {
-				if ( response.reason === 'invalid-login' ) {
+		if (response.success === false) {
+			if (response.reason) {
+				if (response.reason === 'invalid-login') {
 					this.invalidLogin = true;
-				}
-				else if ( response.reason === 'blocked' ) {
+				} else if (response.reason === 'blocked') {
 					this.blockedLogin = true;
 				}
 			}

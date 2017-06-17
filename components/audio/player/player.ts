@@ -4,9 +4,8 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import { GameSong } from '../../game/song/song.model';
 
 @Component({})
-export class AppAudioPlayer extends Vue
-{
-	@Prop( GameSong ) song: GameSong;
+export class AppAudioPlayer extends Vue {
+	@Prop(GameSong) song: GameSong;
 
 	$el: HTMLAudioElement;
 
@@ -14,39 +13,33 @@ export class AppAudioPlayer extends Vue
 
 	private timer?: NodeJS.Timer;
 
-	@Watch( 'song.url' )
-	onChanged()
-	{
+	@Watch('song.url')
+	onChanged() {
 		this.setup();
 	}
 
-	mounted()
-	{
+	mounted() {
 		this.setup();
 	}
 
-	render( h: Vue.CreateElement )
-	{
-		return h( 'audio', {
+	render(h: Vue.CreateElement) {
+		return h('audio', {
 			domProps: {
 				src: this.song.url,
 				preload: 'auto',
 			},
-		} );
+		});
 	}
 
-	destroyed()
-	{
+	destroyed() {
 		this.clearWatcher();
 	}
 
-	seek( time: number )
-	{
+	seek(time: number) {
 		this.$el.currentTime = time;
 	}
 
-	private async setup()
-	{
+	private async setup() {
 		this.clearWatcher();
 
 		await this.$nextTick();
@@ -55,35 +48,30 @@ export class AppAudioPlayer extends Vue
 		this.setWatcher();
 	}
 
-	private onSongEnded( sendEvent: boolean )
-	{
+	private onSongEnded(sendEvent: boolean) {
 		this.clearWatcher();
 
-		if ( sendEvent && this.onSongEnded ) {
-			this.$emit( 'end' );
+		if (sendEvent && this.onSongEnded) {
+			this.$emit('end');
 		}
 	}
 
-	private setWatcher()
-	{
-		this.timer = setInterval( () =>
-		{
-			if ( this.$el.ended ) {
-				this.onSongEnded( true );
-			}
-			else {
-				this.$emit( 'duration', {
+	private setWatcher() {
+		this.timer = setInterval(() => {
+			if (this.$el.ended) {
+				this.onSongEnded(true);
+			} else {
+				this.$emit('duration', {
 					currentTime: this.$el.currentTime,
 					duration: this.$el.duration,
-				} );
+				});
 			}
-		}, 250 );
+		}, 250);
 	}
 
-	private clearWatcher()
-	{
-		if ( this.timer ) {
-			clearInterval( this.timer );
+	private clearWatcher() {
+		if (this.timer) {
+			clearInterval(this.timer);
 			this.timer = undefined;
 		}
 	}

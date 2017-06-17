@@ -3,18 +3,16 @@ import { NgModule } from 'ng-metadata/core';
 // import { GamePackageCardButtonsComponent } from './buttons.component';
 // import { GamePackageCardMoreOptionsComponent } from './more-options.component';
 
-angular.module( 'gj.Game.Package.Card', [] );
+angular.module('gj.Game.Package.Card', []);
 
-require( './payment-form-directive' );
+require('./payment-form-directive');
 
 @NgModule({
-	imports: [
-		'gj.Game.Package.Card',
-	],
+	imports: ['gj.Game.Package.Card'],
 	declarations: [
 		// GamePackageCardComponent,
 		// GamePackageCardButtonsComponent,
 		// GamePackageCardMoreOptionsComponent,
 	],
 })
-export class GamePackageCardModule { }
+export class GamePackageCardModule {}

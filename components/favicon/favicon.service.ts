@@ -1,32 +1,28 @@
-const Favico: favicojs.FavicoJsStatic = require( 'favico.js' );
+const Favico: favicojs.FavicoJsStatic = require('favico.js');
 
-export class Favicon
-{
+export class Favicon {
 	static favicon: favicojs.Favico;
 
-	static badge( num: number )
-	{
+	static badge(num: number) {
 		this.ensureFavico();
-		this.favicon.badge( num );
+		this.favicon.badge(num);
 	}
 
-	static reset()
-	{
+	static reset() {
 		this.ensureFavico();
 		this.favicon.reset();
 	}
 
-	private static ensureFavico()
-	{
-		if ( this.favicon ) {
+	private static ensureFavico() {
+		if (this.favicon) {
 			return;
 		}
 
-		this.favicon = new Favico( {
+		this.favicon = new Favico({
 			animation: 'none',
 			type: 'rectangle',
 			bgColor: '#ff3fac',
 			textColor: '#fff',
-		} );
+		});
 	}
 }

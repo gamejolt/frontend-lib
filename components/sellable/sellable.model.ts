@@ -1,8 +1,7 @@
 import { Model } from '../model/model.service';
 import { SellablePricing } from './pricing/pricing.model';
 
-export class Sellable extends Model
-{
+export class Sellable extends Model {
 	static readonly TYPE_FREE = 'free';
 	static readonly TYPE_PAID = 'paid';
 	static readonly TYPE_PWYW = 'pwyw';
@@ -17,14 +16,13 @@ export class Sellable extends Model
 	description: string;
 	is_owned: boolean;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.pricings ) {
-			this.pricings = SellablePricing.populate( data.pricings );
+		if (data.pricings) {
+			this.pricings = SellablePricing.populate(data.pricings);
 		}
 	}
 }
 
-Model.create( Sellable );
+Model.create(Sellable);

@@ -3,8 +3,6 @@ import { makeComponentProvider } from '../../../vue/angular-link';
 import { AppLoadingFade } from './fade';
 
 @NgModule({
-	declarations: [
-		makeComponentProvider( AppLoadingFade ),
-	],
+	declarations: [makeComponentProvider(AppLoadingFade)],
 })
-export class LoadingFadeModule { }
+export class LoadingFadeModule {}

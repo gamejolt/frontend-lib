@@ -5,6 +5,4 @@ import '../timeline-list/timeline-list.styl';
 
 @View
 @Component({})
-export class AppMessageThread extends Vue
-{
-}
+export class AppMessageThread extends Vue {}

@@ -1,3 +1,3 @@
-angular.module( 'gj.ExpandWhen', [ 'ui.bootstrap.collapse' ] );
+angular.module('gj.ExpandWhen', ['ui.bootstrap.collapse']);
 
-require( './expand-when-directive' );
+require('./expand-when-directive');

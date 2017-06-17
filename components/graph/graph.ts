@@ -11,9 +11,7 @@ const globalColors = [
 	'#31d6ff',
 	'#ff3fac',
 	'#2f7f6f',
-]
-.map( ( color ) =>
-{
+].map(color => {
 	return {
 		backgroundColor: 'rgba( 255, 255, 255, 0.05 )',
 		borderColor: color,
@@ -26,13 +24,12 @@ const globalColors = [
 		pointHoverBackgroundColor: '#fff',
 		pointHoverBorderColor: '#fff',
 	};
-} );
+});
 
 // Try to match site styling.
 const fontFamily = `Lato, 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif`;
 
 const chartOptions: any = {
-
 	responsive: true,
 	maintainAspectRatio: false,
 
@@ -47,19 +44,23 @@ const chartOptions: any = {
 	},
 
 	scales: {
-		xAxes: [{
-			gridLines: {
-				display: false,
+		xAxes: [
+			{
+				gridLines: {
+					display: false,
+				},
 			},
-		}],
-		yAxes: [{
-			gridLines: {
-				display: false,
+		],
+		yAxes: [
+			{
+				gridLines: {
+					display: false,
+				},
+				ticks: {
+					beginAtZero: true,
+				},
 			},
-			ticks: {
-				beginAtZero: true,
-			}
-		}]
+		],
 	},
 
 	tooltips: {
@@ -109,32 +110,30 @@ const backgroundVariantChartOptions: any = {
 
 @View
 @Component({})
-export class AppGraph extends Vue
-{
-	@Prop( Array ) dataset: any[];
-	@Prop( { type: String, default: 'line' } ) type: string;
-	@Prop( Boolean ) backgroundVariant?: boolean;
+export class AppGraph extends Vue {
+	@Prop(Array) dataset: any[];
+	@Prop({ type: String, default: 'line' })
+	type: string;
+	@Prop(Boolean) backgroundVariant?: boolean;
 
 	chart: Chart = null as any;
 	data: any = {};
 	chartOptions: any = {};
 	ourColors: any = {};
 
-	created()
-	{
+	created() {
 		// We gotta deep copy.
-		Object.assign( this.chartOptions, JSON.parse( JSON.stringify( chartOptions ) ) );
-		Object.assign( this.ourColors, JSON.parse( JSON.stringify( globalColors ) ) );
+		Object.assign(this.chartOptions, JSON.parse(JSON.stringify(chartOptions)));
+		Object.assign(this.ourColors, JSON.parse(JSON.stringify(globalColors)));
 
-		if ( this.type === 'line' ) {
-			Object.assign( this.chartOptions, lineChartOptions );
-		}
-		else if ( this.type === 'pie' || this.type === 'doughnut' ) {
-			Object.assign( this.chartOptions, pieChartOptions );
+		if (this.type === 'line') {
+			Object.assign(this.chartOptions, lineChartOptions);
+		} else if (this.type === 'pie' || this.type === 'doughnut') {
+			Object.assign(this.chartOptions, pieChartOptions);
 		}
 
-		if ( this.backgroundVariant ) {
-			Object.assign( this.chartOptions, backgroundVariantChartOptions );
+		if (this.backgroundVariant) {
+			Object.assign(this.chartOptions, backgroundVariantChartOptions);
 
 			this.ourColors[0] = {
 				borderWidth: 1,
@@ -150,27 +149,24 @@ export class AppGraph extends Vue
 		}
 	}
 
-	mounted()
-	{
+	mounted() {
 		this.checkData();
 
-		this.chart = new Chart( this.$refs.canvas as HTMLCanvasElement, {
+		this.chart = new Chart(this.$refs.canvas as HTMLCanvasElement, {
 			type: this.type,
 			data: this.data,
 			options: this.chartOptions,
-		} );
+		});
 	}
 
 	// Will only get called when dataset changes reference.
-	@Watch( 'dataset' )
-	onDatasetChanged()
-	{
+	@Watch('dataset')
+	onDatasetChanged() {
 		this.checkData();
 	}
 
-	private checkData()
-	{
-		if ( !this.dataset ) {
+	private checkData() {
+		if (!this.dataset) {
 			return;
 		}
 
@@ -179,55 +175,52 @@ export class AppGraph extends Vue
 			datasets: [],
 		};
 
-		if ( this.type === 'line' ) {
-			this.dataset.forEach( ( series: any, i: number ) =>
-			{
+		if (this.type === 'line') {
+			this.dataset.forEach((series: any, i: number) => {
 				let dataset: any = {
 					label: series.label,
 					data: [],
 				};
 
-				Object.assign( dataset, this.ourColors[i] );
+				Object.assign(dataset, this.ourColors[i]);
 
-				for ( const row of series.data ) {
-					if ( i === 0 ) {
-						this.data.labels.push( date( row[0], 'MMM DD' ) );
+				for (const row of series.data) {
+					if (i === 0) {
+						this.data.labels.push(date(row[0], 'MMM DD'));
 					}
 
-					dataset.data.push( row[1] );
+					dataset.data.push(row[1]);
 				}
 
-				this.data.datasets.push( dataset );
-			} );
-		}
-		else if ( this.type === 'pie' || this.type === 'doughnut' ) {
+				this.data.datasets.push(dataset);
+			});
+		} else if (this.type === 'pie' || this.type === 'doughnut') {
 			this.data.datasets.push({
 				data: [],
 			});
 
-			this.dataset.forEach( ( item: any, i: number ) =>
-			{
+			this.dataset.forEach((item: any, i: number) => {
 				const dataset = this.data.datasets[0];
 
-				dataset.data.push( item.value );
+				dataset.data.push(item.value);
 
 				// We have to override the color info for the chart since the
 				// defaults are for line charts. We also skip the first color
 				// value since that's only for line charts (white).
-				const colorInfo = Object.assign( {}, this.ourColors[ i + 1 ] );
+				const colorInfo = Object.assign({}, this.ourColors[i + 1]);
 				colorInfo.backgroundColor = colorInfo.borderColor;
 				colorInfo.borderColor = '#000';
 				colorInfo.hoverBackgroundColor = '#fff';
 
-				for ( const n in colorInfo ) {
-					if ( !dataset[ n ] ) {
-						dataset[ n ] = [];
+				for (const n in colorInfo) {
+					if (!dataset[n]) {
+						dataset[n] = [];
 					}
-					dataset[ n ].push( colorInfo[ n ] );
+					dataset[n].push(colorInfo[n]);
 				}
 
-				this.data.labels.push( item.label );
-			} );
+				this.data.labels.push(item.label);
+			});
 		}
 	}
 }

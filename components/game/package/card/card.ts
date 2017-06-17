@@ -46,18 +46,19 @@ import { GamePlayModal } from '../../play-modal/play-modal.service';
 		filesize,
 	},
 })
-export class AppGamePackageCard extends Vue
-{
-	@Prop( Game ) game: Game;
-	@Prop( GamePackage ) package: GamePackage;
-	@Prop( Sellable ) sellable: Sellable;
-	@Prop( { type: Array, default: () => [] } ) releases: GameRelease[];
-	@Prop( { type: Array, default: () => [] } ) builds: GameBuild[];
-	@Prop( String ) accessKey?: string;
-	@Prop( Boolean ) isPartner?: boolean;
-	@Prop( String ) partnerReferredKey?: string;
-	@Prop( User ) partnerReferredBy?: User;
-	@Prop( Boolean ) partnerNoCut?: boolean;
+export class AppGamePackageCard extends Vue {
+	@Prop(Game) game: Game;
+	@Prop(GamePackage) package: GamePackage;
+	@Prop(Sellable) sellable: Sellable;
+	@Prop({ type: Array, default: () => [] })
+	releases: GameRelease[];
+	@Prop({ type: Array, default: () => [] })
+	builds: GameBuild[];
+	@Prop(String) accessKey?: string;
+	@Prop(Boolean) isPartner?: boolean;
+	@Prop(String) partnerReferredKey?: string;
+	@Prop(User) partnerReferredBy?: User;
+	@Prop(Boolean) partnerNoCut?: boolean;
 
 	showFullDescription = false;
 	canToggleDescription = false;
@@ -72,17 +73,11 @@ export class AppGamePackageCard extends Vue
 	saleOldPricing: SellablePricing | null = null;
 	hasPaymentWell = false;
 
-
-	get card()
-	{
-		return new GamePackageCardModel(
-			this.releases,
-			this.builds,
-		);
+	get card() {
+		return new GamePackageCardModel(this.releases, this.builds);
 	}
 
-	created()
-	{
+	created() {
 		// // If this game is in their installed games, this will populate.
 		// this.installedBuild = null;
 
@@ -90,20 +85,27 @@ export class AppGamePackageCard extends Vue
 
 		// If there is a key on the package, then we should show it as being
 		// "owned".
-		if ( this.accessKey ) {
+		if (this.accessKey) {
 			this.isOwned = true;
 		}
 
-		if ( this.sellable && this.sellable.pricings.length > 0 ) {
+		if (this.sellable && this.sellable.pricings.length > 0) {
 			this.pricing = this.sellable.pricings[0];
-			if ( this.pricing.promotional ) {
+			if (this.pricing.promotional) {
 				this.saleOldPricing = this.sellable.pricings[1];
 				this.sale = true;
-				this.salePercentageOff = ((this.saleOldPricing.amount - this.pricing.amount) / this.saleOldPricing.amount * 100).toFixed( 0 );
+				this.salePercentageOff = ((this.saleOldPricing.amount -
+					this.pricing.amount) /
+					this.saleOldPricing.amount *
+					100).toFixed(0);
 			}
 		}
 
-		if ( this.sellable && !this.isOwned && (this.sellable.type === 'pwyw' || this.sellable.type === 'paid') ) {
+		if (
+			this.sellable &&
+			!this.isOwned &&
+			(this.sellable.type === 'pwyw' || this.sellable.type === 'paid')
+		) {
 			this.hasPaymentWell = true;
 		}
 
@@ -118,44 +120,40 @@ export class AppGamePackageCard extends Vue
 		// } );
 	}
 
-	buildClick( build: GameBuild, fromExtraSection = false )
-	{
+	buildClick(build: GameBuild, fromExtraSection = false) {
 		// For client, if they clicked in the "options" section, then skip
 		// showing payment form. Just take them directly to site.
-		if ( GJ_IS_CLIENT && fromExtraSection ) {
-			this.doBuildClick( build, fromExtraSection );
-		}
-		// This will show the payment form if we're supposed to.
-		else if ( this.sellable.type === 'pwyw' && this.showPayment( build ) ) {
-		}
-		// Otherwise direct to the build.
-		else {
-			this.doBuildClick( build, fromExtraSection );
+		if (GJ_IS_CLIENT && fromExtraSection) {
+			this.doBuildClick(build, fromExtraSection);
+		} else if (this.sellable.type === 'pwyw' && this.showPayment(build)) {
+			// This will show the payment form if we're supposed to.
+		} else {
+			// Otherwise direct to the build.
+			this.doBuildClick(build, fromExtraSection);
 		}
 	}
 
-	private doBuildClick( build: GameBuild, fromExtraSection = false )
-	{
-		let operation = build.type === GameBuild.TYPE_DOWNLOADABLE ? 'download' : 'play';
-		if ( build.type === GameBuild.TYPE_ROM && fromExtraSection ) {
+	private doBuildClick(build: GameBuild, fromExtraSection = false) {
+		let operation = build.type === GameBuild.TYPE_DOWNLOADABLE
+			? 'download'
+			: 'play';
+		if (build.type === GameBuild.TYPE_ROM && fromExtraSection) {
 			operation = 'download';
 		}
 
-		if ( operation === 'download' ) {
-			this.download( build );
-		}
-		else if ( operation === 'play' ) {
-			this.showBrowserModal( build );
+		if (operation === 'download') {
+			this.download(build);
+		} else if (operation === 'play') {
+			this.showBrowserModal(build);
 		}
 	}
 
-	showPayment( build: GameBuild )
-	{
+	showPayment(build: GameBuild) {
 		// If this isn't a free game, then we want to slide the payment open. If
 		// it's pay what you want, when the payment is open and they click a
 		// build again, just take them to it.
-		if ( this.hasPaymentWell ) {
-			if ( !this.isPaymentOpen ) {
+		if (this.hasPaymentWell) {
+			if (!this.isPaymentOpen) {
 				this.isPaymentOpen = true;
 				this.clickedBuild = build;
 				return true;
@@ -165,75 +163,66 @@ export class AppGamePackageCard extends Vue
 		return false;
 	}
 
-	skipPayment()
-	{
+	skipPayment() {
 		// When they skip a pwyw payment form, on client we need to start the
 		// install. On site we treat it like a normal build click.
-		if ( GJ_IS_CLIENT ) {
+		if (GJ_IS_CLIENT) {
 			// this.startInstall( this.clickedBuild );
-		}
-		else {
-			this.buildClick( this.clickedBuild! );
+		} else {
+			this.buildClick(this.clickedBuild!);
 		}
 	}
 
-	private download( build: GameBuild )
-	{
-		Analytics.trackEvent( 'game-package-card', 'download', 'download' );
+	private download(build: GameBuild) {
+		Analytics.trackEvent('game-package-card', 'download', 'download');
 
-		GameDownloader.download( this.$router, this.game, build, {
+		GameDownloader.download(this.$router, this.game, build, {
 			isOwned: (this.sellable && this.isOwned) || this.isPartner,
 			key: this.accessKey,
-		} );
+		});
 	}
 
-	private showBrowserModal( build: GameBuild )
-	{
-		Analytics.trackEvent( 'game-package-card', 'download', 'play' );
+	private showBrowserModal(build: GameBuild) {
+		Analytics.trackEvent('game-package-card', 'download', 'play');
 
-		GamePlayModal.show( this.game, build, {
+		GamePlayModal.show(this.game, build, {
 			// isOwned: (this.sellable && this.isOwned) || this.isPartner,
 			key: this.accessKey,
-		} );
+		});
 	}
 
-	integer( pricing: SellablePricing )
-	{
+	integer(pricing: SellablePricing) {
 		return pricing.amount;
 	}
 
-	decimal( pricing: SellablePricing )
-	{
+	decimal(pricing: SellablePricing) {
 		let amount = pricing.amount;
 		amount %= 100;
 
 		let amountStr = amount + '';
-		if ( amount < 10 ) {
+		if (amount < 10) {
 			amountStr = amount + '0';
 		}
 
 		return amountStr;
 	}
 
-	onPackageBought()
-	{
+	onPackageBought() {
 		this.isWhatOpen = false;
 		this.isPaymentOpen = false;
 		this.hasPaymentWell = false;
 		this.isOwned = true;
 
-		Growls.success( {
-			title: this.$gettext( 'Order Complete' ),
+		Growls.success({
+			title: this.$gettext('Order Complete'),
 			message: this.$gettextInterpolate(
 				'Warm thanks from both %{ developer } and the Game Jolt team.',
-				{ developer: this.game.developer.display_name }
+				{ developer: this.game.developer.display_name },
 			),
 			sticky: true,
-		} );
+		});
 	}
 }
-
-
 
 // @Component({
 // 	selector: 'gj-game-package-card',
@@ -241,9 +230,6 @@ export class AppGamePackageCard extends Vue
 // })
 // export class GamePackageCardComponent implements OnInit
 // {
-
-
-
 
 // 	// constructor(
 // 	// 	@Inject( '$scope') private $scope: ng.IScope,
@@ -253,6 +239,5 @@ export class AppGamePackageCard extends Vue
 // 	// )
 // 	// {
 // 	// }
-
 
 // }

@@ -42,7 +42,7 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 		AppCommentWidgetAdd,
 
 		// Since it's recursive it needs to be able to resolve itself.
-		AppCommentWidgetComment: () => Promise.resolve( AppCommentWidgetComment ),
+		AppCommentWidgetComment: () => Promise.resolve(AppCommentWidgetComment),
 	},
 	directives: {
 		AppTrackEvent,
@@ -54,11 +54,10 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 		number,
 	},
 })
-export class AppCommentWidgetComment extends Vue
-{
-	@Prop( Comment ) comment: Comment;
-	@Prop( Array ) children?: Comment[];
-	@Prop( Comment ) parent?: Comment;
+export class AppCommentWidgetComment extends Vue {
+	@Prop(Comment) comment: Comment;
+	@Prop(Array) children?: Comment[];
+	@Prop(Comment) parent?: Comment;
 
 	@State app: AppStore;
 
@@ -76,94 +75,86 @@ export class AppCommentWidgetComment extends Vue
 	date = date;
 	Environment = Environment;
 
-	created()
-	{
-		this.widget = findVueParent( this, AppCommentWidget ) as AppCommentWidget;
+	created() {
+		this.widget = findVueParent(this, AppCommentWidget) as AppCommentWidget;
 	}
 
-	mounted()
-	{
+	mounted() {
 		this.checkPermalink();
 	}
 
-	get isChild()
-	{
+	get isChild() {
 		return !!this.parent;
 	}
 
-	get isOwner()
-	{
-		if ( !this.widget.resourceOwner ) {
+	get isOwner() {
+		if (!this.widget.resourceOwner) {
 			return false;
 		}
 
 		return this.widget.resourceOwner.id === this.comment.user.id;
 	}
 
-	get canFollow()
-	{
+	get canFollow() {
 		// Can't subscribe if...
 		// they aren't logged in
 		// this is a child comment
 		// the resource belongs to them
-		if ( !this.app.user ) {
+		if (!this.app.user) {
 			return false;
-		}
-		else if ( this.isChild ) {
+		} else if (this.isChild) {
 			return false;
-		}
-		else if ( this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id ) {
+		} else if (
+			this.widget.resourceOwner &&
+			this.widget.resourceOwner.id === this.app.user.id
+		) {
 			return false;
 		}
 
 		return true;
 	}
 
-	get canVote()
-	{
+	get canVote() {
 		// Can't vote on this comment if...
 		// they aren't logged in
 		// they wrote the comment
 		// the resource belongs to them (they will just upvote stuff that is nice)
-		if ( !this.app.user ) {
+		if (!this.app.user) {
 			return false;
-		}
-		else if ( this.comment.user.id === this.app.user.id ) {
+		} else if (this.comment.user.id === this.app.user.id) {
 			return false;
-		}
-		else if ( this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id ) {
+		} else if (
+			this.widget.resourceOwner &&
+			this.widget.resourceOwner.id === this.app.user.id
+		) {
 			return false;
 		}
 
 		return true;
 	}
 
-	get votingTooltip()
-	{
+	get votingTooltip() {
 		const userHasVoted = !!this.comment.user_vote;
 		const count = this.comment.votes;
 
-		if ( count <= 0 ) {
-			if ( this.canVote ) {
-				return this.$gettext( 'Give this comment some love!' );
+		if (count <= 0) {
+			if (this.canVote) {
+				return this.$gettext('Give this comment some love!');
 			}
-		}
-		else if ( userHasVoted ) {
-			if ( count === 1 ) {
-				return this.$gettext( 'You like this comment' );
-			}
-			else {
+		} else if (userHasVoted) {
+			if (count === 1) {
+				return this.$gettext('You like this comment');
+			} else {
 				return this.$gettextInterpolate(
 					this.$ngettext(
 						'You and another person like this comment.',
 						'You and %{ count } people like this comment.',
-						(count - 1),
+						count - 1,
 					),
 					{ count },
 				);
 			}
-		}
-		else {
+		} else {
 			return this.$gettextInterpolate(
 				this.$ngettext(
 					'One person likes this comment.',
@@ -175,73 +166,61 @@ export class AppCommentWidgetComment extends Vue
 		}
 	}
 
-	onReplyAdd( formModel: Comment )
-	{
-		this.widget.onCommentAdd( formModel, true );
+	onReplyAdd(formModel: Comment) {
+		this.widget.onCommentAdd(formModel, true);
 	}
 
-	onVoteClick()
-	{
+	onVoteClick() {
 		// If adding a vote.
-		if ( !this.comment.user_vote ) {
+		if (!this.comment.user_vote) {
 			this.comment.$like();
-		}
-		// If removing a vote.
-		else {
+		} else {
+			// If removing a vote.
 			this.comment.$removeLike();
 		}
 	}
 
-	async onFollowClick()
-	{
-		if ( this.isFollowPending ) {
+	async onFollowClick() {
+		if (this.isFollowPending) {
 			return;
 		}
 
 		this.isFollowPending = true;
 
-		if ( !this.widget.subscriptions[ this.comment.id ] ) {
+		if (!this.widget.subscriptions[this.comment.id]) {
+			const newSubscription = await Subscription.$subscribe(this.comment.id);
 
-			const newSubscription = await Subscription.$subscribe( this.comment.id );
-
-			Vue.set( this.widget.subscriptions, this.comment.id + '', newSubscription );
+			Vue.set(this.widget.subscriptions, this.comment.id + '', newSubscription);
 			this.isFollowPending = false;
-		}
-		else {
+		} else {
+			await this.widget.subscriptions[this.comment.id].$remove();
 
-			await this.widget.subscriptions[ this.comment.id ].$remove();
-
-			Vue.delete( this.widget.subscriptions, this.comment.id + '' );
+			Vue.delete(this.widget.subscriptions, this.comment.id + '');
 			this.isFollowPending = false;
 		}
 	}
 
-	selectVideo( video: CommentVideo )
-	{
-		if ( this.selectedVideo === video ) {
+	selectVideo(video: CommentVideo) {
+		if (this.selectedVideo === video) {
 			this.selectedVideo = null;
-		}
-		else {
+		} else {
 			this.selectedVideo = video;
 		}
 	}
 
-	copyPermalink()
-	{
-		Clipboard.copy( this.comment.permalink );
+	copyPermalink() {
+		Clipboard.copy(this.comment.permalink);
 	}
 
-	report()
-	{
-		ReportModal.show( this.comment );
+	report() {
+		ReportModal.show(this.comment);
 	}
 
-	private checkPermalink()
-	{
+	private checkPermalink() {
 		const hash = this.$route.hash;
-		if ( hash === '#comment-' + this.comment.id ) {
+		if (hash === '#comment-' + this.comment.id) {
 			this.isHighlighted = true;
-			Scroll.to( 'comment-' + this.comment.id );
+			Scroll.to('comment-' + this.comment.id);
 		}
 	}
 }

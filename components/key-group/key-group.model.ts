@@ -1,8 +1,7 @@
 import { Model } from '../model/model.service';
 import { GamePackage } from '../game/package/package.model';
 
-export class KeyGroup extends Model
-{
+export class KeyGroup extends Model {
 	static readonly TYPE_ORDER = 'order';
 	static readonly TYPE_ANONYMOUS = 'anonymous';
 	static readonly TYPE_ANONYMOUS_CLAIM = 'anonymous-claim';
@@ -17,32 +16,45 @@ export class KeyGroup extends Model
 	viewed_count: number;
 	claimed_count: number;
 
-	constructor( data: any = {} )
-	{
-		super( data );
+	constructor(data: any = {}) {
+		super(data);
 
-		if ( data.packages ) {
-			this.packages = GamePackage.populate( data.packages );
+		if (data.packages) {
+			this.packages = GamePackage.populate(data.packages);
 		}
 	}
 
-	$save()
-	{
+	$save() {
 		const options = {
-			allowComplexData: [ 'packages' ],
+			allowComplexData: ['packages'],
 		};
 
-		if ( this.id ) {
-			return this.$_save( '/web/dash/developer/games/key-groups/save/' + this.game_id + '/' + this.id, 'keyGroup', options );
+		if (this.id) {
+			return this.$_save(
+				'/web/dash/developer/games/key-groups/save/' +
+					this.game_id +
+					'/' +
+					this.id,
+				'keyGroup',
+				options,
+			);
 		}
 
-		return this.$_save( '/web/dash/developer/games/key-groups/save/' + this.game_id, 'keyGroup', options );
+		return this.$_save(
+			'/web/dash/developer/games/key-groups/save/' + this.game_id,
+			'keyGroup',
+			options,
+		);
 	}
 
-	$remove()
-	{
-		return this.$_remove( '/web/dash/developer/games/key-groups/remove/' + this.game_id + '/' + this.id );
+	$remove() {
+		return this.$_remove(
+			'/web/dash/developer/games/key-groups/remove/' +
+				this.game_id +
+				'/' +
+				this.id,
+		);
 	}
 }
 
-Model.create( KeyGroup );
+Model.create(KeyGroup);

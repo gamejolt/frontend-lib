@@ -20,11 +20,10 @@ const ShortcutFormats = {
 	shortTime: 'h:mm A',
 };
 
-export function date( now: Date | string | number, formatTo?: string )
-{
-	if ( formatTo && (ShortcutFormats as any)[ formatTo ] ) {
-		formatTo = (ShortcutFormats as any)[ formatTo ];
+export function date(now: Date | string | number, formatTo?: string) {
+	if (formatTo && (ShortcutFormats as any)[formatTo]) {
+		formatTo = (ShortcutFormats as any)[formatTo];
 	}
 
-	return format( now, formatTo );
+	return format(now, formatTo);
 }
