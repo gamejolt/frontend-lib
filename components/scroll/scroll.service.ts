@@ -73,7 +73,7 @@ export class Scroll {
 		this.context.addEventListener(
 			'scroll',
 			this.scrollListener,
-			supportsPassiveEvents ? { passive: true } : false,
+			supportsPassiveEvents ? { passive: true } : false
 		);
 	}
 
@@ -117,7 +117,7 @@ export class Scroll {
 		if (element instanceof HTMLDocument) {
 			return Math.max(
 				document.body.scrollHeight,
-				document.documentElement.scrollHeight,
+				document.documentElement.scrollHeight
 			);
 		}
 
@@ -132,7 +132,7 @@ export class Scroll {
 		if (element instanceof HTMLDocument) {
 			return Math.max(
 				document.body.scrollWidth,
-				document.documentElement.scrollWidth,
+				document.documentElement.scrollWidth
 			);
 		}
 
@@ -202,7 +202,7 @@ export class Scroll {
 	 */
 	static async to(
 		input: string | number | HTMLElement,
-		options: { animate?: boolean } = {},
+		options: { animate?: boolean } = {}
 	) {
 		let to = 0;
 		let element: HTMLElement | null = null;
@@ -232,7 +232,7 @@ export class Scroll {
 				this.scrollToElement(
 					element,
 					Screen.height * 0.1 + this.offsetTop,
-					options,
+					options
 				);
 			} else {
 				this.scrollTo(to, options);
@@ -243,7 +243,7 @@ export class Scroll {
 	private static scrollToElement(
 		element: HTMLElement,
 		offset: number,
-		options: { animate?: boolean } = {},
+		options: { animate?: boolean } = {}
 	) {
 		let top =
 			this.getScrollTop(this.context) +

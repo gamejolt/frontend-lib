@@ -24,7 +24,7 @@ export class MarkdownCompilerBindDirective implements OnChanges {
 					sanitize: true,
 					breaks: false,
 					pedantic: true,
-				}),
+				})
 			);
 		}
 	}

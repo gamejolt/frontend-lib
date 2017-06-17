@@ -31,7 +31,7 @@ module.exports = function(config) {
 							interlaced: true,
 							pngquant: true,
 						})
-					: gutil.noop(),
+					: gutil.noop()
 			)
 			.pipe(gulp.dest(config.buildDir))
 			.pipe(plugins.connect.reload());
@@ -45,8 +45,8 @@ module.exports = function(config) {
 					config.buildDir +
 						'/' +
 						config.gjLibDir.replace('src/', '') +
-						'components',
-				),
+						'components'
+				)
 			)
 			.pipe(config.production ? plugins.svgmin() : gutil.noop())
 			.pipe(
@@ -54,8 +54,8 @@ module.exports = function(config) {
 					config.buildDir +
 						'/' +
 						config.gjLibDir.replace('src/', '') +
-						'components',
-				),
+						'components'
+				)
 			)
 			.pipe(plugins.connect.reload());
 	});
@@ -68,8 +68,8 @@ module.exports = function(config) {
 					config.buildDir +
 						'/' +
 						config.gjLibDir.replace('src/', '') +
-						'components',
-				),
+						'components'
+				)
 			)
 			.pipe(
 				config.production
@@ -78,15 +78,15 @@ module.exports = function(config) {
 							interlaced: true,
 							pngquant: true,
 						})
-					: gutil.noop(),
+					: gutil.noop()
 			)
 			.pipe(
 				gulp.dest(
 					config.buildDir +
 						'/' +
 						config.gjLibDir.replace('src/', '') +
-						'components',
-				),
+						'components'
+				)
 			)
 			.pipe(plugins.connect.reload());
 	});
@@ -97,7 +97,7 @@ module.exports = function(config) {
 			'images:svg',
 			'images:raster',
 			'images:lib:svg',
-			'images:lib:raster',
-		),
+			'images:lib:raster'
+		)
 	);
 };

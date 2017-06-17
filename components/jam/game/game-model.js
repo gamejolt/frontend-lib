@@ -45,7 +45,7 @@ angular
 					'/' +
 					this.id +
 					'/0',
-				{},
+				{}
 			).then(function() {
 				_this.force_hidden = true;
 			});
@@ -59,7 +59,7 @@ angular
 					'/' +
 					this.id +
 					'/1',
-				{},
+				{}
 			).then(function() {
 				_this.force_hidden = false;
 			});
@@ -69,7 +69,7 @@ angular
 			var _this = this;
 			return Api.sendRequest(
 				'/jams/manage/jams/games/approve-entry/' + jamId + '/' + this.id,
-				{},
+				{}
 			).then(function() {
 				_this.approved_entry = true;
 			});
@@ -79,7 +79,7 @@ angular
 			var _this = this;
 			return Api.sendRequest(
 				'/jams/manage/jams/games/reject-entry/' + jamId + '/' + this.id,
-				{},
+				{}
 			).then(function() {
 				_this.approved_entry = false;
 			});

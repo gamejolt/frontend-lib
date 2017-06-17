@@ -33,7 +33,7 @@ export class UserFriendship extends Model {
 		const response: any = await Api.sendRequest(
 			'/web/dash/friends/requests',
 			null,
-			{ detach: true },
+			{ detach: true }
 		);
 
 		return {
@@ -55,14 +55,14 @@ export class UserFriendship extends Model {
 	$save() {
 		return this.$_save(
 			'/web/dash/friends/requests/add/' + this.target_user_id,
-			'userFriendship',
+			'userFriendship'
 		);
 	}
 
 	$accept() {
 		return this.$_save(
 			'/web/dash/friends/requests/accept/' + this.id,
-			'userFriendship',
+			'userFriendship'
 		);
 	}
 

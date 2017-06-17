@@ -12,7 +12,7 @@ export class ImgHelper {
 		originalWidth: number,
 		originalHeight: number,
 		maxWidth?: number,
-		maxHeight?: number,
+		maxHeight?: number
 	) {
 		const aspectRatio = originalHeight / originalWidth;
 		let width: number, height: number;

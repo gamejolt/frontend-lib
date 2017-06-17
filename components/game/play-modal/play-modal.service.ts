@@ -22,15 +22,15 @@ export class GamePlayModal {
 	static async show(
 		game: Game,
 		build: GameBuild,
-		options: { key?: string } = {},
+		options: { key?: string } = {}
 	) {
 		Analytics.trackEvent('game-play', 'play');
 
 		if (this.hasModal) {
 			Growls.error(
 				Translate.$gettext(
-					`You already have a browser game open. You can only have one running at a time.`,
-				),
+					`You already have a browser game open. You can only have one running at a time.`
+				)
 			);
 			return;
 		}
@@ -87,7 +87,7 @@ export class GamePlayModal {
 
 	private static async getDownloadUrl(
 		build: GameBuild,
-		options: { key?: string },
+		options: { key?: string }
 	) {
 		const payload = await build.getDownloadUrl({ key: options.key });
 		let url = payload.url;

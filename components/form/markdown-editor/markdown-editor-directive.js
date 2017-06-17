@@ -86,7 +86,7 @@ angular
 							Api.sendRequest(
 								_this.markdownPreviewUrl,
 								{ content: content },
-								{ ignorePayloadUser: true },
+								{ ignorePayloadUser: true }
 							).then(function(response) {
 								if (
 									response &&
@@ -117,7 +117,7 @@ angular
 					function(content) {
 						_this.previewContent = '';
 						_this.currentTab = 'edit';
-					},
+					}
 				);
 
 				_this.codemirrorChange = function(newContent) {
@@ -157,13 +157,13 @@ angular
 								gjForm.formModel +
 								'"]["' +
 								formGroup.name +
-								'"]',
+								'"]'
 						);
 
 						// Server validation errors.
 						element[0].setAttribute(
 							'gj-form-server-validation',
-							'formState.serverErrors',
+							'formState.serverErrors'
 						);
 					} else if (type === 'codemirror') {
 						element[0].setAttribute(
@@ -172,11 +172,11 @@ angular
 								gjForm.formModel +
 								'"]["' +
 								formGroup.name +
-								'"] }}',
+								'"] }}'
 						);
 						element[0].setAttribute(
 							'changed',
-							'ctrl.codemirrorChange( $event )',
+							'ctrl.codemirrorChange( $event )'
 						);
 					}
 

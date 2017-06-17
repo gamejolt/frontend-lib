@@ -18,7 +18,7 @@ module.exports = function(config) {
 				.pipe(
 					plugins.angularGettext.compile({
 						format: 'json',
-					}),
+					})
 				)
 				// Works around a difference in poeditor and angular-gettext: en-us -> en_US.
 				.pipe(renameLangs())

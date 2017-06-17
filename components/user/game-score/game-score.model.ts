@@ -26,7 +26,7 @@ export class UserGameScore extends Model {
 				'/' +
 				this.game_id +
 				'/' +
-				this.id,
+				this.id
 		);
 	}
 }

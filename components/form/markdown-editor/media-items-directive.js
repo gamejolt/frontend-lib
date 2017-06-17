@@ -6,7 +6,7 @@ angular
 		Form,
 		Api,
 		MediaItem,
-		Clipboard,
+		Clipboard
 	) {
 		var form = new Form({
 			template: require('./media-items.html'),

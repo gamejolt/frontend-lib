@@ -12,7 +12,7 @@ angular
 
 		Jam_ContentBlock.getBlock = function(blockId) {
 			return Api.sendRequest(
-				'/jams/manage/jams/content/get-block/' + blockId,
+				'/jams/manage/jams/content/get-block/' + blockId
 			).then(function(response) {
 				return new Jam_ContentBlock(response.jamContentBlock);
 			});
@@ -25,7 +25,7 @@ angular
 		Jam_ContentBlock.prototype.$save = function() {
 			return this.$_save(
 				'/jams/manage/jams/content/save-block/' + this.id,
-				'jamContentBlock',
+				'jamContentBlock'
 			);
 		};
 

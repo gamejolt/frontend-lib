@@ -113,13 +113,13 @@ export class FiresidePost extends Model {
 				return this.$_save(
 					`/web/dash/developer/games/devlog/save/${this.game.id}`,
 					'firesidePost',
-					options,
+					options
 				);
 			} else {
 				return this.$_save(
 					`/web/dash/developer/games/devlog/save/${this.game.id}/${this.id}`,
 					'firesidePost',
-					options,
+					options
 				);
 			}
 		} else {
@@ -128,7 +128,7 @@ export class FiresidePost extends Model {
 			} else {
 				return this.$_save(
 					`/fireside/dash/posts/save/${this.id}`,
-					'firesidePost',
+					'firesidePost'
 				);
 			}
 		}
@@ -149,7 +149,7 @@ export class FiresidePost extends Model {
 	$clearHeader() {
 		return this.$_save(
 			`/fireside/dash/posts/clear-header/${this.id}`,
-			'firesidePost',
+			'firesidePost'
 		);
 	}
 
@@ -157,7 +157,7 @@ export class FiresidePost extends Model {
 		if (this.game) {
 			return this.$_save(
 				`/web/dash/developer/games/devlog/publish/${this.game.id}/${this.id}`,
-				'firesidePost',
+				'firesidePost'
 			);
 		}
 
@@ -168,7 +168,7 @@ export class FiresidePost extends Model {
 		const result = await ModalConfirm.show(
 			Translate.$gettext(`Are you sure you want to remove this post?`),
 			undefined,
-			'yes',
+			'yes'
 		);
 
 		if (result) {
@@ -179,7 +179,7 @@ export class FiresidePost extends Model {
 	$remove() {
 		if (this.game) {
 			return this.$_remove(
-				`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`,
+				`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`
 			);
 		} else {
 			return this.$_remove(`/fireside/dash/posts/remove/${this.id}`);

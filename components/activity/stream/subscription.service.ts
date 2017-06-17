@@ -6,7 +6,7 @@ export class ActivityStreamSubscription {
 		public id: number,
 		public name: string,
 		public input: any,
-		public messageHandler: (message: any) => void,
+		public messageHandler: (message: any) => void
 	) {
 		// Subscribe to the channel. If we aren't yet connected to the server,
 		// primus will queue it up and send when we are.

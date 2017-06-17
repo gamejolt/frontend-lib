@@ -48,7 +48,7 @@ export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
 				route: VueRouter.Route,
 				vm: Vue,
 				payload: any | PayloadError,
-				shouldRefreshCache?: boolean,
+				shouldRefreshCache?: boolean
 			) {
 				// We do a cache refresh if the cache was used for this route.
 				if (shouldRefreshCache === undefined) {
@@ -162,7 +162,7 @@ export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
 					watch: {
 						$route: async function routeChanged(
 							this: Vue,
-							route: VueRouter.Route,
+							route: VueRouter.Route
 						) {
 							EventBus.emit('routeChangeBefore');
 							this.routeLoading = true;
@@ -201,7 +201,7 @@ export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
 							finalizeRoute(
 								this.$route,
 								this,
-								constructor.extendOptions.__INITIAL_STATE__,
+								constructor.extendOptions.__INITIAL_STATE__
 							);
 						}
 					},
@@ -209,8 +209,8 @@ export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
 					destroyed() {
 						this.routeDestroyed = true;
 					},
-				} as Vue.ComponentOptions<Vue>,
+				} as Vue.ComponentOptions<Vue>
 			);
-		},
+		}
 	);
 }

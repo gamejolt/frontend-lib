@@ -28,7 +28,7 @@ export class ImgResponsiveDirective implements OnChanges {
 
 	constructor(
 		@Inject('$element') $element: ng.IAugmentedJQuery,
-		@Inject('$scope') private $scope: ng.IScope,
+		@Inject('$scope') private $scope: ng.IScope
 	) {
 		this.element = $element[0] as HTMLImageElement;
 		this.element.classList.add('img-responsive');
@@ -45,7 +45,7 @@ export class ImgResponsiveDirective implements OnChanges {
 	updateSrc() {
 		this.$scope.$applyAsync(() => {
 			const containerWidth = Ruler.width(
-				this.element.parentNode as HTMLElement,
+				this.element.parentNode as HTMLElement
 			);
 
 			// Make sure we never do a 0 width, just in case.
@@ -69,7 +69,7 @@ export class ImgResponsiveDirective implements OnChanges {
 			if (newSrc.search(WIDTH_HEIGHT_REGEX) !== -1) {
 				newSrc = newSrc.replace(
 					WIDTH_HEIGHT_REGEX,
-					'/' + mediaserverWidth + 'x2000/',
+					'/' + mediaserverWidth + 'x2000/'
 				);
 			} else {
 				newSrc = newSrc.replace(WIDTH_REGEX, '/' + mediaserverWidth + '/');

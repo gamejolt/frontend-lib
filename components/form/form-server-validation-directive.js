@@ -10,7 +10,7 @@ angular.module('gj.Form').directive('gjFormServerValidation', function() {
 			 * If it is, we set it as invalid.
 			 */
 			scope.$watchCollection(attr.gjFormServerValidation, function(
-				serverResponse,
+				serverResponse
 			) {
 				if (serverResponse) {
 					if (

@@ -121,17 +121,17 @@ export class AppMediaBar extends Vue {
 					if (type === 'image') {
 						Growls.error(
 							`We couldn't find the image that was linked. It may have been removed.`,
-							`Invalid Image URL`,
+							`Invalid Image URL`
 						);
 					} else if (type === 'video') {
 						Growls.error(
 							`We couldn't find the video that was linked. It may have been removed.`,
-							`Invalid Video URL`,
+							`Invalid Video URL`
 						);
 					} else if (type === 'sketchfab') {
 						Growls.error(
 							`We couldn't find the sketchfab model that was linked. It may have been removed.`,
-							`Invalid Sketchfab URL`,
+							`Invalid Sketchfab URL`
 						);
 					}
 					this.trackEvent('permalink-invalid');

@@ -54,7 +54,7 @@ export class Comment extends Model {
 		return Api.sendRequest(
 			`/comments/${resource}/${resourceId}${query}`,
 			null,
-			{ detach: true },
+			{ detach: true }
 		);
 	}
 
@@ -62,7 +62,7 @@ export class Comment extends Model {
 		const response = await Api.sendRequest(
 			`/comments/get-comment-page/${commentId}`,
 			null,
-			{ detach: true },
+			{ detach: true }
 		);
 
 		if (!response || response.error) {
@@ -76,7 +76,7 @@ export class Comment extends Model {
 		const response = await Api.sendRequest(
 			`/comments/get-comment-url/${commentId}`,
 			null,
-			{ detach: true },
+			{ detach: true }
 		);
 
 		if (!response || response.error) {
@@ -90,7 +90,7 @@ export class Comment extends Model {
 		return this.$_save(
 			`/comments/add/${this.resource}/${this.resource_id}`,
 			'comment',
-			{ detach: true },
+			{ detach: true }
 		);
 	}
 

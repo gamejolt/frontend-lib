@@ -33,7 +33,7 @@
 						e,
 						t,
 						n,
-						r,
+						r
 					);
 				}
 				return n[o].exports;
@@ -278,7 +278,7 @@
 							a2,
 							a3,
 							a4,
-							a5,
+							a5
 						) {
 							if (!this._events || !this._events[event]) return false;
 
@@ -303,7 +303,7 @@
 											listeners.context,
 											a1,
 											a2,
-											a3,
+											a3
 										), true;
 									case 5:
 										return listeners.fn.call(
@@ -311,7 +311,7 @@
 											a1,
 											a2,
 											a3,
-											a4,
+											a4
 										), true;
 									case 6:
 										return listeners.fn.call(
@@ -320,7 +320,7 @@
 											a2,
 											a3,
 											a4,
-											a5,
+											a5
 										), true;
 								}
 
@@ -414,7 +414,7 @@
 						EventEmitter.prototype.removeListener = function removeListener(
 							event,
 							fn,
-							once,
+							once
 						) {
 							if (!this._events || !this._events[event]) return this;
 
@@ -458,7 +458,7 @@
  * @api public
  */
 						EventEmitter.prototype.removeAllListeners = function removeAllListeners(
-							event,
+							event
 						) {
 							if (!this._events) return this;
 
@@ -522,7 +522,7 @@
 								;
 								(part = parser.exec(query));
 								result[decodeURIComponent(part[1])] = decodeURIComponent(
-									part[2],
+									part[2]
 								)
 							);
 
@@ -550,9 +550,7 @@
 							for (var key in obj) {
 								if (has.call(obj, key)) {
 									pairs.push(
-										encodeURIComponent(key) +
-											'=' +
-											encodeURIComponent(obj[key]),
+										encodeURIComponent(key) + '=' + encodeURIComponent(obj[key])
 									);
 								}
 							}
@@ -591,7 +589,7 @@
 							return millisecond(
 								name in opts
 									? opts[name]
-									: name in selfie ? selfie[name] : Recovery[name],
+									: name in selfie ? selfie[name] : Recovery[name]
 							);
 						}
 
@@ -615,7 +613,7 @@
 							recovery['reconnect timeout'] = defaults(
 								'reconnect timeout',
 								recovery,
-								options,
+								options
 							);
 							recovery.retries = defaults('retries', recovery, options);
 							recovery.factor = defaults('factor', recovery, options);
@@ -674,7 +672,7 @@
 							opts['reconnect timeout'] = defaults(
 								'reconnect timeout',
 								recovery,
-								opts,
+								opts
 							);
 							opts.retries = defaults('retries', recovery, opts);
 							opts.factor = defaults('factor', recovery, opts);
@@ -714,9 +712,9 @@
 										Math.round(
 											(Math.random() + 1) *
 												opts.min *
-												Math.pow(opts.factor, opts.attempt - 1),
+												Math.pow(opts.factor, opts.attempt - 1)
 										),
-										opts.max,
+										opts.max
 									)
 								: opts.min;
 
@@ -745,17 +743,17 @@
 										'timeout',
 										function timeout() {
 											var err = new Error(
-												'Failed to reconnect in a timely manner',
+												'Failed to reconnect in a timely manner'
 											);
 											opts.duration = +new Date() - opts.start;
 
 											recovery.emit('reconnect timeout', err, opts);
 											connect(err);
 										},
-										opts['reconnect timeout'],
+										opts['reconnect timeout']
 									);
 								},
-								opts.scheduled,
+								opts.scheduled
 							);
 
 							//
@@ -839,7 +837,7 @@
 							if ('string' !== typeof ms || '0' === ms || +ms) return +ms;
 
 							var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
-									ms,
+									ms
 								),
 								second = 1000,
 								minute = second * 60,
@@ -1129,7 +1127,7 @@
 							timer.clear(timer.timer);
 							timer.timer = (interval ? setInterval : setTimeout)(
 								tick.tock(name, !interval),
-								ms(time),
+								ms(time)
 							);
 
 							return tick;
@@ -1173,7 +1171,7 @@
 							var failure = new Error(
 								'Primus#' +
 									method +
-									"'s context should called with a Primus instance",
+									"'s context should called with a Primus instance"
 							);
 
 							if (
@@ -1353,7 +1351,7 @@
 										primus.timers.clear('open');
 										primus.open();
 									},
-									0,
+									0
 								);
 
 							primus.initialise(options);
@@ -1454,7 +1452,7 @@
 								if (!data.protocol || ':' === data.protocol) {
 									data.protocol = data.href.substr(
 										0,
-										data.href.indexOf(':') + 1,
+										data.href.indexOf(':') + 1
 									);
 								}
 
@@ -1643,7 +1641,7 @@
 									primus.emits('reconnect failed', function failed(data) {
 										primus.emit('end');
 										return data;
-									}),
+									})
 								)
 								.on('reconnect timeout', primus.emits('reconnect timeout'))
 								.on('reconnect scheduled', primus.emits('reconnect scheduled'))
@@ -1652,7 +1650,7 @@
 									primus.emits('reconnect', function reconnect(next) {
 										primus.emit('outgoing::reconnect');
 										next();
-									}),
+									})
 								);
 
 							primus.on('outgoing::open', function opening() {
@@ -1973,7 +1971,7 @@
 							connection,
 							type,
 							data,
-							raw,
+							raw
 						) {
 							var packet = { data: data },
 								fns = primus.transformers[type];
@@ -2004,7 +2002,7 @@
 
 								transformer.call(connection, packet, function finished(
 									err,
-									arg,
+									arg
 								) {
 									if (err) return connection.emit('error', err);
 									if (false === arg) return;
@@ -2219,7 +2217,7 @@
 										primus.end();
 									}
 								},
-								primus.options.timeout,
+								primus.options.timeout
 							);
 
 							return primus
@@ -2284,7 +2282,7 @@
 							{
 								before: 'end',
 								after: 'removeAllListeners',
-							},
+							}
 						);
 
 						/**
@@ -2416,7 +2414,7 @@
 								options.secure
 									? options.protocol + 's:'
 									: options.protocol + ':',
-								'',
+								''
 							);
 
 							if (options.auth) server.push(options.auth + '@' + host);
@@ -2523,8 +2521,8 @@
 								return primus.critical(
 									new Error(
 										'Missing required `engine.io-client` module. ' +
-											'Please run `npm install --save engine.io-client`',
-									),
+											'Please run `npm install --save engine.io-client`'
+									)
 								);
 
 							//
@@ -2571,8 +2569,8 @@
 											transports: !primus.AVOID_WEBSOCKETS
 												? ['polling', 'websocket']
 												: ['polling'],
-										},
-									),
+										}
+									)
 								);
 
 								//
@@ -2707,7 +2705,7 @@
 
 										e.preventDefault();
 									},
-									false,
+									false
 								);
 							}
 
@@ -2750,7 +2748,7 @@
 				],
 			},
 			{},
-			[10],
+			[10]
 		)(10);
 	return Primus;
 });
@@ -2785,7 +2783,7 @@
 						e,
 						t,
 						n,
-						r,
+						r
 					);
 				}
 				return n[o].exports;
@@ -3123,7 +3121,7 @@
 
 											debug(
 												'pausing current transport "%s"',
-												self.transport.name,
+												self.transport.name
 											);
 											self.transport.pause(function() {
 												if (failed) return;
@@ -3170,7 +3168,7 @@
 									debug(
 										'probe transport "%s" failed because of error: %s',
 										name,
-										err,
+										err
 									);
 
 									self.emit('upgradeError', error);
@@ -3191,7 +3189,7 @@
 										debug(
 											'"%s" works - aborting "%s"',
 											to.name,
-											transport.name,
+											transport.name
 										);
 										freezeTransport();
 									}
@@ -3255,7 +3253,7 @@
 									debug(
 										'socket receive: type "%s", data "%s"',
 										packet.type,
-										packet.data,
+										packet.data
 									);
 
 									this.emit('packet', packet);
@@ -3286,7 +3284,7 @@
 								} else {
 									debug(
 										'packet received with socket readyState "%s"',
-										this.readyState,
+										this.readyState
 									);
 								}
 							};
@@ -3343,7 +3341,7 @@
 								self.pingIntervalTimer = setTimeout(function() {
 									debug(
 										'writing ping packet - expecting pong within %sms',
-										self.pingTimeout,
+										self.pingTimeout
 									);
 									self.ping();
 									self.onHeartbeat(self.pingTimeout);
@@ -3403,7 +3401,7 @@
 								) {
 									debug(
 										'flushing %d packets in socket',
-										this.writeBuffer.length,
+										this.writeBuffer.length
 									);
 									this.transport.send(this.writeBuffer);
 									// keep track of current length of writeBuffer
@@ -3424,7 +3422,7 @@
 
 							Socket.prototype.write = Socket.prototype.send = function(
 								msg,
-								fn,
+								fn
 							) {
 								this.sendPacket('message', msg, fn);
 								return this;
@@ -3582,7 +3580,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{
@@ -3821,7 +3819,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{
@@ -3911,7 +3909,7 @@
 										function() {
 											if (self.script) self.script.onerror = empty;
 										},
-										false,
+										false
 									);
 								}
 							}
@@ -4079,7 +4077,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{ './polling': 8, 'component-inherit': 12 },
@@ -4295,12 +4293,12 @@
 											if (this.isBinary) {
 												xhr.setRequestHeader(
 													'Content-type',
-													'application/octet-stream',
+													'application/octet-stream'
 												);
 											} else {
 												xhr.setRequestHeader(
 													'Content-type',
-													'text/plain;charset=UTF-8',
+													'text/plain;charset=UTF-8'
 												);
 											}
 										} catch (e) {}
@@ -4497,7 +4495,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{
@@ -4670,7 +4668,7 @@
 								} else {
 									debug(
 										'ignoring poll - transport state "%s"',
-										this.readyState,
+										this.readyState
 									);
 								}
 							}
@@ -4719,7 +4717,7 @@
 
 							var self = this;
 							parser.encodePayload(packets, this.supportsBinary, function(
-								data,
+								data
 							) {
 								self.doWrite(data, callbackfn);
 							});
@@ -4927,7 +4925,7 @@
 							// no need for encodePayload
 							for (var i = 0, l = packets.length; i < l; i++) {
 								parser.encodePacket(packets[i], this.supportsBinary, function(
-									data,
+									data
 								) {
 									//Sometimes the websocket has already been closed but the browser didn't
 									//have a chance of informing us about it yet, in that case send will
@@ -5078,7 +5076,7 @@
 							if (!xdomain) {
 								try {
 									return new window[(['Active'].concat('Object').join('X'))](
-										'Microsoft.XMLHTTP',
+										'Microsoft.XMLHTTP'
 									);
 								} catch (e) {}
 							}
@@ -5130,7 +5128,7 @@
 
 						Emitter.prototype.on = Emitter.prototype.addEventListener = function(
 							event,
-							fn,
+							fn
 						) {
 							this._callbacks = this._callbacks || {};
 							(this._callbacks[event] = this._callbacks[event] || []).push(fn);
@@ -5173,7 +5171,7 @@
 
 						Emitter.prototype.off = Emitter.prototype.removeListener = Emitter.prototype.removeAllListeners = Emitter.prototype.removeEventListener = function(
 							event,
-							fn,
+							fn
 						) {
 							this._callbacks = this._callbacks || {};
 
@@ -5347,7 +5345,7 @@
 
 							var c = 'color: ' + this.color;
 							args = [args[0], c, 'color: inherit'].concat(
-								Array.prototype.slice.call(args, 1),
+								Array.prototype.slice.call(args, 1)
 							);
 
 							// the final "%c" is somewhat tricky, because there could be other
@@ -5524,7 +5522,7 @@
 								var index = 0;
 								args[0] = args[0].replace(/%([a-z%])/g, function(
 									match,
-									format,
+									format
 								) {
 									// if we encounter an escaped % then don't increase the array index
 									if (match === '%%') return match;
@@ -5576,7 +5574,7 @@
 								namespaces = split[i].replace(/\*/g, '.*?');
 								if (namespaces[0] === '-') {
 									exports.skips.push(
-										new RegExp('^' + namespaces.substr(1) + '$'),
+										new RegExp('^' + namespaces.substr(1) + '$')
 									);
 								} else {
 									exports.names.push(new RegExp('^' + namespaces + '$'));
@@ -5673,7 +5671,7 @@
 
 						function parse(str) {
 							var match = /^((?:\d+)?\.?\d+) *(ms|seconds?|s|minutes?|m|hours?|h|days?|d|years?|y)?$/i.exec(
-								str,
+								str
 							);
 							if (!match) return;
 							var n = parseFloat(match[1]);
@@ -5841,7 +5839,7 @@
 								packet,
 								supportsBinary,
 								utf8encode,
-								callback,
+								callback
 							) {
 								if ('function' == typeof supportsBinary) {
 									callback = supportsBinary;
@@ -5912,7 +5910,7 @@
 							function encodeBlobAsArrayBuffer(
 								packet,
 								supportsBinary,
-								callback,
+								callback
 							) {
 								if (!supportsBinary) {
 									return exports.encodeBase64Packet(packet, callback);
@@ -5935,7 +5933,7 @@
 									return encodeBlobAsArrayBuffer(
 										packet,
 										supportsBinary,
-										callback,
+										callback
 									);
 								}
 
@@ -5968,7 +5966,7 @@
 								try {
 									b64data = String.fromCharCode.apply(
 										null,
-										new Uint8Array(packet.data),
+										new Uint8Array(packet.data)
 									);
 								} catch (e) {
 									// iPhone Safari doesn't let you apply with typed arrays
@@ -5996,7 +5994,7 @@
 									if (data.charAt(0) == 'b') {
 										return exports.decodeBase64Packet(
 											data.substr(1),
-											binaryType,
+											binaryType
 										);
 									}
 
@@ -6073,7 +6071,7 @@
 							exports.encodePayload = function(
 								packets,
 								supportsBinary,
-								callback,
+								callback
 							) {
 								if (typeof supportsBinary == 'function') {
 									callback = supportsBinary;
@@ -6105,7 +6103,7 @@
 										true,
 										function(message) {
 											doneCallback(null, setLengthHeader(message));
-										},
+										}
 									);
 								}
 
@@ -6147,7 +6145,7 @@
 									return exports.decodePayloadAsBinary(
 										data,
 										binaryType,
-										callback,
+										callback
 									);
 								}
 
@@ -6339,7 +6337,7 @@
 							exports.decodePayloadAsBinary = function(
 								data,
 								binaryType,
-								callback,
+								callback
 							) {
 								if (typeof binaryType === 'function') {
 									callback = binaryType;
@@ -6376,7 +6374,7 @@
 										try {
 											msg = String.fromCharCode.apply(
 												null,
-												new Uint8Array(msg),
+												new Uint8Array(msg)
 											);
 										} catch (e) {
 											// iPhone Safari doesn't let you apply to typed arrays
@@ -6397,7 +6395,7 @@
 									callback(
 										exports.decodePacket(buffer, binaryType, true),
 										i,
-										total,
+										total
 									);
 								});
 							};
@@ -6405,7 +6403,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{
@@ -6587,7 +6585,7 @@
 								return arraybuffer;
 							};
 						})(
-							'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+							'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 						);
 					},
 					{},
@@ -6650,7 +6648,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{},
@@ -6719,7 +6717,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{ isarray: 23 },
@@ -6782,7 +6780,7 @@
 											if ((extra & 0xfc00) == 0xdc00) {
 												// low surrogate
 												output.push(
-													((value & 0x3ff) << 10) + (extra & 0x3ff) + 0x10000,
+													((value & 0x3ff) << 10) + (extra & 0x3ff) + 0x10000
 												);
 											} else {
 												// unmatched surrogate; only append this code unit, in case the next
@@ -6808,7 +6806,7 @@
 										if (value > 0xffff) {
 											value -= 0x10000;
 											output += stringFromCharCode(
-												((value >>> 10) & 0x3ff) | 0xd800,
+												((value >>> 10) & 0x3ff) | 0xd800
 											);
 											value = 0xdc00 | (value & 0x3ff);
 										}
@@ -6821,7 +6819,7 @@
 
 								function createByte(codePoint, shift) {
 									return stringFromCharCode(
-										((codePoint >> shift) & 0x3f) | 0x80,
+										((codePoint >> shift) & 0x3f) | 0x80
 									);
 								}
 
@@ -6834,18 +6832,18 @@
 									if ((codePoint & 0xfffff800) == 0) {
 										// 2-byte sequence
 										symbol = stringFromCharCode(
-											((codePoint >> 6) & 0x1f) | 0xc0,
+											((codePoint >> 6) & 0x1f) | 0xc0
 										);
 									} else if ((codePoint & 0xffff0000) == 0) {
 										// 3-byte sequence
 										symbol = stringFromCharCode(
-											((codePoint >> 12) & 0x0f) | 0xe0,
+											((codePoint >> 12) & 0x0f) | 0xe0
 										);
 										symbol += createByte(codePoint, 6);
 									} else if ((codePoint & 0xffe00000) == 0) {
 										// 4-byte sequence
 										symbol = stringFromCharCode(
-											((codePoint >> 18) & 0x07) | 0xf0,
+											((codePoint >> 18) & 0x07) | 0xf0
 										);
 										symbol += createByte(codePoint, 12);
 										symbol += createByte(codePoint, 6);
@@ -7000,7 +6998,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{},
@@ -7095,7 +7093,7 @@
 										data
 											.replace(rvalidescape, '@')
 											.replace(rvalidtokens, ']')
-											.replace(rvalidbraces, ''),
+											.replace(rvalidbraces, '')
 									)
 								) {
 									return new Function('return ' + data)();
@@ -7105,7 +7103,7 @@
 							this,
 							typeof self !== 'undefined'
 								? self
-								: typeof window !== 'undefined' ? window : {},
+								: typeof window !== 'undefined' ? window : {}
 						));
 					},
 					{},
@@ -7269,7 +7267,7 @@
 				],
 			},
 			{},
-			[1],
+			[1]
 		)(1);
 	});
 })(this['Primus']);

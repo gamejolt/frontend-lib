@@ -17,7 +17,7 @@ export class PayloadError {
 	constructor(
 		public type: string,
 		public response?: any,
-		public status?: number,
+		public status?: number
 	) {}
 
 	preventDefault() {
@@ -68,7 +68,7 @@ export class Payload {
 
 	static async processResponse(
 		requestPromise: Promise<any>,
-		options: RequestOptions = {},
+		options: RequestOptions = {}
 	): Promise<any> {
 		options = {
 			...<RequestOptions>{
@@ -86,7 +86,7 @@ export class Payload {
 				if (!options.noErrorRedirect) {
 					throw new PayloadError(
 						PayloadError.ERROR_INVALID,
-						response ? response.data || undefined : undefined,
+						response ? response.data || undefined : undefined
 					);
 				} else {
 					throw response.data || undefined;
@@ -108,7 +108,7 @@ export class Payload {
 			if (GJ_IS_ANGULAR) {
 				getProvider<any>('$rootScope').$emit(
 					'Payload.responseSuccess',
-					response,
+					response
 				);
 			}
 
@@ -147,7 +147,7 @@ export class Payload {
 				// If the response indicated a failed connection.
 				if (response === undefined || response.status === -1) {
 					throw this.handlePayloadError(
-						new PayloadError(PayloadError.ERROR_OFFLINE),
+						new PayloadError(PayloadError.ERROR_OFFLINE)
 					);
 				} else if (response.status === 401) {
 					// If it was a 401 error, then they need to be logged in.
@@ -155,8 +155,8 @@ export class Payload {
 					throw this.handlePayloadError(
 						new PayloadError(
 							PayloadError.ERROR_NOT_LOGGED,
-							response.data || undefined,
-						),
+							response.data || undefined
+						)
 					);
 				} else {
 					// Otherwise, show an error page.
@@ -164,8 +164,8 @@ export class Payload {
 						new PayloadError(
 							PayloadError.ERROR_HTTP_ERROR,
 							response.data || undefined,
-							response.status || undefined,
-						),
+							response.status || undefined
+						)
 					);
 				}
 			} else {
@@ -253,7 +253,7 @@ export class Payload {
 
 	private static checkAnalyticsExperiments(
 		response: any,
-		_options: RequestOptions,
+		_options: RequestOptions
 	) {
 		if (!response.data.payload) {
 			return;

@@ -17,14 +17,14 @@ export class Clipboard {
 		if (result) {
 			Growls.success(
 				Translate.$gettext('Copied to your clipboard.'),
-				Translate.$gettext('Copied!'),
+				Translate.$gettext('Copied!')
 			);
 		} else {
 			Growls.error(
 				Translate.$gettext(
-					'Could not copy to your clipboard. Dunno why. Sorry.',
+					'Could not copy to your clipboard. Dunno why. Sorry.'
 				),
-				Translate.$gettext('Copy Failed'),
+				Translate.$gettext('Copy Failed')
 			);
 		}
 

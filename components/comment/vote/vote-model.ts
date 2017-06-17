@@ -9,7 +9,7 @@ export class CommentVote extends Model {
 		return this.$_save(
 			'/comments/votes/add/' + this.comment_id,
 			'commentVote',
-			{ ignorePayloadUser: true },
+			{ ignorePayloadUser: true }
 		);
 	}
 

@@ -5,7 +5,7 @@ angular.module('gj.Form').directive('gjFormSubmitButton', function($animate) {
 		scope: true,
 		link: function(scope, element, attrs, gjForm) {
 			var successElement = angular.element(
-				'<span class="jolticon jolticon-check gj-form-success-icon"></span>',
+				'<span class="jolticon jolticon-check gj-form-success-icon"></span>'
 			);
 
 			scope.$watch('formState.isShowingSuccess', function(shouldShow) {
@@ -14,7 +14,7 @@ angular.module('gj.Form').directive('gjFormSubmitButton', function($animate) {
 					$animate.enter(
 						successElement,
 						element,
-						children[children.length - 1],
+						children[children.length - 1]
 					);
 				} else {
 					$animate.leave(successElement);

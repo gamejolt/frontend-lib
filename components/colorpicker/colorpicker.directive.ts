@@ -21,7 +21,7 @@ export class ColorpickerDirective implements OnInit, OnDestroy {
 		@Inject('$scope') private $scope: ng.IScope,
 		@Inject('ngModel')
 		@Host()
-		private ngModel: ng.INgModelController,
+		private ngModel: ng.INgModelController
 	) {}
 
 	ngOnInit() {
@@ -41,7 +41,7 @@ export class ColorpickerDirective implements OnInit, OnDestroy {
 					});
 				},
 			},
-			this.options,
+			this.options
 		);
 
 		// Load it up with the initial options.
@@ -52,7 +52,7 @@ export class ColorpickerDirective implements OnInit, OnDestroy {
 			() => this.ngModel.$modelValue,
 			(val: string) => {
 				this.jqElem.spectrum('set', val || '');
-			},
+			}
 		);
 
 		// This allows us to make the input options dynamic.

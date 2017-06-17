@@ -15,7 +15,7 @@ export class ThemeEditorImageComponent {
 	constructor(
 		@Inject('ngModel')
 		@Self()
-		private ngModel: ng.INgModelController,
+		private ngModel: ng.INgModelController
 	) {}
 
 	onImageAdded(response: any) {

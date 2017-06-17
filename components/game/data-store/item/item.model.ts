@@ -23,7 +23,7 @@ export class GameDataStoreItem extends Model {
 			'/web/dash/developer/games/api/data-storage/remove-item/' +
 				this.game_id +
 				'/' +
-				this.id,
+				this.id
 		);
 	}
 }

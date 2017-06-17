@@ -20,7 +20,7 @@ export class FiresidePostLike extends Model {
 			return this.$_save(
 				'/fireside/posts/like/' + this.fireside_post_id,
 				'firesidePostLike',
-				{ ignorePayloadUser: true },
+				{ ignorePayloadUser: true }
 			);
 		}
 		throw new Error(`Can't update like data.`);

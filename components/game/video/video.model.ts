@@ -42,7 +42,7 @@ export class GameVideo extends Model {
 		if (!this.id) {
 			return this.$_save(
 				'/web/dash/developer/games/media/save/video/' + this.game_id,
-				'gameVideo',
+				'gameVideo'
 			);
 		} else {
 			return this.$_save(
@@ -50,7 +50,7 @@ export class GameVideo extends Model {
 					this.game_id +
 					'/' +
 					this.id,
-				'gameVideo',
+				'gameVideo'
 			);
 		}
 	}
@@ -60,7 +60,7 @@ export class GameVideo extends Model {
 			'/web/dash/developer/games/media/remove/video/' +
 				this.game_id +
 				'/' +
-				this.id,
+				this.id
 		);
 	}
 }

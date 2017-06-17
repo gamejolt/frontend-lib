@@ -7,7 +7,7 @@ export class AppPopoverContext extends Vue {
 		return h(
 			'div',
 			{ domProps: { id: 'popover-context' } },
-			this.$slots.default,
+			this.$slots.default
 		);
 	}
 }

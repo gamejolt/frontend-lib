@@ -23,7 +23,7 @@ function _bootstrapAds() {
 			.defineSlot(
 				'/27005478/web-display-leaderboard',
 				[[728, 90], [970, 90]],
-				'div-gpt-ad-' + _globalTagId + '-10',
+				'div-gpt-ad-' + _globalTagId + '-10'
 			)
 			.addService(_window.googletag.pubads());
 
@@ -31,7 +31,7 @@ function _bootstrapAds() {
 			.defineSlot(
 				'/27005478/web-display-leaderboard',
 				[[728, 90], [970, 90]],
-				'div-gpt-ad-' + _globalTagId + '-11',
+				'div-gpt-ad-' + _globalTagId + '-11'
 			)
 			.addService(_window.googletag.pubads());
 
@@ -39,7 +39,7 @@ function _bootstrapAds() {
 			.defineSlot(
 				'/27005478/web-display-leaderboard',
 				[[728, 90], [970, 90]],
-				'div-gpt-ad-' + _globalTagId + '-12',
+				'div-gpt-ad-' + _globalTagId + '-12'
 			)
 			.addService(_window.googletag.pubads());
 
@@ -47,7 +47,7 @@ function _bootstrapAds() {
 			.defineSlot(
 				'/27005478/web-display-leaderboard',
 				[[728, 90], [970, 90]],
-				'div-gpt-ad-' + _globalTagId + '-13',
+				'div-gpt-ad-' + _globalTagId + '-13'
 			)
 			.addService(_window.googletag.pubads());
 
@@ -55,7 +55,7 @@ function _bootstrapAds() {
 			.defineSlot(
 				'/27005478/web-display-rectangle',
 				[[300, 250], [300, 600]],
-				'div-gpt-ad-' + _globalTagId + '-20',
+				'div-gpt-ad-' + _globalTagId + '-20'
 			)
 			.addService(_window.googletag.pubads());
 
@@ -63,7 +63,7 @@ function _bootstrapAds() {
 			.defineSlot(
 				'/27005478/web-display-rectangle',
 				[[300, 250], [300, 600]],
-				'div-gpt-ad-' + _globalTagId + '-21',
+				'div-gpt-ad-' + _globalTagId + '-21'
 			)
 			.addService(_window.googletag.pubads());
 
@@ -71,7 +71,7 @@ function _bootstrapAds() {
 			.defineSlot(
 				'/27005478/web-display-160x600',
 				[160, 600],
-				'div-gpt-ad-' + _globalTagId + '-30',
+				'div-gpt-ad-' + _globalTagId + '-30'
 			)
 			.addService(_window.googletag.pubads());
 
@@ -79,7 +79,7 @@ function _bootstrapAds() {
 			.defineSlot(
 				'/27005478/web-display-160x600',
 				[160, 600],
-				'div-gpt-ad-' + _globalTagId + '-31',
+				'div-gpt-ad-' + _globalTagId + '-31'
 			)
 			.addService(_window.googletag.pubads());
 

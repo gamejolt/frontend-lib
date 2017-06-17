@@ -26,10 +26,10 @@ module.exports = function(config) {
 			rollupReplace({
 				values: {
 					GJ_ENVIRONMENT: JSON.stringify(
-						!config.developmentEnv ? 'production' : 'development',
+						!config.developmentEnv ? 'production' : 'development'
 					),
 					GJ_BUILD_TYPE: JSON.stringify(
-						config.production ? 'production' : 'development',
+						config.production ? 'production' : 'development'
 					),
 				},
 			}),
@@ -48,7 +48,7 @@ module.exports = function(config) {
 				transform: function(code, id) {
 					return code.replace(
 						/import ([^ ]+).*?=.*?require/g,
-						'const $1 = require',
+						'const $1 = require'
 					);
 				},
 			},
@@ -273,7 +273,7 @@ module.exports = function(config) {
 			files.push(config.buildDir + '/tmp/vendor-component-templates/**/*.js');
 
 			gutil.log(
-				'Adding files to vendor: ' + gutil.colors.gray(JSON.stringify(files)),
+				'Adding files to vendor: ' + gutil.colors.gray(JSON.stringify(files))
 			);
 
 			if (files.length) {
@@ -287,12 +287,12 @@ module.exports = function(config) {
 							? gutil.noop()
 							: plugins.sourcemaps.write('.', {
 									sourceRoot: '/../../src/app/',
-								}),
+								})
 					)
 					.pipe(plugins.size({ gzip: true, title: 'js:vendor' }))
 					.pipe(gulp.dest(config.buildDir + '/app'));
 			}
-		}),
+		})
 	);
 
 	/**
@@ -345,7 +345,7 @@ module.exports = function(config) {
 							if (moduleDefinition.components) {
 								moduleDefinition.components.forEach(function(component) {
 									excludeApp.push(
-										'!src/' + section + '/components/' + component + '/**/*.js',
+										'!src/' + section + '/components/' + component + '/**/*.js'
 									);
 								});
 							}
@@ -358,7 +358,7 @@ module.exports = function(config) {
 											section +
 											'/views/' +
 											view +
-											'/**/*-{service,controller,directive,filter,model}.js',
+											'/**/*-{service,controller,directive,filter,model}.js'
 									);
 								});
 							}
@@ -372,7 +372,7 @@ module.exports = function(config) {
 									if (_.isArray(extraFiles)) {
 										_.forEach(extraFiles, function(extraFile) {
 											excludeApp.push(
-												'!' + config.libDir + repo + '/' + extraFile,
+												'!' + config.libDir + repo + '/' + extraFile
 											);
 										});
 									}
@@ -388,7 +388,7 @@ module.exports = function(config) {
 						gulp.src([config.buildDir + '/tmp/rollup/' + section + '.js'], {
 							base: 'src',
 							allowEmpty: true,
-						}),
+						})
 					);
 
 					// Pull in modules definitions only before actual components..
@@ -401,10 +401,10 @@ module.exports = function(config) {
 										section +
 										'/**/*-{service,controller,directive,filter,model,production,development,node}.js',
 								],
-								excludeApp,
+								excludeApp
 							),
-							{ base: 'src' },
-						),
+							{ base: 'src' }
+						)
 					);
 
 					// Then pull in the actual components.
@@ -416,24 +416,24 @@ module.exports = function(config) {
 										section +
 										'/**/*-{service,controller,directive,filter,model}.js',
 								],
-								excludeApp,
+								excludeApp
 							),
-							{ base: 'src' },
-						),
+							{ base: 'src' }
+						)
 					);
 
 					// Pull in template partials if there are any.
 					stream.queue(
 						gulp.src(
 							[config.buildDir + '/tmp/' + section + '-partials/**/*.html.js'],
-							{ base: 'src' },
-						),
+							{ base: 'src' }
+						)
 					);
 
 					var stream = stream
 						.done()
 						.pipe(
-							config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init(),
+							config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init()
 						)
 						.pipe(plugins.concat('app.js'));
 
@@ -442,7 +442,7 @@ module.exports = function(config) {
 					if (config.injections) {
 						for (var key in config.injections) {
 							stream = stream.pipe(
-								plugins.replace(key, config.injections[key]),
+								plugins.replace(key, config.injections[key])
 							);
 						}
 					}
@@ -455,7 +455,7 @@ module.exports = function(config) {
 								minimize: minimizeOptions,
 								skipTemplates: skipTemplateUrlMatches,
 								skipErrors: true,
-							}),
+							})
 						)
 						.pipe(config.production ? plugins.uglify() : gutil.noop())
 						.pipe(
@@ -463,14 +463,14 @@ module.exports = function(config) {
 								? gutil.noop()
 								: plugins.sourcemaps.write('.', {
 										sourceRoot: '/../../src/' + section + '/',
-									}),
+									})
 						)
 						.pipe(plugins.size({ gzip: true, title: 'js:' + section }))
 						.pipe(gulp.dest(config.buildDir + '/' + section));
 
 					return stream;
-				},
-			),
+				}
+			)
 		);
 	});
 
@@ -522,8 +522,8 @@ module.exports = function(config) {
 										new RegExp(
 											'src/app/components/' +
 												moduleDefinition.components[i] +
-												'/.*',
-										),
+												'/.*'
+										)
 									) !== -1
 								) {
 									return false;
@@ -536,8 +536,8 @@ module.exports = function(config) {
 								if (
 									id.search(
 										new RegExp(
-											'src/app/views/' + moduleDefinition.views[i] + '/.*',
-										),
+											'src/app/views/' + moduleDefinition.views[i] + '/.*'
+										)
 									) !== -1
 								) {
 									return false;
@@ -552,8 +552,8 @@ module.exports = function(config) {
 										new RegExp(
 											'src/lib/gj-lib-client/components/' +
 												moduleDefinition.libComponents[i] +
-												'/.*',
-										),
+												'/.*'
+										)
 									) !== -1
 								) {
 									return false;
@@ -614,7 +614,7 @@ module.exports = function(config) {
 					if (moduleDefinition.componentVendor) {
 						_.forEach(moduleDefinition.componentVendor, function(component) {
 							files.push(
-								config.gjLibDir + 'components/' + component + '/*-vendor.js',
+								config.gjLibDir + 'components/' + component + '/*-vendor.js'
 							);
 						});
 					}
@@ -623,7 +623,7 @@ module.exports = function(config) {
 						'Build module ' +
 							outputFilename +
 							' with files: ' +
-							gutil.colors.gray(JSON.stringify(files)),
+							gutil.colors.gray(JSON.stringify(files))
 					);
 
 					var stream = new streamqueue({ objectMode: true });
@@ -633,7 +633,7 @@ module.exports = function(config) {
 						gulp.src([config.buildDir + '/tmp/rollup/' + outputFilename], {
 							base: 'src',
 							allowEmpty: true,
-						}),
+						})
 					);
 
 					if (files.length) {
@@ -652,8 +652,8 @@ module.exports = function(config) {
 											component +
 											'/**/*-{service,controller,directive,filter,model,production,development,node}.js',
 									],
-									{ base: 'src' },
-								),
+									{ base: 'src' }
+								)
 							);
 
 							// Then pull in the actual components.
@@ -664,8 +664,8 @@ module.exports = function(config) {
 											component +
 											'/**/*-{service,controller,directive,filter,model}.js',
 									],
-									{ base: 'src' },
-								),
+									{ base: 'src' }
+								)
 							);
 						});
 					}
@@ -683,8 +683,8 @@ module.exports = function(config) {
 											view +
 											'/**/*-{service,controller,directive,filter,model}.js',
 									],
-									{ base: 'src' },
-								),
+									{ base: 'src' }
+								)
 							);
 						});
 					}
@@ -693,7 +693,7 @@ module.exports = function(config) {
 					stream = stream
 						.done()
 						.pipe(
-							config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init(),
+							config.noSourcemaps ? gutil.noop() : plugins.sourcemaps.init()
 						)
 						.pipe(plugins.concat(outputFilename))
 						.pipe(injectModules(config))
@@ -703,7 +703,7 @@ module.exports = function(config) {
 								minimize: minimizeOptions,
 								skipTemplates: skipTemplateUrlMatches,
 								skipErrors: true,
-							}),
+							})
 						)
 						.pipe(config.production ? plugins.uglify() : gutil.noop())
 						.pipe(
@@ -711,18 +711,18 @@ module.exports = function(config) {
 								? gutil.noop()
 								: plugins.sourcemaps.write('.', {
 										sourceRoot: '/../../src/app/modules/',
-									}),
+									})
 						)
 						.pipe(
 							plugins.size({
 								gzip: true,
 								title: 'js:module:' + outputFilename,
-							}),
+							})
 						)
 						.pipe(gulp.dest(config.buildDir + '/app/modules'));
 
 					return stream;
-				}),
+				})
 			);
 
 			// Now store this module build task reference.
@@ -755,6 +755,6 @@ module.exports = function(config) {
 
 	gulp.task(
 		'js',
-		gulp.parallel('js:vendor', 'js:sections', 'js:modules', 'js:node:app'),
+		gulp.parallel('js:vendor', 'js:sections', 'js:modules', 'js:node:app')
 	);
 };

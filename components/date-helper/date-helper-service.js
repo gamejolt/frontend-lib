@@ -37,7 +37,7 @@ angular.module('gj.DateHelper').service('DateHelper', function($window) {
 			momentObj.date(),
 			momentObj.hour(),
 			momentObj.minute(),
-			momentObj.millisecond(),
+			momentObj.millisecond()
 		);
 	};
 

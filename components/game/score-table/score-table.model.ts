@@ -16,7 +16,7 @@ export class GameScoreTable extends Model {
 	static $saveSort(gameId: number, sort: number[]) {
 		return Api.sendRequest(
 			'/web/dash/developer/games/api/scores/save-table-sort/' + gameId,
-			sort,
+			sort
 		);
 	}
 
@@ -24,7 +24,7 @@ export class GameScoreTable extends Model {
 		if (!this.id) {
 			return this.$_save(
 				'/web/dash/developer/games/api/scores/save-table/' + this.game_id,
-				'gameScoreTable',
+				'gameScoreTable'
 			);
 		} else {
 			return this.$_save(
@@ -32,7 +32,7 @@ export class GameScoreTable extends Model {
 					this.game_id +
 					'/' +
 					this.id,
-				'gameScoreTable',
+				'gameScoreTable'
 			);
 		}
 	}
@@ -42,7 +42,7 @@ export class GameScoreTable extends Model {
 			'/web/dash/developer/games/api/scores/remove-table/' +
 				this.game_id +
 				'/' +
-				this.id,
+				this.id
 		);
 	}
 
@@ -50,7 +50,7 @@ export class GameScoreTable extends Model {
 		const params = [this.game_id, this.id, userId].join('/');
 		const response = await Api.sendRequest(
 			'/web/dash/developer/games/api/scores/remove-table-user-scores/' + params,
-			{},
+			{}
 		);
 
 		if (!response.success) {

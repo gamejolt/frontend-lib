@@ -63,7 +63,7 @@ export class AppGameSoundtrackCard extends Vue {
 		if (GJ_IS_CLIENT) {
 			const gui = require('nw.gui') as typeof nwGui;
 			gui.Shell.openExternal(
-				Environment.baseUrl + this.$router.resolve(location).href,
+				Environment.baseUrl + this.$router.resolve(location).href
 			);
 		}
 

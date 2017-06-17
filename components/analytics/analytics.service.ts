@@ -171,7 +171,7 @@ export class Analytics {
 		// Now track the page view.
 		if (Environment.buildType === 'development') {
 			console.log(
-				`Track page view: tracker(${tracker}) | ${JSON.stringify(options)}`,
+				`Track page view: tracker(${tracker}) | ${JSON.stringify(options)}`
 			);
 		} else {
 			this.ga(method, 'pageview', { ...options });
@@ -192,7 +192,7 @@ export class Analytics {
 		category: string,
 		action: string,
 		label?: string,
-		value?: string,
+		value?: string
 	) {
 		if (!this.shouldTrack()) {
 			console.log('Skip tracking event since not a normal user.');
@@ -204,7 +204,7 @@ export class Analytics {
 		if (Environment.buildType === 'development') {
 			console.log(
 				`Track event: ${category}:${action || '-'}:${label || '-'}:${value ||
-					'-'}`,
+					'-'}`
 			);
 		} else {
 			const options = {
@@ -237,7 +237,7 @@ export class Analytics {
 		category: string,
 		timingVar: string,
 		value: number,
-		label?: string,
+		label?: string
 	) {
 		if (!this.shouldTrack()) {
 			console.log('Skip tracking timing event since not a normal user.');
@@ -245,7 +245,7 @@ export class Analytics {
 		}
 
 		console.info(
-			`Timing (${category}${label ? ':' + label : ''}) ${timingVar} = ${value}`,
+			`Timing (${category}${label ? ':' + label : ''}) ${timingVar} = ${value}`
 		);
 
 		if (Environment.buildType === 'production') {

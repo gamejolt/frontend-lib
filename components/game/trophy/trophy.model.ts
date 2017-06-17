@@ -48,7 +48,7 @@ export class GameTrophy extends Model {
 	 */
 	static splitAchieved(
 		trophies: GameTrophy[],
-		achievedIndexed: { [k: number]: UserGameTrophy },
+		achievedIndexed: { [k: number]: UserGameTrophy }
 	) {
 		return {
 			achieved: trophies.filter(trophy => achievedIndexed[trophy.id]),
@@ -59,7 +59,7 @@ export class GameTrophy extends Model {
 	static $saveSort(gameId: number, difficulty: string, sort: any) {
 		return Api.sendRequest(
 			`/web/dash/developer/games/api/trophies/save-sort/${gameId}/${difficulty}`,
-			sort,
+			sort
 		);
 	}
 
@@ -68,7 +68,7 @@ export class GameTrophy extends Model {
 			return this.$_save(
 				`/web/dash/developer/games/api/trophies/save/${this.game_id}`,
 				'gameTrophy',
-				{ file: this.file },
+				{ file: this.file }
 			);
 		} else {
 			// May or may not have an upload file on an edit.
@@ -76,7 +76,7 @@ export class GameTrophy extends Model {
 				`/web/dash/developer/games/api/trophies/save/${this.game_id}/${this
 					.id}`,
 				'gameTrophy',
-				{ file: this.file || undefined },
+				{ file: this.file || undefined }
 			);
 		}
 	}
@@ -85,14 +85,13 @@ export class GameTrophy extends Model {
 		return this.$_save(
 			`/web/dash/developer/games/api/trophies/clear-image/${this.game_id}/${this
 				.id}`,
-			'gameTrophy',
+			'gameTrophy'
 		);
 	}
 
 	$remove() {
 		return this.$_remove(
-			`/web/dash/developer/games/api/trophies/remove/${this.game_id}/${this
-				.id}`,
+			`/web/dash/developer/games/api/trophies/remove/${this.game_id}/${this.id}`
 		);
 	}
 }

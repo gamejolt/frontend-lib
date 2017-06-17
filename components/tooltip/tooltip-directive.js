@@ -24,7 +24,7 @@ angular
 						},
 						function(val) {
 							scope._tooltip = val;
-						},
+						}
 					);
 
 					// Add the tooltip stuff, yo.

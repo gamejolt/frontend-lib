@@ -118,14 +118,14 @@ angular.module('gj.Jam').factory('Jam', function(Model, Environment, Api) {
 	Jam.prototype.$saveTwitter = function() {
 		return this.$_save(
 			'/jams/manage/jams/activity-feed/save-twitter/' + this.id,
-			'jam',
+			'jam'
 		);
 	};
 
 	Jam.prototype.$clearTwitter = function() {
 		return this.$_save(
 			'/jams/manage/jams/activity-feed/clear-twitter/' + this.id,
-			'jam',
+			'jam'
 		);
 	};
 
@@ -137,7 +137,7 @@ angular.module('gj.Jam').factory('Jam', function(Model, Environment, Api) {
 				feature +
 				'/' +
 				state,
-			'jam',
+			'jam'
 		);
 	};
 
@@ -148,7 +148,7 @@ angular.module('gj.Jam').factory('Jam', function(Model, Environment, Api) {
 	Jam.prototype.$setStatus = function(status) {
 		return this.$_save(
 			'/jams/manage/jams/set-status/' + this.id + '/' + status,
-			'jam',
+			'jam'
 		);
 	};
 
@@ -159,7 +159,7 @@ angular.module('gj.Jam').factory('Jam', function(Model, Environment, Api) {
 		return Api.sendRequest(
 			'/jams/manage/jams/theme/save/' + this.id,
 			this.theme || {},
-			{ sanitizeComplexData: false },
+			{ sanitizeComplexData: false }
 		).then(function(response) {
 			return _this.processUpdate(response, 'jam');
 		});

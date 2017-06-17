@@ -37,7 +37,7 @@ angular
 			if (attrs.ngChecked) {
 				scope.$watch(
 					scope.$eval.bind(scope, attrs.ngChecked),
-					ngModelCtrl.$setViewValue.bind(ngModelCtrl),
+					ngModelCtrl.$setViewValue.bind(ngModelCtrl)
 				);
 			}
 

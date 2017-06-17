@@ -11,7 +11,7 @@ export class UploadLoader extends LoaderBase {
 				lazyload(() => {
 					require('ng-file-upload');
 				}),
-			'upload',
+			'upload'
 		);
 	}
 }

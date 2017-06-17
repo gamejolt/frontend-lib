@@ -25,7 +25,7 @@ angular
 		Jam_Page.$saveSort = function(jamId, pagesSort) {
 			return Api.sendRequest(
 				'/jams/manage/jams/content/save-sorted-pages/' + jamId,
-				pagesSort,
+				pagesSort
 			);
 		};
 
@@ -106,12 +106,12 @@ angular
 			if (!this.id) {
 				return this.$_save(
 					'/jams/manage/jams/content/add-page/' + this.jam_id,
-					'jamPage',
+					'jamPage'
 				);
 			} else {
 				return this.$_save(
 					'/jams/manage/jams/content/save-page/' + this.id,
-					'jamPage',
+					'jamPage'
 				);
 			}
 		};
@@ -119,7 +119,7 @@ angular
 		Jam_Page.prototype.$setStatus = function(status) {
 			return this.$_save(
 				'/jams/manage/jams/content/set-page-status/' + this.id + '/' + status,
-				'jamPage',
+				'jamPage'
 			);
 		};
 

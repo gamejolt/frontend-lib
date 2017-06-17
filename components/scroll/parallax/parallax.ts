@@ -43,11 +43,11 @@ export class AppScrollParallax extends Vue {
 
 	async mounted() {
 		this.scroll$ = Scroll.scrollChanges.subscribe(change =>
-			this.onScroll(change.top),
+			this.onScroll(change.top)
 		);
 
 		this.resize$ = Screen.resizeChanges.subscribe(() =>
-			this.onScroll(Scroll.getScrollTop()),
+			this.onScroll(Scroll.getScrollTop())
 		);
 
 		const initialOpacity = this.$el.style.opacity;
@@ -152,7 +152,7 @@ export class AppScrollParallax extends Vue {
 			if (scrollDelta) {
 				this.opacity = Math.max(
 					0,
-					this.initialOpacity - scrollDelta / this.elementHeight * this.dim,
+					this.initialOpacity - scrollDelta / this.elementHeight * this.dim
 				);
 				opacity = this.opacity + '';
 				this.dimReset = false;

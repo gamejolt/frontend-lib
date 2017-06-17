@@ -39,19 +39,19 @@ function gatherModules(config) {
 
 			gutil.log(
 				'Injecting client lib modules: ' +
-					gutil.colors.gray(JSON.stringify(modules)),
+					gutil.colors.gray(JSON.stringify(modules))
 			);
 
 			if (modules.length) {
 				var concat = new Concat(
 					!!file.sourceMap,
 					path.basename(file.path),
-					gutil.linefeed,
+					gutil.linefeed
 				);
 				concat.add(
 					path.relative(cwd, file.path),
 					file.contents,
-					file.sourceMap,
+					file.sourceMap
 				);
 
 				// Loop through each matched module.
@@ -85,7 +85,7 @@ function gatherModules(config) {
 			// Streams not supported.
 			this.emit(
 				'error',
-				new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported.'),
+				new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported.')
 			);
 			return callback();
 		}

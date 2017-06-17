@@ -17,7 +17,7 @@ export class ConnectionStatePermissions {
 			'$stateChangeStart',
 			(_event: ng.IAngularEvent, toState: State) => {
 				this.setCurrentState(toState);
-			},
+			}
 		);
 
 		this.$rootScope.$on('$stateChangeSuccess', () => {
@@ -51,7 +51,7 @@ export class ConnectionStatePermissions {
 					// This way the route will still resolve.
 					event.preventDefault();
 				}
-			},
+			}
 		);
 	}
 

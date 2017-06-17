@@ -1,6 +1,6 @@
 export function validateFiles(
 	files: File | File[],
-	cb: (file: File) => boolean,
+	cb: (file: File) => boolean
 ) {
 	files = Array.isArray(files) ? files : [files];
 
@@ -15,7 +15,7 @@ export function validateFiles(
 
 export async function validateFilesAsync(
 	files: File | File[],
-	cb: (file: File) => Promise<boolean>,
+	cb: (file: File) => Promise<boolean>
 ) {
 	files = Array.isArray(files) ? files : [files];
 

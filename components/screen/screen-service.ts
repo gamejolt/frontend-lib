@@ -81,7 +81,7 @@ export class Screen {
 					'dppx)' +
 					', only screen and (min-resolution: ' +
 					HIDPI_BREAKPOINT * 96 +
-					'dpi)',
+					'dpi)'
 			).matches;
 
 	static resizeChanges = new Subject<void>();
@@ -136,7 +136,7 @@ export class Screen {
 					SM_WIDTH +
 					'px) and (max-width: ' +
 					(MD_WIDTH - 1) +
-					'px)',
+					'px)'
 			).matches
 		) {
 			this.isWindowXs = false;
@@ -150,7 +150,7 @@ export class Screen {
 					MD_WIDTH +
 					'px) and (max-width: ' +
 					(LG_WIDTH - 1) +
-					'px)',
+					'px)'
 			).matches
 		) {
 			this.isWindowXs = false;

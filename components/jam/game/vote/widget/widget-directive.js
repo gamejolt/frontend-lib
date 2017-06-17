@@ -22,7 +22,7 @@ angular
 					Api.sendRequest(
 						'/jams-io/voting/' + this.jam.id + '/' + this.game.id,
 						null,
-						{ detach: true },
+						{ detach: true }
 					).then(function(payload) {
 						_this.isLoading = false;
 						_this.isParticipant = payload.isParticipant || false;
@@ -31,7 +31,7 @@ angular
 						// Will be passed in during and after the voting period.
 						if (angular.isDefined(payload.votingCategories)) {
 							_this.votingCategories = Jam_VotingCategory.populate(
-								payload.votingCategories,
+								payload.votingCategories
 							);
 						}
 

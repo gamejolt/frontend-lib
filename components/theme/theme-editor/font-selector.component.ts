@@ -34,7 +34,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit {
 		@Inject('filterFilter') private filterFilter: ng.IFilterFilter,
 		@Inject('ngModel')
 		@Self()
-		private ngModel: ng.INgModelController,
+		private ngModel: ng.INgModelController
 	) {}
 
 	ngOnInit() {
@@ -65,7 +65,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit {
 			await this.$timeout();
 
 			const fontListElement = angular.element(
-				this.$element[0].querySelector('.font-selector-font-list') as Element,
+				this.$element[0].querySelector('.font-selector-font-list') as Element
 			);
 			const liHeight = 38;
 			const listHeight = 300;
@@ -82,7 +82,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit {
 							this.filterFontList();
 						});
 					}
-				}, 250),
+				}, 250)
 			);
 		}
 	}
@@ -107,7 +107,7 @@ export class ThemeEditorFontSelectorComponent implements OnInit {
 		// Limit to only seeing the number of fonts our current "page" will allow.
 		this.fontListFiltered = this.fontListFiltered.slice(
 			0,
-			this.visibleFontCount,
+			this.visibleFontCount
 		);
 
 		// Now that we've filtered the fonts, let's update which font definitions need to be loaded in.

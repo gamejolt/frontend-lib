@@ -6,7 +6,7 @@ angular
 		$window,
 		$parse,
 		Api,
-		Screen,
+		Screen
 	) {
 		return {
 			restrict: 'E',
@@ -226,7 +226,7 @@ angular
 
 									// Validation data needs to be set on the form group so it can give better error messages.
 									formGroup.setValidationData(check, val);
-								},
+								}
 							);
 						}
 					});
@@ -253,7 +253,7 @@ angular
 									} else if (geometryVals['width']) {
 										return dimensions[1] == geometryVals['height'];
 									}
-								},
+								}
 							);
 						} else {
 							if (geometryKeys['min-width'] || geometryKeys['min-height']) {
@@ -272,7 +272,7 @@ angular
 										} else if (geometryVals['min-width']) {
 											return dimensions[1] >= geometryVals['min-height'];
 										}
-									},
+									}
 								);
 							}
 
@@ -292,14 +292,14 @@ angular
 										} else if (geometryVals['max-width']) {
 											return dimensions[1] <= geometryVals['max-height'];
 										}
-									},
+									}
 								);
 							}
 						}
 
 						if (geometryKeys['ratio']) {
 							ngModel.$asyncValidators.ratio = setupGeometryValidator(function(
-								dimensions,
+								dimensions
 							) {
 								var ratio = dimensions[0] / dimensions[1];
 								if (geometryVals['ratio']) {
@@ -313,7 +313,7 @@ angular
 									if (geometryVals['min-ratio']) {
 										return ratio >= geometryVals['min-ratio'];
 									}
-								},
+								}
 							);
 						} else if (geometryKeys['max-ratio']) {
 							ngModel.$asyncValidators.maxRatio = setupGeometryValidator(
@@ -322,7 +322,7 @@ angular
 									if (geometryVals['max-ratio']) {
 										return ratio <= geometryVals['max-ratio'];
 									}
-								},
+								}
 							);
 						}
 					}

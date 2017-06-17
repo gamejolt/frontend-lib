@@ -9,7 +9,7 @@ angular.module('gj.Form').directive('gjFocusWhen', function($timeout, $parse) {
 						element[0].focus();
 					},
 					0,
-					false,
+					false
 				);
 			}
 

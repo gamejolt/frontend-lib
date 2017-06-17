@@ -4,7 +4,7 @@ export class MicrodataContainer {
 
 	static set(microdata: Object) {
 		let elem = this._head.querySelector(
-			'script[type="application/ld+json"]',
+			'script[type="application/ld+json"]'
 		) as HTMLScriptElement;
 		if (elem) {
 			this.clear();
@@ -18,7 +18,7 @@ export class MicrodataContainer {
 
 	static clear() {
 		let elem = this._head.querySelector(
-			'script[type="application/ld+json"]',
+			'script[type="application/ld+json"]'
 		) as HTMLScriptElement;
 		if (elem) {
 			this._head.removeChild(elem);

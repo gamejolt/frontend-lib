@@ -17,14 +17,14 @@ export class GameSong extends Model {
 			undefined,
 			{
 				detach: true,
-			},
+			}
 		);
 	}
 
 	static $saveSort(gameId: number, sort: number[]) {
 		return Api.sendRequest(
 			'/web/dash/developer/games/music/save-sort/' + gameId,
-			sort,
+			sort
 		);
 	}
 
@@ -33,21 +33,21 @@ export class GameSong extends Model {
 			return this.$_save(
 				'/web/dash/developer/games/music/save/' + this.game_id,
 				'gameSong',
-				{ file: this.file },
+				{ file: this.file }
 			);
 		} else {
 			// May or may not have an upload file on an edit.
 			return this.$_save(
 				'/web/dash/developer/games/music/save/' + this.game_id + '/' + this.id,
 				'gameSong',
-				{ file: this.file || null },
+				{ file: this.file || null }
 			);
 		}
 	}
 
 	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/music/remove/' + this.game_id + '/' + this.id,
+			'/web/dash/developer/games/music/remove/' + this.game_id + '/' + this.id
 		);
 	}
 }

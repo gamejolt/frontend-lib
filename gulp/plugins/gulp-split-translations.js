@@ -25,9 +25,9 @@ module.exports = function(sections) {
 			var poContent = fs.readFileSync(
 				path.resolve(
 					__dirname,
-					'../../../site-translations/' + lang + '/main.po',
+					'../../../site-translations/' + lang + '/main.po'
 				),
-				'utf8',
+				'utf8'
 			);
 			var poParsed = pofile.parse(poContent);
 			var poItems = _.indexBy(poParsed.items, 'msgid');
@@ -36,7 +36,7 @@ module.exports = function(sections) {
 				sections,
 				function(sectionPaths, sectionName) {
 					var sectionReferenceRegex = new RegExp(
-						'^(' + sectionPaths.join('|') + ')',
+						'^(' + sectionPaths.join('|') + ')'
 					);
 					var sectionJson = {};
 					sectionJson[lang] = {};
@@ -67,10 +67,10 @@ module.exports = function(sections) {
 							base: file.base,
 							path: path.join(path.dirname(file.path), sectionName + '.json'),
 							contents: new Buffer(JSON.stringify(sectionJson), 'utf-8'),
-						}),
+						})
 					);
 				},
-				this,
+				this
 			);
 
 			file.contents = new Buffer(JSON.stringify(parsed), 'utf-8');
@@ -78,7 +78,7 @@ module.exports = function(sections) {
 			// Streams not supported.
 			this.emit(
 				'error',
-				new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported.'),
+				new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported.')
 			);
 			return callback();
 		}

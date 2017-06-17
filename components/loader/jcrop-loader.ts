@@ -12,7 +12,7 @@ export class JcropLoader extends LoaderBase {
 			() => {
 				require('jquery-jcrop');
 			},
-			'jcrop',
+			'jcrop'
 		);
 	}
 }

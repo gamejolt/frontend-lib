@@ -24,7 +24,7 @@ export class Subscription extends Model {
 			return this.$_save(
 				'/comments/subscriptions/add/' + this.comment_id,
 				'subscription',
-				{ ignorePayloadUser: true },
+				{ ignorePayloadUser: true }
 			);
 		}
 

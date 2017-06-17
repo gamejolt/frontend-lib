@@ -19,14 +19,14 @@ module.exports = function(config) {
 				plugins.newer({
 					dest: config.buildDir + '/tmp/vendor-component-templates',
 					ext: '.html.js',
-				}),
+				})
 			)
 			.pipe(
 				plugins.ngHtml2js({
 					moduleName: 'ui.bootstrap.datepicker.tpls',
 					stripPrefix: config.gjLibDir + 'components/',
 					prefix: 'template/datepicker/',
-				}),
+				})
 			)
 			.pipe(plugins.rename({ extname: '.html.js' }))
 			.pipe(gulp.dest(config.buildDir + '/tmp/vendor-component-templates/'));
@@ -44,14 +44,14 @@ module.exports = function(config) {
 				plugins.newer({
 					dest: config.buildDir + '/tmp/vendor-component-templates',
 					ext: '.html.js',
-				}),
+				})
 			)
 			.pipe(
 				plugins.ngHtml2js({
 					moduleName: 'ui.bootstrap.timepicker.tpls',
 					stripPrefix: config.gjLibDir + 'components/',
 					prefix: 'template/timepicker/',
-				}),
+				})
 			)
 			.pipe(plugins.rename({ extname: '.html.js' }))
 			.pipe(gulp.dest(config.buildDir + '/tmp/vendor-component-templates/'));
@@ -69,14 +69,14 @@ module.exports = function(config) {
 				plugins.newer({
 					dest: config.buildDir + '/tmp/vendor-component-templates',
 					ext: '.html.js',
-				}),
+				})
 			)
 			.pipe(
 				plugins.ngHtml2js({
 					moduleName: 'ui.bootstrap.tooltip.tpls',
 					stripPrefix: config.gjLibDir + 'components/',
 					prefix: 'template/tooltip/',
-				}),
+				})
 			)
 			.pipe(plugins.rename({ extname: '.html.js' }))
 			.pipe(gulp.dest(config.buildDir + '/tmp/vendor-component-templates/'));
@@ -94,14 +94,14 @@ module.exports = function(config) {
 				plugins.newer({
 					dest: config.buildDir + '/tmp/vendor-component-templates',
 					ext: '.html.js',
-				}),
+				})
 			)
 			.pipe(
 				plugins.ngHtml2js({
 					moduleName: 'ui.bootstrap.pagination',
 					stripPrefix: config.gjLibDir + 'components/',
 					prefix: 'template/pagination/',
-				}),
+				})
 			)
 			.pipe(plugins.rename({ extname: '.html.js' }))
 			.pipe(gulp.dest(config.buildDir + '/tmp/vendor-component-templates/'));
@@ -119,14 +119,14 @@ module.exports = function(config) {
 				plugins.newer({
 					dest: config.buildDir + '/tmp/vendor-component-templates',
 					ext: '.html.js',
-				}),
+				})
 			)
 			.pipe(
 				plugins.ngHtml2js({
 					moduleName: 'ui.bootstrap.modal',
 					stripPrefix: config.gjLibDir + 'components/',
 					prefix: 'template/modal/',
-				}),
+				})
 			)
 			.pipe(plugins.rename({ extname: '.html.js' }))
 			.pipe(gulp.dest(config.buildDir + '/tmp/vendor-component-templates/'));
@@ -152,7 +152,7 @@ module.exports = function(config) {
 					plugins.ngHtml2js({
 						moduleName: 'App',
 						prefix: '/',
-					}),
+					})
 				)
 				.pipe(plugins.rename({ extname: '.html.js' }))
 				.pipe(gulp.dest(config.buildDir + '/tmp/' + section + '-partials/'));

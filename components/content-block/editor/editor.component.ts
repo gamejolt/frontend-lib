@@ -34,13 +34,13 @@ export class ContentBlockEditorComponent implements OnInit {
 
 	constructor(
 		@Inject('$scope') private $scope: ng.IScope,
-		@Inject('$element') private $element: ng.IAugmentedJQuery,
+		@Inject('$element') private $element: ng.IAugmentedJQuery
 	) {}
 
 	ngOnInit() {
 		this.fetchPreview = _.debounce(
 			() => this._fetchPreview(),
-			PREVIEW_DEBOUNCE,
+			PREVIEW_DEBOUNCE
 		);
 
 		this.$scope.$watch(
@@ -57,7 +57,7 @@ export class ContentBlockEditorComponent implements OnInit {
 					this.isPreviewLoading = false;
 					this.compiled('');
 				}
-			},
+			}
 		);
 	}
 
@@ -66,7 +66,7 @@ export class ContentBlockEditorComponent implements OnInit {
 		Api.sendRequest(
 			'/web/dash/sites/content-preview',
 			{ content: this.contentBlock.content_markdown },
-			{ ignorePayloadUser: true },
+			{ ignorePayloadUser: true }
 		).then((response: any) => {
 			if (previewIndex === this.previewIndex) {
 				this.isPreviewLoading = false;

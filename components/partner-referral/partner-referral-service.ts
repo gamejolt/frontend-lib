@@ -12,7 +12,7 @@ export class PartnerReferral {
 		if (ref) {
 			window.sessionStorage.setItem(
 				`partner-ref:${resource}:${resourceId}`,
-				ref,
+				ref
 			);
 		}
 	}
@@ -23,7 +23,7 @@ export class PartnerReferral {
 		}
 
 		return window.sessionStorage.getItem(
-			`partner-ref:${resource}:${resourceId}`,
+			`partner-ref:${resource}:${resourceId}`
 		);
 	}
 }

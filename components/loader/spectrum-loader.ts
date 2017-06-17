@@ -12,7 +12,7 @@ export class SpectrumLoader extends LoaderBase {
 			() => {
 				require('spectrum-colorpicker');
 			},
-			'spectrum',
+			'spectrum'
 		);
 	}
 }

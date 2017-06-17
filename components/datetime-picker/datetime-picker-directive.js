@@ -50,7 +50,7 @@ angular
 						// Parse the date they selected in the timezone they selected and pull the milliseconds since epoch.
 						scope.dateModel = DateHelper.changeTimezone(
 							localDate,
-							scope.timezone,
+							scope.timezone
 						).valueOf();
 					}
 				}
@@ -76,8 +76,8 @@ angular
 				$attrs.$set(
 					'name',
 					$interpolate($attrs.gjDatetimePickerInterpolateName || $attrs.name)(
-						$scope,
-					),
+						$scope
+					)
 				);
 			},
 		};

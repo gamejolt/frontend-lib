@@ -8,12 +8,12 @@ interface WebpackRequire {
 	ensure(
 		ids: string[],
 		callback: WebpackRequireEnsureCallback,
-		chunkName?: string,
+		chunkName?: string
 	): Promise<void>;
 	context(
 		directory: string,
 		useSubDirectories?: boolean,
-		regExp?: RegExp,
+		regExp?: RegExp
 	): WebpackContext;
 }
 

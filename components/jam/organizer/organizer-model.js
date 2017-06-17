@@ -14,13 +14,13 @@ angular
 		Jam_Organizer.prototype.$save = function() {
 			return this.$_save(
 				'/jams/manage/jams/organizers/add-organizer/' + this.jam_id,
-				'jamOrganizer',
+				'jamOrganizer'
 			);
 		};
 
 		Jam_Organizer.prototype.$remove = function() {
 			return this.$_remove(
-				'/jams/manage/jams/organizers/remove-organizer/' + this.id,
+				'/jams/manage/jams/organizers/remove-organizer/' + this.id
 			);
 		};
 

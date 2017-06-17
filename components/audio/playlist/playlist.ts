@@ -84,7 +84,7 @@ export class AppAudioPlaylist extends Vue {
 			this.stopSong();
 		} else {
 			const currentIndex = this.songs.findIndex(
-				item => item.id === this.currentSong!.id,
+				item => item.id === this.currentSong!.id
 			);
 			if (currentIndex !== -1) {
 				this.playSong(this.songs[currentIndex + 1]);

@@ -15,7 +15,7 @@ angular
 		Device,
 		HistoryTick,
 		gjCurrencyFilter,
-		gettextCatalog,
+		gettextCatalog
 	) {
 		var form = new Form({
 			template: require('./payment-form.html'),
@@ -86,14 +86,14 @@ angular
 
 			scope.$watchGroup(
 				['formModel.country', 'formModel.region'],
-				getAddressTax,
+				getAddressTax
 			);
 
 			function load() {
 				Api.sendRequest(
 					'/web/checkout/methods?amount=' + scope.formModel.amount * 100,
 					null,
-					{ detach: true },
+					{ detach: true }
 				).then(function(response) {
 					scope.formState.isLoadingMethods = false;
 					scope.formState.isLoaded = true;
@@ -273,7 +273,7 @@ angular
 
 						return Api.sendRequest(
 							'/web/checkout/charge/' + response.cart.id,
-							chargeData,
+							chargeData
 						);
 					})
 					.then(function(response) {
@@ -291,7 +291,7 @@ angular
 						Growls.error({
 							sticky: true,
 							message: gettextCatalog.getString(
-								'There was a problem processing your payment method.',
+								'There was a problem processing your payment method.'
 							),
 						});
 					});
@@ -326,7 +326,7 @@ angular
 			data['ref'] = scope.partnerReferredKey || null;
 
 			return Api.sendRequest('/web/checkout/setup-order', data).then(function(
-				response,
+				response
 			) {
 				if (response.success !== false) {
 					if (GJ_IS_CLIENT) {

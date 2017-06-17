@@ -79,7 +79,7 @@ export class AppThemeInjector extends Vue {
 					fonts.push(
 						'@import url(//fonts.googleapis.com/css?family=' +
 							currentTheme[field].family.replace(/ /g, '+') +
-							');',
+							');'
 					);
 				} else if (definition.type === 'css') {
 					css.push(currentTheme[field]);

@@ -13,7 +13,7 @@ angular.module('gj.Img.Crop').directive('gjImgCrop', function() {
 			$parse,
 			$q,
 			$window,
-			Screen,
+			Screen
 		) {
 			var _this = this;
 			var initialized = false;
@@ -111,7 +111,7 @@ angular.module('gj.Img.Crop').directive('gjImgCrop', function() {
 							}
 
 							resolve(_this.jcrop);
-						},
+						}
 					);
 				});
 

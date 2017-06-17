@@ -54,7 +54,7 @@ export class ThemeEditorComponent implements OnInit {
 			undefined,
 			{
 				detach: true,
-			},
+			}
 		);
 
 		this.isLoaded = true;

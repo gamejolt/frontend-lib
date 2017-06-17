@@ -210,7 +210,7 @@ export class Notification extends Model {
 		return this.$_save(
 			'/web/dash/activity/mark-read/' + this.id,
 			'notification',
-			{ detach: true },
+			{ detach: true }
 		);
 	}
 }

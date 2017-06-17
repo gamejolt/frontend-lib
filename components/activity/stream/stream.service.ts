@@ -28,7 +28,7 @@ export class ActivityStream {
 			// channels.
 			if (this.isInitialized) {
 				for (const subscription of Object.values<ActivityStreamSubscription>(
-					this.subscriptions,
+					this.subscriptions
 				)) {
 					this.primus.write({
 						event: 'channel-subscribe',
@@ -45,7 +45,7 @@ export class ActivityStream {
 		// subscriptions.
 		this.primus.on('data', (message: any) => {
 			for (const subscription of Object.values<ActivityStreamSubscription>(
-				this.subscriptions,
+				this.subscriptions
 			)) {
 				subscription.messageHandler(message);
 			}
@@ -58,7 +58,7 @@ export class ActivityStream {
 		name: string,
 		input: any,
 		messageHandler: (message: any) => void,
-		onConnected?: () => void,
+		onConnected?: () => void
 	) {
 		// We just ensure once, then we use the promise on subsequent
 		// subscribes.
@@ -78,7 +78,7 @@ export class ActivityStream {
 			this.subscriptionCounter,
 			name,
 			input,
-			messageHandler,
+			messageHandler
 		);
 
 		this.subscriptions[this.subscriptionCounter] = subscription;

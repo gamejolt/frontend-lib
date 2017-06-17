@@ -12,7 +12,7 @@ export class HammerLoader extends LoaderBase {
 					// This will require hammerjs as well.
 					require('angular-hammer');
 				}),
-			'hammer',
+			'hammer'
 		);
 	}
 }

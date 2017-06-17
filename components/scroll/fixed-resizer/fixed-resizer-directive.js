@@ -5,7 +5,7 @@ angular
 		$document,
 		$position,
 		Scroll,
-		Screen,
+		Screen
 	) {
 		function check(element, target) {
 			if (!target) {

@@ -206,7 +206,7 @@ export class Translate {
 		// Gotta change all our current sections loaded in to the new language before
 		// we can set it in the UI.
 		const loadSections = this.sections.map(section =>
-			this.loadSection(section, lang),
+			this.loadSection(section, lang)
 		);
 		await Promise.all(loadSections);
 

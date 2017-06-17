@@ -6,7 +6,7 @@ function setupEvents() {
 		Analytics.trackSocial(
 			Analytics.SOCIAL_NETWORK_FB,
 			Analytics.SOCIAL_ACTION_LIKE,
-			url,
+			url
 		);
 	});
 
@@ -14,7 +14,7 @@ function setupEvents() {
 		Analytics.trackSocial(
 			Analytics.SOCIAL_NETWORK_FB,
 			Analytics.SOCIAL_ACTION_SEND,
-			url,
+			url
 		);
 	});
 }

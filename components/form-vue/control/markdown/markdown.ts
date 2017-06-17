@@ -109,7 +109,7 @@ export class AppFormControlMarkdown extends BaseFormControl {
 				const response = await Api.sendRequest(
 					this.previewUrl,
 					{ content: this.value },
-					{ ignorePayloadUser: true },
+					{ ignorePayloadUser: true }
 				);
 
 				if (response && response.success !== false && response.compiled) {

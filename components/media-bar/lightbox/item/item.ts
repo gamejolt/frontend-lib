@@ -39,7 +39,7 @@ export class AppMediaBarLightboxItem extends Vue {
 	mounted() {
 		this.lightbox = findVueParent(
 			this,
-			AppMediaBarLightbox,
+			AppMediaBarLightbox
 		) as AppMediaBarLightbox;
 		this.calcActive();
 		this.calcDimensions();
@@ -67,7 +67,7 @@ export class AppMediaBarLightboxItem extends Vue {
 		this.maxHeight = this.lightbox.maxItemHeight;
 
 		const captionElement = this.$el.getElementsByClassName(
-			'media-bar-lightbox-item-caption',
+			'media-bar-lightbox-item-caption'
 		)[0] as HTMLElement;
 		if (captionElement) {
 			this.maxHeight -= captionElement.offsetHeight;
@@ -76,7 +76,7 @@ export class AppMediaBarLightboxItem extends Vue {
 		if (this.item.media_type === 'image') {
 			const dimensions = this.item.media_item.getDimensions(
 				this.maxWidth,
-				this.maxHeight,
+				this.maxHeight
 			);
 			this.maxWidth = dimensions.width;
 			this.maxHeight = dimensions.height;

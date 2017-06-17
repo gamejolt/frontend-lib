@@ -14,7 +14,7 @@ angular
 		Jam_Award_Game.$saveSort = function(awardId, sortedIds) {
 			return Api.sendRequest(
 				'/jams/manage/jams/awards/save-game-sort/' + awardId,
-				sortedIds,
+				sortedIds
 			);
 		};
 
@@ -22,7 +22,7 @@ angular
 			// Force POST.
 			return Api.sendRequest(
 				'/jams/manage/jams/awards/assign-game/' + awardId + '/' + gameId,
-				{},
+				{}
 			)
 				.then(function(response) {
 					return Jam_Award_Game.processCreate(response, 'jamAwardGame');
@@ -37,7 +37,7 @@ angular
 				'/jams/manage/jams/awards/remove-assigned-game/' +
 					this.jam_award_id +
 					'/' +
-					this.game_id,
+					this.game_id
 			);
 		};
 

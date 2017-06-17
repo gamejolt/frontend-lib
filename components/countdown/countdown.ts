@@ -55,7 +55,7 @@ export class AppCountdown extends Vue {
 		const secondsLeft = Math.floor(timeLeft);
 
 		let text = `${this.pad(hoursLeft)}:${this.pad(minutesLeft)}:${this.pad(
-			secondsLeft,
+			secondsLeft
 		)}`;
 		if (daysLeft) {
 			text = `${daysLeft}:${text}`;

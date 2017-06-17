@@ -37,7 +37,7 @@ export class HistoryTick {
 	static sendBeacon(
 		type: string,
 		resourceId: number,
-		options: BeaconOptions = {},
+		options: BeaconOptions = {}
 	) {
 		if (Environment.isPrerender) {
 			return;
@@ -60,7 +60,7 @@ export class HistoryTick {
 			if (options.sourceResource && options.sourceResourceId) {
 				const source = this.getSource(
 					options.sourceResource,
-					options.sourceResourceId,
+					options.sourceResourceId
 				);
 				if (source) {
 					queryParams.push('source=' + source);
@@ -68,7 +68,7 @@ export class HistoryTick {
 
 				const ref = PartnerReferral.getReferrer(
 					options.sourceResource,
-					options.sourceResourceId,
+					options.sourceResourceId
 				);
 				if (ref) {
 					queryParams.push('ref=' + ref);
@@ -86,7 +86,7 @@ export class HistoryTick {
 			img.width = 1;
 			img.height = 1;
 			img.src = `${Environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join(
-				'&',
+				'&'
 			)}`;
 
 			// Always resolve.

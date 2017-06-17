@@ -41,7 +41,7 @@ export class MediaItem extends Model {
 	getDimensions(
 		maxWidth: number | undefined,
 		maxHeight: number | undefined,
-		options: { force?: boolean } = {},
+		options: { force?: boolean } = {}
 	) {
 		// Simple getter for dimensions.
 		if (!maxWidth && !maxHeight) {
@@ -115,7 +115,7 @@ export class MediaItem extends Model {
 			return this.$_save(
 				'/fireside/dash/posts/media/upload/' + this.post_id + '/' + this.type,
 				'mediaItem',
-				{ file: this.file },
+				{ file: this.file }
 			);
 		}
 	}

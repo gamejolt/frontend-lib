@@ -149,9 +149,9 @@ export class AppCommentWidgetComment extends Vue {
 					this.$ngettext(
 						'You and another person like this comment.',
 						'You and %{ count } people like this comment.',
-						count - 1,
+						count - 1
 					),
-					{ count },
+					{ count }
 				);
 			}
 		} else {
@@ -159,9 +159,9 @@ export class AppCommentWidgetComment extends Vue {
 				this.$ngettext(
 					'One person likes this comment.',
 					'%{ count } people like this comment.',
-					count,
+					count
 				),
-				{ count },
+				{ count }
 			);
 		}
 	}

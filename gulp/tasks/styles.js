@@ -16,13 +16,13 @@ module.exports = function(config) {
 					? gutil.noop()
 					: plugins.plumber({
 							errorHandler: onError,
-						}),
+						})
 			)
 			.pipe(
 				plugins.stylus({
 					errors: true,
 					'include css': true,
-				}),
+				})
 			)
 			.pipe(
 				plugins.autoprefixer(
@@ -31,8 +31,8 @@ module.exports = function(config) {
 					'ie 9',
 					'opera 12.1',
 					'ios 6',
-					'android 4',
-				),
+					'android 4'
+				)
 			)
 			.pipe(config.production ? plugins.minifyCss() : gutil.noop())
 			.pipe(plugins.size({ gzip: true, title: 'styles', showFiles: true }))
@@ -53,13 +53,13 @@ module.exports = function(config) {
 					? gutil.noop()
 					: plugins.plumber({
 							errorHandler: onError,
-						}),
+						})
 			)
 			.pipe(
 				plugins.stylus({
 					errors: true,
 					'include css': true,
-				}),
+				})
 			)
 			.pipe(
 				plugins.autoprefixer(
@@ -68,12 +68,12 @@ module.exports = function(config) {
 					'ie 9',
 					'opera 12.1',
 					'ios 6',
-					'android 4',
-				),
+					'android 4'
+				)
 			)
 			.pipe(config.production ? plugins.minifyCss() : gutil.noop())
 			.pipe(
-				plugins.size({ gzip: true, title: 'styles:extra', showFiles: true }),
+				plugins.size({ gzip: true, title: 'styles:extra', showFiles: true })
 			)
 			.pipe(gulp.dest(config.buildDir + '/app'))
 			.pipe(plugins.connect.reload());

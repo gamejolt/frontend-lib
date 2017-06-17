@@ -12,7 +12,7 @@ export class MetaContainer {
 		this._storeField(name, content);
 
 		let elem = this._head.querySelector(
-			`meta[name="${name}"]`,
+			`meta[name="${name}"]`
 		) as HTMLMetaElement;
 
 		// Remove if we're nulling it out.
@@ -42,7 +42,7 @@ export class MetaContainer {
 			const field = new MetaField();
 
 			const elem = this._head.querySelector(
-				`meta[name="${name}"]`,
+				`meta[name="${name}"]`
 			) as HTMLMetaElement;
 			if (elem) {
 				field.original = elem.content;

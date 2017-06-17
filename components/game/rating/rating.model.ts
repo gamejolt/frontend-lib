@@ -11,7 +11,7 @@ export class GameRating extends Model {
 		return this.$_save(
 			'/web/discover/games/ratings/save/' + this.game_id,
 			'gameRating',
-			{ ignoreLoadingBar: true },
+			{ ignoreLoadingBar: true }
 		);
 	}
 

@@ -3,7 +3,7 @@ import { getImgDimensions } from '../../../utils/image';
 
 export async function FormValidatorMaxImgDimensions(
 	files: File | File[],
-	args: [number, number],
+	args: [number, number]
 ) {
 	const width = args[0];
 	const height = args[1];

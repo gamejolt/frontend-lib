@@ -5,7 +5,7 @@ angular
 		$location,
 		$timeout,
 		$document,
-		Scroll,
+		Scroll
 	) {
 		var _states = {};
 		var _noScroll = false;
@@ -70,8 +70,8 @@ angular
 						}
 					},
 					50,
-					false,
+					false
 				);
-			},
+			}
 		);
 	});

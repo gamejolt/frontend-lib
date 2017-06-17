@@ -37,7 +37,7 @@ export class GamePackage extends Model {
 	static $saveSort(gameId: number, packagesSort: any) {
 		return Api.sendRequest(
 			'/web/dash/developer/games/packages/save-sort/' + gameId,
-			packagesSort,
+			packagesSort
 		);
 	}
 
@@ -53,7 +53,7 @@ export class GamePackage extends Model {
 		if (!this.id) {
 			return this.$_save(
 				'/web/dash/developer/games/packages/save/' + this.game_id,
-				'gamePackage',
+				'gamePackage'
 			);
 		} else {
 			return this.$_save(
@@ -61,7 +61,7 @@ export class GamePackage extends Model {
 					this.game_id +
 					'/' +
 					this.id,
-				'gamePackage',
+				'gamePackage'
 			);
 		}
 	}
@@ -71,7 +71,7 @@ export class GamePackage extends Model {
 			'/web/dash/developer/games/packages/remove/' +
 				this.game_id +
 				'/' +
-				this.id,
+				this.id
 		);
 
 		if (game && response.game) {

@@ -138,7 +138,7 @@ export class AppMediaBarLightbox extends Vue {
 		this.isDragging = true;
 
 		this.activeElem = this.$el.getElementsByClassName(
-			'active',
+			'active'
 		)[0] as HTMLElement;
 		this.nextElem = this.$el.getElementsByClassName('next')[0] as HTMLElement;
 		this.prevElem = this.$el.getElementsByClassName('prev')[0] as HTMLElement;

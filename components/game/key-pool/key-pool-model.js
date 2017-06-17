@@ -24,7 +24,7 @@ angular
 				{
 					data: this.data,
 					provider: this.provider,
-				},
+				}
 			);
 		};
 

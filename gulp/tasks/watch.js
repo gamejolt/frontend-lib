@@ -32,18 +32,18 @@ module.exports = function(config) {
 			gulp.watch(
 				['src/**/*.{js,ts,html}'],
 				{ delay: 750 },
-				gulp.series('html', 'js', 'reload:js'),
+				gulp.series('html', 'js', 'reload:js')
 			);
 
 			// Images.
 			gulp.watch(
 				['src/**/*.{png,jpg,jpeg,gif,svg,ico}'],
 				{ delay: 750 },
-				gulp.parallel('images'),
+				gulp.parallel('images')
 			);
 
 			// Markdown.
 			gulp.watch(['src/**/*.md'], { delay: 750 }, gulp.parallel('markdown'));
-		}),
+		})
 	);
 };

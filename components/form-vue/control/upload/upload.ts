@@ -27,8 +27,8 @@ function traverseFileTree(files: File[], entry: any, path = ''): Promise<void> {
 							traverseFileTree(
 								files,
 								entries[i],
-								(path ? path : '') + entry.name + '/',
-							),
+								(path ? path : '') + entry.name + '/'
+							)
 						);
 					}
 

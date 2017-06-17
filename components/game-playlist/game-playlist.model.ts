@@ -29,7 +29,7 @@ export class GamePlaylist extends Model {
 		const response: any = await Api.sendRequest(
 			'/web/library/playlists' + queryString,
 			null,
-			{ ignoreLoadingBar: true },
+			{ ignoreLoadingBar: true }
 		);
 
 		return {
@@ -61,7 +61,7 @@ export class GamePlaylist extends Model {
 		} else {
 			return this.$_save(
 				'/web/library/playlists/save/' + this.id,
-				'gamePlaylist',
+				'gamePlaylist'
 			);
 		}
 	}

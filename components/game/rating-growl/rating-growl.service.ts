@@ -24,7 +24,7 @@ export class GameRatingGrowl {
 		const payload = await Api.sendRequest(
 			'/web/discover/games/ratings/get-user-rating/' + game.id,
 			null,
-			{ detach: true },
+			{ detach: true }
 		);
 
 		// If there is a rating for this user already, don't show the growl.

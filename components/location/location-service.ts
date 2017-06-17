@@ -13,7 +13,7 @@ export class Location {
 	constructor(
 		@Inject('$timeout') private $timeout: ng.ITimeoutService,
 		@Inject('$location') private $location: ng.ILocationService,
-		@Inject('$state') private $state: StateService,
+		@Inject('$state') private $state: StateService
 	) {}
 
 	/**
@@ -35,7 +35,7 @@ export class Location {
 
 		this.$timeout(() => {
 			const $stateParams: StateParams = getProvider<StateParams>(
-				'$stateParams',
+				'$stateParams'
 			);
 			let mergedParams = angular.extend({}, $stateParams, this.pendingParams);
 

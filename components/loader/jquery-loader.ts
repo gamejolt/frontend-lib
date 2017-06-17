@@ -9,7 +9,7 @@ export class JqueryLoader extends LoaderBase {
 			() => {
 				(window as any).jQuery = require('jquery');
 			},
-			'jquery',
+			'jquery'
 		);
 	}
 }

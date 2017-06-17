@@ -26,7 +26,7 @@ export class AppSketchfabEmbed extends Vue {
 	mounted() {
 		this.recalculateDimensions();
 		this.resize$ = Screen.resizeChanges.subscribe(() =>
-			this.recalculateDimensions(),
+			this.recalculateDimensions()
 		);
 	}
 
@@ -56,9 +56,7 @@ export class AppSketchfabEmbed extends Vue {
 		await this.$nextTick();
 
 		this.width = Ruler.width(
-			this.$el.getElementsByClassName(
-				'sketchfab-embed-inner',
-			)[0] as HTMLElement,
+			this.$el.getElementsByClassName('sketchfab-embed-inner')[0] as HTMLElement
 		);
 
 		if (this.maxWidth) {

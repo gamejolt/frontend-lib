@@ -29,7 +29,7 @@ export class GameDownloader {
 		router: VueRouter,
 		game: Game,
 		build: GameBuild,
-		options: GameDownloaderOptions = {},
+		options: GameDownloaderOptions = {}
 	) {
 		Analytics.trackEvent('game-play', 'download');
 
@@ -48,7 +48,7 @@ export class GameDownloader {
 							id: game.id + '',
 							buildId: build.id + '',
 						},
-					}).href,
+					}).href
 			);
 		} else if (
 			game.bundle_only ||

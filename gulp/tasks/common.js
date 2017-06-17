@@ -119,7 +119,7 @@ module.exports = function(config, projectBase) {
 			'cd ' + config.gjLibDir + ' && git pull',
 			'git add ' + config.gjLibDir,
 			'git commit -m "Update GJ lib."',
-		]),
+		])
 	);
 
 	gulp.task(
@@ -128,6 +128,6 @@ module.exports = function(config, projectBase) {
 			'git add --all build/prod',
 			'git commit -m "New build."',
 			'git push',
-		]),
+		])
 	);
 };

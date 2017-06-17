@@ -27,7 +27,7 @@ export function numberSort(a: number, b: number) {
 
 export function arrayIndexBy<T>(
 	values: T[],
-	field: keyof T,
+	field: keyof T
 ): { [k: string]: T } {
 	const indexed: any = {};
 	values.forEach(item => (indexed[item[field] + ''] = item));
@@ -36,7 +36,7 @@ export function arrayIndexBy<T>(
 
 export function arrayIndexByFunc<T>(
 	values: T[],
-	fn: (item: T) => any,
+	fn: (item: T) => any
 ): { [k: string]: T } {
 	const indexed: any = {};
 	values.forEach(item => (indexed[fn(item) + ''] = item));

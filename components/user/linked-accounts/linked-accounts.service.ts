@@ -22,7 +22,7 @@ export class UserLinkedAccounts {
 	static async loginClient(router: VueRouter, provider: Provider) {
 		const response = await Api.sendRequest(
 			'/web/auth/' + provider + '?client',
-			{},
+			{}
 		);
 
 		// Gotta open a browser window for them to complete the sign up/login.
@@ -46,7 +46,7 @@ export class UserLinkedAccounts {
 
 		const response = await Api.sendRequest(
 			'/web/dash/linked-accounts/link/' + provider,
-			{},
+			{}
 		);
 		window.location.href = response.redirectLocation;
 	}
@@ -54,7 +54,7 @@ export class UserLinkedAccounts {
 	static async linkClient(router: VueRouter, provider: Provider) {
 		const response = await Api.sendRequest(
 			'/web/dash/linked-accounts/link/' + provider + '?client',
-			{},
+			{}
 		);
 
 		// Gotta open a browser window for them to complete the sign up/login.
@@ -90,9 +90,9 @@ export class UserLinkedAccounts {
 			Growls.success(
 				Translate.$gettextInterpolate(
 					`Your %{ provider } account has been unlinked from the site.`,
-					{ provider: providerUpper },
+					{ provider: providerUpper }
 				),
-				Translate.$gettext('Account Unlinked'),
+				Translate.$gettext('Account Unlinked')
 			);
 		} catch (e) {
 			if (!e || !e.success) {
@@ -104,8 +104,8 @@ export class UserLinkedAccounts {
 			Growls.error(
 				Translate.$gettextInterpolate(
 					`Could not unlink your %{ provider } account.`,
-					{ provider: providerUpper },
-				),
+					{ provider: providerUpper }
+				)
 			);
 			throw e;
 		}

@@ -86,7 +86,7 @@ export class AppFormControlErrors extends Vue {
 		const errorMessages = Object.assign(
 			{},
 			ErrorMessagesBase,
-			this.errorMessageOverrides,
+			this.errorMessageOverrides
 		);
 
 		// Pull from the group's validation data to find out the rest of the messages.

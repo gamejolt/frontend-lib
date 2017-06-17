@@ -77,7 +77,7 @@ export class Api {
 	static async sendRequest(
 		uri: string,
 		postData?: any,
-		options: RequestOptions = {},
+		options: RequestOptions = {}
 	): Promise<any> {
 		options = {
 			...<RequestOptions>{
@@ -138,7 +138,7 @@ export class Api {
 			method,
 			url,
 			sanitizedPostData,
-			options,
+			options
 		);
 
 		// If we aren't processing the payload, then just return the promise.
@@ -153,7 +153,7 @@ export class Api {
 		method: string,
 		url: string,
 		data: any,
-		options: RequestOptions,
+		options: RequestOptions
 	) {
 		// An upload request.
 		if (options.file) {

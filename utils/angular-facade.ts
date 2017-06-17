@@ -12,7 +12,7 @@ import { kebabCase } from './string';
 
 export function bootstrapFacade(
 	$q: ng.IQService,
-	$animate: ng.animate.IAnimateService,
+	$animate: ng.animate.IAnimateService
 ) {
 	(window as any).Promise = $q;
 
@@ -89,7 +89,7 @@ function genRouteTemplate(component: any) {
 		const propMetadata = propsMetadata[prop][0];
 		if (propMetadata instanceof InputMetadata) {
 			return ` [${kebabCase(
-				prop,
+				prop
 			)}]="::$resolve['${prop}'] || $ctrl['${prop}']"`;
 		} else if (propMetadata instanceof OutputMetadata) {
 			return ` (${kebabCase(prop)})="$ctrl['${prop}']( $event )"`;

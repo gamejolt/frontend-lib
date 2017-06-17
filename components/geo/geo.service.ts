@@ -16,7 +16,7 @@ export class Geo {
 
 	static getCountryName(code: string) {
 		const country = this.getCountries().find(
-			c => c.code === (code || '').toLowerCase(),
+			c => c.code === (code || '').toLowerCase()
 		);
 		return country ? country.name : undefined;
 	}
@@ -260,7 +260,7 @@ export class Geo {
 				{
 					code: 'gs',
 					name: Translate.$gettext(
-						'South Georgia and the South Sandwich Islands',
+						'South Georgia and the South Sandwich Islands'
 					),
 				},
 				{ code: 'kr', name: Translate.$gettext('South Korea') },

@@ -41,11 +41,11 @@ export class AppForm extends Vue {
 			this.$validator.extend('img_dimensions', FormValidatorImgDimensions);
 			this.$validator.extend(
 				'min_img_dimensions',
-				FormValidatorMinImgDimensions,
+				FormValidatorMinImgDimensions
 			);
 			this.$validator.extend(
 				'max_img_dimensions',
-				FormValidatorMaxImgDimensions,
+				FormValidatorMaxImgDimensions
 			);
 			AppForm.hasAddedValidators = true;
 		}

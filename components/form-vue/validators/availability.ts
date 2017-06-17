@@ -11,7 +11,7 @@ export async function FormValidatorAvailability(value: string, args: [string]) {
 		await Api.sendRequest(
 			args[0],
 			{ value },
-			{ detach: true, processPayload: false },
+			{ detach: true, processPayload: false }
 		);
 	} catch (_e) {
 		return { valid: false };

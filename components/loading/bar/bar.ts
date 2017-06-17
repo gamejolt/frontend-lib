@@ -28,7 +28,7 @@ export class AppLoadingBar extends Vue {
 			error => {
 				this.addComplete(error.config);
 				return Promise.reject(error);
-			},
+			}
 		);
 
 		Axios.interceptors.response.use(
@@ -39,7 +39,7 @@ export class AppLoadingBar extends Vue {
 			error => {
 				this.addComplete(error.config);
 				return Promise.reject(error);
-			},
+			}
 		);
 	}
 

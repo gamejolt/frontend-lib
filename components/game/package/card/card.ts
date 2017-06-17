@@ -217,7 +217,7 @@ export class AppGamePackageCard extends Vue {
 			title: this.$gettext('Order Complete'),
 			message: this.$gettextInterpolate(
 				'Warm thanks from both %{ developer } and the Game Jolt team.',
-				{ developer: this.game.developer.display_name },
+				{ developer: this.game.developer.display_name }
 			),
 			sticky: true,
 		});

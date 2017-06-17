@@ -3,7 +3,7 @@ import { Injectable, Inject } from 'ng-metadata/core';
 @Injectable('gettextCatalog')
 export class TranslateSpoof {
 	constructor(
-		@Inject('$interpolate') private $interpolate: ng.IInterpolateService,
+		@Inject('$interpolate') private $interpolate: ng.IInterpolateService
 	) {}
 
 	getString(str: string, scope?: any) {

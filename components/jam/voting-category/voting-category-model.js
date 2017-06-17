@@ -10,7 +10,7 @@ angular
 		Jam_VotingCategory.$saveSort = function(jamId, sortedIds) {
 			return Api.sendRequest(
 				'/jams/manage/jams/voting/save-sorted-categories/' + jamId,
-				sortedIds,
+				sortedIds
 			);
 		};
 
@@ -19,19 +19,19 @@ angular
 			if (!this.id) {
 				return this.$_save(
 					'/jams/manage/jams/voting/add-category/' + this.jam_id,
-					'jamVotingCategory',
+					'jamVotingCategory'
 				);
 			} else {
 				return this.$_save(
 					'/jams/manage/jams/voting/save-category/' + this.id,
-					'jamVotingCategory',
+					'jamVotingCategory'
 				);
 			}
 		};
 
 		Jam_VotingCategory.prototype.$remove = function() {
 			return this.$_remove(
-				'/jams/manage/jams/voting/remove-category/' + this.id,
+				'/jams/manage/jams/voting/remove-category/' + this.id
 			);
 		};
 

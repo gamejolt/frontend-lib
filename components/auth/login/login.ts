@@ -34,7 +34,7 @@ export class AppAuthLogin extends Vue {
 			// This also handles main domain.
 			if (
 				this.redirectTo.search(
-					/^https?:\/\/([a-zA-Z\.]+\.)?gamejolt.(com|io)/,
+					/^https?:\/\/([a-zA-Z\.]+\.)?gamejolt.(com|io)/
 				) !== -1
 			) {
 				window.location.href = this.redirectTo;

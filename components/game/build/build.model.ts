@@ -265,7 +265,7 @@ export class GameBuild extends Model {
 
 	static getDownloadUrl(
 		id: number,
-		options: { key?: string; forceDownload?: boolean } = {},
+		options: { key?: string; forceDownload?: boolean } = {}
 	) {
 		// This is a game key so you can access games that you have a key for.
 		let data: any = {};
@@ -279,7 +279,7 @@ export class GameBuild extends Model {
 
 		return Api.sendRequest(
 			'/web/discover/games/builds/get-download-url/' + id,
-			data,
+			data
 		);
 	}
 
@@ -293,14 +293,14 @@ export class GameBuild extends Model {
 			return this.$_save(
 				'/web/dash/developer/games/builds/save/' + params.join('/'),
 				'gameBuild',
-				{ file: this.file },
+				{ file: this.file }
 			);
 		} else {
 			// May or may not have an upload file on an edit.
 			params.push(this.id);
 			return this.$_save(
 				'/web/dash/developer/games/builds/save/' + params.join('/'),
-				'gameBuild',
+				'gameBuild'
 			);
 		}
 	}
@@ -313,7 +313,7 @@ export class GameBuild extends Model {
 			this.id,
 		];
 		const response = await this.$_remove(
-			'/web/dash/developer/games/builds/remove/' + params.join('/'),
+			'/web/dash/developer/games/builds/remove/' + params.join('/')
 		);
 
 		if (game && response.game) {

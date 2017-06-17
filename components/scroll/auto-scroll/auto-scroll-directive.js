@@ -11,7 +11,7 @@ angular
 		History,
 		Scroll,
 		$state,
-		$transitions,
+		$transitions
 	) {
 		return {
 			link: function(scope, element, attrs) {
@@ -31,7 +31,7 @@ angular
 									Scroll.to(state.scroll, { animate: false });
 								},
 								0,
-								false,
+								false
 							);
 						} else {
 							$timeout(
@@ -48,7 +48,7 @@ angular
 									}
 								},
 								0,
-								false,
+								false
 							);
 						}
 					}
@@ -62,7 +62,7 @@ angular
 						prevAnchor = AutoScroll.anchor();
 						if (trans.to()) {
 							AutoScroll.pushState(
-								$state.href(trans.from(), trans.params('from')),
+								$state.href(trans.from(), trans.params('from'))
 							);
 						}
 					});

@@ -3,7 +3,7 @@ import { getImgDimensions } from '../../../utils/image';
 
 export async function FormValidatorMaxImgRatio(
 	files: File | File[],
-	args: [number],
+	args: [number]
 ) {
 	const ratio = args[0];
 	return validateFilesAsync(files, async file => {

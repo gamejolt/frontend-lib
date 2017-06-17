@@ -57,7 +57,7 @@ angular
 							// Stop watching as soon as we capture it.
 							formFieldWatcher();
 						}
-					},
+					}
 				);
 
 				/**
@@ -65,7 +65,7 @@ angular
 			 * If no label was set on the directive, then we should pull from the group's label.
 			 */
 				$scope.$watch('ctrl.labelInput || ctrl.formGroup.label', function(
-					newLabel,
+					newLabel
 				) {
 					// If it was from the group watcher, then we need to lowercase it.
 					if (_this.labelInput != newLabel) {
@@ -85,7 +85,7 @@ angular
 					},
 					function() {
 						updateErrorMessages();
-					},
+					}
 				);
 
 				function updateErrorMessages() {
@@ -251,7 +251,7 @@ angular
 					// If we have any overrides then set them on top.
 					_this.errorMessages = angular.extend(
 						_this.errorMessages,
-						_this.errorMessageOverrides,
+						_this.errorMessageOverrides
 					);
 
 					// Now update the error messages and replace the label placeholders.

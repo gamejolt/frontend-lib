@@ -10,7 +10,7 @@ angular.module('gj.Form').directive('gjSelectOnFocus', function($timeout) {
 						element.select();
 					},
 					0,
-					false,
+					false
 				); // Don't digest.
 			});
 		},

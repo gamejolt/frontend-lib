@@ -46,7 +46,7 @@ angular
 
 					angular.forEach(scope.formModel.votes, function(
 						categoryVote,
-						category,
+						category
 					) {
 						if (categoryVote) {
 							total += categoryVote;

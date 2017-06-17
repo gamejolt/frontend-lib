@@ -11,7 +11,7 @@ export class AppMediaBarLightboxSlider extends Vue {
 	mounted() {
 		const mediaBar = findVueParent(
 			this,
-			AppMediaBarLightbox,
+			AppMediaBarLightbox
 		) as AppMediaBarLightbox;
 		mediaBar.setSlider(this.$el);
 	}

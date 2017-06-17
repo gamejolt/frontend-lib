@@ -57,7 +57,7 @@ export class AppTimeAgo extends Vue {
 		if (!GJ_IS_SSR) {
 			this.timeout = window.setTimeout(
 				() => this.refresh(),
-				secondsUntilUpdate * 1000,
+				secondsUntilUpdate * 1000
 			);
 		}
 	}

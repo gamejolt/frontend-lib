@@ -88,7 +88,7 @@ export class Model {
 	async $_save(
 		url: string,
 		field: string,
-		options: RequestOptions = {},
+		options: RequestOptions = {}
 	): Promise<any> {
 		// Keep track of progress within the model.
 		if (!options.progress) {

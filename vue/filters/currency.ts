@@ -1,7 +1,7 @@
 export function currency(
 	amount: number,
 	currencyCode = 'USD',
-	fractionDigits = 2,
+	fractionDigits = 2
 ): string {
 	// No fraction if it's evenly divisible by 100.
 	if (amount % 100 === 0) {

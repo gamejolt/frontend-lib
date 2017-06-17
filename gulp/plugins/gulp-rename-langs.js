@@ -25,7 +25,7 @@ module.exports = function(options) {
 			// Streams not supported.
 			this.emit(
 				'error',
-				new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported.'),
+				new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported.')
 			);
 			return callback();
 		}

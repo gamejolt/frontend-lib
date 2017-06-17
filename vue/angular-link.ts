@@ -14,7 +14,7 @@ let componentCounter = 0;
 
 export function makeComponentProvider(
 	component: typeof Vue,
-	outputs: string[] = [],
+	outputs: string[] = []
 ) {
 	const instance = new component();
 	const options = instance.$options;
@@ -66,7 +66,7 @@ export function makeComponentProvider(
 			// For some reason this is undefined some times...
 			if (this.vueComponent.$el.querySelector) {
 				const slot = this.vueComponent.$el.querySelector(
-					`.ng-slot-${componentCounter}`,
+					`.ng-slot-${componentCounter}`
 				);
 				if (slot) {
 					slot.appendChild(this.ngEl);
@@ -117,7 +117,7 @@ function createVueElement(ngComponent: any, componentDefinition: any) {
 					slotId,
 				};
 				Object.keys(props).forEach(
-					prop => (reactivePropsList[prop] = this[prop]),
+					prop => (reactivePropsList[prop] = this[prop])
 				);
 				return reactivePropsList;
 			},

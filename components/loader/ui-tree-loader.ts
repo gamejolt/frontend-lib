@@ -11,7 +11,7 @@ export class UiTreeLoader extends LoaderBase {
 				lazyload(() => {
 					require('angular-ui-tree');
 				}),
-			'ui-tree',
+			'ui-tree'
 		);
 	}
 }

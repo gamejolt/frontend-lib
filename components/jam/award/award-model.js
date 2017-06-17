@@ -8,7 +8,7 @@ angular.module('gj.Jam.Award').factory('Jam_Award', function(Model, Api) {
 	Jam_Award.$saveSort = function(jamId, sortedIds) {
 		return Api.sendRequest(
 			'/jams/manage/jams/awards/save-sort/' + jamId,
-			sortedIds,
+			sortedIds
 		);
 	};
 
@@ -17,12 +17,12 @@ angular.module('gj.Jam.Award').factory('Jam_Award', function(Model, Api) {
 		if (!this.id) {
 			return this.$_save(
 				'/jams/manage/jams/awards/save/' + this.jam_id,
-				'jamAward',
+				'jamAward'
 			);
 		} else {
 			return this.$_save(
 				'/jams/manage/jams/awards/save/' + this.jam_id + '/' + this.id,
-				'jamAward',
+				'jamAward'
 			);
 		}
 	};

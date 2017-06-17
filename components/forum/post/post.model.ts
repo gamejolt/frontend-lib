@@ -58,7 +58,7 @@ export class ForumPost extends Model {
 		const response = await Api.sendRequest(
 			'/web/forums/posts/get-post-url/' + postId,
 			null,
-			{ detach: true },
+			{ detach: true }
 		);
 
 		if (!response || response.error) {

@@ -5,7 +5,7 @@ export class ModalConfirm {
 	static async show(
 		message: string,
 		title = 'Confirm...',
-		buttonType: 'ok' | 'yes' = 'ok',
+		buttonType: 'ok' | 'yes' = 'ok'
 	) {
 		return await Modal.show<boolean>({
 			size: 'sm',

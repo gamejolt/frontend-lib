@@ -99,7 +99,7 @@ export class AppFadeCollapse extends Vue {
 	setupScrollAnim() {
 		// Start the loop.
 		this.frameRequestHandle = window.requestAnimationFrame(() =>
-			this.animStep(),
+			this.animStep()
 		);
 	}
 
@@ -120,7 +120,7 @@ export class AppFadeCollapse extends Vue {
 
 		// Request another frame to loop again.
 		this.frameRequestHandle = window.requestAnimationFrame(() =>
-			this.animStep(),
+			this.animStep()
 		);
 	}
 

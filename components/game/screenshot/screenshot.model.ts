@@ -40,7 +40,7 @@ export class GameScreenshot extends Model {
 					progress: event => {
 						this._progress = event;
 					},
-				},
+				}
 			);
 
 			if (response.success) {
@@ -54,7 +54,7 @@ export class GameScreenshot extends Model {
 					this.game_id +
 					'/' +
 					this.id,
-				'gameScreenshot',
+				'gameScreenshot'
 			);
 		}
 	}
@@ -64,7 +64,7 @@ export class GameScreenshot extends Model {
 			'/web/dash/developer/games/media/remove/image/' +
 				this.game_id +
 				'/' +
-				this.id,
+				this.id
 		);
 	}
 }

@@ -22,7 +22,7 @@ export class Popover {
 
 			if (GJ_IS_ANGULAR) {
 				getProvider<any>('$rootScope').$on('$stateChangeStart', () =>
-					this.hideStateChange(),
+					this.hideStateChange()
 				);
 			}
 		}

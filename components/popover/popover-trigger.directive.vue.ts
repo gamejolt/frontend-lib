@@ -11,7 +11,7 @@ class VuePopoverTrigger implements PopoverTrigger {
 	constructor(
 		public el: HTMLElement,
 		public popoverId: string,
-		public triggerEvent: string,
+		public triggerEvent: string
 	) {
 		el.addEventListener('click', e => this.click(e));
 		el.addEventListener('mouseenter', () => this.mouseenter());
@@ -98,7 +98,7 @@ export const AppPopoverTrigger: Vue.DirectiveOptions = {
 		const trigger = new VuePopoverTrigger(
 			el,
 			getPopoverId(binding),
-			getTriggerEvent(binding),
+			getTriggerEvent(binding)
 		);
 		trigger.disabled = getDisabled(binding);
 

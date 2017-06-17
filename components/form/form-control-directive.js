@@ -34,7 +34,7 @@ angular
 				if (
 					attrs.formControl &&
 					['radio', 'checkbox', 'file', 'upload', 'crop'].indexOf(
-						attrs.formControl,
+						attrs.formControl
 					) === -1
 				) {
 					addControlClass = true;
@@ -99,7 +99,7 @@ angular
 						if (angular.isUndefined(attrs.ngModel)) {
 							element.attr(
 								'ng-model',
-								gjForm.formModel + "['" + formGroup.name + "']",
+								gjForm.formModel + "['" + formGroup.name + "']"
 							);
 						}
 
@@ -148,7 +148,7 @@ angular
 					},
 					function(isRequired) {
 						scope.isRequired = isRequired;
-					},
+					}
 				);
 			},
 		};

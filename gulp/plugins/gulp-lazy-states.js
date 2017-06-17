@@ -32,7 +32,7 @@ module.exports = function(options) {
 
 			do {
 				var matches = content.match(
-					/\$stateProvider\.state\([ ]?['"]([a-zA-Z0-9\.\-_]+)['"]/,
+					/\$stateProvider\.state\([ ]?['"]([a-zA-Z0-9\.\-_]+)['"]/
 				);
 
 				if (!matches) {
@@ -57,14 +57,14 @@ module.exports = function(options) {
 			if (output.length) {
 				fs.writeFileSync(
 					cwd + '/' + options.outputFile,
-					JSON.stringify(output),
+					JSON.stringify(output)
 				);
 			}
 		} else if (file.isStream()) {
 			// Streams not supported.
 			this.emit(
 				'error',
-				new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported.'),
+				new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported.')
 			);
 			return callback();
 		}

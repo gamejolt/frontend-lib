@@ -43,7 +43,7 @@ angular
 			},
 			compile: function(element) {
 				element.addClass(
-					'editable-accordion-item-container anim-fade-enter-right stagger-enter animfade-leave-enlarge',
+					'editable-accordion-item-container anim-fade-enter-right stagger-enter animfade-leave-enlarge'
 				);
 
 				return function(scope, element, attrs, ctrls) {

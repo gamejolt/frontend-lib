@@ -55,7 +55,7 @@ export class WidgetCompiler {
 	 */
 	static compile(
 		context: WidgetCompilerContext,
-		content: string,
+		content: string
 	): HTMLElement | undefined {
 		if (!content) {
 			return undefined;
@@ -130,7 +130,7 @@ export class WidgetCompiler {
 	 */
 	private static processWidgetMatch(
 		context: WidgetCompilerContext,
-		match: string,
+		match: string
 	) {
 		// Trim whitespace.
 		match = match.replace(REGEX.whitespaceTrim, '');

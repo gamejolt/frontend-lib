@@ -105,7 +105,7 @@ export class AppCommentWidget extends Vue {
 			const payload = await Comment.fetch(
 				this.resource,
 				this.resourceId,
-				this.currentPage,
+				this.currentPage
 			);
 			this.isLoading = false;
 
@@ -121,7 +121,7 @@ export class AppCommentWidget extends Vue {
 			this.childComments = {};
 			if (payload.childComments) {
 				const childComments: Comment[] = Comment.populate(
-					payload.childComments,
+					payload.childComments
 				);
 				const grouped: any = {};
 				for (const child of childComments) {
@@ -137,7 +137,7 @@ export class AppCommentWidget extends Vue {
 			this.subscriptions = {};
 			if (payload.subscriptions) {
 				const subscriptions: Subscription[] = Subscription.populate(
-					payload.subscriptions,
+					payload.subscriptions
 				);
 				const indexed: any = {};
 				for (const subscription of subscriptions) {
@@ -166,9 +166,9 @@ export class AppCommentWidget extends Vue {
 		if (formModel.status === Comment.STATUS_SPAM) {
 			Growls.success(
 				this.$gettext(
-					'Your comment has been marked for review. Please allow some time for it to show on the site.',
+					'Your comment has been marked for review. Please allow some time for it to show on the site.'
 				),
-				this.$gettext('Almost there...'),
+				this.$gettext('Almost there...')
 			);
 
 			if (Analytics) {
@@ -196,7 +196,7 @@ export class AppCommentWidget extends Vue {
 			Analytics.trackEvent(
 				'comment-widget',
 				'change-page',
-				this.currentPage + '',
+				this.currentPage + ''
 			);
 		}
 	}
@@ -220,7 +220,7 @@ export class AppCommentWidget extends Vue {
 			const response = await Api.sendRequest(
 				'/comments/translate',
 				{ lang: Translate.lang, resources: commentIds },
-				{ sanitizeComplexData: false, detach: true },
+				{ sanitizeComplexData: false, detach: true }
 			);
 
 			// This may happen if they changed the page while translating.
@@ -230,7 +230,7 @@ export class AppCommentWidget extends Vue {
 			}
 
 			const translations: Translation[] = Translation.populate(
-				response.translations,
+				response.translations
 			);
 
 			const indexed: any = {};
@@ -304,7 +304,7 @@ export class AppCommentWidget extends Vue {
 			Analytics.trackEvent('comment-widget', 'permalink');
 		} catch (e) {
 			Growls.error(
-				this.$gettext(`Invalid comment passed in. It may have been removed.`),
+				this.$gettext(`Invalid comment passed in. It may have been removed.`)
 			);
 		}
 	}

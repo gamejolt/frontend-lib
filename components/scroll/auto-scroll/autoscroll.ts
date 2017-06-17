@@ -58,7 +58,7 @@ export class AppAutoscroll extends Vue {
 					height: this.Autoscroll.height,
 				},
 			},
-			this.$slots.default,
+			this.$slots.default
 		);
 	}
 

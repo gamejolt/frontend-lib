@@ -76,7 +76,7 @@ export class Connection {
 					this.hasRequestFailure = false;
 					this._refreshIsOnline();
 				}
-			},
+			}
 		);
 	}
 

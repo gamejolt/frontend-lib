@@ -23,7 +23,7 @@ angular.module('gj.Form').directive('inputGroup', function() {
 					} else {
 						element.removeClass('input-group');
 					}
-				},
+				}
 			);
 		},
 	};

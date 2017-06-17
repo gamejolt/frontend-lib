@@ -17,7 +17,7 @@ export class Timezone {
 			this.timezonesFetch = Api.sendRequest(
 				'/jams/manage/jams/get-timezones',
 				null,
-				options,
+				options
 			).then((response: any) => {
 				return response.data;
 			});

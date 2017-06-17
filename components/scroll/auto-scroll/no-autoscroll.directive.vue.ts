@@ -21,7 +21,7 @@ if (!GJ_IS_SSR) {
 				Scroll.shouldAutoScroll = false;
 			}
 		},
-		true,
+		true
 	);
 }
 

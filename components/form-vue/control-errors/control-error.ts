@@ -21,7 +21,7 @@ export class AppFormControlError extends Vue {
 	private setOverride() {
 		const errors = findVueParent(
 			this,
-			AppFormControlErrors,
+			AppFormControlErrors
 		) as AppFormControlErrors;
 		errors.setMessageOverride(this.when, this.message);
 	}

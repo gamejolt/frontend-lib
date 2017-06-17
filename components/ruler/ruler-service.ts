@@ -86,7 +86,7 @@ export class Ruler {
 
 	private static dimensions(
 		baseProp: 'clientWidth' | 'clientHeight' | 'offsetWidth' | 'offsetHeight',
-		_elem: HTMLElement | Document,
+		_elem: HTMLElement | Document
 	): number {
 		let elem: HTMLElement;
 

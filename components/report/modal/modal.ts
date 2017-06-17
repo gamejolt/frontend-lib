@@ -55,9 +55,9 @@ export default class AppReportModal extends BaseModal {
 	onSubmitted() {
 		Growls.info(
 			this.$gettext(
-				`Thanks for helping us make Game Jolt a place for everyone. We will take a look as soon as possible!`,
+				`Thanks for helping us make Game Jolt a place for everyone. We will take a look as soon as possible!`
 			),
-			this.$gettext('Reported'),
+			this.$gettext('Reported')
 		);
 
 		this.modal.resolve();

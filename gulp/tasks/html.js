@@ -47,6 +47,6 @@ module.exports = function(config) {
 
 	gulp.task(
 		'html',
-		gulp.series(checkHooks, 'html:pre', 'html:main', 'html:post'),
+		gulp.series(checkHooks, 'html:pre', 'html:main', 'html:post')
 	);
 };

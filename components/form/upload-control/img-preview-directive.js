@@ -34,7 +34,7 @@ angular
 						canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 					},
 					0,
-					false,
+					false
 				);
 			}
 		},

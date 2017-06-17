@@ -212,7 +212,7 @@ export class Game extends Model {
 
 		return getProvider<any>('$state').href(
 			this.getSref(page),
-			this.getSrefParams(page),
+			this.getSrefParams(page)
 		);
 	}
 
@@ -246,7 +246,7 @@ export class Game extends Model {
 	static checkDeviceSupport(
 		obj: any,
 		os: string,
-		arch: string | undefined,
+		arch: string | undefined
 	): boolean {
 		if (obj['os_' + os]) {
 			return true;
@@ -273,7 +273,7 @@ export class Game extends Model {
 	static pluckInstallableBuilds(
 		packages: GamePackage[],
 		os: string,
-		arch: string | undefined,
+		arch: string | undefined
 	): GameBuild[] {
 		let pluckedBuilds: GameBuild[] = [];
 
@@ -338,7 +338,7 @@ export class Game extends Model {
 
 	static chooseBestBuild(builds: GameBuild[], os: string, arch?: string) {
 		const sortedBuilds = builds.sort(
-			(a, b) => a._release!.sort - b._release!.sort,
+			(a, b) => a._release!.sort - b._release!.sort
 		);
 
 		const build32 = sortedBuilds.find(build => build.isPlatform(os));
@@ -374,7 +374,7 @@ export class Game extends Model {
 
 	async $unfollow() {
 		const response = await this.$_remove(
-			'/web/library/games/remove/followed/' + this.id,
+			'/web/library/games/remove/followed/' + this.id
 		);
 
 		this.is_following = false;
@@ -394,14 +394,14 @@ export class Game extends Model {
 	$saveDescription() {
 		return this.$_save(
 			'/web/dash/developer/games/description/save/' + this.id,
-			'game',
+			'game'
 		);
 	}
 
 	$saveMaturity() {
 		return this.$_save(
 			'/web/dash/developer/games/maturity/save/' + this.id,
-			'game',
+			'game'
 		);
 	}
 
@@ -409,7 +409,7 @@ export class Game extends Model {
 		return this.$_save(
 			'/web/dash/developer/games/thumbnail/save/' + this.id,
 			'game',
-			{ file: this.file, allowComplexData: ['crop'] },
+			{ file: this.file, allowComplexData: ['crop'] }
 		);
 	}
 
@@ -417,35 +417,35 @@ export class Game extends Model {
 		return this.$_save(
 			'/web/dash/developer/games/header/save/' + this.id,
 			'game',
-			{ file: this.file },
+			{ file: this.file }
 		);
 	}
 
 	$clearHeader() {
 		return this.$_save(
 			'/web/dash/developer/games/header/clear/' + this.id,
-			'game',
+			'game'
 		);
 	}
 
 	$saveSettings() {
 		return this.$_save(
 			'/web/dash/developer/games/settings/save/' + this.id,
-			'game',
+			'game'
 		);
 	}
 
 	$setStatus(status: number) {
 		return this.$_save(
 			'/web/dash/developer/games/set-status/' + this.id + '/' + status,
-			'game',
+			'game'
 		);
 	}
 
 	$setDevStage(stage: number) {
 		return this.$_save(
 			'/web/dash/developer/games/set-dev-stage/' + this.id + '/' + stage,
-			'game',
+			'game'
 		);
 	}
 
@@ -455,7 +455,7 @@ export class Game extends Model {
 				this.id +
 				'/' +
 				(isCanceled ? '1' : '0'),
-			'game',
+			'game'
 		);
 	}
 

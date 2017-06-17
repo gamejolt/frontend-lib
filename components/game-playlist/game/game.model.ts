@@ -8,7 +8,7 @@ export class GamePlaylistGame extends Model {
 	$save() {
 		return this.$_save(
 			'/web/library/games/add/playlist/' + this.game_playlist_id,
-			'gamePlaylistGame',
+			'gamePlaylistGame'
 		);
 	}
 
@@ -17,7 +17,7 @@ export class GamePlaylistGame extends Model {
 			'/web/library/games/remove/playlist/' +
 				this.game_id +
 				'/' +
-				this.game_playlist_id,
+				this.game_playlist_id
 		);
 	}
 }

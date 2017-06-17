@@ -39,7 +39,7 @@ export class Order extends Model {
 
 	get shipping_address() {
 		return this.addresses.find(
-			item => item.type === OrderAddress.TYPE_SHIPPING,
+			item => item.type === OrderAddress.TYPE_SHIPPING
 		);
 	}
 

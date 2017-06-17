@@ -16,7 +16,7 @@ export class AppLoading extends Vue {
 	@Prop(Boolean) centered: boolean;
 
 	images = importContext(
-		require.context('../../../components/loading/', false, /\.gif$/),
+		require.context('../../../components/loading/', false, /\.gif$/)
 	);
 
 	get img() {

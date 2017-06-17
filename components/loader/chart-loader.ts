@@ -12,7 +12,7 @@ export class ChartLoader extends LoaderBase {
 					(window as any).Chart = require('chart.js');
 					require('tc-angular-chartjs');
 				}),
-			'chart',
+			'chart'
 		);
 	}
 }

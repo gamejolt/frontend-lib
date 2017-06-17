@@ -9,7 +9,7 @@ declare module 'vue/types/vue' {
 			context: string,
 			msgid: string,
 			plural: string,
-			n: number,
+			n: number
 		) => string;
 		$gettextInterpolate: (msgid: string, context: any) => string;
 	}

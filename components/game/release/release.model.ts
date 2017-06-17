@@ -33,7 +33,7 @@ export class GameRelease extends Model {
 					this.game_id +
 					'/' +
 					this.game_package_id,
-				'gameRelease',
+				'gameRelease'
 			);
 		} else {
 			return this.$_save(
@@ -43,7 +43,7 @@ export class GameRelease extends Model {
 					this.game_package_id +
 					'/' +
 					this.id,
-				'gameRelease',
+				'gameRelease'
 			);
 		}
 	}
@@ -56,7 +56,7 @@ export class GameRelease extends Model {
 				this.game_package_id +
 				'/' +
 				this.id,
-			'gameRelease',
+			'gameRelease'
 		);
 
 		if (game && response.game) {
@@ -74,7 +74,7 @@ export class GameRelease extends Model {
 				this.game_package_id +
 				'/' +
 				this.id,
-			'gameRelease',
+			'gameRelease'
 		);
 
 		if (game && response.game) {
@@ -91,7 +91,7 @@ export class GameRelease extends Model {
 				'/' +
 				this.game_package_id +
 				'/' +
-				this.id,
+				this.id
 		);
 
 		if (game && response.game) {

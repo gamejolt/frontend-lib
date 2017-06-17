@@ -7,7 +7,7 @@ function setupEvents() {
 		Analytics.trackSocial(
 			Analytics.SOCIAL_NETWORK_TWITTER,
 			Analytics.SOCIAL_ACTION_TWEET,
-			url,
+			url
 		);
 	});
 
@@ -16,7 +16,7 @@ function setupEvents() {
 		Analytics.trackSocial(
 			Analytics.SOCIAL_NETWORK_TWITTER,
 			Analytics.SOCIAL_ACTION_FOLLOW,
-			url,
+			url
 		);
 	});
 }

@@ -14,7 +14,7 @@ angular
 				{
 					detach: true,
 					allowComplexData: ['votes'],
-				},
+				}
 			);
 		};
 
@@ -22,7 +22,7 @@ angular
 			return Api.sendRequest(
 				'/jams-io/voting/clear-vote/' + jamId + '/' + game.id,
 				{},
-				{ detach: true },
+				{ detach: true }
 			);
 		};
 
