@@ -23,6 +23,9 @@ $zindex-comment-video-lightbox ?= 500
 		@media $media-sm-up
 			top: 100px
 
+		>>> .video-embed iframe
+			margin: 0 auto
+
 	&-interaction
 		clearfix()
 		padding: 20px
@@ -80,6 +83,7 @@ $zindex-comment-video-lightbox ?= 500
 			float: left
 			width: 75px
 			border: 1px solid $white
+			border-radius: $border-radius-base
 
 			@media $media-sm-up
 				border-width: 2px
@@ -103,6 +107,7 @@ $zindex-comment-video-lightbox ?= 500
 		margin-right: 10px
 		background-color: $gray-darkest
 		border: 1px solid $white
+		border-radius: $border-radius-base
 
 		@media $media-sm-up
 			width: 50px

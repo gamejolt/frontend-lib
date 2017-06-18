@@ -2,7 +2,6 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import * as View from '!view!./lightbox.html?style=./lightbox.styl';
-import './lightbox-content.styl';
 
 import { Screen } from '../../../screen/screen-service';
 import { HistoryTick } from '../../../history-tick/history-tick-service';
