@@ -62,8 +62,10 @@
 	background-clip: padding-box
 	outline: none // Remove focus outline from opened modal
 	background-color: $modal-content-bg
-	border-radius: $border-radius-base
 	box-shadow: 0 5px 15px rgba( $black, 0.5 )
+
+	@media $media-sm-up
+		border-radius: $border-radius-base
 
 @media $media-sm-up
 
