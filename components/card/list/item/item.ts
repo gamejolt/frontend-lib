@@ -3,10 +3,11 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./item.html?style=./item.styl';
 
 import { AppCardList } from '../list';
-import { findVueParent } from '../../../../utils/vue';
+import { findVueParent, makeObservableService } from '../../../../utils/vue';
 import { AppExpand } from '../../../expand/expand';
 import { AppCard } from '../../card';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import { Screen } from '../../../screen/screen-service';
 
 @View
 @Component({
@@ -18,8 +19,12 @@ import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 })
 export class AppCardListItem extends Vue {
 	@Prop() item: any;
+	@Prop({ type: Boolean, default: false })
+	isInactive: boolean;
 
 	list: AppCardList = null as any;
+
+	Screen = makeObservableService(Screen);
 
 	get isActive() {
 		return this.list.activeItem === this.item;

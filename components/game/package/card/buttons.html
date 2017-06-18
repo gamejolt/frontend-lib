@@ -31,7 +31,8 @@
 		v-if="card.extraBuilds.length"
 		:class="{
 			'btn-success-outline': card.otherOnly,
-			'btn-outline btn-circle btn-sparse': !card.otherOnly,
+			'btn-outline': !card.otherOnly && Screen.isXs,
+			'btn-outline btn-circle btn-sparse': !card.otherOnly && !Screen.isXs,
 		}"
 		v-app-popover-trigger="`game-package-card-more-options-${ package.id }`"
 		v-app-track-event="`game-package-card:more-options`"

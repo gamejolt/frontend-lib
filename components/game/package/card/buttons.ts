@@ -11,6 +11,8 @@ import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vue';
 import { filesize } from '../../../../vue/filters/filesize';
 import { AppGamePackageCardMoreOptions } from './more-options';
+import { makeObservableService } from '../../../../utils/vue';
+import { Screen } from '../../../screen/screen-service';
 
 @View
 @Component({
@@ -30,6 +32,8 @@ import { AppGamePackageCardMoreOptions } from './more-options';
 export class AppGamePackageCardButtons extends Vue {
 	@Prop(GamePackage) package: GamePackage;
 	@Prop(GamePackageCardModel) card: GamePackageCardModel;
+
+	Screen = makeObservableService(Screen);
 
 	click(build: GameBuild, fromExtraSection = false) {
 		this.$emit('click', { build, fromExtraSection });

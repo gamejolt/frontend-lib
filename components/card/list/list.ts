@@ -8,6 +8,7 @@ export class AppCardList extends Vue {
 	@Prop(Array) items: any[];
 	@Prop({ default: null })
 	activeItem: any | null;
+	@Prop(Boolean) isAdding?: boolean;
 
 	isDraggable = false;
 

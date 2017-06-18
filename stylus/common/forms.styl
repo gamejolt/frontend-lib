@@ -33,12 +33,10 @@ legend
 // Form controls have no spacing around them.
 // The elements that wrap around get the spacing.
 .form-control
+	box-shadow: none
 
 	&:focus
 		box-shadow: none
-
-	&.ng-dirty.ng-invalid
-		border-color: $gj-pink
 
 	// We overwrite bootstrap's placeholder styling so we can do italics.
 	// Firefox
@@ -132,22 +130,3 @@ legend + .help-block
 			display: block
 			caret( color: $gj-pink, direction: 'down', size: 5px )
 			left: 10px
-
-form button
-
-	.jolticon-check
-		margin-right: 0
-		overflow: hidden
-		width: 20px
-		text-align: right
-
-		&.ng-hide-add
-		&.ng-hide-remove
-			transition: opacity 300ms, width 300ms
-			display: inline-block !important
-			opacity: 1
-			width: 20px
-
-		&.ng-hide
-			opacity: 0
-			width: 0

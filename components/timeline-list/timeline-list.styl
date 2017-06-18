@@ -73,15 +73,16 @@
 			display: block
 			background-color: $black
 			margin-bottom: $line-height-computed
-			border-top-right-radius: $border-radius-base
-			border-bottom-right-radius: $border-radius-base
 
 			@media $media-xs
 				margin-left: -($grid-gutter-width-xs / 2)
 				margin-right: @margin-left
+				border-radius: 0
 
 			@media $media-sm-up
 				margin-left: -(($timeline-list-icon-size / 2) + $timeline-list-avatar-margin)
+				border-top-right-radius: $border-radius-base
+				border-bottom-right-radius: $border-radius-base
 
 			&-content
 				clearfix()

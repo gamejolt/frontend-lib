@@ -5,14 +5,14 @@
 	<button
 		class="btn btn-success-outline btn-block"
 		:class="{ 'btn-success active': isActive }"
-		@click="isActive = !isActive"
+		@click="toggle"
 		>
 		{{ label }}
 	</button>
 
-	<div class="card-list-item-body">
+	<div class="card-list-item-body full-bleed-xs">
 		<app-expand :when="isActive">
-			<div class="well fill-lightest">
+			<div class="well fill-lightest" :class="{ 'well-row': Screen.isXs }">
 				<slot />
 			</div>
 		</app-expand>

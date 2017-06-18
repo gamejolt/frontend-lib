@@ -6,6 +6,7 @@
 		:is-expandable="isExpandable"
 		:is-expanded="isActive"
 		:is-draggable="isDraggable"
+		:is-inactive="isInactive"
 		@click.native="onClick"
 		>
 		<div class="card-drag-handle" v-if="isDraggable">
@@ -14,9 +15,9 @@
 		<slot />
 	</app-card>
 
-	<div class="card-list-item-body">
+	<div class="card-list-item-body full-bleed-xs">
 		<app-expand :when="isActive">
-			<div class="well fill-lightest">
+			<div class="well fill-lightest" :class="{ 'well-row': Screen.isXs }">
 				<slot name="body" />
 			</div>
 		</app-expand>
