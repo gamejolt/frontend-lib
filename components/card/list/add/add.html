@@ -1,0 +1,20 @@
+<div
+	class="card-list-item card-list-add"
+	:class="{ active: isActive }"
+	>
+	<button
+		class="btn btn-success-outline btn-block"
+		:class="{ 'btn-success active': isActive }"
+		@click="isActive = !isActive"
+		>
+		{{ label }}
+	</button>
+
+	<div class="card-list-item-body">
+		<app-expand :when="isActive">
+			<div class="well fill-lightest">
+				<slot />
+			</div>
+		</app-expand>
+	</div>
+</div>

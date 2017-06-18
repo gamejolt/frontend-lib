@@ -10,6 +10,9 @@
 	&-inner
 		display: block
 
+		img
+			border-radius: $border-radius-base
+
 	.play-button-overlay
 		display: none
 
@@ -22,8 +25,16 @@
 		display: block
 		position: absolute
 		bottom: 5px
-		border: 2px solid $white
+		border: 2px solid $gray-light
+		border-radius: $border-radius-base
+		padding: 2px
 		background-color: $gray-darkest
+
+		>>> img
+			border-radius: ($border-radius-base / 2)
+
+		&:hover
+			border-color: $white
 
 	&-game
 		left: 5px

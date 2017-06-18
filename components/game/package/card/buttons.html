@@ -31,7 +31,7 @@
 		v-if="card.extraBuilds.length"
 		:class="{
 			'btn-success-outline': card.otherOnly,
-			'btn-outline': !card.otherOnly,
+			'btn-outline btn-circle btn-sparse': !card.otherOnly,
 		}"
 		v-app-popover-trigger="`game-package-card-more-options-${ package.id }`"
 		v-app-track-event="`game-package-card:more-options`"
@@ -42,7 +42,7 @@
 			<translate>Download</translate>
 			<app-jolticon class="jolticon-addon" icon="other-os" />
 		</span>
-		<translate v-if="!card.otherOnly">more</translate>
+		<!--<translate v-if="!card.otherOnly">more</translate>-->
 	</button>
 
 	<app-popover :popover-id="`game-package-card-more-options-${ package.id }`">
