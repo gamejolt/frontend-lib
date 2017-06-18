@@ -36,13 +36,19 @@ export class AppFadeCollapse extends Vue {
 		// Let it compile DOM.
 		await this.$nextTick();
 
+		// Take threshold into account only if our collapse height is big enough
+		// for threshold to matter.
+		const threshold = this.collapseHeight > Threshold * 2 ? Threshold : 0;
+
 		let isRequired = false;
 		if (
 			this.collapseHeight &&
-			this.$el.scrollHeight - Threshold > this.collapseHeight
+			this.$el.scrollHeight - threshold > this.collapseHeight
 		) {
 			isRequired = true;
 		}
+
+		console.log('required?', isRequired, this.$el, this.$el.scrollHeight);
 
 		if (isRequired) {
 			this.$emit('required');
