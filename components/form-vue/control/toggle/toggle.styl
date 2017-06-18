@@ -1,61 +1,44 @@
 @require '~styles/variables'
 
-$toggle-width = 100px
+$toggle-padding = 3px
+$toggle-width = $input-height-base * 2 // + $toggle-padding * 2
 
 .toggle
 	display: block
 	overflow: hidden
 	width: $toggle-width
 	height: $input-height-base
-	line-height: $line-height-base
-	border: 1px solid $input-border
+	line-height: $input-height-base
+	border-radius: $input-height-base
 	vertical-align: top
-	transition: border-color ease-in-out 300ms
+	background-color: $gray-light
+	transition: all ease-in-out 300ms
 	text-align: left
 	cursor: pointer
 	user-select: none
 	outline: none
-	white-space: nowrap
 
-	&-inner
-		display: inline-block
-		width: 150%
-		height: 100%
-		transform: translate3d( -(100% / 3), 0, 0 )
+	&-checked
+		background-color: $gj-dark-green
+
+	&-knob
+		display: block
+		margin: $toggle-padding
+		background-color: $white
+		width: ($input-height-base - $toggle-padding * 2)
+		height: @width
+		border-radius: @width
 		transition: transform $strong-ease-out 300ms
 
 		.toggle-checked &
-			transform: translate3d( 0, 0, 0 )
+			transform: translateX( $input-height-base )
 
-	&-on
-	&-off
-	&-knob
-		display: inline-block
-		float: left
-		width: (100% / 3)
-		height: 100%
-		line-height: $input-height-base - 2px
-		font-size: $font-size-small
-		text-align: center
-		vertical-align: top
-
-	&-on
-		color: $gj-green
-		background-color: $gj-dark-green
-
-	&-off
-		color: $gray-light
-		background-color: $gray-lighter
-
-	&-knob
-		background-color: $gray-lightest
-
+	// This does a sort of outline style.
 	&:focus
-		border-color: $input-border-focus
+		box-shadow: 0px 0px 0px 2px $white, 0px 0px 0px 4px rgba( $input-border-focus, 0.5 );
 
 	&[disabled]
 		opacity: 0.5
-		border-color: $input-border
 		cursor: not-allowed !important
 
 	.form-horizontal &
