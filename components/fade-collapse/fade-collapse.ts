@@ -48,8 +48,6 @@ export class AppFadeCollapse extends Vue {
 			isRequired = true;
 		}
 
-		console.log('required?', isRequired, this.$el, this.$el.scrollHeight);
-
 		if (isRequired) {
 			this.$emit('required');
 			triggerEvent(this.$el, 'required');

@@ -275,9 +275,9 @@ export class Analytics {
 	}
 
 	static attachAdditionalPageTracker(scope: any, trackingId: string) {
-		if (!GJ_IS_ANGULAR) {
-			throw new Error(`Can't attach addtional page trackers in vue yet.`);
-		}
+		// if (!GJ_IS_ANGULAR) {
+		// 	throw new Error(`Can't attach addtional page trackers in vue yet.`);
+		// }
 
 		if (Environment.buildType === 'development') {
 			console.log(`Attached additional tracker: ${trackingId}`);

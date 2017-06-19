@@ -1,5 +1,4 @@
 import { AppPopover } from './popover';
-import { getProvider } from '../../utils/utils';
 
 export class Popover {
 	static popovers: { [k: string]: AppPopover } = {};
@@ -18,12 +17,6 @@ export class Popover {
 					this.hideStateChange();
 					next();
 				});
-			}
-
-			if (GJ_IS_ANGULAR) {
-				getProvider<any>('$rootScope').$on('$stateChangeStart', () =>
-					this.hideStateChange()
-				);
 			}
 		}
 	}

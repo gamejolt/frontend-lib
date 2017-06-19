@@ -105,12 +105,12 @@ export class Payload {
 			this.checkAnalyticsExperiments(response, options);
 
 			// TODO: Still needed?
-			if (GJ_IS_ANGULAR) {
-				getProvider<any>('$rootScope').$emit(
-					'Payload.responseSuccess',
-					response
-				);
-			}
+			// if (GJ_IS_ANGULAR) {
+			// 	getProvider<any>('$rootScope').$emit(
+			// 		'Payload.responseSuccess',
+			// 		response
+			// 	);
+			// }
 
 			return data.payload;
 		} catch (error) {
@@ -181,11 +181,11 @@ export class Payload {
 
 		// Redirecting within the app.
 		// TODO: Get this working for Vue.
-		if (GJ_IS_ANGULAR) {
-			getProvider<any>('$location').url(response.data.redirect);
-		} else {
-			throw new Error(`Response redirect isn't supported for Vue yet.`);
-		}
+		// if (GJ_IS_ANGULAR) {
+		// 	getProvider<any>('$location').url(response.data.redirect);
+		// } else {
+		// 	throw new Error(`Response redirect isn't supported for Vue yet.`);
+		// }
 
 		return true;
 	}

@@ -69,13 +69,6 @@ export class AppScrollAffix extends Vue {
 
 		// // In case the click changed the page position, or changed element positions.
 		document.addEventListener('click', this.clickHandler);
-
-		if (GJ_IS_ANGULAR) {
-			const $rootScope = getProvider<any>('$rootScope');
-			this.ngStateChange = $rootScope.$on('$stateChangeSuccess', () =>
-				this.checkLoop()
-			);
-		}
 	}
 
 	destroyed() {

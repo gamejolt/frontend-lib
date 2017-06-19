@@ -149,13 +149,6 @@ module.exports = function(config) {
 								},
 							},
 							{
-								loader: 'ng-annotate-loader',
-								options: {
-									add: true,
-									map: { inline: true },
-								},
-							},
-							{
 								loader: 'ts-loader',
 								options: {
 									transpileOnly: true,
@@ -174,26 +167,9 @@ module.exports = function(config) {
 									replace: 'import(',
 								},
 							},
-							{
-								loader: 'ng-annotate-loader',
-								options: {
-									add: true,
-									map: { inline: true },
-								},
-							},
 						],
 						exclude: /node_modules/,
 					},
-					// For vue we use the "view" alias.
-					{
-						test: /\.html$/,
-						use: [
-							'file-loader?name=templates/[name].[hash:6].[ext]',
-							'extract-loader',
-							'html-loader',
-						],
-					},
-					// Gotta split it out for vue, but it would be fine with angular as well.
 					{
 						enforce: 'pre',
 						test: /\.styl$/,
@@ -240,8 +216,6 @@ module.exports = function(config) {
 					GJ_BUILD_TYPE: JSON.stringify(
 						config.production ? 'production' : 'development'
 					),
-					GJ_IS_ANGULAR: JSON.stringify(config.framework === 'angular'),
-					GJ_IS_VUE: JSON.stringify(config.framework === 'vue'),
 					GJ_IS_CLIENT: JSON.stringify(config.client),
 					GJ_IS_SSR: JSON.stringify(config.server),
 					GJ_VERSION: JSON.stringify(
@@ -261,10 +235,6 @@ module.exports = function(config) {
 						output: {},
 						htmlLoader: {
 							minimize: config.production,
-
-							// Fix angular templates.
-							removeAttributeQuotes: false,
-							ignoreCustomFragments: [/\{\{.*?}}/],
 						},
 						stylus: {
 							use: [],

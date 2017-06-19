@@ -112,12 +112,13 @@ export class AppMediaBarLightbox extends Vue {
 			hash = 'close';
 		}
 
+		// TODO
 		// Replace the URL. This way people can link to it by pulling from the browser bar,
 		// but we don't want it to mess up their history navigation after closing.
-		if (GJ_IS_ANGULAR) {
-			const $location = getProvider<any>('$location');
-			$location.hash(hash).replace();
-		}
+		// if (GJ_IS_ANGULAR) {
+		// 	const $location = getProvider<any>('$location');
+		// 	$location.hash(hash).replace();
+		// }
 	}
 
 	refreshSliderPosition() {

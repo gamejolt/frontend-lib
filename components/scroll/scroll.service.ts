@@ -184,20 +184,6 @@ export class Scroll {
 	}
 
 	/**
-	 * Sets up a "spy" on the scroll event of the current scroll context. Will
-	 * remember to remove the handler when the scope is destroyed. Also resets
-	 * the handler when the context changes.
-	 */
-	static setScrollSpy(scope: any, onScroll: Function) {
-		if (!GJ_IS_ANGULAR) {
-			throw new Error(`You can only set a scroll spy in angular.`);
-		}
-
-		const scrollChange$ = this.scrollChanges.subscribe(() => onScroll());
-		scope.$on('$destroy', () => scrollChange$.unsubscribe());
-	}
-
-	/**
 	 * Scrolls to the element passed in.
 	 */
 	static async to(

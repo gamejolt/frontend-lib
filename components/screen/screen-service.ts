@@ -87,17 +87,6 @@ export class Screen {
 	static resizeChanges = new Subject<void>();
 
 	/**
-	 * Sets the Screen's context.
-	 */
-	static setContext(element: ng.IRootElementService) {
-		if (!element) {
-			this.context = null;
-		} else {
-			this.context = element[0];
-		}
-	}
-
-	/**
 	 * Sets up a "spy" on the resize event.
 	 * Will remember to remove the handler when the scope is destroyed.
 	 */
@@ -115,11 +104,6 @@ export class Screen {
 	}
 
 	static async _onResize() {
-		// This will force angular to digest if needed.
-		if (GJ_IS_ANGULAR) {
-			await Promise.resolve();
-		}
-
 		// Get everything for the window first.
 		if (
 			window.matchMedia('only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)')
