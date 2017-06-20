@@ -56,7 +56,7 @@ export class GameTrophy extends Model {
 		};
 	}
 
-	static $saveSort(gameId: number, difficulty: string, sort: any) {
+	static $saveSort(gameId: number, difficulty: number, sort: any) {
 		return Api.sendRequest(
 			`/web/dash/developer/games/api/trophies/save-sort/${gameId}/${difficulty}`,
 			sort
