@@ -357,9 +357,6 @@ module.exports = function(config) {
 				},
 				quiet: true,
 				hot: !config.server,
-				watchOptions: {
-					aggregateTimeout: 300,
-				},
 			});
 
 			if (!config.server) {
