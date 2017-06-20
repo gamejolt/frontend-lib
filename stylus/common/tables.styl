@@ -1,7 +1,13 @@
-.table
-	tr[ng-click]:hover td
-		background-color: $gray-lightest
-		cursor: pointer
+.table-controls
+	@media $media-lg
+		visibility: hidden
+		tr:hover &
+			visibility: visible
+
+// Primary link is how you click on things in a table.
+.table-primary-link
+	tr:hover &
+		text-decoration: underline
 
 // Draggable table handles.
 td
