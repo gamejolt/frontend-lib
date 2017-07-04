@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./affix.html?style=./affix.styl';
 
-import { getProvider } from '../../../utils/utils';
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
@@ -17,8 +16,6 @@ export class AppScrollAffix extends Vue {
 	@Prop({ type: Boolean, default: true })
 	shouldAffix: boolean;
 	@Prop(Number) scrollOffset?: number;
-
-	@Prop(Number) slotId: number;
 
 	isAffixed = false;
 	placeholderHeight = 0;

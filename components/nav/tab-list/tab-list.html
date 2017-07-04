@@ -3,7 +3,6 @@
 	<nav class="tab-list" :class="{ 'tab-list-centered': center }">
 		<div class="tab-list-content">
 			<div class="clearfix">
-				<div v-if="slotId" :class="`ng-slot-${slotId}`"></div>
 				<slot />
 
 				<div class="tab-list-addons">

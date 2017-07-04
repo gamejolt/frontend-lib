@@ -9,7 +9,6 @@ import { Analytics } from '../../analytics/analytics.service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppMediaBarLightboxSlider } from './slider';
 import { AppMediaBarLightboxItem } from './item/item';
-import { getProvider } from '../../../utils/utils';
 import { bootstrapShortkey } from '../../../vue/shortkey';
 
 if (!GJ_IS_SSR) {

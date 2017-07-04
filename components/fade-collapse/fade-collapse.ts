@@ -20,7 +20,6 @@ const Threshold = 50;
 export class AppFadeCollapse extends Vue {
 	@Prop(Number) collapseHeight: number;
 	@Prop(Boolean) isOpen?: boolean;
-	@Prop(Number) slotId: number;
 
 	private isPrimed = false;
 	private isCollapsed = false;

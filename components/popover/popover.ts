@@ -34,8 +34,6 @@ export class AppPopover extends Vue {
 	@Prop(Boolean) hideOnStateChange: boolean;
 	@Prop(Boolean) noMaxHeight: boolean;
 
-	@Prop(Number) slotId: number;
-
 	isVisible = false;
 	isAppendedToBody = false;
 	arrowLeft?: string = undefined;
@@ -247,7 +245,7 @@ export class AppPopover extends Vue {
 		if (this.position === 'top' || this.position === 'bottom') {
 			const extraSpacing = elementStyles.left
 				? (popoverWidth - Ruler.width(this.$el)) / 2 +
-						parseFloat(elementStyles.left)
+					parseFloat(elementStyles.left)
 				: 0;
 			this.arrowLeft =
 				triggerLeft +
@@ -257,7 +255,7 @@ export class AppPopover extends Vue {
 		} else if (this.position === 'left' || this.position === 'right') {
 			const extraSpacing = elementStyles.top
 				? (popoverHeight - Ruler.height(this.$el)) / 2 +
-						parseFloat(elementStyles.top)
+					parseFloat(elementStyles.top)
 				: 0;
 			this.arrowTop =
 				triggerTop +

@@ -11,6 +11,5 @@
 		<span class="jolticon" :class="'jolticon-chevron-' + (isExpanded ? 'down' : 'right')"></span>
 	</div>
 
-	<div v-if="slotId" :class="`ng-slot-${slotId}`"></div>
 	<slot></slot>
 </div>

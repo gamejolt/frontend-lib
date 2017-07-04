@@ -9,7 +9,6 @@ import { makeObservableService } from '../../../utils/vue';
 @Component({})
 export class AppNavTabList extends Vue {
 	@Prop(Boolean) center?: boolean;
-	@Prop(Number) slotId: number;
 
 	Screen = makeObservableService(Screen);
 }

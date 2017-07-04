@@ -17,6 +17,4 @@ export class AppCard extends Vue {
 	isInactive: boolean;
 	@Prop({ type: Boolean, default: false })
 	isDisabled: boolean;
-
-	@Prop(Number) slotId: number;
 }

@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { getProvider } from '../../utils/utils';
 import { arrayIndexBy } from '../../utils/array';
 
 const LangStorageKey = 'lang';

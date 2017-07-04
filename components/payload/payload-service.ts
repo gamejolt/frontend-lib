@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
-import { getProvider } from '../../utils/utils';
 import { RequestOptions } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
 import { Analytics } from '../analytics/analytics.service';
