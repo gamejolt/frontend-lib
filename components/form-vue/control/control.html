@@ -1,9 +1,7 @@
 <input
 	:id="id"
 	:name="group.name"
-	:class="{
-		'form-control': addControlClass,
-	}"
+	class="form-control"
 	:type="type"
 	:value="value"
 	@input="onChange( $event.target.value )"

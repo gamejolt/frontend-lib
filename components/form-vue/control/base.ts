@@ -14,17 +14,17 @@ export class BaseFormControl extends Vue {
 	value: any;
 
 	/**
-	 * Whether or not we should add an ID to this control. We don't add to
-	 * inputs that will be repeated for the same model.
+	 * Whether or not the form control has multiple controls for the group. This
+	 * is for radio and checkboxes mostly.
 	 */
-	addId = true;
+	multi = false;
 
 	form: AppForm;
 	group: AppFormGroup;
 
 	get id() {
 		const id = this.form.name + '-' + this.group.name;
-		return this.addId ? id : undefined;
+		return !this.multi ? id : undefined;
 	}
 
 	protected get baseRules() {
@@ -46,14 +46,16 @@ export class BaseFormControl extends Vue {
 		this.group.inputErrors = this.$validator.errorBag;
 		this.group.control = this;
 
-		// Copy over the initial form model value.
-		this.value = this.form.base.formModel[this.group.name];
+		if (!this.multi) {
+			// Copy over the initial form model value.
+			this.value = this.form.base.formModel[this.group.name];
 
-		// Watch the form model for changes and sync to our control.
-		this.$watch(
-			() => this.form.base.formModel[this.group.name],
-			newVal => (this.value = newVal)
-		);
+			// Watch the form model for changes and sync to our control.
+			this.$watch(
+				() => this.form.base.formModel[this.group.name],
+				newVal => (this.value = newVal)
+			);
+		}
 	}
 
 	destroyed() {
@@ -66,8 +68,11 @@ export class BaseFormControl extends Vue {
 	applyValue(value: any) {
 		// When the DOM value changes we bind it back to our own value and set
 		// it on the form model as well.
-		this.value = value;
-		Vue.set(this.form.base.formModel, this.group.name, value);
+		if (!this.multi) {
+			this.value = value;
+		}
+
+		this.form.base.setField(this.group.name, value);
 
 		this.$emit('changed', value);
 		this.form.onChange();

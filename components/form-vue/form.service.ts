@@ -9,6 +9,8 @@ import { AppFormControlError } from './control-errors/control-error';
 import { AppFormButton } from './button/button';
 import { AppFormControlSelect } from './control/select/select';
 import { AppFormControlTextarea } from './control/textarea/textarea';
+import { AppFormControlRadio } from './control/radio/radio';
+import { AppFormControlCheckbox } from './control/checkbox/checkbox';
 
 export interface FormOnInit {
 	onInit(): void;
@@ -28,6 +30,8 @@ export interface FormOnSubmitSuccess {
 		AppFormControl,
 		AppFormControlSelect,
 		AppFormControlTextarea,
+		AppFormControlRadio,
+		AppFormControlCheckbox,
 		AppFormGroup,
 		AppFormControlErrors,
 		AppFormControlError,
@@ -85,6 +89,15 @@ export class BaseForm<T> extends Vue {
 		if ((this as any).onInit) {
 			(this as any).onInit();
 		}
+	}
+
+	/**
+	 * When setting form model field values we need to make sure Vue knows that
+	 * the field has changed. This ensures that we always let Vue know any time
+	 * we change a field.
+	 */
+	setField<K extends keyof T>(key: K, value: T[K]) {
+		Vue.set(this.formModel, key, value);
 	}
 
 	setState(key: string, value: any) {

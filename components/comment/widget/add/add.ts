@@ -21,12 +21,12 @@ export class AppCommentWidgetAdd extends BaseForm<Comment>
 	resetOnSubmit = true;
 
 	onInit() {
-		this.formModel.comment = '';
-		this.formModel.resource = this.resource;
-		this.formModel.resource_id = this.resourceId;
+		this.setField('comment', '');
+		this.setField('resource', this.resource);
+		this.setField('resource_id', this.resourceId);
 
 		if (this.parentId) {
-			this.formModel.parent_id = this.parentId;
+			this.setField('parent_id', this.parentId);
 		}
 	}
 }

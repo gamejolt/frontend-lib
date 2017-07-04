@@ -11,17 +11,17 @@ import { AppExpand } from '../../expand/expand';
 // These are default messages that don't need any extra validation data.
 // They are also common enough to be applied to all elements.
 const ErrorMessagesBase: { [k: string]: string } = {
-	required: 'You must enter a {}.',
-	server: "The {} you've entered is invalid.",
-	pattern: 'Please enter a valid {}.',
-	url: 'Please enter a valid URL.',
-	accept: 'The chosen {} is the wrong type of file.',
-	email: 'Please enter a valid email address.',
-	number: 'Please enter a valid number.',
-	currency: 'Please enter a valid amount.',
-	min_value: 'The {} entered is too low.',
-	max_value: 'The {} entered is too high.',
-	availability: 'This {} is already in use.',
+	required: `You must enter a {}.`,
+	server: `The {} you've entered is invalid.`,
+	pattern: `Please enter a valid {}.`,
+	url: `Please enter a valid URL.`,
+	accept: `The chosen {} is the wrong type of file.`,
+	email: `Please enter a valid email address.`,
+	number: `Please enter a valid number.`,
+	currency: `Please enter a valid amount.`,
+	min_value: `The {} entered is too low.`,
+	max_value: `The {} entered is too high.`,
+	availability: `This {} is already in use.`,
 };
 
 @View
