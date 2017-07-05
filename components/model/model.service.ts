@@ -84,14 +84,14 @@ export class Model {
 	async $_save(
 		url: string,
 		field: string,
-		options: RequestOptions = {}
+		options: RequestOptions & { data?: any } = {}
 	): Promise<any> {
 		// Keep track of progress within the model.
 		if (!options.progress) {
 			options.progress = event => (this._progress = event);
 		}
 
-		const response = await Api.sendRequest(url, this, options);
+		const response = await Api.sendRequest(url, options.data || this, options);
 		return this.processUpdate(response, field);
 	}
 
