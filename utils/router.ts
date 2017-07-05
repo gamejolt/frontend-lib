@@ -22,10 +22,10 @@ export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
 				(window as any).__INITIAL_STATE__.components;
 
 			/**
-		 * This will call the function to get the payload.
-		 * It will return a promise that will resolve with the data.
-		 * If we are caching, then we will try to return the cache data.
-		 */
+			 * This will call the function to get the payload.
+			 * It will return a promise that will resolve with the data.
+			 * If we are caching, then we will try to return the cache data.
+			 */
 			async function getPayload(route: VueRouter.Route, useCache = false) {
 				if (useCache) {
 					const cache = HistoryCache.get(route, options.cacheTag);

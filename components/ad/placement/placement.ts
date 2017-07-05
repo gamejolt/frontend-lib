@@ -7,9 +7,14 @@ import { Screen } from '../../screen/screen-service';
 import { makeObservableService } from '../../../utils/vue';
 import { isPrerender } from '../../environment/environment.service';
 import { Game } from '../../game/game.model';
+import { AppAd } from '../ad';
 
 @View
-@Component({})
+@Component({
+	components: {
+		AppAd,
+	},
+})
 export class AppAdPlacement extends Vue {
 	@Prop(Object) resource?: Model;
 
