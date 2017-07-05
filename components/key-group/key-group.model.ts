@@ -25,8 +25,15 @@ export class KeyGroup extends Model {
 	}
 
 	$save() {
+		const data: any = Object.assign({}, this);
+		data.packages = {};
+		for (const pkg of this.packages) {
+			data.packages[pkg.id] = true;
+		}
+
 		const options = {
 			allowComplexData: ['packages'],
+			data,
 		};
 
 		if (this.id) {
