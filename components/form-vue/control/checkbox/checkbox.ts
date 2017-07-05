@@ -6,7 +6,7 @@ import { BaseFormControl } from '../base';
 @View
 @Component({})
 export class AppFormControlCheckbox extends BaseFormControl {
-	@Prop(String) value: string;
+	@Prop() value: any;
 
 	multi = true;
 
