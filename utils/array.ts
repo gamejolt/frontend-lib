@@ -42,3 +42,10 @@ export function arrayIndexByFunc<T>(
 	values.forEach(item => (indexed[fn(item) + ''] = item));
 	return indexed;
 }
+
+export function arrayRemove<T>(arr: T[], predicate: (v: T) => boolean) {
+	const idx = arr.findIndex(predicate);
+	if (idx !== -1) {
+		return arr.splice(idx, 1);
+	}
+}
