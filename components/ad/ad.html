@@ -1,10 +1,11 @@
-<div
-	class="ad"
+<div class="ad"
+	v-if="slot"
 	:class="{
 		'ad-leaderboard': size === 'leaderboard',
 		'ad-rectangle': size === 'rectangle',
-		'ad-skyscraper': size === 'skyscraper',
 	}"
 	>
-	<div class="ad-inner"></div>
+	<div class="ad-inner">
+		<div :id="slot.id"></div>
+	</div>
 </div>

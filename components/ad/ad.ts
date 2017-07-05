@@ -2,196 +2,116 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./ad.html?style=./ad.styl';
 
-import { Ads } from './ads.service';
-import { Environment } from '../environment/environment.service';
-
-let _globalTagId = '1437670388518';
-let _isBootstrapped = false;
-
-if (!GJ_IS_SSR) {
-}
-
-function _bootstrapAds() {
-	const _window = window as any;
-
-	// _window.googletag = {};  // We always start from scratch on every bootstrap.
-	_window.googletag = _window.googletag || {};
-	_window.googletag.cmd = _window.googletag.cmd || [];
-
-	_window.googletag.cmd.push(function() {
-		_window.googletag
-			.defineSlot(
-				'/27005478/web-display-leaderboard',
-				[[728, 90], [970, 90]],
-				'div-gpt-ad-' + _globalTagId + '-10'
-			)
-			.addService(_window.googletag.pubads());
-
-		_window.googletag
-			.defineSlot(
-				'/27005478/web-display-leaderboard',
-				[[728, 90], [970, 90]],
-				'div-gpt-ad-' + _globalTagId + '-11'
-			)
-			.addService(_window.googletag.pubads());
-
-		_window.googletag
-			.defineSlot(
-				'/27005478/web-display-leaderboard',
-				[[728, 90], [970, 90]],
-				'div-gpt-ad-' + _globalTagId + '-12'
-			)
-			.addService(_window.googletag.pubads());
-
-		_window.googletag
-			.defineSlot(
-				'/27005478/web-display-leaderboard',
-				[[728, 90], [970, 90]],
-				'div-gpt-ad-' + _globalTagId + '-13'
-			)
-			.addService(_window.googletag.pubads());
-
-		_window.googletag
-			.defineSlot(
-				'/27005478/web-display-rectangle',
-				[[300, 250], [300, 600]],
-				'div-gpt-ad-' + _globalTagId + '-20'
-			)
-			.addService(_window.googletag.pubads());
-
-		_window.googletag
-			.defineSlot(
-				'/27005478/web-display-rectangle',
-				[[300, 250], [300, 600]],
-				'div-gpt-ad-' + _globalTagId + '-21'
-			)
-			.addService(_window.googletag.pubads());
-
-		_window.googletag
-			.defineSlot(
-				'/27005478/web-display-160x600',
-				[160, 600],
-				'div-gpt-ad-' + _globalTagId + '-30'
-			)
-			.addService(_window.googletag.pubads());
-
-		_window.googletag
-			.defineSlot(
-				'/27005478/web-display-160x600',
-				[160, 600],
-				'div-gpt-ad-' + _globalTagId + '-31'
-			)
-			.addService(_window.googletag.pubads());
-
-		_window.googletag.enableServices();
-	});
-
-	if (_isBootstrapped) {
-		// console.log( window.googletag );
-		(window as any).googletag.pubads().updateCorrelator();
-		(window as any).googletag.pubads().refresh();
-		return;
-	}
-
-	_isBootstrapped = true;
-
-	const gads = document.createElement('script');
-	gads.id = 'ads-script-bootsrapper';
-	gads.async = true;
-	gads.type = 'text/javascript';
-	gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
-
-	const node = document.getElementsByTagName('script')[0];
-	node.parentNode!.insertBefore(gads, node);
-}
-
-function _cleanupAds() {
-	console.log('cleaning up');
-	_isBootstrapped = false;
-
-	const _window = window as any;
-	if (_window.googletag.pubads) {
-		_window.googletag.destroySlots();
-	}
-
-	// let oldScript = null;
-	// if ( oldScript = document.getElementById( 'ads-script-bootsrapper' ) ) {
-	// 	oldScript.parentNode!.removeChild( oldScript );
-	// }
-}
+import { AdSlot, Ads } from './ads.service';
+import { isPrerender } from '../environment/environment.service';
+import { Model } from '../model/model.service';
+import { Game } from '../game/game.model';
+import { User } from '../user/user.model';
+import { FiresidePost } from '../fireside/post/post-model';
+import { EventBus } from '../event-bus/event-bus.service';
 
 @View
 @Component({})
 export class AppAd extends Vue {
-	@Prop(String) size: string;
-	@Prop(String) resource: string;
-	@Prop(Number) resourceId: number;
+	@Prop({ type: String, default: 'rectangle' })
+	size: 'rectangle' | 'leaderboard';
+	@Prop(Object) resource?: Model;
 
-	adId = 0;
-	globalTagId = _globalTagId;
+	slot: AdSlot | null = null;
+
+	private isDestroyed = false;
+	private adsRefreshedEvent?: () => void;
+
+	get resourceInfo() {
+		let resource: string = undefined as any;
+		let resourceId: number = undefined as any;
+
+		if (this.resource instanceof Game) {
+			resource = 'Game';
+			resourceId = this.resource.id;
+		} else if (this.resource instanceof User) {
+			resource = 'User';
+			resourceId = this.resource.id;
+		} else if (this.resource instanceof FiresidePost) {
+			resource = 'Fireside_Post';
+			resourceId = this.resource.id;
+		}
+
+		return { resource, resourceId };
+	}
 
 	mounted() {
-		return;
-		++Ads.numActive;
-
-		// Send the beacon saying that we've viewed this ad.
-		Ads.sendBeacon(Ads.TYPE_DISPLAY, this.resource, this.resourceId);
-
-		if (this.size === 'leaderboard') {
-			this.adId = 10 + Ads.numLeaderboards;
-			++Ads.numLeaderboards;
-		} else if (this.size === 'rectangle') {
-			this.adId = 20 + Ads.numRectangles;
-			++Ads.numRectangles;
-		} else if (this.size === 'skyscraper') {
-			this.adId = 30 + Ads.numSkyscrapers;
-			++Ads.numSkyscrapers;
-		}
-
-		// Don't do anything if we're just prerendering the page.
-		if (Environment.isPrerender) {
+		if (
+			GJ_IS_CLIENT ||
+			GJ_IS_SSR ||
+			isPrerender ||
+			(this.resource &&
+				this.resource instanceof Game &&
+				!this.resource._should_show_ads)
+		) {
 			return;
 		}
 
-		const adElem = this.$el.querySelector('.ad-inner');
-		if (!adElem) {
-			return;
+		this.slot = Ads.getUnusedAdSlot(this.size) || null;
+		if (this.slot) {
+			this.slot.isUsed = true;
+
+			const resourceInfo = this.resourceInfo;
+			Ads.sendBeacon(
+				Ads.TYPE_DISPLAY,
+				resourceInfo.resource,
+				resourceInfo.resourceId
+			);
 		}
 
-		const googlePlaceholderElem = document.createElement('div');
-		googlePlaceholderElem.id =
-			'div-gpt-ad-' + this.globalTagId + '-' + this.adId;
-		adElem.appendChild(googlePlaceholderElem);
+		this.display();
 
-		if (GJ_ENVIRONMENT === 'production' && !GJ_IS_CLIENT) {
-			if (Ads.numActive === 1) {
-				_bootstrapAds();
-			}
+		// When the state changes we want to refresh this ad if the scope hasn't
+		// been destroyed. This is for ads that are in a parent state outside
+		// the changed view.
+		EventBus.on(
+			'$adsRefreshed',
+			(this.adsRefreshedEvent = () => {
+				// We need the destroyed event to trigger first. Setting a timeout
+				// to 0 will cause it to run on next loop which will push this event
+				// past any destroyed event that may happen.
+				setTimeout(() => this.refresh(), 0);
+			})
+		);
+	}
 
-			const scriptElem = document.createElement('script');
-			scriptElem.type = 'text/javascript';
-			scriptElem.text = `googletag.cmd.push(function() { googletag.display('div-gpt-ad-${this
-				.globalTagId}-${this.adId}'); });`;
-			googlePlaceholderElem.appendChild(scriptElem);
+	async display() {
+		await this.$nextTick();
+		if (this.slot) {
+			await Ads.display(this.slot.id);
 		}
 	}
 
+	/**
+	 * Show a new ad in this slot.
+	 */
+	async refresh() {
+		if (!this.slot || this.isDestroyed) {
+			return;
+		}
+
+		Ads.refreshSlots([this.slot]);
+
+		const resourceInfo = this.resourceInfo;
+		Ads.sendBeacon(
+			Ads.TYPE_DISPLAY,
+			resourceInfo.resource,
+			resourceInfo.resourceId
+		);
+	}
+
 	destroyed() {
-		return;
-		--Ads.numActive;
-
-		if (this.size === 'leaderboard') {
-			--Ads.numLeaderboards;
-		} else if (this.size === 'rectangle') {
-			--Ads.numRectangles;
-		} else if (this.size === 'skyscraper') {
-			--Ads.numSkyscrapers;
+		if (this.slot) {
+			this.slot.isUsed = false;
 		}
+		this.isDestroyed = true;
 
-		// If we have no more active ads clean up the ad code.
-		// It should mean that we switched pages.
-		if (Ads.numActive <= 0) {
-			_cleanupAds();
-		}
+		EventBus.off('$adsRefreshed', this.adsRefreshedEvent);
+		this.adsRefreshedEvent = undefined;
 	}
 }

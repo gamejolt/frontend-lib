@@ -1,0 +1,8 @@
+<div v-if="isVisible">
+	<section class="section section-thin" v-if="Screen.isDesktop">
+		<app-ad size="leaderboard" :resource="resource" />
+	</section>
+	<section class="section section-thin fill-lightest" v-else-if="Screen.isMobile">
+		<app-ad size="rectangle" :resource="resource" />
+	</section>
+</div>
