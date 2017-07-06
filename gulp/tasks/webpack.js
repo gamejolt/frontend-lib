@@ -127,12 +127,12 @@ module.exports = function(config) {
 				alias: {
 					view:
 						'vue-template-loader?' +
-							JSON.stringify({
-								scoped: true,
-								transformToRequire: {
-									img: 'src',
-								},
-							}),
+						JSON.stringify({
+							scoped: true,
+							transformToRequire: {
+								img: 'src',
+							},
+						}),
 				},
 			},
 			module: {
@@ -141,34 +141,12 @@ module.exports = function(config) {
 						test: /\.tsx?$/,
 						use: [
 							{
-								// God save us.
-								loader: 'string-replace-loader',
-								options: {
-									search: /\$import\(/g,
-									replace: 'import(',
-								},
-							},
-							{
 								loader: 'ts-loader',
 								options: {
 									transpileOnly: true,
 								},
 							},
 						],
-					},
-					{
-						test: /\.js$/,
-						use: [
-							{
-								// God save us.
-								loader: 'string-replace-loader',
-								options: {
-									search: /\$import\(/g,
-									replace: 'import(',
-								},
-							},
-						],
-						exclude: /node_modules/,
 					},
 					{
 						enforce: 'pre',
@@ -349,9 +327,10 @@ module.exports = function(config) {
 					rewrites: [
 						{
 							from: /./,
-							to: config.buildSection === 'app'
-								? '/index.html'
-								: '/' + config.buildSection + '.html',
+							to:
+								config.buildSection === 'app'
+									? '/index.html'
+									: '/' + config.buildSection + '.html',
 						},
 					],
 				},

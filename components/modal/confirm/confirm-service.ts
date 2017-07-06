@@ -9,7 +9,7 @@ export class ModalConfirm {
 	) {
 		return await Modal.show<boolean>({
 			size: 'sm',
-			component: () => asyncComponentLoader($import('./confirm')),
+			component: () => asyncComponentLoader(import('./confirm')),
 			props: { message, title, buttonType },
 		});
 	}

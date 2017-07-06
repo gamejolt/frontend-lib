@@ -30,9 +30,9 @@ export class AppCodemirror extends Vue {
 		this._options = Object.assign(defaultOptions, this.options);
 
 		if (this._options.mode === 'css') {
-			await $import('codemirror/mode/css/css.js');
+			await import('codemirror/mode/css/css.js');
 		} else if (this._options.mode === 'gfm') {
-			await $import('codemirror/mode/gfm/gfm.js');
+			await import('codemirror/mode/gfm/gfm.js');
 		}
 
 		this.editor = CodeMirror.fromTextArea(this.$el, this._options);
