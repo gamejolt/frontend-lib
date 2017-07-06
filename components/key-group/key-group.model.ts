@@ -16,19 +16,23 @@ export class KeyGroup extends Model {
 	viewed_count: number;
 	claimed_count: number;
 
+	// Used for forms and saving.
+	package_ids: number[] = [];
+
 	constructor(data: any = {}) {
 		super(data);
 
 		if (data.packages) {
 			this.packages = GamePackage.populate(data.packages);
+			this.package_ids = this.packages.map(i => i.id);
 		}
 	}
 
 	$save() {
 		const data: any = Object.assign({}, this);
 		data.packages = {};
-		for (const pkg of this.packages) {
-			data.packages[pkg.id] = true;
+		for (const id of this.package_ids) {
+			data.packages[id] = true;
 		}
 
 		const options = {
