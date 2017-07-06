@@ -17,12 +17,18 @@ import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 	},
 })
 export class AppMessageThreadItem extends Vue {
-	@Prop(User) user: User;
-	@Prop(User) repliedTo?: User;
-	@Prop(Number) date: number;
-	@Prop(String) id?: string;
-	@Prop(Boolean) isActive?: boolean;
-	@Prop(Boolean) isNew?: boolean;
+	@Prop([User])
+	user: User;
+	@Prop([User])
+	repliedTo?: User;
+	@Prop([Number])
+	date: number;
+	@Prop([String])
+	id?: string;
+	@Prop([Boolean])
+	isActive?: boolean;
+	@Prop([Boolean])
+	isNew?: boolean;
 
 	dateFilter = date;
 }

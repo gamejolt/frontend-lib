@@ -12,7 +12,8 @@ import { Game } from '../game.model';
 	},
 })
 export class AppGameThumbnailImg extends Vue {
-	@Prop(Object) game: Game;
+	@Prop([Object])
+	game: Game;
 
 	imgLoadChange(isLoaded: boolean) {
 		if (isLoaded) {

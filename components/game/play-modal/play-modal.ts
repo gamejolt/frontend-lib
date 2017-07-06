@@ -15,9 +15,12 @@ import { GameRatingGrowl } from '../rating-growl/rating-growl.service';
 	},
 })
 export default class AppGamePlayModal extends BaseModal {
-	@Prop(Game) game: Game;
-	@Prop(String) url: string;
-	@Prop(Boolean) canMinimize?: boolean;
+	@Prop([Game])
+	game: Game;
+	@Prop([String])
+	url: string;
+	@Prop([Boolean])
+	canMinimize?: boolean;
 
 	mounted() {
 		document.body.classList.add('game-play-modal-open');

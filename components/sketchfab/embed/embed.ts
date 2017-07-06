@@ -11,9 +11,12 @@ const RATIO = 0.5625; // 16:9
 @View
 @Component({})
 export class AppSketchfabEmbed extends Vue {
-	@Prop(String) sketchfabId: string;
-	@Prop(Number) maxWidth: number;
-	@Prop(Number) maxHeight: number;
+	@Prop([String])
+	sketchfabId: string;
+	@Prop([Number])
+	maxWidth: number;
+	@Prop([Number])
+	maxHeight: number;
 	@Prop({ type: Boolean, default: false })
 	autoplay: boolean;
 

@@ -7,7 +7,8 @@ import { Ruler } from '../ruler/ruler-service';
 
 @Component({})
 export class AppResponsiveDimensions extends Vue {
-	@Prop(Number) ratio: number;
+	@Prop([Number])
+	ratio: number;
 
 	private resize$: Subscription | undefined;
 	private height = 'auto';

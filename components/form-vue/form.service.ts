@@ -39,7 +39,8 @@ export interface FormOnSubmitSuccess {
 	},
 })
 export class BaseForm<T> extends Vue {
-	@Prop(Object) model?: T;
+	@Prop([Object])
+	model?: T;
 
 	formModel: T = {} as T;
 	modelClass?: { new (data?: T): T } = undefined;

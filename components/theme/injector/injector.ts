@@ -3,8 +3,10 @@ import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export class AppThemeInjector extends Vue {
-	@Prop(Object) definition: any;
-	@Prop(Object) theme: any;
+	@Prop([Object])
+	definition: any;
+	@Prop([Object])
+	theme: any;
 
 	styleElem: HTMLStyleElement;
 

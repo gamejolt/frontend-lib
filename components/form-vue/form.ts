@@ -22,7 +22,8 @@ Vue.use(VeeValidate);
 @View
 @Component({})
 export class AppForm extends Vue {
-	@Prop(String) name: string;
+	@Prop([String])
+	name: string;
 
 	base: BaseForm<any>;
 	controls: BaseFormControl[] = [];

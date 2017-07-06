@@ -15,7 +15,8 @@ import { EventBus } from '../event-bus/event-bus.service';
 export class AppAd extends Vue {
 	@Prop({ type: String, default: 'rectangle' })
 	size: 'rectangle' | 'leaderboard';
-	@Prop(Object) resource?: Model;
+	@Prop([Object])
+	resource?: Model;
 
 	slot: AdSlot | null = null;
 

@@ -13,9 +13,12 @@ import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markd
 })
 export class AppCommentWidgetAdd extends BaseForm<Comment>
 	implements FormOnInit {
-	@Prop(String) resource: string;
-	@Prop(Number) resourceId: number;
-	@Prop(Number) parentId?: number;
+	@Prop([String])
+	resource: string;
+	@Prop([Number])
+	resourceId: number;
+	@Prop([Number])
+	parentId?: number;
 
 	modelClass = Comment;
 	resetOnSubmit = true;

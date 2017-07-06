@@ -13,9 +13,12 @@ import { AppUserAvatarImg } from './img/img';
 	},
 })
 export class AppUserAvatar extends Vue {
-	@Prop(Object) user: User;
-	@Prop(String) link?: string;
-	@Prop(Boolean) showName?: boolean;
+	@Prop([Object])
+	user: User;
+	@Prop([String])
+	link?: string;
+	@Prop([Boolean])
+	showName?: boolean;
 
 	href = '';
 

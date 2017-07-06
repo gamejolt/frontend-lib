@@ -14,7 +14,8 @@ import { Api } from '../../api/api.service';
 	},
 })
 export class AppAuthJoinForm extends BaseForm<any> implements FormOnSubmit {
-	@Prop(Boolean) darkVariant?: boolean;
+	@Prop([Boolean])
+	darkVariant?: boolean;
 
 	Connection = makeObservableService(Connection);
 

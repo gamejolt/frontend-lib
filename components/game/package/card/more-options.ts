@@ -21,7 +21,8 @@ import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 	},
 })
 export class AppGamePackageCardMoreOptions extends Vue {
-	@Prop(GamePackageCardModel) card: GamePackageCardModel;
+	@Prop([GamePackageCardModel])
+	card: GamePackageCardModel;
 
 	emulatorInfo = GameBuild.emulatorInfo;
 

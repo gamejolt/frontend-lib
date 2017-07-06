@@ -6,8 +6,10 @@ import { AppFormControlErrors } from './control-errors';
 
 @Component({})
 export class AppFormControlError extends Vue {
-	@Prop(String) when: string;
-	@Prop(String) message: string;
+	@Prop([String])
+	when: string;
+	@Prop([String])
+	message: string;
 
 	mounted() {
 		this.setOverride();

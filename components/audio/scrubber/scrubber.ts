@@ -12,8 +12,10 @@ if (!GJ_IS_SSR) {
 @View
 @Component({})
 export class AppAudioScrubber extends Vue {
-	@Prop(Number) currentTime: number;
-	@Prop(Number) duration: number;
+	@Prop([Number])
+	currentTime: number;
+	@Prop([Number])
+	duration: number;
 
 	private isDragging = false;
 	private startX = 0;

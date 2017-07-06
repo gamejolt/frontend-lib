@@ -111,10 +111,12 @@ const backgroundVariantChartOptions: any = {
 @View
 @Component({})
 export class AppGraph extends Vue {
-	@Prop(Array) dataset: any[];
+	@Prop([Array])
+	dataset: any[];
 	@Prop({ type: String, default: 'line' })
 	type: string;
-	@Prop(Boolean) backgroundVariant?: boolean;
+	@Prop([Boolean])
+	backgroundVariant?: boolean;
 
 	chart: Chart = null as any;
 	data: any = {};

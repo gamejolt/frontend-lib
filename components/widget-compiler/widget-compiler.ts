@@ -8,7 +8,8 @@ import {
 
 @Component({})
 export class AppWidgetCompiler extends Vue {
-	@Prop(String) content: string;
+	@Prop([String])
+	content: string;
 	@Prop({ type: Boolean, default: false })
 	isDisabled: boolean;
 

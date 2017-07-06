@@ -8,8 +8,10 @@ import { BaseFormControl } from './base';
 export class AppFormControl extends BaseFormControl {
 	@Prop({ type: String, default: 'text' })
 	type: string;
-	@Prop(Array) validateOn: string[];
-	@Prop(Number) validateDelay: number;
+	@Prop([Array])
+	validateOn: string[];
+	@Prop([Number])
+	validateDelay: number;
 
 	value: string = '';
 

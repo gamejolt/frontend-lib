@@ -23,16 +23,24 @@ interface PopoverTiggerEvent extends Event {
 @View
 @Component({})
 export class AppPopover extends Vue {
-	@Prop(String) popoverId: string;
-	@Prop(Boolean) appendToBody: boolean;
-	@Prop(Boolean) triggerManually: boolean;
-	@Prop(String) positionBy?: 'position' | 'offset' | 'fixed';
-	@Prop(String) trackElementWidth?: string;
+	@Prop([String])
+	popoverId: string;
+	@Prop([Boolean])
+	appendToBody: boolean;
+	@Prop([Boolean])
+	triggerManually: boolean;
+	@Prop([String])
+	positionBy?: 'position' | 'offset' | 'fixed';
+	@Prop([String])
+	trackElementWidth?: string;
 	@Prop({ type: String, default: 'bottom' })
 	position: 'top' | 'right' | 'bottom' | 'left';
-	@Prop(String) positionHorizontal?: string;
-	@Prop(Boolean) hideOnStateChange: boolean;
-	@Prop(Boolean) noMaxHeight: boolean;
+	@Prop([String])
+	positionHorizontal?: string;
+	@Prop([Boolean])
+	hideOnStateChange: boolean;
+	@Prop([Boolean])
+	noMaxHeight: boolean;
 
 	isVisible = false;
 	isAppendedToBody = false;

@@ -5,8 +5,10 @@ import * as View from '!view!./expand.html?style=./expand.styl';
 @View
 @Component({})
 export class AppExpand extends Vue {
-	@Prop(Boolean) when?: boolean;
-	@Prop(Boolean) animateInitial?: boolean;
+	@Prop([Boolean])
+	when?: boolean;
+	@Prop([Boolean])
+	animateInitial?: boolean;
 
 	inDom = false;
 

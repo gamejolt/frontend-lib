@@ -23,9 +23,12 @@ function getElementTop(element: HTMLElement, currentTransform: number) {
 
 @Component({})
 export class AppScrollParallax extends Vue {
-	@Prop(Number) drag?: number;
-	@Prop(Number) dim?: number;
-	@Prop(Boolean) disabled?: boolean;
+	@Prop([Number])
+	drag?: number;
+	@Prop([Number])
+	dim?: number;
+	@Prop([Boolean])
+	disabled?: boolean;
 
 	private transform = 0;
 	private opacity = 0;

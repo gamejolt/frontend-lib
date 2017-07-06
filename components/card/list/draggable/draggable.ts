@@ -14,7 +14,8 @@ const draggable = require('vuedraggable');
 	},
 })
 export class AppCardListDraggable extends Vue {
-	@Prop(Boolean) disabled?: boolean;
+	@Prop([Boolean])
+	disabled?: boolean;
 
 	list: AppCardList = null as any;
 

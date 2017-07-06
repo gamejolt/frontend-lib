@@ -11,9 +11,12 @@ import { BaseModal } from '../base';
 	},
 })
 export default class AppModalConfirm extends BaseModal {
-	@Prop(String) message: string;
-	@Prop(String) title: string;
-	@Prop(String) buttonType: 'ok' | 'yes';
+	@Prop([String])
+	message: string;
+	@Prop([String])
+	title: string;
+	@Prop([String])
+	buttonType: 'ok' | 'yes';
 
 	ok() {
 		this.modal.resolve(true);

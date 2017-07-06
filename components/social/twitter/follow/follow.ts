@@ -6,7 +6,8 @@ import { TwitterSdk } from '../sdk/sdk.service';
 
 @Component({})
 export class AppSocialTwitterFollow extends Vue {
-	@Prop(String) handle: string;
+	@Prop([String])
+	handle: string;
 	@Prop({ type: Boolean, default: true })
 	showCount: boolean;
 	@Prop({ type: String, default: 'small' })

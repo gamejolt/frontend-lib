@@ -13,7 +13,8 @@ import { findVueParent } from '../../../utils/vue';
 	},
 })
 export class AppFormButton extends Vue {
-	@Prop(String) icon?: string;
+	@Prop([String])
+	icon?: string;
 
 	form: AppForm;
 

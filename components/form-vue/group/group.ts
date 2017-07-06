@@ -11,11 +11,16 @@ import { BaseFormControl } from '../control/base';
 @View
 @Component({})
 export class AppFormGroup extends Vue {
-	@Prop(String) name: string;
-	@Prop(String) label?: string;
-	@Prop(Boolean) optional?: boolean;
-	@Prop(Boolean) hideLabel?: boolean;
-	@Prop(String) labelClass?: string;
+	@Prop([String])
+	name: string;
+	@Prop([String])
+	label?: string;
+	@Prop([Boolean])
+	optional?: boolean;
+	@Prop([Boolean])
+	hideLabel?: boolean;
+	@Prop([String])
+	labelClass?: string;
 
 	form: AppForm;
 	control: BaseFormControl;

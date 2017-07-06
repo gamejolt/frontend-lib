@@ -47,18 +47,26 @@ import { GamePlayModal } from '../../play-modal/play-modal.service';
 	},
 })
 export class AppGamePackageCard extends Vue {
-	@Prop(Game) game: Game;
-	@Prop(GamePackage) package: GamePackage;
-	@Prop(Sellable) sellable: Sellable;
+	@Prop([Game])
+	game: Game;
+	@Prop([GamePackage])
+	package: GamePackage;
+	@Prop([Sellable])
+	sellable: Sellable;
 	@Prop({ type: Array, default: () => [] })
 	releases: GameRelease[];
 	@Prop({ type: Array, default: () => [] })
 	builds: GameBuild[];
-	@Prop(String) accessKey?: string;
-	@Prop(Boolean) isPartner?: boolean;
-	@Prop(String) partnerReferredKey?: string;
-	@Prop(User) partnerReferredBy?: User;
-	@Prop(Boolean) partnerNoCut?: boolean;
+	@Prop([String])
+	accessKey?: string;
+	@Prop([Boolean])
+	isPartner?: boolean;
+	@Prop([String])
+	partnerReferredKey?: string;
+	@Prop([User])
+	partnerReferredBy?: User;
+	@Prop([Boolean])
+	partnerNoCut?: boolean;
 
 	showFullDescription = false;
 	canToggleDescription = false;
@@ -134,9 +142,8 @@ export class AppGamePackageCard extends Vue {
 	}
 
 	private doBuildClick(build: GameBuild, fromExtraSection = false) {
-		let operation = build.type === GameBuild.TYPE_DOWNLOADABLE
-			? 'download'
-			: 'play';
+		let operation =
+			build.type === GameBuild.TYPE_DOWNLOADABLE ? 'download' : 'play';
 		if (build.type === GameBuild.TYPE_ROM && fromExtraSection) {
 			operation = 'download';
 		}

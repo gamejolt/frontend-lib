@@ -18,7 +18,8 @@ const defaultOptions = {
 export class AppCodemirror extends Vue {
 	$el: HTMLTextAreaElement;
 
-	@Prop(String) value: string;
+	@Prop([String])
+	value: string;
 	@Prop({ type: Object, default: () => new Object() })
 	options: any;
 

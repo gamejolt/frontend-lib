@@ -5,8 +5,12 @@ import * as View from '!view!./bar.html?style=./bar.styl';
 @View
 @Component({})
 export class AppProgressBar extends Vue {
-	@Prop(Number) percent: number;
-	@Prop(Boolean) thin?: boolean;
-	@Prop(String) variant?: string;
-	@Prop(Boolean) active?: boolean;
+	@Prop([Number])
+	percent: number;
+	@Prop([Boolean])
+	thin?: boolean;
+	@Prop([String])
+	variant?: string;
+	@Prop([Boolean])
+	active?: boolean;
 }

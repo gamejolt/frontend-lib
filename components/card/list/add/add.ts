@@ -14,7 +14,8 @@ import { Screen } from '../../../screen/screen-service';
 	},
 })
 export class AppCardListAdd extends Vue {
-	@Prop(String) label: string;
+	@Prop([String])
+	label: string;
 
 	list: AppCardList = null as any;
 

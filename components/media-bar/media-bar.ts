@@ -18,7 +18,8 @@ import { Growls } from '../growls/growls.service';
 	},
 })
 export class AppMediaBar extends Vue {
-	@Prop(Array) mediaItems: any[];
+	@Prop([Array])
+	mediaItems: any[];
 
 	private urlChecked = false;
 	private lightbox?: AppMediaBarLightbox;

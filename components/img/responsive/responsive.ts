@@ -11,7 +11,8 @@ const WIDTH_REGEX = /\/(\d+)\//;
 
 @Component({})
 export class AppImgResponsive extends Vue {
-	@Prop(String) src: string;
+	@Prop([String])
+	src: string;
 
 	private processedSrc = '';
 	private resize$: Subscription | undefined;

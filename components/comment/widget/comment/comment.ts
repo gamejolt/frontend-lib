@@ -55,9 +55,12 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 	},
 })
 export class AppCommentWidgetComment extends Vue {
-	@Prop(Comment) comment: Comment;
-	@Prop(Array) children?: Comment[];
-	@Prop(Comment) parent?: Comment;
+	@Prop([Comment])
+	comment: Comment;
+	@Prop([Array])
+	children?: Comment[];
+	@Prop([Comment])
+	parent?: Comment;
 
 	@State app: AppStore;
 

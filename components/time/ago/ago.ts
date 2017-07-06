@@ -6,7 +6,8 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 export class AppTimeAgo extends Vue {
 	@Prop([Number, Date])
 	date: number | Date;
-	@Prop(Boolean) withoutSuffix?: boolean;
+	@Prop([Boolean])
+	withoutSuffix?: boolean;
 
 	private timeout?: number;
 	private timeAgo = '';

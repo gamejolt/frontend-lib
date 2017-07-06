@@ -23,9 +23,12 @@ import { AppCommentVideoLightbox } from '../lightbox/lightbox';
 	},
 })
 export class AppCommentVideoThumbnail extends Vue {
-	@Prop(CommentVideo) video: CommentVideo;
-	@Prop(Boolean) showUser?: boolean;
-	@Prop(Boolean) showGame?: boolean;
+	@Prop([CommentVideo])
+	video: CommentVideo;
+	@Prop([Boolean])
+	showUser?: boolean;
+	@Prop([Boolean])
+	showGame?: boolean;
 
 	isLightboxActive = false;
 }

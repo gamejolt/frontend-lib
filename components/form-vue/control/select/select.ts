@@ -6,8 +6,10 @@ import { BaseFormControl } from '../base';
 @View
 @Component({})
 export class AppFormControlSelect extends BaseFormControl {
-	@Prop(Array) validateOn: string[];
-	@Prop(Number) validateDelay: number;
+	@Prop([Array])
+	validateOn: string[];
+	@Prop([Number])
+	validateDelay: number;
 
 	value: string = '';
 

@@ -29,8 +29,10 @@ import { number } from '../../../../vue/filters/number';
 	},
 })
 export class AppGameSoundtrackCard extends Vue {
-	@Prop(Game) game: Game;
-	@Prop(Array) songs: GameSong[];
+	@Prop([Game])
+	game: Game;
+	@Prop([Array])
+	songs: GameSong[];
 
 	isPlaying = false;
 	isShowingSoundtrack = false;
