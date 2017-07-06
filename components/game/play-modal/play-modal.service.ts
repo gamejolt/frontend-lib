@@ -75,7 +75,7 @@ export class GamePlayModal {
 		const canMinimize = this.canMinimize;
 
 		await Modal.show({
-			component: () => asyncComponentLoader($import('./play-modal')),
+			component: () => asyncComponentLoader(import('./play-modal')),
 			props: { game, build, url, canMinimize },
 			noBackdrop: true,
 			noBackdropClose: true,

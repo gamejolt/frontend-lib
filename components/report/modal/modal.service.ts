@@ -6,7 +6,7 @@ export class ReportModal {
 	static async show(resource: Model) {
 		await Modal.show({
 			size: 'sm',
-			component: () => asyncComponentLoader($import('./modal')),
+			component: () => asyncComponentLoader(import('./modal')),
 			props: { resource },
 		});
 	}
