@@ -25,7 +25,7 @@ export class Referrer {
 	static init() {
 		this.isInitialized = true;
 
-		if (window.document.referrer) {
+		if (!GJ_IS_SSR && window.document.referrer) {
 			this.referrer = window.document.referrer;
 		}
 	}

@@ -39,7 +39,7 @@ export class HistoryTick {
 		resourceId: number,
 		options: BeaconOptions = {}
 	) {
-		if (Environment.isPrerender) {
+		if (Environment.isPrerender || GJ_IS_SSR) {
 			return;
 		}
 

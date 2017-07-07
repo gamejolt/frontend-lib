@@ -2,9 +2,7 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./codemirror.html';
 
-import * as CodeMirror from 'codemirror';
 import './codemirror.styl';
-import { triggerEvent } from '../../utils/event';
 
 const defaultOptions = {
 	lineNumbers: true,
@@ -30,19 +28,24 @@ export class AppCodemirror extends Vue {
 	async mounted() {
 		this._options = Object.assign(defaultOptions, this.options);
 
+		// CodeMirror doesn't work in SSR context.
+		if (!GJ_IS_SSR) {
+			return;
+		}
+
 		if (this._options.mode === 'css') {
 			await import('codemirror/mode/css/css.js');
 		} else if (this._options.mode === 'gfm') {
 			await import('codemirror/mode/gfm/gfm.js');
 		}
 
+		const CodeMirror = require('codemirror');
 		this.editor = CodeMirror.fromTextArea(this.$el, this._options);
 		this.editor.setValue(this.value || '');
 
 		this.editor.on('change', cm => {
 			this.$emit('changed', cm.getValue());
 			this.$emit('input', cm.getValue());
-			triggerEvent(this.$el, 'changed', cm.getValue());
 		});
 
 		this.bootstrapped = true;

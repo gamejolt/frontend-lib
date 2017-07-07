@@ -5,7 +5,6 @@ import * as View from '!view!./fade-collapse.html?style=./fade-collapse.styl';
 import { Environment } from '../environment/environment.service';
 import { Scroll } from '../scroll/scroll.service';
 import { Screen } from '../screen/screen-service';
-import { triggerEvent } from '../../utils/event';
 
 const ExtraCollapsePadding = 200;
 
@@ -51,7 +50,6 @@ export class AppFadeCollapse extends Vue {
 
 		if (isRequired) {
 			this.$emit('required');
-			triggerEvent(this.$el, 'required');
 		}
 
 		if (isRequired && !this.isOpen) {

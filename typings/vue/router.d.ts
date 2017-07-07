@@ -15,6 +15,7 @@ declare module 'vue/types/vue' {
 		routeDestroyed: boolean;
 		routeLoading: boolean;
 		routeBootstrapped: boolean;
+		routeInit?(): void;
 		routed?(): void;
 		routeError?(PayloadError): void;
 	}

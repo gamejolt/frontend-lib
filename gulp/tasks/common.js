@@ -44,6 +44,7 @@ module.exports = function(config, projectBase) {
 	config.bowerDir = 'src/bower-lib/';
 
 	if (config.server) {
+		config.write = true;
 		config.buildDir += '-server';
 	}
 

@@ -177,7 +177,7 @@ export class Ads {
 	}
 
 	static sendBeacon(type: string, resource?: string, resourceId?: number) {
-		if (Environment.isPrerender) {
+		if (Environment.isPrerender || GJ_IS_SSR) {
 			return;
 		}
 

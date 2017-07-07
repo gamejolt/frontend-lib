@@ -5,7 +5,9 @@ import { supportsPassiveEvents } from '../../utils/detection';
 import { AppAutoscrollAnchor } from './auto-scroll/anchor';
 
 // Polyfill smooth scrolling.
-require('smoothscroll-polyfill').polyfill();
+if (!GJ_IS_SSR) {
+	require('smoothscroll-polyfill').polyfill();
+}
 
 export interface ScrollChange {
 	top: number;

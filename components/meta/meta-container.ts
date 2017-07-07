@@ -4,30 +4,32 @@ export class MetaField {
 }
 
 export class MetaContainer {
-	private static _document = window.document;
-	private static _head = MetaContainer._document.head;
 	private static _fields: { [key: string]: MetaField } = {};
 
 	protected static _set(name: string, content: string | null) {
 		this._storeField(name, content);
 
-		let elem = this._head.querySelector(
+		if (GJ_IS_SSR) {
+			return;
+		}
+
+		let elem = document.head.querySelector(
 			`meta[name="${name}"]`
 		) as HTMLMetaElement;
 
 		// Remove if we're nulling it out.
 		if (!content) {
 			if (elem) {
-				this._head.removeChild(elem);
+				document.head.removeChild(elem);
 			}
 			return;
 		}
 
 		// Create if not exists.
 		if (!elem) {
-			elem = this._document.createElement('meta');
+			elem = document.createElement('meta');
 			elem.name = name;
-			this._head.appendChild(elem);
+			document.head.appendChild(elem);
 		}
 
 		elem.content = content;
@@ -41,11 +43,13 @@ export class MetaContainer {
 		if (!this._fields[name]) {
 			const field = new MetaField();
 
-			const elem = this._head.querySelector(
-				`meta[name="${name}"]`
-			) as HTMLMetaElement;
-			if (elem) {
-				field.original = elem.content;
+			if (!GJ_IS_SSR) {
+				const elem = document.head.querySelector(
+					`meta[name="${name}"]`
+				) as HTMLMetaElement;
+				if (elem) {
+					field.original = elem.content;
+				}
 			}
 
 			this._fields[name] = field;

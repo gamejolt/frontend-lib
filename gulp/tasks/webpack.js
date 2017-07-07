@@ -13,8 +13,9 @@ const CleanCss = require('clean-css');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 	.BundleAnalyzerPlugin;
-const VueSSRPlugin = require('vue-ssr-webpack-plugin');
+const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = function(config) {
 	let base = path.resolve(config.projectBase);
@@ -27,6 +28,18 @@ module.exports = function(config) {
 	let externals = {};
 	for (let extern of ['nw.gui', 'client-voodoo']) {
 		externals[extern] = extern;
+	}
+
+	if (config.server) {
+		Object.assign(
+			externals,
+			nodeExternals({
+				// do not externalize dependencies that need to be processed by webpack.
+				// you can add more file types here e.g. raw *.vue files
+				// you should also whitelist deps that modifies `global` (e.g. polyfills)
+				whitelist: /\.css$/,
+			})
+		);
 	}
 
 	const cleanCssOptions = {
@@ -44,12 +57,10 @@ module.exports = function(config) {
 
 	let libraryTarget = 'var';
 	if (config.server) {
-		libraryTarget = 'commonjs';
+		libraryTarget = 'commonjs2';
 	}
 
 	function stylesLoader(loaders, options) {
-		// Note: style-loader doesn't work on the server.
-
 		if (config.production) {
 			loaders.push({
 				loader: 'clean-css-loader',
@@ -57,14 +68,12 @@ module.exports = function(config) {
 			});
 
 			return ExtractTextPlugin.extract({
-				fallback: !config.server ? 'style-loader' : undefined,
 				use: loaders,
+				fallback: 'vue-style-loader',
 			});
 		}
 
-		if (!config.server) {
-			loaders.unshift('style-loader');
-		}
+		loaders.unshift('vue-style-loader');
 
 		return loaders;
 	}
@@ -183,9 +192,7 @@ module.exports = function(config) {
 			},
 			// Inline allows us to debug by setting breakpoints.
 			// Eval may be faster, but it doesn't allow setting breakpoints.
-			devtool: !config.server
-				? 'cheap-module-inline-source-map'
-				: '#source-map',
+			devtool: !config.server ? 'cheap-module-inline-source-map' : 'source-map',
 			plugins: [
 				new webpack.DefinePlugin({
 					GJ_ENVIRONMENT: JSON.stringify(
@@ -238,6 +245,7 @@ module.exports = function(config) {
 
 				// Pull out vendor code from the main entry point.
 				devNoop ||
+					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'vendor',
 						minChunks: function(module) {
@@ -253,6 +261,7 @@ module.exports = function(config) {
 				// to be cached longer if it doesn't change.
 				// More info: https://webpack.js.org/guides/code-splitting-libraries/#implicit-common-vendor-chunk
 				devNoop ||
+					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'manifest',
 					}),
@@ -285,11 +294,7 @@ module.exports = function(config) {
 						excludeChunks: ['server'],
 					}),
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
-				!config.server
-					? noop
-					: new VueSSRPlugin({
-							entry: 'server',
-						}),
+				!config.server ? noop : new VueSSRServerPlugin(),
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			],

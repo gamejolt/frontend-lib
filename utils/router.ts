@@ -11,7 +11,7 @@ interface BeforeRouteEnterOptions {
 	cacheTag?: string;
 }
 
-export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
+export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 	return createDecorator(
 		(componentOptions: Vue.ComponentOptions<Vue>, key: string) => {
 			// This is component state that the server may have returned to the
@@ -174,6 +174,10 @@ export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
 
 					// This gets called both in the server and the browser.
 					created() {
+						if (this.routeInit) {
+							this.routeInit();
+						}
+
 						// If we are in a browser context, the server may have set
 						// initial state for the routed components. If this is the case
 						// we want to pull it into the component options so it can
@@ -188,6 +192,7 @@ export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
 							}
 						}
 
+						// DISABLED ON BROWSER FOR NOW
 						// We run this on browser and server. When it's on the server
 						// the route enter hook has populated the initial data and now
 						// we want to call the routed() method. When it's browser we may
@@ -196,7 +201,8 @@ export function BeforeRouteEnter(options: BeforeRouteEnterOptions = {}) {
 						const constructor = this.constructor as any;
 						if (
 							constructor.extendOptions &&
-							constructor.extendOptions.__INITIAL_STATE__
+							constructor.extendOptions.__INITIAL_STATE__ &&
+							GJ_IS_SSR
 						) {
 							finalizeRoute(
 								this.$route,

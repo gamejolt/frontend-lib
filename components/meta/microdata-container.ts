@@ -1,27 +1,41 @@
 export class MicrodataContainer {
-	private static _document = window.document;
-	private static _head = MicrodataContainer._document.head;
+	// private static _document = window.document;
+	// private static _head = MicrodataContainer._document.head;
 
-	static set(microdata: Object) {
-		let elem = this._head.querySelector(
+	static microdata: any | undefined;
+
+	static set(microdata: any) {
+		this.microdata = microdata;
+
+		if (GJ_IS_SSR) {
+			return;
+		}
+
+		let elem = document.head.querySelector(
 			'script[type="application/ld+json"]'
 		) as HTMLScriptElement;
 		if (elem) {
 			this.clear();
 		}
 
-		elem = this._document.createElement('script');
+		elem = document.createElement('script');
 		elem.type = 'application/ld+json';
 		elem.text = JSON.stringify(microdata);
-		this._head.appendChild(elem);
+		document.head.appendChild(elem);
 	}
 
 	static clear() {
-		let elem = this._head.querySelector(
+		this.microdata = undefined;
+
+		if (GJ_IS_SSR) {
+			return;
+		}
+
+		let elem = document.head.querySelector(
 			'script[type="application/ld+json"]'
 		) as HTMLScriptElement;
 		if (elem) {
-			this._head.removeChild(elem);
+			document.head.removeChild(elem);
 		}
 	}
 }

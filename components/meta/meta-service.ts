@@ -4,7 +4,8 @@ import { TwitterMetaContainer } from './twitter-meta-container';
 import { MicrodataContainer } from './microdata-container';
 
 export class Meta extends MetaContainer {
-	private static _originalTitle = window.document.title;
+	private static _title = '';
+	private static _originalTitle = !GJ_IS_SSR ? document.title : null;
 	private static _fb = FbMetaContainer;
 	private static _twitter = TwitterMetaContainer;
 	private static _microdata = MicrodataContainer;
@@ -27,11 +28,16 @@ export class Meta extends MetaContainer {
 			title = this._originalTitle;
 		}
 
-		window.document.title = title;
+		if (title) {
+			if (!GJ_IS_SSR) {
+				document.title = title;
+			}
+			this._title = title;
+		}
 	}
 
 	static get title() {
-		return window.document.title;
+		return this._title;
 	}
 
 	static set description(value: string | null) {
