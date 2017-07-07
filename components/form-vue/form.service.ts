@@ -48,6 +48,7 @@ export class BaseForm<T> extends Vue {
 	saveMethod?: keyof T;
 	method: 'add' | 'edit' = 'add';
 	changed = false;
+	valid = false;
 
 	state: { [k: string]: any } = {
 		isProcessing: false,

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./form.html';
 import * as VeeValidate from 'vee-validate';
 
@@ -30,6 +30,23 @@ export class AppForm extends Vue {
 
 	private static hasAddedValidators = false;
 
+	get hasErrors() {
+		let hasErrors = false;
+
+		this.controls.forEach(control => {
+			if (control.$validator.getErrors().count() > 0) {
+				hasErrors = true;
+			}
+		});
+
+		return hasErrors;
+	}
+
+	@Watch('hasErrors')
+	onHasErrorsChange(hasErrors: boolean) {
+		this.base.valid = !hasErrors;
+	}
+
 	mounted() {
 		if (!AppForm.hasAddedValidators) {
 			this.$validator.extend('pattern', FormValidatorPattern);
@@ -57,6 +74,9 @@ export class AppForm extends Vue {
 		if (!this.base) {
 			throw new Error(`Couldn't find BaseForm in parent tree.`);
 		}
+
+		// We gotta make sure that the initial values are correct.
+		this.base.valid = !this.hasErrors;
 	}
 
 	async validate() {
@@ -68,18 +88,6 @@ export class AppForm extends Vue {
 		});
 
 		await Promise.all(promises);
-	}
-
-	get hasErrors() {
-		let hasErrors = false;
-
-		this.controls.forEach(control => {
-			if (control.$validator.getErrors().count() > 0) {
-				hasErrors = true;
-			}
-		});
-
-		return hasErrors;
 	}
 
 	async onSubmit() {
