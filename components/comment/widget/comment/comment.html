@@ -4,6 +4,7 @@
 	:date="comment.posted_on"
 	:is-active="isHighlighted"
 	:replied-to="parent ? parent.user : undefined"
+	:is-showing-replies="isShowingReplies"
 	>
 
 	<span slot="tags" v-if="isOwner">
@@ -191,7 +192,7 @@
 	</div>
 
 	<!-- Child Comments -->
-	<div v-if="(children && children.length && isShowingChildren) || isReplying" slot="replies">
+	<div v-if="isShowingReplies" slot="replies">
 
 		<div v-if="isShowingChildren">
 			<app-comment-widget-comment

@@ -98,6 +98,13 @@ export class AppCommentWidgetComment extends Vue {
 		return this.widget.resourceOwner.id === this.comment.user.id;
 	}
 
+	get isShowingReplies() {
+		return (
+			(this.children && this.children.length && this.isShowingChildren) ||
+			this.isReplying
+		);
+	}
+
 	get canFollow() {
 		// Can't subscribe if...
 		// they aren't logged in

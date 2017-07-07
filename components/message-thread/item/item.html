@@ -74,8 +74,10 @@
 				<slot name="controls" />
 			</div>
 
-			<div class="message-thread-item-replies">
+			<div class="message-thread-item-replies" v-if="isShowingReplies">
+				<hr class="message-thread-item-replies-split">
 				<slot name="replies" />
+				<hr class="message-thread-item-replies-split">
 			</div>
 
 		</div>
