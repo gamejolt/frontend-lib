@@ -120,8 +120,6 @@ export class Ads {
 		}
 
 		router.afterEach((_to, _from) => {
-			console.log('routed', _to, _from);
-
 			// TODO
 			// fromParams = angular.copy( fromParams );
 			// toParams = angular.copy( toParams );
@@ -160,7 +158,6 @@ export class Ads {
 	static async display(id: string) {
 		await this.ensure();
 		this.googletag.cmd.push(() => {
-			console.log('display', id);
 			this.googletag.display(id);
 		});
 	}
@@ -169,7 +166,6 @@ export class Ads {
 		await this.ensure();
 		this.googletag.cmd.push(() => {
 			const definedSlots = slots.map(slot => this.definedSlots[slot.id]);
-			console.log('refresh', definedSlots);
 			this.googletag
 				.pubads()
 				.refresh(definedSlots, { changeCorrelator: false });
