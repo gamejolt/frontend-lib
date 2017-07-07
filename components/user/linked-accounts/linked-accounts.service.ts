@@ -6,7 +6,7 @@ import { User } from '../user.model';
 import { Growls } from '../../growls/growls.service';
 import { Translate } from '../../translate/translate.service';
 
-type Provider = 'twitter' | 'facebook' | 'twitch' | 'google';
+export type Provider = 'twitter' | 'facebook' | 'twitch' | 'google';
 
 export class UserLinkedAccounts {
 	static async login(router: VueRouter, provider: Provider) {
