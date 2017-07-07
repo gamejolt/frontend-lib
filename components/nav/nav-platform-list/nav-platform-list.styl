@@ -85,8 +85,11 @@ nav.platform-list
 			display: inline-block
 			border-left: 0
 			border-bottom-width: 3px
-			padding: 0 5px ($line-height-computed / 2) 0
 			margin: 0
+
+			// For some reason we need this extra 1px of padding with the font
+			// we use.
+			padding: 0 5px ($line-height-computed / 2) + 1px 0
 
 			&:hover
 				border-color: $gray-lighter
