@@ -1,0 +1,24 @@
+<app-modal>
+
+	<div class="modal-controls">
+		<button class="btn btn-danger-outline" @click="modal.dismiss()">
+			<app-jolticon icon="remove" />
+			<translate>Close</translate>
+		</button>
+	</div>
+
+	<div class="modal-header">
+		<h2 class="modal-title">
+			{{ (package.title || game.title) }}
+		</h2>
+	</div>
+
+	<div class="modal-body">
+		<form-game-package-payment
+			:game="game"
+			:package="package"
+			:sellable="sellable"
+			/>
+	</div>
+
+</app-modal>

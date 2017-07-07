@@ -1,11 +1,11 @@
 import { Translate } from '../translate/translate.service';
 
-interface Country {
+export interface Country {
 	code: string;
 	name: string;
 }
 
-interface Region {
+export interface Region {
 	code: string;
 	name: string;
 }

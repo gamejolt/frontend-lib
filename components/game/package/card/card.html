@@ -191,10 +191,9 @@
 				@click="buildClick( $event.build, $event.fromExtraSection )"
 				/>
 
-			<div v-if="isPartner && sellable.type === 'paid'">
+			<div v-if="isPartner && sellable.type === 'paid' && !isOwned">
 				<br>
-				<div class="alert alert-success">
-					<app-jolticon icon="check" />
+				<div class="alert alert-info">
 					<translate>You get access to this package because you're a partner.</translate>
 				</div>
 				<hr>
@@ -208,9 +207,10 @@
 				Remove this as soon as we open the payment area.
 			-->
 			<div class="clearfix">
+					<!--v-if="!isPaymentOpen"
+					@click="isPaymentOpen = !isPaymentOpen"-->
 				<button class="btn btn-success-outline btn-block-xs"
-					v-if="!isPaymentOpen"
-					@click="isPaymentOpen = !isPaymentOpen"
+					@click="showPayment()"
 					>
 					<app-jolticon icon="heart" />
 					<translate>Buy Now</translate>

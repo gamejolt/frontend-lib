@@ -25,6 +25,7 @@ import { AppCountdown } from '../../../countdown/countdown';
 import { GameDownloader } from '../../downloader/downloader.service';
 import { AppGamePackageCardButtons } from './buttons';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
+import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
 
 @View
 @Component({
@@ -117,6 +118,7 @@ export class AppGamePackageCard extends Vue {
 			this.hasPaymentWell = true;
 		}
 
+		// TODO
 		// // Event to be able to open up the payment form.
 		// this.$scope.$on( 'Game_Package_Card.showPaymentOptions', ( _event, _package: GamePackage ) =>
 		// {
@@ -155,19 +157,25 @@ export class AppGamePackageCard extends Vue {
 		}
 	}
 
-	showPayment(build: GameBuild) {
-		// If this isn't a free game, then we want to slide the payment open. If
-		// it's pay what you want, when the payment is open and they click a
-		// build again, just take them to it.
-		if (this.hasPaymentWell) {
-			if (!this.isPaymentOpen) {
-				this.isPaymentOpen = true;
-				this.clickedBuild = build;
-				return true;
-			}
-		}
+	showPayment(build?: GameBuild) {
+		GamePackagePurchaseModal.show(
+			this.game,
+			this.package,
+			this.sellable,
+			build
+		);
+		// // If this isn't a free game, then we want to slide the payment open. If
+		// // it's pay what you want, when the payment is open and they click a
+		// // build again, just take them to it.
+		// if (this.hasPaymentWell) {
+		// 	if (!this.isPaymentOpen) {
+		// 		this.isPaymentOpen = true;
+		// 		this.clickedBuild = build;
+		// 		return true;
+		// 	}
+		// }
 
-		return false;
+		// return false;
 	}
 
 	skipPayment() {
