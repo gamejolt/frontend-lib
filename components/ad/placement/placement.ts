@@ -37,6 +37,7 @@ export class AppAdPlacement extends Vue {
 
 	get isVisible() {
 		if (
+			Screen.isXs ||
 			GJ_IS_CLIENT ||
 			GJ_IS_SSR ||
 			isPrerender ||

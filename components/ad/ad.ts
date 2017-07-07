@@ -9,6 +9,7 @@ import { Game } from '../game/game.model';
 import { User } from '../user/user.model';
 import { FiresidePost } from '../fireside/post/post-model';
 import { EventBus } from '../event-bus/event-bus.service';
+import { Screen } from '../screen/screen-service';
 
 @View
 @Component({})
@@ -43,6 +44,7 @@ export class AppAd extends Vue {
 
 	mounted() {
 		if (
+			Screen.isXs ||
 			GJ_IS_CLIENT ||
 			GJ_IS_SSR ||
 			isPrerender ||
