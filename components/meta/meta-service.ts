@@ -2,6 +2,7 @@ import { MetaContainer } from './meta-container';
 import { FbMetaContainer } from './fb-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
 import { MicrodataContainer } from './microdata-container';
+import { Environment } from '../environment/environment.service';
 
 export class Meta extends MetaContainer {
 	private static _title = '';
@@ -33,6 +34,7 @@ export class Meta extends MetaContainer {
 				document.title = title;
 			}
 			this._title = title;
+			Environment.ssrContext.meta.title = title;
 		}
 	}
 
