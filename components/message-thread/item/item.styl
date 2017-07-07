@@ -26,12 +26,14 @@
 	&-replies
 
 		&-split
-			margin-left: -35px
+			margin-left: -(($timeline-list-icon-size / 2) + $timeline-list-avatar-margin)
 			border-top: 2px solid $gray-lighter
+
+			@media $media-xs
+				margin-right: -($grid-gutter-width-xs / 2)
 
 		// Target the div within so that the slot doesn't take up any space until
 		// there's content within it
 		& > div
-			margin-top: $line-height-computed * 2
 			margin-bottom: $line-height-computed
 			margin-left: ($timeline-list-icon-size / 2) - $timeline-list-avatar-margin
