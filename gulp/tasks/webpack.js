@@ -172,12 +172,7 @@ module.exports = function(config) {
 					},
 					{
 						test: /\.md$/,
-						use: [
-							'file-loader?name=templates/[name].[hash:6].html',
-							'extract-loader',
-							'html-loader',
-							'markdown-loader',
-						],
+						use: ['html-loader', 'markdown-loader'],
 					},
 					{
 						test: /\.(png|jpe?g|gif|svg|json|ogg|mp4)(\?.*)?$/,
