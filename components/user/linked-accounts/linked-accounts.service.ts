@@ -66,7 +66,7 @@ export class UserLinkedAccounts {
 		// what tells us our oauth state.
 		router.push({
 			name: 'dash.account.linked-accounts.linking',
-			params: { token: response.token },
+			query: { token: response.token },
 		});
 	}
 
