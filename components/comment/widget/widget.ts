@@ -103,7 +103,6 @@ export class AppCommentWidget extends Vue {
 	}
 
 	private async refreshComments() {
-		// Pull in new comments, huzzah!
 		try {
 			this.isLoading = true;
 			const payload = await Comment.fetch(

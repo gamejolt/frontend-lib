@@ -198,6 +198,8 @@
 			<app-comment-widget-comment
 				v-for="child of children"
 				:key="child.id"
+				:resource="resource"
+				:resource-id="resourceId"
 				:comment="child"
 				:parent="comment"
 				/>

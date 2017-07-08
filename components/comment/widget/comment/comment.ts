@@ -61,6 +61,10 @@ export class AppCommentWidgetComment extends Vue {
 	children?: Comment[];
 	@Prop([Comment])
 	parent?: Comment;
+	@Prop([String])
+	resource: string;
+	@Prop([Number])
+	resourceId: number;
 
 	@State app: AppStore;
 

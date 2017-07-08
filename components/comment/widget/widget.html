@@ -81,6 +81,8 @@
 				<app-comment-widget-comment
 					v-for="comment of comments"
 					:key="comment.id"
+					:resource="resource"
+					:resource-id="resourceId"
 					:comment="comment"
 					:children="childComments[ comment.id ]"
 					/>
