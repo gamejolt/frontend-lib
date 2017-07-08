@@ -50,7 +50,9 @@ export class Primus {
 
 	private static async queryForHost(host: string, resolve: Function) {
 		try {
-			const response = await Axios.get(host + '/_info');
+			const response = await Axios.get(host + '/_info', {
+				ignoreLoadingBar: true,
+			});
 
 			const protocol = host.search(/^https/) === -1 ? 'http' : 'https';
 			if (response.status !== 200) {
