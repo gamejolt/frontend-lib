@@ -8,11 +8,12 @@ $media-bar-lightbox-item-start-scale ?= 0.5
 	width: 80%
 	vertical-align: top
 	transition: transform 300ms $weak-ease-out, opacity 300ms $weak-ease-out
+	will-change: transform, opacity
 
 	&.next
 	&.prev
 		opacity: $media-bar-lightbox-item-start-opacity
-		transform: scale( $media-bar-lightbox-item-start-scale, $media-bar-lightbox-item-start-scale )
+		transform: scale($media-bar-lightbox-item-start-scale, $media-bar-lightbox-item-start-scale)
 
 	// We need manual control of styling when dragging.
 	.dragging &
