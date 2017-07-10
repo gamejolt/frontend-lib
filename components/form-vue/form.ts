@@ -16,6 +16,8 @@ import { FormValidatorImgDimensions } from './validators/img_dimensions';
 import { FormValidatorMinImgDimensions } from './validators/min_img_dimensions';
 import { FormValidatorMaxImgDimensions } from './validators/max_img_dimensions';
 import { FormValidatorAccept } from './validators/accept';
+import { FormValidatorCcExp } from './validators/cc_exp';
+import { FormValidatorCcExpExpired } from './validators/cc_exp_expired';
 
 Vue.use(VeeValidate);
 
@@ -65,6 +67,8 @@ export class AppForm extends Vue {
 				'max_img_dimensions',
 				FormValidatorMaxImgDimensions
 			);
+			this.$validator.extend('cc_exp', FormValidatorCcExp);
+			this.$validator.extend('cc_exp_expired', FormValidatorCcExpExpired);
 			AppForm.hasAddedValidators = true;
 		}
 	}
