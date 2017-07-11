@@ -1,42 +1,54 @@
-$gj-font-lib = '../../components/fonts/';
+$gj-font-lib = '../../components/fonts/'
 
-font-url( font-url, variant )
-	src: url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.eot' )
-	src: url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.eot#iefix' ) format('embedded-opentype'),
-	url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.woff2' ) format('woff2'),
-	url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.woff' ) format('woff'),
-	url( $gj-font-lib + font-url + '/' + variant + '/' + font-url + '.ttf' ) format('truetype');
+font-url($font-url, $variant)
+	src: url($gj-font-lib + $font-url + '/' + $variant + '/' + $font-url + '.woff2') format('woff2'),
+	url($gj-font-lib + $font-url + '/' + $variant + '/' + $font-url + '.woff') format('woff')
 
 /**
  * Lato
  */
 @font-face
 	font-family: 'Lato'
-	font-url( 'lato', 'regular' )
+	font-url('lato', 'regular')
 	font-weight: normal
 	font-style: normal
 
 @font-face
 	font-family: 'Lato'
-	font-url( 'lato', 'regular-italic' )
-	font-weight: normal
-	font-style: italic
-
-@font-face
-	font-family: 'Lato'
-	font-url( 'lato', 'light' )
+	font-url('lato', 'light')
 	font-weight: 300
 	font-style: normal
 
 @font-face
 	font-family: 'Lato'
-	font-url( 'lato', 'bold' )
+	font-url('lato', 'bold')
+	font-weight: 700
+	font-style: normal
+
+/**
+ * Nunito
+ */
+@font-face
+	font-family: 'Nunito'
+	font-url('nunito', 'regular')
+	font-weight: normal
+	font-style: normal
+
+@font-face
+	font-family: 'Nunito'
+	font-url('nunito', 'regular-italic')
+	font-weight: normal
+	font-style: italic
+
+@font-face
+	font-family: 'Nunito'
+	font-url('nunito', 'bold')
 	font-weight: 700
 	font-style: normal
 
 @font-face
-	font-family: 'Lato'
-	font-url( 'lato', 'bold-italic' )
+	font-family: 'Nunito'
+	font-url('nunito', 'bold-italic')
 	font-weight: 700
 	font-style: italic
 
@@ -45,25 +57,25 @@ font-url( font-url, variant )
  */
 @font-face
 	font-family: 'Merriweather'
-	font-url( 'merriweather', 'regular' )
+	font-url('merriweather', 'regular')
 	font-weight: normal
 	font-style: normal
 
 @font-face
 	font-family: 'Merriweather'
-	font-url( 'merriweather', 'regular-italic' )
+	font-url('merriweather', 'regular-italic')
 	font-weight: normal
 	font-style: italic
 
 @font-face
 	font-family: 'Merriweather'
-	font-url( 'merriweather', 'bold' )
+	font-url('merriweather', 'bold')
 	font-weight: 700
 	font-style: normal
 
 @font-face
 	font-family: 'Merriweather'
-	font-url( 'merriweather', 'bold-italic' )
+	font-url('merriweather', 'bold-italic')
 	font-weight: 700
 	font-style: italic
 
@@ -72,6 +84,6 @@ font-url( font-url, variant )
  */
 @font-face
 	font-family: 'Inconsolata'
-	font-url( 'inconsolata', 'regular' )
+	font-url('inconsolata', 'regular')
 	font-weight: normal
 	font-style: normal
