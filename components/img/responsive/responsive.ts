@@ -14,14 +14,12 @@ export class AppImgResponsive extends Vue {
 	@Prop([String])
 	src: string;
 
+	private initialized = false;
 	private processedSrc = '';
 	private resize$: Subscription | undefined;
 
 	created() {
-		// Set the initial src for SSR.
-		if (GJ_IS_SSR) {
-			this.processedSrc = this.src;
-		}
+		this.processedSrc = this.src;
 	}
 
 	async mounted() {
@@ -85,8 +83,9 @@ export class AppImgResponsive extends Vue {
 
 		// Only if the src changed from previous runs.
 		// They may be the same if the user resized the window but image container didn't change dimensions.
-		if (newSrc !== this.processedSrc) {
+		if (!this.initialized || newSrc !== this.processedSrc) {
 			this.processedSrc = newSrc;
+			this.initialized = true;
 
 			// Keep the isLoaded state up to date?
 			this.$emit('imgloadchange', false);
