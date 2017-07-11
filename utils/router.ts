@@ -1,14 +1,29 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
 import { createDecorator } from 'vue-class-component';
 import { HistoryCache } from '../components/history/cache/cache.service';
 import { PayloadError } from '../components/payload/payload-service';
 import { EventBus } from '../components/event-bus/event-bus.service';
+import { routeError404 } from '../components/error/page/page.route';
+import { initScrollBehavior } from '../components/scroll/auto-scroll/autoscroll.service';
 
 interface BeforeRouteEnterOptions {
 	lazy?: boolean;
 	cache?: boolean;
 	cacheTag?: string;
+}
+
+export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
+	Vue.use(VueRouter);
+
+	const routes = [...appRoutes, routeError404];
+
+	return new VueRouter({
+		mode: !GJ_IS_CLIENT ? 'history' : undefined,
+		routes,
+		scrollBehavior: initScrollBehavior(),
+	});
 }
 
 export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
