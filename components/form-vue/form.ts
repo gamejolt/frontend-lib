@@ -94,7 +94,7 @@ export class AppForm extends Vue {
 		await Promise.all(promises);
 	}
 
-	async onSubmit() {
+	async submit() {
 		// Gotta validate all controls first.
 		await this.validate();
 
