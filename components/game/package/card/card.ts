@@ -164,6 +164,7 @@ export class AppGamePackageCard extends Vue {
 			this.sellable,
 			build
 		);
+		return true;
 		// // If this isn't a free game, then we want to slide the payment open. If
 		// // it's pay what you want, when the payment is open and they click a
 		// // build again, just take them to it.
