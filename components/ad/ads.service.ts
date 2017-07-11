@@ -156,6 +156,10 @@ export class Ads {
 	}
 
 	static async display(id: string) {
+		if (GJ_BUILD_TYPE === 'development') {
+			return;
+		}
+
 		await this.ensure();
 		this.googletag.cmd.push(() => {
 			this.googletag.display(id);
