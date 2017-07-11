@@ -31,6 +31,7 @@ import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vu
 import { AppPopover } from '../../../popover/popover';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppFocusWhen } from '../../../form-vue/focus-when.directive';
+import { AppForm } from '../../../form-vue/form';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
@@ -74,6 +75,10 @@ export class FormGamePackagePayment extends BaseForm<any>
 	partnerNoCut?: boolean;
 
 	@State app: AppStore;
+
+	$refs: {
+		form: AppForm;
+	};
 
 	// form.this.onBought = '&';
 
@@ -283,12 +288,12 @@ export class FormGamePackagePayment extends BaseForm<any>
 
 	checkoutCard() {
 		this.checkoutType = 'cc-stripe';
-		this.onSubmit();
+		this.$refs.form.submit();
 	}
 
 	checkoutPaypal() {
 		this.checkoutType = 'paypal';
-		this.onSubmit();
+		this.$refs.form.submit();
 	}
 
 	startOver() {
