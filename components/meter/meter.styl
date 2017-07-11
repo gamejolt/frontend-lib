@@ -24,18 +24,17 @@ $meter-blip-count = 10
 		background-color: $gray
 
 .meter-dark
-
 	.meter-blip
 		background-color: $gray-light
 
 .meter-blip-filled
-	.meter-dark .meter-low &
+	.meter-dark.meter-low &
 		background-color: $gj-pink
 
-	.meter-dark .meter-mid &
+	.meter-dark.meter-mid &
 		background-color: $gray-lightest
 
-	.meter-dark .meter-high &
+	.meter-dark.meter-high &
 		background-color: $gj-green
 
 for i in 1..$meter-blip-count
