@@ -19,7 +19,9 @@ export class AppImgResponsive extends Vue {
 
 	created() {
 		// Set the initial src for SSR.
-		this.processedSrc = this.src;
+		if (GJ_IS_SSR) {
+			this.processedSrc = this.src;
+		}
 	}
 
 	async mounted() {
