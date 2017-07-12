@@ -26,78 +26,78 @@ export class Ads {
 	static readonly TAG_SLOTS = [
 		new AdSlot(
 			'/27005478/web-display-leaderboard',
-			[[728, 90], [970, 90]],
+			[[728, 90]],
 			`div-gpt-ad-${DfpTagId}-10`
 		),
 		new AdSlot(
 			'/27005478/web-display-leaderboard',
-			[[728, 90], [970, 90]],
+			[[728, 90]],
 			`div-gpt-ad-${DfpTagId}-11`
 		),
 		new AdSlot(
 			'/27005478/web-display-leaderboard',
-			[[728, 90], [970, 90]],
+			[[728, 90]],
 			`div-gpt-ad-${DfpTagId}-12`
 		),
 		new AdSlot(
 			'/27005478/web-display-leaderboard',
-			[[728, 90], [970, 90]],
+			[[728, 90]],
 			`div-gpt-ad-${DfpTagId}-13`
 		),
 		new AdSlot(
 			'/27005478/web-display-leaderboard',
-			[[728, 90], [970, 90]],
+			[[728, 90]],
 			`div-gpt-ad-${DfpTagId}-14`
 		),
 
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-20`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-21`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-22`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-23`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-24`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-25`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-26`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-27`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-28`
 		),
 		new AdSlot(
 			'/27005478/web-display-rectangle',
-			[[300, 250], [300, 600]],
+			[[300, 250]],
 			`div-gpt-ad-${DfpTagId}-29`
 		),
 	];
