@@ -12,6 +12,7 @@ import { Api } from '../../api/api.service';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
+import { KeyGroup } from '../../key-group/key-group.model';
 
 export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
@@ -48,6 +49,7 @@ export class FiresidePost extends Model {
 	videos: FiresidePostVideo[] = [];
 	sketchfabs: FiresidePostSketchfab[] = [];
 	user_like: FiresidePostLike | null;
+	key_groups: KeyGroup[] = [];
 
 	url: string;
 
@@ -56,6 +58,9 @@ export class FiresidePost extends Model {
 
 	// For uploads.
 	file: any;
+
+	// Used for forms and saving.
+	key_group_ids: number[] = [];
 
 	constructor(data: any = {}) {
 		super(data);
@@ -88,6 +93,11 @@ export class FiresidePost extends Model {
 			this.user_like = new FiresidePostLike(data.user_like);
 		}
 
+		if (data.key_groups) {
+			this.key_groups = KeyGroup.populate(data.key_groups);
+			this.key_group_ids = this.key_groups.map(i => i.id);
+		}
+
 		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
 
 		Registry.store('FiresidePost', this);
@@ -104,8 +114,15 @@ export class FiresidePost extends Model {
 
 	$save() {
 		if (this.game) {
+			const data: any = Object.assign({}, this);
+			data.keyGroups = {};
+			for (const id of this.key_group_ids) {
+				data.keyGroups[id] = true;
+			}
+
 			const options = {
 				allowComplexData: ['keyGroups'],
+				data,
 				file: this.file,
 			};
 
@@ -172,8 +189,11 @@ export class FiresidePost extends Model {
 		);
 
 		if (result) {
-			return this.$remove();
+			await this.$remove();
+			return true;
 		}
+
+		return false;
 	}
 
 	$remove() {
