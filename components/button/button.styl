@@ -97,8 +97,10 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 		transform: translateY( 2px )
 
 	.jolticon
+		position: relative
+		top: -1px
 		cursor: pointer
-		vertical-align: middle
+		vertical-align: text-top
 		margin: 0 $button-icon-spacing-right 0 0
 
 	.jolticon-addon
@@ -107,7 +109,7 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 	small
 		font-weight: normal
 		font-size: $font-size-tiny
-		vertical-align: middle
+		vertical-align: baseline
 
 	&-badge
 		float: right
@@ -118,8 +120,8 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 		background-color: $black
 		color: $gj-green
 		font-size: $font-size-small
-		border-top-right-radius: ($border-radius-base / 2)
-		border-bottom-right-radius: ($border-radius-base / 2)
+		border-top-right-radius: $border-radius-base
+		border-bottom-right-radius: $border-radius-base
 
 /**
  * Disabled State
@@ -182,6 +184,8 @@ button-variant( background, color, icon-color, addon-color, outline-color, outli
 
 	.btn-badge
 		margin-right: -($button-padding-horizontal - $button-outline-border-size)
+		border-top-right-radius: ($border-radius-base / 2)
+		border-bottom-right-radius: ($border-radius-base / 2)
 
 /**
 * Default
