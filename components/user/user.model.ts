@@ -49,6 +49,13 @@ export class User extends Model {
 	fireside_about: string;
 	compiled_fireside_about: string;
 
+	// Financials
+	paypal_id?: string;
+	paypal_email_address?: string;
+	revenue_percentage?: number;
+	revenue_payout_minimum?: number;
+	revenue_wallet_maximum?: number;
+
 	constructor(data: any = {}) {
 		super(data);
 
