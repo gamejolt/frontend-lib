@@ -5,8 +5,9 @@ $list-group-addon-width = 40px
 $list-group-drag-handle-width = 20px
 
 .list-group
-	border: 1px solid $gray-lightest
 	margin-bottom: $font-size-base
+	border: 1px solid $gray-lightest
+	border-radius: $border-radius-base
 
 	&.nowrap
 		white-space: nowrap
@@ -142,27 +143,6 @@ $list-group-drag-handle-width = 20px
 		border-right: 0
 
 /**
- * Dragging
- */
-.list-group-item-drag-handle
-	position: absolute
-	right: 0
-	top: 0
-	bottom: 0
-	width: $list-group-drag-handle-width
-	cursor: move
-	background-color: $gray-lighter
-	user-select: none
-
-	> .jolticon
-		position: absolute
-		top: 50%
-		left: 0
-		margin-top: -8px
-		cursor: inherit
-		color: $black
-
-/**
  * Dark list groups
  */
 .list-group-dark
@@ -188,6 +168,14 @@ $list-group-drag-handle-width = 20px
 			color: $white !important
 			&:hover
 				color: $gj-blue !important
+
+		&:first-child
+			border-top-left-radius: $border-radius-base
+			border-top-right-radius: $border-radius-base
+
+		&:last-child
+			border-bottom-left-radius: $border-radius-base
+			border-bottom-right-radius: $border-radius-base
 
 	.list-group-item-heading
 		color: $gray-lighter
