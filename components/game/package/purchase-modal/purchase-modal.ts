@@ -17,15 +17,11 @@ import { Sellable } from '../../../sellable/sellable.model';
 	},
 })
 export default class AppGamePackagePurchaseModal extends BaseModal {
-	@Prop([Game])
-	game: Game;
+	@Prop(Game) game: Game;
 
-	@Prop([GamePackage])
-	package: GamePackage;
+	@Prop(GamePackage) package: GamePackage;
 
-	@Prop([Sellable])
-	sellable: Sellable;
+	@Prop(Sellable) sellable: Sellable;
 
-	@Prop([GameBuild])
-	build?: GameBuild;
+	@Prop(GameBuild) build?: GameBuild;
 }

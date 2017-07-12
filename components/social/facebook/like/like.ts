@@ -6,8 +6,7 @@ import { FacebookSdk } from '../sdk/sdk.service';
 
 @Component({})
 export class AppSocialFacebookLike extends Vue {
-	@Prop([String])
-	url: string;
+	@Prop(String) url: string;
 	@Prop({ type: Boolean, default: true })
 	showShare: boolean;
 

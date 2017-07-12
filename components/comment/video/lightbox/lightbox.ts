@@ -38,8 +38,7 @@ bootstrapShortkey();
 	},
 })
 export class AppCommentVideoLightbox extends Vue {
-	@Prop([CommentVideo])
-	video: CommentVideo;
+	@Prop(CommentVideo) video: CommentVideo;
 
 	@State app: AppStore;
 

@@ -15,12 +15,9 @@ import { AppLoading } from '../../vue/components/loading/loading';
 	},
 })
 export class AppVideo extends Vue {
-	@Prop([String])
-	poster: string;
-	@Prop([String])
-	webm: string;
-	@Prop([String])
-	mp4: string;
+	@Prop(String) poster: string;
+	@Prop(String) webm: string;
+	@Prop(String) mp4: string;
 	@Prop({ type: Boolean, default: false })
 	showLoading: boolean;
 

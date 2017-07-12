@@ -23,24 +23,16 @@ interface PopoverTiggerEvent extends Event {
 @View
 @Component({})
 export class AppPopover extends Vue {
-	@Prop([String])
-	popoverId: string;
-	@Prop([Boolean])
-	appendToBody: boolean;
-	@Prop([Boolean])
-	triggerManually: boolean;
-	@Prop([String])
-	positionBy?: 'position' | 'offset' | 'fixed';
-	@Prop([String])
-	trackElementWidth?: string;
+	@Prop(String) popoverId: string;
+	@Prop(Boolean) appendToBody: boolean;
+	@Prop(Boolean) triggerManually: boolean;
+	@Prop(String) positionBy?: 'position' | 'offset' | 'fixed';
+	@Prop(String) trackElementWidth?: string;
 	@Prop({ type: String, default: 'bottom' })
 	position: 'top' | 'right' | 'bottom' | 'left';
-	@Prop([String])
-	positionHorizontal?: string;
-	@Prop([Boolean])
-	hideOnStateChange: boolean;
-	@Prop([Boolean])
-	noMaxHeight: boolean;
+	@Prop(String) positionHorizontal?: string;
+	@Prop(Boolean) hideOnStateChange: boolean;
+	@Prop(Boolean) noMaxHeight: boolean;
 
 	isVisible = false;
 	isAppendedToBody = false;
@@ -253,7 +245,7 @@ export class AppPopover extends Vue {
 		if (this.position === 'top' || this.position === 'bottom') {
 			const extraSpacing = elementStyles.left
 				? (popoverWidth - Ruler.width(this.$el)) / 2 +
-					parseFloat(elementStyles.left)
+						parseFloat(elementStyles.left)
 				: 0;
 			this.arrowLeft =
 				triggerLeft +
@@ -263,7 +255,7 @@ export class AppPopover extends Vue {
 		} else if (this.position === 'left' || this.position === 'right') {
 			const extraSpacing = elementStyles.top
 				? (popoverHeight - Ruler.height(this.$el)) / 2 +
-					parseFloat(elementStyles.top)
+						parseFloat(elementStyles.top)
 				: 0;
 			this.arrowTop =
 				triggerTop +

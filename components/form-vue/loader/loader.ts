@@ -12,8 +12,7 @@ import { AppLoading } from '../../../vue/components/loading/loading';
 	},
 })
 export class AppFormLoader extends Vue {
-	@Prop([String])
-	url: string;
+	@Prop(String) url: string;
 
 	isLoaded = false;
 

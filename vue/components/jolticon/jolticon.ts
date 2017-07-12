@@ -5,8 +5,6 @@ import * as View from '!view!./jolticon.html';
 @View
 @Component({})
 export class AppJolticon extends Vue {
-	@Prop([String])
-	icon: string;
-	@Prop([Boolean])
-	big?: boolean;
+	@Prop(String) icon: string;
+	@Prop(Boolean) big?: boolean;
 }

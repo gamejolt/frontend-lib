@@ -54,25 +54,19 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 })
 export class FormGamePackagePayment extends BaseForm<any>
 	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess {
-	@Prop([Game])
-	game: Game;
+	@Prop(Game) game: Game;
 
-	@Prop([GamePackage])
-	package: GamePackage;
+	@Prop(GamePackage) package: GamePackage;
 
-	@Prop([Sellable])
-	sellable: Sellable;
-	// @Prop([SellablePricing])
+	@Prop(Sellable) sellable: Sellable;
+	// @Prop(SellablePricing)
 	// pricing: SellablePricing;
 
-	@Prop([String])
-	partnerReferredKey?: string;
+	@Prop(String) partnerReferredKey?: string;
 
-	@Prop([User])
-	partnerReferredBy?: User;
+	@Prop(User) partnerReferredBy?: User;
 
-	@Prop([Boolean])
-	partnerNoCut?: boolean;
+	@Prop(Boolean) partnerNoCut?: boolean;
 
 	@State app: AppStore;
 
@@ -129,8 +123,9 @@ export class FormGamePackagePayment extends BaseForm<any>
 
 		// When we're filling in the address, pull that tax.
 		// Otherwise, when we're on the main page, check the wallet tax amount for their saved address.
-		const taxAmount =
-			this.checkoutStep === 'address' ? this.addressTaxAmount : this.walletTax;
+		const taxAmount = this.checkoutStep === 'address'
+			? this.addressTaxAmount
+			: this.walletTax;
 		const sellableAmount = this.pricing.amount;
 		const currentAmount = this.formModel.amount * 100; // The formModel amount is a decimal.
 
@@ -230,10 +225,9 @@ export class FormGamePackagePayment extends BaseForm<any>
 	}
 
 	addMoney(amount: number) {
-		let curAmount: number =
-			typeof this.formModel.amount === 'string'
-				? parseFloat(this.formModel.amount)
-				: this.formModel.amount;
+		let curAmount: number = typeof this.formModel.amount === 'string'
+			? parseFloat(this.formModel.amount)
+			: this.formModel.amount;
 
 		if (!curAmount) {
 			curAmount = amount;

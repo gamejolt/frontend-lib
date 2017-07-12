@@ -16,22 +16,15 @@ import { AppAd } from '../ad';
 	},
 })
 export class AppAdPlacement extends Vue {
-	@Prop([Object])
-	resource?: Model;
+	@Prop(Object) resource?: Model;
 
-	@Prop([Boolean])
-	hiddenXs?: boolean;
-	@Prop([Boolean])
-	hiddenSm?: boolean;
-	@Prop([Boolean])
-	hiddenDesktop?: boolean;
+	@Prop(Boolean) hiddenXs?: boolean;
+	@Prop(Boolean) hiddenSm?: boolean;
+	@Prop(Boolean) hiddenDesktop?: boolean;
 
-	@Prop([Boolean])
-	visibleXs?: boolean;
-	@Prop([Boolean])
-	visibleSm?: boolean;
-	@Prop([Boolean])
-	visibleDesktop?: boolean;
+	@Prop(Boolean) visibleXs?: boolean;
+	@Prop(Boolean) visibleSm?: boolean;
+	@Prop(Boolean) visibleDesktop?: boolean;
 
 	Screen = makeObservableService(Screen);
 

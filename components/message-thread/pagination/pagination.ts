@@ -11,16 +11,11 @@ import { AppPagination } from '../../pagination/pagination';
 	},
 })
 export class AppMessageThreadPagination extends Vue {
-	@Prop([Number])
-	itemsPerPage: number;
-	@Prop([Number])
-	totalItems: number;
-	@Prop([Number])
-	currentPage: number;
-	@Prop([Boolean])
-	pager?: boolean;
-	@Prop([Boolean])
-	preventUrlChange?: boolean;
+	@Prop(Number) itemsPerPage: number;
+	@Prop(Number) totalItems: number;
+	@Prop(Number) currentPage: number;
+	@Prop(Boolean) pager?: boolean;
+	@Prop(Boolean) preventUrlChange?: boolean;
 
 	get hasPages() {
 		return this.totalItems > this.itemsPerPage;

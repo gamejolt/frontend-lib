@@ -5,8 +5,7 @@ import { GameSong } from '../../game/song/song.model';
 
 @Component({})
 export class AppAudioPlayer extends Vue {
-	@Prop([GameSong])
-	song: GameSong;
+	@Prop(GameSong) song: GameSong;
 
 	$el: HTMLAudioElement;
 

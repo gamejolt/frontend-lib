@@ -24,8 +24,7 @@ import { time } from '../../../vue/filters/time';
 	},
 })
 export class AppAudioPlaylist extends Vue {
-	@Prop([Array])
-	songs: GameSong[];
+	@Prop(Array) songs: GameSong[];
 
 	currentSong: GameSong | null = null;
 	duration = 0;

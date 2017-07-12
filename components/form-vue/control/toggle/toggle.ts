@@ -6,8 +6,7 @@ import { BaseFormControl } from '../base';
 @View
 @Component({})
 export class AppFormControlToggle extends BaseFormControl {
-	@Prop([Boolean])
-	disabled?: boolean;
+	@Prop(Boolean) disabled?: boolean;
 
 	value: boolean = false;
 

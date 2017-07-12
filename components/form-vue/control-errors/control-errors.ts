@@ -31,14 +31,11 @@ const ErrorMessagesBase: { [k: string]: string } = {
 	},
 })
 export class AppFormControlErrors extends Vue {
-	@Prop([String])
-	label?: string;
-	@Prop([String])
-	position?: string;
+	@Prop(String) label?: string;
+	@Prop(String) position?: string;
 
 	// TODO
-	@Prop([Boolean])
-	ignoreDirty?: boolean;
+	@Prop(Boolean) ignoreDirty?: boolean;
 
 	form: AppForm;
 	group: AppFormGroup;

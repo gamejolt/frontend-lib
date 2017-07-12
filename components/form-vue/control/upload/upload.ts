@@ -103,19 +103,13 @@ async function getFiles(e: DragEvent) {
 	},
 })
 export class AppFormControlUpload extends BaseFormControl {
-	@Prop([Boolean])
-	sortable?: boolean;
-	@Prop([Boolean])
-	multiple?: boolean;
-	@Prop([String])
-	uploadLinkLabel?: string;
-	@Prop([String])
-	accept?: string;
+	@Prop(Boolean) sortable?: boolean;
+	@Prop(Boolean) multiple?: boolean;
+	@Prop(String) uploadLinkLabel?: string;
+	@Prop(String) accept?: string;
 
-	@Prop([Array])
-	validateOn: string[];
-	@Prop([Number])
-	validateDelay: number;
+	@Prop(Array) validateOn: string[];
+	@Prop(Number) validateDelay: number;
 
 	value: File | File[] | null = [];
 	isDropActive = false;

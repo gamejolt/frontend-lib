@@ -11,14 +11,11 @@ export class AppFormControl extends BaseFormControl {
 	@Prop({ type: String, default: 'text' })
 	type: string;
 
-	@Prop([Array])
-	validateOn: string[];
+	@Prop(Array) validateOn: string[];
 
-	@Prop([Number])
-	validateDelay: number;
+	@Prop(Number) validateDelay: number;
 
-	@Prop([Array])
-	mask: (string | RegExp)[];
+	@Prop(Array) mask: (string | RegExp)[];
 
 	value = '';
 	maskedInputElem: any = null;

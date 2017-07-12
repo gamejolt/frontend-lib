@@ -5,12 +5,10 @@ import * as View from '!view!./list.html?style=./list.styl';
 @View
 @Component({})
 export class AppCardList extends Vue {
-	@Prop([Array])
-	items: any[];
+	@Prop(Array) items: any[];
 	@Prop({ default: null })
 	activeItem: any | null;
-	@Prop([Boolean])
-	isAdding?: boolean;
+	@Prop(Boolean) isAdding?: boolean;
 
 	isDraggable = false;
 

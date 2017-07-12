@@ -18,10 +18,8 @@ require('./growl-content.styl');
 	},
 })
 export class AppGrowl extends Vue {
-	@Prop([Number])
-	index: number;
-	@Prop([Object])
-	growl: Growl;
+	@Prop(Number) index: number;
+	@Prop(Object) growl: Growl;
 
 	Screen = makeObservableService(Screen);
 

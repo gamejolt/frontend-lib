@@ -18,8 +18,7 @@ import { findVueParent } from '../../../utils/vue';
 	},
 })
 export class AppMediaBarItem extends Vue {
-	@Prop([Object])
-	item: any;
+	@Prop(Object) item: any;
 
 	mediaBar: AppMediaBar;
 	width = 'auto';

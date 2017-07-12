@@ -15,8 +15,7 @@ export class AppScrollAffix extends Vue {
 
 	@Prop({ type: Boolean, default: true })
 	shouldAffix: boolean;
-	@Prop([Number])
-	scrollOffset?: number;
+	@Prop(Number) scrollOffset?: number;
 
 	isAffixed = false;
 	placeholderHeight = 0;

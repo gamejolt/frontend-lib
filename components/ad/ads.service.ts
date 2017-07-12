@@ -210,10 +210,9 @@ export class Ads {
 	}
 
 	static getUnusedAdSlot(size: 'rectangle' | 'leaderboard') {
-		const adUnit =
-			size === 'rectangle'
-				? '/27005478/web-display-rectangle'
-				: '/27005478/web-display-leaderboard';
+		const adUnit = size === 'rectangle'
+			? '/27005478/web-display-rectangle'
+			: '/27005478/web-display-leaderboard';
 
 		return this.TAG_SLOTS.find(slot => slot.adUnit === adUnit && !slot.isUsed);
 	}

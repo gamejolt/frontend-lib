@@ -34,8 +34,7 @@ bootstrapShortkey();
 	},
 })
 export class AppMediaBarLightbox extends Vue {
-	@Prop([Object])
-	mediaBar: AppMediaBar;
+	@Prop(Object) mediaBar: AppMediaBar;
 
 	sliderElem: HTMLElement;
 

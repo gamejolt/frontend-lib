@@ -3,8 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export class AppCountdown extends Vue {
-	@Prop([Number])
-	end: number;
+	@Prop(Number) end: number;
 
 	private time = '';
 	private interval: number;

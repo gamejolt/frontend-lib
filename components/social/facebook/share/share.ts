@@ -6,8 +6,7 @@ import { FacebookSdk } from '../sdk/sdk.service';
 
 @Component({})
 export class AppSocialFacebookShare extends Vue {
-	@Prop([String])
-	url: string;
+	@Prop(String) url: string;
 
 	render(h: Vue.CreateElement) {
 		return h('div', {

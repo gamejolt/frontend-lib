@@ -25,12 +25,9 @@ import { number } from '../../../../../vue/filters/number';
 	},
 })
 export class AppFiresidePostLikeWidget extends Vue {
-	@Prop([FiresidePost])
-	post: FiresidePost;
-	@Prop([Boolean])
-	sparse?: boolean;
-	@Prop([Boolean])
-	circle?: boolean;
+	@Prop(FiresidePost) post: FiresidePost;
+	@Prop(Boolean) sparse?: boolean;
+	@Prop(Boolean) circle?: boolean;
 
 	@State app: AppStore;
 

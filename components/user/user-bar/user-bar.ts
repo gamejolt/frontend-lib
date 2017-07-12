@@ -13,12 +13,9 @@ import { AppUserAvatarImg } from '../user-avatar/img/img';
 	},
 })
 export class AppUserBar extends Vue {
-	@Prop([User])
-	user: User;
-	@Prop([String])
-	site: string;
-	@Prop([Boolean])
-	hideSiteSelector?: boolean;
+	@Prop(User) user: User;
+	@Prop(String) site: string;
+	@Prop(Boolean) hideSiteSelector?: boolean;
 
 	get userLink() {
 		// User link on fireside goes to their fireside profile if they are an

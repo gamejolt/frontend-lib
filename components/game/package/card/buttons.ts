@@ -30,10 +30,8 @@ import { Screen } from '../../../screen/screen-service';
 	},
 })
 export class AppGamePackageCardButtons extends Vue {
-	@Prop([GamePackage])
-	package: GamePackage;
-	@Prop([GamePackageCardModel])
-	card: GamePackageCardModel;
+	@Prop(GamePackage) package: GamePackage;
+	@Prop(GamePackageCardModel) card: GamePackageCardModel;
 
 	Screen = makeObservableService(Screen);
 

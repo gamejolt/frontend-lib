@@ -15,26 +15,18 @@ const MaxPagesShown = 5;
 	},
 })
 export class AppPagination extends Vue {
-	@Prop([Number])
-	totalItems: number;
-	@Prop([Number])
-	itemsPerPage: number;
-	@Prop([Number])
-	currentPage: number;
+	@Prop(Number) totalItems: number;
+	@Prop(Number) itemsPerPage: number;
+	@Prop(Number) currentPage: number;
 	@Prop({ type: String, default: 'page' })
 	queryParam: string;
-	@Prop([Boolean])
-	preventUrlChange?: boolean;
+	@Prop(Boolean) preventUrlChange?: boolean;
 
 	// These only make sense for pagers.
-	@Prop([Boolean])
-	pager?: boolean;
-	@Prop([Boolean])
-	reverseButtons?: boolean;
-	@Prop([String])
-	nextText?: string;
-	@Prop([String])
-	previousText?: string;
+	@Prop(Boolean) pager?: boolean;
+	@Prop(Boolean) reverseButtons?: boolean;
+	@Prop(String) nextText?: string;
+	@Prop(String) previousText?: string;
 
 	Screen = makeObservableService(Screen);
 

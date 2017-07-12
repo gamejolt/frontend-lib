@@ -25,28 +25,18 @@ import { AppCodemirror } from '../../../codemirror/codemirror';
 	},
 })
 export class AppFormControlMarkdown extends BaseFormControl {
-	@Prop([String])
-	editorClass?: string;
-	@Prop([String])
-	previewClass?: string;
-	@Prop([String])
-	previewUrl: string;
-	@Prop([Boolean])
-	disablePreview?: boolean;
-	@Prop([String])
-	placeholder?: string;
+	@Prop(String) editorClass?: string;
+	@Prop(String) previewClass?: string;
+	@Prop(String) previewUrl: string;
+	@Prop(Boolean) disablePreview?: boolean;
+	@Prop(String) placeholder?: string;
 	@Prop({ type: String, default: 'markdown' })
 	markdownMode?: string;
-	@Prop([Boolean])
-	htmlSupport?: boolean;
-	@Prop([Boolean])
-	showMediaItems?: boolean;
-	@Prop([String])
-	mediaItemType?: string;
-	@Prop([Boolean])
-	allowCodeEditor?: boolean;
-	@Prop([Boolean])
-	disabled?: boolean;
+	@Prop(Boolean) htmlSupport?: boolean;
+	@Prop(Boolean) showMediaItems?: boolean;
+	@Prop(String) mediaItemType?: string;
+	@Prop(Boolean) allowCodeEditor?: boolean;
+	@Prop(Boolean) disabled?: boolean;
 
 	value: string = '';
 	currentTab = 'edit';
