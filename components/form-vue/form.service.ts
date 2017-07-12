@@ -108,7 +108,7 @@ export class BaseForm<T> extends Vue {
 
 	async _onSubmit() {
 		if (this.state.isProcessing) {
-			return;
+			return false;
 		}
 
 		this.state.isProcessing = true;
@@ -153,6 +153,8 @@ export class BaseForm<T> extends Vue {
 			if (this.resetOnSubmit) {
 				this._init();
 			}
+
+			return true;
 		} catch (_response) {
 			console.error('Form error', _response);
 
@@ -163,6 +165,7 @@ export class BaseForm<T> extends Vue {
 
 			// Reset our processing state.
 			this.state.isProcessing = false;
+			return false;
 		}
 	}
 

@@ -100,10 +100,10 @@ export class AppForm extends Vue {
 
 		// If we have validation errors, don't let it pass through.
 		if (this.hasErrors) {
-			return;
+			return false;
 		}
 
-		this.base._onSubmit();
+		return await this.base._onSubmit();
 	}
 
 	onChange() {
