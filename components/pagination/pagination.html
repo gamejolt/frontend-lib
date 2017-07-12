@@ -11,7 +11,7 @@
 			<div class="pagination-item" v-if="hasPrevious && currentPage !== 2" @click.capture="onPageClick( $event, 1 )">
 				<router-link
 					class="btn btn-outline"
-					:to="{ name: $route.name, query: getQuery( 1 ) }"
+					:to="getPageLocation( 1 )"
 					v-app-no-autoscroll
 					>
 					<translate>First</translate>
@@ -20,7 +20,7 @@
 			<div class="pagination-item" v-if="hasPrevious" @click.capture="onPageClick( $event, prevPage )">
 				<router-link
 					class="btn btn-outline"
-					:to="{ name: $route.name, query: getQuery( prevPage ) }"
+					:to="getPageLocation( prevPage )"
 					v-app-no-autoscroll
 					>
 					<translate>Previous</translate>
@@ -30,7 +30,7 @@
 			<div class="pagination-item" v-if="prevChunkPage" @click.capture="onPageClick( $event, prevChunkPage )">
 				<router-link
 					class="btn btn-outline btn-sparse"
-					:to="{ name: $route.name, query: getQuery( prevChunkPage ) }"
+					:to="getPageLocation( prevChunkPage )"
 					v-app-no-autoscroll
 					>
 					...
@@ -46,7 +46,7 @@
 				<router-link
 					class="btn btn-outline btn-sparse"
 					v-if="page !== currentPage"
-					:to="{ name: $route.name, query: getQuery( (page > 1 ? page : undefined) ) }"
+					:to="getPageLocation( (page > 1 ? page : undefined) )"
 					v-app-no-autoscroll
 					>
 					{{ page }}
@@ -59,7 +59,7 @@
 			<div class="pagination-item" v-if="nextChunkPage" @click.capture="onPageClick( $event, nextChunkPage )">
 				<router-link
 					class="btn btn-outline btn-sparse"
-					:to="{ name: $route.name, query: getQuery( nextChunkPage ) }"
+					:to="getPageLocation( nextChunkPage )"
 					v-app-no-autoscroll
 					>
 					...
@@ -69,7 +69,7 @@
 			<div class="pagination-item" v-if="hasNext" @click.capture="onPageClick( $event, nextPage )">
 				<router-link
 					class="btn btn-outline"
-					:to="{ name: $route.name, query: getQuery( nextPage ) }"
+					:to="getPageLocation( nextPage )"
 					v-app-no-autoscroll
 					>
 					<translate>Next</translate>
@@ -78,7 +78,7 @@
 			<div class="pagination-item" v-if="hasNext && currentPage !== totalPages - 1" @click.capture="onPageClick( $event, totalPages )">
 				<router-link
 					class="btn btn-outline"
-					:to="{ name: $route.name, query: getQuery( totalPages ) }"
+					:to="getPageLocation( totalPages )"
 					v-app-no-autoscroll
 					>
 					<translate>Last</translate>
@@ -95,7 +95,7 @@
 			<div class="pagination-item previous" v-if="hasPrevious" @click.capture="onPageClick( $event, prevPage )">
 				<router-link
 					class="btn btn-outline"
-					:to="{ name: $route.name, query: getQuery( prevPage ) }"
+					:to="getPageLocation( prevPage )"
 					v-app-no-autoscroll
 					>
 					{{ (previousText || '&laquo; Previous') }}
@@ -110,7 +110,7 @@
 			<div class="pagination-item next" v-if="hasNext" @click.capture="onPageClick( $event, nextPage )">
 				<router-link
 					class="btn btn-outline"
-					:to="{ name: $route.name, query: getQuery( nextPage ) }"
+					:to="getPageLocation( nextPage )"
 					v-app-no-autoscroll
 					>
 					{{ (nextText || 'Next &raquo;') }}

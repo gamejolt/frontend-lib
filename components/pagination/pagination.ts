@@ -100,7 +100,15 @@ export class AppPagination extends Vue {
 		return [startPage, endPage];
 	}
 
-	getQuery(page: number) {
+	getPageLocation(page: number) {
+		return {
+			name: this.$route.name,
+			params: this.$route.params,
+			query: this.getQuery(page),
+		};
+	}
+
+	private getQuery(page: number) {
 		return Object.assign({}, this.$route.query, {
 			[this.queryParam || 'page']: page,
 		});
