@@ -4,41 +4,45 @@
 	<h3>Regular</h3>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
 	<h3>Outline</h3>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
 	<h3>Without Icons</h3>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" ng-class="::btnClass">
+		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" :class="btnClass">
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 	<br>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" ng-class="::btnClass">
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
@@ -47,11 +51,11 @@
 
 	<div>
 		<a class="btn btn-outline">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			A Tag
 		</a>
 		<button class="btn btn-success-outline">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			Button Tag
 		</button>
 		<input type="submit" class="btn btn-primary-outline" value="Input Tag as Submit">
@@ -62,11 +66,12 @@
 	<p>You can also force the dark variant for use on dark backgrounds. This only affects outline buttons.</p>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn btn-dark-variant" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn btn-dark-variant" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
@@ -74,11 +79,12 @@
 	<p>Similar to dark variant, but shades in the background color a bit. Useful for overlaying images.</p>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn btn-overlay-variant" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn btn-overlay-variant" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
@@ -87,42 +93,46 @@
 
 	<div class="well fill-dark">
 
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
 	<p>Lighter fills will keep the default styling.</p>
 
 	<div class="well fill-lighter">
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
 	<div class="well fill-lighter">
-		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" ng-class="btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
 	<h3>Active State</h3>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn active" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn active" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 	<br>
@@ -130,11 +140,12 @@
 	<p>Active states for outline buttons look the same as normal buttons.</p>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn active" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn active" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 	<br>
@@ -142,11 +153,12 @@
 	<p>In daker fills they will look different, though...</p>
 
 	<div class="well fill-dark">
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn active" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn active" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
@@ -154,154 +166,163 @@
 	<p>Can be used for icon-only buttons.</p>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn btn-sparse" ng-class="::btnClass">
-				<span class="jolticon jolticon-ellipsis-h"></span>
+		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn btn-sparse" :class="btnClass">
+				<app-jolticon icon="ellipsis-h" />
 			</a>
+			&nbsp;
 		</span>
 	</div>
 	<br>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn btn-sparse" ng-class="::btnClass">
-				<span class="jolticon jolticon-ellipsis-h"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn btn-sparse" :class="btnClass">
+				<app-jolticon icon="ellipsis-h" />
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
 	<h3>Inner Styling</h3>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" ng-class="::btnClass">
-				<span class="jolticon jolticon-download"></span>
+		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="download" />
 				Download
 				<small>12MB</small>
-				<span class="jolticon jolticon-linux jolticon-addon"></span>
+				<app-jolticon icon="linux jolticon-addon" />
 			</a>
+			&nbsp;
 		</span>
 	</div>
 	<br>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" ng-class="::btnClass">
-				<span class="jolticon jolticon-download"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="download" />
 				Download
 				<small>12MB</small>
-				<span class="jolticon jolticon-linux jolticon-addon"></span>
+				<app-jolticon icon="linux jolticon-addon" />
 			</a>
+			&nbsp;
 		</span>
 	</div>
 	<br>
 
 	<div class="well fill-dark">
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" ng-class="::btnClass">
-				<span class="jolticon jolticon-download"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="download" />
 				Download
 				<small>12MB</small>
-				<span class="jolticon jolticon-linux jolticon-addon"></span>
+				<app-jolticon icon="linux jolticon-addon" />
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
 	<h3>Button Badges</h3>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" ng-class="::btnClass">
+		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn" :class="btnClass">
 				<span class="btn-badge">4</span>
-				<span class="jolticon jolticon-subscribe"></span>
+				<app-jolticon icon="subscribe" />
 				Follow
 			</a>
+			&nbsp;
 		</span>
 
 		<a class="btn btn-success btn-sparse">
 			<span class="btn-badge">4</span>
-			<span class="jolticon jolticon-subscribe"></span>
+			<app-jolticon icon="subscribe" />
 		</a>
 	</div>
 	<br>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" ng-class="::btnClass">
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
 				<span class="btn-badge">4</span>
-				<span class="jolticon jolticon-subscribe"></span>
+				<app-jolticon icon="subscribe" />
 				Follow
 			</a>
+			&nbsp;
 		</span>
 
 		<a class="btn btn-success-outline btn-sparse">
 			<span class="btn-badge">4</span>
-			<span class="jolticon jolticon-subscribe"></span>
+			<app-jolticon icon="subscribe" />
 		</a>
 	</div>
 	<br>
 
 	<div class="well fill-dark">
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" ng-class="::btnClass">
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
 				<span class="btn-badge">4</span>
-				<span class="jolticon jolticon-subscribe"></span>
+				<app-jolticon icon="subscribe" />
 				Follow
 			</a>
+			&nbsp;
 		</span>
 	</div>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn btn-overlay-variant" ng-class="::btnClass">
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn btn-overlay-variant" :class="btnClass">
 				<span class="btn-badge">4</span>
-				<span class="jolticon jolticon-subscribe"></span>
+				<app-jolticon icon="subscribe" />
 				Follow
 			</a>
+			&nbsp;
 		</span>
 	</div>
 	<br>
 
 	<div>
 		<a class="btn btn-sm">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			<span class="btn-badge">4</span>
 			.btn-sm
 		</a>
 		<a class="btn btn-sm btn-success btn-sparse">
 			<span class="btn-badge">4</span>
-			<span class="jolticon jolticon-subscribe"></span>
+			<app-jolticon icon="subscribe" />
 		</a>
 		<a class="btn btn-sm btn-outline">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			<span class="btn-badge">4</span>
 			.btn-sm
 		</a>
 		<a class="btn btn-sm btn-success-outline btn-sparse">
 			<span class="btn-badge">4</span>
-			<span class="jolticon jolticon-subscribe"></span>
+			<app-jolticon icon="subscribe" />
 		</a>
 	</div>
 	<br>
 
 	<div>
 		<a class="btn btn-lg">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			<span class="btn-badge">4</span>
 			.btn-lg
 		</a>
 		<a class="btn btn-lg btn-success btn-sparse">
 			<span class="btn-badge">4</span>
-			<span class="jolticon jolticon-subscribe"></span>
+			<app-jolticon icon="subscribe" />
 		</a>
 		<a class="btn btn-lg btn-outline">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			<span class="btn-badge">4</span>
 			.btn-lg
 		</a>
 		<a class="btn btn-lg btn-success-outline btn-sparse">
 			<span class="btn-badge">4</span>
-			<span class="jolticon jolticon-subscribe"></span>
+			<app-jolticon icon="subscribe" />
 		</a>
 	</div>
 
@@ -309,11 +330,11 @@
 
 	<div>
 		<a class="btn btn-block">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			Block Button
 		</a>
 		<a class="btn btn-block btn-outline">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			Block Outline Button
 		</a>
 	</div>
@@ -322,67 +343,69 @@
 
 	<div>
 		<a class="btn btn-sm btn-block">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			.btn-sm
 		</a>
 		<br>
 		<a class="btn btn-sm">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			.btn-sm
 		</a>
 		<a class="btn btn-sm btn-sparse">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 		</a>
 		<a class="btn btn-sm btn-outline">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			.btn-sm
 		</a>
 		<a class="btn btn-sm btn-outline btn-sparse">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 		</a>
 	</div>
 	<br>
 
 	<div>
 		<a class="btn btn-lg btn-block">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			.btn-lg
 		</a>
 		<br>
 		<a class="btn btn-lg">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			.btn-lg
 		</a>
 		<a class="btn btn-lg btn-sparse">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 		</a>
 		<a class="btn btn-lg btn-outline">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 			.btn-lg
 		</a>
 		<a class="btn btn-lg btn-outline btn-sparse">
-			<span class="jolticon jolticon-chevron-right"></span>
+			<app-jolticon icon="chevron-right" />
 		</a>
 	</div>
 
 	<h3>Disabled State</h3>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn disabled" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+			<a class="btn disabled" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 	<br>
 
 	<div>
-		<span ng-repeat="btnClass in ::[ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn disabled" ng-class="::btnClass">
-				<span class="jolticon jolticon-chevron-right"></span>
+		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn disabled" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
 				Save Game
 			</a>
+			&nbsp;
 		</span>
 	</div>
 

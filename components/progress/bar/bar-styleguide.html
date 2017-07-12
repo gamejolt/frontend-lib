@@ -2,120 +2,58 @@
 
 	<h1 class="section-header">Progress Bars</h1>
 
-	<div class="progress">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
+	<app-progress-bar :percent="30" />
 
-	<p><code>.progress-darker</code></p>
+	<p><code>darker</code></p>
+	<app-progress-bar :percent="30" variant="darker" />
 
-	<div class="progress progress-darker">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
+	<p><code>danger</code></p>
+	<app-progress-bar :percent="30" variant="danger" />
 
-	<p><code>.progress-danger</code></p>
-
-	<div class="progress progress-danger">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<p><code>.progress-success</code></p>
-
-	<div class="progress progress-success">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
+	<p><code>success</code></p>
+	<app-progress-bar :percent="30" variant="success" />
 
 	<h3>Thin</h3>
 
-	<div class="progress progress-thin">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-thin progress-darker">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-thin progress-danger">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-thin progress-success">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
+	<app-progress-bar :percent="30" :thin="true" />
+	<app-progress-bar :percent="30" :thin="true" variant="darker" />
+	<app-progress-bar :percent="30" :thin="true" variant="danger" />
+	<app-progress-bar :percent="30" :thin="true" variant="success" />
 
 	<h3>Content Inside</h3>
 	<p>You can put content inside progress bars.</p>
 
-	<div class="progress">
-		<div class="progress-bar" style="width: 30%">30%</div>
-	</div>
-
-	<div class="progress progress-darker">
-		<div class="progress-bar" style="width: 30%">30%</div>
-	</div>
-
-	<div class="progress progress-danger">
-		<div class="progress-bar" style="width: 30%">30%</div>
-	</div>
-
-	<div class="progress progress-success">
-		<div class="progress-bar" style="width: 30%">30%</div>
-	</div>
+	<app-progress-bar :percent="30">30%</app-progress-bar>
+	<app-progress-bar :percent="30" variant="darker">30%</app-progress-bar>
+	<app-progress-bar :percent="30" variant="danger">30%</app-progress-bar>
+	<app-progress-bar :percent="30" variant="success">30%</app-progress-bar>
 
 	<h3>Animated Progress</h3>
 	<p>Progress bars will automatically animate as they fill up.</p>
 
-	<div class="progress" ng-init="progress = 0">
-		<div class="progress-bar" ng-style="{ width: progress + '%' }">{{ progress }}%</div>
-	</div>
+	<app-progress-bar :percent="progress">{{ progress }}%</app-progress-bar>
 
-	<button class="btn btn-outline" ng-click="progress = progress + 10 > 100 ? 0 : progress + 10">
+	<button class="btn btn-outline" @click="progress = progress + 10 > 100 ? 0 : progress + 10">
 		Increase Progress
 	</button>
 
 	<h3>Striped</h3>
 	<p>Currently doesn't look so great on Firefox. Should use thin versions in most places.</p>
 
-	<div class="progress progress-striped">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
+	<app-progress-bar :percent="30" :indeterminate="true" />
+	<app-progress-bar :percent="30" :indeterminate="true" variant="darker" />
+	<app-progress-bar :percent="30" :indeterminate="true" variant="danger" />
+	<app-progress-bar :percent="30" :indeterminate="true" variant="success" />
 
-	<div class="progress progress-striped progress-darker">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-striped progress-danger">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-striped progress-success">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-striped progress-thin">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-striped progress-thin progress-darker">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-striped progress-thin progress-danger">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
-
-	<div class="progress progress-striped progress-thin progress-success">
-		<div class="progress-bar" style="width: 30%"></div>
-	</div>
+	<app-progress-bar :percent="30" :indeterminate="true" :thin="true" />
+	<app-progress-bar :percent="30" :indeterminate="true" :thin="true" variant="darker" />
+	<app-progress-bar :percent="30" :indeterminate="true" :thin="true" variant="danger" />
+	<app-progress-bar :percent="30" :indeterminate="true" :thin="true" variant="success" />
 
 	<h3>Animated Stripes</h3>
-	<p>You can add an <code>.active</code> class to animate stripes and indicate an indeterminate state.</p>
+	<p>You can use the <code>active</code> prop to animate stripes and indicate an indeterminate state.</p>
 
-	<div class="progress progress-striped active">
-		<div class="progress-bar" style="width: 100%"></div>
-	</div>
-
-	<div class="progress progress-thin progress-striped active">
-		<div class="progress-bar" style="width: 100%"></div>
-	</div>
+	<app-progress-bar :percent="100" :indeterminate="true" :active="true" />
+	<app-progress-bar :percent="100" :indeterminate="true" :active="true" :thin="true" />
 
 </section>

@@ -114,48 +114,26 @@
 
 	<p>You can use <code>.list-group-item-addon</code>s and the <code>.has-addon</code> class to take up constant width for styling selections.
 
-	<div class="list-group" style="max-width: 400px" ng-init="lgSelector = 0">
-		<a class="list-group-item has-addon" ng-click="lgSelector = 0">
+	<div class="list-group" style="max-width: 400px">
+		<a class="list-group-item has-addon" @click="lgSelector = 0">
 			<div class="list-group-item-addon">
-				<span class="jolticon jolticon-check" ng-show="lgSelector == 0"></span>
+				<span class="jolticon jolticon-check" v-if="lgSelector === 0"></span>
 			</div>
 			Item One
 		</a>
-		<a class="list-group-item has-addon" ng-click="lgSelector = 1">
+		<a class="list-group-item has-addon" @click="lgSelector = 1">
 			<div class="list-group-item-addon">
-				<span class="jolticon jolticon-check" ng-show="lgSelector == 1"></span>
+				<span class="jolticon jolticon-check" v-if="lgSelector === 1"></span>
 			</div>
 			Item Two
 		</a>
-		<a class="list-group-item has-addon has-icon" ng-click="lgSelector = 2">
+		<a class="list-group-item has-addon has-icon" @click="lgSelector = 2">
 			<div class="list-group-item-addon">
-				<span class="jolticon jolticon-check" ng-show="lgSelector == 2"></span>
+				<span class="jolticon jolticon-check" v-if="lgSelector === 2"></span>
 			</div>
 			<span class="jolticon jolticon-html5"></span>
 			You can also add icons with addons
 		</a>
-	</div>
-
-	<h3>Dragging</h3>
-
-	<p>You can add drag handles if they are draggable with <code>.has-drag-handle</code> and the <code>.list-group-item-drag-handle</code> classes.</p>
-
-	<div class="list-group" style="max-width: 400px">
-		<div class="list-group-item has-drag-handle">
-			Item One
-			<div class="list-group-item-drag-handle">
-				<span class="jolticon jolticon-arrows-v"></span>
-			</div>
-		</div>
-		<div class="angular-ui-tree-placeholder">
-			Drop Placeholder
-		</div>
-		<div class="list-group-item has-drag-handle">
-			Item Two
-			<div class="list-group-item-drag-handle">
-				<span class="jolticon jolticon-arrows-v"></span>
-			</div>
-		</div>
 	</div>
 
 	<h3>Dark Variant</h3>
