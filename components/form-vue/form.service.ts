@@ -39,9 +39,9 @@ export interface FormOnSubmitSuccess {
 	},
 })
 export class BaseForm<T> extends Vue {
-	@Prop(Object) model?: T;
+	@Prop(Object) model?: Readonly<T>;
 
-	formModel: T = {} as T;
+	formModel: Readonly<T> = {} as T;
 	modelClass?: { new (data?: T): T } = undefined;
 	resetOnSubmit = false;
 	saveMethod?: keyof T;
@@ -98,7 +98,7 @@ export class BaseForm<T> extends Vue {
 	 * we change a field.
 	 */
 	setField<K extends keyof T>(key: K, value: T[K]) {
-		Vue.set(this.formModel, key, value);
+		Vue.set(this.formModel as T, key, value);
 	}
 
 	setState(key: string, value: any) {
