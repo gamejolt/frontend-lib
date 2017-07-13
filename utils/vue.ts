@@ -1,15 +1,33 @@
 import Vue from 'vue';
 
-export function findVueParent(component: Vue, parentType: typeof Vue) {
+export function findVueParent<T extends Vue>(
+	component: Vue,
+	parentType: { new (): T }
+) {
 	let parent = component.$parent;
 	while (parent) {
 		if (parent instanceof parentType) {
-			return parent;
+			return parent as T;
 		}
 		parent = parent.$parent;
 	}
 
 	return undefined;
+}
+
+export function findRequiredVueParent<T extends Vue>(
+	component: Vue,
+	parentType: { new (): T }
+) {
+	const parent = findVueParent(component, parentType);
+	if (!parent) {
+		throw new Error(
+			`Couldn't find parent component (${parentType.name}) from child component (${component
+				.$options.name}).`
+		);
+	}
+
+	return parent;
 }
 
 export function makeObservableService<T>(service: T): T {
