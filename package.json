@@ -37,12 +37,12 @@
 		"webpack-dev-server": "2.5.1",
 		"postcss-loader": "2.0.6",
 		"autoprefixer": "7.1.2",
-		"vue-loader": "13.0.1",
+		"vue-loader": "13.0.2",
 		"vue-style-loader": "3.0.1",
 		"vue-template-loader": "0.3.1",
-		"vue-template-compiler": "2.3.4",
+		"vue-template-compiler": "2.4.1",
 		"write-file-webpack-plugin": "4.1.0",
-		"webpack-bundle-analyzer": "2.8.2",
+		"webpack-bundle-analyzer": "2.8.3",
 		"webpack-node-externals": "1.6.0",
 		"clean-css-loader": "0.1.2"
 	}
