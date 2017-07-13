@@ -24,18 +24,22 @@ export interface FormOnSubmitSuccess {
 	onSubmitSuccess(response: any): void;
 }
 
+export const CommonFormComponents = {
+	AppForm,
+	AppFormControl,
+	AppFormControlSelect,
+	AppFormControlTextarea,
+	AppFormControlRadio,
+	AppFormControlCheckbox,
+	AppFormGroup,
+	AppFormControlErrors,
+	AppFormControlError,
+	AppFormButton,
+};
+
 @Component({
 	components: {
-		AppForm,
-		AppFormControl,
-		AppFormControlSelect,
-		AppFormControlTextarea,
-		AppFormControlRadio,
-		AppFormControlCheckbox,
-		AppFormGroup,
-		AppFormControlErrors,
-		AppFormControlError,
-		AppFormButton,
+		...CommonFormComponents,
 	},
 })
 export class BaseForm<T> extends Vue {
