@@ -184,12 +184,13 @@ export class Api {
 						options.progress(e);
 					}
 				},
-			}).then(() => {
+			}).then((response: any) => {
 				// When the request is done, send one last progress event of
 				// nothing to indicate that the transfer is complete.
 				if (options.progress) {
 					options.progress(undefined);
 				}
+				return response;
 			});
 
 			// const uploadPromise = Upload.upload( {

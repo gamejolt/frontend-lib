@@ -12,7 +12,7 @@
 			We hide the button and use it to simulate a click on it.
 		-->
 		<div class="small" v-if="!!uploadLinkLabel">
-			<a class="link-muted" @click="showFileSelect">
+			<a class="link-muted" @click="showFileSelect()">
 				{{ uploadLinkLabel }}
 			</a>
 		</div>
@@ -21,6 +21,7 @@
 			type="file"
 			ref="input"
 			@change="onChange"
+			v-show="!uploadLinkLabel"
 			v-validate="{ rules: validationRules }"
 			:data-vv-validate-on="validateOn"
 			:data-vv-delay="validateDelay"
@@ -28,7 +29,7 @@
 			:multiple="multiple ? 'multiple' : undefined"
 			>
 	</div>
-	<div v-else class="form-upload-control-files">
+	<div v-else-if="progress === undefined" class="form-upload-control-files">
 		<app-card-list :items="files">
 		<!--<div
 			ui-tree
@@ -57,6 +58,27 @@
 			</app-card-list-draggable>
 
 		</app-card-list>
+	</div>
+	<div v-else>
+		<app-progress-bar
+			:percent="progress"
+			>
+			<span v-if="progress < 99">
+				{{ Math.round( progress ) }}%
+			</span>
+			<span v-else>
+				<translate>Processing...</translate>
+			</span>
+		</app-progress-bar>
+
+		<div
+			v-if="progress >= 99"
+			class="alert alert-info"
+			>
+			<p>
+				<translate>Upload complete! Please wait while we process your file(s). This may take a few minutes, so don't close or refresh the page.</translate>
+			</p>
+		</div>
 	</div>
 
 	<!--<div class="progress" ng-if="progress !== false">

@@ -6,6 +6,7 @@ import { AppCardList } from '../../../card/list/list';
 import { AppCardListItem } from '../../../card/list/item/item';
 import { AppCardListDraggable } from '../../../card/list/draggable/draggable';
 import { AppFormControlUploadFilePreview } from './file-preview/file-preview';
+import { AppProgressBar } from '../../../progress/bar/bar';
 
 function isAscii(str: string) {
 	return /^[\000-\177]*$/.test(str);
@@ -100,9 +101,11 @@ async function getFiles(e: DragEvent) {
 		AppCardListItem,
 		AppCardListDraggable,
 		AppFormControlUploadFilePreview,
+		AppProgressBar,
 	},
 })
 export class AppFormControlUpload extends BaseFormControl {
+	@Prop(Number) progress?: number;
 	@Prop(Boolean) sortable?: boolean;
 	@Prop(Boolean) multiple?: boolean;
 	@Prop(String) uploadLinkLabel?: string;
@@ -169,6 +172,11 @@ export class AppFormControlUpload extends BaseFormControl {
 
 		const files = await getFiles(e);
 		this.setFiles(files);
+	}
+
+	showFileSelect() {
+		const el = this.$refs.input as HTMLElement;
+		el.click();
 	}
 
 	// Normal file select.

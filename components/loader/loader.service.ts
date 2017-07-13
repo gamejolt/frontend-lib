@@ -1,7 +1,7 @@
 import { LoaderBase } from './loader-base';
 
 export class Loader {
-	private static loaders: { [k: string]: any } = {};
+	private static loaders: { [k: string]: LoaderBase } = {};
 
 	static addLoader(loader: LoaderBase) {
 		this.loaders[loader.name] = loader;

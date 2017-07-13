@@ -62,3 +62,13 @@ export function loadScript(src: string) {
 		script.src = src;
 	});
 }
+
+export function LoaderFunc() {
+	return function(
+		_: any,
+		__: string,
+		descriptor: TypedPropertyDescriptor<(...args: any[]) => Promise<any>>
+	) {
+		return descriptor;
+	};
+}
