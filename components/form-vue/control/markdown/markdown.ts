@@ -38,7 +38,7 @@ export class AppFormControlMarkdown extends BaseFormControl {
 	@Prop(Boolean) allowCodeEditor?: boolean;
 	@Prop(Boolean) disabled?: boolean;
 
-	value: string = '';
+	value = '';
 	currentTab = 'edit';
 	editorMode = 'textarea';
 	shouldShowMarkdownHelp = true;

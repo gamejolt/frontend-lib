@@ -5,7 +5,7 @@
 	>
 
 	<nav class="platform-list inline clearfix">
-		<ul v-if="!isPreviewDisabled">
+		<ul v-if="!disablePreview">
 			<li>
 				<a :class="{ active: currentTab === 'edit' }"
 					@click="changeTab( 'edit' )"
@@ -76,16 +76,16 @@
 			>
 		</textarea>
 
-		<gj-codemirror
-			v-else-if="editorMode === 'code-editor'"
-			:id="id"
-			:value="value"
-			@input="onChange"
-			:options="{
-				mode: 'gfm',
-			}"
-			>
-		</gj-codemirror>
+		<div v-else-if="editorMode === 'code-editor'">
+			<app-codemirror
+				:id="id"
+				:value="value"
+				@input="onChange"
+				:options="{
+					mode: 'gfm',
+				}"
+				/>
+		</div>
 
 		<!--TODO-->
 		<div v-if="showMediaItems">
