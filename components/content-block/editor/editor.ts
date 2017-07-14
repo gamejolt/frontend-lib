@@ -1,8 +1,135 @@
-import { provide } from 'ng-metadata/core';
-import { ContentBlockEditorComponent } from './editor.component';
-import { ContentBlockEditorFormFactory } from './editor-form.component';
+import Vue from 'vue';
+import { Component, Prop, Watch } from 'vue-property-decorator';
+import * as View from '!view!./editor.html';
 
-export default angular
-	.module('gj.ContentBlock.Editor', [])
-	.directive('gjContentBlockEditorForm', ContentBlockEditorFormFactory)
-	.directive(...provide(ContentBlockEditorComponent)).name;
+import { SiteContentBlock } from '../../site/content-block/content-block-model';
+import { Environment } from '../../environment/environment.service';
+import { Api } from '../../api/api.service';
+import { Site } from '../../site/site-model';
+import { FormContentBlockEditor } from './editor-form';
+import { AppLoading } from '../../../vue/components/loading/loading';
+import { AppTooltip } from '../../tooltip/tooltip';
+
+@View
+@Component({
+	components: {
+		AppLoading,
+		FormContentBlockEditor,
+	},
+	directives: {
+		AppTooltip,
+	},
+})
+export class AppContentBlockEditor extends Vue {
+	@Prop(Site) site: Site;
+	@Prop(String) windowId: string;
+	@Prop(SiteContentBlock) contentBlock: SiteContentBlock;
+
+	isPreviewLoading = false;
+	private previewIndex = 0;
+	// private fetchPreview: Function;
+
+	Environment = Environment;
+
+	@Watch('contentBlock.content_markdown')
+	onContentChanged(content: string, oldContent: string) {
+		if (content !== oldContent) {
+			this.$emit('change', content);
+		}
+
+		if (content) {
+			this.isPreviewLoading = true;
+			// this.fetchPreview();
+		} else {
+			this.isPreviewLoading = false;
+			this.compiled('');
+		}
+	}
+
+	created() {
+		// TODO
+		// this.fetchPreview = _.debounce(
+		// 	() => this._fetchPreview(),
+		// 	PREVIEW_DEBOUNCE
+		// );
+	}
+
+	private async _fetchPreview() {
+		const previewIndex = ++this.previewIndex;
+		const response = await Api.sendRequest(
+			'/web/dash/sites/content-preview',
+			{ content: this.contentBlock.content_markdown },
+			{ ignorePayloadUser: true }
+		);
+
+		if (previewIndex === this.previewIndex) {
+			this.isPreviewLoading = false;
+			if (response && response.success !== false && response.compiled) {
+				this.compiled(response.compiled);
+			}
+		}
+	}
+
+	compiled(compiledContent: string) {
+		this.contentBlock.content_compiled = compiledContent;
+		this.refresh();
+	}
+
+	refresh() {
+		const iframe = document.getElementById(this.windowId) as
+			| HTMLIFrameElement
+			| undefined;
+		if (iframe) {
+			const msg = {
+				type: 'content-update',
+				block: this.contentBlock,
+			};
+			iframe.contentWindow.postMessage(msg, '*');
+		}
+	}
+
+	// Pulled from: http://stackoverflow.com/questions/1064089/inserting-a-text-where-cursor-is-using-javascript-jquery
+	insertAtCaret(text: string) {
+		const txtarea = this.$el.getElementsByTagName('textarea')[0];
+		if (!txtarea) {
+			return;
+		}
+
+		const scrollPos = txtarea.scrollTop;
+		let strPos = 0;
+		const br =
+			txtarea.selectionStart || txtarea.selectionStart === 0
+				? 'ff'
+				: (document as any).selection ? 'ie' : false;
+
+		if (br === 'ie') {
+			txtarea.focus();
+			const range = (document as any).selection.createRange();
+			range.moveStart('character', -txtarea.value.length);
+			strPos = range.text.length;
+		} else if (br === 'ff') {
+			strPos = txtarea.selectionStart;
+		}
+
+		const front = txtarea.value.substring(0, strPos);
+		const back = txtarea.value.substring(strPos, txtarea.value.length);
+		txtarea.value = front + text + back;
+		strPos = strPos + text.length;
+		if (br === 'ie') {
+			txtarea.focus();
+			const ieRange = (document as any).selection.createRange();
+			ieRange.moveStart('character', -txtarea.value.length);
+			ieRange.moveStart('character', strPos);
+			ieRange.moveEnd('character', 0);
+			ieRange.select();
+		} else if (br === 'ff') {
+			txtarea.selectionStart = strPos;
+			txtarea.selectionEnd = strPos;
+			txtarea.focus();
+		}
+
+		txtarea.scrollTop = scrollPos;
+
+		this.contentBlock.content_markdown = txtarea.value;
+	}
+}
