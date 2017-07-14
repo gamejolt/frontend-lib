@@ -27,17 +27,13 @@ export class AppCodemirror extends Vue {
 	async mounted() {
 		this._options = Object.assign(defaultOptions, this.options);
 
-		// CodeMirror doesn't work in SSR context.
-		if (!GJ_IS_SSR) {
-			return;
-		}
-
 		if (this._options.mode === 'css') {
 			await import('codemirror/mode/css/css.js');
 		} else if (this._options.mode === 'gfm') {
 			await import('codemirror/mode/gfm/gfm.js');
 		}
 
+		// Codemirror doesn't work in SSR, so bootstrap it in mounted().
 		const CodeMirror = require('codemirror');
 		this.editor = CodeMirror.fromTextArea(this.$el, this._options);
 		this.editor.setValue(this.value || '');

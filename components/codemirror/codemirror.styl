@@ -1,7 +1,6 @@
 @require '~styles/variables'
 @require '../overlay-scrollbar/overlay-scrollbar'
-
-@require '~codemirror/lib/codemirror.css';
+@require '~codemirror/lib/codemirror.css'
 
 // Based on Splash of Gray
 $codemirror-bg = #161616
@@ -21,7 +20,8 @@ $codemirror-gray = #a4a9b0
 	height: auto  // Will make it auto-expand
 	padding: $padding-base-vertical $padding-base-horizontal
 	border: 1px solid $input-border
-	transition border-color ease-in-out .15s
+	border-radius: $border-radius-base
+	transition: border-color ease-in-out 0.15s
 
 	pre.CodeMirror-placeholder
 		color: $text-muted
@@ -51,7 +51,7 @@ $codemirror-gray = #a4a9b0
 
 	.CodeMirror-gutters
 		background: $codemirror-bg
-		border-right: 0px
+		border-right: 0
 
 	.CodeMirror-linenumber
 		font-family: $font-family-monospace
