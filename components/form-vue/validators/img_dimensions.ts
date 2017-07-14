@@ -10,7 +10,7 @@ export async function FormValidatorImgDimensions(
 	return validateFilesAsync(files, async file => {
 		const dimensions = await getImgDimensions(file);
 		return (
-			width && dimensions[0] === width && (height && dimensions[1] === height)
+			!!width && dimensions[0] === width && !!height && dimensions[1] === height
 		);
 	});
 }
