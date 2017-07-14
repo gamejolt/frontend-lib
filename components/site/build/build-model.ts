@@ -9,9 +9,6 @@ export class SiteBuild extends Model {
 	folder: string;
 	status: string;
 	added_on: number;
-
-	// Set by the site build form with the file to upload
-	file?: File;
 }
 
 Model.create(SiteBuild);

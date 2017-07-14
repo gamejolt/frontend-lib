@@ -2,8 +2,12 @@ import { Api, RequestOptions } from '../api/api.service';
 
 export class Model {
 	id: number;
-	_removed: boolean;
-	_progress?: ProgressEvent;
+
+	// Set default values so Vue can see them when instantiating the model and
+	// set up observers.
+	file: File | File[] | null = null;
+	_removed = false;
+	_progress: ProgressEvent | null = null;
 
 	// We need to create some methods dynamically on the model.
 	static populate: (rows: any[]) => any[];

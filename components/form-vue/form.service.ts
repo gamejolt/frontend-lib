@@ -56,7 +56,6 @@ export class BaseForm<T> extends Vue {
 	state: { [k: string]: any } = {
 		isProcessing: false,
 		isShowingSuccess: false,
-		// progress: undefined,
 	};
 
 	successClearTimeout?: NodeJS.Timer;
@@ -115,7 +114,6 @@ export class BaseForm<T> extends Vue {
 		}
 
 		this.state.isProcessing = true;
-		// this.state.progress = undefined;
 
 		let response: any;
 

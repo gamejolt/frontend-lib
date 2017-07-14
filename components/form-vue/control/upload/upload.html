@@ -18,6 +18,8 @@
 		</div>
 
 		<input
+			:id="id"
+			:name="group.name"
 			type="file"
 			ref="input"
 			@change="onChange"
@@ -30,41 +32,25 @@
 			>
 	</div>
 	<div v-else-if="progress === undefined" class="form-upload-control-files">
-		<app-card-list :items="files">
-		<!--<div
-			ui-tree
-			ui-tree-nodes
-			drag-enabled="isSortable ? true : false"
-			ng-model="ngModel.$viewValue"
-			>-->
-			<app-card-list-draggable
-				:disabled="!(multiple && sortable)"
-				@change="sortItems"
+		<p>
+			<strong><translate>Selected files:</translate></strong>
+		</p>
+		<div class="list-group list-group-dark">
+			<div
+				class="list-group-item"
+				v-for="file of files"
 				>
-				<app-card-list-item
-					v-for="file of files"
-					:key="file"
-					:item="file"
-					>
-					<!--ui-tree-node-->
-
-					<!--<app-card-drag-handle ng-if="isSortable ? true : false" />-->
-
-					<app-form-control-upload-file-preview
-						:file="file"
-						@clear="clearFile( file )"
-						/>
-				</app-card-list-item>
-			</app-card-list-draggable>
-
-		</app-card-list>
+				<a class="card-remove" @click="clearFile(file)">
+					<app-jolticon icon="remove" class="warning" />
+				</a>
+				{{ file.name }}
+			</div>
+		</div>
 	</div>
 	<div v-else>
-		<app-progress-bar
-			:percent="progress"
-			>
-			<span v-if="progress < 99">
-				{{ Math.round( progress ) }}%
+		<app-progress-bar :percent="progress * 100">
+			<span v-if="progress < 0.99">
+				{{ progress | number({ style: 'percent' }) }}
 			</span>
 			<span v-else>
 				<translate>Processing...</translate>
@@ -72,7 +58,7 @@
 		</app-progress-bar>
 
 		<div
-			v-if="progress >= 99"
+			v-if="progress >= 0.99"
 			class="alert alert-info"
 			>
 			<p>
@@ -80,30 +66,4 @@
 			</p>
 		</div>
 	</div>
-
-	<!--<div class="progress" ng-if="progress !== false">
-		<div class="progress-bar"
-			role="progressbar"
-			ng-attr-aria-valuenow="{{ progress }}"
-			aria-valuemin="0"
-			aria-valuemax="100"
-			ng-style="{ width: progress + '%' }"
-			>
-			<span ng-if="progress < 99">
-				{{ progress }}%
-			</span>
-			<span ng-if="progress >= 99" translate>
-				Processing...
-			</span>
-		</div>
-	</div>
-
-	<div ng-if="progress >= 99">
-		<br>
-		<div class="alert alert-info">
-			<p translate>
-				Upload complete! Please wait while we process your file(s). This may take a few minutes, so don't close or refresh the page.
-			</p>
-		</div>
-	</div>-->
 </div>

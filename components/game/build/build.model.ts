@@ -172,8 +172,6 @@ export class GameBuild extends Model {
 	_release?: GameRelease;
 	_launch_options?: GameBuildLaunchOption[];
 
-	file?: File;
-
 	static pluckOsSupport(build: GameBuild) {
 		let support = [];
 

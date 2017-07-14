@@ -98,8 +98,6 @@ export class Game extends Model {
 	_should_show_ads = true;
 	_can_buy_primary_sellable = false;
 
-	file?: File;
-
 	constructor(data: any = {}) {
 		super(data);
 

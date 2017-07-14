@@ -33,8 +33,6 @@ export class GameTrophy extends Model {
 	img_thumbnail: string;
 	has_thumbnail: boolean;
 
-	file?: File;
-
 	constructor(data: any = {}) {
 		super(data);
 	}
@@ -76,7 +74,7 @@ export class GameTrophy extends Model {
 				`/web/dash/developer/games/api/trophies/save/${this.game_id}/${this
 					.id}`,
 				'gameTrophy',
-				{ file: this.file || undefined }
+				{ file: this.file }
 			);
 		}
 	}

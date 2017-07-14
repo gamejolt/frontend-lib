@@ -9,8 +9,6 @@ export class GameSong extends Model {
 	sort: number;
 	url: string;
 
-	file?: File;
-
 	static getSoundtrackDownloadUrl(gameId: number) {
 		return Api.sendRequest(
 			'/web/discover/games/audio/get-soundtrack-download-url/' + gameId,
@@ -40,7 +38,7 @@ export class GameSong extends Model {
 			return this.$_save(
 				'/web/dash/developer/games/music/save/' + this.game_id + '/' + this.id,
 				'gameSong',
-				{ file: this.file || null }
+				{ file: this.file }
 			);
 		}
 	}

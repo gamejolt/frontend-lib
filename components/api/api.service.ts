@@ -6,12 +6,12 @@ export interface RequestOptions {
 	/**
 	 * Files to upload can be passed in through here.
 	 */
-	file?: File | File[];
+	file?: File | File[] | null;
 
 	/**
 	 * Progress handler. Will only be used when uploading a file.
 	 */
-	progress?: (event: ProgressEvent | undefined) => void;
+	progress?: (event: ProgressEvent | null) => void;
 
 	/**
 	 * Whether or not to show the loading bar.
@@ -157,20 +157,17 @@ export class Api {
 	) {
 		// An upload request.
 		if (options.file) {
-			// const Upload = getProvider<any>( 'Upload' );
-
-			// Copy over since we'll modify.
-			// let _options: any = { ...{}, ...options };
-
-			// if ( Array.isArray( _options.file ) && _options.file.length <= 1 ) {
-			// 	_options.file = _options.file[0];
-			// }
-
 			// We have to send it over as form data instead of JSON data.
 			data = { ...data, file: options.file };
 			const formData = new FormData();
 			for (const key in data) {
-				formData.append(key, data[key]);
+				if (Array.isArray(data[key])) {
+					for (const i of data[key]) {
+						formData.append(key + '[]', i);
+					}
+				} else {
+					formData.append(key, data[key]);
+				}
 			}
 
 			const request = Axios({
@@ -188,41 +185,10 @@ export class Api {
 				// When the request is done, send one last progress event of
 				// nothing to indicate that the transfer is complete.
 				if (options.progress) {
-					options.progress(undefined);
+					options.progress(null);
 				}
 				return response;
 			});
-
-			// const uploadPromise = Upload.upload( {
-			// 	method: 'POST',
-			// 	url,
-			// 	data: { ...data, file: options.file },
-			// 	withCredentials: options.withCredentials,
-
-			// 	// Force ignore in upload.
-			// 	// We show a form upload progress bar instead.
-			// 	ignoreLoadingBar: true,
-			// } );
-
-			// // Set up progress events.
-			// uploadPromise
-			// 	.then( null, null, ( event: any ) =>
-			// 	{
-			// 		if ( options.progress && event.lengthComputable ) {
-			// 			options.progress( {
-			// 				current: event.loaded,
-			// 				total: event.total,
-			// 			} );
-			// 		}
-			// 	} )
-			// 	.then( () =>
-			// 	{
-			// 		if ( options.progress ) {
-			// 			options.progress( undefined );
-			// 		}
-			// 	} );
-
-			// return uploadPromise;
 
 			return request;
 		}

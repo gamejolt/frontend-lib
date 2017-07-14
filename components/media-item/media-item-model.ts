@@ -36,8 +36,6 @@ export class MediaItem extends Model {
 
 	post_id: number;
 
-	file?: any;
-
 	getDimensions(
 		maxWidth: number | undefined,
 		maxHeight: number | undefined,

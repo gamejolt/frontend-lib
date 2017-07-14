@@ -15,8 +15,6 @@ export class GameScreenshot extends Model {
 	img_thumbnail_med: string;
 	img_thumbnail_large: string;
 
-	file?: File[];
-
 	constructor(data: any = {}) {
 		super(data);
 
