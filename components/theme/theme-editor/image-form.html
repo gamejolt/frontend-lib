@@ -1,0 +1,26 @@
+<app-form name="themeEditorImageForm">
+	<app-form-loader
+		url="/web/dash/media-items"
+		:data="formModel"
+		@loaded="onLoaded"
+		>
+
+		<app-form-group
+			name="file"
+			:hide-label="true"
+			>
+			<app-form-control-upload
+				:rules="{
+					filesize: maxFilesize,
+					max_img_dimensions: [maxWidth, maxHeight],
+				}"
+				accept=".png,.jpg,.jpeg,.gif"
+				:upload-link-label="$gettext( `Upload a PNG, JPG, or GIF image.` )"
+				@change="onSubmit()"
+				/>
+
+			<app-form-control-errors />
+		</app-form-group>
+
+	</app-form-loader>
+</app-form>

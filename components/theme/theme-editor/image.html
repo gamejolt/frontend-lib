@@ -1,0 +1,27 @@
+<div class="theme-editor-image">
+
+	<a
+		class="theme-editor-image-clear"
+		@click="clear()"
+		>
+		<!-- TODO -->
+		<!-- v-if="ngModel.$modelValue" -->
+		<translate>clear</translate>
+	</a>
+
+	<div class="theme-editor-image-content">
+		<!-- <img
+			class="theme-editor-image-img"
+			v-if="ngModel.$modelValue.img_url"
+			:src="ngModel.$modelValue.img_url"
+			alt=""
+			> -->
+
+		<form-theme-editor-image
+			:type="type"
+			:parent-id="parentId"
+			@submit="onImageAdded"
+			/>
+	</div>
+
+</div>
