@@ -75,7 +75,8 @@ export class Scroll {
 		this.context.addEventListener(
 			'scroll',
 			this.scrollListener,
-			supportsPassiveEvents ? { passive: true } : false
+			// TODO: Fix once TS has this type def.
+			supportsPassiveEvents ? { passive: true } as any : false
 		);
 	}
 
