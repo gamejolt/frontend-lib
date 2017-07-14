@@ -9,6 +9,7 @@ import {
 import { Api } from '../../api/api.service';
 import { AppFormLoader } from '../../form-vue/loader/loader';
 import { AppFormControlUpload } from '../../form-vue/control/upload/upload';
+import { AppForm } from '../../form-vue/form';
 
 interface FormModel {
 	type: string;
@@ -31,6 +32,10 @@ export class FormThemeEditorImage extends BaseForm<FormModel>
 	@Prop(String) type: string;
 	@Prop(Number) parentId: number;
 
+	$refs: {
+		form: AppForm;
+	};
+
 	maxFilesize = 0;
 	maxWidth = 0;
 	maxHeight = 0;
@@ -44,6 +49,10 @@ export class FormThemeEditorImage extends BaseForm<FormModel>
 		this.maxFilesize = response.maxFilesize;
 		this.maxWidth = response.maxWidth;
 		this.maxHeight = response.maxHeight;
+	}
+
+	submit() {
+		this.$refs.form.submit();
 	}
 
 	onSubmit() {

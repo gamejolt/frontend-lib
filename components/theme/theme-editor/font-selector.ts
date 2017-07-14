@@ -1,8 +1,9 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./font-selector.html?style=./font-selector.styl';
 
 import { Api } from '../../api/api.service';
+import { AppThemeEditorFontSelectorStyleInjector } from './font-selector-style-injector';
 
 interface FontDefinition {
 	family: string;
@@ -12,8 +13,14 @@ interface FontDefinition {
 }
 
 @View
-@Component({})
+@Component({
+	components: {
+		AppThemeEditorFontSelectorStyleInjector,
+	},
+})
 export class AppThemeEditorFontSelector extends Vue {
+	@Prop(Object) value?: FontDefinition;
+
 	$refs: {
 		list: HTMLElement;
 	};
@@ -23,29 +30,28 @@ export class AppThemeEditorFontSelector extends Vue {
 	isSelectorShowing = false;
 
 	fontList: FontDefinition[] = [];
-	// fontListFiltered: FontDefinition[] = [];
 	visibleFontCount = 50;
 	fontListFilter = '';
 
 	fontDefinitions = '';
 	loadedFonts: string[] = [];
 
+	// Copy to our value when the model changes.
+	@Watch('value', { immediate: true })
+	onValueChanged() {
+		this.selectedFont = this.value || null;
+		this.updateFontDefinitions();
+	}
+
 	get fontListFiltered() {
+		const filter = this.fontListFilter.toLowerCase();
 		return (
 			this.fontList
 				// Filter based on the filter text they enter in.
-				.filter(i => i.family.indexOf(this.fontListFilter) !== -1)
+				.filter(i => i.family.toLowerCase().indexOf(filter) !== -1)
 				// Limit to only seeing the number of fonts our current "page" will allow.
 				.slice(0, this.visibleFontCount)
 		);
-	}
-
-	created() {
-		// // Copy to our value when the model changes.
-		// this.ngModel.$render = () => {
-		// 	this.selectedFont = this.ngModel.$viewValue || null;
-		// 	this.updateFontDefinitions();
-		// };
 	}
 
 	async toggleSelector() {
@@ -53,7 +59,7 @@ export class AppThemeEditorFontSelector extends Vue {
 
 		if (!this.isSelectorShowing) {
 			this.fontListFilter = '';
-			this.filterFontList();
+			this.updateFontDefinitions();
 			return;
 		}
 
@@ -65,7 +71,7 @@ export class AppThemeEditorFontSelector extends Vue {
 			this.fontList = fontList;
 
 			// Filter the font list with our current filters.
-			this.filterFontList();
+			this.updateFontDefinitions();
 		}
 
 		await this.$nextTick();
@@ -73,38 +79,33 @@ export class AppThemeEditorFontSelector extends Vue {
 		const liHeight = 38;
 		const listHeight = 300;
 
-		this.$refs.list.addEventListener('scroll', () => {
-			// _.throttle(() => {
-			const scrollTop = this.$refs.list.scrollTop;
-			const scrolledItemsCalculated = (scrollTop + listHeight) / liHeight;
+		this.$refs.list.addEventListener(
+			'scroll',
+			() => {
+				const scrollTop = this.$refs.list.scrollTop;
+				const scrolledItemsCalculated = (scrollTop + listHeight) / liHeight;
 
-			if (this.visibleFontCount - scrolledItemsCalculated < 25) {
-				this.visibleFontCount += 50;
-				this.filterFontList();
-			}
-			// }, 250)
-		});
+				if (this.visibleFontCount - scrolledItemsCalculated < 25) {
+					this.visibleFontCount += 50;
+					this.updateFontDefinitions();
+				}
+			},
+			// TODO: Fix once TS has this type def.
+			{ passive: true } as any
+		);
 	}
 
 	selectFont(font: FontDefinition) {
-		this.selectedFont = font;
 		this.toggleSelector();
-		this.persistSelectedFont();
+		this.updateValue(font);
 	}
 
 	clearSelectedFont() {
-		this.selectedFont = null;
-		this.persistSelectedFont();
+		this.updateValue();
 	}
 
-	filterFontList() {
-		// Now that we've filtered the fonts, let's update which font definitions need to be loaded in.
-		this.updateFontDefinitions();
-	}
-
-	private persistSelectedFont() {
-		// TODO
-		// this.ngModel.$setViewValue(this.selectedFont);
+	private updateValue(font?: FontDefinition) {
+		this.$emit('input', font);
 	}
 
 	private async getFontList(): Promise<FontDefinition[]> {
@@ -138,7 +139,7 @@ export class AppThemeEditorFontSelector extends Vue {
 		return '';
 	}
 
-	private updateFontDefinitions() {
+	updateFontDefinitions() {
 		let newDefinitions: string[] = [];
 
 		// Make sure our selected font's definition is loaded so it's styled correctly.

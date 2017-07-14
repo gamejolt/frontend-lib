@@ -1,4 +1,4 @@
-<app-form name="themeEditorImageForm">
+<app-form name="themeEditorImageForm" ref="form">
 	<app-form-loader
 		url="/web/dash/media-items"
 		:data="formModel"
@@ -16,7 +16,7 @@
 				}"
 				accept=".png,.jpg,.jpeg,.gif"
 				:upload-link-label="$gettext( `Upload a PNG, JPG, or GIF image.` )"
-				@change="onSubmit()"
+				@changed="submit"
 				/>
 
 			<app-form-control-errors />

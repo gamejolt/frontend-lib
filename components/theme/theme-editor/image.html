@@ -2,20 +2,19 @@
 
 	<a
 		class="theme-editor-image-clear"
+		v-if="value"
 		@click="clear()"
 		>
-		<!-- TODO -->
-		<!-- v-if="ngModel.$modelValue" -->
 		<translate>clear</translate>
 	</a>
 
 	<div class="theme-editor-image-content">
-		<!-- <img
+		 <img
 			class="theme-editor-image-img"
-			v-if="ngModel.$modelValue.img_url"
-			:src="ngModel.$modelValue.img_url"
+			v-if="value"
+			:src="value.img_url"
 			alt=""
-			> -->
+			>
 
 		<form-theme-editor-image
 			:type="type"

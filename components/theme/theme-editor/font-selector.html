@@ -2,6 +2,11 @@
 
 	<!-- TODO: WHAT!? -->
 	<!-- <style v-html="fontDefinitions"></style> -->
+	<app-theme-editor-font-selector-style-injector
+		:font-definitions="fontDefinitions"
+		/>
+
+	<!-- <style></style> -->
 
 	<div
 		class="font-selector fill-white"
@@ -42,7 +47,7 @@
 				type="text"
 				class="form-control"
 				v-model="fontListFilter"
-				ng-change="filterFontList()"
+				ng-change="updateFontDefinitions()"
 				:placeholder="$gettext( `Filter fonts` )"
 				>
 		</div>
@@ -52,10 +57,10 @@
 				class="font-selector-font-list-item"
 				v-for="font of fontListFiltered"
 				:key="font.family"
-				:style="{ 'font-family': `'${ selectedFont.family }::Selector'` }"
+				:style="{ 'font-family': `'${ font.family }::Selector'` }"
 				@click="selectFont( font )"
 				>
-				{{ font.family }}
+				 {{ font.family }}
 			</li>
 		</ul>
 	</div>

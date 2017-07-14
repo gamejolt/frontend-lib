@@ -1,7 +1,7 @@
 @require '~styles/variables'
 @require '../../../stylus/common/mixins'
 
-.theme-editor .CodeMirror
+.theme-editor >>> .CodeMirror
 	border-color: $gray-dark
 	height: 400px
 
@@ -9,12 +9,25 @@
 		border-color: $gray
 
 .theme-editor-definitions
+	border-radius: $border-radius-base
 
 	.form-group
 		clearfix()
 		animation-duration: 0
 		margin-bottom: 0
 		border-bottom: 1px solid $gray-lightest
+
+		&:first-child
+			border-top-left-radius: $border-radius-base
+			border-top-right-radius: $border-radius-base
+
+		&:last-child
+			border-bottom: 0
+
+			&
+			>>> .fill-white
+				border-bottom-left-radius: $border-radius-base
+				border-bottom-right-radius: $border-radius-base
 
 	.control-label
 		float: left

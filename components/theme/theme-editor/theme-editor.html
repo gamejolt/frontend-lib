@@ -34,9 +34,12 @@
 							:class="'theme-editor-definition-' + definition.definitions[definitionField].type"
 							>
 
+
 							<label class="control-label">
 								{{ definition.definitions[definitionField].title }}
 							</label>
+
+							{{ theme[definitionField] }}
 
 							<!-- Colopicker -->
 							<div

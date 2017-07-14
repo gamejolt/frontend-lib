@@ -12,12 +12,13 @@ import { FormThemeEditorImage } from './image-form';
 export class AppThemeEditorImage extends Vue {
 	@Prop(String) type: string;
 	@Prop(Number) parentId: number;
+	@Prop(Object) value: any;
 
 	onImageAdded(_model: any, response: any) {
-		// this.ngModel.$setViewValue(response.mediaItem);
+		this.$emit('input', response.mediaItem);
 	}
 
 	clear() {
-		// this.ngModel.$setViewValue(undefined);
+		this.$emit('input', undefined);
 	}
 }
