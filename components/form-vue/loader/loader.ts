@@ -14,13 +14,14 @@ import { AppLoading } from '../../../vue/components/loading/loading';
 export class AppFormLoader extends Vue {
 	@Prop(String) url?: string;
 	@Prop(Promise) load?: Promise<any>;
+	@Prop(Object) data?: any;
 
 	isLoaded = false;
 
 	async mounted() {
 		let payload;
 		if (this.url) {
-			payload = await Api.sendRequest(this.url, undefined, {
+			payload = await Api.sendRequest(this.url, this.data || undefined, {
 				detach: true,
 			});
 		} else if (this.load) {
