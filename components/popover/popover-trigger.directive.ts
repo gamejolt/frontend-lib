@@ -14,8 +14,7 @@ export class PopoverTriggerDirective implements PopoverTrigger {
 	 * `hover` will show when moused over, and hide when moused out.
 	 * `click-show` will only show when clicked and won't hide ever.
 	 */
-	@Input('@popoverTriggerEvent')
-	triggerEvent: 'click' | 'hover' | 'click-show' = 'click';
+	@Input('@popoverTriggerEvent') triggerEvent: 'click' | 'hover' | 'click-show' = 'click';
 
 	el: HTMLElement;
 
@@ -29,10 +28,7 @@ export class PopoverTriggerDirective implements PopoverTrigger {
 
 	@HostListener('click', ['$event'])
 	onClick($event: JQueryEventObject) {
-		if (
-			['click', 'click-show'].indexOf(this.triggerEvent) === -1 ||
-			this.popoverTriggerDisabled
-		) {
+		if (['click', 'click-show'].indexOf(this.triggerEvent) === -1 || this.popoverTriggerDisabled) {
 			return true;
 		}
 

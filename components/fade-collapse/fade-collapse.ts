@@ -39,10 +39,7 @@ export class AppFadeCollapse extends Vue {
 		const threshold = this.collapseHeight > Threshold * 2 ? Threshold : 0;
 
 		let isRequired = false;
-		if (
-			this.collapseHeight &&
-			this.$el.scrollHeight - threshold > this.collapseHeight
-		) {
+		if (this.collapseHeight && this.$el.scrollHeight - threshold > this.collapseHeight) {
 			isRequired = true;
 		}
 
@@ -79,9 +76,7 @@ export class AppFadeCollapse extends Vue {
 			// We will scroll to the bottom of the element minus some extra padding.
 			// This keeps the element in view a bit.
 			const scrollTo =
-				Scroll.getElementOffsetFromContext(this.$el) +
-				this.collapseHeight -
-				ExtraCollapsePadding;
+				Scroll.getElementOffsetFromContext(this.$el) + this.collapseHeight - ExtraCollapsePadding;
 
 			// Only if we're past where we would scroll.
 			if (Scroll.getScrollTop() > scrollTo) {
@@ -99,18 +94,14 @@ export class AppFadeCollapse extends Vue {
 
 	setupScrollAnim() {
 		// Start the loop.
-		this.frameRequestHandle = window.requestAnimationFrame(() =>
-			this.animStep()
-		);
+		this.frameRequestHandle = window.requestAnimationFrame(() => this.animStep());
 	}
 
 	private animStep() {
 		// Bottom of element from the scroll context top.
 		// We then subtract some padding so that they still see some of the element while scrolling.
 		const curPos =
-			Scroll.getElementOffsetFromContext(this.$el) +
-			this.$el.offsetHeight -
-			ExtraCollapsePadding;
+			Scroll.getElementOffsetFromContext(this.$el) + this.$el.offsetHeight - ExtraCollapsePadding;
 
 		// Only scroll if we have to.
 		// This will allow the element to collapse freely until our marker would go out of view.
@@ -120,9 +111,7 @@ export class AppFadeCollapse extends Vue {
 		}
 
 		// Request another frame to loop again.
-		this.frameRequestHandle = window.requestAnimationFrame(() =>
-			this.animStep()
-		);
+		this.frameRequestHandle = window.requestAnimationFrame(() => this.animStep());
 	}
 
 	// This gets called after any of our maxHeight transitions.

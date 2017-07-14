@@ -5,13 +5,7 @@ import * as View from '!view!./graph.html?style=./graph.styl';
 
 import { date } from '../../vue/filters/date';
 
-const globalColors = [
-	'#ffffff',
-	'#ccff00',
-	'#31d6ff',
-	'#ff3fac',
-	'#2f7f6f',
-].map(color => {
+const globalColors = ['#ffffff', '#ccff00', '#31d6ff', '#ff3fac', '#2f7f6f'].map(color => {
 	return {
 		backgroundColor: 'rgba( 255, 255, 255, 0.05 )',
 		borderColor: color,

@@ -32,11 +32,7 @@ export class AppAuthLogin extends Vue {
 
 			// Subdomain redirect: jams.gamejolt.io, fireside.gamejolt.com, etc.
 			// This also handles main domain.
-			if (
-				this.redirectTo.search(
-					/^https?:\/\/([a-zA-Z\.]+\.)?gamejolt.(com|io)/
-				) !== -1
-			) {
+			if (this.redirectTo.search(/^https?:\/\/([a-zA-Z\.]+\.)?gamejolt.(com|io)/) !== -1) {
 				window.location.href = this.redirectTo;
 				return;
 			}

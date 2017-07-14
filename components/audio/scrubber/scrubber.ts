@@ -87,8 +87,7 @@ export class AppAudioScrubber extends Vue {
 			return;
 		}
 
-		this.scrubPos =
-			(this.startX - this.timebarLeft + event.deltaX) / this.timebarWidth;
+		this.scrubPos = (this.startX - this.timebarLeft + event.deltaX) / this.timebarWidth;
 		this.scrubPos = Math.max(Math.min(this.scrubPos, 1), 0);
 	}
 }

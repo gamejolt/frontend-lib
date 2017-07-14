@@ -53,10 +53,7 @@ export class WidgetCompiler {
 	 * Any reruns of this call will check for any child widget scopes on the scope passed in and destroy
 	 * them. This ensure you can continue compiling the same content on the scope and it should work.
 	 */
-	static compile(
-		context: WidgetCompilerContext,
-		content: string
-	): HTMLElement | undefined {
+	static compile(context: WidgetCompilerContext, content: string): HTMLElement | undefined {
 		if (!content) {
 			return undefined;
 		}
@@ -87,8 +84,7 @@ export class WidgetCompiler {
 				const token = Math.random().toString(36).substr(2);
 
 				// Make a placeholder div that we can inject in to later.
-				compiledInput += `</div><div id="_inj_${token}_"></div><div class="${this
-					.contentClass}">`;
+				compiledInput += `</div><div id="_inj_${token}_"></div><div class="${this.contentClass}">`;
 
 				// Now save this injection.
 				widgetInjections['_inj_' + token + '_'] = injectedWidget;
@@ -128,10 +124,7 @@ export class WidgetCompiler {
 	 * Will attempt to figure out the widget that they were trying to call
 	 * and call its compilation function.
 	 */
-	private static processWidgetMatch(
-		context: WidgetCompilerContext,
-		match: string
-	) {
+	private static processWidgetMatch(context: WidgetCompilerContext, match: string) {
 		// Trim whitespace.
 		match = match.replace(REGEX.whitespaceTrim, '');
 

@@ -1,7 +1,4 @@
-export function validateFiles(
-	files: File | File[],
-	cb: (file: File) => boolean
-) {
+export function validateFiles(files: File | File[], cb: (file: File) => boolean) {
 	files = Array.isArray(files) ? files : [files];
 
 	for (const file of files) {

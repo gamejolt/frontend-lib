@@ -1,9 +1,6 @@
 import Vue from 'vue';
 
-export function findVueParent<T extends Vue>(
-	component: Vue,
-	parentType: { new (): T }
-) {
+export function findVueParent<T extends Vue>(component: Vue, parentType: { new (): T }) {
 	let parent = component.$parent;
 	while (parent) {
 		if (parent instanceof parentType) {
@@ -15,10 +12,7 @@ export function findVueParent<T extends Vue>(
 	return undefined;
 }
 
-export function findRequiredVueParent<T extends Vue>(
-	component: Vue,
-	parentType: { new (): T }
-) {
+export function findRequiredVueParent<T extends Vue>(component: Vue, parentType: { new (): T }) {
 	const parent = findVueParent(component, parentType);
 	if (!parent) {
 		throw new Error(

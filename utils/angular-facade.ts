@@ -1,19 +1,13 @@
 import * as angular from 'angular';
 import { bundle } from 'ng-metadata/core';
 import { reflector } from 'ng-metadata/src/core/reflection/reflection';
-import {
-	OutputMetadata,
-	InputMetadata,
-} from 'ng-metadata/src/core/directives/metadata_directives';
+import { OutputMetadata, InputMetadata } from 'ng-metadata/src/core/directives/metadata_directives';
 import { ResolvePolicy } from 'angular-ui-router';
 import { getProvider } from './utils';
 import { isPrerender } from '../components/environment/environment.service';
 import { kebabCase } from './string';
 
-export function bootstrapFacade(
-	$q: ng.IQService,
-	$animate: ng.animate.IAnimateService
-) {
+export function bootstrapFacade($q: ng.IQService, $animate: ng.animate.IAnimateService) {
 	(window as any).Promise = $q;
 
 	// Disable angular animations if we're prerendering.
@@ -55,9 +49,7 @@ export function makeState(name: string, options: StateCreatorOptions) {
 			const loader = options.lazyLoad;
 			state.lazyLoad = async () => {
 				const mod = await loader();
-				routeComponent = options.lazyLoadComponent
-					? mod[options.lazyLoadComponent]
-					: mod.default;
+				routeComponent = options.lazyLoadComponent ? mod[options.lazyLoadComponent] : mod.default;
 			};
 
 			state.templateProvider = () => {
@@ -88,9 +80,7 @@ function genRouteTemplate(component: any) {
 	const mappedProps = props.map(prop => {
 		const propMetadata = propsMetadata[prop][0];
 		if (propMetadata instanceof InputMetadata) {
-			return ` [${kebabCase(
-				prop
-			)}]="::$resolve['${prop}'] || $ctrl['${prop}']"`;
+			return ` [${kebabCase(prop)}]="::$resolve['${prop}'] || $ctrl['${prop}']"`;
 		} else if (propMetadata instanceof OutputMetadata) {
 			return ` (${kebabCase(prop)})="$ctrl['${prop}']( $event )"`;
 		}

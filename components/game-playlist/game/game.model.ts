@@ -14,10 +14,7 @@ export class GamePlaylistGame extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/web/library/games/remove/playlist/' +
-				this.game_id +
-				'/' +
-				this.game_playlist_id
+			'/web/library/games/remove/playlist/' + this.game_id + '/' + this.game_playlist_id
 		);
 	}
 }

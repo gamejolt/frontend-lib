@@ -10,8 +10,7 @@ export class Translate {
 	private static sections: string[] = [];
 	private static loaded: { [k: string]: boolean } = {};
 
-	static lang = (typeof localStorage !== 'undefined' &&
-		localStorage.getItem(LangStorageKey)) ||
+	static lang = (typeof localStorage !== 'undefined' && localStorage.getItem(LangStorageKey)) ||
 		'en_US';
 
 	static readonly langs = [
@@ -204,9 +203,7 @@ export class Translate {
 
 		// Gotta change all our current sections loaded in to the new language before
 		// we can set it in the UI.
-		const loadSections = this.sections.map(section =>
-			this.loadSection(section, lang)
-		);
+		const loadSections = this.sections.map(section => this.loadSection(section, lang));
 		await Promise.all(loadSections);
 
 		gettextCatalog.setCurrentLanguage(lang);

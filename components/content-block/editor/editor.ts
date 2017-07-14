@@ -76,9 +76,7 @@ export class AppContentBlockEditor extends Vue {
 	}
 
 	refresh() {
-		const iframe = document.getElementById(this.windowId) as
-			| HTMLIFrameElement
-			| undefined;
+		const iframe = document.getElementById(this.windowId) as HTMLIFrameElement | undefined;
 		if (iframe) {
 			const msg = {
 				type: 'content-update',
@@ -97,10 +95,9 @@ export class AppContentBlockEditor extends Vue {
 
 		const scrollPos = txtarea.scrollTop;
 		let strPos = 0;
-		const br =
-			txtarea.selectionStart || txtarea.selectionStart === 0
-				? 'ff'
-				: (document as any).selection ? 'ie' : false;
+		const br = txtarea.selectionStart || txtarea.selectionStart === 0
+			? 'ff'
+			: (document as any).selection ? 'ie' : false;
 
 		if (br === 'ie') {
 			txtarea.focus();

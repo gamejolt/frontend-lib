@@ -1,11 +1,4 @@
-import {
-	Directive,
-	Inject,
-	Input,
-	OnInit,
-	Host,
-	OnDestroy,
-} from 'ng-metadata/core';
+import { Directive, Inject, Input, OnInit, Host, OnDestroy } from 'ng-metadata/core';
 
 @Directive({
 	selector: '[gj-colorpicker]',

@@ -34,11 +34,7 @@ export class HistoryTick {
 		return this._sources[resource + ':' + resourceId];
 	}
 
-	static sendBeacon(
-		type: string,
-		resourceId: number,
-		options: BeaconOptions = {}
-	) {
+	static sendBeacon(type: string, resourceId: number, options: BeaconOptions = {}) {
 		if (Environment.isPrerender || GJ_IS_SSR) {
 			return;
 		}
@@ -58,18 +54,12 @@ export class HistoryTick {
 
 			// Source/referrer.
 			if (options.sourceResource && options.sourceResourceId) {
-				const source = this.getSource(
-					options.sourceResource,
-					options.sourceResourceId
-				);
+				const source = this.getSource(options.sourceResource, options.sourceResourceId);
 				if (source) {
 					queryParams.push('source=' + source);
 				}
 
-				const ref = PartnerReferral.getReferrer(
-					options.sourceResource,
-					options.sourceResourceId
-				);
+				const ref = PartnerReferral.getReferrer(options.sourceResource, options.sourceResourceId);
 				if (ref) {
 					queryParams.push('ref=' + ref);
 				}
@@ -85,9 +75,7 @@ export class HistoryTick {
 			const img = window.document.createElement('img');
 			img.width = 1;
 			img.height = 1;
-			img.src = `${Environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join(
-				'&'
-			)}`;
+			img.src = `${Environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join('&')}`;
 
 			// Always resolve.
 			img.onload = img.onerror = () => {

@@ -20,10 +20,7 @@ export class UserLinkedAccounts {
 	}
 
 	static async loginClient(router: VueRouter, provider: Provider) {
-		const response = await Api.sendRequest(
-			'/web/auth/' + provider + '?client',
-			{}
-		);
+		const response = await Api.sendRequest('/web/auth/' + provider + '?client', {});
 
 		// Gotta open a browser window for them to complete the sign up/login.
 		const gui = require('nw.gui') as typeof nwGui;
@@ -44,10 +41,7 @@ export class UserLinkedAccounts {
 			return this.linkClient(router, provider);
 		}
 
-		const response = await Api.sendRequest(
-			'/web/dash/linked-accounts/link/' + provider,
-			{}
-		);
+		const response = await Api.sendRequest('/web/dash/linked-accounts/link/' + provider, {});
 		window.location.href = response.redirectLocation;
 	}
 
@@ -102,10 +96,9 @@ export class UserLinkedAccounts {
 			}
 
 			Growls.error(
-				Translate.$gettextInterpolate(
-					`Could not unlink your %{ provider } account.`,
-					{ provider: providerUpper }
-				)
+				Translate.$gettextInterpolate(`Could not unlink your %{ provider } account.`, {
+					provider: providerUpper,
+				})
 			);
 			throw e;
 		}

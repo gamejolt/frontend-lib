@@ -13,9 +13,7 @@ export class AppResponsiveDimensions extends Vue {
 	private height = 'auto';
 
 	mounted() {
-		this.resize$ = Screen.resizeChanges.subscribe(() =>
-			this.updateDimensions()
-		);
+		this.resize$ = Screen.resizeChanges.subscribe(() => this.updateDimensions());
 		this.updateDimensions();
 	}
 

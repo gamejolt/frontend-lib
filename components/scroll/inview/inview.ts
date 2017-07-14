@@ -15,11 +15,7 @@ if (!GJ_IS_SSR) {
 }
 
 let lastScrollHeight: number | undefined = undefined;
-function onScroll(scroll?: {
-	scrollHeight: number;
-	top: number;
-	height: number;
-}) {
+function onScroll(scroll?: { scrollHeight: number; top: number; height: number }) {
 	// These values might come from the scrollChanges subscription, or manually
 	// when a check is queued.
 	const scrollTop = scroll ? scroll.top : Scroll.getScrollTop();

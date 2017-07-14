@@ -83,8 +83,7 @@ export class AppPagination extends Vue {
 	}
 
 	private getEdgePages() {
-		const startPage =
-			(Math.ceil(this.currentPage / MaxPagesShown) - 1) * MaxPagesShown + 1;
+		const startPage = (Math.ceil(this.currentPage / MaxPagesShown) - 1) * MaxPagesShown + 1;
 
 		// Adjust last page if limit is exceeded
 		const endPage = Math.min(startPage + MaxPagesShown - 1, this.totalPages);

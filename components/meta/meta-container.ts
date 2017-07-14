@@ -13,9 +13,7 @@ export class MetaContainer {
 			return;
 		}
 
-		let elem = document.head.querySelector(
-			`meta[name="${name}"]`
-		) as HTMLMetaElement;
+		let elem = document.head.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
 
 		// Remove if we're nulling it out.
 		if (!content) {
@@ -44,9 +42,7 @@ export class MetaContainer {
 			const field = new MetaField();
 
 			if (!GJ_IS_SSR) {
-				const elem = document.head.querySelector(
-					`meta[name="${name}"]`
-				) as HTMLMetaElement;
+				const elem = document.head.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
 				if (elem) {
 					field.original = elem.content;
 				}

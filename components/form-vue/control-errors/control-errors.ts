@@ -80,31 +80,19 @@ export class AppFormControlErrors extends Vue {
 
 	private processMessage(rule: string, label: string) {
 		let message = '';
-		const data =
-			this.group.control.validationRules &&
-			this.group.control.validationRules[rule];
-		const errorMessages = Object.assign(
-			{},
-			ErrorMessagesBase,
-			this.errorMessageOverrides
-		);
+		const data = this.group.control.validationRules && this.group.control.validationRules[rule];
+		const errorMessages = Object.assign({}, ErrorMessagesBase, this.errorMessageOverrides);
 
 		// Pull from the group's validation data to find out the rest of the messages.
 		// When an input has validations like maxlength, we register the attribute's value.
 		// This way we can message on it better.
 		switch (rule) {
 			case 'max':
-				message =
-					'Please enter a {} shorter than or equal to ' +
-					number(data) +
-					' characters.';
+				message = 'Please enter a {} shorter than or equal to ' + number(data) + ' characters.';
 				break;
 
 			case 'min':
-				message =
-					'Please enter a {} longer than or equal to ' +
-					number(data) +
-					' characters.';
+				message = 'Please enter a {} longer than or equal to ' + number(data) + ' characters.';
 				break;
 
 			case 'pattern':
@@ -113,16 +101,13 @@ export class AppFormControlErrors extends Vue {
 				} else if (data === 'hashtag') {
 					message = 'Please use only letters, numbers, and underscores (_).';
 				} else if (data === 'username') {
-					message =
-						'Please use only letters, numbers, hyphens (-), and underscores (_).';
+					message = 'Please use only letters, numbers, hyphens (-), and underscores (_).';
 				}
 				break;
 
 			case 'filesize':
 				message =
-					'The chosen {} exceeds the maximum file size of ' +
-					number(data / 1024 / 1024) +
-					'MB.';
+					'The chosen {} exceeds the maximum file size of ' + number(data / 1024 / 1024) + 'MB.';
 				break;
 
 			case 'img_dimensions':
@@ -138,11 +123,9 @@ export class AppFormControlErrors extends Vue {
 							number(height) +
 							'px.';
 					} else if (width) {
-						message =
-							'The width of your {} must be exactly ' + number(width) + 'px.';
+						message = 'The width of your {} must be exactly ' + number(width) + 'px.';
 					} else if (height) {
-						message =
-							'The height of your {} must be exactly ' + number(height) + 'px.';
+						message = 'The height of your {} must be exactly ' + number(height) + 'px.';
 					}
 				}
 				break;

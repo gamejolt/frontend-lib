@@ -114,11 +114,8 @@ export class Api {
 				// It must be set explicitly if you want to send in an object as a value.
 				if (options.sanitizeComplexData) {
 					if (
-						(options.allowComplexData &&
-							options.allowComplexData.indexOf(key) !== -1) ||
-						(valueType !== 'function' &&
-							valueType !== 'object' &&
-							!Array.isArray(value))
+						(options.allowComplexData && options.allowComplexData.indexOf(key) !== -1) ||
+						(valueType !== 'function' && valueType !== 'object' && !Array.isArray(value))
 					) {
 						sanitizedPostData[key] = value;
 					}
@@ -129,17 +126,9 @@ export class Api {
 		}
 
 		const method = sanitizedPostData ? 'POST' : 'GET';
-		const url =
-			(options.apiHost || this.apiHost) +
-			(options.apiPath || this.apiPath) +
-			uri;
+		const url = (options.apiHost || this.apiHost) + (options.apiPath || this.apiPath) + uri;
 
-		const requestPromise = this.createRequest(
-			method,
-			url,
-			sanitizedPostData,
-			options
-		);
+		const requestPromise = this.createRequest(method, url, sanitizedPostData, options);
 
 		// If we aren't processing the payload, then just return the promise.
 		if (!options.processPayload) {
@@ -149,12 +138,7 @@ export class Api {
 		return await Payload.processResponse(requestPromise, options);
 	}
 
-	private static createRequest(
-		method: string,
-		url: string,
-		data: any,
-		options: RequestOptions
-	) {
+	private static createRequest(method: string, url: string, data: any, options: RequestOptions) {
 		// An upload request.
 		if (options.file) {
 			// We have to send it over as form data instead of JSON data.

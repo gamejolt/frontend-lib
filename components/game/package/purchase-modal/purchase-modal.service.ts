@@ -6,12 +6,7 @@ import { Game } from '../../game.model';
 import { Sellable } from '../../../sellable/sellable.model';
 
 export class GamePackagePurchaseModal {
-	static async show(
-		game: Game,
-		pkg: GamePackage,
-		sellable: Sellable,
-		build?: GameBuild
-	) {
+	static async show(game: Game, pkg: GamePackage, sellable: Sellable, build?: GameBuild) {
 		return await Modal.show<void>({
 			component: () => asyncComponentLoader(import('./purchase-modal')),
 			size: 'sm',

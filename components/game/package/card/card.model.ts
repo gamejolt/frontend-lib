@@ -59,22 +59,13 @@ export class GamePackageCardModel {
 			// We change the sort for their detected OS to be the first before sorting.
 			this.platformSupportInfo[os].sort = 0;
 			this.platformSupport.sort((a, b) => {
-				return (
-					this.platformSupportInfo[a].sort - this.platformSupportInfo[b].sort
-				);
+				return this.platformSupportInfo[a].sort - this.platformSupportInfo[b].sort;
 			});
 
 			// Now that we have all the builds indexed by the platform they support
 			// we need to try to pick one to showcase as the default download. We put
 			// their detected OS first so that it tries to pick that one first.
-			let checkDownloadables = [
-				'windows',
-				'windows_64',
-				'mac',
-				'mac_64',
-				'linux',
-				'linux_64',
-			];
+			let checkDownloadables = ['windows', 'windows_64', 'mac', 'mac_64', 'linux', 'linux_64'];
 
 			// This will put the 64 bit version as higher priority.
 			if (arch === '64') {
@@ -118,8 +109,7 @@ export class GamePackageCardModel {
 			// Lower sort value is a "newer" version.
 			if (
 				this.browserBuild &&
-				(!this.showcasedRelease ||
-					this.browserBuild._release!.sort < this.showcasedRelease.sort)
+				(!this.showcasedRelease || this.browserBuild._release!.sort < this.showcasedRelease.sort)
 			) {
 				this.showcasedRelease = this.browserBuild._release || null;
 			}
@@ -179,8 +169,7 @@ export class GamePackageCardModel {
 			if (this.extraBuilds.length) {
 				this.extraBuilds.sort((a, b) => {
 					return (
-						this.platformSupportInfo[a.platform].sort -
-						this.platformSupportInfo[b.platform].sort
+						this.platformSupportInfo[a.platform].sort - this.platformSupportInfo[b.platform].sort
 					);
 				});
 			}

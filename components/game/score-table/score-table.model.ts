@@ -14,10 +14,7 @@ export class GameScoreTable extends Model {
 	static readonly SORTING_DIRECTION_ASC = 1;
 
 	static $saveSort(gameId: number, sort: number[]) {
-		return Api.sendRequest(
-			'/web/dash/developer/games/api/scores/save-table-sort/' + gameId,
-			sort
-		);
+		return Api.sendRequest('/web/dash/developer/games/api/scores/save-table-sort/' + gameId, sort);
 	}
 
 	$save() {
@@ -28,10 +25,7 @@ export class GameScoreTable extends Model {
 			);
 		} else {
 			return this.$_save(
-				'/web/dash/developer/games/api/scores/save-table/' +
-					this.game_id +
-					'/' +
-					this.id,
+				'/web/dash/developer/games/api/scores/save-table/' + this.game_id + '/' + this.id,
 				'gameScoreTable'
 			);
 		}
@@ -39,10 +33,7 @@ export class GameScoreTable extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/api/scores/remove-table/' +
-				this.game_id +
-				'/' +
-				this.id
+			'/web/dash/developer/games/api/scores/remove-table/' + this.game_id + '/' + this.id
 		);
 	}
 

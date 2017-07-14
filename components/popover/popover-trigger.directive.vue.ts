@@ -8,21 +8,14 @@ const registeredDirectives = new Map<HTMLElement, VuePopoverTrigger>();
 class VuePopoverTrigger implements PopoverTrigger {
 	public disabled = false;
 
-	constructor(
-		public el: HTMLElement,
-		public popoverId: string,
-		public triggerEvent: string
-	) {
+	constructor(public el: HTMLElement, public popoverId: string, public triggerEvent: string) {
 		el.addEventListener('click', e => this.click(e));
 		el.addEventListener('mouseenter', () => this.mouseenter());
 		el.addEventListener('mouseleave', () => this.mouseleave());
 	}
 
 	click(e: Event) {
-		if (
-			['click', 'click-show'].indexOf(this.triggerEvent) === -1 ||
-			this.disabled
-		) {
+		if (['click', 'click-show'].indexOf(this.triggerEvent) === -1 || this.disabled) {
 			return true;
 		}
 
@@ -95,11 +88,7 @@ function getDisabled(binding: Vue.VNodeDirective): boolean {
 
 export const AppPopoverTrigger: Vue.DirectiveOptions = {
 	inserted(el, binding) {
-		const trigger = new VuePopoverTrigger(
-			el,
-			getPopoverId(binding),
-			getTriggerEvent(binding)
-		);
+		const trigger = new VuePopoverTrigger(el, getPopoverId(binding), getTriggerEvent(binding));
 		trigger.disabled = getDisabled(binding);
 
 		registeredDirectives.set(el, trigger);

@@ -71,11 +71,7 @@ export class AppCommentWidget extends Vue {
 	subscriptions: { [k: string]: Subscription } = {};
 
 	get loginUrl() {
-		return (
-			Environment.authBaseUrl +
-			'/login?redirect=' +
-			encodeURIComponent(this.$route.fullPath)
-		);
+		return Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent(this.$route.fullPath);
 	}
 
 	async created() {
@@ -101,11 +97,7 @@ export class AppCommentWidget extends Vue {
 	private async refreshComments() {
 		try {
 			this.isLoading = true;
-			const payload = await Comment.fetch(
-				this.resource,
-				this.resourceId,
-				this.currentPage
-			);
+			const payload = await Comment.fetch(this.resource, this.resourceId, this.currentPage);
 			this.isLoading = false;
 
 			this.hasBootstrapped = true;
@@ -119,9 +111,7 @@ export class AppCommentWidget extends Vue {
 			// Child comments.
 			this.childComments = {};
 			if (payload.childComments) {
-				const childComments: Comment[] = Comment.populate(
-					payload.childComments
-				);
+				const childComments: Comment[] = Comment.populate(payload.childComments);
 				const grouped: any = {};
 				for (const child of childComments) {
 					if (!grouped[child.parent_id]) {
@@ -135,9 +125,7 @@ export class AppCommentWidget extends Vue {
 			// User subscriptions to comment threads.
 			this.subscriptions = {};
 			if (payload.subscriptions) {
-				const subscriptions: Subscription[] = Subscription.populate(
-					payload.subscriptions
-				);
+				const subscriptions: Subscription[] = Subscription.populate(payload.subscriptions);
 				const indexed: any = {};
 				for (const subscription of subscriptions) {
 					indexed[subscription.resource_id] = subscription;
@@ -192,11 +180,7 @@ export class AppCommentWidget extends Vue {
 		this.refreshComments();
 
 		if (Analytics) {
-			Analytics.trackEvent(
-				'comment-widget',
-				'change-page',
-				this.currentPage + ''
-			);
+			Analytics.trackEvent('comment-widget', 'change-page', this.currentPage + '');
 		}
 	}
 
@@ -228,9 +212,7 @@ export class AppCommentWidget extends Vue {
 				return;
 			}
 
-			const translations: Translation[] = Translation.populate(
-				response.translations
-			);
+			const translations: Translation[] = Translation.populate(response.translations);
 
 			const indexed: any = {};
 			for (const translation of translations) {
@@ -302,9 +284,7 @@ export class AppCommentWidget extends Vue {
 			this.changePage(page);
 			Analytics.trackEvent('comment-widget', 'permalink');
 		} catch (e) {
-			Growls.error(
-				this.$gettext(`Invalid comment passed in. It may have been removed.`)
-			);
+			Growls.error(this.$gettext(`Invalid comment passed in. It may have been removed.`));
 		}
 	}
 }

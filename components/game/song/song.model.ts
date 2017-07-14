@@ -20,19 +20,14 @@ export class GameSong extends Model {
 	}
 
 	static $saveSort(gameId: number, sort: number[]) {
-		return Api.sendRequest(
-			'/web/dash/developer/games/music/save-sort/' + gameId,
-			sort
-		);
+		return Api.sendRequest('/web/dash/developer/games/music/save-sort/' + gameId, sort);
 	}
 
 	$save() {
 		if (!this.id) {
-			return this.$_save(
-				'/web/dash/developer/games/music/save/' + this.game_id,
-				'gameSong',
-				{ file: this.file }
-			);
+			return this.$_save('/web/dash/developer/games/music/save/' + this.game_id, 'gameSong', {
+				file: this.file,
+			});
 		} else {
 			// May or may not have an upload file on an edit.
 			return this.$_save(
@@ -44,9 +39,7 @@ export class GameSong extends Model {
 	}
 
 	$remove() {
-		return this.$_remove(
-			'/web/dash/developer/games/music/remove/' + this.game_id + '/' + this.id
-		);
+		return this.$_remove('/web/dash/developer/games/music/remove/' + this.game_id + '/' + this.id);
 	}
 }
 

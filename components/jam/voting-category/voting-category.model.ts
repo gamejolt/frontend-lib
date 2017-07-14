@@ -12,10 +12,7 @@ export class JamVotingCategory extends Model {
 	}
 
 	static $saveSort(jamId: number, sortedIds: number[]) {
-		return Api.sendRequest(
-			'/jams/manage/jams/voting/save-sorted-categories/' + jamId,
-			sortedIds
-		);
+		return Api.sendRequest('/jams/manage/jams/voting/save-sorted-categories/' + jamId, sortedIds);
 	}
 
 	$save() {
@@ -26,10 +23,7 @@ export class JamVotingCategory extends Model {
 				'jamVotingCategory'
 			);
 		} else {
-			return this.$_save(
-				'/jams/manage/jams/voting/save-category/' + this.id,
-				'jamVotingCategory'
-			);
+			return this.$_save('/jams/manage/jams/voting/save-category/' + this.id, 'jamVotingCategory');
 		}
 	}
 

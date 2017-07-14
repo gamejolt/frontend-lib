@@ -21,9 +21,7 @@ export class Clipboard {
 			);
 		} else {
 			Growls.error(
-				Translate.$gettext(
-					'Could not copy to your clipboard. Dunno why. Sorry.'
-				),
+				Translate.$gettext('Could not copy to your clipboard. Dunno why. Sorry.'),
 				Translate.$gettext('Copy Failed')
 			);
 		}

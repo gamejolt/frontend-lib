@@ -105,10 +105,7 @@ export class Screen {
 
 	static async _onResize() {
 		// Get everything for the window first.
-		if (
-			window.matchMedia('only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)')
-				.matches
-		) {
+		if (window.matchMedia('only screen and (max-width: ' + (SM_WIDTH - 1) + 'px)').matches) {
 			this.isWindowXs = true;
 			this.isWindowSm = false;
 			this.isWindowMd = false;
@@ -116,11 +113,7 @@ export class Screen {
 			this.windowBreakpoint = 'xs';
 		} else if (
 			window.matchMedia(
-				'only screen and (min-width: ' +
-					SM_WIDTH +
-					'px) and (max-width: ' +
-					(MD_WIDTH - 1) +
-					'px)'
+				'only screen and (min-width: ' + SM_WIDTH + 'px) and (max-width: ' + (MD_WIDTH - 1) + 'px)'
 			).matches
 		) {
 			this.isWindowXs = false;
@@ -130,11 +123,7 @@ export class Screen {
 			this.windowBreakpoint = 'sm';
 		} else if (
 			window.matchMedia(
-				'only screen and (min-width: ' +
-					MD_WIDTH +
-					'px) and (max-width: ' +
-					(LG_WIDTH - 1) +
-					'px)'
+				'only screen and (min-width: ' + MD_WIDTH + 'px) and (max-width: ' + (LG_WIDTH - 1) + 'px)'
 			).matches
 		) {
 			this.isWindowXs = false;
@@ -142,10 +131,7 @@ export class Screen {
 			this.isWindowMd = true;
 			this.isWindowLg = false;
 			this.windowBreakpoint = 'md';
-		} else if (
-			window.matchMedia('only screen and (min-width: ' + LG_WIDTH + 'px)')
-				.matches
-		) {
+		} else if (window.matchMedia('only screen and (min-width: ' + LG_WIDTH + 'px)').matches) {
 			this.isWindowXs = false;
 			this.isWindowSm = false;
 			this.isWindowMd = false;
@@ -161,12 +147,8 @@ export class Screen {
 			this.isWindowDesktop = true;
 		}
 
-		this.windowWidth = window.innerWidth > 0
-			? window.innerWidth
-			: (window as any)['width'];
-		this.windowHeight = window.innerHeight > 0
-			? window.innerHeight
-			: (window as any)['height'];
+		this.windowWidth = window.innerWidth > 0 ? window.innerWidth : (window as any)['width'];
+		this.windowHeight = window.innerHeight > 0 ? window.innerHeight : (window as any)['height'];
 
 		// Now if we have a Screen context set, let's get settings for that.
 		// Othwerise we simply use the $indow dimensions.
@@ -235,7 +217,5 @@ if (!GJ_IS_SSR) {
 	 * This is used internally to check things every time window resizes.
 	 * We debounce this and afterwards fire the resizeChanges for everyone else.
 	 */
-	fromEvent(window, 'resize')
-		.debounceTime(250)
-		.subscribe(() => Screen._onResize());
+	fromEvent(window, 'resize').debounceTime(250).subscribe(() => Screen._onResize());
 }

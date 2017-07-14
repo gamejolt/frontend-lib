@@ -51,19 +51,13 @@ export class Comment extends Model {
 			query = '?page=' + page;
 		}
 
-		return Api.sendRequest(
-			`/comments/${resource}/${resourceId}${query}`,
-			null,
-			{ detach: true }
-		);
+		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, null, { detach: true });
 	}
 
 	static async getCommentPage(commentId: number): Promise<number> {
-		const response = await Api.sendRequest(
-			`/comments/get-comment-page/${commentId}`,
-			null,
-			{ detach: true }
-		);
+		const response = await Api.sendRequest(`/comments/get-comment-page/${commentId}`, null, {
+			detach: true,
+		});
 
 		if (!response || response.error) {
 			return Promise.reject(response.error);
@@ -73,11 +67,9 @@ export class Comment extends Model {
 	}
 
 	static async getCommentUrl(commentId: number): Promise<string> {
-		const response = await Api.sendRequest(
-			`/comments/get-comment-url/${commentId}`,
-			null,
-			{ detach: true }
-		);
+		const response = await Api.sendRequest(`/comments/get-comment-url/${commentId}`, null, {
+			detach: true,
+		});
 
 		if (!response || response.error) {
 			return Promise.reject(response.error);
@@ -87,11 +79,9 @@ export class Comment extends Model {
 	}
 
 	$save() {
-		return this.$_save(
-			`/comments/add/${this.resource}/${this.resource_id}`,
-			'comment',
-			{ detach: true }
-		);
+		return this.$_save(`/comments/add/${this.resource}/${this.resource_id}`, 'comment', {
+			detach: true,
+		});
 	}
 
 	async $like() {

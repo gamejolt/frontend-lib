@@ -44,10 +44,7 @@ export class GameTrophy extends Model {
 	/**
 	 * Splits out the trophies by achieved/unachieved.
 	 */
-	static splitAchieved(
-		trophies: GameTrophy[],
-		achievedIndexed: { [k: number]: UserGameTrophy }
-	) {
+	static splitAchieved(trophies: GameTrophy[], achievedIndexed: { [k: number]: UserGameTrophy }) {
 		return {
 			achieved: trophies.filter(trophy => achievedIndexed[trophy.id]),
 			unachieved: trophies.filter(trophy => !achievedIndexed[trophy.id]),
@@ -71,8 +68,7 @@ export class GameTrophy extends Model {
 		} else {
 			// May or may not have an upload file on an edit.
 			return this.$_save(
-				`/web/dash/developer/games/api/trophies/save/${this.game_id}/${this
-					.id}`,
+				`/web/dash/developer/games/api/trophies/save/${this.game_id}/${this.id}`,
 				'gameTrophy',
 				{ file: this.file }
 			);
@@ -81,8 +77,7 @@ export class GameTrophy extends Model {
 
 	$clearImage() {
 		return this.$_save(
-			`/web/dash/developer/games/api/trophies/clear-image/${this.game_id}/${this
-				.id}`,
+			`/web/dash/developer/games/api/trophies/clear-image/${this.game_id}/${this.id}`,
 			'gameTrophy'
 		);
 	}

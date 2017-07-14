@@ -95,8 +95,7 @@ export class AppGamePackageCard extends Vue {
 			if (this.pricing.promotional) {
 				this.saleOldPricing = this.sellable.pricings[1];
 				this.sale = true;
-				this.salePercentageOff = ((this.saleOldPricing.amount -
-					this.pricing.amount) /
+				this.salePercentageOff = ((this.saleOldPricing.amount - this.pricing.amount) /
 					this.saleOldPricing.amount *
 					100).toFixed(0);
 			}
@@ -136,9 +135,7 @@ export class AppGamePackageCard extends Vue {
 	}
 
 	private doBuildClick(build: GameBuild, fromExtraSection = false) {
-		let operation = build.type === GameBuild.TYPE_DOWNLOADABLE
-			? 'download'
-			: 'play';
+		let operation = build.type === GameBuild.TYPE_DOWNLOADABLE ? 'download' : 'play';
 		if (build.type === GameBuild.TYPE_ROM && fromExtraSection) {
 			operation = 'download';
 		}
@@ -151,12 +148,7 @@ export class AppGamePackageCard extends Vue {
 	}
 
 	showPayment(build?: GameBuild) {
-		GamePackagePurchaseModal.show(
-			this.game,
-			this.package,
-			this.sellable,
-			build
-		);
+		GamePackagePurchaseModal.show(this.game, this.package, this.sellable, build);
 		return true;
 		// // If this isn't a free game, then we want to slide the payment open. If
 		// // it's pay what you want, when the payment is open and they click a

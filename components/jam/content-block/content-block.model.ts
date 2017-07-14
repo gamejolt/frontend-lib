@@ -18,9 +18,7 @@ export class JamContentBlock extends Model {
 	}
 
 	static async getBlock(blockId: number) {
-		const response = await Api.sendRequest(
-			'/jams/manage/jams/content/get-block/' + blockId
-		);
+		const response = await Api.sendRequest('/jams/manage/jams/content/get-block/' + blockId);
 
 		return new JamContentBlock(response.jamContentBlock);
 	}
@@ -30,10 +28,7 @@ export class JamContentBlock extends Model {
 	}
 
 	$save() {
-		return this.$_save(
-			'/jams/manage/jams/content/save-block/' + this.id,
-			'jamContentBlock'
-		);
+		return this.$_save('/jams/manage/jams/content/save-block/' + this.id, 'jamContentBlock');
 	}
 }
 

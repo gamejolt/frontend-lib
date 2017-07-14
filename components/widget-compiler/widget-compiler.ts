@@ -1,10 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
-import {
-	WidgetCompiler,
-	WidgetCompilerContext,
-} from './widget-compiler.service';
+import { WidgetCompiler, WidgetCompilerContext } from './widget-compiler.service';
 
 @Component({})
 export class AppWidgetCompiler extends Vue {

@@ -29,10 +29,7 @@ export class GameRelease extends Model {
 	$save() {
 		if (!this.id) {
 			return this.$_save(
-				'/web/dash/developer/games/releases/save/' +
-					this.game_id +
-					'/' +
-					this.game_package_id,
+				'/web/dash/developer/games/releases/save/' + this.game_id + '/' + this.game_package_id,
 				'gameRelease'
 			);
 		} else {

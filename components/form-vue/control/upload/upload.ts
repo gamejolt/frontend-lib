@@ -51,8 +51,7 @@ export class AppFormControlUpload extends BaseFormControl {
 	}
 
 	get progress(): number | undefined {
-		const progressEvent = this.form.base.formModel
-			._progress as ProgressEvent | null;
+		const progressEvent = this.form.base.formModel._progress as ProgressEvent | null;
 		if (!progressEvent) {
 			return undefined;
 		}
@@ -62,10 +61,7 @@ export class AppFormControlUpload extends BaseFormControl {
 
 	dragOver(e: DragEvent) {
 		// Don't do anything if not a file drop.
-		if (
-			!e.dataTransfer.items.length ||
-			e.dataTransfer.items[0].kind !== 'file'
-		) {
+		if (!e.dataTransfer.items.length || e.dataTransfer.items[0].kind !== 'file') {
 			return;
 		}
 
@@ -80,10 +76,7 @@ export class AppFormControlUpload extends BaseFormControl {
 	// File select resulting from a drop onto the input.
 	async drop(e: DragEvent) {
 		// Don't do anything if not a file drop.
-		if (
-			!e.dataTransfer.items.length ||
-			e.dataTransfer.items[0].kind !== 'file'
-		) {
+		if (!e.dataTransfer.items.length || e.dataTransfer.items[0].kind !== 'file') {
 			return;
 		}
 
@@ -158,11 +151,7 @@ function traverseFileTree(files: File[], entry: any, path = ''): Promise<void> {
 					const promises = [];
 					for (let i = 0; i < entries.length; ++i) {
 						promises.push(
-							traverseFileTree(
-								files,
-								entries[i],
-								(path ? path : '') + entry.name + '/'
-							)
+							traverseFileTree(files, entries[i], (path ? path : '') + entry.name + '/')
 						);
 					}
 

@@ -14,14 +14,10 @@ export class JamGameVote extends Model {
 	}
 
 	$saveVote(jamId: number, game: Game, voteData: any) {
-		return Api.sendRequest(
-			'/jams-io/voting/save-vote/' + jamId + '/' + game.id,
-			voteData,
-			{
-				detach: true,
-				allowComplexData: ['votes'],
-			}
-		);
+		return Api.sendRequest('/jams-io/voting/save-vote/' + jamId + '/' + game.id, voteData, {
+			detach: true,
+			allowComplexData: ['votes'],
+		});
 	}
 
 	$clearVote(jamId: number, game: Game) {

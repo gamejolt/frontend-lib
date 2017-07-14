@@ -33,10 +33,7 @@ export class JamPage extends Model {
 	}
 
 	static $saveSort(jamId: number, pagesSort: number[]) {
-		return Api.sendRequest(
-			'/jams/manage/jams/content/save-sorted-pages/' + jamId,
-			pagesSort
-		);
+		return Api.sendRequest('/jams/manage/jams/content/save-sorted-pages/' + jamId, pagesSort);
 	}
 
 	getUrl(jam: Jam) {
@@ -114,15 +111,9 @@ export class JamPage extends Model {
 	$save() {
 		// Are we adding or saving?
 		if (!this.id) {
-			return this.$_save(
-				'/jams/manage/jams/content/add-page/' + this.jam_id,
-				'jamPage'
-			);
+			return this.$_save('/jams/manage/jams/content/add-page/' + this.jam_id, 'jamPage');
 		} else {
-			return this.$_save(
-				'/jams/manage/jams/content/save-page/' + this.id,
-				'jamPage'
-			);
+			return this.$_save('/jams/manage/jams/content/save-page/' + this.id, 'jamPage');
 		}
 	}
 

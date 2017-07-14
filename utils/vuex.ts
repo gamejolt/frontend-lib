@@ -5,10 +5,7 @@ import { Module } from 'vuex/types';
 
 Vue.use(Vuex);
 
-export type VuexDispatch<P> = <T extends keyof P>(
-	type: T,
-	value?: P[T]
-) => Promise<any[]>;
+export type VuexDispatch<P> = <T extends keyof P>(type: T, value?: P[T]) => Promise<any[]>;
 export type VuexCommit<P> = <T extends keyof P>(type: T, value?: P[T]) => void;
 
 export type VuexWatch<S> = <T>(
@@ -251,21 +248,15 @@ function scopeNoCallers(caller: string, scope: any, state: any) {
 }
 
 function stateMutateError(caller: string, field: string) {
-	throwError(
-		`Couldn't modify field ${field}. You can't modify state within a ${caller}.`
-	);
+	throwError(`Couldn't modify field ${field}. You can't modify state within a ${caller}.`);
 }
 
 function mutationError(caller: string, mutation: string) {
-	throwError(
-		`Couldn't commit ${mutation}. You can't call mutations within a ${caller}.`
-	);
+	throwError(`Couldn't commit ${mutation}. You can't call mutations within a ${caller}.`);
 }
 
 function actionError(caller: string, action: string) {
-	throwError(
-		`Couldn't dispatch ${action}. You can't call actions within a ${caller}.`
-	);
+	throwError(`Couldn't dispatch ${action}. You can't call actions within a ${caller}.`);
 }
 
 /**

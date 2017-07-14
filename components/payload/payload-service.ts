@@ -13,11 +13,7 @@ export class PayloadError {
 
 	defaultPrevented = false;
 
-	constructor(
-		public type: string,
-		public response?: any,
-		public status?: number
-	) {}
+	constructor(public type: string, public response?: any, public status?: number) {}
 
 	preventDefault() {
 		this.defaultPrevented = true;
@@ -145,17 +141,12 @@ export class Payload {
 			if (!options.noErrorRedirect) {
 				// If the response indicated a failed connection.
 				if (response === undefined || response.status === -1) {
-					throw this.handlePayloadError(
-						new PayloadError(PayloadError.ERROR_OFFLINE)
-					);
+					throw this.handlePayloadError(new PayloadError(PayloadError.ERROR_OFFLINE));
 				} else if (response.status === 401) {
 					// If it was a 401 error, then they need to be logged in.
 					// Let's redirect them to the login page on the main site.
 					throw this.handlePayloadError(
-						new PayloadError(
-							PayloadError.ERROR_NOT_LOGGED,
-							response.data || undefined
-						)
+						new PayloadError(PayloadError.ERROR_NOT_LOGGED, response.data || undefined)
 					);
 				} else {
 					// Otherwise, show an error page.
@@ -216,12 +207,7 @@ export class Payload {
 	}
 
 	private static checkPayloadUser(response: any, options: RequestOptions) {
-		if (
-			options.ignorePayloadUser ||
-			!response ||
-			!response.data ||
-			!this.store
-		) {
+		if (options.ignorePayloadUser || !response || !response.data || !this.store) {
 			return;
 		}
 
@@ -250,20 +236,13 @@ export class Payload {
 		// }
 	}
 
-	private static checkAnalyticsExperiments(
-		response: any,
-		_options: RequestOptions
-	) {
+	private static checkAnalyticsExperiments(response: any, _options: RequestOptions) {
 		if (!response.data.payload) {
 			return;
 		}
 
 		const payload = response.data.payload;
-		if (
-			payload._experiment &&
-			payload._variation &&
-			payload._variation !== -1
-		) {
+		if (payload._experiment && payload._variation && payload._variation !== -1) {
 			Analytics.setCurrentExperiment(payload._experiment, payload._variation);
 		}
 	}
@@ -313,8 +292,7 @@ export class Payload {
 				if (this.router) {
 					redirect = encodeURIComponent(this.router.currentRoute.fullPath);
 				}
-				window.location.href =
-					Environment.authBaseUrl + '/login?redirect=' + redirect;
+				window.location.href = Environment.authBaseUrl + '/login?redirect=' + redirect;
 			} else if (error.type === PayloadError.ERROR_INVALID) {
 				this.store.commit('app/setError', 500);
 			} else if (

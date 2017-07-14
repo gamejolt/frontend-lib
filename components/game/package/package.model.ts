@@ -35,32 +35,19 @@ export class GamePackage extends Model {
 	_sellable?: Sellable;
 
 	static $saveSort(gameId: number, packagesSort: any) {
-		return Api.sendRequest(
-			'/web/dash/developer/games/packages/save-sort/' + gameId,
-			packagesSort
-		);
+		return Api.sendRequest('/web/dash/developer/games/packages/save-sort/' + gameId, packagesSort);
 	}
 
 	shouldShowNamePrice() {
-		return (
-			this._sellable &&
-			this._sellable.type === 'pwyw' &&
-			!this._sellable.is_owned
-		);
+		return this._sellable && this._sellable.type === 'pwyw' && !this._sellable.is_owned;
 	}
 
 	$save() {
 		if (!this.id) {
-			return this.$_save(
-				'/web/dash/developer/games/packages/save/' + this.game_id,
-				'gamePackage'
-			);
+			return this.$_save('/web/dash/developer/games/packages/save/' + this.game_id, 'gamePackage');
 		} else {
 			return this.$_save(
-				'/web/dash/developer/games/packages/save/' +
-					this.game_id +
-					'/' +
-					this.id,
+				'/web/dash/developer/games/packages/save/' + this.game_id + '/' + this.id,
 				'gamePackage'
 			);
 		}
@@ -68,10 +55,7 @@ export class GamePackage extends Model {
 
 	async $remove(game: Game) {
 		const response = await this.$_remove(
-			'/web/dash/developer/games/packages/remove/' +
-				this.game_id +
-				'/' +
-				this.id
+			'/web/dash/developer/games/packages/remove/' + this.game_id + '/' + this.id
 		);
 
 		if (game && response.game) {

@@ -62,10 +62,7 @@ export class AppMediaBar extends Vue {
 	}
 
 	goNext() {
-		if (
-			this.activeIndex === null ||
-			this.activeIndex + 1 >= this.mediaItems.length
-		) {
+		if (this.activeIndex === null || this.activeIndex + 1 >= this.mediaItems.length) {
 			return;
 		}
 

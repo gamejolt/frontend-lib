@@ -16,16 +16,11 @@ export class JamOrganizer extends Model {
 	}
 
 	$save() {
-		return this.$_save(
-			'/jams/manage/jams/organizers/add-organizer/' + this.jam_id,
-			'jamOrganizer'
-		);
+		return this.$_save('/jams/manage/jams/organizers/add-organizer/' + this.jam_id, 'jamOrganizer');
 	}
 
 	$remove() {
-		return this.$_remove(
-			'/jams/manage/jams/organizers/remove-organizer/' + this.id
-		);
+		return this.$_remove('/jams/manage/jams/organizers/remove-organizer/' + this.id);
 	}
 }
 

@@ -42,10 +42,7 @@ export class KeyGroup extends Model {
 
 		if (this.id) {
 			return this.$_save(
-				'/web/dash/developer/games/key-groups/save/' +
-					this.game_id +
-					'/' +
-					this.id,
+				'/web/dash/developer/games/key-groups/save/' + this.game_id + '/' + this.id,
 				'keyGroup',
 				options
 			);
@@ -60,10 +57,7 @@ export class KeyGroup extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/key-groups/remove/' +
-				this.game_id +
-				'/' +
-				this.id
+			'/web/dash/developer/games/key-groups/remove/' + this.game_id + '/' + this.id
 		);
 	}
 }

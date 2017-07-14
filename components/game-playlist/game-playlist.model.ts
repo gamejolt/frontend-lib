@@ -26,11 +26,9 @@ export class GamePlaylist extends Model {
 			queryString += '?game_id=' + options.gameId;
 		}
 
-		const response: any = await Api.sendRequest(
-			'/web/library/playlists' + queryString,
-			null,
-			{ ignoreLoadingBar: true }
-		);
+		const response: any = await Api.sendRequest('/web/library/playlists' + queryString, null, {
+			ignoreLoadingBar: true,
+		});
 
 		return {
 			playlists: GamePlaylist.populate(response.playlists) as GamePlaylist[],
@@ -59,10 +57,7 @@ export class GamePlaylist extends Model {
 		if (!this.id) {
 			return this.$_save('/web/library/playlists/save', 'gamePlaylist');
 		} else {
-			return this.$_save(
-				'/web/library/playlists/save/' + this.id,
-				'gamePlaylist'
-			);
+			return this.$_save('/web/library/playlists/save/' + this.id, 'gamePlaylist');
 		}
 	}
 

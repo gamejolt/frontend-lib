@@ -44,13 +44,9 @@ export class AppThemeEditor extends Vue {
 		// Save the initial content, as well.
 		this.initialTheme = Object.assign({}, this.theme);
 
-		const response = await Api.sendRequest(
-			'/sites-io/get-template/' + this.template,
-			undefined,
-			{
-				detach: true,
-			}
-		);
+		const response = await Api.sendRequest('/sites-io/get-template/' + this.template, undefined, {
+			detach: true,
+		});
 
 		this.isLoaded = true;
 
@@ -63,9 +59,7 @@ export class AppThemeEditor extends Vue {
 	}
 
 	refresh(initial = false) {
-		const iframe = document.getElementById(this.windowId) as
-			| HTMLIFrameElement
-			| undefined;
+		const iframe = document.getElementById(this.windowId) as HTMLIFrameElement | undefined;
 
 		if (iframe) {
 			const msg = {

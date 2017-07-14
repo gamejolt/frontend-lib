@@ -12,19 +12,13 @@ export class JamAward extends Model {
 	}
 
 	static $saveSort(jamId: number, sortedIds: number[]) {
-		return Api.sendRequest(
-			'/jams/manage/jams/awards/save-sort/' + jamId,
-			sortedIds
-		);
+		return Api.sendRequest('/jams/manage/jams/awards/save-sort/' + jamId, sortedIds);
 	}
 
 	$save() {
 		// Are we adding or saving?
 		if (!this.id) {
-			return this.$_save(
-				'/jams/manage/jams/awards/save/' + this.jam_id,
-				'jamAward'
-			);
+			return this.$_save('/jams/manage/jams/awards/save/' + this.jam_id, 'jamAward');
 		} else {
 			return this.$_save(
 				'/jams/manage/jams/awards/save/' + this.jam_id + '/' + this.id,

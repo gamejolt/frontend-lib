@@ -8,11 +8,7 @@ export async function FormValidatorAvailability(value: string, args: [string]) {
 	// }
 
 	try {
-		await Api.sendRequest(
-			args[0],
-			{ value },
-			{ detach: true, processPayload: false }
-		);
+		await Api.sendRequest(args[0], { value }, { detach: true, processPayload: false });
 	} catch (_e) {
 		return { valid: false };
 	}

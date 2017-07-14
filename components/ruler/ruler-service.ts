@@ -25,11 +25,7 @@ function isStaticPositioned(el: HTMLElement) {
 
 function elementParentOffset(el: HTMLElement) {
 	let offsetParent = (el.offsetParent as HTMLElement) || document;
-	while (
-		offsetParent &&
-		offsetParent !== (document as any) &&
-		isStaticPositioned(offsetParent)
-	) {
+	while (offsetParent && offsetParent !== (document as any) && isStaticPositioned(offsetParent)) {
 		offsetParent = offsetParent.offsetParent as HTMLElement;
 	}
 
@@ -77,10 +73,8 @@ export class Ruler {
 		return {
 			width: rect.width || el.offsetWidth,
 			height: rect.height || el.offsetHeight,
-			top:
-				rect.top + (window.pageYOffset || document.documentElement.scrollTop),
-			left:
-				rect.left + (window.pageXOffset || document.documentElement.scrollLeft),
+			top: rect.top + (window.pageYOffset || document.documentElement.scrollTop),
+			left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft),
 		};
 	}
 
@@ -103,10 +97,7 @@ export class Ruler {
 		// This only matters for currently hidden elements that wouldn't return dimensions.
 		let swappedStyles = false;
 		const oldStyles: any = {};
-		if (
-			DISPLAY_SWAP_REGEX.test(styles.display || '') &&
-			elem.offsetWidth === 0
-		) {
+		if (DISPLAY_SWAP_REGEX.test(styles.display || '') && elem.offsetWidth === 0) {
 			swappedStyles = true;
 
 			for (const name in CSS_SHOW_STYLES) {
@@ -117,21 +108,13 @@ export class Ruler {
 
 		let val = elem[baseProp];
 		if (baseProp === 'clientWidth') {
-			val -=
-				parseFloat(styles.paddingLeft || '') +
-				parseFloat(styles.paddingRight || '');
+			val -= parseFloat(styles.paddingLeft || '') + parseFloat(styles.paddingRight || '');
 		} else if (baseProp === 'clientHeight') {
-			val -=
-				parseFloat(styles.paddingTop || '') +
-				parseFloat(styles.paddingBottom || '');
+			val -= parseFloat(styles.paddingTop || '') + parseFloat(styles.paddingBottom || '');
 		} else if (baseProp === 'offsetWidth') {
-			val +=
-				parseFloat(styles.marginLeft || '') +
-				parseFloat(styles.marginRight || '');
+			val += parseFloat(styles.marginLeft || '') + parseFloat(styles.marginRight || '');
 		} else if (baseProp === 'offsetHeight') {
-			val +=
-				parseFloat(styles.marginTop || '') +
-				parseFloat(styles.marginBottom || '');
+			val += parseFloat(styles.marginTop || '') + parseFloat(styles.marginBottom || '');
 		}
 
 		if (swappedStyles) {

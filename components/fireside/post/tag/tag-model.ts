@@ -22,10 +22,7 @@ export class FiresidePostTag extends Model {
 	}
 
 	getUrl(page?: number) {
-		return getProvider<StateService>('$state').href(
-			this.getSref(page),
-			this.getSrefParams(page)
-		);
+		return getProvider<StateService>('$state').href(this.getSref(page), this.getSrefParams(page));
 	}
 }
 

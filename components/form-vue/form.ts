@@ -58,14 +58,8 @@ export class AppForm extends Vue {
 			this.$validator.extend('min_img_ratio', FormValidatorMinImgRatio);
 			this.$validator.extend('max_img_ratio', FormValidatorMaxImgRatio);
 			this.$validator.extend('img_dimensions', FormValidatorImgDimensions);
-			this.$validator.extend(
-				'min_img_dimensions',
-				FormValidatorMinImgDimensions
-			);
-			this.$validator.extend(
-				'max_img_dimensions',
-				FormValidatorMaxImgDimensions
-			);
+			this.$validator.extend('min_img_dimensions', FormValidatorMinImgDimensions);
+			this.$validator.extend('max_img_dimensions', FormValidatorMaxImgDimensions);
 			this.$validator.extend('cc_exp', FormValidatorCcExp);
 			this.$validator.extend('cc_exp_expired', FormValidatorCcExpExpired);
 			AppForm.hasAddedValidators = true;

@@ -207,11 +207,7 @@ export class Notification extends Model {
 	}
 
 	$read() {
-		return this.$_save(
-			'/web/dash/activity/mark-read/' + this.id,
-			'notification',
-			{ detach: true }
-		);
+		return this.$_save('/web/dash/activity/mark-read/' + this.id, 'notification', { detach: true });
 	}
 }
 

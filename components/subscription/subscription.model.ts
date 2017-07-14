@@ -21,11 +21,9 @@ export class Subscription extends Model {
 
 	$save() {
 		if (!this.id) {
-			return this.$_save(
-				'/comments/subscriptions/add/' + this.comment_id,
-				'subscription',
-				{ ignorePayloadUser: true }
-			);
+			return this.$_save('/comments/subscriptions/add/' + this.comment_id, 'subscription', {
+				ignorePayloadUser: true,
+			});
 		}
 
 		throw new Error('No edit method for subscriptions.');

@@ -73,8 +73,7 @@ export class AppMediaBarLightbox extends Vue {
 
 	calcMaxDimensions() {
 		this.maxItemWidth = Screen.windowWidth * 0.8;
-		this.maxItemHeight =
-			Screen.windowHeight - MediaBarLightboxConfig.controlsHeight * 2;
+		this.maxItemHeight = Screen.windowHeight - MediaBarLightboxConfig.controlsHeight * 2;
 	}
 
 	goNext() {
@@ -137,9 +136,7 @@ export class AppMediaBarLightbox extends Vue {
 	panStart() {
 		this.isDragging = true;
 
-		this.activeElem = this.$el.getElementsByClassName(
-			'active'
-		)[0] as HTMLElement;
+		this.activeElem = this.$el.getElementsByClassName('active')[0] as HTMLElement;
 		this.nextElem = this.$el.getElementsByClassName('next')[0] as HTMLElement;
 		this.prevElem = this.$el.getElementsByClassName('prev')[0] as HTMLElement;
 
@@ -169,8 +166,7 @@ export class AppMediaBarLightbox extends Vue {
 			MediaBarLightboxConfig.opacityStart +
 			slidePercent * (1 - MediaBarLightboxConfig.opacityStart);
 		const scale =
-			MediaBarLightboxConfig.scaleStart +
-			slidePercent * (1 - MediaBarLightboxConfig.scaleStart);
+			MediaBarLightboxConfig.scaleStart + slidePercent * (1 - MediaBarLightboxConfig.scaleStart);
 
 		if (this.nextElem) {
 			this.nextElem.style.opacity = opacity + '';
@@ -186,8 +182,7 @@ export class AppMediaBarLightbox extends Vue {
 		if (this.activeElem) {
 			const scaleX = 1 + MediaBarLightboxConfig.scaleStart - scale;
 			const scaleY = 1 + MediaBarLightboxConfig.scaleStart - scale;
-			this.activeElem.style.opacity =
-				1 + MediaBarLightboxConfig.opacityStart - opacity + '';
+			this.activeElem.style.opacity = 1 + MediaBarLightboxConfig.opacityStart - opacity + '';
 			this.activeElem.style.transform = `scale( ${scaleX}, ${scaleY} )`;
 		}
 	}

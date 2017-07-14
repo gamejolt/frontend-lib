@@ -3,19 +3,11 @@ import { Analytics } from '../../../analytics/analytics.service';
 
 function setupEvents() {
 	(window as any).FB.Event.subscribe('edge.create', (url: string) => {
-		Analytics.trackSocial(
-			Analytics.SOCIAL_NETWORK_FB,
-			Analytics.SOCIAL_ACTION_LIKE,
-			url
-		);
+		Analytics.trackSocial(Analytics.SOCIAL_NETWORK_FB, Analytics.SOCIAL_ACTION_LIKE, url);
 	});
 
 	(window as any).FB.Event.subscribe('message.send', (url: string) => {
-		Analytics.trackSocial(
-			Analytics.SOCIAL_NETWORK_FB,
-			Analytics.SOCIAL_ACTION_SEND,
-			url
-		);
+		Analytics.trackSocial(Analytics.SOCIAL_NETWORK_FB, Analytics.SOCIAL_ACTION_SEND, url);
 	});
 }
 

@@ -123,11 +123,9 @@ export class Game extends Model {
 			this.is_published = true;
 		}
 
-		this._is_finished =
-			this.development_status === Game.DEVELOPMENT_STATUS_FINISHED;
+		this._is_finished = this.development_status === Game.DEVELOPMENT_STATUS_FINISHED;
 		this._is_wip = this.development_status === Game.DEVELOPMENT_STATUS_WIP;
-		this._is_devlog =
-			this.development_status === Game.DEVELOPMENT_STATUS_DEVLOG;
+		this._is_devlog = this.development_status === Game.DEVELOPMENT_STATUS_DEVLOG;
 
 		if (this.compatibility) {
 			const keys = Object.keys(this.compatibility);
@@ -153,11 +151,7 @@ export class Game extends Model {
 			}
 		}
 
-		if (
-			this.sellable &&
-			this.sellable.type === 'paid' &&
-			!this.sellable.is_owned
-		) {
+		if (this.sellable && this.sellable.type === 'paid' && !this.sellable.is_owned) {
 			this._can_buy_primary_sellable = true;
 		}
 
@@ -208,10 +202,7 @@ export class Game extends Model {
 			return '/games/' + this.slug + '/' + this.id;
 		}
 
-		return getProvider<any>('$state').href(
-			this.getSref(page),
-			this.getSrefParams(page)
-		);
+		return getProvider<any>('$state').href(this.getSref(page), this.getSrefParams(page));
 	}
 
 	hasDesktopSupport(): boolean {
@@ -241,11 +232,7 @@ export class Game extends Model {
 	 * Helper function to check if the resource passed in has support for the
 	 * os/arch passed in.
 	 */
-	static checkDeviceSupport(
-		obj: any,
-		os: string,
-		arch: string | undefined
-	): boolean {
+	static checkDeviceSupport(obj: any, os: string, arch: string | undefined): boolean {
 		if (obj['os_' + os]) {
 			return true;
 		}
@@ -335,9 +322,7 @@ export class Game extends Model {
 	}
 
 	static chooseBestBuild(builds: GameBuild[], os: string, arch?: string) {
-		const sortedBuilds = builds.sort(
-			(a, b) => a._release!.sort - b._release!.sort
-		);
+		const sortedBuilds = builds.sort((a, b) => a._release!.sort - b._release!.sort);
 
 		const build32 = sortedBuilds.find(build => build.isPlatform(os));
 		const build64 = sortedBuilds.find(build => build.isPlatform(os, '64'));
@@ -371,9 +356,7 @@ export class Game extends Model {
 	}
 
 	async $unfollow() {
-		const response = await this.$_remove(
-			'/web/library/games/remove/followed/' + this.id
-		);
+		const response = await this.$_remove('/web/library/games/remove/followed/' + this.id);
 
 		this.is_following = false;
 		--this.follower_count;
@@ -390,69 +373,45 @@ export class Game extends Model {
 	}
 
 	$saveDescription() {
-		return this.$_save(
-			'/web/dash/developer/games/description/save/' + this.id,
-			'game'
-		);
+		return this.$_save('/web/dash/developer/games/description/save/' + this.id, 'game');
 	}
 
 	$saveMaturity() {
-		return this.$_save(
-			'/web/dash/developer/games/maturity/save/' + this.id,
-			'game'
-		);
+		return this.$_save('/web/dash/developer/games/maturity/save/' + this.id, 'game');
 	}
 
 	$saveThumbnail() {
-		return this.$_save(
-			'/web/dash/developer/games/thumbnail/save/' + this.id,
-			'game',
-			{ file: this.file, allowComplexData: ['crop'] }
-		);
+		return this.$_save('/web/dash/developer/games/thumbnail/save/' + this.id, 'game', {
+			file: this.file,
+			allowComplexData: ['crop'],
+		});
 	}
 
 	$saveHeader() {
-		return this.$_save(
-			'/web/dash/developer/games/header/save/' + this.id,
-			'game',
-			{ file: this.file }
-		);
+		return this.$_save('/web/dash/developer/games/header/save/' + this.id, 'game', {
+			file: this.file,
+		});
 	}
 
 	$clearHeader() {
-		return this.$_save(
-			'/web/dash/developer/games/header/clear/' + this.id,
-			'game'
-		);
+		return this.$_save('/web/dash/developer/games/header/clear/' + this.id, 'game');
 	}
 
 	$saveSettings() {
-		return this.$_save(
-			'/web/dash/developer/games/settings/save/' + this.id,
-			'game'
-		);
+		return this.$_save('/web/dash/developer/games/settings/save/' + this.id, 'game');
 	}
 
 	$setStatus(status: number) {
-		return this.$_save(
-			'/web/dash/developer/games/set-status/' + this.id + '/' + status,
-			'game'
-		);
+		return this.$_save('/web/dash/developer/games/set-status/' + this.id + '/' + status, 'game');
 	}
 
 	$setDevStage(stage: number) {
-		return this.$_save(
-			'/web/dash/developer/games/set-dev-stage/' + this.id + '/' + stage,
-			'game'
-		);
+		return this.$_save('/web/dash/developer/games/set-dev-stage/' + this.id + '/' + stage, 'game');
 	}
 
 	$setCanceled(isCanceled: boolean) {
 		return this.$_save(
-			'/web/dash/developer/games/set-canceled/' +
-				this.id +
-				'/' +
-				(isCanceled ? '1' : '0'),
+			'/web/dash/developer/games/set-canceled/' + this.id + '/' + (isCanceled ? '1' : '0'),
 			'game'
 		);
 	}
