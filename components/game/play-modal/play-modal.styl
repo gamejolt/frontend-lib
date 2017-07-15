@@ -1,7 +1,9 @@
 @require '~styles/variables'
 
 >>> .game-play-modal-open
-	overflow: hidden
+	&
+	.modal
+		overflow: hidden !important
 
 .game-play-modal
 	position: fixed
@@ -10,7 +12,6 @@
 	bottom: 0
 	left: 0
 	overflow: auto
-	overflow-y: scroll
 	z-index: $zindex-modal
 	background-color: transparent
 
