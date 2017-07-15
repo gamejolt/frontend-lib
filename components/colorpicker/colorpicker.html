@@ -1,0 +1,40 @@
+<div class="colorpicker">
+
+	<div
+		class="color"
+		:class="{ empty: !colors.hex }"
+		v-app-popover-trigger="`colorpicker-${id}`"
+		:style="{
+			'background-color': colors.hex,
+		}"
+		>
+	</div>
+
+	<app-popover
+		:popover-id="`colorpicker-${id}`"
+		position-horizontal="left"
+		@focused="isOpen = true"
+		@blurred="isOpen = false"
+		>
+		<div class="colorpicker-popover" v-if="isOpen">
+			<picker
+				:value="colors"
+				@input="onChange"
+				/>
+
+			<div class="colorpicker-well">
+				<div class="col">
+					<a class="btn btn-block" @click="accept">
+						<translate>Accept</translate>
+					</a>
+				</div>
+				<div class="col">
+					<a class="btn btn-block" @click="cancel">
+						<translate>Cancel</translate>
+					</a>
+				</div>
+			</div>
+		</div>
+	</app-popover>
+
+</div>
