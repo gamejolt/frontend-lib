@@ -11,6 +11,7 @@ import { AppTooltip } from '../../../tooltip/tooltip';
 import { AppLoading } from '../../../../vue/components/loading/loading';
 import { AppFormAutosize } from '../../autosize.directive';
 import { AppCodemirror } from '../../../codemirror/codemirror';
+import { AppFormControlMarkdownMediaItems } from './media-items/media-items';
 
 @View
 @Component({
@@ -18,6 +19,7 @@ import { AppCodemirror } from '../../../codemirror/codemirror';
 		AppJolticon,
 		AppLoading,
 		AppCodemirror,
+		AppFormControlMarkdownMediaItems,
 	},
 	directives: {
 		AppTooltip,

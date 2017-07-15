@@ -87,14 +87,11 @@
 				/>
 		</div>
 
-		<!--TODO-->
-		<div v-if="showMediaItems">
-			<!--<form-control-markdown-media-items
-				type="{{ mediaItemType }}"
-				parent-id="mediaItemParentId"
-				>
-			</form-control-markdown-media-items>-->
-		</div>
+		<app-form-control-markdown-media-items
+			v-if="showMediaItems"
+			:type="mediaItemType"
+			:parent-id="mediaItemParentId"
+			/>
 	</div>
 
 	<div

@@ -1,0 +1,54 @@
+@require '~styles/variables'
+
+.form-markdown-editor-media-items
+	border: 1px solid $input-border
+	border-top: 0
+	background-color: $input-bg
+	border-top-left-radius: 0
+	border-top-right-radius: 0
+
+	>>> .form-group
+		margin-bottom: 0
+
+	.media-item-list
+		white-space: nowrap
+		margin: 0 -10px
+
+		&-col
+			display: inline-block
+			width: 40%
+			max-width: 200px
+			padding: 0 10px
+
+		&-item
+			display: block
+			position: relative
+			padding-top: 80%
+			height: 0
+			background-color: $gray-darkest
+
+			@media $media-xs
+				margin-bottom: $grid-gutter-width-xs
+
+		&-item-inner
+			position: absolute
+			top: 5px
+			right: 5px
+			bottom: 5px
+			left: 5px
+
+		&-item-controls
+			position: absolute
+			top: -5px
+			right: 5px
+			z-index: 1
+
+		&-item-img
+			position: absolute
+			top: 0
+			right: 0
+			bottom: 0
+			left: 0
+			background-repeat: no-repeat
+			background-position: center center
+			background-size: cover
