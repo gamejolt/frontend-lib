@@ -24,6 +24,10 @@ export class AppFormControlUpload extends BaseFormControl {
 	@Prop(Array) validateOn: string[];
 	@Prop(Number) validateDelay: number;
 
+	$refs: {
+		input: HTMLInputElement;
+	};
+
 	value: File | File[] | null = [];
 	isDropActive = false;
 
@@ -88,14 +92,13 @@ export class AppFormControlUpload extends BaseFormControl {
 	}
 
 	showFileSelect() {
-		const el = this.$refs.input as HTMLElement;
-		el.click();
+		this.$refs.input.click();
 	}
 
 	// Normal file select.
 	onChange() {
 		let files: File[] = [];
-		const fileList = (this.$refs.input as HTMLInputElement).files;
+		const fileList = this.$refs.input.files;
 		if (fileList) {
 			for (let i = 0; i < fileList.length; ++i) {
 				files.push(fileList.item(i));
