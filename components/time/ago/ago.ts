@@ -4,7 +4,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 
 @Component({})
 export class AppTimeAgo extends Vue {
-	@Prop(Number, Date)
+	@Prop([Number, Date])
 	date: number | Date;
 	@Prop(Boolean) withoutSuffix?: boolean;
 
