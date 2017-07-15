@@ -7,6 +7,7 @@ import { PayloadError } from '../components/payload/payload-service';
 import { EventBus } from '../components/event-bus/event-bus.service';
 import { routeError404 } from '../components/error/page/page.route';
 import { initScrollBehavior } from '../components/scroll/auto-scroll/autoscroll.service';
+import { objectEquals } from './object';
 
 interface BeforeRouteEnterOptions {
 	lazy?: boolean;
@@ -26,6 +27,23 @@ export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
 	});
 }
 
+function didRouteChange(from: VueRouter.Route, to: VueRouter.Route) {
+	if (to.name !== from.name) {
+		return true;
+	}
+
+	if (!objectEquals(to.params, from.params)) {
+		return true;
+	}
+
+	if (!objectEquals(to.query, from.query)) {
+		return true;
+	}
+
+	// We don't check hash since that isn't considered a route change.
+	return false;
+}
+
 export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 	return createDecorator((componentOptions: Vue.ComponentOptions<Vue>, key: string) => {
 		// This is component state that the server may have returned to the
@@ -36,10 +54,10 @@ export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 			(window as any).__INITIAL_STATE__.components;
 
 		/**
-			 * This will call the function to get the payload.
-			 * It will return a promise that will resolve with the data.
-			 * If we are caching, then we will try to return the cache data.
-			 */
+		 * This will call the function to get the payload.
+		 * It will return a promise that will resolve with the data.
+		 * If we are caching, then we will try to return the cache data.
+		 */
 		async function getPayload(route: VueRouter.Route, useCache = false) {
 			if (useCache) {
 				const cache = HistoryCache.get(route, options.cacheTag);
@@ -172,11 +190,21 @@ export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 				// In the browser, for when the component stays the same but the
 				// route changes. We basically have to duplicate the above.
 				watch: {
-					$route: async function routeChanged(this: Vue, route: VueRouter.Route) {
+					$route: async function routeChanged(
+						this: Vue,
+						to: VueRouter.Route,
+						from: VueRouter.Route
+					) {
+						// Only do work if the route params/query has actually
+						// changed.
+						if (!didRouteChange(from, to)) {
+							return;
+						}
+
 						EventBus.emit('routeChangeBefore');
 						this.routeLoading = true;
-						const payload = await getPayload(route, options.cache);
-						await finalizeRoute(route, this, payload);
+						const payload = await getPayload(to, options.cache);
+						await finalizeRoute(to, this, payload);
 						EventBus.emit('routeChangeAfter');
 					},
 				},
