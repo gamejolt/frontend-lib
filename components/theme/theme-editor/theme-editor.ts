@@ -8,6 +8,7 @@ import { AppCodemirror } from '../../codemirror/codemirror';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { AppThemeEditorFontSelector } from './font-selector';
 import { AppThemeEditorImage } from './image';
+import { AppColorpicker } from '../../colorpicker/colorpicker';
 
 interface StyleGroup {
 	name: string;
@@ -24,6 +25,7 @@ interface StyleGroup {
 		AppCodemirror,
 		AppThemeEditorFontSelector,
 		AppThemeEditorImage,
+		AppColorpicker,
 	},
 })
 export class AppThemeEditor extends Vue {

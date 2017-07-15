@@ -34,7 +34,6 @@
 							:class="'theme-editor-definition-' + definition.definitions[definitionField].type"
 							>
 
-
 							<label class="control-label">
 								{{ definition.definitions[definitionField].title }}
 							</label>
@@ -46,7 +45,19 @@
 								class="theme-editor-colorpicker"
 								v-if="definition.definitions[definitionField].type === 'color'"
 								>
-								color picker
+									<!-- @click="clearSelectedFont()" -->
+									<!-- class="font-selector-clear" -->
+								<a
+									style="float: left"
+									class="clear-link"
+									v-if="!!theme[definitionField]"
+									@click="theme[definitionField] = undefined"
+									>
+									<translate>clear</translate>
+								</a>
+								<app-colorpicker
+									v-model="theme[definitionField]"
+									/>
 								<!-- <input
 									class="form-control"
 									gj-colorpicker="{ allowEmpty: true }"
