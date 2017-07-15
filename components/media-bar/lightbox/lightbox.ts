@@ -68,7 +68,6 @@ export class AppMediaBarLightbox extends Vue {
 		this.sliderElem = slider;
 		this.calcMaxDimensions();
 		this.refreshSliderPosition();
-		this.syncUrl();
 	}
 
 	calcMaxDimensions() {
@@ -79,44 +78,15 @@ export class AppMediaBarLightbox extends Vue {
 	goNext() {
 		this.mediaBar.goNext();
 		this.refreshSliderPosition();
-		this.syncUrl();
 	}
 
 	goPrev() {
 		this.mediaBar.goPrev();
 		this.refreshSliderPosition();
-		this.syncUrl();
 	}
 
 	close() {
 		this.mediaBar.clearActiveItem();
-		this.syncUrl();
-	}
-
-	syncUrl() {
-		let hash = '';
-
-		if (this.mediaBar.activeItem) {
-			if (this.mediaBar.activeItem.media_type === 'image') {
-				hash = 'screenshot-';
-			} else if (this.mediaBar.activeItem.media_type === 'video') {
-				hash = 'video-';
-			} else if (this.mediaBar.activeItem.media_type === 'sketchfab') {
-				hash = 'sketchfab-';
-			}
-			hash += this.mediaBar.activeItem.id;
-		} else {
-			// TODO: Remove this once angular fixes its business.
-			hash = 'close';
-		}
-
-		// TODO
-		// Replace the URL. This way people can link to it by pulling from the browser bar,
-		// but we don't want it to mess up their history navigation after closing.
-		// if (GJ_IS_ANGULAR) {
-		// 	const $location = getProvider<any>('$location');
-		// 	$location.hash(hash).replace();
-		// }
 	}
 
 	refreshSliderPosition() {
