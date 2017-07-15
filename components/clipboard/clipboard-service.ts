@@ -2,7 +2,7 @@ import { Growls } from '../growls/growls.service';
 import { Translate } from '../translate/translate.service';
 
 export class Clipboard {
-	static copy(url: string) {
+	static copy(url: string, message?: string) {
 		// We have to add it into view, select, copy, then remove. Yeesh.
 		const rand = Math.random();
 		const clipboardElem = document.createElement('input');
@@ -16,7 +16,7 @@ export class Clipboard {
 
 		if (result) {
 			Growls.success(
-				Translate.$gettext('Copied to your clipboard.'),
+				message || Translate.$gettext('Copied to your clipboard.'),
 				Translate.$gettext('Copied!')
 			);
 		} else {
