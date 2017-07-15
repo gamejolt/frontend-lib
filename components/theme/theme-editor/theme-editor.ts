@@ -60,9 +60,11 @@ export class AppThemeEditor extends Vue {
 		this.refresh(true);
 	}
 
-	refresh(initial = false) {
-		const iframe = document.getElementById(this.windowId) as HTMLIFrameElement | undefined;
+	async refresh(initial = false) {
+		// Gotta wait for the value to be saved.
+		await this.$nextTick();
 
+		const iframe = document.getElementById(this.windowId) as HTMLIFrameElement | undefined;
 		if (iframe) {
 			const msg = {
 				type: 'theme-update',
@@ -70,6 +72,7 @@ export class AppThemeEditor extends Vue {
 				definition: this.definition,
 				theme: this.theme,
 			};
+
 			iframe.contentWindow.postMessage(msg, '*');
 		}
 

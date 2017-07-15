@@ -38,32 +38,23 @@
 								{{ definition.definitions[definitionField].title }}
 							</label>
 
-							{{ theme[definitionField] }}
-
 							<!-- Colopicker -->
 							<div
 								class="theme-editor-colorpicker"
 								v-if="definition.definitions[definitionField].type === 'color'"
 								>
-									<!-- @click="clearSelectedFont()" -->
-									<!-- class="font-selector-clear" -->
 								<a
 									style="float: left"
 									class="clear-link"
 									v-if="!!theme[definitionField]"
-									@click="theme[definitionField] = undefined"
+									@click="updateField( definitionField, undefined )"
 									>
 									<translate>clear</translate>
 								</a>
 								<app-colorpicker
 									v-model="theme[definitionField]"
+									@input="refresh()"
 									/>
-								<!-- <input
-									class="form-control"
-									gj-colorpicker="{ allowEmpty: true }"
-									v-model="theme[definitionField]"
-									ng-change="refresh()"
-									> -->
 							</div>
 
 							<!-- Image -->
@@ -72,7 +63,7 @@
 								type="sites-theme-image"
 								:parent-id="resourceId"
 								v-model="theme[definitionField]"
-								ng-change="refresh()"
+								@input="refresh()"
 								/>
 
 							<!-- Font Family -->
@@ -80,7 +71,7 @@
 								v-else-if="definition.definitions[definitionField].type === 'fontFamily'"
 								class="theme-editor-font-family"
 								v-model="theme[definitionField]"
-								ng-change="refresh()"
+								@input="refresh()"
 								/>
 
 							<!-- Dropdown -->
@@ -91,7 +82,7 @@
 								<select
 									class="form-control"
 									v-model="theme[definitionField]"
-									ng-change="refresh()"
+									@input="refresh()"
 									>
 									<option
 										v-for="option of definition.definitions[ definitionField ].options"
@@ -110,9 +101,9 @@
 								<select
 									class="form-control"
 									v-model="theme[definitionField]"
-									ng-change="refresh()"
+									@input="refresh()"
 									>
-									<option value=""><translate>Repeat</translate></option>
+									<option :value="undefined"><translate>Repeat</translate></option>
 									<option value="repeat-x"><translate>Repeat Horizontal</translate></option>
 									<option value="repeat-y"><translate>Repeat Vertical</translate></option>
 									<option value="no-repeat"><translate>Don't Repeat</translate></option>
@@ -127,9 +118,9 @@
 								<select
 									class="form-control"
 									v-model="theme[definitionField]"
-									ng-change="refresh()"
+									@input="refresh()"
 									>
-									<option value=""><translate>Auto (Default)</translate></option>
+									<option :value="undefined"><translate>Auto (Default)</translate></option>
 									<option value="cover"><translate>Cover</translate></option>
 									<option value="contain"><translate>Contain</translate></option>
 								</select>
@@ -143,11 +134,11 @@
 								<select
 									class="form-control"
 									v-model="theme[definitionField]"
-									ng-change="refresh()"
+									@input="refresh()"
 									>
-									<option value=""><translate>Top</translate></option>
+									<option :value="undefined"><translate>Top</translate></option>
 									<option value="topLeft"><translate>Top Left</translate></option>
-									<option value="Right"><translate>Right</translate></option>
+									<option value="right"><translate>Right</translate></option>
 									<option value="topRight"><translate>Top Right</translate></option>
 									<option value="bottomRight"><translate>Bottom Right</translate></option>
 									<option value="bottom"><translate>Bottom</translate></option>
@@ -169,7 +160,7 @@
 										lineNumbers: false,
 										tabSize: 2,
 									}"
-									@changed="updateField( definitionField, $event )"
+									@input="updateField( definitionField, $event )"
 									/>
 							</div>
 
