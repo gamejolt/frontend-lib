@@ -27,9 +27,7 @@ export class ActivityStream {
 			// a reconnection. In this case we need to resubscribe to our
 			// channels.
 			if (this.isInitialized) {
-				for (const subscription of Object.values<ActivityStreamSubscription>(
-					this.subscriptions
-				)) {
+				for (const subscription of Object.values<ActivityStreamSubscription>(this.subscriptions)) {
 					this.primus.write({
 						event: 'channel-subscribe',
 						name: subscription.name,
@@ -44,9 +42,7 @@ export class ActivityStream {
 		// On any data received send it off to all message handlers of all
 		// subscriptions.
 		this.primus.on('data', (message: any) => {
-			for (const subscription of Object.values<ActivityStreamSubscription>(
-				this.subscriptions
-			)) {
+			for (const subscription of Object.values<ActivityStreamSubscription>(this.subscriptions)) {
 				subscription.messageHandler(message);
 			}
 		});

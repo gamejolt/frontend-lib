@@ -68,56 +68,25 @@ export class AppMediaBarLightbox extends Vue {
 		this.sliderElem = slider;
 		this.calcMaxDimensions();
 		this.refreshSliderPosition();
-		this.syncUrl();
 	}
 
 	calcMaxDimensions() {
 		this.maxItemWidth = Screen.windowWidth * 0.8;
-		this.maxItemHeight =
-			Screen.windowHeight - MediaBarLightboxConfig.controlsHeight * 2;
+		this.maxItemHeight = Screen.windowHeight - MediaBarLightboxConfig.controlsHeight * 2;
 	}
 
 	goNext() {
 		this.mediaBar.goNext();
 		this.refreshSliderPosition();
-		this.syncUrl();
 	}
 
 	goPrev() {
 		this.mediaBar.goPrev();
 		this.refreshSliderPosition();
-		this.syncUrl();
 	}
 
 	close() {
 		this.mediaBar.clearActiveItem();
-		this.syncUrl();
-	}
-
-	syncUrl() {
-		let hash = '';
-
-		if (this.mediaBar.activeItem) {
-			if (this.mediaBar.activeItem.media_type === 'image') {
-				hash = 'screenshot-';
-			} else if (this.mediaBar.activeItem.media_type === 'video') {
-				hash = 'video-';
-			} else if (this.mediaBar.activeItem.media_type === 'sketchfab') {
-				hash = 'sketchfab-';
-			}
-			hash += this.mediaBar.activeItem.id;
-		} else {
-			// TODO: Remove this once angular fixes its business.
-			hash = 'close';
-		}
-
-		// TODO
-		// Replace the URL. This way people can link to it by pulling from the browser bar,
-		// but we don't want it to mess up their history navigation after closing.
-		// if (GJ_IS_ANGULAR) {
-		// 	const $location = getProvider<any>('$location');
-		// 	$location.hash(hash).replace();
-		// }
 	}
 
 	refreshSliderPosition() {
@@ -137,9 +106,7 @@ export class AppMediaBarLightbox extends Vue {
 	panStart() {
 		this.isDragging = true;
 
-		this.activeElem = this.$el.getElementsByClassName(
-			'active'
-		)[0] as HTMLElement;
+		this.activeElem = this.$el.getElementsByClassName('active')[0] as HTMLElement;
 		this.nextElem = this.$el.getElementsByClassName('next')[0] as HTMLElement;
 		this.prevElem = this.$el.getElementsByClassName('prev')[0] as HTMLElement;
 
@@ -169,8 +136,7 @@ export class AppMediaBarLightbox extends Vue {
 			MediaBarLightboxConfig.opacityStart +
 			slidePercent * (1 - MediaBarLightboxConfig.opacityStart);
 		const scale =
-			MediaBarLightboxConfig.scaleStart +
-			slidePercent * (1 - MediaBarLightboxConfig.scaleStart);
+			MediaBarLightboxConfig.scaleStart + slidePercent * (1 - MediaBarLightboxConfig.scaleStart);
 
 		if (this.nextElem) {
 			this.nextElem.style.opacity = opacity + '';
@@ -186,8 +152,7 @@ export class AppMediaBarLightbox extends Vue {
 		if (this.activeElem) {
 			const scaleX = 1 + MediaBarLightboxConfig.scaleStart - scale;
 			const scaleY = 1 + MediaBarLightboxConfig.scaleStart - scale;
-			this.activeElem.style.opacity =
-				1 + MediaBarLightboxConfig.opacityStart - opacity + '';
+			this.activeElem.style.opacity = 1 + MediaBarLightboxConfig.opacityStart - opacity + '';
 			this.activeElem.style.transform = `scale( ${scaleX}, ${scaleY} )`;
 		}
 	}

@@ -51,21 +51,13 @@ export class AppAdVideo extends Vue {
 		} catch (e) {
 			// May be DOMError or google.ima.AdError.
 			if (e.message) {
-				Analytics.trackEvent(
-					this.trackingLabel || 'Video Ad',
-					'Ad Error',
-					e.message
-				);
+				Analytics.trackEvent(this.trackingLabel || 'Video Ad', 'Ad Error', e.message);
 				return;
 			}
 
 			switch (e.getErrorCode()) {
 				case 303:
-					Analytics.trackEvent(
-						this.trackingLabel || 'Video Ad',
-						'No Ad',
-						e.getMessage()
-					);
+					Analytics.trackEvent(this.trackingLabel || 'Video Ad', 'No Ad', e.getMessage());
 					break;
 
 				case 403:
@@ -97,18 +89,13 @@ export class AppAdVideo extends Vue {
 		const ima: any = (window as any).google.ima;
 
 		return new Promise<any>((resolve, reject) => {
-			this.videoElem = this.$el.getElementsByTagName(
-				'video'
-			)[0] as HTMLVideoElement;
+			this.videoElem = this.$el.getElementsByTagName('video')[0] as HTMLVideoElement;
 			this.adContainerElem = this.$el.getElementsByClassName(
 				'ad-video-player-ad-container'
 			)[0] as HTMLElement;
 
 			// Iinitialize the ad container.
-			const adDisplayContainer = new ima.AdDisplayContainer(
-				this.adContainerElem,
-				this.videoElem
-			);
+			const adDisplayContainer = new ima.AdDisplayContainer(this.adContainerElem, this.videoElem);
 			adDisplayContainer.initialize();
 
 			// Set up an ads loader.
@@ -141,9 +128,7 @@ export class AppAdVideo extends Vue {
 					'&impl=s&gdfp_req=1&env=vp&output=xml_vast2&unviewed_position_start=1' +
 					'&url=[referrer_url]&correlator=[timestamp]' +
 					'&cust_params=' +
-					encodeURIComponent(
-						'ref_url=' + encodeURIComponent(window.location.href)
-					);
+					encodeURIComponent('ref_url=' + encodeURIComponent(window.location.href));
 			}
 
 			adsRequest.linearAdSlotWidth = AdSlotWidth;
@@ -161,36 +146,26 @@ export class AppAdVideo extends Vue {
 		this.adsManager = event.getAdsManager(this.videoElem);
 
 		// Set up all the events.
-		this.adsManager.addEventListener(
-			ima.AdErrorEvent.Type.AD_ERROR,
-			(_event: any) => this.onAdError(_event, reject)
+		this.adsManager.addEventListener(ima.AdErrorEvent.Type.AD_ERROR, (_event: any) =>
+			this.onAdError(_event, reject)
 		);
 
-		this.adsManager.addEventListener(
-			ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
-			() => {
-				this.videoElem.pause();
-				this.isAdPlaying = true;
-			}
-		);
+		this.adsManager.addEventListener(ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED, () => {
+			this.videoElem.pause();
+			this.isAdPlaying = true;
+		});
 
-		this.adsManager.addEventListener(
-			ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
-			() => {
-				this.videoElem.play();
-				this.isAdPlaying = false;
-			}
-		);
+		this.adsManager.addEventListener(ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, () => {
+			this.videoElem.play();
+			this.isAdPlaying = false;
+		});
 
 		this.adsManager.addEventListener(ima.AdEvent.Type.STARTED, () => {
 			Analytics.trackEvent(this.trackingLabel || 'Video Ad', 'Started', 'IMA');
 
 			this.isLoading = false;
 			this.updateTimeRemaining();
-			this.remainingInterval = window.setInterval(
-				() => this.updateTimeRemaining(),
-				1000
-			);
+			this.remainingInterval = window.setInterval(() => this.updateTimeRemaining(), 1000);
 		});
 
 		this.adsManager.addEventListener(ima.AdEvent.Type.IMPRESSION, () => {
@@ -208,11 +183,7 @@ export class AppAdVideo extends Vue {
 		});
 
 		this.adsManager.addEventListener(ima.AdEvent.Type.COMPLETE, () => {
-			Analytics.trackEvent(
-				this.trackingLabel || 'Video Ad',
-				'Completed',
-				'IMA'
-			);
+			Analytics.trackEvent(this.trackingLabel || 'Video Ad', 'Completed', 'IMA');
 			resolve();
 		});
 

@@ -42,13 +42,9 @@ export class AppScrollParallax extends Vue {
 	private lastCalculated: number;
 
 	async mounted() {
-		this.scroll$ = Scroll.scrollChanges.subscribe(change =>
-			this.onScroll(change.top)
-		);
+		this.scroll$ = Scroll.scrollChanges.subscribe(change => this.onScroll(change.top));
 
-		this.resize$ = Screen.resizeChanges.subscribe(() =>
-			this.onScroll(Scroll.getScrollTop())
-		);
+		this.resize$ = Screen.resizeChanges.subscribe(() => this.onScroll(Scroll.getScrollTop()));
 
 		const initialOpacity = this.$el.style.opacity;
 		if (initialOpacity) {

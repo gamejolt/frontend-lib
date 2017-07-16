@@ -48,14 +48,7 @@ export class Device {
 		'sparc',
 	];
 
-	static readonly ARCH_64 = [
-		'amd64',
-		'arm64',
-		'ia64',
-		'irix64',
-		'mips64',
-		'sparc64',
-	];
+	static readonly ARCH_64 = ['amd64', 'arm64', 'ia64', 'irix64', 'mips64', 'sparc64'];
 
 	private static _getResult() {
 		if (!this._result) {
@@ -106,10 +99,7 @@ export class Device {
 			// Because of a bug where 32-bit node versions will always report 32 instead of the OS arch.
 			// http://blog.differentpla.net/blog/2013/03/10/processor-architew6432/
 			if (this.os() === 'windows') {
-				return arch === 'x64' ||
-					process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432')
-					? '64'
-					: '32';
+				return arch === 'x64' || process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432') ? '64' : '32';
 			}
 
 			if (arch === 'x64') {

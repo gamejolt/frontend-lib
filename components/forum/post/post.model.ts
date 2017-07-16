@@ -55,11 +55,9 @@ export class ForumPost extends Model {
 	}
 
 	static async getPostUrl(postId: number) {
-		const response = await Api.sendRequest(
-			'/web/forums/posts/get-post-url/' + postId,
-			null,
-			{ detach: true }
-		);
+		const response = await Api.sendRequest('/web/forums/posts/get-post-url/' + postId, null, {
+			detach: true,
+		});
 
 		if (!response || response.error) {
 			throw response.error;

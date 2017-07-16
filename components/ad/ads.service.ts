@@ -7,11 +7,7 @@ const DfpTagId = '1437670388518';
 export class AdSlot {
 	public isUsed = false;
 
-	constructor(
-		public adUnit: string,
-		public sizes: [number, number][],
-		public id: string
-	) {}
+	constructor(public adUnit: string, public sizes: [number, number][], public id: string) {}
 }
 
 export class Ads {
@@ -24,82 +20,22 @@ export class Ads {
 	static readonly RESOURCE_TYPE_FIRESIDE_POST = 4;
 
 	static readonly TAG_SLOTS = [
-		new AdSlot(
-			'/27005478/web-display-leaderboard',
-			[[728, 90]],
-			`div-gpt-ad-${DfpTagId}-10`
-		),
-		new AdSlot(
-			'/27005478/web-display-leaderboard',
-			[[728, 90]],
-			`div-gpt-ad-${DfpTagId}-11`
-		),
-		new AdSlot(
-			'/27005478/web-display-leaderboard',
-			[[728, 90]],
-			`div-gpt-ad-${DfpTagId}-12`
-		),
-		new AdSlot(
-			'/27005478/web-display-leaderboard',
-			[[728, 90]],
-			`div-gpt-ad-${DfpTagId}-13`
-		),
-		new AdSlot(
-			'/27005478/web-display-leaderboard',
-			[[728, 90]],
-			`div-gpt-ad-${DfpTagId}-14`
-		),
+		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-10`),
+		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-11`),
+		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-12`),
+		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-13`),
+		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-14`),
 
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-20`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-21`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-22`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-23`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-24`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-25`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-26`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-27`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-28`
-		),
-		new AdSlot(
-			'/27005478/web-display-rectangle',
-			[[300, 250]],
-			`div-gpt-ad-${DfpTagId}-29`
-		),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-20`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-21`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-22`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-23`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-24`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-25`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-26`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-27`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-28`),
+		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-29`),
 	];
 
 	/**
@@ -170,9 +106,7 @@ export class Ads {
 		await this.ensure();
 		this.googletag.cmd.push(() => {
 			const definedSlots = slots.map(slot => this.definedSlots[slot.id]);
-			this.googletag
-				.pubads()
-				.refresh(definedSlots, { changeCorrelator: false });
+			this.googletag.pubads().refresh(definedSlots, { changeCorrelator: false });
 		});
 	}
 
@@ -231,9 +165,7 @@ export class Ads {
 	private static createTag() {
 		return new Promise(resolve => {
 			const gads = document.createElement('script');
-			const node = document.getElementsByTagName(
-				'script'
-			)[0] as HTMLScriptElement;
+			const node = document.getElementsByTagName('script')[0] as HTMLScriptElement;
 
 			gads.async = true;
 			gads.type = 'text/javascript';

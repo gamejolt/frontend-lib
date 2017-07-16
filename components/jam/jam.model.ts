@@ -145,27 +145,16 @@ export class Jam extends Model {
 	}
 
 	$saveTwitter() {
-		return this.$_save(
-			'/jams/manage/jams/activity-feed/save-twitter/' + this.id,
-			'jam'
-		);
+		return this.$_save('/jams/manage/jams/activity-feed/save-twitter/' + this.id, 'jam');
 	}
 
 	$clearTwitter() {
-		return this.$_save(
-			'/jams/manage/jams/activity-feed/clear-twitter/' + this.id,
-			'jam'
-		);
+		return this.$_save('/jams/manage/jams/activity-feed/clear-twitter/' + this.id, 'jam');
 	}
 
 	$setFeatureState(feature: string, state: number) {
 		return this.$_save(
-			'/jams/manage/jams/set-feature-state/' +
-				this.id +
-				'/' +
-				feature +
-				'/' +
-				state,
+			'/jams/manage/jams/set-feature-state/' + this.id + '/' + feature + '/' + state,
 			'jam'
 		);
 	}
@@ -175,10 +164,7 @@ export class Jam extends Model {
 	}
 
 	$setStatus(status: number) {
-		return this.$_save(
-			'/jams/manage/jams/set-status/' + this.id + '/' + status,
-			'jam'
-		);
+		return this.$_save('/jams/manage/jams/set-status/' + this.id + '/' + status, 'jam');
 	}
 
 	async $saveTheme() {

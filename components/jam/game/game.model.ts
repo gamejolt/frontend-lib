@@ -56,11 +56,7 @@ export class JamGame extends Model {
 
 	async $hide(jamId: number) {
 		await Api.sendRequest(
-			'/jams/manage/jams/games/set-game-visibility/' +
-				jamId +
-				'/' +
-				this.id +
-				'/0',
+			'/jams/manage/jams/games/set-game-visibility/' + jamId + '/' + this.id + '/0',
 			{}
 		);
 		this.force_hidden = true;
@@ -68,29 +64,19 @@ export class JamGame extends Model {
 
 	async $unhide(jamId: number) {
 		await Api.sendRequest(
-			'/jams/manage/jams/games/set-game-visibility/' +
-				jamId +
-				'/' +
-				this.id +
-				'/1',
+			'/jams/manage/jams/games/set-game-visibility/' + jamId + '/' + this.id + '/1',
 			{}
 		);
 		this.force_hidden = false;
 	}
 
 	async $approve(jamId: number) {
-		await Api.sendRequest(
-			'/jams/manage/jams/games/approve-entry/' + jamId + '/' + this.id,
-			{}
-		);
+		await Api.sendRequest('/jams/manage/jams/games/approve-entry/' + jamId + '/' + this.id, {});
 		this.approved_entry = true;
 	}
 
 	async $reject(jamId: number) {
-		await Api.sendRequest(
-			'/jams/manage/jams/games/reject-entry/' + jamId + '/' + this.id,
-			{}
-		);
+		await Api.sendRequest('/jams/manage/jams/games/reject-entry/' + jamId + '/' + this.id, {});
 		this.approved_entry = false;
 	}
 }

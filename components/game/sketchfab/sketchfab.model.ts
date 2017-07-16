@@ -22,10 +22,7 @@ export class GameSketchfab extends Model {
 			);
 		} else {
 			return this.$_save(
-				'/web/dash/developer/games/media/save/sketchfab/' +
-					this.game_id +
-					'/' +
-					this.id,
+				'/web/dash/developer/games/media/save/sketchfab/' + this.game_id + '/' + this.id,
 				'gameSketchfab'
 			);
 		}
@@ -33,10 +30,7 @@ export class GameSketchfab extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/media/remove/sketchfab/' +
-				this.game_id +
-				'/' +
-				this.id
+			'/web/dash/developer/games/media/remove/sketchfab/' + this.game_id + '/' + this.id
 		);
 	}
 }

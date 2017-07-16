@@ -38,9 +38,7 @@ export class Order extends Model {
 	}
 
 	get shipping_address() {
-		return this.addresses.find(
-			item => item.type === OrderAddress.TYPE_SHIPPING
-		);
+		return this.addresses.find(item => item.type === OrderAddress.TYPE_SHIPPING);
 	}
 
 	get _is_refunded() {

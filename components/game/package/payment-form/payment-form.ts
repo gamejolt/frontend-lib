@@ -99,9 +99,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 	}
 
 	get _minOrderAmount() {
-		return this.sellable.type === 'paid'
-			? this.pricing.amount / 100
-			: this.minOrderAmount / 100;
+		return this.sellable.type === 'paid' ? this.pricing.amount / 100 : this.minOrderAmount / 100;
 	}
 
 	get formattedAmount() {
@@ -123,9 +121,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 
 		// When we're filling in the address, pull that tax.
 		// Otherwise, when we're on the main page, check the wallet tax amount for their saved address.
-		const taxAmount = this.checkoutStep === 'address'
-			? this.addressTaxAmount
-			: this.walletTax;
+		const taxAmount = this.checkoutStep === 'address' ? this.addressTaxAmount : this.walletTax;
 		const sellableAmount = this.pricing.amount;
 		const currentAmount = this.formModel.amount * 100; // The formModel amount is a decimal.
 
@@ -179,10 +175,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 		// this.checkoutType = 'cc-stripe';
 		// this.checkoutStep = 'primary';
 
-		this.setField(
-			'amount',
-			this.pricing.amount ? this.pricing.amount / 100 : null
-		);
+		this.setField('amount', this.pricing.amount ? this.pricing.amount / 100 : null);
 		this.setField('country', 'us');
 
 		// this.cards = [];
@@ -210,11 +203,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 			this.cardsTax = arrayIndexBy<any>(response.cardsTax, 'id');
 		}
 
-		if (
-			response &&
-			response.billingAddresses &&
-			response.billingAddresses.length
-		) {
+		if (response && response.billingAddresses && response.billingAddresses.length) {
 			this.addresses = response.billingAddresses;
 		}
 
@@ -336,25 +325,18 @@ export class FormGamePackagePayment extends BaseForm<any>
 
 		this.isProcessing = true;
 
-		setupData['source'] =
-			HistoryTick.getSource('Game', this.package.game_id) || null;
+		setupData['source'] = HistoryTick.getSource('Game', this.package.game_id) || null;
 		setupData['os'] = Device.os();
 		setupData['arch'] = Device.arch();
 		setupData['ref'] = this.partnerReferredKey || null;
 
 		try {
-			let response = await Api.sendRequest(
-				'/web/checkout/setup-order',
-				setupData
-			);
+			let response = await Api.sendRequest('/web/checkout/setup-order', setupData);
 			if (response.success === false) {
 				throw response;
 			}
 
-			response = await Api.sendRequest(
-				'/web/checkout/charge/' + response.cart.id,
-				chargeData
-			);
+			response = await Api.sendRequest('/web/checkout/charge/' + response.cart.id, chargeData);
 			if (response.success === false) {
 				throw response;
 			}
@@ -367,9 +349,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 			// This should always succeed, so let's throw a generic message if it fails.
 			Growls.error({
 				sticky: true,
-				message: this.$gettext(
-					'There was a problem processing your payment method.'
-				),
+				message: this.$gettext('There was a problem processing your payment method.'),
 			});
 		}
 	}
@@ -395,8 +375,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 			data.address_id = this.addresses[0].id;
 		}
 
-		data['source'] =
-			HistoryTick.getSource('Game', this.package.game_id) || null;
+		data['source'] = HistoryTick.getSource('Game', this.package.game_id) || null;
 		data['os'] = Device.os();
 		data['arch'] = Device.arch();
 		data['ref'] = this.partnerReferredKey || null;
@@ -408,8 +387,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 		if (GJ_IS_CLIENT) {
 			// Our checkout can be done in client.
 			if (this.checkoutType === OrderPayment.METHOD_CC_STRIPE) {
-				window.location.href =
-					Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
+				window.location.href = Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
 			} else {
 				// Otherwise we have to open in browser.
 				require('nw.gui').Shell.openExternal(response.redirectUrl);

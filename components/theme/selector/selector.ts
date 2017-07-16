@@ -26,16 +26,14 @@ export class AppThemeSelector extends Vue {
 
 	created() {
 		if (this.currentTemplate) {
-			this.current =
-				this.templates.find(t => t.id === this.currentTemplate) || null;
+			this.current = this.templates.find(t => t.id === this.currentTemplate) || null;
 		}
 	}
 
 	select(id: number) {
 		this.currentTemplate = id;
-		this.current =
-			this.templates.find(t => t.id === this.currentTemplate) || null;
-		this.$emit('changed', id);
+		this.current = this.templates.find(t => t.id === this.currentTemplate) || null;
+		this.$emit('change', id);
 		Popover.hideAll();
 	}
 }

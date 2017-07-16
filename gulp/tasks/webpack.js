@@ -11,8 +11,7 @@ const OptimizeCssPlugin = require('optimize-css-assets-webpack-plugin');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const CleanCss = require('clean-css');
 const WriteFilePlugin = require('write-file-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-	.BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
@@ -89,9 +88,7 @@ module.exports = function(config) {
 		];
 
 		if (!config.production) {
-			appEntries.push(
-				'webpack-dev-server/client?http://localhost:' + config.port + '/'
-			);
+			appEntries.push('webpack-dev-server/client?http://localhost:' + config.port + '/');
 			appEntries.push('webpack/hot/dev-server');
 		}
 
@@ -114,12 +111,10 @@ module.exports = function(config) {
 			output: {
 				publicPath: (config.production ? config.staticCdn : '') + '/',
 				path: path.resolve(base, config.buildDir),
-				filename: config.production
-					? section + '.[name].[chunkhash:6].js'
-					: section + '.[name].js',
+				filename: config.production ? section + '.[name].[chunkhash:6].js' : section + '.[name].js',
 				chunkFilename: config.production
 					? section + '.[name].[id].[chunkhash:6].js'
-					: undefined,
+					: section + '.[name].[id].js',
 				libraryTarget: libraryTarget,
 			},
 			resolve: {
@@ -190,23 +185,15 @@ module.exports = function(config) {
 			devtool: !config.server ? 'cheap-module-inline-source-map' : 'source-map',
 			plugins: [
 				new webpack.DefinePlugin({
-					GJ_ENVIRONMENT: JSON.stringify(
-						!config.developmentEnv ? 'production' : 'development'
-					),
-					GJ_BUILD_TYPE: JSON.stringify(
-						config.production ? 'production' : 'development'
-					),
+					GJ_ENVIRONMENT: JSON.stringify(!config.developmentEnv ? 'production' : 'development'),
+					GJ_BUILD_TYPE: JSON.stringify(config.production ? 'production' : 'development'),
 					GJ_IS_CLIENT: JSON.stringify(config.client),
 					GJ_IS_SSR: JSON.stringify(config.server),
-					GJ_VERSION: JSON.stringify(
-						require(path.resolve(process.cwd(), 'package.json')).version
-					),
+					GJ_VERSION: JSON.stringify(require(path.resolve(process.cwd(), 'package.json')).version),
 
 					// This sets vue in production mode.
 					'process.env': {
-						NODE_ENV: JSON.stringify(
-							config.production ? 'production' : 'development'
-						),
+						NODE_ENV: JSON.stringify(config.production ? 'production' : 'development'),
 					},
 				}),
 				new webpack.LoaderOptionsPlugin({
@@ -328,9 +315,7 @@ module.exports = function(config) {
 						{
 							from: /./,
 							to:
-								config.buildSection === 'app'
-									? '/index.html'
-									: '/' + config.buildSection + '.html',
+								config.buildSection === 'app' ? '/index.html' : '/' + config.buildSection + '.html',
 						},
 					],
 				},
@@ -345,8 +330,5 @@ module.exports = function(config) {
 	);
 
 	gulp.task('compile', gulp.series(webpackSectionTasks));
-	gulp.task(
-		'default',
-		gulp.series('clean:pre', 'translations:compile', 'compile')
-	);
+	gulp.task('default', gulp.series('clean:pre', 'translations:compile', 'compile'));
 };

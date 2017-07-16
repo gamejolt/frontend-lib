@@ -6,11 +6,9 @@ export class CommentVote extends Model {
 	posted_on: number;
 
 	$save() {
-		return this.$_save(
-			'/comments/votes/add/' + this.comment_id,
-			'commentVote',
-			{ ignorePayloadUser: true }
-		);
+		return this.$_save('/comments/votes/add/' + this.comment_id, 'commentVote', {
+			ignorePayloadUser: true,
+		});
 	}
 
 	$remove() {

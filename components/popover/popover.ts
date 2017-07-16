@@ -162,9 +162,7 @@ export class AppPopover extends Vue {
 		// We don't track width when it's an XS screen since we do a full width popover in those cases.
 		let widthElem: HTMLElement | undefined;
 		if (this.trackElementWidth && !Screen.isWindowXs) {
-			widthElem = document.querySelector(this.trackElementWidth) as
-				| HTMLElement
-				| undefined;
+			widthElem = document.querySelector(this.trackElementWidth) as HTMLElement | undefined;
 			if (widthElem) {
 				this.$el.style.width = widthElem.offsetWidth + 'px';
 				this.$el.style.maxWidth = 'none';
@@ -183,13 +181,9 @@ export class AppPopover extends Vue {
 		// If we're appending to body, then we're positioning it relative to the whole screen.
 		// If we're keeping it in place, then we position relative to the parent positioner.
 		// We allow to override this logic through a param, though.
-		const positionBy =
-			this.positionBy || (this.appendToBody ? 'offset' : 'position');
+		const positionBy = this.positionBy || (this.appendToBody ? 'offset' : 'position');
 
-		let triggerLeft: number,
-			triggerTop: number,
-			triggerRight: number,
-			triggerBottom: number;
+		let triggerLeft: number, triggerTop: number, triggerRight: number, triggerBottom: number;
 		if (positionBy === 'offset') {
 			triggerLeft = triggerOffset.left;
 			triggerTop = triggerOffset.top;
@@ -208,10 +202,7 @@ export class AppPopover extends Vue {
 		if (this.position === 'top' || this.position === 'bottom') {
 			// Align to the right if the trigger is past the window mid line.
 			// Always go by the trigger offset.
-			if (
-				this.positionHorizontal === 'left' ||
-				triggerOffset.left > Screen.windowWidth / 2
-			) {
+			if (this.positionHorizontal === 'left' || triggerOffset.left > Screen.windowWidth / 2) {
 				this.$el.style.left = triggerRight - popoverWidth + 'px';
 			} else {
 				this.$el.style.left = triggerLeft + 'px';
@@ -244,28 +235,19 @@ export class AppPopover extends Vue {
 		const elementStyles = window.getComputedStyle(this.$el);
 		if (this.position === 'top' || this.position === 'bottom') {
 			const extraSpacing = elementStyles.left
-				? (popoverWidth - Ruler.width(this.$el)) / 2 +
-						parseFloat(elementStyles.left)
+				? (popoverWidth - Ruler.width(this.$el)) / 2 + parseFloat(elementStyles.left)
 				: 0;
 			this.arrowLeft =
-				triggerLeft +
-				Math.min(triggerWidth / 2, popoverWidth / 2) -
-				extraSpacing +
-				'px';
+				triggerLeft + Math.min(triggerWidth / 2, popoverWidth / 2) - extraSpacing + 'px';
 		} else if (this.position === 'left' || this.position === 'right') {
 			const extraSpacing = elementStyles.top
-				? (popoverHeight - Ruler.height(this.$el)) / 2 +
-						parseFloat(elementStyles.top)
+				? (popoverHeight - Ruler.height(this.$el)) / 2 + parseFloat(elementStyles.top)
 				: 0;
 			this.arrowTop =
-				triggerTop +
-				Math.min(triggerHeight / 2, popoverHeight / 2) -
-				extraSpacing +
-				'px';
+				triggerTop + Math.min(triggerHeight / 2, popoverHeight / 2) - extraSpacing + 'px';
 		}
 
-		this.hidePopoversWrapped = (event: PopoverTiggerEvent) =>
-			this.hidePopovers(event);
+		this.hidePopoversWrapped = (event: PopoverTiggerEvent) => this.hidePopovers(event);
 		document.addEventListener('click', this.hidePopoversWrapped);
 
 		this.backdropElem = document.createElement('div');

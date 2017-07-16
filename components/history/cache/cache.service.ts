@@ -12,9 +12,7 @@ export class HistoryCache {
 	private static states: HistoryCacheState[] = [];
 
 	static get(route: VueRouter.Route, tag?: string) {
-		return this.states.find(
-			item => item.url === route.fullPath && item.tag === tag
-		);
+		return this.states.find(item => item.url === route.fullPath && item.tag === tag);
 	}
 
 	static has(route: VueRouter.Route, tag?: string) {

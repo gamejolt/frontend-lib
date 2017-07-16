@@ -48,10 +48,7 @@ export class GameScreenshot extends Model {
 			throw response;
 		} else {
 			return this.$_save(
-				'/web/dash/developer/games/media/save/image/' +
-					this.game_id +
-					'/' +
-					this.id,
+				'/web/dash/developer/games/media/save/image/' + this.game_id + '/' + this.id,
 				'gameScreenshot'
 			);
 		}
@@ -59,10 +56,7 @@ export class GameScreenshot extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/media/remove/image/' +
-				this.game_id +
-				'/' +
-				this.id
+			'/web/dash/developer/games/media/remove/image/' + this.game_id + '/' + this.id
 		);
 	}
 }

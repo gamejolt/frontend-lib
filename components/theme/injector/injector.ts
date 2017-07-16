@@ -36,11 +36,7 @@ export class AppThemeInjector extends Vue {
 		Object.keys(themeDefinition.definitions).forEach((field: string) => {
 			const definition = themeDefinition.definitions[field];
 
-			if (
-				currentTheme &&
-				typeof currentTheme[field] !== 'undefined' &&
-				currentTheme[field]
-			) {
+			if (currentTheme && typeof currentTheme[field] !== 'undefined' && currentTheme[field]) {
 				let propertyValue: string;
 				if (definition.type === 'image') {
 					propertyValue = 'url("' + currentTheme[field].img_url + '")';

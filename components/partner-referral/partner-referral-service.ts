@@ -10,10 +10,7 @@ export class PartnerReferral {
 		const ref = queryParams['ref'];
 
 		if (ref) {
-			window.sessionStorage.setItem(
-				`partner-ref:${resource}:${resourceId}`,
-				ref
-			);
+			window.sessionStorage.setItem(`partner-ref:${resource}:${resourceId}`, ref);
 		}
 	}
 
@@ -22,8 +19,6 @@ export class PartnerReferral {
 			return null;
 		}
 
-		return window.sessionStorage.getItem(
-			`partner-ref:${resource}:${resourceId}`
-		);
+		return window.sessionStorage.getItem(`partner-ref:${resource}:${resourceId}`);
 	}
 }

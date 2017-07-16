@@ -30,11 +30,9 @@ export class UserFriendship extends Model {
 	}
 
 	static async fetchRequests() {
-		const response: any = await Api.sendRequest(
-			'/web/dash/friends/requests',
-			null,
-			{ detach: true }
-		);
+		const response: any = await Api.sendRequest('/web/dash/friends/requests', null, {
+			detach: true,
+		});
 
 		return {
 			requests: UserFriendship.populate(response.requests) as UserFriendship[],
@@ -53,17 +51,11 @@ export class UserFriendship extends Model {
 	}
 
 	$save() {
-		return this.$_save(
-			'/web/dash/friends/requests/add/' + this.target_user_id,
-			'userFriendship'
-		);
+		return this.$_save('/web/dash/friends/requests/add/' + this.target_user_id, 'userFriendship');
 	}
 
 	$accept() {
-		return this.$_save(
-			'/web/dash/friends/requests/accept/' + this.id,
-			'userFriendship'
-		);
+		return this.$_save('/web/dash/friends/requests/accept/' + this.id, 'userFriendship');
 	}
 
 	$remove() {

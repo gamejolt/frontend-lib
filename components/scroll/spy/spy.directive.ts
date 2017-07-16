@@ -76,11 +76,7 @@ if (!GJ_IS_SSR) {
 		// If we have an active spy and we are scrolled back up before it we want to
 		// clear it out. If the active spy's top position is the start of the
 		// window, then keep it active.
-		if (
-			activeSpy &&
-			scrollTop < activeSpy.targetTop &&
-			activeSpy.targetTop > 0
-		) {
+		if (activeSpy && scrollTop < activeSpy.targetTop && activeSpy.targetTop > 0) {
 			activeSpy.el.classList.remove('active');
 			activeSpy = undefined;
 			return;
@@ -91,10 +87,7 @@ if (!GJ_IS_SSR) {
 				return;
 			}
 
-			if (
-				scrollTop >= spy.targetTop &&
-				scrollTop < spy.targetTop + spy.targetHeight
-			) {
+			if (scrollTop >= spy.targetTop && scrollTop < spy.targetTop + spy.targetHeight) {
 				spy.el.classList.add('active');
 				activateSpy(spy);
 				found = true;
@@ -105,8 +98,7 @@ if (!GJ_IS_SSR) {
 
 export const AppScrollSpy: Vue.DirectiveOptions = {
 	bind(el, binding) {
-		const id: string =
-			binding.value || (el.getAttribute('href') || '').substring(1);
+		const id: string = binding.value || (el.getAttribute('href') || '').substring(1);
 		if (!id) {
 			console.error(new Error(`Couldn't get scroll spy ID.`));
 			return;

@@ -17,11 +17,9 @@ export class FiresidePostLike extends Model {
 
 	$save() {
 		if (!this.id) {
-			return this.$_save(
-				'/fireside/posts/like/' + this.fireside_post_id,
-				'firesidePostLike',
-				{ ignorePayloadUser: true }
-			);
+			return this.$_save('/fireside/posts/like/' + this.fireside_post_id, 'firesidePostLike', {
+				ignorePayloadUser: true,
+			});
 		}
 		throw new Error(`Can't update like data.`);
 	}

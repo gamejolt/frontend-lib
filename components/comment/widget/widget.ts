@@ -11,7 +11,7 @@ import { Environment } from '../../environment/environment.service';
 import { Analytics } from '../../analytics/analytics.service';
 import { Growls } from '../../growls/growls.service';
 import { Scroll } from '../../scroll/scroll.service';
-import { Translate } from '../../translate/translate.service';
+import { getTranslationLang, TranslationLangsByCode } from '../../translate/translate.service';
 import { Api } from '../../api/api.service';
 import { Translation } from '../../translation/translation.model';
 import { AppLoading } from '../../../vue/components/loading/loading';
@@ -61,7 +61,7 @@ export class AppCommentWidget extends Vue {
 	perPage = 10;
 	numPages = 0;
 
-	lang = this.getTranslationLabel(Translate.lang);
+	lang = this.getTranslationLabel(getTranslationLang());
 	allowTranslate = false;
 	isTranslating = false;
 	isShowingTranslations = false;
@@ -71,11 +71,7 @@ export class AppCommentWidget extends Vue {
 	subscriptions: { [k: string]: Subscription } = {};
 
 	get loginUrl() {
-		return (
-			Environment.authBaseUrl +
-			'/login?redirect=' +
-			encodeURIComponent(this.$route.fullPath)
-		);
+		return Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent(this.$route.fullPath);
 	}
 
 	async created() {
@@ -101,11 +97,7 @@ export class AppCommentWidget extends Vue {
 	private async refreshComments() {
 		try {
 			this.isLoading = true;
-			const payload = await Comment.fetch(
-				this.resource,
-				this.resourceId,
-				this.currentPage
-			);
+			const payload = await Comment.fetch(this.resource, this.resourceId, this.currentPage);
 			this.isLoading = false;
 
 			this.hasBootstrapped = true;
@@ -119,9 +111,7 @@ export class AppCommentWidget extends Vue {
 			// Child comments.
 			this.childComments = {};
 			if (payload.childComments) {
-				const childComments: Comment[] = Comment.populate(
-					payload.childComments
-				);
+				const childComments: Comment[] = Comment.populate(payload.childComments);
 				const grouped: any = {};
 				for (const child of childComments) {
 					if (!grouped[child.parent_id]) {
@@ -135,9 +125,7 @@ export class AppCommentWidget extends Vue {
 			// User subscriptions to comment threads.
 			this.subscriptions = {};
 			if (payload.subscriptions) {
-				const subscriptions: Subscription[] = Subscription.populate(
-					payload.subscriptions
-				);
+				const subscriptions: Subscription[] = Subscription.populate(payload.subscriptions);
 				const indexed: any = {};
 				for (const subscription of subscriptions) {
 					indexed[subscription.resource_id] = subscription;
@@ -192,11 +180,7 @@ export class AppCommentWidget extends Vue {
 		this.refreshComments();
 
 		if (Analytics) {
-			Analytics.trackEvent(
-				'comment-widget',
-				'change-page',
-				this.currentPage + ''
-			);
+			Analytics.trackEvent('comment-widget', 'change-page', this.currentPage + '');
 		}
 	}
 
@@ -218,7 +202,7 @@ export class AppCommentWidget extends Vue {
 			const commentIds = this.gatherTranslatable().map(item => item.id);
 			const response = await Api.sendRequest(
 				'/comments/translate',
-				{ lang: Translate.lang, resources: commentIds },
+				{ lang: getTranslationLang(), resources: commentIds },
 				{ sanitizeComplexData: false, detach: true }
 			);
 
@@ -228,9 +212,7 @@ export class AppCommentWidget extends Vue {
 				return;
 			}
 
-			const translations: Translation[] = Translation.populate(
-				response.translations
-			);
+			const translations: Translation[] = Translation.populate(response.translations);
 
 			const indexed: any = {};
 			for (const translation of translations) {
@@ -253,7 +235,7 @@ export class AppCommentWidget extends Vue {
 			comments.push(child);
 		}
 
-		const translationCode = this.getTranslationCode(Translate.lang);
+		const translationCode = this.getTranslationCode(getTranslationLang());
 		const translatable = comments.filter(comment => {
 			if (comment.lang && comment.lang !== translationCode) {
 				return true;
@@ -283,7 +265,7 @@ export class AppCommentWidget extends Vue {
 			return 'Português';
 		}
 
-		return Translate.langsByCode[lang].label;
+		return TranslationLangsByCode[lang].label;
 	}
 
 	private async checkPermalink() {
@@ -302,9 +284,7 @@ export class AppCommentWidget extends Vue {
 			this.changePage(page);
 			Analytics.trackEvent('comment-widget', 'permalink');
 		} catch (e) {
-			Growls.error(
-				this.$gettext(`Invalid comment passed in. It may have been removed.`)
-			);
+			Growls.error(this.$gettext(`Invalid comment passed in. It may have been removed.`));
 		}
 	}
 }

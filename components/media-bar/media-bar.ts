@@ -35,6 +35,20 @@ export class AppMediaBar extends Vue {
 		} else if (!this.activeItem && this.lightbox) {
 			this.destroyLightbox();
 		}
+
+		let hash = '';
+		if (this.activeItem) {
+			if (this.activeItem.media_type === 'image') {
+				hash = '#screenshot-';
+			} else if (this.activeItem.media_type === 'video') {
+				hash = '#video-';
+			} else if (this.activeItem.media_type === 'sketchfab') {
+				hash = '#sketchfab-';
+			}
+			hash += this.activeItem.id;
+		}
+
+		this.$router.replace({ hash });
 	}
 
 	async updated() {
@@ -42,6 +56,7 @@ export class AppMediaBar extends Vue {
 		// wasn't correctly seeing that the check URL updates the state. Using
 		// next tick to fix this.
 		if (typeof this.mediaItems !== 'undefined' && !this.urlChecked) {
+			this.urlChecked = true;
 			await this.$nextTick();
 			this.checkUrl();
 		}
@@ -62,10 +77,7 @@ export class AppMediaBar extends Vue {
 	}
 
 	goNext() {
-		if (
-			this.activeIndex === null ||
-			this.activeIndex + 1 >= this.mediaItems.length
-		) {
+		if (this.activeIndex === null || this.activeIndex + 1 >= this.mediaItems.length) {
 			return;
 		}
 
@@ -94,8 +106,6 @@ export class AppMediaBar extends Vue {
 	}
 
 	private checkUrl() {
-		this.urlChecked = true;
-
 		// If there is a hash in the URL, let's try to load it in.
 		let id: number | undefined;
 		const hash = window.location.hash.substring(1);
@@ -117,27 +127,31 @@ export class AppMediaBar extends Vue {
 				if (item) {
 					this.setActiveItem(item);
 					this.trackEvent('permalink');
+				} else {
+					if (type === 'image') {
+						Growls.error(
+							this.$gettext(
+								`We couldn't find the image that was linked. It may have been removed.`
+							),
+							this.$gettext(`Invalid Image URL`)
+						);
+					} else if (type === 'video') {
+						Growls.error(
+							this.$gettext(
+								`We couldn't find the video that was linked. It may have been removed.`
+							),
+							this.$gettext(`Invalid Video URL`)
+						);
+					} else if (type === 'sketchfab') {
+						Growls.error(
+							this.$gettext(
+								`We couldn't find the sketchfab model that was linked. It may have been removed.`
+							),
+							this.$gettext(`Invalid Sketchfab URL`)
+						);
+					}
+					this.trackEvent('permalink-invalid');
 				}
-				// TODO
-				// else if (GJ_IS_ANGULAR) {
-				// 	if (type === 'image') {
-				// 		Growls.error(
-				// 			`We couldn't find the image that was linked. It may have been removed.`,
-				// 			`Invalid Image URL`
-				// 		);
-				// 	} else if (type === 'video') {
-				// 		Growls.error(
-				// 			`We couldn't find the video that was linked. It may have been removed.`,
-				// 			`Invalid Video URL`
-				// 		);
-				// 	} else if (type === 'sketchfab') {
-				// 		Growls.error(
-				// 			`We couldn't find the sketchfab model that was linked. It may have been removed.`,
-				// 			`Invalid Sketchfab URL`
-				// 		);
-				// 	}
-				// 	this.trackEvent('permalink-invalid');
-				// }
 			}
 		}
 	}

@@ -12,10 +12,7 @@ import { kebabCase } from '../utils/string';
 
 let componentCounter = 0;
 
-export function makeComponentProvider(
-	component: typeof Vue,
-	outputs: string[] = []
-) {
+export function makeComponentProvider(component: typeof Vue, outputs: string[] = []) {
 	const instance = new component();
 	const options = instance.$options;
 
@@ -47,8 +44,7 @@ export function makeComponentProvider(
 		constructor(@Inject('$element') private $element: ng.IAugmentedJQuery) {
 			this.ngEl = this.$element[0].children[0] as HTMLElement;
 			this.vueEl = this.$element[0].children[1] as HTMLElement;
-			this.vueEl.className =
-				this.vueEl.className + ' ' + this.$element[0].className;
+			this.vueEl.className = this.vueEl.className + ' ' + this.$element[0].className;
 
 			for (const output of outputs) {
 				(this as any)[output] = new EventEmitter<any>();
@@ -65,9 +61,7 @@ export function makeComponentProvider(
 
 			// For some reason this is undefined some times...
 			if (this.vueComponent.$el.querySelector) {
-				const slot = this.vueComponent.$el.querySelector(
-					`.ng-slot-${componentCounter}`
-				);
+				const slot = this.vueComponent.$el.querySelector(`.ng-slot-${componentCounter}`);
 				if (slot) {
 					slot.appendChild(this.ngEl);
 				}
@@ -116,9 +110,7 @@ function createVueElement(ngComponent: any, componentDefinition: any) {
 				const reactivePropsList: any = {
 					slotId,
 				};
-				Object.keys(props).forEach(
-					prop => (reactivePropsList[prop] = this[prop])
-				);
+				Object.keys(props).forEach(prop => (reactivePropsList[prop] = this[prop]));
 				return reactivePropsList;
 			},
 		},

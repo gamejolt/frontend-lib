@@ -20,10 +20,7 @@ export class GameDataStoreItem extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/api/data-storage/remove-item/' +
-				this.game_id +
-				'/' +
-				this.id
+			'/web/dash/developer/games/api/data-storage/remove-item/' + this.game_id + '/' + this.id
 		);
 	}
 }

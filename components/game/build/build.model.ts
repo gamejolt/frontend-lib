@@ -261,10 +261,7 @@ export class GameBuild extends Model {
 		return undefined;
 	}
 
-	static getDownloadUrl(
-		id: number,
-		options: { key?: string; forceDownload?: boolean } = {}
-	) {
+	static getDownloadUrl(id: number, options: { key?: string; forceDownload?: boolean } = {}) {
 		// This is a game key so you can access games that you have a key for.
 		let data: any = {};
 		if (options.key) {
@@ -275,10 +272,7 @@ export class GameBuild extends Model {
 			data.forceDownload = true;
 		}
 
-		return Api.sendRequest(
-			'/web/discover/games/builds/get-download-url/' + id,
-			data
-		);
+		return Api.sendRequest('/web/discover/games/builds/get-download-url/' + id, data);
 	}
 
 	getDownloadUrl(options: { key?: string; forceDownload?: boolean } = {}) {
@@ -288,28 +282,18 @@ export class GameBuild extends Model {
 	$save() {
 		let params = [this.game_id, this.game_package_id, this.game_release_id];
 		if (!this.id) {
-			return this.$_save(
-				'/web/dash/developer/games/builds/save/' + params.join('/'),
-				'gameBuild',
-				{ file: this.file }
-			);
+			return this.$_save('/web/dash/developer/games/builds/save/' + params.join('/'), 'gameBuild', {
+				file: this.file,
+			});
 		} else {
 			// May or may not have an upload file on an edit.
 			params.push(this.id);
-			return this.$_save(
-				'/web/dash/developer/games/builds/save/' + params.join('/'),
-				'gameBuild'
-			);
+			return this.$_save('/web/dash/developer/games/builds/save/' + params.join('/'), 'gameBuild');
 		}
 	}
 
 	async $remove(game: Game) {
-		const params = [
-			this.game_id,
-			this.game_package_id,
-			this.game_release_id,
-			this.id,
-		];
+		const params = [this.game_id, this.game_package_id, this.game_release_id, this.id];
 		const response = await this.$_remove(
 			'/web/dash/developer/games/builds/remove/' + params.join('/')
 		);

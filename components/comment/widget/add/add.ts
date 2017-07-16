@@ -11,8 +11,7 @@ import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markd
 		AppFormControlMarkdown,
 	},
 })
-export class AppCommentWidgetAdd extends BaseForm<Comment>
-	implements FormOnInit {
+export class AppCommentWidgetAdd extends BaseForm<Comment> implements FormOnInit {
 	@Prop(String) resource: string;
 	@Prop(Number) resourceId: number;
 	@Prop(Number) parentId?: number;

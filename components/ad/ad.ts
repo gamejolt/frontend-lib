@@ -47,9 +47,7 @@ export class AppAd extends Vue {
 			GJ_IS_CLIENT ||
 			GJ_IS_SSR ||
 			isPrerender ||
-			(this.resource &&
-				this.resource instanceof Game &&
-				!this.resource._should_show_ads)
+			(this.resource && this.resource instanceof Game && !this.resource._should_show_ads)
 		) {
 			return;
 		}
@@ -59,11 +57,7 @@ export class AppAd extends Vue {
 			this.slot.isUsed = true;
 
 			const resourceInfo = this.resourceInfo;
-			Ads.sendBeacon(
-				Ads.TYPE_DISPLAY,
-				resourceInfo.resource,
-				resourceInfo.resourceId
-			);
+			Ads.sendBeacon(Ads.TYPE_DISPLAY, resourceInfo.resource, resourceInfo.resourceId);
 		}
 
 		this.display();
@@ -100,11 +94,7 @@ export class AppAd extends Vue {
 		Ads.refreshSlots([this.slot]);
 
 		const resourceInfo = this.resourceInfo;
-		Ads.sendBeacon(
-			Ads.TYPE_DISPLAY,
-			resourceInfo.resource,
-			resourceInfo.resourceId
-		);
+		Ads.sendBeacon(Ads.TYPE_DISPLAY, resourceInfo.resource, resourceInfo.resourceId);
 	}
 
 	destroyed() {

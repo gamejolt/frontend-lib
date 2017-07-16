@@ -19,11 +19,7 @@ export class GamePlayModal {
 		this.canMinimize = options.canMinimize || false;
 	}
 
-	static async show(
-		game: Game,
-		build: GameBuild,
-		options: { key?: string } = {}
-	) {
+	static async show(game: Game, build: GameBuild, options: { key?: string } = {}) {
 		Analytics.trackEvent('game-play', 'play');
 
 		if (this.hasModal) {
@@ -45,11 +41,7 @@ export class GamePlayModal {
 		Popover.hideAll();
 
 		// Will open the gameserver in their browser.
-		if (
-			GJ_IS_CLIENT &&
-			build.type !== GameBuild.TYPE_HTML &&
-			build.type !== GameBuild.TYPE_ROM
-		) {
+		if (GJ_IS_CLIENT && build.type !== GameBuild.TYPE_HTML && build.type !== GameBuild.TYPE_ROM) {
 			const gui = require('nw.gui') as typeof nwGui;
 			const url = await this.getDownloadUrl(build, { key: options.key });
 			gui.Shell.openExternal(url);
@@ -85,10 +77,7 @@ export class GamePlayModal {
 		this.hasModal = false;
 	}
 
-	private static async getDownloadUrl(
-		build: GameBuild,
-		options: { key?: string }
-	) {
+	private static async getDownloadUrl(build: GameBuild, options: { key?: string }) {
 		const payload = await build.getDownloadUrl({ key: options.key });
 		let url = payload.url;
 

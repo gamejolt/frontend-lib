@@ -23,7 +23,7 @@ module.exports = function(config) {
 				// Works around a difference in poeditor and angular-gettext: en-us -> en_US.
 				.pipe(renameLangs())
 				.pipe(sanitizeTranslations())
-				.pipe(splitTranslations(config.translationSections))
+				// .pipe(splitTranslations(config.translationSections))
 				.pipe(gulp.dest('src/translations')) );
 	});
 };

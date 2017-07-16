@@ -26,9 +26,7 @@ export class AppVideoEmbed extends Vue {
 
 	mounted() {
 		this.recalculateDimensions();
-		this.resize$ = Screen.resizeChanges.subscribe(() =>
-			this.recalculateDimensions()
-		);
+		this.resize$ = Screen.resizeChanges.subscribe(() => this.recalculateDimensions());
 	}
 
 	destroyed() {

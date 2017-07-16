@@ -4,20 +4,12 @@ import { Analytics } from '../../../analytics/analytics.service';
 function setupEvents() {
 	(window as any).twttr.events.bind('tweet', () => {
 		const url = window.location.href;
-		Analytics.trackSocial(
-			Analytics.SOCIAL_NETWORK_TWITTER,
-			Analytics.SOCIAL_ACTION_TWEET,
-			url
-		);
+		Analytics.trackSocial(Analytics.SOCIAL_NETWORK_TWITTER, Analytics.SOCIAL_ACTION_TWEET, url);
 	});
 
 	(window as any).twttr.events.bind('follow', () => {
 		const url = window.location.href;
-		Analytics.trackSocial(
-			Analytics.SOCIAL_NETWORK_TWITTER,
-			Analytics.SOCIAL_ACTION_FOLLOW,
-			url
-		);
+		Analytics.trackSocial(Analytics.SOCIAL_NETWORK_TWITTER, Analytics.SOCIAL_ACTION_FOLLOW, url);
 	});
 }
 

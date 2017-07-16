@@ -3,9 +3,7 @@ export function parse(val: string) {
 	const m = parseInt(sanitized.substring(0, 2), 10);
 
 	const ySub = sanitized.substring(2, 4);
-	const y = ySub && ySub.length === 2
-		? parseInt('20' + sanitized.substring(2, 4), 10)
-		: 0;
+	const y = ySub && ySub.length === 2 ? parseInt('20' + sanitized.substring(2, 4), 10) : 0;
 
 	return { m: m, y: y };
 }

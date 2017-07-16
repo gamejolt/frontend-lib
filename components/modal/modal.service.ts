@@ -37,11 +37,7 @@ export class Modal {
 		}
 	}
 
-	constructor(
-		public id: number,
-		private _resolve: Function,
-		options: ModalOptions
-	) {
+	constructor(public id: number, private _resolve: Function, options: ModalOptions) {
 		this.size = options.size;
 		this.component = options.component;
 		this.props = options.props;

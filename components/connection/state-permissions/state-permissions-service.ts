@@ -13,12 +13,9 @@ export class ConnectionStatePermissions {
 		 * This way on a payload failure in the Payload service we can see if we should still
 		 * allow the state to transition successfully.
 		 */
-		this.$rootScope.$on(
-			'$stateChangeStart',
-			(_event: ng.IAngularEvent, toState: State) => {
-				this.setCurrentState(toState);
-			}
-		);
+		this.$rootScope.$on('$stateChangeStart', (_event: ng.IAngularEvent, toState: State) => {
+			this.setCurrentState(toState);
+		});
 
 		this.$rootScope.$on('$stateChangeSuccess', () => {
 			this.clearCurrentState();

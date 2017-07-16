@@ -72,10 +72,7 @@ export class AppImgResponsive extends Vue {
 		}
 
 		if (newSrc.search(WIDTH_HEIGHT_REGEX) !== -1) {
-			newSrc = newSrc.replace(
-				WIDTH_HEIGHT_REGEX,
-				'/' + mediaserverWidth + 'x2000/'
-			);
+			newSrc = newSrc.replace(WIDTH_HEIGHT_REGEX, '/' + mediaserverWidth + 'x2000/');
 		} else {
 			newSrc = newSrc.replace(WIDTH_REGEX, '/' + mediaserverWidth + '/');
 		}

@@ -8,6 +8,7 @@ import { AppCodemirror } from '../../codemirror/codemirror';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { AppThemeEditorFontSelector } from './font-selector';
 import { AppThemeEditorImage } from './image';
+import { AppColorpicker } from '../../colorpicker/colorpicker';
 
 interface StyleGroup {
 	name: string;
@@ -24,6 +25,7 @@ interface StyleGroup {
 		AppCodemirror,
 		AppThemeEditorFontSelector,
 		AppThemeEditorImage,
+		AppColorpicker,
 	},
 })
 export class AppThemeEditor extends Vue {
@@ -44,13 +46,9 @@ export class AppThemeEditor extends Vue {
 		// Save the initial content, as well.
 		this.initialTheme = Object.assign({}, this.theme);
 
-		const response = await Api.sendRequest(
-			'/sites-io/get-template/' + this.template,
-			undefined,
-			{
-				detach: true,
-			}
-		);
+		const response = await Api.sendRequest('/sites-io/get-template/' + this.template, undefined, {
+			detach: true,
+		});
 
 		this.isLoaded = true;
 
@@ -62,11 +60,11 @@ export class AppThemeEditor extends Vue {
 		this.refresh(true);
 	}
 
-	refresh(initial = false) {
-		const iframe = document.getElementById(this.windowId) as
-			| HTMLIFrameElement
-			| undefined;
+	async refresh(initial = false) {
+		// Gotta wait for the value to be saved.
+		await this.$nextTick();
 
+		const iframe = document.getElementById(this.windowId) as HTMLIFrameElement | undefined;
 		if (iframe) {
 			const msg = {
 				type: 'theme-update',
@@ -74,6 +72,7 @@ export class AppThemeEditor extends Vue {
 				definition: this.definition,
 				theme: this.theme,
 			};
+
 			iframe.contentWindow.postMessage(msg, '*');
 		}
 

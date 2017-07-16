@@ -2,8 +2,7 @@ import { Environment } from '../environment/environment.service';
 import { appStore } from '../../vue/services/app/app-store';
 import { EventBus } from '../event-bus/event-bus.service';
 
-const ga: any =
-	(typeof window !== 'undefined' && (window as any).ga) || function() {};
+const ga: any = (typeof window !== 'undefined' && (window as any).ga) || function() {};
 
 // Force HTTPS tracking beacons.
 ga('set', 'forceSSL', true);
@@ -67,11 +66,7 @@ export class Analytics {
 		const user = this.getAppUser();
 
 		// If they're not a normal user, don't track.
-		if (
-			Environment.buildType === 'production' &&
-			user &&
-			user.permission_level > 0
-		) {
+		if (Environment.buildType === 'production' && user && user.permission_level > 0) {
 			return false;
 		}
 
@@ -154,10 +149,7 @@ export class Analytics {
 
 		// If no path passed in, then pull it from the location.
 		if (!path) {
-			path =
-				window.location.pathname +
-				window.location.search +
-				window.location.hash;
+			path = window.location.pathname + window.location.search + window.location.hash;
 		}
 
 		// Pull the title.
@@ -170,9 +162,7 @@ export class Analytics {
 
 		// Now track the page view.
 		if (Environment.buildType === 'development') {
-			console.log(
-				`Track page view: tracker(${tracker}) | ${JSON.stringify(options)}`
-			);
+			console.log(`Track page view: tracker(${tracker}) | ${JSON.stringify(options)}`);
 		} else {
 			this.ga(method, 'pageview', { ...options });
 		}
@@ -188,12 +178,7 @@ export class Analytics {
 		}
 	}
 
-	static async trackEvent(
-		category: string,
-		action: string,
-		label?: string,
-		value?: string
-	) {
+	static async trackEvent(category: string, action: string, label?: string, value?: string) {
 		if (!this.shouldTrack()) {
 			console.log('Skip tracking event since not a normal user.');
 			return;
@@ -202,10 +187,7 @@ export class Analytics {
 		this.ensureUserId();
 
 		if (Environment.buildType === 'development') {
-			console.log(
-				`Track event: ${category}:${action || '-'}:${label || '-'}:${value ||
-					'-'}`
-			);
+			console.log(`Track event: ${category}:${action || '-'}:${label || '-'}:${value || '-'}`);
 		} else {
 			const options = {
 				nonInteraction: 1,
@@ -233,20 +215,13 @@ export class Analytics {
 		}
 	}
 
-	static async trackTiming(
-		category: string,
-		timingVar: string,
-		value: number,
-		label?: string
-	) {
+	static async trackTiming(category: string, timingVar: string, value: number, label?: string) {
 		if (!this.shouldTrack()) {
 			console.log('Skip tracking timing event since not a normal user.');
 			return;
 		}
 
-		console.info(
-			`Timing (${category}${label ? ':' + label : ''}) ${timingVar} = ${value}`
-		);
+		console.info(`Timing (${category}${label ? ':' + label : ''}) ${timingVar} = ${value}`);
 
 		if (Environment.buildType === 'production') {
 			this.ga('send', 'timing', category, timingVar, value, label, {

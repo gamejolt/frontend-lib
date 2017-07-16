@@ -51,10 +51,7 @@ export class BaseFormControl extends Vue {
 			this.value = this.form.base.formModel[this.group.name];
 
 			// Watch the form model for changes and sync to our control.
-			this.$watch(
-				() => this.form.base.formModel[this.group.name],
-				newVal => (this.value = newVal)
-			);
+			this.$watch(() => this.form.base.formModel[this.group.name], newVal => (this.value = newVal));
 		}
 	}
 

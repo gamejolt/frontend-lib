@@ -37,10 +37,7 @@ export class AppMediaBarLightboxItem extends Vue {
 	private resize$: Subscription | undefined;
 
 	mounted() {
-		this.lightbox = findVueParent(
-			this,
-			AppMediaBarLightbox
-		) as AppMediaBarLightbox;
+		this.lightbox = findVueParent(this, AppMediaBarLightbox) as AppMediaBarLightbox;
 		this.calcActive();
 		this.calcDimensions();
 
@@ -62,8 +59,7 @@ export class AppMediaBarLightboxItem extends Vue {
 	async calcDimensions() {
 		await this.$nextTick();
 
-		this.maxWidth =
-			this.lightbox.maxItemWidth - MediaBarLightboxConfig.itemPadding;
+		this.maxWidth = this.lightbox.maxItemWidth - MediaBarLightboxConfig.itemPadding;
 		this.maxHeight = this.lightbox.maxItemHeight;
 
 		const captionElement = this.$el.getElementsByClassName(
@@ -74,10 +70,7 @@ export class AppMediaBarLightboxItem extends Vue {
 		}
 
 		if (this.item.media_type === 'image') {
-			const dimensions = this.item.media_item.getDimensions(
-				this.maxWidth,
-				this.maxHeight
-			);
+			const dimensions = this.item.media_item.getDimensions(this.maxWidth, this.maxHeight);
 			this.maxWidth = dimensions.width;
 			this.maxHeight = dimensions.height;
 		}

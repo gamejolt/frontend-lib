@@ -3,12 +3,7 @@ if (!GJ_IS_SSR && typeof (window as any).CustomEvent !== 'function') {
 	function _CustomEvent(event: any, params: any) {
 		params = params || { bubbles: false, cancelable: false, detail: undefined };
 		const evt = document.createEvent('CustomEvent');
-		evt.initCustomEvent(
-			event,
-			params.bubbles,
-			params.cancelable,
-			params.detail
-		);
+		evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
 		return evt;
 	}
 

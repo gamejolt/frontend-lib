@@ -53,8 +53,7 @@ export function loadScript(src: string) {
 		script.type = 'text/javascript';
 		script.async = true;
 
-		const docHead =
-			window.document.head || window.document.getElementsByTagName('head')[0];
+		const docHead = window.document.head || window.document.getElementsByTagName('head')[0];
 		docHead.appendChild(script);
 
 		script.onload = resolve;

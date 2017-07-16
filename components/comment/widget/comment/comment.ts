@@ -98,10 +98,7 @@ export class AppCommentWidgetComment extends Vue {
 	}
 
 	get isShowingReplies() {
-		return (
-			(this.children && this.children.length && this.isShowingChildren) ||
-			this.isReplying
-		);
+		return (this.children && this.children.length && this.isShowingChildren) || this.isReplying;
 	}
 
 	get canFollow() {
@@ -113,10 +110,7 @@ export class AppCommentWidgetComment extends Vue {
 			return false;
 		} else if (this.isChild) {
 			return false;
-		} else if (
-			this.widget.resourceOwner &&
-			this.widget.resourceOwner.id === this.app.user.id
-		) {
+		} else if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id) {
 			return false;
 		}
 
@@ -132,10 +126,7 @@ export class AppCommentWidgetComment extends Vue {
 			return false;
 		} else if (this.comment.user.id === this.app.user.id) {
 			return false;
-		} else if (
-			this.widget.resourceOwner &&
-			this.widget.resourceOwner.id === this.app.user.id
-		) {
+		} else if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id) {
 			return false;
 		}
 

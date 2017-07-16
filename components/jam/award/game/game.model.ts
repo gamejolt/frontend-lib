@@ -18,10 +18,7 @@ export class JamAwardGame extends Model {
 	}
 
 	static $saveSort(awardId: number, sortedIds: number[]) {
-		return Api.sendRequest(
-			'/jams/manage/jams/awards/save-game-sort/' + awardId,
-			sortedIds
-		);
+		return Api.sendRequest('/jams/manage/jams/awards/save-game-sort/' + awardId, sortedIds);
 	}
 
 	static async $assignToAward(awardId: number, gameId: number) {
@@ -37,10 +34,7 @@ export class JamAwardGame extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/jams/manage/jams/awards/remove-assigned-game/' +
-				this.jam_award_id +
-				'/' +
-				this.game_id
+			'/jams/manage/jams/awards/remove-assigned-game/' + this.jam_award_id + '/' + this.game_id
 		);
 	}
 }

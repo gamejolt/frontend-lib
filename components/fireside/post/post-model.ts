@@ -140,10 +140,7 @@ export class FiresidePost extends Model {
 			if (!this.id) {
 				return this.$_save('/fireside/dash/posts/add', 'firesidePost');
 			} else {
-				return this.$_save(
-					`/fireside/dash/posts/save/${this.id}`,
-					'firesidePost'
-				);
+				return this.$_save(`/fireside/dash/posts/save/${this.id}`, 'firesidePost');
 			}
 		}
 	}
@@ -161,10 +158,7 @@ export class FiresidePost extends Model {
 	}
 
 	$clearHeader() {
-		return this.$_save(
-			`/fireside/dash/posts/clear-header/${this.id}`,
-			'firesidePost'
-		);
+		return this.$_save(`/fireside/dash/posts/clear-header/${this.id}`, 'firesidePost');
 	}
 
 	$publish() {
@@ -195,9 +189,7 @@ export class FiresidePost extends Model {
 
 	$remove() {
 		if (this.game) {
-			return this.$_remove(
-				`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`
-			);
+			return this.$_remove(`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`);
 		} else {
 			return this.$_remove(`/fireside/dash/posts/remove/${this.id}`);
 		}

@@ -14,10 +14,7 @@ export class PageClassesComponent implements OnChanges {
 
 	ngOnChanges() {
 		if (this.stateName && typeof this.stateName === 'string') {
-			const pageClass = this.stateName
-				.replace('-', '')
-				.replace(/\./g, '-')
-				.toLowerCase();
+			const pageClass = this.stateName.replace('-', '').replace(/\./g, '-').toLowerCase();
 
 			this.currentClasses = [];
 			const pieces = pageClass.split('-');

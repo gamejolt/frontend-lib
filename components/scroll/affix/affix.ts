@@ -51,13 +51,9 @@ export class AppScrollAffix extends Vue {
 			this.checkLoop();
 		});
 
-		this.scroll$ = Scroll.scrollChanges.subscribe(change =>
-			this.checkScroll(change.top)
-		);
+		this.scroll$ = Scroll.scrollChanges.subscribe(change => this.checkScroll(change.top));
 
-		this.container = this.$el.getElementsByClassName(
-			'scroll-affix-container'
-		)[0] as HTMLElement;
+		this.container = this.$el.getElementsByClassName('scroll-affix-container')[0] as HTMLElement;
 		if (!this.container) {
 			throw new Error(`Couldn't find container.`);
 		}
@@ -99,9 +95,7 @@ export class AppScrollAffix extends Vue {
 	}
 
 	private getPlaceholder() {
-		return this.$el.getElementsByClassName(
-			'gj-scroll-affix-placeholder'
-		)[0] as HTMLElement;
+		return this.$el.getElementsByClassName('gj-scroll-affix-placeholder')[0] as HTMLElement;
 	}
 
 	// This sets up a loop that syncs repeatedly for a bit.

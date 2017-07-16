@@ -1,11 +1,10 @@
 @require '~styles/variables'
 
 .form-control-markdown
-
-	> nav
+	& > nav
 		margin-bottom: 0
 
-		> ul
+		& > ul
 			float: left
 
 	textarea
@@ -41,6 +40,5 @@
 
 	&.has-controls textarea
 		border-bottom-style: dashed
-
-// TODO
-// @require './media-items'
+		border-bottom-left-radius: 0
+		border-bottom-right-radius: 0

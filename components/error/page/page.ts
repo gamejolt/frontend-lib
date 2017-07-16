@@ -2,11 +2,7 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import * as View from '!view!./page.html?style=./page.styl';
 
-import {
-	AppStore,
-	AppMutation,
-	AppState,
-} from '../../../vue/services/app/app-store';
+import { AppStore, AppMutation, AppState } from '../../../vue/services/app/app-store';
 import { ErrorPages } from './page-components';
 
 @View

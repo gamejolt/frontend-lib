@@ -10,6 +10,8 @@ import { FormContentBlockEditor } from './editor-form';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { AppTooltip } from '../../tooltip/tooltip';
 
+const PreviewDebounce = 3000;
+
 @View
 @Component({
 	components: {
@@ -27,7 +29,7 @@ export class AppContentBlockEditor extends Vue {
 
 	isPreviewLoading = false;
 	private previewIndex = 0;
-	// private fetchPreview: Function;
+	private previewTimeout: NodeJS.Timer | null = null;
 
 	Environment = Environment;
 
@@ -39,35 +41,35 @@ export class AppContentBlockEditor extends Vue {
 
 		if (content) {
 			this.isPreviewLoading = true;
-			// this.fetchPreview();
+			this._fetchPreview();
 		} else {
 			this.isPreviewLoading = false;
 			this.compiled('');
 		}
 	}
 
-	created() {
-		// TODO
-		// this.fetchPreview = _.debounce(
-		// 	() => this._fetchPreview(),
-		// 	PREVIEW_DEBOUNCE
-		// );
-	}
-
-	private async _fetchPreview() {
-		const previewIndex = ++this.previewIndex;
-		const response = await Api.sendRequest(
-			'/web/dash/sites/content-preview',
-			{ content: this.contentBlock.content_markdown },
-			{ ignorePayloadUser: true }
-		);
-
-		if (previewIndex === this.previewIndex) {
-			this.isPreviewLoading = false;
-			if (response && response.success !== false && response.compiled) {
-				this.compiled(response.compiled);
-			}
+	async _fetchPreview() {
+		if (this.previewTimeout) {
+			clearTimeout(this.previewTimeout);
 		}
+
+		this.previewTimeout = setTimeout(async () => {
+			const previewIndex = ++this.previewIndex;
+			const response = await Api.sendRequest(
+				'/web/dash/sites/content-preview',
+				{ content: this.contentBlock.content_markdown },
+				{ ignorePayloadUser: true }
+			);
+
+			if (previewIndex === this.previewIndex) {
+				this.isPreviewLoading = false;
+				if (response && response.success !== false && response.compiled) {
+					this.compiled(response.compiled);
+				}
+			}
+
+			this.previewTimeout = null;
+		}, PreviewDebounce);
 	}
 
 	compiled(compiledContent: string) {
@@ -76,9 +78,7 @@ export class AppContentBlockEditor extends Vue {
 	}
 
 	refresh() {
-		const iframe = document.getElementById(this.windowId) as
-			| HTMLIFrameElement
-			| undefined;
+		const iframe = document.getElementById(this.windowId) as HTMLIFrameElement | undefined;
 		if (iframe) {
 			const msg = {
 				type: 'content-update',

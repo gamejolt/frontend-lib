@@ -6,7 +6,7 @@
 	@dragleave="dragLeave"
 	@drop="drop"
 	>
-	<div v-if="!value">
+	<div v-show="!value">
 		<!--
 			If we have a label, then we show the upload "button" as a link instead.
 			We hide the button and use it to simulate a click on it.
@@ -31,39 +31,42 @@
 			:multiple="multiple ? 'multiple' : undefined"
 			>
 	</div>
-	<div v-else-if="progress === undefined" class="form-upload-control-files">
-		<p>
-			<strong><translate>Selected files:</translate></strong>
-		</p>
-		<div class="list-group list-group-dark">
-			<div
-				class="list-group-item"
-				v-for="file of files"
-				>
-				<a class="card-remove" @click="clearFile(file)">
-					<app-jolticon icon="remove" class="warning" />
-				</a>
-				{{ file.name }}
+
+	<div v-if="!!value">
+		<div v-if="progress === undefined" class="form-upload-control-files">
+			<p>
+				<strong><translate>Selected files:</translate></strong>
+			</p>
+			<div class="list-group list-group-dark">
+				<div
+					class="list-group-item"
+					v-for="file of files"
+					>
+					<a class="card-remove" @click="clearFile(file)">
+						<app-jolticon icon="remove" class="warning" />
+					</a>
+					{{ file.name }}
+				</div>
 			</div>
 		</div>
-	</div>
-	<div v-else>
-		<app-progress-bar :percent="progress * 100">
-			<span v-if="progress < 0.99">
-				{{ progress | number({ style: 'percent' }) }}
-			</span>
-			<span v-else>
-				<translate>Processing...</translate>
-			</span>
-		</app-progress-bar>
+		<div v-else>
+			<app-progress-bar :percent="progress * 100">
+				<span v-if="progress < 0.99">
+					{{ progress | number({ style: 'percent' }) }}
+				</span>
+				<span v-else>
+					<translate>Processing...</translate>
+				</span>
+			</app-progress-bar>
 
-		<div
-			v-if="progress >= 0.99"
-			class="alert alert-info"
-			>
-			<p>
-				<translate>Upload complete! Please wait while we process your file(s). This may take a few minutes, so don't close or refresh the page.</translate>
-			</p>
+			<div
+				v-if="progress >= 0.99"
+				class="alert alert-info"
+				>
+				<p>
+					<translate>Upload complete! Please wait while we process your file(s). This may take a few minutes, so don't close or refresh the page.</translate>
+				</p>
+			</div>
 		</div>
 	</div>
 </div>

@@ -4,7 +4,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 
 @Component({})
 export class AppTimeAgo extends Vue {
-	@Prop(Number, Date)
+	@Prop([Number, Date])
 	date: number | Date;
 	@Prop(Boolean) withoutSuffix?: boolean;
 
@@ -55,10 +55,7 @@ export class AppTimeAgo extends Vue {
 		}
 
 		if (!GJ_IS_SSR) {
-			this.timeout = window.setTimeout(
-				() => this.refresh(),
-				secondsUntilUpdate * 1000
-			);
+			this.timeout = window.setTimeout(() => this.refresh(), secondsUntilUpdate * 1000);
 		}
 	}
 

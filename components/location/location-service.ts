@@ -34,9 +34,7 @@ export class Location {
 		this.isApplyPending = true;
 
 		this.$timeout(() => {
-			const $stateParams: StateParams = getProvider<StateParams>(
-				'$stateParams'
-			);
+			const $stateParams: StateParams = getProvider<StateParams>('$stateParams');
 			let mergedParams = angular.extend({}, $stateParams, this.pendingParams);
 
 			this.isApplyPending = false;

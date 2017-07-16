@@ -22,11 +22,7 @@ export class UserGameScore extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/api/scores/remove-score' +
-				'/' +
-				this.game_id +
-				'/' +
-				this.id
+			'/web/dash/developer/games/api/scores/remove-score' + '/' + this.game_id + '/' + this.id
 		);
 	}
 }

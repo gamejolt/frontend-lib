@@ -40,16 +40,10 @@ export class GameVideo extends Model {
 
 	$save() {
 		if (!this.id) {
-			return this.$_save(
-				'/web/dash/developer/games/media/save/video/' + this.game_id,
-				'gameVideo'
-			);
+			return this.$_save('/web/dash/developer/games/media/save/video/' + this.game_id, 'gameVideo');
 		} else {
 			return this.$_save(
-				'/web/dash/developer/games/media/save/video/' +
-					this.game_id +
-					'/' +
-					this.id,
+				'/web/dash/developer/games/media/save/video/' + this.game_id + '/' + this.id,
 				'gameVideo'
 			);
 		}
@@ -57,10 +51,7 @@ export class GameVideo extends Model {
 
 	$remove() {
 		return this.$_remove(
-			'/web/dash/developer/games/media/remove/video/' +
-				this.game_id +
-				'/' +
-				this.id
+			'/web/dash/developer/games/media/remove/video/' + this.game_id + '/' + this.id
 		);
 	}
 }

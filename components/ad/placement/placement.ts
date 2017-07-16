@@ -34,9 +34,7 @@ export class AppAdPlacement extends Vue {
 			GJ_IS_CLIENT ||
 			GJ_IS_SSR ||
 			isPrerender ||
-			(this.resource &&
-				this.resource instanceof Game &&
-				!this.resource._should_show_ads)
+			(this.resource && this.resource instanceof Game && !this.resource._should_show_ads)
 		) {
 			return false;
 		}

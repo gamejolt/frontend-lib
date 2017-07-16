@@ -1,11 +1,4 @@
-import {
-	Directive,
-	OnChanges,
-	SimpleChanges,
-	Input,
-	Output,
-	EventEmitter,
-} from 'ng-metadata/core';
+import { Directive, OnChanges, SimpleChanges, Input, Output, EventEmitter } from 'ng-metadata/core';
 
 @Directive({
 	selector: '[gj-markdown-compiler-bind]',

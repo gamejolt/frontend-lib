@@ -86,11 +86,7 @@ export class Scroll {
 		}
 
 		if (element instanceof HTMLDocument) {
-			return (
-				window.scrollY ||
-				document.documentElement.scrollTop ||
-				document.body.scrollTop
-			);
+			return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
 		}
 
 		return element.scrollTop;
@@ -102,11 +98,7 @@ export class Scroll {
 		}
 
 		if (element instanceof HTMLDocument) {
-			return (
-				window.scrollX ||
-				document.documentElement.scrollLeft ||
-				document.body.scrollLeft
-			);
+			return window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
 		}
 
 		return element.scrollLeft;
@@ -118,10 +110,7 @@ export class Scroll {
 		}
 
 		if (element instanceof HTMLDocument) {
-			return Math.max(
-				document.body.scrollHeight,
-				document.documentElement.scrollHeight
-			);
+			return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
 		}
 
 		return element.scrollHeight;
@@ -133,10 +122,7 @@ export class Scroll {
 		}
 
 		if (element instanceof HTMLDocument) {
-			return Math.max(
-				document.body.scrollWidth,
-				document.documentElement.scrollWidth
-			);
+			return Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
 		}
 
 		return element.scrollWidth;
@@ -147,9 +133,7 @@ export class Scroll {
 			element = this.context;
 		}
 
-		return element === document
-			? window.innerHeight
-			: (element as HTMLElement).clientHeight;
+		return element === document ? window.innerHeight : (element as HTMLElement).clientHeight;
 	}
 
 	static getScrollWindowWidth(element?: HTMLElement | HTMLDocument): number {
@@ -157,9 +141,7 @@ export class Scroll {
 			element = this.context;
 		}
 
-		return element === document
-			? window.innerWidth
-			: (element as HTMLElement).clientWidth;
+		return element === document ? window.innerWidth : (element as HTMLElement).clientWidth;
 	}
 
 	/**
@@ -189,10 +171,7 @@ export class Scroll {
 	/**
 	 * Scrolls to the element passed in.
 	 */
-	static async to(
-		input: string | number | HTMLElement,
-		options: { animate?: boolean } = {}
-	) {
+	static async to(input: string | number | HTMLElement, options: { animate?: boolean } = {}) {
 		let to = 0;
 		let element: HTMLElement | null = null;
 
@@ -218,11 +197,7 @@ export class Scroll {
 				// based on the screen's height, so that mobile and stuff works
 				// well too. This is because I think it's kind of annoying when
 				// the edge hits the exact top of the browser.
-				this.scrollToElement(
-					element,
-					Screen.height * 0.1 + this.offsetTop,
-					options
-				);
+				this.scrollToElement(element, Screen.height * 0.1 + this.offsetTop, options);
 			} else {
 				this.scrollTo(to, options);
 			}
@@ -234,10 +209,7 @@ export class Scroll {
 		offset: number,
 		options: { animate?: boolean } = {}
 	) {
-		let top =
-			this.getScrollTop(this.context) +
-			element.getBoundingClientRect().top -
-			offset;
+		let top = this.getScrollTop(this.context) + element.getBoundingClientRect().top - offset;
 		if (this.context instanceof HTMLElement) {
 			top -= this.context.getBoundingClientRect().top;
 		}
