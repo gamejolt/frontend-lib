@@ -215,6 +215,7 @@ module.exports = function(config) {
 				// 		to: 'package.json',
 				// 	},
 				// ]),
+				new webpack.optimize.ModuleConcatenationPlugin(),
 				devNoop ||
 					new webpack.optimize.UglifyJsPlugin({
 						compress: {
