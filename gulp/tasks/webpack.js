@@ -166,6 +166,13 @@ module.exports = function(config) {
 						]),
 					},
 					{
+						test: /\.css$/,
+						use: stylesLoader([
+							'css-loader?-minimize',
+							{ loader: 'postcss-loader', options: { sourceMap: true } },
+						]),
+					},
+					{
 						test: /\.md$/,
 						use: ['html-loader', 'markdown-loader'],
 					},
