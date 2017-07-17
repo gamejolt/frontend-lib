@@ -21,13 +21,14 @@ export class AppCardListItem extends Vue {
 	@Prop() item: any;
 	@Prop({ type: Boolean, default: false })
 	isInactive: boolean;
+	@Prop(Boolean) forceActive?: boolean;
 
 	list: AppCardList = null as any;
 
 	Screen = makeObservableService(Screen);
 
 	get isActive() {
-		return this.list.activeItem === this.item;
+		return this.forceActive || this.list.activeItem === this.item;
 	}
 
 	get isExpandable() {
