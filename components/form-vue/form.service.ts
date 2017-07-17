@@ -11,6 +11,7 @@ import { AppFormControlSelect } from './control/select/select';
 import { AppFormControlTextarea } from './control/textarea/textarea';
 import { AppFormControlRadio } from './control/radio/radio';
 import { AppFormControlCheckbox } from './control/checkbox/checkbox';
+import { Api } from '../api/api.service';
 
 export interface FormOnInit {
 	onInit(): void;
@@ -18,6 +19,12 @@ export interface FormOnInit {
 
 export interface FormOnSubmit {
 	onSubmit(): Promise<any>;
+}
+
+export interface FormOnLoad {
+	readonly loadUrl: string;
+	readonly loadData?: any;
+	onLoad(response: any): void;
 }
 
 export interface FormOnSubmitSuccess {
@@ -52,6 +59,12 @@ export class BaseForm<T> extends Vue {
 	method: 'add' | 'edit' = 'add';
 	changed = false;
 	valid = false;
+
+	// These get overriden as getters in the child classes.
+	readonly loadUrl: string | null;
+	readonly loadData: any | null;
+	isLoaded: boolean | null = null;
+	reloadOnSubmit = false;
 
 	state: { [k: string]: any } = {
 		isProcessing: false,
@@ -92,6 +105,30 @@ export class BaseForm<T> extends Vue {
 		// This is the main way for forms to initialize.
 		if ((this as any).onInit) {
 			(this as any).onInit();
+		}
+
+		this.load();
+	}
+
+	private async load() {
+		if (this.isLoaded && !this.reloadOnSubmit) {
+			return;
+		}
+
+		this.isLoaded = null;
+		if (!this.loadUrl) {
+			return;
+		}
+
+		this.isLoaded = false;
+
+		const payload = await Api.sendRequest(this.loadUrl, this.loadData || undefined, {
+			detach: true,
+		});
+
+		this.isLoaded = true;
+		if ((this as any).onLoad) {
+			(this as any).onLoad(payload);
 		}
 	}
 

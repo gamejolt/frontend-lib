@@ -33,25 +33,19 @@
 	<br>
 
 	<app-form name="markdownEditorMediaItemForm" ref="form">
-		<app-form-loader
-			url="/web/dash/media-items"
-			:data="formModel"
-			@loaded="onLoaded"
-			>
-			<app-form-group name="image" :hide-label="true">
-				<app-form-control-upload
-					:rules="{
-						filesize: maxFilesize,
-						max_dimensions: [maxWidth, maxHeight],
-					}"
-					accept=".png,.jpg,.jpeg,.gif"
-					:upload-link-label="$gettext( `Upload a PNG, JPG, or GIF image.` )"
-					:multiple="true"
-					@changed="imageSelected()"
-					/>
-				<app-form-control-errors />
-			</app-form-group>
-		</app-form-loader>
+		<app-form-group name="image" :hide-label="true">
+			<app-form-control-upload
+				:rules="{
+					filesize: maxFilesize,
+					max_dimensions: [maxWidth, maxHeight],
+				}"
+				accept=".png,.jpg,.jpeg,.gif"
+				:upload-link-label="$gettext( `Upload a PNG, JPG, or GIF image.` )"
+				:multiple="true"
+				@changed="imageSelected()"
+				/>
+			<app-form-control-errors />
+		</app-form-group>
 	</app-form>
 
 </div>

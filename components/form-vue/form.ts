@@ -18,11 +18,16 @@ import { FormValidatorMaxImgDimensions } from './validators/max_img_dimensions';
 import { FormValidatorAccept } from './validators/accept';
 import { FormValidatorCcExp } from './validators/cc_exp';
 import { FormValidatorCcExpExpired } from './validators/cc_exp_expired';
+import { AppLoading } from '../../vue/components/loading/loading';
 
 Vue.use(VeeValidate);
 
 @View
-@Component({})
+@Component({
+	components: {
+		AppLoading,
+	},
+})
 export class AppForm extends Vue {
 	@Prop(String) name: string;
 
@@ -30,6 +35,11 @@ export class AppForm extends Vue {
 	controls: BaseFormControl[] = [];
 
 	private static hasAddedValidators = false;
+
+	get isLoaded() {
+		// Check specifically false so that "null" is correctly shown as loaded.
+		return this.base.isLoaded !== false;
+	}
 
 	get hasErrors() {
 		let hasErrors = false;
@@ -48,6 +58,16 @@ export class AppForm extends Vue {
 		this.base.valid = !hasErrors;
 	}
 
+	created() {
+		this.base = findVueParent(this, BaseForm) as BaseForm<any>;
+		if (!this.base) {
+			throw new Error(`Couldn't find BaseForm in parent tree.`);
+		}
+
+		// We gotta make sure that the initial values are correct.
+		this.base.valid = !this.hasErrors;
+	}
+
 	mounted() {
 		if (!AppForm.hasAddedValidators) {
 			this.$validator.extend('pattern', FormValidatorPattern);
@@ -64,16 +84,6 @@ export class AppForm extends Vue {
 			this.$validator.extend('cc_exp_expired', FormValidatorCcExpExpired);
 			AppForm.hasAddedValidators = true;
 		}
-	}
-
-	created() {
-		this.base = findVueParent(this, BaseForm) as BaseForm<any>;
-		if (!this.base) {
-			throw new Error(`Couldn't find BaseForm in parent tree.`);
-		}
-
-		// We gotta make sure that the initial values are correct.
-		this.base.valid = !this.hasErrors;
 	}
 
 	async validate() {

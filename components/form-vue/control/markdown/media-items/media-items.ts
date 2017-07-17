@@ -1,11 +1,10 @@
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./media-items.html?style=./media-items.styl';
 
-import { BaseForm, FormOnInit, FormOnSubmit } from '../../../form.service';
+import { BaseForm, FormOnInit, FormOnSubmit, FormOnLoad } from '../../../form.service';
 import { Api } from '../../../../api/api.service';
 import { MediaItem } from '../../../../media-item/media-item-model';
 import { Clipboard } from '../../../../clipboard/clipboard-service';
-import { AppFormLoader } from '../../../loader/loader';
 import { AppFormControlUpload } from '../../upload/upload';
 import { AppForm } from '../../../form';
 import { AppTooltip } from '../../../../tooltip/tooltip';
@@ -22,7 +21,6 @@ interface FormModel {
 @Component({
 	components: {
 		AppJolticon,
-		AppFormLoader,
 		AppFormControlUpload,
 	},
 	directives: {
@@ -30,11 +28,12 @@ interface FormModel {
 	},
 })
 export class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
-	implements FormOnInit, FormOnSubmit {
+	implements FormOnInit, FormOnLoad, FormOnSubmit {
 	@Prop(String) type: string;
 	@Prop(Number) parentId: number;
 
 	resetOnSubmit = true;
+	reloadOnSubmit = true;
 
 	$refs: {
 		form: AppForm;
@@ -45,13 +44,21 @@ export class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
 	maxWidth = 0;
 	maxHeight = 0;
 
+	get loadUrl() {
+		return `/web/dash/media-items`;
+	}
+
+	get loadData() {
+		return this.formModel;
+	}
+
 	onInit() {
 		this.setField('type', this.type);
 		this.setField('parent_id', this.parentId);
 		this.setField('image', null);
 	}
 
-	onLoaded(response: any) {
+	onLoad(response: any) {
 		this.mediaItems = MediaItem.populate(response.mediaItems);
 		this.maxFilesize = response.maxFilesize;
 		this.maxWidth = response.maxWidth;
