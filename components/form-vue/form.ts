@@ -55,14 +55,14 @@ export class AppForm extends Vue {
 
 	@Watch('hasErrors')
 	onHasErrorsChange(hasErrors: boolean) {
-		this.base.valid = !hasErrors;
+		this.base.hasFormErrors = hasErrors;
 	}
 
 	created() {
 		this.base = findRequiredVueParent(this, BaseForm);
 
 		// We gotta make sure that the initial values are correct.
-		this.base.valid = !this.hasErrors;
+		this.base.hasFormErrors = this.hasErrors;
 	}
 
 	mounted() {
@@ -99,7 +99,7 @@ export class AppForm extends Vue {
 		await this.validate();
 
 		// If we have validation errors, don't let it pass through.
-		if (this.hasErrors) {
+		if (!this.base.valid) {
 			return false;
 		}
 

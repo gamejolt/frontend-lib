@@ -12,6 +12,7 @@ import { AppFormControlTextarea } from './control/textarea/textarea';
 import { AppFormControlRadio } from './control/radio/radio';
 import { AppFormControlCheckbox } from './control/checkbox/checkbox';
 import { Api } from '../api/api.service';
+import { arrayUnique, arrayRemove } from '../../utils/array';
 
 export interface FormOnInit {
 	onInit(): void;
@@ -58,7 +59,7 @@ export class BaseForm<T> extends Vue {
 	saveMethod?: keyof T;
 	method: 'add' | 'edit' = 'add';
 	changed = false;
-	valid = false;
+	hasFormErrors = false;
 
 	// These get overriden as getters in the child classes.
 	readonly loadUrl: string | null;
@@ -73,6 +74,11 @@ export class BaseForm<T> extends Vue {
 
 	successClearTimeout?: NodeJS.Timer;
 	serverErrors: { [k: string]: boolean } = {};
+	private customErrors: string[] = [];
+
+	get valid() {
+		return !this.hasFormErrors && this.customErrors.length === 0;
+	}
 
 	created() {
 		this._init();
@@ -145,6 +151,19 @@ export class BaseForm<T> extends Vue {
 		Vue.set(this.state, key, value);
 	}
 
+	setCustomError(error: string) {
+		this.customErrors.push(error);
+		this.customErrors = arrayUnique(this.customErrors);
+	}
+
+	clearCustomError(error: string) {
+		arrayRemove(this.customErrors, i => i === error);
+	}
+
+	hasCustomError(error: string) {
+		return this.customErrors.indexOf(error) !== -1;
+	}
+
 	async _onSubmit() {
 		if (this.state.isProcessing) {
 			return false;
@@ -181,7 +200,8 @@ export class BaseForm<T> extends Vue {
 			// Reset our processing state.
 			this.state.isProcessing = false;
 
-			// Make sure that serverErrors is reset on a successful submit, just in case.
+			// Make sure that errors are reset on a successful submit, just in
+			// case.
 			this.serverErrors = {};
 
 			// Show successful form submission.
