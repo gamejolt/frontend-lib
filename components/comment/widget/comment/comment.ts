@@ -6,7 +6,7 @@ import './comment-content.styl';
 
 import { Environment } from '../../../environment/environment.service';
 import { AppCommentWidget } from '../widget';
-import { findVueParent } from '../../../../utils/vue';
+import { findRequiredVueParent } from '../../../../utils/vue';
 import { Comment } from '../../comment-model';
 import { AppStore } from '../../../../vue/services/app/app-store';
 import { Subscription } from '../../../subscription/subscription.model';
@@ -78,7 +78,7 @@ export class AppCommentWidgetComment extends Vue {
 	Environment = Environment;
 
 	created() {
-		this.widget = findVueParent(this, AppCommentWidget) as AppCommentWidget;
+		this.widget = findRequiredVueParent(this, AppCommentWidget);
 	}
 
 	mounted() {

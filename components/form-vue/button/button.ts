@@ -4,7 +4,7 @@ import * as View from '!view!./button.html?style=./button.styl';
 
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppForm } from '../form';
-import { findVueParent } from '../../../utils/vue';
+import { findRequiredVueParent } from '../../../utils/vue';
 
 @View
 @Component({
@@ -18,6 +18,6 @@ export class AppFormButton extends Vue {
 	form: AppForm;
 
 	created() {
-		this.form = findVueParent(this, AppForm) as AppForm;
+		this.form = findRequiredVueParent(this, AppForm);
 	}
 }

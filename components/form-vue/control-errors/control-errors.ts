@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./control-errors.html';
 
-import { findVueParent } from '../../../utils/vue';
+import { findRequiredVueParent } from '../../../utils/vue';
 import { AppForm } from '../form';
 import { AppFormGroup } from '../group/group';
 import { number } from '../../../vue/filters/number';
@@ -43,8 +43,8 @@ export class AppFormControlErrors extends Vue {
 	private errorMessageOverrides: { [k: string]: string } = {};
 
 	created() {
-		this.form = findVueParent(this, AppForm) as AppForm;
-		this.group = findVueParent(this, AppFormGroup) as AppFormGroup;
+		this.form = findRequiredVueParent(this, AppForm);
+		this.group = findRequiredVueParent(this, AppFormGroup);
 	}
 
 	get _label() {

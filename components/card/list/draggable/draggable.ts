@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./draggable.html';
 
 import { AppCardList } from '../list';
-import { findVueParent } from '../../../../utils/vue';
+import { findRequiredVueParent } from '../../../../utils/vue';
 
 const draggable = require('vuedraggable');
 
@@ -27,11 +27,7 @@ export class AppCardListDraggable extends Vue {
 	}
 
 	created() {
-		this.list = findVueParent(this, AppCardList) as AppCardList;
-		if (!this.list) {
-			throw new Error(`Couldn't find card list parent.`);
-		}
-
+		this.list = findRequiredVueParent(this, AppCardList);
 		this.list.isDraggable = !this.disabled;
 	}
 

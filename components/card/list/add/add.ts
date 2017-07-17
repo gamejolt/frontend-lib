@@ -4,7 +4,7 @@ import * as View from '!view!./add.html?style=./add.styl';
 
 import { AppExpand } from '../../../expand/expand';
 import { AppCardList } from '../list';
-import { findVueParent, makeObservableService } from '../../../../utils/vue';
+import { makeObservableService, findRequiredVueParent } from '../../../../utils/vue';
 import { Screen } from '../../../screen/screen-service';
 
 @View
@@ -25,10 +25,7 @@ export class AppCardListAdd extends Vue {
 	}
 
 	created() {
-		this.list = findVueParent(this, AppCardList) as AppCardList;
-		if (!this.list) {
-			throw new Error(`Couldn't find parent card.`);
-		}
+		this.list = findRequiredVueParent(this, AppCardList);
 	}
 
 	toggle() {

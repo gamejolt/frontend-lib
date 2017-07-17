@@ -3,7 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./group.html';
 
 import { AppForm } from '../form';
-import { findVueParent } from '../../../utils/vue';
+import { findRequiredVueParent } from '../../../utils/vue';
 import { titleCase } from '../../../utils/string';
 import { ErrorBag } from 'vee-validate';
 import { BaseFormControl } from '../control/base';
@@ -42,6 +42,6 @@ export class AppFormGroup extends Vue {
 	}
 
 	created() {
-		this.form = findVueParent(this, AppForm) as AppForm;
+		this.form = findRequiredVueParent(this, AppForm);
 	}
 }

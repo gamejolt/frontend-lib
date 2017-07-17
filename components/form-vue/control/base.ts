@@ -4,7 +4,7 @@ import * as View from '!view!./control.html';
 
 import { AppForm } from '../form';
 import { AppFormGroup } from '../group/group';
-import { findVueParent } from '../../../utils/vue';
+import { findRequiredVueParent } from '../../../utils/vue';
 
 @View
 @Component({})
@@ -39,10 +39,10 @@ export class BaseFormControl extends Vue {
 	}
 
 	created() {
-		this.form = findVueParent(this, AppForm) as AppForm;
+		this.form = findRequiredVueParent(this, AppForm);
 		this.form.controls.push(this);
 
-		this.group = findVueParent(this, AppFormGroup) as AppFormGroup;
+		this.group = findRequiredVueParent(this, AppFormGroup);
 		this.group.inputErrors = this.$validator.errorBag;
 		this.group.control = this;
 

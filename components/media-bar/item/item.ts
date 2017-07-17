@@ -8,7 +8,7 @@ import { Analytics } from '../../analytics/analytics.service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppImgResponsive } from '../../img/responsive/responsive';
 import { AppMediaBar } from '../media-bar';
-import { findVueParent } from '../../../utils/vue';
+import { findRequiredVueParent } from '../../../utils/vue';
 
 @View
 @Component({
@@ -25,7 +25,7 @@ export class AppMediaBarItem extends Vue {
 	height = 'auto';
 
 	created() {
-		this.mediaBar = findVueParent(this, AppMediaBar) as AppMediaBar;
+		this.mediaBar = findRequiredVueParent(this, AppMediaBar);
 
 		// We set the dimensions on the thumbnails manually.
 		// This way we can size it correct before it loads.

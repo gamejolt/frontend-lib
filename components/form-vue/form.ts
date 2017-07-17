@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./form.html';
 import * as VeeValidate from 'vee-validate';
 
-import { findVueParent } from '../../utils/vue';
+import { findRequiredVueParent } from '../../utils/vue';
 import { BaseForm } from './form.service';
 import { FormValidatorPattern } from './validators/pattern';
 import { FormValidatorAvailability } from './validators/availability';
@@ -59,10 +59,7 @@ export class AppForm extends Vue {
 	}
 
 	created() {
-		this.base = findVueParent(this, BaseForm) as BaseForm<any>;
-		if (!this.base) {
-			throw new Error(`Couldn't find BaseForm in parent tree.`);
-		}
+		this.base = findRequiredVueParent(this, BaseForm);
 
 		// We gotta make sure that the initial values are correct.
 		this.base.valid = !this.hasErrors;

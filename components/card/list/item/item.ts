@@ -3,7 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./item.html?style=./item.styl';
 
 import { AppCardList } from '../list';
-import { findVueParent, makeObservableService } from '../../../../utils/vue';
+import { makeObservableService, findRequiredVueParent } from '../../../../utils/vue';
 import { AppExpand } from '../../../expand/expand';
 import { AppCard } from '../../card';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
@@ -39,10 +39,7 @@ export class AppCardListItem extends Vue {
 	}
 
 	created() {
-		this.list = findVueParent(this, AppCardList) as AppCardList;
-		if (!this.list) {
-			throw new Error(`Couldn't find parent card.`);
-		}
+		this.list = findRequiredVueParent(this, AppCardList);
 	}
 
 	onClick() {

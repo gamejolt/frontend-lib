@@ -3,13 +3,13 @@ import { Component } from 'vue-property-decorator';
 import * as View from '!view!./slider.html';
 
 import { AppMediaBarLightbox } from './lightbox';
-import { findVueParent } from '../../../utils/vue';
+import { findRequiredVueParent } from '../../../utils/vue';
 
 @View
 @Component({})
 export class AppMediaBarLightboxSlider extends Vue {
 	mounted() {
-		const mediaBar = findVueParent(this, AppMediaBarLightbox) as AppMediaBarLightbox;
+		const mediaBar = findRequiredVueParent(this, AppMediaBarLightbox);
 		mediaBar.setSlider(this.$el);
 	}
 }

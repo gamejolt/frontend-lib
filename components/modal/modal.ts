@@ -7,7 +7,7 @@ import { Modal } from './modal.service';
 import { AppBackdrop } from '../backdrop/backdrop';
 import { Backdrop } from '../backdrop/backdrop.service';
 import { bootstrapShortkey } from '../../vue/shortkey';
-import { findVueParent } from '../../utils/vue';
+import { findRequiredVueParent } from '../../utils/vue';
 import { BaseModal } from './base';
 
 bootstrapShortkey();
@@ -19,11 +19,7 @@ export class AppModal extends Vue {
 	private backdrop?: AppBackdrop;
 
 	created() {
-		const parent = findVueParent(this, BaseModal) as BaseModal;
-		if (!parent) {
-			throw new Error(`Couldn't find base modal.`);
-		}
-
+		const parent = findRequiredVueParent(this, BaseModal);
 		this.modal = parent.modal;
 	}
 

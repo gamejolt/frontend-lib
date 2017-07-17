@@ -8,7 +8,7 @@ import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppImgResponsive } from '../../../img/responsive/responsive';
 import { AppVideoEmbed } from '../../../video/embed/embed';
 import { AppSketchfabEmbed } from '../../../sketchfab/embed/embed';
-import { findVueParent } from '../../../../utils/vue';
+import { findRequiredVueParent } from '../../../../utils/vue';
 import { Screen } from '../../../screen/screen-service';
 
 @View
@@ -37,7 +37,7 @@ export class AppMediaBarLightboxItem extends Vue {
 	private resize$: Subscription | undefined;
 
 	mounted() {
-		this.lightbox = findVueParent(this, AppMediaBarLightbox) as AppMediaBarLightbox;
+		this.lightbox = findRequiredVueParent(this, AppMediaBarLightbox);
 		this.calcActive();
 		this.calcDimensions();
 
