@@ -13,7 +13,7 @@ export class Meta extends MetaContainer {
 
 	static titleSuffix = GJ_IS_CLIENT ? ' - Game Jolt' : ' on Game Jolt';
 
-	// TODO
+	// TODO(rewrite)
 	// static initAngular( $rootScope: any )
 	// {
 	// 	$rootScope.$on( '$stateChangeSuccess', () =>

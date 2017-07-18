@@ -34,7 +34,7 @@ export class AppFormControlErrors extends Vue {
 	@Prop(String) label?: string;
 	@Prop(String) position?: string;
 
-	// TODO
+	// TODO(rewrite)
 	@Prop(Boolean) ignoreDirty?: boolean;
 
 	form: AppForm;

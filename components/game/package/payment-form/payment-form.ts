@@ -35,6 +35,7 @@ import { AppForm } from '../../../form-vue/form';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
+// TODO(rewrite): the rest of this form
 @View
 @Component({
 	components: {
@@ -214,17 +215,14 @@ export class FormGamePackagePayment extends BaseForm<any>
 	}
 
 	addMoney(amount: number) {
-		let curAmount: number = typeof this.formModel.amount === 'string'
-			? parseFloat(this.formModel.amount)
-			: this.formModel.amount;
+		let curAmount: number =
+			typeof this.formModel.amount === 'string'
+				? parseFloat(this.formModel.amount)
+				: this.formModel.amount;
 
 		if (!curAmount) {
 			curAmount = amount;
 		} else {
-			// TODO
-			// } else if (this.paymentForm.amount.$valid) {
-			// Don't add if the form field is invalid.
-			// It will blank out the total amount.
 			curAmount += amount;
 			curAmount = parseFloat(curAmount.toFixed(2));
 		}

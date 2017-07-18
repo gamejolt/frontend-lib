@@ -29,7 +29,7 @@ export class Payload {
 	private static ver?: number = undefined;
 	private static errorHandlers: Function[] = [];
 
-	// TODO: Does angular still work?
+	// TODO(rewrite): Does angular still work?
 	// static initAngular( app: any, $transitions: any )
 	// {
 	// 	if ( GJ_IS_ANGULAR ) {
@@ -99,7 +99,7 @@ export class Payload {
 			this.checkPayloadVersion(data, options);
 			this.checkAnalyticsExperiments(response, options);
 
-			// TODO: Still needed?
+			// TODO(rewrite): Still needed?
 			// if (GJ_IS_ANGULAR) {
 			// 	getProvider<any>('$rootScope').$emit(
 			// 		'Payload.responseSuccess',
@@ -127,7 +127,7 @@ export class Payload {
 			this.checkPayloadUser(response, options);
 
 			// Send an event and let other services react.
-			// TODO: Still needed?
+			// TODO(rewrite): Still needed?
 			// if ( GJ_IS_ANGULAR ) {
 			// 	const $rootScope = getProvider<any>( '$rootScope' );
 			// 	const event = $rootScope.$emit( 'Payload.responseError', response, options );
@@ -170,7 +170,7 @@ export class Payload {
 		}
 
 		// Redirecting within the app.
-		// TODO: Get this working for Vue.
+		// TODO(rewrite): Get this working for Vue.
 		// if (GJ_IS_ANGULAR) {
 		// 	getProvider<any>('$location').url(response.data.redirect);
 		// } else {
@@ -229,7 +229,7 @@ export class Payload {
 			}
 		}
 
-		// TODO: Still needed?
+		// TODO(rewrite): Still needed?
 		// // Emit an event to the root scope that a payload has been received and the user has been set.
 		// if ( GJ_IS_ANGULAR ) {
 		// 	getProvider<any>( '$rootScope' ).$emit( 'Payload.userProcessed', !!this.App.user );
@@ -248,7 +248,7 @@ export class Payload {
 	}
 
 	private static handlePayloadError(error: PayloadError) {
-		// TODO
+		// TODO(rewrite)
 		// // They may pass in `error` if this API call wasn't done in the middle of a transition.
 		// if ( !error ) {
 		// 	error = trans.error();

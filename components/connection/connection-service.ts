@@ -8,7 +8,7 @@ export class Connection {
 	private static hasRequestFailure = false;
 	private static _reconnectChecker?: ConnectionReconnect;
 
-	// TODO
+	// TODO(rewrite)
 	// static initAngular( $rootScope: any )
 	// {
 	// 	// This attribute isn't perfect.

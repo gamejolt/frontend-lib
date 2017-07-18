@@ -61,9 +61,7 @@ angular
 					startWatcher = $transitions.onStart({}, function(trans) {
 						prevAnchor = AutoScroll.anchor();
 						if (trans.to()) {
-							AutoScroll.pushState(
-								$state.href(trans.from(), trans.params('from'))
-							);
+							AutoScroll.pushState($state.href(trans.from(), trans.params('from')));
 						}
 					});
 
