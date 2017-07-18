@@ -15,6 +15,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
+const OptimizeJsPlugin = require('optimize-js-plugin');
 
 module.exports = function(config) {
 	let base = path.resolve(config.projectBase);
@@ -230,6 +231,7 @@ module.exports = function(config) {
 							screw_ie8: true,
 						},
 					}),
+				devNoop || new OptimizeJsPlugin(),
 				devNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
 
