@@ -27,6 +27,7 @@ import { AppGamePackageCardButtons } from './buttons';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
 import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
 
+// TODO(rewrite): finish the card functions out
 @View
 @Component({
 	components: {
@@ -108,17 +109,6 @@ export class AppGamePackageCard extends Vue {
 		) {
 			this.hasPaymentWell = true;
 		}
-
-		// TODO
-		// // Event to be able to open up the payment form.
-		// this.$scope.$on( 'Game_Package_Card.showPaymentOptions', ( _event, _package: GamePackage ) =>
-		// {
-		// 	// Ennsure that the payment well opens with the correct build
-		// 	// for "skip paying".
-		// 	if ( this.package.id === _package.id ) {
-		// 		this.showPayment( this.card.downloadableBuild! );
-		// 	}
-		// } );
 	}
 
 	buildClick(build: GameBuild, fromExtraSection = false) {

@@ -3,7 +3,7 @@ import { UAParser } from 'ua-parser-js';
 export class Device {
 	static ua?: string;
 
-	private static _result?: any;
+	private static _result?: IUAParser.IResult;
 	private static _os?: string;
 	private static _arch?: string;
 	private static _browser?: string;
@@ -111,13 +111,12 @@ export class Device {
 
 		if (typeof this._arch === 'undefined') {
 			const result = this._getResult();
-			const arch = result.cpu && result.cpu.architecture
-				? result.cpu.architecture.toLowerCase()
-				: null;
+			const arch =
+				result.cpu && result.cpu.architecture ? result.cpu.architecture.toLowerCase() : null;
 
-			if (Device.ARCH_64.indexOf(arch) !== -1) {
+			if (Device.ARCH_64.indexOf(arch!) !== -1) {
 				this._arch = '64';
-			} else if (Device.ARCH_32.indexOf(arch) !== -1) {
+			} else if (Device.ARCH_32.indexOf(arch!) !== -1) {
 				this._arch = '32';
 			} else {
 				this._arch = undefined;

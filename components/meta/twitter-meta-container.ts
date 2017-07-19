@@ -1,7 +1,7 @@
 import { MetaContainer } from './meta-container';
 
 export class TwitterMetaContainer extends MetaContainer {
-	// TODO: Get this working.
+	// TODO(rewrite): Get this working.
 	static shareMessage: string;
 
 	static set card(value: string | null) {

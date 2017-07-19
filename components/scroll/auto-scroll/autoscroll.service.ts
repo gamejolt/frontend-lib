@@ -1,9 +1,27 @@
 import VueRouter from 'vue-router';
 import { Scroll } from '../scroll.service';
 
-export interface AutoscrollState {
-	key: any;
-	scroll: number;
+/**
+ * Returns the scroll position but also sets up a timeout to enforce the scroll
+ * position. Browsers for some reason scroll randomly through the vue-router
+ * scroll behavior. It's always slightly off. Scrolling again in the browser's
+ * next tick seems to solve this in most cases.
+ */
+function scroll(pos: { x: number; y: number }) {
+	setTimeout(() => {
+		window.scrollTo(pos.x, pos.y);
+	}, 0);
+	return pos;
+}
+
+function checkScrollAnchorParam(key: string | number, from: VueRouter.Route, to: VueRouter.Route) {
+	// Params haven't changed, so same page.
+	if (from.params[key] === to.params[key]) {
+		return true;
+	}
+
+	// Params changed, new anchor!
+	return false;
 }
 
 export function initScrollBehavior() {
@@ -14,11 +32,9 @@ export function initScrollBehavior() {
 		}
 	}
 
-	// let prevAnchor: HTMLElement | undefined;
-
 	return function scrollBehavior(
 		to: VueRouter.Route,
-		_from: VueRouter.Route,
+		from: VueRouter.Route,
 		savedPosition?: { x: number; y: number }
 	) {
 		// Skip one auto scroll trigger.
@@ -27,43 +43,23 @@ export function initScrollBehavior() {
 			return undefined;
 		}
 
-		if (to.meta.noAutoScroll) {
-			return undefined;
-		}
-
 		if (savedPosition) {
-			// Browsers for some reason scroll randomly through the vue-router
-			// scroll behavior. It's always slightly off. Scrolling again in
-			// the browser's next tick seems to solve this in most cases.
-			// blah = false;
-			// window.addEventListener('scroll', unblah);
-			setTimeout(() => {
-				window.scrollTo(savedPosition.x, savedPosition.y);
-			}, 0);
-			return savedPosition;
+			return scroll(savedPosition);
 		}
 
-		// const anchor = Scroll.autoscrollAnchor;
-
-		// if ( anchor && anchor === prevAnchor ) {
-
-		// 	console.log( 'same anchor', anchor );
-
-		// 	// We only scroll to the anchor if they're scrolled past it currently.
-		// 	const offset = Ruler.offset( anchor );
-		// 	console.log( offset.top, Scroll.getScrollTop(), Scroll.offsetTop );
-		// 	if ( Scroll.getScrollTop() > offset.top - Scroll.offsetTop ) {
-		// 		console.log( 'whaaaaaat' );
-		// 		return {
-		// 			x: 0,
-		// 			y: offset.top,
-		// 		};
-		// 	}
-
-		// 	return undefined;
-		// }
-
-		// prevAnchor = anchor;
+		// If there's an anchor, then we want to either scroll to the anchor's
+		// spot, or we want to leave the scroll as is.
+		const anchor = Scroll.autoscrollAnchor;
+		if (anchor && checkScrollAnchorParam(anchor.autoscrollRouteParam, from, to)) {
+			if (anchor.scrollTo) {
+				return scroll({
+					x: 0,
+					y: anchor.scrollTo,
+				});
+			} else {
+				return undefined;
+			}
+		}
 
 		if (to.hash) {
 			return {
@@ -76,38 +72,4 @@ export function initScrollBehavior() {
 			y: 0,
 		};
 	};
-}
-
-export class Autoscroll {
-	private static states: AutoscrollState[] = [];
-
-	static height: string | null = null;
-
-	static routeChange(to: VueRouter.Route, from: VueRouter.Route) {
-		const scroll = Scroll.getScrollTop();
-		// this.prevAnchor = Scroll.autoscrollAnchor;
-
-		const fromState = this.getState(from.fullPath);
-		if (fromState) {
-			fromState.scroll = scroll;
-			console.log('modify state', fromState);
-		} else {
-			this.states.push({
-				key: from.fullPath,
-				scroll,
-			});
-
-			console.log('add new state', this.states);
-		}
-
-		const toState = this.getState(to.fullPath);
-		if (toState && toState.scroll) {
-			this.height = toState.scroll + 'px';
-		}
-	}
-
-	private static getState(key: any) {
-		console.log('try to get state', key);
-		return this.states.find(item => item.key === key);
-	}
 }
