@@ -27,21 +27,32 @@ export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
 	});
 }
 
-function didRouteChange(from: VueRouter.Route, to: VueRouter.Route) {
-	if (to.name !== from.name) {
-		return true;
+export class LocationRedirect {
+	location: VueRouter.Location;
+
+	constructor(public from: VueRouter.Route, params: any, query: any = {}) {
+		this.location = {
+			name: from.name,
+			params: Object.assign({}, from.params, params),
+			query: Object.assign({}, from.query, query),
+			hash: from.hash,
+			replace: true,
+		};
+	}
+}
+
+export function enforceLocation(route: VueRouter.Route, params: any, query: any = {}) {
+	for (const key in params) {
+		if (route.params[key] !== params[key]) {
+			return new LocationRedirect(route, params, query);
+		}
 	}
 
-	if (!objectEquals(to.params, from.params)) {
-		return true;
+	for (const key in query) {
+		if (route.query[key] !== query[key]) {
+			return new LocationRedirect(route, params, query);
+		}
 	}
-
-	if (!objectEquals(to.query, from.query)) {
-		return true;
-	}
-
-	// We don't check hash since that isn't considered a route change.
-	return false;
 }
 
 export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
@@ -108,6 +119,8 @@ export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 					}
 
 					return;
+				} else if (payload instanceof LocationRedirect) {
+					return vm.$router.replace(payload.location);
 				}
 
 				vm.$payload = payload;
@@ -148,7 +161,13 @@ export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 				// This will get called by the browser and server. We call their
 				// annotated function for fetching the data for the route.
 				async beforeRouteEnter(to, _from, next) {
-					EventBus.emit('routeChangeBefore', to);
+					// The router crawls through each matched route and calls
+					// beforeRouteEnter on them one by one. Since we continue to
+					// set the leaf route the last one is the only one that will
+					// be saved as the leaf.
+					setLeafRoute(componentOptions);
+
+					EventBus.emit('routeChangeBefore');
 
 					let promise: Promise<any> | undefined;
 					let payload: any;
@@ -183,7 +202,14 @@ export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 						}
 
 						await finalizeRoute(to, vm, payload);
-						EventBus.emit('routeChangeAfter');
+
+						// The leaf route is the last in the hierarchy of
+						// routes. We only want to trigger the route change
+						// after this one has resolved, otherwise we end up
+						// triggering many routeChangeAfter events.
+						if (isLeafRoute(componentOptions)) {
+							EventBus.emit('routeChangeAfter');
+						}
 					});
 				},
 
@@ -202,10 +228,19 @@ export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 						}
 
 						EventBus.emit('routeChangeBefore');
+
+						if (this.routeInit) {
+							this.routeInit();
+						}
+
 						this.routeLoading = true;
+
 						const payload = await getPayload(to, options.cache);
 						await finalizeRoute(to, this, payload);
-						EventBus.emit('routeChangeAfter');
+
+						if (isLeafRoute(componentOptions)) {
+							EventBus.emit('routeChangeAfter');
+						}
 					},
 				},
 
@@ -251,4 +286,32 @@ export function RouteResolve(options: BeforeRouteEnterOptions = {}) {
 			} as Vue.ComponentOptions<Vue>
 		);
 	});
+}
+
+// Helper functions
+
+function didRouteChange(from: VueRouter.Route, to: VueRouter.Route) {
+	if (to.name !== from.name) {
+		return true;
+	}
+
+	if (!objectEquals(to.params, from.params)) {
+		return true;
+	}
+
+	if (!objectEquals(to.query, from.query)) {
+		return true;
+	}
+
+	// We don't check hash since that isn't considered a route change.
+	return false;
+}
+
+let leaf: string | undefined;
+function setLeafRoute(componentOptions: Vue.ComponentOptions<Vue>) {
+	leaf = componentOptions.name;
+}
+
+function isLeafRoute(componentOptions: Vue.ComponentOptions<Vue>) {
+	return leaf === componentOptions.name;
 }
