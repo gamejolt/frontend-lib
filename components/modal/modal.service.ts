@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { arrayRemove } from '../../utils/array';
 
 type ModalComponent = typeof Vue | (() => Promise<Vue>);
 
@@ -31,10 +32,7 @@ export class Modal {
 	}
 
 	static remove(modal: Modal) {
-		const index = Modal.modals.findIndex(item => item.id === modal.id);
-		if (index !== -1) {
-			Modal.modals.splice(index, 1);
-		}
+		arrayRemove(Modal.modals, item => item.id === modal.id);
 	}
 
 	constructor(public id: number, private _resolve: Function, options: ModalOptions) {
