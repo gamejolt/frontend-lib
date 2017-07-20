@@ -14,7 +14,7 @@ export type VuexWatch<S> = <T>(
 	options?: WatchOptions
 ) => void;
 
-export class VuexStore<S, A, M> {
+export abstract class VuexStore<S = any, A = any, M = any> {
 	readonly state: S;
 	readonly getters: any;
 
