@@ -23,6 +23,7 @@ export class AppFadeCollapse extends Vue {
 	private isPrimed = false;
 	private isCollapsed = false;
 	private frameRequestHandle?: number = undefined;
+	private isRequired = false;
 
 	async mounted() {
 		// No need to do anything if prerendering.
@@ -38,22 +39,23 @@ export class AppFadeCollapse extends Vue {
 		// for threshold to matter.
 		const threshold = this.collapseHeight > Threshold * 2 ? Threshold : 0;
 
-		let isRequired = false;
 		if (this.collapseHeight && this.$el.scrollHeight - threshold > this.collapseHeight) {
-			isRequired = true;
+			this.isRequired = true;
 		}
 
-		if (isRequired) {
-			this.$emit('required');
-		}
+		this.$emit('require-change', this.isRequired);
 
-		if (isRequired && !this.isOpen) {
+		if (this.isRequired && !this.isOpen) {
 			this.collapse();
 		}
 	}
 
 	@Watch('isOpen')
 	isOpenChanged() {
+		if (!this.isRequired) {
+			return;
+		}
+
 		if (this.isOpen) {
 			this.expand();
 		} else {

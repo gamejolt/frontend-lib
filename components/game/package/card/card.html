@@ -119,7 +119,7 @@
 		<app-fade-collapse
 			:collapse-height="100"
 			:is-open="showFullDescription"
-			@required="canToggleDescription = true"
+			@require-change="canToggleDescription = $event"
 			>
 
 			<!--TODO: This used to link-->
