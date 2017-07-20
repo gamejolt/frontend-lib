@@ -35,7 +35,7 @@ export class FormThemeEditorImage extends BaseForm<FormModel>
 	maxHeight = 0;
 
 	get loadUrl() {
-		return `web/dash/media-items`;
+		return `/web/dash/media-items`;
 	}
 
 	get loadData() {
