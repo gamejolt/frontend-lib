@@ -109,13 +109,11 @@ export class BaseRouteComponent extends Vue {
 		const options = this.$options.routeOptions || {};
 
 		// Only do work if the route params/query has actually changed.
-		if (!this.didRouteChange(from, to)) {
+		if (this.canSkipRouteUpdate(from, to)) {
 			return;
 		}
 
-		if (!this.canSkipRouteUpdate(from, to)) {
-			this._reloadRoute(options.cache);
-		}
+		this._reloadRoute(options.cache);
 
 		if (isLeafRoute(this.$options.name)) {
 			EventBus.emit('routeChangeAfter');
@@ -141,36 +139,15 @@ export class BaseRouteComponent extends Vue {
 		await finalizeRoute(this.$options, this.$router.currentRoute, this, payload, useCache);
 	}
 
-	private didRouteChange(from: VueRouter.Route, to: VueRouter.Route) {
-		// Change of hash isn't considered a route change.
-		return (
-			to.name !== from.name ||
-			!objectEquals(to.params, from.params) ||
-			!objectEquals(to.query, from.query)
-		);
-	}
-
 	/**
 	 * If all of the previous params are the same, then the already activated
 	 * components can stay the same. We only initialize routes that have probably
 	 * changed between updates.
 	 */
 	private canSkipRouteUpdate(from: VueRouter.Route, to: VueRouter.Route) {
-		for (const key in from.params) {
-			// If the param no longer exists we can skip the check since the
-			// currently activated routes won't need to use that data.
-			if (typeof to.params[key] === 'undefined') {
-				continue;
-			}
-
-			// If the params are different we gotta skip re-update all the routes.
-			if (to.params[key] + '' !== from.params[key] + '') {
-				console.log('param different?', key, to.params[key] + '', from.params[key] + '');
-				return false;
-			}
-		}
-
-		return true;
+		// TODO: We can probably try to be smarter about this in the future and
+		// only update if params that affect the route have changed.
+		return objectEquals(to.params, from.params) && objectEquals(to.query, from.query);
 	}
 }
 
