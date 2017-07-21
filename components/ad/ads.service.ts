@@ -1,6 +1,7 @@
 import { Environment, isPrerender } from '../environment/environment.service';
 import VueRouter from 'vue-router';
 import { EventBus } from '../event-bus/event-bus.service';
+import { objectEquals } from '../../utils/object';
 
 const DfpTagId = '1437670388518';
 
@@ -55,18 +56,14 @@ export class Ads {
 			return;
 		}
 
-		router.afterEach((_to, _from) => {
-			// TODO(rewrite)
-			// fromParams = angular.copy( fromParams );
-			// toParams = angular.copy( toParams );
+		router.afterEach((to, from) => {
+			// Don't change ads if just the hash has changed.
+			const fromParams = Object.assign({}, from.params, from.query);
+			const toParams = Object.assign({}, to.params, to.query);
 
-			// // Don't change ads if just the hash has changed.
-			// delete fromParams['#'];
-			// delete toParams['#'];
-
-			// if ( toState === fromState && angular.equals( fromParams, toParams ) ) {
-			// 	return;
-			// }
+			if (to.name === from.name && objectEquals(fromParams, toParams)) {
+				return;
+			}
 
 			// Only if DFP is already loaded in.
 			if (!(window as any).googletag || !(window as any).googletag.pubads) {
