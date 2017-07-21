@@ -7,6 +7,8 @@ import { RouteOptions } from '../../components/route/route-component';
 declare module 'vue/types/options' {
 	interface ComponentOptions<V extends Vue> {
 		__INITIAL_STATE__?: any;
-		routeOptions?: RouteOptions;
+		routeOptions?: RouteOptions & {
+			hasResolver?: boolean;
+		};
 	}
 }
