@@ -11,8 +11,16 @@ export class AppErrorPage extends Vue {
 	@AppState error: AppStore['error'];
 	@AppMutation clearError: AppStore['clearError'];
 
-	created() {
-		this.$router.beforeResolve((_to, _from, next) => {
+	watcher?: Function;
+
+	get page() {
+		if (this.error) {
+			return ErrorPages[this.error];
+		}
+	}
+
+	mounted() {
+		this.watcher = this.$router.beforeEach((_to, _from, next) => {
 			if (this.error) {
 				this.clearError();
 			}
@@ -20,9 +28,10 @@ export class AppErrorPage extends Vue {
 		});
 	}
 
-	get page() {
-		if (this.error) {
-			return ErrorPages[this.error];
+	destroyed() {
+		if (this.watcher) {
+			this.watcher();
+			this.watcher = undefined;
 		}
 	}
 }
