@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import { routeError404 } from '../components/error/page/page.route';
+import { routeError404, RouteError404 } from '../components/error/page/page.route';
 import { initScrollBehavior } from '../components/scroll/auto-scroll/autoscroll.service';
+import { isPrerender } from '../components/environment/environment.service';
 
 export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
 	Vue.use(VueRouter);
@@ -13,6 +14,58 @@ export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
 		mode: !GJ_IS_CLIENT ? 'history' : undefined,
 		routes,
 		scrollBehavior: initScrollBehavior(),
+	});
+}
+
+/**
+ * In order for vue-router to capture the clicks and switch routes, every link
+ * must be done inside a router-link element. This captures A tags that may not
+ * be in router-link and tries to route them if it points to a correct route.
+ */
+export function hijackLinks(router: VueRouter, host: string) {
+	if (GJ_IS_SSR || isPrerender) {
+		return;
+	}
+
+	document.body.addEventListener('click', e => {
+		// router-link will prevent the default browser behavior if it has
+		// handled the click. Just skip these.
+		if (e.defaultPrevented) {
+			return;
+		}
+
+		// Try to find an A tag.
+		let target = e.target as HTMLAnchorElement;
+		if (!(target instanceof HTMLElement)) {
+			return;
+		}
+
+		while (target.nodeName.toLowerCase() !== 'a') {
+			// Immediately stop if we hit the end.
+			if ((target as any) === document || !target.parentNode) {
+				return;
+			}
+			target = target.parentNode as HTMLAnchorElement;
+		}
+
+		let href = target.href;
+		if (!href) {
+			return;
+		}
+
+		href = href.replace('http://' + host, '').replace('https://' + host, '');
+
+		// Now try to match it against our routes and see if we got anything. If
+		// we match a 404 it's obviously wrong.
+		const matched = router.getMatchedComponents(href);
+		if (!matched.length || matched[0] === RouteError404) {
+			return;
+		}
+
+		// We matched a route! Let's go to it and stop the browser from doing
+		// anything with the link click.
+		e.preventDefault();
+		router.push(href);
 	});
 }
 
