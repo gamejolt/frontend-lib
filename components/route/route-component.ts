@@ -114,12 +114,7 @@ export class BaseRouteComponent extends Vue {
 		}
 
 		if (!this.canSkipRouteUpdate(from, to)) {
-			await this.routeInit();
-			this.routeLoading = true;
-
-			// Only if there is a resolver.
-			const payload = await getPayload(this.$options, to, options.cache);
-			await finalizeRoute(this.$options, to, this, payload);
+			this._reloadRoute(options.cache);
 		}
 
 		if (isLeafRoute(this.$options.name)) {
@@ -133,6 +128,17 @@ export class BaseRouteComponent extends Vue {
 		}
 		this.routeDestroyed = true;
 		this.routeDestroy();
+	}
+
+	async reloadRoute() {
+		this._reloadRoute(false);
+	}
+
+	private async _reloadRoute(useCache = true) {
+		await this.routeInit();
+		this.routeLoading = true;
+		const payload = await getPayload(this.$options, this.$router.currentRoute, useCache);
+		await finalizeRoute(this.$options, this.$router.currentRoute, this, payload, useCache);
 	}
 
 	private didRouteChange(from: VueRouter.Route, to: VueRouter.Route) {
