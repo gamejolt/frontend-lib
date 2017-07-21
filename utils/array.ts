@@ -43,3 +43,11 @@ export function arrayRemove<T>(arr: T[], predicate: (v: T) => boolean) {
 		return arr.splice(idx, 1);
 	}
 }
+
+export function arrayChunk<T>(arr: T[], size: number): T[][] {
+	const arrays: T[][] = [];
+	while (arr.length > 0) {
+		arrays.push(arr.splice(0, size));
+	}
+	return arrays;
+}

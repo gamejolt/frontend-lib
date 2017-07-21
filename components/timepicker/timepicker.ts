@@ -2,17 +2,15 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./timepicker.html?style=./timepicker.styl';
 import { AppJolticon } from '../../vue/components/jolticon/jolticon';
-import { AppFormControl } from '../form-vue/control/control';
 
 @View
 @Component({
 	components: {
 		AppJolticon,
-		AppFormControl,
 	},
 })
 export class AppTimepicker extends Vue {
-	@Prop(Date) value?: Date;
+	@Prop(Date) value: Date;
 	@Prop({ type: Number, default: 1 })
 	hourStep: number;
 	@Prop({ type: Number, default: 1 })
@@ -42,6 +40,30 @@ export class AppTimepicker extends Vue {
 		return this.meridians || [this.$gettext('AM'), this.$gettext('PM')];
 	}
 
+	// Get this.hours in 24H mode if valid
+	get validHours() {
+		let hours = parseInt(this.hours, 10);
+		const valid = this.showMeridian ? hours > 0 && hours < 13 : hours >= 0 && hours < 24;
+		if (!valid) {
+			return undefined;
+		}
+
+		if (this.showMeridian) {
+			if (hours === 12) {
+				hours = 0;
+			}
+			if (this.meridian === this._meridians[1]) {
+				hours = hours + 12;
+			}
+		}
+		return hours;
+	}
+
+	get validMinutes() {
+		const minutes = parseInt(this.minutes, 10);
+		return minutes >= 0 && minutes < 60 ? minutes : undefined;
+	}
+
 	created() {
 		this.selected = this.value || new Date();
 		if (this.selected !== this.value) {
@@ -50,20 +72,8 @@ export class AppTimepicker extends Vue {
 	}
 
 	mounted() {
-		this.$refs.hours.addEventListener('blur', () => {
-			if (!this.invalidHours && parseInt(this.hours, 10) < 10) {
-				this.hours = this.pad(this.hours);
-			}
-		});
-
-		this.$refs.minutes.addEventListener('blur', () => {
-			if (!this.invalidMinutes && parseInt(this.minutes, 10) < 10) {
-				this.minutes = this.pad(this.minutes);
-			}
-		});
-
 		this.makeValid();
-		this.updateTemplate();
+		this.updateDisplayFields();
 	}
 
 	private invalidate(hours: boolean | null, minutes: boolean | null) {
@@ -84,11 +94,10 @@ export class AppTimepicker extends Vue {
 			return;
 		}
 
-		const hours = this.getHoursFromTemplate();
-
+		const hours = this.validHours;
 		if (hours !== undefined) {
 			this.selected.setHours(hours);
-			this.refresh('h');
+			this.refresh();
 		} else {
 			this.invalidate(true, null);
 		}
@@ -99,50 +108,31 @@ export class AppTimepicker extends Vue {
 			return;
 		}
 
-		const minutes = this.getMinutesFromTemplate();
-
+		const minutes = this.validMinutes;
 		if (minutes !== undefined) {
 			this.selected.setMinutes(minutes);
-			this.refresh('m');
+			this.refresh();
 		} else {
 			this.invalidate(null, true);
 		}
 	}
 
-	// Get $scope.hours in 24H mode if valid
-	getHoursFromTemplate() {
-		let hours = parseInt(this.hours, 10);
-		const valid = this.showMeridian ? hours > 0 && hours < 13 : hours >= 0 && hours < 24;
-		if (!valid) {
-			return undefined;
-		}
-
-		if (this.showMeridian) {
-			if (hours === 12) {
-				hours = 0;
-			}
-			if (this.meridian === this._meridians[1]) {
-				hours = hours + 12;
-			}
-		}
-		return hours;
-	}
-
-	getMinutesFromTemplate() {
-		const minutes = parseInt(this.minutes, 10);
-		return minutes >= 0 && minutes < 60 ? minutes : undefined;
-	}
-
 	pad(value: any) {
-		return value && value.toString().length < 2 ? '0' + value : value + '';
+		if (!value) {
+			return '00';
+		}
+
+		return value.toString().length < 2 ? '0' + value : value + '';
 	}
 
-	// TODO figure out what to do with setViewValue
 	// Call internally when we know that model is valid.
-	refresh(keyboardChange?: 'h' | 'm') {
+	refresh(updateDisplayFields?: boolean) {
 		this.makeValid();
 		this.$emit('input', this.selected);
-		this.updateTemplate(keyboardChange);
+
+		if (updateDisplayFields !== false) {
+			this.updateDisplayFields();
+		}
 	}
 
 	makeValid() {
@@ -151,7 +141,7 @@ export class AppTimepicker extends Vue {
 		this.invalidMinutes = false;
 	}
 
-	updateTemplate(keyboardChange?: 'h' | 'm') {
+	updateDisplayFields() {
 		let hours = this.selected.getHours(),
 			minutes = this.selected.getMinutes();
 
@@ -159,14 +149,19 @@ export class AppTimepicker extends Vue {
 			hours = hours === 0 || hours === 12 ? 12 : hours % 12; // Convert 24 to 12 hour system
 		}
 
-		this.hours = keyboardChange === 'h' ? hours + '' : this.pad(hours);
-		this.minutes = keyboardChange === 'm' ? minutes + '' : this.pad(minutes);
+		this.hours = this.pad(hours);
+		this.minutes = this.pad(minutes);
 		this.meridian = this.selected.getHours() < 12 ? this._meridians[0] : this._meridians[1];
 	}
 
 	addMinutes(minutes: number) {
+		if (this.readonlyInput) {
+			return;
+		}
+
 		const dt = new Date(this.selected.getTime() + minutes * 60000);
 		this.selected.setHours(dt.getHours(), dt.getMinutes());
+
 		this.refresh();
 	}
 
@@ -182,7 +177,7 @@ export class AppTimepicker extends Vue {
 		this.addMinutes(this.minuteStep);
 	}
 
-	decrementAAQQMinutes() {
+	decrementMinutes() {
 		this.addMinutes(-this.minuteStep);
 	}
 
@@ -190,18 +185,32 @@ export class AppTimepicker extends Vue {
 		this.addMinutes(12 * 60 * (this.selected.getHours() < 12 ? 1 : -1));
 	}
 
+	@Watch('hours')
+	@Watch('minutes')
+	onTimeChanged() {
+		const hours = this.validHours,
+			minutes = this.validMinutes;
+
+		// If the hours and minutes are valid, update the v-model.
+		// Don't update the display fields however because the user might still be editing the input field.
+		if (hours !== undefined && minutes !== undefined) {
+			this.selected.setHours(hours, minutes);
+			this.refresh(false);
+		}
+	}
+
 	@Watch('showMeridian')
 	onShowMeridianChanged() {
 		if (!this.valid) {
 			// Evaluate from template
-			const hours = this.getHoursFromTemplate(),
-				minutes = this.getMinutesFromTemplate();
+			const hours = this.validHours,
+				minutes = this.validMinutes;
 			if (hours !== undefined && minutes !== undefined) {
-				this.selected.setHours(hours);
+				this.selected.setHours(hours, minutes);
 				this.refresh();
 			}
 		} else {
-			this.updateTemplate();
+			this.updateDisplayFields();
 		}
 	}
 }
@@ -272,8 +281,8 @@ export class AppTimepicker extends Vue {
 
 // 					if (ngModelCtrl.$error.time) {
 // 						// Evaluate from template
-// 						var hours = getHoursFromTemplate(),
-// 							minutes = getMinutesFromTemplate();
+// 						var hours = getValidHours(),
+// 							minutes = getValidMinutes();
 // 						if (angular.isDefined(hours) && angular.isDefined(minutes)) {
 // 							selected.setHours(hours);
 // 							refresh();
@@ -285,7 +294,7 @@ export class AppTimepicker extends Vue {
 // 			}
 
 // 			// Get $scope.hours in 24H mode if valid
-// 			function getHoursFromTemplate() {
+// 			function getValidHours() {
 // 				var hours = parseInt($scope.hours, 10);
 // 				var valid = $scope.showMeridian ? hours > 0 && hours < 13 : hours >= 0 && hours < 24;
 // 				if (!valid) {
@@ -303,7 +312,7 @@ export class AppTimepicker extends Vue {
 // 				return hours;
 // 			}
 
-// 			function getMinutesFromTemplate() {
+// 			function getValidMinutes() {
 // 				var minutes = parseInt($scope.minutes, 10);
 // 				return minutes >= 0 && minutes < 60 ? minutes : undefined;
 // 			}
@@ -353,7 +362,7 @@ export class AppTimepicker extends Vue {
 // 				};
 
 // 				$scope.updateHours = function() {
-// 					var hours = getHoursFromTemplate();
+// 					var hours = getValidHours();
 
 // 					if (angular.isDefined(hours)) {
 // 						selected.setHours(hours);
@@ -372,7 +381,7 @@ export class AppTimepicker extends Vue {
 // 				});
 
 // 				$scope.updateMinutes = function() {
-// 					var minutes = getMinutesFromTemplate();
+// 					var minutes = getValidMinutes();
 
 // 					if (angular.isDefined(minutes)) {
 // 						selected.setMinutes(minutes);

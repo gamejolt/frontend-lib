@@ -1,9 +1,18 @@
 <div class="datepicker-dropdown">
-	<div class="datepicker-dropdown-menu" ng-style="{display: (isOpen && 'block') || 'none'}" ng-keydown="keydown($event)">
-		<div ng-transclude></div>
-		<div ng-if="showButtonBar" class="datepicker-popup-button-bar">
-			<a class="btn" ng-click="select('today')"><span class="jolticon jolticon-check"></span>{{ getText('current') }}</a>
-			<a class="btn pull-right" ng-click="close()"><span class="jolticon jolticon-remove"></span> {{ getText('close') }}</a>
+	<div
+		class="datepicker-dropdown-menu"
+		:style="{ display: isOpen ? 'block' : 'none' }"
+		@keydown="keydown( $event )"
+		>
+		<slot></slot>
+		<div v-if="showButtonBar" class="datepicker-popup-button-bar">
+			<!-- TODO change a elements to button? -->
+			<a class="btn" @click="select('today')">
+				<app-jolticon icon="check" /> {{ getText('current') }}
+			</a>
+			<a class="btn pull-right" @click="close()">
+				<app-jolticon icon="remove" /> {{ getText('close') }}
+			</a>
 		</div>
 	</div>
 </div>

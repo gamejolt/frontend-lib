@@ -1,16 +1,76 @@
-<table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}" class="datepicker-table">
-  <thead>
-    <tr>
-      <th><button type="button" class="datepicker-btn datepicker-btn-default pull-left" ng-click="move(-1)" tabindex="-1" style="width: 100%"><i class="jolticon jolticon-chevron-left"></i></button></th>
-      <th><button id="{{uniqueId}}-title" role="heading" aria-live="assertive" aria-atomic="true" type="button" class="datepicker-btn datepicker-btn-default" ng-click="toggleMode()" tabindex="-1" style="width:100%;"><strong>{{title}}</strong></button></th>
-      <th><button type="button" class="datepicker-btn datepicker-btn-default pull-right" ng-click="move(1)" tabindex="-1" style="width: 100%"><i class="jolticon jolticon-chevron-right"></i></button></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="row in rows track by $index">
-      <td ng-repeat="dt in row track by dt.date" class="text-center" role="gridcell" id="{{dt.uid}}" aria-disabled="{{!!dt.disabled}}">
-        <button type="button" style="width:100%;" class="datepicker-btn datepicker-btn-default" ng-class="{'datepicker-btn-info': dt.selected, active: isActive(dt)}" ng-click="select(dt.date)" ng-disabled="dt.disabled" tabindex="-1"><span ng-class="{'text-info': dt.current}">{{dt.label}}</span></button>
-      </td>
-    </tr>
-  </tbody>
+<table
+	role="grid"
+	:aria-labelledby="`${parent.uniqueId}-title`"
+	:aria-activedescendant="parent.activeDateId"
+	class="datepicker-table"
+	>
+	<thead>
+		<tr>
+			<th>
+				<button
+					type="button"
+					class="datepicker-btn datepicker-btn-default pull-left"
+					@click="move(-1)"
+					tabindex="-1"
+					style="width: 100%"
+					>
+					<app-jolticon icon="chevron-left" />
+				</button>
+			</th>
+			<th>
+				<button
+					:id="`${uniqueId}-title`"
+					role="heading"
+					aria-live="assertive"
+					aria-atomic="true"
+					type="button"
+					class="datepicker-btn datepicker-btn-default"
+					@click="parent.toggleMode()"
+					tabindex="-1"
+					style="width:100%;"
+					>
+					<strong>{{title}}</strong>
+				</button>
+			</th>
+			<th>
+				<button
+					type="button"
+					class="datepicker-btn datepicker-btn-default pull-right"
+					@click="move(1)"
+					tabindex="-1"
+					style="width: 100%"
+					>
+					<app-jolticon icon="chevron-right" />
+				</button>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr v-for="row in rows">
+			<td
+				v-for="dt in row"
+				:key="dt.date.getTime()"
+				class="text-center"
+				role="gridcell"
+				:id="dt.uid"
+				:aria-disabled="!!dt.disabled"
+				>
+				<button
+					type="button"
+					style="width:100%;"
+					:class="[
+						'datepicker-btn',
+						'datepicker-btn-default',
+						dt.selected ? 'datepicker-btn-info' : '',
+						parent.isActive(dt) ? 'active' : '',
+					]"
+					@click="parent.select(dt.date)"
+					:disabled="!!dt.disabled"
+					tabindex="-1"
+					>
+					<span :class="{'text-info': !!dt.current}">{{dt.label}}</span>
+				</button>
+			</td>
+		</tr>
+	</tbody>
 </table>
