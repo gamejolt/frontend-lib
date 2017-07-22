@@ -1,9 +1,6 @@
 import { MetaContainer } from './meta-container';
 
 export class TwitterMetaContainer extends MetaContainer {
-	// TODO(rewrite): Get this working.
-	static shareMessage: string;
-
 	static set card(value: string | null) {
 		this._set('twitter:card', value);
 	}
