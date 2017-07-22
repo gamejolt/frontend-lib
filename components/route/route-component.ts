@@ -184,21 +184,24 @@ export class BaseRouteComponent extends Vue {
 		// 	}
 		// }
 
-		// DISABLED ON BROWSER FOR NOW
-		// We run this on browser and server. When it's on the server the route
-		// enter hook has populated the initial data and now we want to call the
-		// routed() method. When it's browser we may have gotten initial state
-		// from the server and are now bootstrapping our component with it.
-		const constructor = this.constructor as any;
-		if (constructor.extendOptions && constructor.extendOptions.__INITIAL_STATE__ && GJ_IS_SSR) {
-			this.resolveRoute(this.$route, constructor.extendOptions.__INITIAL_STATE__);
-		}
-
-		const options = this.$options.routeOptions || {};
-		if (options.hasResolver && RouteResolver.isComponentResolving(this.$options.name!)) {
-			// console.log('RAWR FINALIZE AFTER CREATE', this.$options.name);
-			// TODO: Don't use cache?
-			this._reloadRoute(false);
+		if (GJ_IS_SSR) {
+			// In SSR we have to store the resolver for each route component
+			// somewhere. Since we don't have an instance we instead put it into
+			// the component's static options. Yay for hacks! Let's use it and
+			// resolve it here.
+			if (this.$options.__INITIAL_STATE__) {
+				this.resolveRoute(this.$route, this.$options.__INITIAL_STATE__);
+			}
+		} else {
+			// If this route component wasn't in the DOM (v-if maybe?) when the
+			// route changed, then it won't trigger the resolve flow. We have to
+			// manually trigger the resolve in this case.
+			const options = this.$options.routeOptions || {};
+			if (options.hasResolver && RouteResolver.isComponentResolving(this.$options.name!)) {
+				// console.log('RAWR FINALIZE AFTER CREATE', this.$options.name);
+				// TODO: Don't use cache?
+				this._reloadRoute(false);
+			}
 		}
 	}
 
