@@ -25,7 +25,9 @@ export class AppModal extends Vue {
 
 	mounted() {
 		if (!this.modal.noBackdrop) {
-			this.backdrop = Backdrop.push();
+			this.backdrop = Backdrop.push({
+				className: 'modal-backdrop',
+			});
 		}
 	}
 

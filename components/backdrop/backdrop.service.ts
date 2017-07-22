@@ -1,18 +1,28 @@
 import { AppBackdrop } from './backdrop';
 
+export interface BackdropOptions {
+	context?: HTMLElement;
+	className?: string;
+}
+
 export class Backdrop {
 	private static backdrops: AppBackdrop[] = [];
 
-	static push(context?: HTMLElement) {
+	static push(options: BackdropOptions = {}) {
 		const el = document.createElement('div');
 
-		if (!context) {
+		if (!options.context) {
 			document.body.appendChild(el);
 		} else {
-			context.appendChild(el);
+			options.context.appendChild(el);
 		}
 
-		const backdrop = new AppBackdrop();
+		const backdrop = new AppBackdrop({
+			propsData: {
+				className: options.className,
+			},
+		});
+
 		backdrop.$mount(el);
 
 		this.backdrops.push(backdrop);

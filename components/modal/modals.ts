@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
-import * as View from '!view!./modals.html';
-import './modals-global.styl';
+import * as View from '!view!./modals.html?style=./modals.styl';
 
 import { Modal } from './modal.service';
 import { makeObservableService } from '../../utils/vue';
