@@ -14,16 +14,6 @@ function scroll(pos: { x: number; y: number }) {
 	return pos;
 }
 
-function checkScrollAnchorParam(key: string | number, from: VueRouter.Route, to: VueRouter.Route) {
-	// Params haven't changed, so same page.
-	if (from.params[key] === to.params[key]) {
-		return true;
-	}
-
-	// Params changed, new anchor!
-	return false;
-}
-
 export function initScrollBehavior() {
 	// Should tell the browser that we want to handle our own scrolling.
 	if (!GJ_IS_SSR) {
@@ -34,7 +24,7 @@ export function initScrollBehavior() {
 
 	return function scrollBehavior(
 		to: VueRouter.Route,
-		from: VueRouter.Route,
+		_from: VueRouter.Route,
 		savedPosition?: { x: number; y: number }
 	) {
 		// Skip one auto scroll trigger.
@@ -50,14 +40,21 @@ export function initScrollBehavior() {
 		// If there's an anchor, then we want to either scroll to the anchor's
 		// spot, or we want to leave the scroll as is.
 		const anchor = Scroll.autoscrollAnchor;
-		if (anchor && checkScrollAnchorParam(anchor.autoscrollRouteParam, from, to)) {
-			if (anchor.scrollTo) {
-				return scroll({
-					x: 0,
-					y: anchor.scrollTo,
-				});
+		if (anchor) {
+			// If the anchor key hasn't changed then we can do the anchor
+			// scrolling. If it has changed it means we gotta skip this cycle
+			// and reset it.
+			if (!anchor.keyChanged) {
+				if (anchor.scrollTo) {
+					return scroll({
+						x: 0,
+						y: anchor.scrollTo,
+					});
+				} else {
+					return undefined;
+				}
 			} else {
-				return undefined;
+				anchor.keyChanged = false;
 			}
 		}
 
