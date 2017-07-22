@@ -5,7 +5,7 @@
 			<app-form-control
 				type="email"
 				:rules="{
-					availability: '/web/auth/check-field-availability/email',
+					availability: { url: '/web/auth/check-field-availability/email' },
 				}"
 				:validate-on="[ 'blur' ]"
 				:placeholder="$gettext( 'Email' )"
@@ -21,7 +21,7 @@
 					min: 3,
 					max: 30,
 					pattern: 'username',
-					availability: '/web/auth/check-field-availability/username',
+					availability: { url: '/web/auth/check-field-availability/username' },
 				}"
 				:validate-on="[ 'blur' ]"
 				:placeholder="$gettext( 'Username' )"
