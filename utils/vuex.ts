@@ -215,10 +215,6 @@ function scopeNoStateChange(caller: string, scope: any, state: any) {
 	// Make a passthrough for all state to get. This allows us to throw an error
 	// when they try setting within the action.
 	for (const key of Object.getOwnPropertyNames(state)) {
-		const desc = Object.getOwnPropertyDescriptor(state, key);
-		if (!desc.get) {
-			continue;
-		}
 		Object.defineProperty(scope, key, {
 			get: () => state[key],
 			set: () => stateMutateError(caller, key),
