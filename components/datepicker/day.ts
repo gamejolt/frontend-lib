@@ -115,6 +115,7 @@ export class AppDaypicker extends Vue {
 	}
 
 	handleKeyDown(key: string, _evt: KeyboardEvent) {
+		console.log('handling key down');
 		let date = this.parent.activeDate.getDate();
 
 		if (key === 'left') {
@@ -144,5 +145,6 @@ export class AppDaypicker extends Vue {
 			);
 		}
 		this.parent.activeDate.setDate(date);
+		this.parent.refreshView();
 	}
 }
