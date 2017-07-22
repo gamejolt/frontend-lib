@@ -28,7 +28,7 @@
 
 				<router-link class="comment-video-lightbox-user"
 					:to="{ name: 'profile.overview', params: { username: video.comment.user.username } }"
-					v-app-tooltip.bottom-center="`${video.comment.user.display_name} (@${video.comment.user.username})`"
+					v-app-tooltip.bottom="`${video.comment.user.display_name} (@${video.comment.user.username})`"
 					v-app-track-event="`comment-video-lightbox:user`"
 					@click="close"
 					>
