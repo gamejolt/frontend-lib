@@ -20,6 +20,10 @@ export class Connection {
 	static init(store: VuexStore) {
 		this.store = store;
 
+		if (GJ_IS_SSR) {
+			return;
+		}
+
 		// This attribute isn't perfect. The browser will set this when they are
 		// absolutely disconnected to the internet through their network card,
 		// but it won't catch things like their router saying they're connected
