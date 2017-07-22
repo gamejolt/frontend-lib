@@ -1,6 +1,7 @@
 import { Injectable, Inject } from 'ng-metadata/core';
 import { State } from 'angular-ui-router';
 
+// TODO(rewrite) - client only functionality
 @Injectable('ConnectionStatePermissions')
 export class ConnectionStatePermissions {
 	currentState?: State;

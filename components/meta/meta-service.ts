@@ -1,3 +1,4 @@
+import VueRouter from 'vue-router';
 import { MetaContainer } from './meta-container';
 import { FbMetaContainer } from './fb-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
@@ -13,14 +14,12 @@ export class Meta extends MetaContainer {
 
 	static titleSuffix = GJ_IS_CLIENT ? ' - Game Jolt' : ' on Game Jolt';
 
-	// TODO(rewrite)
-	// static initAngular( $rootScope: any )
-	// {
-	// 	$rootScope.$on( '$stateChangeSuccess', () =>
-	// 	{
-	// 		this.clear();
-	// 	} );
-	// }
+	static init(router: VueRouter) {
+		router.beforeEach((_to, _from, next) => {
+			this.clear();
+			next();
+		});
+	}
 
 	static set title(title: string | null) {
 		if (title) {

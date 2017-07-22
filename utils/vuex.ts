@@ -14,7 +14,7 @@ export type VuexWatch<S> = <T>(
 	options?: WatchOptions
 ) => void;
 
-export class VuexStore<S, A, M> {
+export abstract class VuexStore<S = any, A = any, M = any> {
 	readonly state: S;
 	readonly getters: any;
 
@@ -197,9 +197,8 @@ function getActionScope(store: any) {
 
 function getMutationScope(state: any) {
 	if (!state.__vuexMutationScope) {
-		// Set as our scope's prototype. This keeps the getters/setters working
-		// for the main state data.
-		const scope = Object.create(state);
+		const scope: any = {};
+		scopeState('mutation', scope, state);
 		scopeNoCallers('mutation', scope, state);
 
 		state.__vuexMutationScope = scope;
@@ -209,16 +208,25 @@ function getMutationScope(state: any) {
 }
 
 /**
+ * Sets up the scope so that you can access and modify state.
+ */
+function scopeState(_caller: string, scope: any, state: any) {
+	for (const key of Object.getOwnPropertyNames(state)) {
+		Object.defineProperty(scope, key, {
+			enumerable: true,
+			get: () => state[key],
+			set: (val: any) => (state[key] = val),
+		});
+	}
+}
+
+/**
  * Sets up the scope so that you can't modify state.
  */
 function scopeNoStateChange(caller: string, scope: any, state: any) {
 	// Make a passthrough for all state to get. This allows us to throw an error
 	// when they try setting within the action.
 	for (const key of Object.getOwnPropertyNames(state)) {
-		const desc = Object.getOwnPropertyDescriptor(state, key);
-		if (!desc.get) {
-			continue;
-		}
 		Object.defineProperty(scope, key, {
 			get: () => state[key],
 			set: () => stateMutateError(caller, key),

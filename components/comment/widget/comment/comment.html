@@ -65,7 +65,7 @@
 	<app-fade-collapse
 		:collapse-height="300"
 		:is-open="showFullContent"
-		@required="canToggleContent = true"
+		@require-change="canToggleContent = $event"
 		>
 		<div class="comment-content"
 			v-html="widget.isShowingTranslations && widget.translations[ comment.id ]

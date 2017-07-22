@@ -76,7 +76,7 @@ export class Device {
 
 		if (!this._os) {
 			const result = this._getResult();
-			const osName = result.os.name.toLowerCase();
+			const osName = result.os.name ? result.os.name.toLowerCase() : 'windows';
 
 			if (Device.OS_WINDOWS.indexOf(osName) !== -1) {
 				this._os = 'windows';

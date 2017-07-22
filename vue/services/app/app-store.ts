@@ -19,7 +19,7 @@ export type Mutations = {
 export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 	user: User | null = null;
 	userBootstrapped = false;
-	error: number | null = null;
+	error: number | string | null = null;
 
 	@VuexMutation
 	setUser(user: Mutations['app/setUser']) {

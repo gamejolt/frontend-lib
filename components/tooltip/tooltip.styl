@@ -1,99 +1,30 @@
 @require '~styles/variables'
 
 .tooltip
-	position: absolute
-	z-index: $zindex-tooltip
-	display: none
-	visibility: visible
+	display: block !important
+	padding: 4px
 	font-size: $tooltip-font-size
 	line-height: 1.4
-	opacity: 0
-	pointer-events: none
+	z-index: $zindex-tooltip
 
-	// Arrow.
-	&::before
-		content: ''
-		position: absolute
-		width: 0
-		height: 0
-		border-color: transparent
-		border-style: solid
-
-	&.tooltip-target-attached-top
-		padding-bottom: 3px
-
-	&.tooltip-target-attached-bottom
-		padding-top: 3px
-
-	&.tooltip-target-attached-left
-		padding-right: 3px
-
-	&.tooltip-target-attached-right
-		padding-left: 3px
-
-	&.tooltip-target-attached-top.tooltip-target-attached-center::before
-		bottom: 0
-		left: 50%
-		margin-left: -($tooltip-arrow-width / 2)
-		border-width: $tooltip-arrow-width $tooltip-arrow-width 0
-		border-top-color: $tooltip-arrow-color
-
-	&.tooltip-target-attached-top.tooltip-target-attached-left::before
-		bottom: 0
-		left: $tooltip-arrow-width
-		border-width: $tooltip-arrow-width $tooltip-arrow-width 0
-		border-top-color: $tooltip-arrow-color
-
-	&.tooltip-target-attached-top.tooltip-target-attached-right::before
-		bottom: 0
-		right: $tooltip-arrow-width
-		border-width: $tooltip-arrow-width $tooltip-arrow-width 0
-		border-top-color: $tooltip-arrow-color
-
-	&.tooltip-target-attached-right.tooltip-target-attached-middle::before
-		top: 50%
-		left: 0
-		margin-top: -($tooltip-arrow-width)
-		border-width: $tooltip-arrow-width $tooltip-arrow-width $tooltip-arrow-width 0
-		border-right-color: $tooltip-arrow-color
-
-	&.tooltip-target-attached-left.tooltip-target-attached-middle::before
-		top: 50%
-		right: 0
-		margin-top: -($tooltip-arrow-width)
-		border-width: $tooltip-arrow-width 0 $tooltip-arrow-width $tooltip-arrow-width
-		border-left-color: $tooltip-arrow-color
-
-	&.tooltip-target-attached-bottom.tooltip-target-attached-center::before
-		top: 0
-		left: 50%
-		margin-left: -($tooltip-arrow-width * 2)
-		border-width: 0 $tooltip-arrow-width $tooltip-arrow-width
-		border-bottom-color: $tooltip-arrow-color
-
-	&.tooltip-target-attached-bottom.tooltip-target-attached-left::before
-		top: 0
-		left: $tooltip-arrow-width
-		border-width: 0 $tooltip-arrow-width $tooltip-arrow-width
-		border-bottom-color: $tooltip-arrow-color
-
-	&.tooltip-target-attached-bottom.tooltip-target-attached-right::before
-		top: 0
-		right: $tooltip-arrow-width
-		border-width: 0 $tooltip-arrow-width $tooltip-arrow-width
-		border-bottom-color: $tooltip-arrow-color
-
-	.tooltip-content
+	.tooltip-inner
 		max-width: $tooltip-max-width
 		padding: 5px 8px
 		text-align: center
-		text-decoration: none
 		color: $tooltip-color
 		background-color: $tooltip-bg
 		border-radius: $border-radius-base
 
-	&.tooltip-open-transitionend
-		display: block
+	.tooltip-arrow
+		display: none
 
-	&.tooltip-after-open
+	&[aria-hidden='true']
+		visibility: hidden
+		opacity: 0
+		transition: opacity 200ms, visibility 200ms
+
+	&[aria-hidden='false']
+		visibility: visible
 		opacity: 1
+		// Instant in.
+		transition: none

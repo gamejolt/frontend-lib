@@ -31,7 +31,7 @@
 				<app-fade-collapse
 					:collapse-height="250"
 					:is-open="isShowingSoundtrack"
-					@required="canToggleSoundtrack = true"
+					@require-change="canToggleSoundtrack = $event"
 					>
 
 					<app-audio-playlist

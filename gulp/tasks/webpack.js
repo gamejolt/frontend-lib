@@ -84,7 +84,6 @@ module.exports = function(config) {
 		let indexHtml = section === 'app' ? 'index.html' : section + '.html';
 
 		let appEntries = [
-			path.resolve(base, 'src/' + section + '/main.styl'),
 			path.resolve(base, 'src/' + section + '/main.ts'),
 		];
 

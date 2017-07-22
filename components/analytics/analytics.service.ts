@@ -1,6 +1,8 @@
 import { Environment } from '../environment/environment.service';
 import { appStore } from '../../vue/services/app/app-store';
 import { EventBus } from '../event-bus/event-bus.service';
+import VueRouter from 'vue-router';
+import { arrayRemove } from '../../utils/array';
 
 const ga: any = (typeof window !== 'undefined' && (window as any).ga) || function() {};
 
@@ -10,6 +12,16 @@ ga('set', 'forceSSL', true);
 // Allow file:// and app:// protocols for Client or App.
 // https://discuss.atom.io/t/google-analytics-in-atom-shell/14109/7
 ga('set', 'checkProtocolTask', null);
+
+class PageTracker {
+	pageViewRecorded = false;
+
+	get normalizedId() {
+		return this.id.replace(/[\-_:]/g, '');
+	}
+
+	constructor(public id = '') {}
+}
 
 export class Analytics {
 	static readonly SOCIAL_NETWORK_FB = 'facebook';
@@ -25,14 +37,14 @@ export class Analytics {
 	static readonly SOCIAL_ACTION_SUBSCRIBE = 'subscribe';
 	static readonly SOCIAL_ACTION_UNSUBSCRIBE = 'unsubscribe';
 
-	static extraTrackers: string[] = [];
+	private static pageTrackers = [new PageTracker()];
+	private static addedTrackers: string[] = [];
 
-	private static additionalPageTracker?: string;
-	private static recordedPageView = true;
-
-	static initRouter() {
-		EventBus.on('routeChangeBefore', () => {
-			this.recordedPageView = false;
+	static initRouter(router: VueRouter) {
+		// Reset all page trackers since we're starting the page route.
+		router.beforeEach((_to, _from, next) => {
+			this.pageTrackers.forEach(i => (i.pageViewRecorded = false));
+			next();
 		});
 
 		EventBus.on('routeChangeAfter', () => {
@@ -40,12 +52,12 @@ export class Analytics {
 		});
 	}
 
-	private static getAppUser() {
+	private static get appUser() {
 		return appStore.state.user;
 	}
 
 	private static ensureUserId() {
-		const user = this.getAppUser();
+		const user = this.appUser;
 
 		if (user && user.id) {
 			if (Environment.buildType === 'development') {
@@ -62,8 +74,8 @@ export class Analytics {
 		}
 	}
 
-	private static shouldTrack() {
-		const user = this.getAppUser();
+	private static get shouldTrack() {
+		const user = this.appUser;
 
 		// If they're not a normal user, don't track.
 		if (Environment.buildType === 'production' && user && user.permission_level > 0) {
@@ -111,36 +123,38 @@ export class Analytics {
 
 		// Gotta make sure the system has a chance to compile the title into the page.
 		window.setTimeout(() => {
-			this._trackPageview(path);
+			this.pageTrackers.forEach(i => this._trackPageview(i, path));
 		});
 	}
 
-	private static _trackPageview(path?: string, tracker = '') {
-		if (!this.shouldTrack()) {
+	private static _trackPageview(tracker: PageTracker, path?: string) {
+		if (!this.shouldTrack) {
 			console.log('Skip tracking page view since not a normal user.');
+			return;
+		}
+
+		if (tracker.pageViewRecorded) {
+			console.log('Page view already recorded for this tracker.');
 			return;
 		}
 
 		let method = 'send';
 
 		// Did they pass in a tracker other than the default?
-		if (tracker) {
-			// Normalize.
-			const normalizedTracker = tracker.replace(/[\-_:]/g, '');
-
+		if (tracker.id !== '') {
 			// Prefix the method with the tracker.
-			method = normalizedTracker + '.' + method;
+			method = tracker.normalizedId + '.' + method;
 
 			// If we haven't added this tracker yet in GA, let's do so.
-			if (this.extraTrackers.indexOf(tracker) === -1) {
+			if (this.addedTrackers.indexOf(tracker.id) === -1) {
 				// Save that we have this tracker set.
-				this.extraTrackers.push(tracker);
+				this.addedTrackers.push(tracker.id);
 
 				// Now add it in GA.
 				if (Environment.buildType === 'development') {
-					console.log('Create new tracker: ' + tracker);
+					console.log('Create new tracker: ' + tracker.id);
 				} else {
-					this.ga('create', tracker, 'auto', { name: normalizedTracker });
+					this.ga('create', tracker.id, 'auto', { name: tracker.normalizedId });
 				}
 			}
 		}
@@ -162,24 +176,16 @@ export class Analytics {
 
 		// Now track the page view.
 		if (Environment.buildType === 'development') {
-			console.log(`Track page view: tracker(${tracker}) | ${JSON.stringify(options)}`);
+			console.log(`Track page view: tracker(${tracker.id}) | ${JSON.stringify(options)}`);
 		} else {
 			this.ga(method, 'pageview', { ...options });
 		}
 
-		// If they have an additional page tracker attached, then track the page view for that tracker as well.
-		if (!tracker && this.additionalPageTracker) {
-			this._trackPageview(undefined, this.additionalPageTracker);
-		}
-
-		// Since this is the primary (not an additional tracker) set that we've recorded the page view.
-		if (!tracker) {
-			this.recordedPageView = true;
-		}
+		tracker.pageViewRecorded = true;
 	}
 
 	static async trackEvent(category: string, action: string, label?: string, value?: string) {
-		if (!this.shouldTrack()) {
+		if (!this.shouldTrack) {
 			console.log('Skip tracking event since not a normal user.');
 			return;
 		}
@@ -199,7 +205,7 @@ export class Analytics {
 	}
 
 	static async trackSocial(network: string, action: string, target: string) {
-		if (!this.shouldTrack()) {
+		if (!this.shouldTrack) {
 			console.log('Skip tracking social event since not a normal user.');
 			return;
 		}
@@ -216,7 +222,7 @@ export class Analytics {
 	}
 
 	static async trackTiming(category: string, timingVar: string, value: number, label?: string) {
-		if (!this.shouldTrack()) {
+		if (!this.shouldTrack) {
 			console.log('Skip tracking timing event since not a normal user.');
 			return;
 		}
@@ -236,7 +242,7 @@ export class Analytics {
 			return;
 		}
 
-		if (!this.shouldTrack()) {
+		if (!this.shouldTrack) {
 			console.log('Skip setting experiment since not a normal user.');
 			return;
 		}
@@ -249,27 +255,25 @@ export class Analytics {
 		}
 	}
 
-	static attachAdditionalPageTracker(scope: any, trackingId: string) {
-		// if (!GJ_IS_ANGULAR) {
-		// 	throw new Error(`Can't attach addtional page trackers in vue yet.`);
-		// }
+	static attachAdditionalPageTracker(trackingId: string) {
+		const index = this.pageTrackers.findIndex(i => i.id === trackingId);
+		if (index !== -1) {
+			return;
+		}
 
 		if (Environment.buildType === 'development') {
 			console.log(`Attached additional tracker: ${trackingId}`);
 		}
 
-		this.additionalPageTracker = trackingId;
-		scope.$on('$destroy', () => {
-			if (Environment.buildType === 'development') {
-				console.log(`Detached additional tracker: ${trackingId}`);
-			}
-			this.additionalPageTracker = undefined;
-		});
+		const tracker = new PageTracker(trackingId);
+		this.pageTrackers.push(tracker);
+	}
 
-		// If we have already recorded the page view and we're adding the tracker, record the current page.
-		// This ensures that if we add it in lazily it'll still record correctly.
-		if (this.recordedPageView) {
-			this._trackPageview(undefined, trackingId);
+	static detachAdditionalPageTracker(trackingId: string) {
+		if (Environment.buildType === 'development') {
+			console.log(`Detached additional tracker: ${trackingId}`);
 		}
+
+		arrayRemove(this.pageTrackers, i => i.id === trackingId);
 	}
 }
