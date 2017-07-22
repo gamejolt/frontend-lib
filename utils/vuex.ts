@@ -197,15 +197,27 @@ function getActionScope(store: any) {
 
 function getMutationScope(state: any) {
 	if (!state.__vuexMutationScope) {
-		// Set as our scope's prototype. This keeps the getters/setters working
-		// for the main state data.
-		const scope = Object.create(state);
+		const scope: any = {};
+		scopeState('mutation', scope, state);
 		scopeNoCallers('mutation', scope, state);
 
 		state.__vuexMutationScope = scope;
 	}
 
 	return state.__vuexMutationScope;
+}
+
+/**
+ * Sets up the scope so that you can access and modify state.
+ */
+function scopeState(_caller: string, scope: any, state: any) {
+	for (const key of Object.getOwnPropertyNames(state)) {
+		Object.defineProperty(scope, key, {
+			enumerable: true,
+			get: () => state[key],
+			set: (val: any) => (state[key] = val),
+		});
+	}
 }
 
 /**
