@@ -108,11 +108,18 @@ export function RouteResolve(options: RouteOptions = {}) {
 						// all server locations from this options. Kind of
 						// hacky, though.
 						if (GJ_IS_SSR) {
-							componentOptions.__INITIAL_STATE__ = resolver.payload;
+							componentOptions.__INITIAL_STATE__ = resolver;
 						}
 					}
 
 					next(async (vm: BaseRouteComponent) => {
+						// SSR still calls next() but won't re-render the route
+						// component, so it's pointless to do things here.
+						// Instead we do it in the component created() func.
+						if (GJ_IS_SSR) {
+							return;
+						}
+
 						// console.log('RAWR NEXT CALLED', vm.$options.name);
 						if (promise) {
 							vm.routeLoading = true;
@@ -143,7 +150,7 @@ export class BaseRouteComponent extends Vue {
 	 * Called to initialize the route either at the first route to this
 	 * component or after the $route object changes.
 	 */
-	routeInit(): Promise<any> | void {}
+	routeInit(): void {}
 
 	/**
 	 * Called after routeResolve resolves with data. `$payload` will be set with
@@ -161,7 +168,7 @@ export class BaseRouteComponent extends Vue {
 			this.$store.registerModule(this.storeName, new this.storeModule());
 		}
 
-		await this.routeInit();
+		this.routeInit();
 
 		// TODO(SSR)
 		// // If we are in a browser context, the server may have set initial state
@@ -177,16 +184,15 @@ export class BaseRouteComponent extends Vue {
 		// 	}
 		// }
 
-		// TODO(SSR)
-		// // DISABLED ON BROWSER FOR NOW
-		// // We run this on browser and server. When it's on the server the route
-		// // enter hook has populated the initial data and now we want to call the
-		// // routed() method. When it's browser we may have gotten initial state
-		// // from the server and are now bootstrapping our component with it.
-		// const constructor = this.constructor as any;
-		// if (constructor.extendOptions && constructor.extendOptions.__INITIAL_STATE__ && GJ_IS_SSR) {
-		// 	this.resolveRoute(this.$route, constructor.extendOptions.__INITIAL_STATE__);
-		// }
+		// DISABLED ON BROWSER FOR NOW
+		// We run this on browser and server. When it's on the server the route
+		// enter hook has populated the initial data and now we want to call the
+		// routed() method. When it's browser we may have gotten initial state
+		// from the server and are now bootstrapping our component with it.
+		const constructor = this.constructor as any;
+		if (constructor.extendOptions && constructor.extendOptions.__INITIAL_STATE__ && GJ_IS_SSR) {
+			this.resolveRoute(this.$route, constructor.extendOptions.__INITIAL_STATE__);
+		}
 
 		const options = this.$options.routeOptions || {};
 		if (options.hasResolver && RouteResolver.isComponentResolving(this.$options.name!)) {
@@ -228,7 +234,7 @@ export class BaseRouteComponent extends Vue {
 		const options = this.$options.routeOptions || {};
 		const to = this.$router.currentRoute;
 
-		await this.routeInit();
+		this.routeInit();
 
 		if (options.hasResolver) {
 			const resolver = RouteResolver.startResolve(this.$options, to);
