@@ -69,6 +69,9 @@ export class User extends Model {
 	}
 
 	static touch() {
+		if (GJ_IS_SSR) {
+			return Promise.resolve();
+		}
 		return Api.sendRequest('/web/touch');
 	}
 
