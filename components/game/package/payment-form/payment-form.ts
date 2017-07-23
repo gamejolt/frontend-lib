@@ -56,17 +56,12 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 export class FormGamePackagePayment extends BaseForm<any>
 	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess {
 	@Prop(Game) game: Game;
-
 	@Prop(GamePackage) package: GamePackage;
-
 	@Prop(Sellable) sellable: Sellable;
 	// @Prop(SellablePricing)
 	// pricing: SellablePricing;
-
 	@Prop(String) partnerReferredKey?: string;
-
 	@Prop(User) partnerReferredBy?: User;
-
 	@Prop(Boolean) partnerNoCut?: boolean;
 
 	@State app: AppStore;
@@ -74,6 +69,8 @@ export class FormGamePackagePayment extends BaseForm<any>
 	$refs: {
 		form: AppForm;
 	};
+
+	warnOnDiscard = false;
 
 	// form.this.onBought = '&';
 

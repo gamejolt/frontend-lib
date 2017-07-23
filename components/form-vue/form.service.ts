@@ -56,6 +56,7 @@ export class BaseForm<T> extends Vue {
 	formModel: Readonly<T> = {} as T;
 	modelClass?: { new (data?: T): T } = undefined;
 	resetOnSubmit = false;
+	warnOnDiscard = true;
 	saveMethod?: keyof T;
 	method: 'add' | 'edit' = 'add';
 	changed = false;
@@ -66,6 +67,8 @@ export class BaseForm<T> extends Vue {
 	readonly loadData: any | null;
 	isLoaded: boolean | null = null;
 	reloadOnSubmit = false;
+
+	private changeDeregister?: Function;
 
 	state: { [k: string]: any } = {
 		isProcessing: false,
@@ -84,9 +87,31 @@ export class BaseForm<T> extends Vue {
 		this._init();
 	}
 
-	private _init() {
-		this.changed = false;
+	mounted() {
+		if (!this.warnOnDiscard) {
+			return;
+		}
 
+		this.changeDeregister = this.$router.beforeEach((_to, _from, next) => {
+			if (this.changed) {
+				if (
+					!window.confirm(this.$gettext(`Are you sure you want to discard your unsaved changes?`))
+				) {
+					return next(false);
+				}
+			}
+			next();
+		});
+	}
+
+	destroyed() {
+		if (this.changeDeregister) {
+			this.changeDeregister();
+			this.changeDeregister = undefined;
+		}
+	}
+
+	private _init() {
 		// Is a base model defined? If so, then we're editing.
 		if (this.model) {
 			this.method = 'edit';
@@ -197,11 +222,9 @@ export class BaseForm<T> extends Vue {
 			// Send the new model back into the submit handler.
 			this.$emit('submit', this.formModel, response);
 
-			// Reset our processing state.
+			// Reset our state.
 			this.state.isProcessing = false;
-
-			// Make sure that errors are reset on a successful submit, just in
-			// case.
+			this.changed = false;
 			this.serverErrors = {};
 
 			// Show successful form submission.

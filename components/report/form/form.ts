@@ -8,8 +8,9 @@ import { Api } from '../../api/api.service';
 @Component({})
 export class AppReportForm extends BaseForm<any> implements FormOnSubmit {
 	@Prop(String) type: string;
-
 	@Prop(Object) resource: any;
+
+	warnOnDiscard = false;
 
 	onSubmit() {
 		const data = {
