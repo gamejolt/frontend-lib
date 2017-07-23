@@ -1,9 +1,10 @@
 @require '~styles/variables'
+@require '../../stylus/common/mixins'
 
 .datetime-picker
-	// @extend .clearfix
+	clearfix()
 
-	.datepicker-table
+	>>> .datepicker-table
 		float: left
 		margin-right: ($grid-gutter-width / 2)
 
@@ -11,7 +12,7 @@
 			float: none
 			margin-right: 0
 
-	.timepicker
+	>>> .timepicker
 		float: left
 
 		@media $media-xs
