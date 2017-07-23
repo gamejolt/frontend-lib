@@ -1,15 +1,18 @@
 import { Api } from '../../api/api.service';
 
-export async function FormValidatorAvailability(value: string, args: [string]) {
-	// TODO(rewrite)
+export interface AvailabilityCheck {
+	url: string;
+	initVal?: string;
+}
+export async function FormValidatorAvailability(value: string, args: [AvailabilityCheck]) {
 	// Skip the check if our initial value still isn't set yet.
 	// The validator runs before the initial value gets set, so skip it if we haven't gotten the initialVal yet.
-	// if ( angular.isUndefined( initialVal ) || ngModel.$isEmpty( value ) || initialVal === value ) {
-	// 	return $q.when( true );
-	// }
+	if (args[0].initVal && args[0].initVal === value) {
+		return { valid: true };
+	}
 
 	try {
-		await Api.sendRequest(args[0], { value }, { detach: true, processPayload: false });
+		await Api.sendRequest(args[0].url, { value }, { detach: true, processPayload: false });
 	} catch (_e) {
 		return { valid: false };
 	}

@@ -1,28 +1,49 @@
-import { Injectable } from 'ng-metadata/core';
 import { Api } from '../api/api.service';
 
-@Injectable('Timezone')
+export interface TimezoneData {
+	i: string;
+	r: string;
+	o: number;
+}
+
 export class Timezone {
-	private timezonesFetch: any;
+	private static timezonesFetch: Promise<TimezoneData[]>;
+	private static groupedTimezones: { [region: string]: TimezoneData[] };
 
-	getTimezones() {
+	private static async fetchTimezones() {
+		// Raw request (ignore most payload stuff).
+		const options = {
+			withCredentials: false,
+			detach: true,
+			processPayload: false,
+		};
+
+		const response = await Api.sendRequest('/jams/manage/jams/get-timezones', null, options);
+		return response.data;
+	}
+
+	static getTimezones() {
 		if (!this.timezonesFetch) {
-			// Raw request (ignore most payload stuff).
-			const options = {
-				withCredentials: false,
-				detach: true,
-				processPayload: false,
-			};
-
-			this.timezonesFetch = Api.sendRequest(
-				'/jams/manage/jams/get-timezones',
-				null,
-				options
-			).then((response: any) => {
-				return response.data;
-			});
+			this.timezonesFetch = this.fetchTimezones();
 		}
 
 		return this.timezonesFetch;
+	}
+
+	static async getGroupedTimezones() {
+		if (!this.groupedTimezones) {
+			const timezones = await this.getTimezones();
+			this.groupedTimezones = {};
+			for (let timezone of timezones) {
+				const arr = this.groupedTimezones[timezone.r];
+				if (arr) {
+					arr.push(timezone);
+					continue;
+				}
+				this.groupedTimezones[timezone.r] = [timezone];
+			}
+		}
+
+		return this.groupedTimezones;
 	}
 }

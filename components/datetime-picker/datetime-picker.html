@@ -1,14 +1,15 @@
 <div class="datetime-picker">
-	<datepicker
+	<app-datepicker
 		required
-		gj-datetime-picker-interpolate-name="{{name}}"
-		ng-model="date"
-		min-date="minDate"
-		max-date="maxDate"
+		v-model="date"
+		:min-date="minDateBounds"
+		:max-date="maxDateBounds"
 		max-mode="month"
-		show-weeks="false"
-		gj-form-server-validation="serverErrors">
-	</datepicker>
+		:show-weeks="false"
+		/>
+		<!-- TODO(rewrite) -->
+		<!-- gj-datetime-picker-interpolate-name="{{name}}" -->
+		<!-- gj-form-server-validation="serverErrors" -->
 
-	<timepicker show-meridian="true" mousewheel="false" ng-model="time"></timepicker>
+	<app-timepicker :show-meridian="true" v-model="time" />
 </div>

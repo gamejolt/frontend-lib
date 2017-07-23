@@ -12,31 +12,27 @@
 		</tr>
 		<tr>
 			<td style="width: 50px;" class="form-group">
-				<app-form-control
+				<input
 					ref="hours"
+					type="text"
 					v-model="hours"
-					@changed="updateHours()"
-					:class="['text-center', { invalid: invalidHours }]"
+					@blur="updateHours()"
+					:class="['form-control', 'text-center', { invalid: invalidHours }]"
 					:readonly="readonlyInput"
 					:maxlength="2"
-					:rules="{
-						max: 2,
-					}"
-					/>
+					>
 			</td>
 			<td>:</td>
 			<td style="width: 50px;" class="form-group">
-				<app-form-control
+				<input
 					ref="minutes"
+					type="text"
 					v-model="minutes"
-					@changed="updateMinutes()"
-					:class="['text-center', { invalid: invalidMinutes }]"
+					@blur="updateMinutes()"
+					:class="['form-control', 'text-center', { invalid: invalidMinutes }]"
 					:readonly="readonlyInput"
-					maxlength="2"
-					:rules="{
-						max: 2,
-					}"
-					/>
+					:maxlength="2"
+					>
 			</td>
 			<td v-show="showMeridian">
 				<button
