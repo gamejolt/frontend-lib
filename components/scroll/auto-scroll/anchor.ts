@@ -21,7 +21,9 @@ export class AppAutoscrollAnchor extends Vue {
 	 */
 	scrollTo? = 0;
 
-	keyChanged = false;
+	// Set that we changed the key so that the initial render won't trigger an
+	// anchor scrolling affect. Only subsequent route changes will.
+	keyChanged = true;
 
 	private beforeRouteDeregister?: Function;
 
