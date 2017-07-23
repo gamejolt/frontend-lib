@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { WidgetCompilerWidget } from '../widget';
 import { WidgetCompilerContext } from '../widget-compiler.service';
 import { AppWidgetCompilerWidgetGameList } from './widget-game-list';
@@ -5,11 +6,11 @@ import { AppWidgetCompilerWidgetGameList } from './widget-game-list';
 export class WidgetCompilerWidgetGameList extends WidgetCompilerWidget {
 	readonly name = 'game-list';
 
-	compile(context: WidgetCompilerContext, _params: string[] = []) {
-		return this.wrapComponent(AppWidgetCompilerWidgetGameList, () => {
-			return {
+	compile(h: Vue.CreateElement, context: WidgetCompilerContext, _params: string[] = []) {
+		return h(AppWidgetCompilerWidgetGameList, {
+			props: {
 				games: context['games'],
-			};
+			},
 		});
 	}
 }

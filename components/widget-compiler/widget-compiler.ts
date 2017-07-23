@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
 import { WidgetCompiler, WidgetCompilerContext } from './widget-compiler.service';
 
@@ -15,39 +15,15 @@ export class AppWidgetCompiler extends Vue {
 	})
 	context: WidgetCompilerContext;
 
-	mounted() {
-		this.refresh();
-	}
-
-	@Watch('content')
-	contentChanged() {
-		this.refresh();
-	}
-
-	destroyed() {
-		this.context.destroy();
-	}
-
-	private refresh() {
+	render(h: Vue.CreateElement) {
 		if (!this.content) {
-			this.$el.innerHTML = '';
-			return;
+			return h('div');
 		}
 
 		if (this.isDisabled) {
-			this.$el.innerHTML = this.content;
-		} else {
-			const compiledElem = WidgetCompiler.compile(this.context, this.content);
-			if (compiledElem) {
-				this.$el.innerHTML = '';
-				this.$el.appendChild(compiledElem);
-			}
+			return h('div', { domProps: { innerHTML: this.content } });
 		}
 
-		this.$emit('compiled');
-	}
-
-	render(h: Vue.CreateElement) {
-		return h('div');
+		return WidgetCompiler.compile(h, this.context, this.content);
 	}
 }

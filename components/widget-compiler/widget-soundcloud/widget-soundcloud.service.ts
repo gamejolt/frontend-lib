@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { WidgetCompilerWidget } from '../widget';
 import { WidgetCompilerContext } from '../widget-compiler.service';
 import { AppWidgetCompilerWidgetSoundcloud } from './widget-soundcloud';
@@ -5,7 +6,7 @@ import { AppWidgetCompilerWidgetSoundcloud } from './widget-soundcloud';
 export class WidgetCompilerWidgetSoundcloud extends WidgetCompilerWidget {
 	readonly name = 'soundcloud';
 
-	compile(_context: WidgetCompilerContext, params: string[] = []) {
+	compile(h: Vue.CreateElement, _context: WidgetCompilerContext, params: string[] = []) {
 		if (!params || !params.length) {
 			throw new Error(`Invalid params for widget.`);
 		}
@@ -18,11 +19,11 @@ export class WidgetCompilerWidgetSoundcloud extends WidgetCompilerWidget {
 			color = params[1].replace(/[^0-9A-Za-z]/g, '');
 		}
 
-		return this.wrapComponent(AppWidgetCompilerWidgetSoundcloud, () => {
-			return {
+		return h(AppWidgetCompilerWidgetSoundcloud, {
+			props: {
 				trackId,
 				color,
-			};
+			},
 		});
 	}
 }

@@ -18,16 +18,7 @@ const REGEX = {
 };
 
 export class WidgetCompilerContext {
-	__widgetCompilerChildren: Vue[] = [];
 	[k: string]: any;
-
-	destroy() {
-		this.__widgetCompilerChildren.forEach(child => {
-			child.$destroy();
-		});
-
-		this.__widgetCompilerChildren = [];
-	}
 }
 
 export class WidgetCompiler {
@@ -46,23 +37,13 @@ export class WidgetCompiler {
 		return this.contentClass;
 	}
 
-	/**
-	 * Compiles any widgets in the content provided.
-	 * Creates isolate child scopes for each widget and attaches their scopes to the scope passed in.
-	 * This allows it to destroy the child scopes correctly when the parent is destroyed.
-	 * Any reruns of this call will check for any child widget scopes on the scope passed in and destroy
-	 * them. This ensure you can continue compiling the same content on the scope and it should work.
-	 */
-	static compile(context: WidgetCompilerContext, content: string): HTMLElement | undefined {
+	static compile(h: Vue.CreateElement, context: WidgetCompilerContext, content: string) {
 		if (!content) {
 			return undefined;
 		}
 
-		context.destroy();
-
-		let compiledInput = `<div class="${this.contentClass}">`;
+		let children: Vue.VNode[] = [];
 		let workingInput = content;
-		let widgetInjections: { [k: string]: Vue } = {};
 
 		// Loop through each match that looks like a widget.
 		let matchInfo: RegExpMatchArray | null = null;
@@ -75,48 +56,44 @@ export class WidgetCompiler {
 			const innerMatch = matchInfo[1];
 
 			// Add in the text up until this regex match.
-			compiledInput += workingInput.substring(0, matchInfo.index);
+			children.push(
+				h('div', {
+					staticClass: this.contentClass,
+					domProps: { innerHTML: workingInput.substring(0, matchInfo.index) },
+				})
+			);
 
 			// Process this match.
-			const injectedWidget = this.processWidgetMatch(context, innerMatch);
+			const injectedWidget = this.processWidgetMatch(h, context, innerMatch);
 			if (injectedWidget) {
-				// This is magic... o_O
-				const token = Math.random().toString(36).substr(2);
-
-				// Make a placeholder div that we can inject in to later.
-				compiledInput += `</div><div id="_inj_${token}_"></div><div class="${this.contentClass}">`;
-
-				// Now save this injection.
-				widgetInjections['_inj_' + token + '_'] = injectedWidget;
-				context.__widgetCompilerChildren.push(injectedWidget);
+				children.push(injectedWidget);
 			}
 
 			// Pull the new working input text to process.
 			// It's just anything that was after our match.
 			// This way we keep processing from where we left off.
-			workingInput = workingInput.substring(matchInfo.index + match.length);
+			workingInput = workingInput.substring(matchInfo.index! + match.length);
 		}
 
 		// Get the remaining portion of input after the last widget (if there were any).
-		compiledInput += workingInput + '</div>';
+		children.push(
+			h('div', {
+				staticClass: this.contentClass,
+				domProps: { innerHTML: workingInput },
+			})
+		);
 
-		// Convert our compiled input into an element.
-		// Wrap in a div so we can do finds on it.
-		const compiledElement = document.createElement('div');
-		compiledElement.className = 'widget-compiler';
-		compiledElement.innerHTML = compiledInput;
-
-		// If we've gathered any injections, let's put them in.
-		for (const id in widgetInjections) {
-			const injectionElement = widgetInjections[id];
-			const slot = compiledElement.querySelector('#' + id) as HTMLElement;
-			injectionElement.$mount(slot);
-		}
-
+		// TODO
 		// Clean all empty tags out.
-		this.cleanEmptyContent(compiledElement);
+		// this.cleanEmptyContent(compiledElement);
 
-		return compiledElement;
+		return h(
+			'div',
+			{
+				staticClass: 'widget-compiler',
+			},
+			children
+		);
 	}
 
 	/**
@@ -124,7 +101,11 @@ export class WidgetCompiler {
 	 * Will attempt to figure out the widget that they were trying to call
 	 * and call its compilation function.
 	 */
-	private static processWidgetMatch(context: WidgetCompilerContext, match: string) {
+	private static processWidgetMatch(
+		h: Vue.CreateElement,
+		context: WidgetCompilerContext,
+		match: string
+	) {
 		// Trim whitespace.
 		match = match.replace(REGEX.whitespaceTrim, '');
 
@@ -146,22 +127,22 @@ export class WidgetCompiler {
 		params.shift();
 
 		// Call the widget's service.
-		return this.widgets[widgetName].compile(context, params);
+		return this.widgets[widgetName].compile(h, context, params);
 	}
 
-	private static cleanEmptyContent(compiledElement: HTMLElement) {
-		let emptyElems = compiledElement.querySelectorAll('p:empty');
-		for (let i = 0; i < emptyElems.length; ++i) {
-			const elem = emptyElems[i];
-			elem.parentNode!.removeChild(elem);
-		}
+	// private static cleanEmptyContent(compiledElement: HTMLElement) {
+	// 	let emptyElems = compiledElement.querySelectorAll('p:empty');
+	// 	for (let i = 0; i < emptyElems.length; ++i) {
+	// 		const elem = emptyElems[i];
+	// 		elem.parentNode!.removeChild(elem);
+	// 	}
 
-		emptyElems = compiledElement.querySelectorAll('div:empty');
-		for (let i = 0; i < emptyElems.length; ++i) {
-			const elem = emptyElems[i];
-			elem.parentNode!.removeChild(elem);
-		}
-	}
+	// 	emptyElems = compiledElement.querySelectorAll('div:empty');
+	// 	for (let i = 0; i < emptyElems.length; ++i) {
+	// 		const elem = emptyElems[i];
+	// 		elem.parentNode!.removeChild(elem);
+	// 	}
+	// }
 }
 
 // Add in default widgets.

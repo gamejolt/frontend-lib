@@ -19,8 +19,8 @@ export class AppVideoEmbed extends Vue {
 	autoplay: boolean;
 
 	embedUrl = '';
-	width = 0;
-	height = 0;
+	width: number | 'auto' = 'auto';
+	height: number | 'auto' = 'auto';
 
 	private resize$: Subscription | undefined;
 
