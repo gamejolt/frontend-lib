@@ -83,9 +83,7 @@ module.exports = function(config) {
 	config.sections.forEach(function(section) {
 		let indexHtml = section === 'app' ? 'index.html' : section + '.html';
 
-		let appEntries = [
-			path.resolve(base, 'src/' + section + '/main.ts'),
-		];
+		let appEntries = [path.resolve(base, 'src/' + section + '/main.ts')];
 
 		if (!config.production) {
 			appEntries.push('webpack-dev-server/client?http://localhost:' + config.port + '/');
