@@ -5,14 +5,9 @@
 		<div class="alert alert-info"
 			v-if="partnerReferredBy && !partnerNoCut"
 			>
-			<translate
-				:escape-html="false"
-				:translate-params="{
-					user: partnerReferredBy.display_name,
-				}"
-				>
+			<span v-translate="{ user: partnerReferredBy.display_name }">
 				You've accessed this game through a Game Jolt Partner link! A percentage of this sale will go to <b>%{ user }</b>.
-			</translate>
+			</span>
 			<router-link class="link-muted" :to="{ name: 'landing.partners' }">
 				<translate>Learn more about the Game Jolt Partner system.</translate>
 			</router-link>
@@ -29,15 +24,15 @@
 				</translate>
 			</span>
 			<span v-else>
-				<translate :escape-html="false" :translate-params="{ amount: formattedAmount }">
+				<span v-translate="{ amount: formattedAmount }">
 					This developer suggests paying <b>%{ amount }</b>, but you're able to pay what you want.
-				</translate>
+				</span>
 			</span>
 		</p>
 		<p v-else-if="sellable.type === 'paid'">
-			<translate :escape-html="false" :translate-params="{ amount: formattedAmount }">
+			<span v-translate="{ amount: formattedAmount }">
 				The developer has set the price of this game to <b>%{ amount }</b>, but you are able to support them by giving more.
-			</translate>
+			</span>
 		</p>
 
 		<hr>
