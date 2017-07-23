@@ -113,10 +113,10 @@ export class BaseForm<T> extends Vue {
 			(this as any).onInit();
 		}
 
-		this.load();
+		this._load();
 	}
 
-	private async load() {
+	private async _load() {
 		if (this.isLoaded && !this.reloadOnSubmit) {
 			return;
 		}
