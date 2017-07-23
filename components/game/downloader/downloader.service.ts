@@ -7,19 +7,12 @@ import { HistoryTick } from '../../history-tick/history-tick-service';
 import { Growls } from '../../growls/growls.service';
 import { Translate } from '../../translate/translate.service';
 import { Popover } from '../../popover/popover.service';
-import { EventBus } from '../../event-bus/event-bus.service';
 import { Environment } from '../../environment/environment.service';
 
 export interface GameDownloaderOptions {
 	key?: string;
 	isOwned?: boolean;
 }
-
-// Any time we transition away from the page, make sure we reset our download
-// transition. THis will ensure the download won't start.
-EventBus.on('routeChangeBefore', () => {
-	GameDownloader.shouldTransition = false;
-});
 
 export class GameDownloader {
 	static isDownloadQueued = false;
@@ -35,6 +28,17 @@ export class GameDownloader {
 
 		// In case any popover was used to click the download.
 		Popover.hideAll();
+
+		// Any time we transition away from the page, make sure we reset our
+		// download transition. This will ensure the download won't start.
+		let deregister: Function | undefined = router.beforeEach((_to, _from, next) => {
+			GameDownloader.shouldTransition = false;
+			if (deregister) {
+				deregister();
+				deregister = undefined;
+			}
+			next();
+		});
 
 		// Client needs to download externally.
 		if (GJ_IS_CLIENT) {
