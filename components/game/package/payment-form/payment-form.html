@@ -67,16 +67,12 @@
 					<span class="amount-input">
 						<span class="amount-input-currency">$</span>
 						<app-form-control
-							type="number"
+							type="currency"
 							v-app-focus-when
-							step="1"
-							:min="_minOrderAmount"
 							:rules="{
 								min_value: _minOrderAmount
 							}"
 							/>
-							<!--TODO(rewrite)-->
-							<!--gj-form-currency-input-->
 					</span>
 
 					<span
