@@ -45,7 +45,7 @@ export function initScrollBehavior() {
 			// scrolling. If it has changed it means we gotta skip this cycle
 			// and reset it.
 			if (!anchor.keyChanged) {
-				if (anchor.scrollTo) {
+				if (typeof anchor.scrollTo !== 'undefined') {
 					return scroll({
 						x: 0,
 						y: anchor.scrollTo,
