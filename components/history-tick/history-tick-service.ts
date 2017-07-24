@@ -26,7 +26,7 @@ export class HistoryTick {
 		// Look specifically for undefined and not just null.
 		// There may have been a null referrer if we got here through a direct page hit.
 		if (typeof this._sources[resource + ':' + resourceId] === 'undefined') {
-			this._sources[resource + ':' + resourceId] = Referrer.get();
+			this._sources[resource + ':' + resourceId] = Referrer.referrer;
 		}
 	}
 
