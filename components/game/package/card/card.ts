@@ -11,7 +11,6 @@ import { GamePackageCardModel } from './card.model';
 import { SellablePricing } from '../../../sellable/pricing/pricing.model';
 import { Analytics } from '../../../analytics/analytics.service';
 import { User } from '../../../user/user.model';
-import { Growls } from '../../../growls/growls.service';
 import { AppCard } from '../../../card/card';
 import { currency } from '../../../../vue/filters/currency';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
@@ -27,7 +26,6 @@ import { AppGamePackageCardButtons } from './buttons';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
 import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
 
-// TODO(rewrite): finish the card functions out
 @View
 @Component({
 	components: {
@@ -58,38 +56,44 @@ export class AppGamePackageCard extends Vue {
 	builds: GameBuild[];
 	@Prop(String) accessKey?: string;
 	@Prop(Boolean) isPartner?: boolean;
-	@Prop(String) partnerReferredKey?: string;
-	@Prop(User) partnerReferredBy?: User;
-	@Prop(Boolean) partnerNoCut?: boolean;
+	@Prop(String) partnerKey?: string;
+	@Prop(User) partner?: User;
 
 	showFullDescription = false;
 	canToggleDescription = false;
 
-	isOwned = false;
 	isWhatOpen = false;
-	isPaymentOpen = false;
-	clickedBuild?: GameBuild;
 	pricing: SellablePricing | null = null;
 	sale = false;
 	salePercentageOff = '';
 	saleOldPricing: SellablePricing | null = null;
-	hasPaymentWell = false;
 
 	get card() {
 		return new GamePackageCardModel(this.releases, this.builds);
 	}
 
-	created() {
-		// // If this game is in their installed games, this will populate.
-		// this.installedBuild = null;
-
-		this.isOwned = this.sellable && this.sellable.is_owned ? true : false;
-
+	get isOwned() {
 		// If there is a key on the package, then we should show it as being
 		// "owned".
 		if (this.accessKey) {
-			this.isOwned = true;
+			return true;
 		}
+
+		return this.sellable && this.sellable.is_owned ? true : false;
+	}
+
+	get canBuy() {
+		return (
+			this.sellable &&
+			!this.isOwned &&
+			(this.sellable.type === 'pwyw' || this.sellable.type === 'paid')
+		);
+	}
+
+	created() {
+		// TODO(rewrite)
+		// // If this game is in their installed games, this will populate.
+		// this.installedBuild = null;
 
 		if (this.sellable && this.sellable.pricings.length > 0) {
 			this.pricing = this.sellable.pricings[0];
@@ -101,14 +105,6 @@ export class AppGamePackageCard extends Vue {
 					100).toFixed(0);
 			}
 		}
-
-		if (
-			this.sellable &&
-			!this.isOwned &&
-			(this.sellable.type === 'pwyw' || this.sellable.type === 'paid')
-		) {
-			this.hasPaymentWell = true;
-		}
 	}
 
 	buildClick(build: GameBuild, fromExtraSection = false) {
@@ -116,10 +112,9 @@ export class AppGamePackageCard extends Vue {
 		// showing payment form. Just take them directly to site.
 		if (GJ_IS_CLIENT && fromExtraSection) {
 			this.doBuildClick(build, fromExtraSection);
-		} else if (this.sellable.type === 'pwyw' && this.showPayment(build)) {
-			// This will show the payment form if we're supposed to.
+		} else if (this.sellable.type === 'pwyw' && this.canBuy) {
+			this.showPayment(build);
 		} else {
-			// Otherwise direct to the build.
 			this.doBuildClick(build, fromExtraSection);
 		}
 	}
@@ -138,37 +133,20 @@ export class AppGamePackageCard extends Vue {
 	}
 
 	showPayment(build?: GameBuild) {
-		GamePackagePurchaseModal.show(this.game, this.package, this.sellable, build);
-		return true;
-		// // If this isn't a free game, then we want to slide the payment open. If
-		// // it's pay what you want, when the payment is open and they click a
-		// // build again, just take them to it.
-		// if (this.hasPaymentWell) {
-		// 	if (!this.isPaymentOpen) {
-		// 		this.isPaymentOpen = true;
-		// 		this.clickedBuild = build;
-		// 		return true;
-		// 	}
-		// }
-
-		// return false;
-	}
-
-	skipPayment() {
-		// When they skip a pwyw payment form, on client we need to start the
-		// install. On site we treat it like a normal build click.
-		if (GJ_IS_CLIENT) {
-			// this.startInstall( this.clickedBuild );
-		} else {
-			this.buildClick(this.clickedBuild!);
-		}
+		GamePackagePurchaseModal.show({
+			game: this.game,
+			package: this.package,
+			build,
+			partner: this.partner,
+			partnerKey: this.partnerKey,
+		});
 	}
 
 	private download(build: GameBuild) {
 		Analytics.trackEvent('game-package-card', 'download', 'download');
 
 		GameDownloader.download(this.$router, this.game, build, {
-			isOwned: (this.sellable && this.isOwned) || this.isPartner,
+			isOwned: this.isOwned || this.isPartner,
 			key: this.accessKey,
 		});
 	}
@@ -177,7 +155,7 @@ export class AppGamePackageCard extends Vue {
 		Analytics.trackEvent('game-package-card', 'download', 'play');
 
 		GamePlayModal.show(this.game, build, {
-			// isOwned: (this.sellable && this.isOwned) || this.isPartner,
+			// isOwned: this.isOwned || this.isPartner,
 			key: this.accessKey,
 		});
 	}
@@ -197,38 +175,4 @@ export class AppGamePackageCard extends Vue {
 
 		return amountStr;
 	}
-
-	onPackageBought() {
-		this.isWhatOpen = false;
-		this.isPaymentOpen = false;
-		this.hasPaymentWell = false;
-		this.isOwned = true;
-
-		Growls.success({
-			title: this.$gettext('Order Complete'),
-			message: this.$gettextInterpolate(
-				'Warm thanks from both %{ developer } and the Game Jolt team.',
-				{ developer: this.game.developer.display_name }
-			),
-			sticky: true,
-		});
-	}
 }
-
-// @Component({
-// 	selector: 'gj-game-package-card',
-// 	template,
-// })
-// export class GamePackageCardComponent implements OnInit
-// {
-
-// 	// constructor(
-// 	// 	@Inject( '$scope') private $scope: ng.IScope,
-// 	// 	@Inject( 'gettextCatalog' ) private gettextCatalog: ng.gettext.gettextCatalog,
-// 	// 	@Inject( 'Game_PlayModal' ) private Game_PlayModal: GamePlayModal,
-// 	// 	@Inject( 'Game_Downloader' ) private Game_Downloader: any,
-// 	// )
-// 	// {
-// 	// }
-
-// }

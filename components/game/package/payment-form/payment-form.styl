@@ -1,23 +1,6 @@
 @require '~styles/variables'
 @require './../../../../stylus/common/mixins.styl'
 
-.-spinner
-	position: absolute
-	top: 0
-	right: 0
-	bottom: 0
-	left: 0
-	content: ''
-	background-color: rgba($gray-dark, 0.7)
-	z-index: 2
-	display: flex
-	align-items: center
-	justify-content: center
-
-	.loading
-		color: $white
-		font-weight: bold
-
 .form-group
 	margin-bottom: $font-size-base
 
@@ -52,8 +35,8 @@
 	padding-bottom: 8px
 	border: 2px solid $black
 	border-radius: $border-radius-base
-	height: 40px + (@padding-top * 2) + (2px * 2)
 	width: 100%
+	height: 40px + (@padding-top * 2) + (2px * 2)
 	margin-bottom: $line-height-computed
 	vertical-align: middle
 	cursor: pointer
@@ -66,14 +49,28 @@
 		pointer-events: none
 		opacity: 0.5
 
-.saved-card-more
-	line-height: 40px
-	padding-left: 10px
-	padding-right: 10px
+.saved-card-options
+	clearfix()
 
-	.jolticon
-		vertical-align: middle
-		color: $gj-green !important
+	.saved-card-option
+		margin-right: 10px + 40px
+
+	.saved-card
+		float: left
+		display: block
+		margin-right: 10px
+
+	.saved-card-more
+		float: left
+		width: 40px
+		padding-left: 0
+		padding-right: 0
+		line-height: 40px
+		text-align: center
+
+		.jolticon
+			vertical-align: middle
+			cursor: pointer
 
 .saved-card-label
 	font-size: $font-size-tiny
