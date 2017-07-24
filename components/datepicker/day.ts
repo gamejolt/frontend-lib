@@ -13,7 +13,7 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 		AppJolticon,
 	},
 })
-export class AppDaypicker extends Vue {
+export class AppDatepickerDay extends Vue {
 	parent: AppDatepicker = null as any;
 
 	labels: { abbr: string; full: string }[] = [];
@@ -74,7 +74,6 @@ export class AppDaypicker extends Vue {
 		const days = new Array<DateObj>(42);
 		for (let i = 0; i < 42; i++) {
 			const dateObj = this.parent.createDateObject(dates[i], this.parent.formatDay);
-			dateObj.uid = `${this.parent.uniqueId}-${i}`;
 			dateObj.secondary = dates[i].getMonth() !== month;
 			days[i] = dateObj;
 		}
@@ -112,39 +111,5 @@ export class AppDaypicker extends Vue {
 		checkDate.setMonth(0); // Compare with Jan 1
 		checkDate.setDate(1);
 		return Math.floor(Math.round((time - checkDate.getTime()) / 86400000) / 7) + 1;
-	}
-
-	handleKeyDown(key: string, _evt: KeyboardEvent) {
-		console.log('handling key down');
-		let date = this.parent.activeDate.getDate();
-
-		if (key === 'left') {
-			date = date - 1; // up
-		} else if (key === 'up') {
-			date = date - 7; // down
-		} else if (key === 'right') {
-			date = date + 1; // down
-		} else if (key === 'down') {
-			date = date + 7;
-		} else if (key === 'pageup' || key === 'pagedown') {
-			const month = this.parent.activeDate.getMonth() + (key === 'pageup' ? -1 : 1);
-			this.parent.activeDate.setMonth(month, 1);
-			date = Math.min(
-				this.getDaysInMonth(
-					this.parent.activeDate.getFullYear(),
-					this.parent.activeDate.getMonth()
-				),
-				date
-			);
-		} else if (key === 'home') {
-			date = 1;
-		} else if (key === 'end') {
-			date = this.getDaysInMonth(
-				this.parent.activeDate.getFullYear(),
-				this.parent.activeDate.getMonth()
-			);
-		}
-		this.parent.activeDate.setDate(date);
-		this.parent.refreshView();
 	}
 }

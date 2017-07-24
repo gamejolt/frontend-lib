@@ -1,9 +1,4 @@
-<table
-	role="grid"
-	class="datepicker-table"
-	:aria-labelledby="`${parent.uniqueId}-title`"
-	:aria-activedescendant="parent.activeDateId"
-	>
+<table class="datepicker-table">
 	<thead>
 		<tr>
 			<th>
@@ -11,7 +6,6 @@
 					type="button"
 					class="datepicker-btn datepicker-btn-default pull-left"
 					@click="move(-1)"
-					tabindex="-1"
 					style="width: 100%"
 					>
 					<app-jolticon icon="chevron-left" />
@@ -19,14 +13,9 @@
 			</th>
 			<th :colspan="5 + parent.showWeeks">
 				<button
-					:id="`${parent.uniqueId}-title`"
-					role="heading"
-					aria-live="assertive"
-					aria-atomic="true"
 					type="button"
 					class="datepicker-btn datepicker-btn-default"
 					@click="parent.toggleMode()"
-					tabindex="-1"
 					style="width:100%;"
 					>
 					<strong>{{title}}</strong>
@@ -37,7 +26,6 @@
 					type="button"
 					class="datepicker-btn datepicker-btn-default pull-right"
 					@click="move(1)"
-					tabindex="-1"
 					style="width: 100%"
 					>
 					<app-jolticon icon="chevron-right" />
@@ -46,33 +34,26 @@
 		</tr>
 		<tr>
 			<th v-show="parent.showWeeks" class="text-center"></th>
-			<th v-for="label in labels" class="text-center">
-				<small :aria-label="`${label.full}`">{{label.abbr}}</small>
+			<th v-for="label of labels" class="text-center">
+				<small>{{label.abbr}}</small>
 			</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr	v-for="(row, index) in rows">
-			<td v-show="parent.showWeeks" class="text-center"><em>{{ weekNumbers[index] }}</em></td>
-			<td
-				v-for="dt in row"
-				:key="dt.date.getTime()"
-				class="text-center"
-				role="gridcell"
-				:id="dt.uid"
-				:aria-disabled="!!dt.disabled"
-				>
+		<tr v-for="(row, i) of rows" :key="i">
+			<td v-show="parent.showWeeks" class="text-center">
+				<em>{{ weekNumbers[i] }}</em>
+			</td>
+			<td v-for="(dt, n) of row" :key="n" class="text-center">
 				<a
-					style="width:100%;"
-					:class="[
-						'datepicker-btn',
-						'datepicker-btn-default',
-						dt.selected ? 'datepicker-btn-info' : '',
-						parent.isActive(dt) ? 'active' : '',
-					]"
+					style="width: 100%;"
+					class="datepicker-btn datepicker-btn-default"
+					:class="{
+						'datepicker-btn-info': dt.selected,
+						'active': parent.isActive(dt),
+					}"
 					@click="parent.select(dt.date)"
 					:disabled="!!dt.disabled"
-					tabindex="-1"
 					>
 					<span
 						:class="{

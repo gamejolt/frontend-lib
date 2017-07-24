@@ -1,7 +1,8 @@
 import Vue from 'vue';
+import startOfToday from 'date-fns/start_of_today';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./datetime-picker.html?style=./datetime-picker.styl';
-import fns from 'date-fns';
+
 import { AppDatepicker } from '../datepicker/datepicker';
 import { AppTimepicker } from '../timepicker/timepicker';
 
@@ -41,7 +42,7 @@ export class AppDatetimePicker extends Vue {
 			// This way they can select a date from scratch.
 			// Time should be set to midnight, though.
 			this.date = null;
-			this.time = fns.startOfToday();
+			this.time = startOfToday();
 		}
 	}
 
