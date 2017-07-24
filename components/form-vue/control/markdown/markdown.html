@@ -68,6 +68,7 @@
 			:class="editorClass"
 			:name="group.name"
 			:placeholder="placeholder"
+			:disabled="disabled"
 			:value="value"
 			@input="onChange( $event.target.value )"
 			v-validate="{ rules: validationRules }"
