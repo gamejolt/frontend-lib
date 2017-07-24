@@ -216,5 +216,10 @@ export class AppGraph extends Vue {
 				this.data.labels.push(item.label);
 			});
 		}
+
+		if (this.chart) {
+			this.chart.data = this.data;
+			this.chart.update();
+		}
 	}
 }
