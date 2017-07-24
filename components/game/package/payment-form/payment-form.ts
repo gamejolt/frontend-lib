@@ -1,4 +1,4 @@
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import * as View from '!view!./payment-form.html?style=./payment-form.styl';
 
@@ -16,7 +16,7 @@ import { Screen } from '../../../screen/screen-service';
 import { makeObservableService } from '../../../../utils/vue';
 import { Api } from '../../../api/api.service';
 import { arrayIndexBy } from '../../../../utils/array';
-import { Geo, Country } from '../../../geo/geo.service';
+import { Geo, Region } from '../../../geo/geo.service';
 import { HistoryTick } from '../../../history-tick/history-tick-service';
 import { Device } from '../../../device/device.service';
 import { OrderPayment } from '../../../order/payment/payment.model';
@@ -32,6 +32,8 @@ import { AppPopover } from '../../../popover/popover';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppFocusWhen } from '../../../form-vue/focus-when.directive';
 import { AppForm } from '../../../form-vue/form';
+import { AppLoadingFade } from '../../../loading/fade/fade';
+import { FormOnSubmitError } from '../../../form-vue/form.service';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
@@ -41,6 +43,7 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 	components: {
 		AppJolticon,
 		AppLoading,
+		AppLoadingFade,
 		AppExpand,
 		AppPopover,
 	},
@@ -54,15 +57,12 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 	},
 })
 export class FormGamePackagePayment extends BaseForm<any>
-	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess {
+	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess, FormOnSubmitError {
 	@Prop(Game) game: Game;
 	@Prop(GamePackage) package: GamePackage;
 	@Prop(Sellable) sellable: Sellable;
-	// @Prop(SellablePricing)
-	// pricing: SellablePricing;
-	@Prop(String) partnerReferredKey?: string;
-	@Prop(User) partnerReferredBy?: User;
-	@Prop(Boolean) partnerNoCut?: boolean;
+	@Prop(String) partnerKey?: string;
+	@Prop(User) partner?: User;
 
 	@State app: AppStore;
 
@@ -71,8 +71,6 @@ export class FormGamePackagePayment extends BaseForm<any>
 	};
 
 	warnOnDiscard = false;
-
-	// form.this.onBought = '&';
 
 	isLoaded = false;
 	isLoadingMethods = true;
@@ -85,7 +83,8 @@ export class FormGamePackagePayment extends BaseForm<any>
 	addresses: any[] = [];
 	calculatedAddressTax = false;
 	addressTaxAmount = 0;
-	countries: Country[] = [];
+	countries = Geo.getCountries();
+	regions: Region[] | null = null;
 	walletBalance = 0;
 	walletTax = 0;
 	minOrderAmount = 50;
@@ -139,49 +138,31 @@ export class FormGamePackagePayment extends BaseForm<any>
 		return true;
 	}
 
-	// this.$watch('formModel.country', function(country) {
-	// 	this.regions = Geo.getRegions(country);
-	// 	if (this.regions) {
-	// 		this.formModel.region = this.regions[0].code; // Default to first.
-	// 	} else {
-	// 		this.formModel.region = '';
-	// 	}
-	// });
-
-	// // Tax changes when amount changes.
-	// // Gotta repull all methods to get new tax info.
-	// var debouncedLoad = _.debounce(load, 1000);
-	// this.$watch('formModel.amount', function(newVal, oldVal) {
-	// 	if (newVal != oldVal) {
-	// 		this.isLoadingMethods = true;
-	// 		debouncedLoad();
-	// 	}
-	// });
-
-	// this.$watchGroup(
-	// 	['formModel.country', 'formModel.region'],
-	// 	getAddressTax
-	// );
-
 	onInit() {
-		// this.$state = $state;
-		// this.App = App;
-		// this.gjCurrencyFilter = gjCurrencyFilter;
-
-		// this.isLoaded = false;
-		// this.isLoadingMethods = true;
-		// this.checkoutType = 'cc-stripe';
-		// this.checkoutStep = 'primary';
-
 		this.setField('amount', this.pricing.amount ? this.pricing.amount / 100 : null);
 		this.setField('country', 'us');
+		this.load();
+	}
 
-		// this.cards = [];
-		// this.cardsTax = {};
-		// this.addresses = [];
-		// this.walletBalance = 0;
-		// this.walletTax = 0;
+	@Watch('formModel.country')
+	onCountryChange() {
+		this.regions = Geo.getRegions(this.formModel.country) || null;
+		if (this.regions) {
+			this.formModel.region = this.regions[0].code; // Default to first.
+		} else {
+			this.formModel.region = '';
+		}
+		this.getAddressTax();
+	}
 
+	@Watch('formModel.region')
+	onTaxFieldsChange() {
+		this.getAddressTax();
+	}
+
+	@Watch('formModel.amount')
+	onAmountChange() {
+		this.isLoadingMethods = true;
 		this.load();
 	}
 
@@ -239,7 +220,6 @@ export class FormGamePackagePayment extends BaseForm<any>
 
 		this.checkoutStep = 'address';
 		this.checkoutType = checkoutType;
-		this.countries = Geo.getCountries();
 		this.calculatedAddressTax = false;
 		this.addressTaxAmount = 0;
 	}
@@ -278,7 +258,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 		this.checkoutStep = 'primary';
 	}
 
-	checkoutSavedCard(card) {
+	checkoutSavedCard(card: any) {
 		const data: any = {
 			payment_method: 'cc-stripe',
 			sellable_id: this.sellable.id,
@@ -313,7 +293,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 	 * This is for checkouts outside the normal form submit flow.
 	 * We need to manually handle processing and errors.
 	 */
-	private async doCheckout(setupData, chargeData) {
+	private async doCheckout(setupData: any, chargeData: any) {
 		if (this.isLoadingMethods || this.isProcessing) {
 			return;
 		}
@@ -323,15 +303,21 @@ export class FormGamePackagePayment extends BaseForm<any>
 		setupData['source'] = HistoryTick.getSource('Game', this.package.game_id) || null;
 		setupData['os'] = Device.os();
 		setupData['arch'] = Device.arch();
-		setupData['ref'] = this.partnerReferredKey || null;
+		setupData['ref'] = this.partnerKey || null;
 
 		try {
-			let response = await Api.sendRequest('/web/checkout/setup-order', setupData);
+			let response = await Api.sendRequest('/web/checkout/setup-order', setupData, {
+				detach: true,
+			});
+
 			if (response.success === false) {
 				throw response;
 			}
 
-			response = await Api.sendRequest('/web/checkout/charge/' + response.cart.id, chargeData);
+			response = await Api.sendRequest('/web/checkout/charge/' + response.cart.id, chargeData, {
+				detach: true,
+			});
+
 			if (response.success === false) {
 				throw response;
 			}
@@ -350,6 +336,8 @@ export class FormGamePackagePayment extends BaseForm<any>
 	}
 
 	onSubmit() {
+		this.isProcessing = true;
+
 		const data: any = {
 			payment_method: this.checkoutType,
 			sellable_id: this.sellable.id,
@@ -373,9 +361,9 @@ export class FormGamePackagePayment extends BaseForm<any>
 		data['source'] = HistoryTick.getSource('Game', this.package.game_id) || null;
 		data['os'] = Device.os();
 		data['arch'] = Device.arch();
-		data['ref'] = this.partnerReferredKey || null;
+		data['ref'] = this.partnerKey || null;
 
-		return Api.sendRequest('/web/checkout/setup-order', data);
+		return Api.sendRequest('/web/checkout/setup-order', data, { detach: true });
 	}
 
 	onSubmitSuccess(response: any) {
@@ -391,5 +379,9 @@ export class FormGamePackagePayment extends BaseForm<any>
 			// For site we have to replace the URL completely since we are switching to https.
 			window.location.href = response.redirectUrl;
 		}
+	}
+
+	onSubmitError() {
+		this.isProcessing = false;
 	}
 }

@@ -13,7 +13,7 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 		AppJolticon,
 	},
 })
-export class AppMonthpicker extends Vue {
+export class AppDatepickerMonth extends Vue {
 	parent: AppDatepicker = null as any;
 
 	title: string = null as any;
@@ -34,7 +34,6 @@ export class AppMonthpicker extends Vue {
 
 		for (let i = 0; i < 12; i++) {
 			const month = this.parent.createDateObject(new Date(year, i, 1), this.parent.formatMonth);
-			month.uid = `${this.parent.uniqueId}-${i}`;
 			months[i] = month;
 		}
 
@@ -54,27 +53,5 @@ export class AppMonthpicker extends Vue {
 			new Date(date1.getFullYear(), date1.getMonth()).getTime() -
 			new Date(date2.getFullYear(), date2.getMonth()).getTime()
 		);
-	}
-
-	handleKeyDown(key: string, _evt: KeyboardEvent) {
-		let date = this.parent.activeDate.getMonth();
-
-		if (key === 'left') {
-			date = date - 1; // up
-		} else if (key === 'up') {
-			date = date - 3; // down
-		} else if (key === 'right') {
-			date = date + 1; // down
-		} else if (key === 'down') {
-			date = date + 3;
-		} else if (key === 'pageup' || key === 'pagedown') {
-			const year = this.parent.activeDate.getFullYear() + (key === 'pageup' ? -1 : 1);
-			this.parent.activeDate.setFullYear(year);
-		} else if (key === 'home') {
-			date = 0;
-		} else if (key === 'end') {
-			date = 11;
-		}
-		this.parent.activeDate.setMonth(date);
 	}
 }

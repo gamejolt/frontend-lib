@@ -1,7 +1,6 @@
 import { RequestOptions } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
 import { Analytics } from '../analytics/analytics.service';
-import { User } from '../user/user.model';
 import { VuexStore } from '../../utils/vuex';
 import { LocationRedirect } from '../../utils/router';
 
@@ -148,6 +147,8 @@ export class Payload {
 			if (data.user === null) {
 				this.store.commit('app/clearUser');
 			} else {
+				// There is a circular dependency if we import at top.
+				const User = require('../user/user.model').User;
 				this.store.commit('app/setUser', new User(data.user));
 			}
 		}

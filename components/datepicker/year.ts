@@ -12,7 +12,7 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 		AppJolticon,
 	},
 })
-export class AppYearpicker extends Vue {
+export class AppDatepickerYear extends Vue {
 	parent: AppDatepicker = null as any;
 
 	range = 0;
@@ -46,7 +46,6 @@ export class AppYearpicker extends Vue {
 		const start = this.getStartingYear(this.parent.activeDate.getFullYear());
 		for (let i = 0; i < this.range; i++) {
 			const year = this.parent.createDateObject(new Date(start + i, 0, 1), this.parent.formatYear);
-			year.uid = `${this.parent.uniqueId}-${i}`;
 			years[i] = year;
 		}
 
@@ -56,26 +55,5 @@ export class AppYearpicker extends Vue {
 
 	compare(date1: Date, date2: Date) {
 		return date1.getFullYear() - date2.getFullYear();
-	}
-
-	handleKeyDown(key: string, _evt: KeyboardEvent) {
-		let date = this.parent.activeDate.getFullYear();
-
-		if (key === 'left') {
-			date = date - 1; // up
-		} else if (key === 'up') {
-			date = date - 5; // down
-		} else if (key === 'right') {
-			date = date + 1; // down
-		} else if (key === 'down') {
-			date = date + 5;
-		} else if (key === 'pageup' || key === 'pagedown') {
-			date += (key === 'pageup' ? -1 : 1) * this.range;
-		} else if (key === 'home') {
-			date = this.getStartingYear(this.parent.activeDate.getFullYear());
-		} else if (key === 'end') {
-			date = this.getStartingYear(this.parent.activeDate.getFullYear()) + this.range - 1;
-		}
-		this.parent.activeDate.setFullYear(date);
 	}
 }

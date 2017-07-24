@@ -37,14 +37,14 @@
 			</div>
 
 			<!-- Pay What You Want -->
-			<div v-if="sellable.type === 'pwyw'">
+			<div v-else-if="sellable.type === 'pwyw'">
 				<translate class="game-package-card-pricing-tag text-lower">
 					Name Your Price
 				</translate>
 			</div>
 
 			<!-- Free/Default -->
-			<div v-if="sellable.type === 'free'">
+			<div v-else-if="sellable.type === 'free'">
 				<strong class="game-package-card-pricing-amount text-upper">
 					<translate>Free</translate>
 				</strong>
@@ -142,37 +142,6 @@
 		</div>
 	</div>
 
-	<!-- TODO(rewrite) -->
-	<div v-if="hasPaymentWell">
-		<app-expand :when="isPaymentOpen" class="payment-well-expander">
-			<div class="payment-well fill-dark">
-
-				<!--<gj-game-package-card-payment-form
-					game="game"
-					package="package"
-					sellable="sellable"
-					pricing="pricing"
-					partner-referred-key="partnerReferredKey"
-					partner-referred-by="partnerReferredBy"
-					partner-no-cut="partnerNoCut"
-					on-bought="onPackageBought()"
-					>
-				</gj-game-package-card-payment-form>-->
-
-				<div v-if="sellable.type == 'pwyw'">
-					<hr>
-					<app-jolticon class="middle" icon="chevron-right" />
-					<a class="link-unstyled small"
-						@click="skipPayment"
-						>
-						<translate v-if="!GJ_IS_CLIENT">No thanks, take me to the download.</translate>
-						<translate v-else>No thanks, just install it.</translate>
-					</a>
-				</div>
-			</div>
-		</app-expand>
-	</div>
-
 	<div class="card-controls" v-if="card.showcasedRelease">
 
 		<div v-if="sellable.type !== 'paid' || isOwned || isPartner">
@@ -203,43 +172,37 @@
 		</div>
 
 		<div v-if="sellable.type === 'paid' && !isOwned">
-
-			<!--
-				Remove this as soon as we open the payment area.
-			-->
 			<div class="clearfix">
-					<!--v-if="!isPaymentOpen"
-					@click="isPaymentOpen = !isPaymentOpen"-->
-				<button class="btn btn-success-outline btn-block-xs"
-					@click="showPayment()"
-					>
+				<button class="btn btn-success-outline btn-block-xs" @click="showPayment()">
 					<app-jolticon icon="heart" />
 					<translate>Buy Now</translate>
 				</button>
 
 				<span class="game-package-card-payment-what-link">
-					(<a class="link-help" ng-click="isWhatOpen = !isWhatOpen"><translate>What do you get?</translate></a>)
+					(<a class="link-help" @click="isWhatOpen = !isWhatOpen"><translate>What do you get?</translate></a>)
 				</span>
 			</div>
-
 		</div>
 
 	</div>
 
-	<app-expand :when="isWhatOpen" class="payment-well-expander payment-well-expander-files">
-		<div class="payment-well">
+	<app-expand :when="isWhatOpen" class="package-card-well-expander">
+		<div class="package-card-well">
 
-			<div v-for="build in builds" :key="build.id">
+			<div v-for="build of builds" :key="build.id">
 
 				{{ build.primary_file.filename }}
 				<small class="text-muted">({{ build.primary_file.filesize | filesize }})</small>
 
-				<span v-for="os of [ 'windows', 'mac', 'linux', 'other' ]">
-					<app-jolticon
+				<span class="package-card-well-os" v-for="os of [ 'windows', 'mac', 'linux', 'other' ]">
+					<span
 						v-if="build[ 'os_' + os ] || build[ 'os_' + os + '_64' ]"
-						:icon="card.platformSupportInfo[ os ].icon"
-						v-app-tooltip="card.platformSupportInfo[ os ].tooltip"
-						/>
+						>
+						{{ card.platformSupportInfo[ os ].tooltip }}
+					</span>
+
+					<span v-if="!build[ 'os_' + os ] && build[ 'os_' + os + '_64' ]">
+						64-bit
 					</span>
 				</span>
 

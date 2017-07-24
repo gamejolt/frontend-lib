@@ -12,5 +12,10 @@ export function currency(amount: number, currencyCode = 'USD', fractionDigits = 
 		maximumFractionDigits: fractionDigits,
 	});
 
-	return formatter.format(amount / 100);
+	amount = amount / 100;
+	if (fractionDigits === 0) {
+		amount = Math.floor(amount);
+	}
+
+	return formatter.format(amount);
 }

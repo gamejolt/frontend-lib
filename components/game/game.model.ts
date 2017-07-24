@@ -88,16 +88,6 @@ export class Game extends Model {
 	tigrs_humor: number;
 	tigrs_gambling: number;
 
-	// These are computed in the constructor.
-	_has_cover: boolean;
-	is_published = false;
-	_is_finished: boolean;
-	_is_wip: boolean;
-	_is_devlog: boolean;
-	_has_packages = false;
-	_should_show_ads = true;
-	_can_buy_primary_sellable = false;
-
 	constructor(data: any = {}) {
 		super(data);
 
@@ -117,33 +107,6 @@ export class Game extends Model {
 			this.site = new Site(data.site);
 		}
 
-		this._has_cover = !!this.header_media_item;
-
-		if (this.status === Game.STATUS_VISIBLE) {
-			this.is_published = true;
-		}
-
-		this._is_finished = this.development_status === Game.DEVELOPMENT_STATUS_FINISHED;
-		this._is_wip = this.development_status === Game.DEVELOPMENT_STATUS_WIP;
-		this._is_devlog = this.development_status === Game.DEVELOPMENT_STATUS_DEVLOG;
-
-		if (this.compatibility) {
-			const keys = Object.keys(this.compatibility);
-			for (let i = 0; i < keys.length; ++i) {
-				if (keys[i] !== 'id' && keys[i] !== 'game_id') {
-					this._has_packages = true;
-					break;
-				}
-			}
-		}
-
-		// We don't want to show ads if this game has sellable items.
-		if (!this.ads_enabled) {
-			this._should_show_ads = false;
-		} else if (this.sellable && this.sellable.type !== 'free') {
-			this._should_show_ads = false;
-		}
-
 		// Should show as owned for the dev of the game.
 		if (this.sellable && this.sellable.type !== 'free' && this.developer) {
 			if (appStore.state.user && appStore.state.user.id === this.developer.id) {
@@ -151,11 +114,48 @@ export class Game extends Model {
 			}
 		}
 
-		if (this.sellable && this.sellable.type === 'paid' && !this.sellable.is_owned) {
-			this._can_buy_primary_sellable = true;
-		}
-
 		Registry.store('Game', this);
+	}
+
+	get _can_buy_primary_sellable() {
+		return this.sellable && this.sellable.type === 'paid' && !this.sellable.is_owned;
+	}
+
+	// We don't want to show ads if this game has sellable items.
+	get _should_show_ads() {
+		return this.ads_enabled && (!this.sellable || this.sellable.type === 'free');
+	}
+
+	get _is_finished() {
+		return this.development_status === Game.DEVELOPMENT_STATUS_FINISHED;
+	}
+
+	get _is_wip() {
+		return this.development_status === Game.DEVELOPMENT_STATUS_WIP;
+	}
+
+	get _is_devlog() {
+		return this.development_status === Game.DEVELOPMENT_STATUS_DEVLOG;
+	}
+
+	get is_published() {
+		return this.status === Game.STATUS_VISIBLE;
+	}
+
+	get _has_cover() {
+		return !!this.header_media_item;
+	}
+
+	get _has_packages() {
+		if (this.compatibility) {
+			const keys = Object.keys(this.compatibility);
+			for (let i = 0; i < keys.length; ++i) {
+				if (keys[i] !== 'id' && keys[i] !== 'game_id') {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	get routeLocation() {

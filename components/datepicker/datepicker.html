@@ -1,5 +1,5 @@
-<div role="application" @keydown="keydown( $event )">
-	<app-daypicker v-if="datepickerMode === 'day'" tabindex="0" />
-	 <app-monthpicker v-if="datepickerMode === 'month'" tabindex="0" />
-	<app-yearpicker v-if="datepickerMode === 'year'" tabindex="0" />
+<div>
+	<app-datepicker-day v-if="datepickerMode === 'day'" />
+	<app-datepicker-month v-if="datepickerMode === 'month'" />
+	<app-datepicker-year v-if="datepickerMode === 'year'" />
 </div>

@@ -1,14 +1,12 @@
-import { parse } from 'qs';
+import VueRouter from 'vue-router';
 
 export class PartnerReferral {
-	static trackReferrer(resource: string, resourceId: number) {
+	static trackReferrer(resource: string, resourceId: number, route: VueRouter.Route) {
 		if (GJ_IS_SSR) {
 			return;
 		}
 
-		const queryParams = parse(window.location.search.substring(1));
-		const ref = queryParams['ref'];
-
+		const ref = route.query.ref;
 		if (ref) {
 			window.sessionStorage.setItem(`partner-ref:${resource}:${resourceId}`, ref);
 		}

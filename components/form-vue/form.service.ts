@@ -32,6 +32,10 @@ export interface FormOnSubmitSuccess {
 	onSubmitSuccess(response: any): void;
 }
 
+export interface FormOnSubmitError {
+	onSubmitError(response: any): void;
+}
+
 export const CommonFormComponents = {
 	AppForm,
 	AppFormControl,
@@ -242,6 +246,10 @@ export class BaseForm<T> extends Vue {
 			// Store the server validation errors.
 			if (_response && _response.errors) {
 				this.serverErrors = _response.errors;
+			}
+
+			if ((this as any).onSubmitError) {
+				(this as any).onSubmitError(_response);
 			}
 
 			// Reset our processing state.
