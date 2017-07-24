@@ -43,8 +43,8 @@ export class GamePlayModal {
 		// Will open the gameserver in their browser.
 		if (GJ_IS_CLIENT && build.type !== GameBuild.TYPE_HTML && build.type !== GameBuild.TYPE_ROM) {
 			const gui = require('nw.gui') as typeof nwGui;
-			const url = await this.getDownloadUrl(build, { key: options.key });
-			gui.Shell.openExternal(url);
+			const downloadUrl = await this.getDownloadUrl(build, { key: options.key });
+			gui.Shell.openExternal(downloadUrl);
 			return;
 		}
 
@@ -57,8 +57,8 @@ export class GamePlayModal {
 			// onclick handler. Once we have the download URL we can direct the
 			// window that we now have the reference to.
 			const win = window.open('');
-			const url = await this.getDownloadUrl(build, { key: options.key });
-			win.location.href = url;
+			const downloadUrl = await this.getDownloadUrl(build, { key: options.key });
+			win.location.href = downloadUrl;
 			return;
 		}
 
