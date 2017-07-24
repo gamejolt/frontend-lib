@@ -57,34 +57,34 @@ export class GameBuild extends Model {
 	static readonly platformSupportInfo: { [k: string]: PlatformSupport } = {
 		windows: {
 			icon: 'windows',
-			tooltip: 'Windows Support',
+			tooltip: 'Windows',
 			sort: 10,
 		},
 		windows_64: {
 			icon: 'windows',
-			tooltip: 'Windows 64-bit Support',
+			tooltip: 'Windows 64-bit',
 			arch: '64',
 			sort: 11,
 		},
 		mac: {
 			icon: 'mac',
-			tooltip: 'Mac Support',
+			tooltip: 'macOS',
 			sort: 20,
 		},
 		mac_64: {
 			icon: 'mac',
-			tooltip: 'Mac 64-bit Support',
+			tooltip: 'macOS 64-bit',
 			arch: '64',
 			sort: 21,
 		},
 		linux: {
 			icon: 'linux',
-			tooltip: 'Linux Support',
+			tooltip: 'Linux',
 			sort: 30,
 		},
 		linux_64: {
 			icon: 'linux',
-			tooltip: 'Linux 64-bit Support',
+			tooltip: 'Linux 64-bit',
 			arch: '64',
 			sort: 30,
 		},
