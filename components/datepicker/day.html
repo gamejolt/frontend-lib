@@ -11,7 +11,7 @@
 					<app-jolticon icon="chevron-left" />
 				</button>
 			</th>
-			<th :colspan="5 + parent.showWeeks">
+			<th colspan="5">
 				<button
 					type="button"
 					class="datepicker-btn datepicker-btn-default"
@@ -33,7 +33,6 @@
 			</th>
 		</tr>
 		<tr>
-			<th v-show="parent.showWeeks" class="text-center"></th>
 			<th v-for="label of labels" class="text-center">
 				<small>{{label.abbr}}</small>
 			</th>
@@ -41,24 +40,22 @@
 	</thead>
 	<tbody>
 		<tr v-for="(row, i) of rows" :key="i">
-			<td v-show="parent.showWeeks" class="text-center">
-				<em>{{ weekNumbers[i] }}</em>
-			</td>
 			<td v-for="(dt, n) of row" :key="n" class="text-center">
 				<a
 					style="width: 100%;"
-					class="datepicker-btn datepicker-btn-default"
-					:class="{
-						'datepicker-btn-info': dt.selected,
-						'active': parent.isActive(dt),
-					}"
-					@click="parent.select(dt.date)"
-					:disabled="!!dt.disabled"
+					:class="[
+						'datepicker-btn',
+						'datepicker-btn-default',
+						dt.isSelected ? 'datepicker-btn-info' : '',
+						dt.isToday ? 'active' : '',
+					]"
+					@click="select(dt.date)"
+					:disabled="dt.isDisabled"
 					>
 					<span
 						:class="{
-							'text-muted': !!dt.secondary,
-							'text-info': !!dt.current,
+							'text-muted': dt.isOtherMonth,
+							'text-info': dt.isToday,
 						}"
 						>
 						{{dt.label}}

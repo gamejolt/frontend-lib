@@ -6,7 +6,6 @@
 					type="button"
 					class="datepicker-btn datepicker-btn-default pull-left"
 					@click="move(-1)"
-					tabindex="-1"
 					style="width: 100%"
 					>
 					<app-jolticon icon="chevron-left" />
@@ -17,7 +16,6 @@
 					type="button"
 					class="datepicker-btn datepicker-btn-default"
 					@click="parent.toggleMode()"
-					tabindex="-1"
 					style="width:100%;"
 					>
 					<strong>{{title}}</strong>
@@ -28,7 +26,6 @@
 					type="button"
 					class="datepicker-btn datepicker-btn-default pull-right"
 					@click="move(1)"
-					tabindex="-1"
 					style="width: 100%"
 					>
 					<app-jolticon icon="chevron-right" />
@@ -49,14 +46,13 @@
 					:class="[
 						'datepicker-btn',
 						'datepicker-btn-default',
-						dt.selected ? 'datepicker-btn-info' : '',
-						parent.isActive(dt) ? 'active' : '',
+						dt.isSelected ? 'datepicker-btn-info' : '',
+						dt.isToday ? 'active' : '',
 					]"
-					@click="parent.select(dt.date)"
-					:disabled="!!dt.disabled"
-					tabindex="-1"
+					@click="select(dt.date)"
+					:disabled="dt.isDisabled"
 					>
-					<span :class="{'text-info': !!dt.current}">{{dt.label}}</span>
+					<span :class="{'text-info': dt.isToday}">{{dt.label}}</span>
 				</button>
 			</td>
 		</tr>

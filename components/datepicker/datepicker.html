@@ -1,5 +1,11 @@
 <div>
-	<app-datepicker-day v-if="datepickerMode === 'day'" />
-	<app-datepicker-month v-if="datepickerMode === 'month'" />
-	<app-datepicker-year v-if="datepickerMode === 'year'" />
+	<app-datepicker-day
+		v-if="pickerMode === 'day'"
+		v-model="viewDate"
+		@selected="select( $event )"
+		/>
+	<app-datepicker-month
+		v-if="pickerMode === 'month'"
+		v-model="viewDate"
+		/>
 </div>

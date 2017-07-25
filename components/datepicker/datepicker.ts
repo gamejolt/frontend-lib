@@ -5,17 +5,71 @@ import './datepicker.styl';
 import { AppDatepickerDay } from './day';
 import { date as dateFilter } from '../../vue/filters/date';
 import { AppDatepickerMonth } from './month';
-import { AppDatepickerYear } from './year';
 
-type DateMode = 'day' | 'month' | 'year';
+type DateMode = 'day' | 'month';
 
-export interface DateObj {
-	date: Date;
-	label: string;
-	selected: boolean;
-	disabled: boolean;
-	current: boolean;
-	secondary?: boolean;
+export class DatepickerDate {
+	private picker: AppDatepicker;
+	private now: Date;
+	private mode: DateMode;
+
+	readonly date: Date;
+	readonly label: string;
+
+	constructor(picker: AppDatepicker, date: Date) {
+		this.picker = picker;
+		this.now = new Date();
+		this.mode = this.picker.pickerMode;
+		this.date = date;
+		this.label = dateFilter(
+			this.date,
+			this.mode === 'day' ? this.picker.formatDay : this.picker.formatMonth
+		);
+	}
+
+	get isSelected() {
+		return this.mode === 'day'
+			? !this.compareDay(this.date, this.picker.value)
+			: !this.compareMonth(this.date, this.picker.value);
+	}
+
+	get isToday() {
+		return this.mode === 'day'
+			? !this.compareDay(this.date, this.now)
+			: !this.compareMonth(this.date, this.now);
+	}
+
+	get isOtherMonth() {
+		return this.date.getMonth() !== this.picker.value.getMonth();
+	}
+
+	get isDisabled() {
+		if (this.mode === 'day') {
+			return (
+				(this.picker.minDate && this.compareDay(this.date, this.picker.minDate) < 0) ||
+				(this.picker.maxDate && this.compareDay(this.date, this.picker.maxDate) > 0)
+			);
+		}
+
+		return (
+			(this.picker.minDate && this.compareMonth(this.date, this.picker.minDate) < 0) ||
+			(this.picker.maxDate && this.compareMonth(this.date, this.picker.maxDate) > 0)
+		);
+	}
+
+	private compareMonth(date1: Date, date2: Date) {
+		return (
+			new Date(date1.getFullYear(), date1.getMonth()).getTime() -
+			new Date(date2.getFullYear(), date2.getMonth()).getTime()
+		);
+	}
+
+	private compareDay(date1: Date, date2: Date) {
+		return (
+			new Date(date1.getFullYear(), date1.getMonth(), date1.getDate()).getTime() -
+			new Date(date2.getFullYear(), date2.getMonth(), date2.getDate()).getTime()
+		);
+	}
 }
 
 @View
@@ -23,130 +77,44 @@ export interface DateObj {
 	components: {
 		AppDatepickerDay,
 		AppDatepickerMonth,
-		AppDatepickerYear,
 	},
 })
 export class AppDatepicker extends Vue {
-	@Prop(Date) value: Date | null;
+	@Prop(Date) value: Date;
 	@Prop({ type: Date, default: null })
 	minDate: Date;
 	@Prop({ type: Date, default: null })
 	maxDate: Date;
-	@Prop(Date) initDate?: Date;
-	@Prop(Function) dateDisabled?: (obj: { date: Date; mode: DateMode }) => any;
 
-	formatDay = 'D';
-	formatMonth = 'MMMM';
-	formatYear = 'YYYY';
-	formatDayHeader = 'ddd';
-	formatDayTitle = 'MMMM YYYY';
-	formatMonthTitle = 'YYYY';
-	minMode: DateMode = 'day';
-	maxMode: DateMode = 'year';
-	showWeeks = false;
-	startingDay = 0;
-	yearRange = 20;
+	pickerMode: DateMode = 'day';
+	viewDate: Date = null as any;
 
-	modes: DateMode[] = ['day', 'month', 'year'];
-	uniqueId = '';
-	activeDate: Date = null as any;
-	dateValid = false;
-	dateDisabledValid = false;
-	datepickerMode: DateMode = 'day';
-	activePicker?: AppDatepickerDay | AppDatepickerMonth | AppDatepickerYear;
+	readonly formatDay = 'D';
+	readonly formatMonth = 'MMMM';
+	readonly formatDayHeader = 'ddd';
+	readonly formatDayName = 'dddd';
+	readonly formatDayTitle = 'MMMM YYYY';
+	readonly formatMonthTitle = 'YYYY';
 
 	created() {
-		this.uniqueId = 'datepicker-' + Math.floor(Math.random() * 10000);
-		this.activeDate = this.initDate || new Date();
+		this.viewDate = new Date(this.value.getFullYear(), this.value.getMonth());
 	}
 
-	isActive(dateObj: DateObj) {
-		if (!this.activePicker) {
-			return false;
-		}
-
-		if (this.activePicker.compare(dateObj.date, this.activeDate) === 0) {
-			return true;
-		}
-		return false;
+	createDate(date: Date) {
+		return new DatepickerDate(this, date);
 	}
 
-	render() {
-		if (this.value) {
-			// const date = new Date(this.value),
-			// 	isValid = !isNaN(date);
-
-			// if (isValid) {
-			// 	this.activeDate = date;
-			// } else {
-			// 	$log.error(
-			// 		'Datepicker directive: "ng-model" value must be a Date object, a number of milliseconds since 01.01.1970 or a string representing an RFC2822 or ISO 8601 date.'
-			// 	);
-			// }
-
-			this.activeDate = new Date(this.value);
-			this.dateValid = true;
-		}
-		this.refreshView();
-	}
-
-	refreshView() {
-		console.log('refresh view');
-		if (this.activePicker && this.activePicker.$el) {
-			console.log('has active picker!');
-			this.activePicker.refreshView();
-
-			const date = this.value ? new Date(this.value) : null;
-			this.dateDisabledValid = !date || !this.isDisabled(date);
-		}
-	}
-
-	createDateObject(date: Date, format: string): DateObj {
-		const model = this.value ? new Date(this.value) : null;
-		return {
-			date: date,
-			label: dateFilter(date, format),
-			selected: !!model && this.activePicker!.compare(date, model) === 0,
-			disabled: this.isDisabled(date),
-			current: this.activePicker!.compare(date, new Date()) === 0,
-		};
-	}
-
-	isDisabled(date: Date) {
-		if (!this.activePicker) {
-			return true;
-		}
-
-		return (
-			(this.minDate && this.activePicker.compare(date, this.minDate) < 0) ||
-			(this.maxDate && this.activePicker.compare(date, this.maxDate) > 0) ||
-			(this.dateDisabled && this.dateDisabled({ date: date, mode: this.datepickerMode }))
-		);
-	}
-
-	// Submits the date and moves to the next step (year -> month -> date).
-	// If finished the date step emit the date to mutate the model value.
-	select(date: Date) {
-		if (this.datepickerMode === this.minMode) {
-			const dt = this.value ? new Date(this.value) : new Date(0, 0, 0, 0, 0, 0, 0);
-			dt.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
-			this.$emit('input', dt);
+	toggleMode() {
+		if (this.pickerMode === 'day') {
+			this.pickerMode = 'month';
 		} else {
-			this.activeDate = date;
-			this.datepickerMode = this.modes[this.modes.indexOf(this.datepickerMode) - 1];
+			this.pickerMode = 'day';
 		}
 	}
 
-	toggleMode(direction?: -1 | 1) {
-		direction = direction || 1;
-
-		if (
-			(this.datepickerMode === this.maxMode && direction === 1) ||
-			(this.datepickerMode === this.minMode && direction === -1)
-		) {
-			return;
-		}
-
-		this.datepickerMode = this.modes[this.modes.indexOf(this.datepickerMode) + direction];
+	select(date: Date) {
+		const newValue = new Date(this.value);
+		newValue.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+		this.$emit('input', newValue);
 	}
 }

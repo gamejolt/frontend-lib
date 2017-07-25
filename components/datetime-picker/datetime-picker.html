@@ -1,15 +1,18 @@
 <div class="datetime-picker">
+	{{ value }}
 	<app-datepicker
 		required
-		v-model="date"
+		:value="datetime"
+		@input="select( $event )"
 		:min-date="minDateBounds"
 		:max-date="maxDateBounds"
-		max-mode="month"
-		:show-weeks="false"
 		/>
 		<!-- TODO(rewrite) -->
 		<!-- gj-datetime-picker-interpolate-name="{{name}}" -->
 		<!-- gj-form-server-validation="serverErrors" -->
 
-	<app-timepicker :show-meridian="true" v-model="time" />
+	<app-timepicker
+		:value="datetime"
+		@input="select( $event )"
+		:show-meridian="true" />
 </div>
