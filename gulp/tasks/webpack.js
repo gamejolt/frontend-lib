@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const path = require('path');
+const crypto = require('crypto');
 
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -189,6 +190,24 @@ module.exports = function(config) {
 			// Eval may be faster, but it doesn't allow setting breakpoints.
 			devtool: !config.server ? 'cheap-module-inline-source-map' : 'source-map',
 			plugins: [
+				// We use this in prod build too since gzip is able to zip up
+				// path names better than hashed module IDs resulting in smaller
+				// file sizes.
+				new webpack.NamedModulesPlugin(),
+				new webpack.NamedChunksPlugin(chunk => {
+					// Info: https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31
+					if (chunk.name) {
+						return chunk.name;
+					}
+
+					// If there is no chunk name, then we have to generate one.
+					const joined = chunk.modules
+						.map(m => path.relative(m.context, m.request || ''))
+						.join('_');
+					return crypto.createHash('md5').update(joined).digest('hex');
+				}),
+				// Hoists modules instead of using a function call when it can.
+				devNoop || new webpack.optimize.ModuleConcatenationPlugin(),
 				new webpack.DefinePlugin({
 					GJ_ENVIRONMENT: JSON.stringify(!config.developmentEnv ? 'production' : 'development'),
 					GJ_BUILD_TYPE: JSON.stringify(config.production ? 'production' : 'development'),
@@ -220,7 +239,6 @@ module.exports = function(config) {
 				// 		to: 'package.json',
 				// 	},
 				// ]),
-				devNoop || new webpack.optimize.ModuleConcatenationPlugin(),
 				devNoop ||
 					new webpack.optimize.UglifyJsPlugin({
 						compress: {
