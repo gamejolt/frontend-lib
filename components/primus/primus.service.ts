@@ -2,7 +2,7 @@ import Axios from 'axios';
 
 export class Primus {
 	static async createConnection(host: string) {
-		const Primus: any = await import('./primus-vendor');
+		const PrimusConstructor: any = await import(/* webpackChunkName: "primus" */ './primus-vendor');
 
 		// We first have to make an API call to get a host to use.
 		// This allows us to go through the load balancer to get a host to contact.
@@ -10,7 +10,7 @@ export class Primus {
 		let streamingHost = await this.getStreamingHost(host);
 
 		// Let's connect to Primus.
-		let primus = new Primus(streamingHost, {
+		let primus = new PrimusConstructor(streamingHost, {
 			reconnect: {
 				maxDelay: 15000,
 				minDelay: 500,

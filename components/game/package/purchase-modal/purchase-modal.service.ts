@@ -17,7 +17,10 @@ interface GamePackagePurchaseModalOptions {
 export class GamePackagePurchaseModal {
 	static async show(options: GamePackagePurchaseModalOptions) {
 		return await Modal.show<void>({
-			component: () => asyncComponentLoader(import('./purchase-modal')),
+			component: () =>
+				asyncComponentLoader(
+					import(/* webpackChunkName: "GamePackagePurchaseModal" */ './purchase-modal')
+				),
 			size: 'sm',
 			props: options,
 			noBackdropClose: true,
