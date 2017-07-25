@@ -202,8 +202,9 @@ module.exports = function(config) {
 
 					// If there is no chunk name, then we have to generate one.
 					const joined = chunk.modules
-						.map(m => path.relative(m.context, m.request || ''))
+						.map(m => (m.context && m.request ? path.relative(m.context, m.request) : ''))
 						.join('_');
+
 					return crypto.createHash('md5').update(joined).digest('hex');
 				}),
 				// Hoists modules instead of using a function call when it can.
