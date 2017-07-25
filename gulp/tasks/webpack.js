@@ -192,8 +192,8 @@ module.exports = function(config) {
 				// We use this in prod build too since gzip is able to zip up
 				// path names better than hashed module IDs resulting in smaller
 				// file sizes.
-				new webpack.NamedModulesPlugin(),
-				new webpack.NamedChunksPlugin(),
+				// new webpack.NamedModulesPlugin(),
+				// new webpack.NamedChunksPlugin(),
 				// Hoists modules instead of using a function call when it can.
 				new webpack.optimize.ModuleConcatenationPlugin(),
 				new webpack.DefinePlugin({
