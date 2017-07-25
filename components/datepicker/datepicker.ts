@@ -40,7 +40,7 @@ export class DatepickerDate {
 	}
 
 	get isOtherMonth() {
-		return this.date.getMonth() !== this.picker.value.getMonth();
+		return this.date.getMonth() !== this.picker.viewDate.getMonth();
 	}
 
 	get isDisabled() {
