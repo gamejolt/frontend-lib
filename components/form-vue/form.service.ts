@@ -223,9 +223,6 @@ export class BaseForm<T> extends Vue {
 				(this as any).onSubmitSuccess(response);
 			}
 
-			// Send the new model back into the submit handler.
-			this.$emit('submit', this.formModel, response);
-
 			// Reset our state.
 			this.state.isProcessing = false;
 			this.changed = false;
@@ -234,9 +231,15 @@ export class BaseForm<T> extends Vue {
 			// Show successful form submission.
 			this._showSuccess();
 
+			// Send the new model back into the submit handler.
+			this.$emit('submit', this.formModel, response);
+
 			// If we should reset on successful submit, let's do that now.
 			if (this.resetOnSubmit) {
 				this._init();
+
+				// Reset again in case init triggered changes.
+				this.changed = false;
 			}
 
 			return true;
