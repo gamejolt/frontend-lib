@@ -16,7 +16,7 @@
 					type="button"
 					class="datepicker-btn datepicker-btn-default"
 					@click="parent.toggleMode()"
-					style="width:100%;"
+					style="width: 100%;"
 					>
 					<strong>{{title}}</strong>
 				</button>
@@ -42,17 +42,16 @@
 				>
 				<button
 					type="button"
-					style="width:100%;"
-					:class="[
-						'datepicker-btn',
-						'datepicker-btn-default',
-						dt.isSelected ? 'datepicker-btn-info' : '',
-						dt.isToday ? 'active' : '',
-					]"
+					style="width: 100%;"
+					class="datepicker-btn datepicker-btn-default"
+					:class="{
+						'datepicker-btn-info': dt.isSelected,
+						'active': dt.isToday,
+					}"
 					@click="select(dt.date)"
 					:disabled="dt.isDisabled"
 					>
-					<span :class="{'text-info': dt.isToday}">{{dt.label}}</span>
+					<span :class="{ 'text-info': dt.isToday }">{{dt.label}}</span>
 				</button>
 			</td>
 		</tr>

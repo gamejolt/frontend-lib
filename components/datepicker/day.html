@@ -16,7 +16,7 @@
 					type="button"
 					class="datepicker-btn datepicker-btn-default"
 					@click="parent.toggleMode()"
-					style="width:100%;"
+					style="width: 100%;"
 					>
 					<strong>{{title}}</strong>
 				</button>
@@ -43,12 +43,11 @@
 			<td v-for="(dt, n) of row" :key="n" class="text-center">
 				<a
 					style="width: 100%;"
-					:class="[
-						'datepicker-btn',
-						'datepicker-btn-default',
-						dt.isSelected ? 'datepicker-btn-info' : '',
-						dt.isToday ? 'active' : '',
-					]"
+					class="datepicker-btn datepicker-btn-default"
+					:class="{
+						'datepicker-btn-info': dt.isSelected,
+						'active': dt.isToday,
+					}"
 					@click="select(dt.date)"
 					:disabled="dt.isDisabled"
 					>
