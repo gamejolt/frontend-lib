@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import { Component, Watch, Prop } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./day.html';
+
 import { findRequiredVueParent } from '../../utils/vue';
 import { AppDatepicker, DatepickerDate } from './datepicker';
 import { date as dateFilter } from '../../vue/filters/date';
@@ -18,18 +19,32 @@ export class AppDatepickerDay extends Vue {
 
 	parent: AppDatepicker = null as any;
 
-	labels: { abbr: string; full: string }[] = [];
-	title: string = null as any;
-	rows: DatepickerDate[][] = [];
-	weekNumbers: number[] = [];
+	get title() {
+		return dateFilter(this.value, this.parent.formatDayTitle);
+	}
+
+	get labels() {
+		const days = this.getDays();
+		const labels = new Array(7);
+		for (let i = 0; i < 7; i++) {
+			labels[i] = {
+				abbr: dateFilter(days[i].date, this.parent.formatDayHeader),
+				full: dateFilter(days[i].date, this.parent.formatDayName),
+			};
+		}
+
+		return labels;
+	}
+
+	get rows() {
+		return arrayChunk(this.getDays(), 7);
+	}
 
 	created() {
 		this.parent = findRequiredVueParent(this, AppDatepicker);
-		this.onValueChanged();
 	}
 
-	@Watch('value')
-	private onValueChanged() {
+	private getDays() {
 		const year = this.value.getFullYear(),
 			month = this.value.getMonth(),
 			firstDayOfMonth = new Date(year, month, 1),
@@ -45,17 +60,7 @@ export class AppDatepickerDay extends Vue {
 		for (let i = 0; i < 42; i++) {
 			days[i] = this.parent.createDate(dates[i]);
 		}
-
-		this.labels = new Array(7);
-		for (let i = 0; i < 7; i++) {
-			this.labels[i] = {
-				abbr: dateFilter(days[i].date, this.parent.formatDayHeader),
-				full: dateFilter(days[i].date, this.parent.formatDayName),
-			};
-		}
-
-		this.title = dateFilter(this.value, this.parent.formatDayTitle);
-		this.rows = arrayChunk(days, 7);
+		return days;
 	}
 
 	private getDates(startDate: Date, n: number) {

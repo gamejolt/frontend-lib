@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./month.html';
+
 import { findRequiredVueParent } from '../../utils/vue';
 import { AppDatepicker, DatepickerDate } from './datepicker';
 import { date as dateFilter } from '../../vue/filters/date';
@@ -18,16 +19,11 @@ export class AppDatepickerMonth extends Vue {
 
 	parent: AppDatepicker = null as any;
 
-	title: string = null as any;
-	rows: DatepickerDate[][] = [];
-
-	created() {
-		this.parent = findRequiredVueParent(this, AppDatepicker);
-		this.onValueChanged();
+	get title() {
+		return dateFilter(this.value, this.parent.formatMonthTitle);
 	}
 
-	@Watch('value')
-	private onValueChanged() {
+	get rows() {
 		const months = new Array<DatepickerDate>(12),
 			year = this.value.getFullYear();
 
@@ -35,8 +31,11 @@ export class AppDatepickerMonth extends Vue {
 			months[i] = this.parent.createDate(new Date(year, i, 1));
 		}
 
-		this.title = dateFilter(this.value, this.parent.formatMonthTitle);
-		this.rows = arrayChunk(months, 3);
+		return arrayChunk(months, 3);
+	}
+
+	created() {
+		this.parent = findRequiredVueParent(this, AppDatepicker);
 	}
 
 	move(direction: number) {
