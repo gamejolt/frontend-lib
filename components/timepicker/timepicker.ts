@@ -19,8 +19,6 @@ export class AppTimepicker extends Vue {
 	hours = '';
 	minutes = '';
 	meridian = '';
-	invalidHours = false;
-	invalidMinutes = false;
 
 	private get _meridians() {
 		return this.meridians || [this.$gettext('AM'), this.$gettext('PM')];
@@ -36,11 +34,9 @@ export class AppTimepicker extends Vue {
 	@Watch('value')
 	@Watch('showMeridian')
 	private onTimeValueChanged() {
-		this.invalidHours = false;
-		this.invalidMinutes = false;
 		const hours = this.getValidHours(this.value.getHours()),
 			minutes = this.getValidMinutes(this.value.getMinutes());
-		this.hours = this.pad(hours);
+		this.hours = this.showMeridian && hours === 0 ? '12' : this.pad(hours);
 		this.minutes = this.pad(minutes);
 		this.meridian = this.value.getHours() < 12 ? this._meridians[0] : this._meridians[1];
 	}
@@ -65,12 +61,15 @@ export class AppTimepicker extends Vue {
 			return;
 		}
 
-		let hours = parseInt(this.hours, 10);
-		if (hours < 0 || hours > 23) {
-			this.invalidHours = true;
-		} else {
-			const newValue = new Date(this.value);
-			if (this.showMeridian && this.value.getHours() >= 12) {
+		let hours = Math.round(Math.min(Math.max(parseInt(this.hours, 10), 0, 23)));
+		if (isNaN(hours)) {
+			hours = this.showMeridian ? 12 : 0;
+			this.hours = this.pad(hours);
+		}
+
+		const newValue = new Date(this.value);
+		if (this.showMeridian) {
+			if (this.value.getHours() >= 12) {
 				// If we're working with meridians and it's currently on 'PM' we need to add 12 hours.
 				// This way for 1pm it'll submit hour 1 as hour 13 as the actual value.
 				if (hours < 12) {
@@ -79,14 +78,18 @@ export class AppTimepicker extends Vue {
 					// Theres an issue when using hours >= 12 while in 'PM' if the result date is the same as the current one.
 					// In that case it won't trigger the value watch to reformat the display hours correctly.
 					// e.g. if the time is 1pm and we give it hour 13 it'll remain 13.
+					// To fix this, we just modify this.hours directly to fix the display value.
 					if (hours === this.value.getHours()) {
-						this.hours = this.pad(hours - 12);
+						this.hours = hours === 12 ? '12' : this.pad(hours - 12);
 					}
 				}
+			} else if (hours === 12) {
+				hours -= 12;
 			}
-			newValue.setHours(hours);
-			this.$emit('input', newValue);
 		}
+		newValue.setHours(hours);
+		newValue.setDate(this.value.getDate());
+		this.$emit('input', newValue);
 	}
 
 	updateMinutes() {
@@ -94,14 +97,16 @@ export class AppTimepicker extends Vue {
 			return;
 		}
 
-		const minutes = parseInt(this.minutes, 10);
-		if (minutes < 0 || minutes > 59) {
-			this.invalidMinutes = true;
-		} else {
-			const newValue = new Date(this.value);
-			newValue.setMinutes(minutes);
-			this.$emit('input', newValue);
+		let minutes = Math.round(Math.min(Math.max(parseInt(this.minutes, 10), 0, 59)));
+		if (isNaN(minutes)) {
+			minutes = 0;
+			this.minutes = this.pad(minutes);
 		}
+
+		const newValue = new Date(this.value);
+		newValue.setMinutes(minutes);
+		newValue.setDate(this.value.getDate());
+		this.$emit('input', newValue);
 	}
 
 	addMinutes(minutes: number) {
@@ -109,7 +114,9 @@ export class AppTimepicker extends Vue {
 			return;
 		}
 
-		this.$emit('input', new Date(this.value.getTime() + minutes * 60000));
+		const newValue = new Date(this.value.getTime() + minutes * 60000);
+		newValue.setDate(this.value.getDate());
+		this.$emit('input', newValue);
 	}
 
 	addHours(hours: number) {

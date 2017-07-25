@@ -18,9 +18,6 @@
 					v-model="hours"
 					@blur="updateHours()"
 					class="form-control text-center"
-					:class="{
-						invalid: invalidHours,
-					}"
 					:readonly="readonlyInput"
 					:maxlength="2"
 					>
@@ -33,9 +30,6 @@
 					v-model="minutes"
 					@blur="updateMinutes()"
 					class="form-control text-center"
-					:class="{
-						invalid: invalidMinutes,
-					}"
 					:readonly="readonlyInput"
 					:maxlength="2"
 					>
