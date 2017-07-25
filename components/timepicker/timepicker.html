@@ -1,11 +1,11 @@
 <table class="timepicker">
 	<tbody>
 		<tr class="text-center">
-			<td><a @click="incrementHours()" class="timepicker-link">
+			<td><a @click="addHours(1)" class="timepicker-link">
 				<app-jolticon icon="chevron-up" :big="true" />
 			</a></td>
 			<td>&nbsp;</td>
-			<td><a @click="incrementMinutes()" class="timepicker-link">
+			<td><a @click="addMinutes(1)" class="timepicker-link">
 				<app-jolticon icon="chevron-up" :big="true" />
 			</a></td>
 			<td v-show="showMeridian"></td>
@@ -17,7 +17,10 @@
 					type="text"
 					v-model="hours"
 					@blur="updateHours()"
-					:class="['form-control', 'text-center', { invalid: invalidHours }]"
+					class="form-control text-center"
+					:class="{
+						invalid: invalidHours,
+					}"
 					:readonly="readonlyInput"
 					:maxlength="2"
 					>
@@ -29,7 +32,10 @@
 					type="text"
 					v-model="minutes"
 					@blur="updateMinutes()"
-					:class="['form-control', 'text-center', { invalid: invalidMinutes }]"
+					class="form-control text-center"
+					:class="{
+						invalid: invalidMinutes,
+					}"
 					:readonly="readonlyInput"
 					:maxlength="2"
 					>
@@ -45,11 +51,11 @@
 			</td>
 		</tr>
 		<tr class="text-center">
-			<td><a @click="decrementHours()" class="timepicker-link">
+			<td><a @click="addHours(-1)" class="timepicker-link">
 				<app-jolticon icon="chevron-down" :big="true" />
 			</a></td>
 			<td>&nbsp;</td>
-			<td><a @click="decrementMinutes()" class="timepicker-link">
+			<td><a @click="addMinutes(-1)" class="timepicker-link">
 				<app-jolticon icon="chevron-down" :big="true" />
 			</a></td>
 			<td v-show="showMeridian"></td>

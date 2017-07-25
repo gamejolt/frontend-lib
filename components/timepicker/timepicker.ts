@@ -11,85 +11,53 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 })
 export class AppTimepicker extends Vue {
 	@Prop(Date) value: Date;
-	@Prop({ type: Number, default: 1 })
-	hourStep: number;
-	@Prop({ type: Number, default: 1 })
-	minuteStep: number;
 	@Prop({ type: Boolean, default: true })
 	showMeridian: boolean;
 	@Prop(Array) meridians?: [string, string];
 	@Prop(Boolean) readonlyInput: boolean;
 
-	selected: Date = null as any;
 	hours = '';
 	minutes = '';
 	meridian = '';
 	invalidHours = false;
 	invalidMinutes = false;
 
-	// The component assumed it is a form, but since it isn't anymore, validity is a simple boolean.
-	// Embedding forms can watch on this value to use in their own validity filters or whatever.
-	valid = true;
-
-	$refs: {
-		hours: HTMLInputElement;
-		minutes: HTMLInputElement;
-	};
-
 	private get _meridians() {
 		return this.meridians || [this.$gettext('AM'), this.$gettext('PM')];
 	}
 
-	// Get this.hours in 24H mode if valid
-	get validHours() {
-		let hours = parseInt(this.hours, 10);
-		const valid = this.showMeridian ? hours >= 0 && hours < 13 : hours >= 0 && hours < 24;
-		if (!valid) {
+	created() {
+		if (!this.value) {
+			throw new Error('Value must be set');
+		}
+		this.onTimeValueChanged();
+	}
+
+	@Watch('value')
+	@Watch('showMeridian')
+	private onTimeValueChanged() {
+		this.invalidHours = false;
+		this.invalidMinutes = false;
+		const hours = this.getValidHours(this.value.getHours()),
+			minutes = this.getValidMinutes(this.value.getMinutes());
+		this.hours = this.pad(hours);
+		this.minutes = this.pad(minutes);
+		this.meridian = this.value.getHours() < 12 ? this._meridians[0] : this._meridians[1];
+	}
+
+	getValidHours(hours: number) {
+		if (hours < 0 || hours > 23) {
 			return undefined;
 		}
 
-		if (this.showMeridian) {
-			if (hours === 12) {
-				hours = 0;
-			}
-			if (this.meridian === this._meridians[1]) {
-				hours = hours + 12;
-			}
+		if (this.showMeridian && hours >= 12) {
+			hours -= 12;
 		}
-		return hours;
+		return hours >= 0 && hours < 24 ? hours : undefined;
 	}
 
-	get validMinutes() {
-		const minutes = parseInt(this.minutes, 10);
+	getValidMinutes(minutes: number) {
 		return minutes >= 0 && minutes < 60 ? minutes : undefined;
-	}
-
-	created() {
-		if (!this.value) {
-			this.selected = new Date();
-			this.selected.setSeconds(0, 0);
-			this.$emit('input', this.selected);
-		} else {
-			this.selected = new Date(this.value);
-		}
-	}
-
-	mounted() {
-		this.makeValid();
-		this.updateDisplayFields();
-	}
-
-	private invalidate(hours: boolean | null, minutes: boolean | null) {
-		// TODO: should set selected to null?
-		this.$emit('input', null);
-
-		this.valid = false;
-		if (hours !== null) {
-			this.invalidHours = hours;
-		}
-		if (minutes !== null) {
-			this.invalidMinutes = minutes;
-		}
 	}
 
 	updateHours() {
@@ -97,12 +65,27 @@ export class AppTimepicker extends Vue {
 			return;
 		}
 
-		const hours = this.validHours;
-		if (hours !== undefined) {
-			this.selected.setHours(hours);
-			this.refresh();
+		let hours = parseInt(this.hours, 10);
+		if (hours < 0 || hours > 23) {
+			this.invalidHours = true;
 		} else {
-			this.invalidate(true, null);
+			const newValue = new Date(this.value);
+			if (this.showMeridian && this.value.getHours() >= 12) {
+				// If we're working with meridians and it's currently on 'PM' we need to add 12 hours.
+				// This way for 1pm it'll submit hour 1 as hour 13 as the actual value.
+				if (hours < 12) {
+					hours += 12;
+				} else {
+					// Theres an issue when using hours >= 12 while in 'PM' if the result date is the same as the current one.
+					// In that case it won't trigger the value watch to reformat the display hours correctly.
+					// e.g. if the time is 1pm and we give it hour 13 it'll remain 13.
+					if (hours === this.value.getHours()) {
+						this.hours = this.pad(hours - 12);
+					}
+				}
+			}
+			newValue.setHours(hours);
+			this.$emit('input', newValue);
 		}
 	}
 
@@ -111,50 +94,14 @@ export class AppTimepicker extends Vue {
 			return;
 		}
 
-		const minutes = this.validMinutes;
-		if (minutes !== undefined) {
-			this.selected.setMinutes(minutes);
-			this.refresh();
+		const minutes = parseInt(this.minutes, 10);
+		if (minutes < 0 || minutes > 59) {
+			this.invalidMinutes = true;
 		} else {
-			this.invalidate(null, true);
+			const newValue = new Date(this.value);
+			newValue.setMinutes(minutes);
+			this.$emit('input', newValue);
 		}
-	}
-
-	pad(value: any) {
-		if (!value) {
-			return '00';
-		}
-
-		return value.toString().length < 2 ? '0' + value : value + '';
-	}
-
-	// Call internally when we know that model is valid.
-	refresh(updateDisplayFields?: boolean) {
-		this.makeValid();
-		this.$emit('input', this.selected);
-
-		if (updateDisplayFields !== false) {
-			this.updateDisplayFields();
-		}
-	}
-
-	makeValid() {
-		this.valid = true;
-		this.invalidHours = false;
-		this.invalidMinutes = false;
-	}
-
-	updateDisplayFields() {
-		let hours = this.selected.getHours(),
-			minutes = this.selected.getMinutes();
-
-		if (this.showMeridian) {
-			hours = hours === 0 || hours === 12 ? 12 : hours % 12; // Convert 24 to 12 hour system
-		}
-
-		this.hours = this.pad(hours);
-		this.minutes = this.pad(minutes);
-		this.meridian = this.selected.getHours() < 12 ? this._meridians[0] : this._meridians[1];
 	}
 
 	addMinutes(minutes: number) {
@@ -162,58 +109,22 @@ export class AppTimepicker extends Vue {
 			return;
 		}
 
-		const dt = new Date(this.selected.getTime() + minutes * 60000);
-		this.selected.setHours(dt.getHours(), dt.getMinutes());
-
-		this.refresh();
+		this.$emit('input', new Date(this.value.getTime() + minutes * 60000));
 	}
 
-	incrementHours() {
-		this.addMinutes(this.hourStep * 60);
-	}
-
-	decrementHours() {
-		this.addMinutes(-this.hourStep * 60);
-	}
-
-	incrementMinutes() {
-		this.addMinutes(this.minuteStep);
-	}
-
-	decrementMinutes() {
-		this.addMinutes(-this.minuteStep);
+	addHours(hours: number) {
+		return this.addMinutes(hours * 60);
 	}
 
 	toggleMeridian() {
-		this.addMinutes(12 * 60 * (this.selected.getHours() < 12 ? 1 : -1));
+		this.addHours(12 * (this.value.getHours() < 12 ? 1 : -1));
 	}
 
-	@Watch('hours')
-	@Watch('minutes')
-	onTimeChanged() {
-		const hours = this.validHours,
-			minutes = this.validMinutes;
-
-		// If the hours and minutes are valid, update the v-model.
-		// Don't update the display fields however because the user might still be editing the input field.
-		if (hours !== undefined && minutes !== undefined) {
-			this.selected.setHours(hours, minutes);
-			this.refresh(false);
+	private pad(value: any) {
+		if (!value) {
+			return '00';
 		}
-	}
 
-	@Watch('showMeridian')
-	onShowMeridianChanged() {
-		if (!this.valid) {
-			// Evaluate from template
-			const hours = this.validHours,
-				minutes = this.validMinutes;
-			if (hours !== undefined && minutes !== undefined) {
-				this.selected.setHours(hours, minutes);
-				this.refresh();
-			}
-		} else {
-			this.updateDisplayFields();
-		}
+		return value.toString().length < 2 ? '0' + value : value + '';
 	}
 }
