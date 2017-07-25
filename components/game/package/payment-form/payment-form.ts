@@ -37,7 +37,6 @@ import { FormOnSubmitError } from '../../../form-vue/form.service';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
-// TODO(rewrite): the rest of this form
 @View
 @Component({
 	components: {
