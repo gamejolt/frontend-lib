@@ -19,6 +19,8 @@ import { FormValidatorAccept } from './validators/accept';
 import { FormValidatorCcExp } from './validators/cc_exp';
 import { FormValidatorCcExpExpired } from './validators/cc_exp_expired';
 import { AppLoading } from '../../vue/components/loading/loading';
+import { FormValidatorMinDate } from './validators/min_date';
+import { FormValidatorMaxDate } from './validators/max_date';
 
 Vue.use(VeeValidate);
 
@@ -79,6 +81,8 @@ export class AppForm extends Vue {
 			this.$validator.extend('max_img_dimensions', FormValidatorMaxImgDimensions);
 			this.$validator.extend('cc_exp', FormValidatorCcExp);
 			this.$validator.extend('cc_exp_expired', FormValidatorCcExpExpired);
+			this.$validator.extend('min_date', FormValidatorMinDate);
+			this.$validator.extend('max_date', FormValidatorMaxDate);
 			AppForm.hasAddedValidators = true;
 		}
 	}

@@ -1,0 +1,20 @@
+<div>
+
+	<app-datetime-picker
+		:id="id"
+		:value="value"
+		@input="onChange"
+		:timezone-offset="timezoneOffset"
+		:min-date="minDate"
+		:max-date="maxDate"
+		/>
+
+	<input
+		class="hidden"
+		type="number"
+		:name="group.name"
+		v-model="value"
+		v-validate="{ rules: validationRules }"
+		>
+
+</div>

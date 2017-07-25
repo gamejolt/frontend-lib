@@ -22,6 +22,8 @@ const ErrorMessagesBase: { [k: string]: string } = {
 	min_value: `The {} entered is too low.`,
 	max_value: `The {} entered is too high.`,
 	availability: `This {} is already in use.`,
+	min_date: `The time you selected is too early.`,
+	max_date: `The time you selected is too late.`,
 };
 
 @View
