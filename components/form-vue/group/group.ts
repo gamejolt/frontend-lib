@@ -42,6 +42,6 @@ export class AppFormGroup extends Vue {
 	}
 
 	created() {
-		this.form = findRequiredVueParent(this, AppForm);
+		this.form = findRequiredVueParent(this, require('../form').AppForm);
 	}
 }

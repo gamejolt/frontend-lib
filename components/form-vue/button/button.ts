@@ -18,6 +18,6 @@ export class AppFormButton extends Vue {
 	form: AppForm;
 
 	created() {
-		this.form = findRequiredVueParent(this, AppForm);
+		this.form = findRequiredVueParent(this, require('../form').AppForm);
 	}
 }

@@ -61,7 +61,7 @@ export class AppForm extends Vue {
 	}
 
 	created() {
-		this.base = findRequiredVueParent(this, BaseForm);
+		this.base = findRequiredVueParent(this, require('./form.service').BaseForm);
 
 		// We gotta make sure that the initial values are correct.
 		this.base.hasFormErrors = this.hasErrors;

@@ -9,7 +9,7 @@ export class AppFormControlTextarea extends BaseFormControl {
 	@Prop(Array) validateOn: string[];
 	@Prop(Number) validateDelay: number;
 
-	value: string = '';
+	value = '';
 
 	get validationRules() {
 		return {

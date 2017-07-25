@@ -19,7 +19,10 @@ export class AppFormControlError extends Vue {
 	}
 
 	private setOverride() {
-		const errors = findRequiredVueParent(this, AppFormControlErrors);
+		const errors = findRequiredVueParent(
+			this,
+			require('./control-errors').AppFormControlErrors as typeof AppFormControlErrors
+		);
 		errors.setMessageOverride(this.when, this.message);
 	}
 
