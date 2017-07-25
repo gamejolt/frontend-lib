@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import startOfToday from 'date-fns/start_of_today';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./datetime-picker.html?style=./datetime-picker.styl';
 
@@ -19,16 +18,22 @@ export class AppDatetimePicker extends Vue {
 	@Prop(Number) minDate?: number;
 	@Prop(Number) maxDate?: number;
 
+	private myTimezoneOffset = new Date().getTimezoneOffset() * 60000;
+
+	get tzOffset() {
+		return this.timezoneOffset + this.myTimezoneOffset;
+	}
+
 	get datetime() {
-		return new Date(this.value + this.timezoneOffset);
+		return new Date(this.value + this.tzOffset);
 	}
 
 	get minDateBounds() {
-		return this.minDate ? new Date(this.minDate + this.timezoneOffset) : null;
+		return this.minDate ? new Date(this.minDate + this.tzOffset) : null;
 	}
 
 	get maxDateBounds() {
-		return this.maxDate ? new Date(this.maxDate + this.timezoneOffset) : null;
+		return this.maxDate ? new Date(this.maxDate + this.tzOffset) : null;
 	}
 
 	created() {
@@ -39,7 +44,7 @@ export class AppDatetimePicker extends Vue {
 
 	@Watch('timezoneOffset')
 	onTimezoneChanged(oldOffset: number, newOffset: number) {
-		this.$emit('input', this.value + oldOffset - newOffset);
+		this.$emit('input', this.value - oldOffset + newOffset);
 	}
 
 	select(date: Date) {
@@ -47,6 +52,6 @@ export class AppDatetimePicker extends Vue {
 		// Get the selected date from the date/time pickers.
 		// This date would be local to the timezone that was selected,
 		// so it must first be offsetted back to UTC.
-		this.$emit('input', date.getTime() - this.timezoneOffset);
+		this.$emit('input', date.getTime() - this.tzOffset);
 	}
 }
