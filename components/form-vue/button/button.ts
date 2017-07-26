@@ -13,6 +13,9 @@ import { findRequiredVueParent } from '../../../utils/vue';
 	},
 })
 export class AppFormButton extends Vue {
+	@Prop({ type: String, default: 'btn-success-outline' })
+	type?: string;
+
 	@Prop(String) icon?: string;
 
 	form: AppForm;
