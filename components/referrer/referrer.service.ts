@@ -30,24 +30,24 @@ export class Referrer {
 
 		if (!GJ_IS_SSR && window.document.referrer) {
 			this._referrer = window.document.referrer;
+
+			router.beforeEach((_to, _from, next) => {
+				// Don't track until we've tracked on full page view.
+				if (this.firstPass) {
+					return next();
+				}
+
+				this._referrer = this.url;
+				next();
+			});
+
+			EventBus.on('routeChangeAfter', () => {
+				// We have finished the first state change.
+				// We will now begin tracking new referrers.
+				this.firstPass = false;
+				this.url = window.location.href;
+			});
 		}
-
-		router.beforeEach((_to, _from, next) => {
-			// Don't track until we've tracked on full page view.
-			if (this.firstPass) {
-				return next();
-			}
-
-			this._referrer = this.url;
-			next();
-		});
-
-		EventBus.on('routeChangeAfter', () => {
-			// We have finished the first state change.
-			// We will now begin tracking new referrers.
-			this.firstPass = false;
-			this.url = window.location.href;
-		});
 	}
 
 	static get referrer() {
