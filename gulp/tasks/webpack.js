@@ -13,6 +13,7 @@ const CleanCss = require('clean-css');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
+const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const OptimizeJsPlugin = require('optimize-js-plugin');
@@ -23,6 +24,7 @@ module.exports = function(config) {
 	let noop = function() {};
 	let devNoop = config.production ? undefined : noop;
 	let prodNoop = !config.production ? undefined : noop;
+	let browserNoop = config.server ? undefined : noop;
 	let serverNoop = !config.server ? undefined : noop;
 
 	let externals = {};
@@ -266,7 +268,7 @@ module.exports = function(config) {
 						name: 'manifest',
 					}),
 
-				serverNoop || new ExtractTextPlugin('[name].[contenthash:6].css'),
+				devNoop || new ExtractTextPlugin('[name].[contenthash:6].css'),
 				devNoop ||
 					new OptimizeCssPlugin({
 						cssProcessor: {
@@ -291,10 +293,10 @@ module.exports = function(config) {
 						favicon: path.resolve(base, 'src/app/img/favicon.png'),
 						inject: true,
 						chunksSortMode: 'dependency',
-						excludeChunks: ['server'],
 					}),
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
-				!config.server ? noop : new VueSSRServerPlugin(),
+				serverNoop || new VueSSRClientPlugin(),
+				browserNoop || new VueSSRServerPlugin(),
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			],
