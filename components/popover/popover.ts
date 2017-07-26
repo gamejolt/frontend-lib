@@ -298,8 +298,8 @@ export class AppPopover extends Vue {
 			return;
 		}
 
-		if (shouldRemove) {
-			this.$el.parentNode!.removeChild(this.$el);
+		if (shouldRemove && this.$el.parentNode) {
+			this.$el.parentNode.removeChild(this.$el);
 		}
 
 		this.isVisible = false;
