@@ -46,7 +46,7 @@ export class MetaContainer {
 		for (const key in this._fields) {
 			const field = this._fields[key];
 			if (field.current) {
-				output += `<meta ${this._attr}="${key}" content="${escapeString(field.current)}">` + '\n';
+				output += `<meta ${this._attr}="${key}" content="${escapeString(field.current)}" />` + '\n';
 			}
 		}
 
