@@ -295,8 +295,14 @@ module.exports = function(config) {
 						chunksSortMode: 'dependency',
 					}),
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
-				serverNoop || new VueSSRClientPlugin(),
-				browserNoop || new VueSSRServerPlugin(),
+				serverNoop ||
+					new VueSSRClientPlugin({
+						filename: 'vue-ssr-client-manifest-' + section + '.json',
+					}),
+				browserNoop ||
+					new VueSSRServerPlugin({
+						filename: 'vue-ssr-server-bundle-' + section + '.json',
+					}),
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			],
