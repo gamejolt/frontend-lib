@@ -60,6 +60,13 @@ module.exports = function(config) {
 		libraryTarget = 'commonjs2';
 	}
 
+	// Inline allows us to debug by setting breakpoints.
+	// Eval may be faster, but it doesn't allow setting breakpoints.
+	let devtool = undefined;
+	if (!config.production) {
+		devtool = !config.server ? 'cheap-module-inline-source-map' : 'source-map';
+	}
+
 	function stylesLoader(loaders, options) {
 		if (config.production) {
 			loaders.push({
@@ -185,9 +192,7 @@ module.exports = function(config) {
 					},
 				],
 			},
-			// Inline allows us to debug by setting breakpoints.
-			// Eval may be faster, but it doesn't allow setting breakpoints.
-			devtool: !config.server ? 'cheap-module-inline-source-map' : 'source-map',
+			devtool,
 			plugins: [
 				// We use this in prod build too since gzip is able to zip up
 				// path names better than hashed module IDs resulting in smaller
