@@ -21,6 +21,7 @@ import { FormValidatorCcExpExpired } from './validators/cc_exp_expired';
 import { AppLoading } from '../../vue/components/loading/loading';
 import { FormValidatorMinDate } from './validators/min_date';
 import { FormValidatorMaxDate } from './validators/max_date';
+import { AppLoadingFade } from '../loading/fade/fade';
 
 Vue.use(VeeValidate);
 
@@ -28,6 +29,7 @@ Vue.use(VeeValidate);
 @Component({
 	components: {
 		AppLoading,
+		AppLoadingFade,
 	},
 })
 export class AppForm extends Vue {
@@ -41,6 +43,11 @@ export class AppForm extends Vue {
 	get isLoaded() {
 		// Check specifically false so that "null" is correctly shown as loaded.
 		return this.base.isLoaded !== false;
+	}
+
+	get isLoadedBootstrapped() {
+		// Check specifically false so that "null" is correctly shown as loaded.
+		return this.base.isLoadedBootstrapped !== false;
 	}
 
 	get hasErrors() {

@@ -70,6 +70,7 @@ export class BaseForm<T> extends Vue {
 	readonly loadUrl: string | null;
 	readonly loadData: any | null;
 	isLoaded: boolean | null = null;
+	isLoadedBootstrapped: boolean | null = null;
 	reloadOnSubmit = false;
 
 	private changeDeregister?: Function;
@@ -162,6 +163,7 @@ export class BaseForm<T> extends Vue {
 		});
 
 		this.isLoaded = true;
+		this.isLoadedBootstrapped = true;
 		if ((this as any).onLoad) {
 			(this as any).onLoad(payload);
 		}
