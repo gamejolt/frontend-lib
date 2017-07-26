@@ -1,45 +1,47 @@
 import { MetaContainer } from './meta-container';
 
 export class FbMetaContainer extends MetaContainer {
-	static set title(value: string | null) {
-		this._set('og:title', value);
+	protected _attr = 'property';
+
+	set title(value: string | null) {
+		this.set('og:title', value);
 	}
-	static get title() {
-		return this._get('og:title');
+	get title() {
+		return this.get('og:title');
 	}
 
-	static set description(value: string | null) {
-		this._set('og:description', value);
+	set description(value: string | null) {
+		this.set('og:description', value);
 	}
-	static get description() {
-		return this._get('og:description');
-	}
-
-	static set url(value: string | null) {
-		this._set('og:url', value);
-	}
-	static get url() {
-		return this._get('og:url');
+	get description() {
+		return this.get('og:description');
 	}
 
-	static set type(value: string | null) {
-		this._set('og:type', value);
+	set url(value: string | null) {
+		this.set('og:url', value);
 	}
-	static get type() {
-		return this._get('og:type');
-	}
-
-	static set image(value: string | null) {
-		this._set('og:image', value);
-	}
-	static get image() {
-		return this._get('og:image');
+	get url() {
+		return this.get('og:url');
 	}
 
-	static set profileId(value: string | null) {
-		this._set('og:profile_id', value);
+	set type(value: string | null) {
+		this.set('og:type', value);
 	}
-	static get profileId() {
-		return this._get('og:profile_id');
+	get type() {
+		return this.get('og:type');
+	}
+
+	set image(value: string | null) {
+		this.set('og:image', value);
+	}
+	get image() {
+		return this.get('og:image');
+	}
+
+	set profileId(value: string | null) {
+		this.set('og:profile_id', value);
+	}
+	get profileId() {
+		return this.get('og:profile_id');
 	}
 }

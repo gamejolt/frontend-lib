@@ -1,10 +1,7 @@
 export class MicrodataContainer {
-	// private static _document = window.document;
-	// private static _head = MicrodataContainer._document.head;
+	microdata: any | undefined;
 
-	static microdata: any | undefined;
-
-	static set(microdata: any) {
+	set(microdata: any) {
 		this.microdata = microdata;
 
 		if (GJ_IS_SSR) {
@@ -24,7 +21,7 @@ export class MicrodataContainer {
 		document.head.appendChild(elem);
 	}
 
-	static clear() {
+	clear() {
 		this.microdata = undefined;
 
 		if (GJ_IS_SSR) {
@@ -37,5 +34,9 @@ export class MicrodataContainer {
 		if (elem) {
 			document.head.removeChild(elem);
 		}
+	}
+
+	render() {
+		return `<script type="application/ld+json">${JSON.stringify(this.microdata)}</script>`;
 	}
 }

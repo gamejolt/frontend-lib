@@ -6,13 +6,14 @@ import { MicrodataContainer } from './microdata-container';
 import { Environment } from '../environment/environment.service';
 
 export class Meta extends MetaContainer {
+	static titleSuffix = GJ_IS_CLIENT ? ' - Game Jolt' : ' on Game Jolt';
+
 	private static _title = '';
 	private static _originalTitle = !GJ_IS_SSR ? document.title : null;
-	private static _fb = FbMetaContainer;
-	private static _twitter = TwitterMetaContainer;
-	private static _microdata = MicrodataContainer;
-
-	static titleSuffix = GJ_IS_CLIENT ? ' - Game Jolt' : ' on Game Jolt';
+	private static _base = new MetaContainer();
+	private static _fb = new FbMetaContainer();
+	private static _twitter = new TwitterMetaContainer();
+	private static _microdata = new MicrodataContainer();
 
 	static init(router: VueRouter) {
 		router.beforeEach((_to, _from, next) => {
@@ -42,24 +43,10 @@ export class Meta extends MetaContainer {
 	}
 
 	static set description(value: string | null) {
-		this._set('description', value);
+		this._base.set('description', value);
 	}
 	static get description() {
-		return this._get('description');
-	}
-
-	static set redirect(value: string | null) {
-		this._set('redirect', value);
-	}
-	static get redirect() {
-		return this._get('redirect');
-	}
-
-	static set responseCode(value: string | null) {
-		this._set('responseCode', value);
-	}
-	static get responseCode() {
-		return this._get('responseCode');
+		return this._base.get('description');
 	}
 
 	static set fb(values: any) {
@@ -84,8 +71,6 @@ export class Meta extends MetaContainer {
 
 	static clear() {
 		this.description = null;
-		this.redirect = null;
-		this.responseCode = null;
 
 		this.fb = {
 			title: null,
@@ -106,5 +91,11 @@ export class Meta extends MetaContainer {
 		};
 
 		this._microdata.clear();
+	}
+
+	static render() {
+		return (
+			this._base.render() + this._fb.render() + this._twitter.render() + this._microdata.render()
+		);
 	}
 }

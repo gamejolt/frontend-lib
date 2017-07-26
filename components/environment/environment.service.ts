@@ -4,9 +4,7 @@ export const isPrerender =
 	typeof window !== 'undefined' && window.navigator.userAgent.search(/PhantomJS/) !== -1;
 
 interface SsrContext {
-	meta: {
-		title?: string;
-	};
+	meta: any;
 }
 
 export class Environment {

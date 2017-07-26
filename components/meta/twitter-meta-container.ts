@@ -1,38 +1,38 @@
 import { MetaContainer } from './meta-container';
 
 export class TwitterMetaContainer extends MetaContainer {
-	static set card(value: string | null) {
-		this._set('twitter:card', value);
+	set card(value: string | null) {
+		this.set('twitter:card', value);
 	}
-	static get card() {
-		return this._get('twitter:card');
-	}
-
-	static set title(value: string | null) {
-		this._set('twitter:title', value);
-	}
-	static get title() {
-		return this._get('twitter:title');
+	get card() {
+		return this.get('twitter:card');
 	}
 
-	static set description(value: string | null) {
-		this._set('twitter:description', value);
+	set title(value: string | null) {
+		this.set('twitter:title', value);
 	}
-	static get description() {
-		return this._get('twitter:description');
-	}
-
-	static set image(value: string | null) {
-		this._set('twitter:image', value);
-	}
-	static get image() {
-		return this._get('twitter:image');
+	get title() {
+		return this.get('twitter:title');
 	}
 
-	static set url(value: string | null) {
-		this._set('twitter:url', value);
+	set description(value: string | null) {
+		this.set('twitter:description', value);
 	}
-	static get url() {
-		return this._get('twitter:url');
+	get description() {
+		return this.get('twitter:description');
+	}
+
+	set image(value: string | null) {
+		this.set('twitter:image', value);
+	}
+	get image() {
+		return this.get('twitter:image');
+	}
+
+	set url(value: string | null) {
+		this.set('twitter:url', value);
+	}
+	get url() {
+		return this.get('twitter:url');
 	}
 }
