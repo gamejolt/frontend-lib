@@ -31,14 +31,17 @@ module.exports = function(config, projectBase) {
 	config.sections.push('app');
 	config.buildSection = argv['section'] || 'app';
 
+	if (config.server) {
+		config.sections = config.serverSections;
+	}
+
 	if (argv['section']) {
 		config.sections = [argv['section']];
 	}
 
 	config.projectBase = projectBase;
 	config.buildBaseDir = process.env.BUILD_DIR || './';
-	config.buildDir =
-		config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
+	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
 	config.libDir = 'src/lib/';
 	config.gjLibDir = 'src/lib/gj-lib-client/';
 	config.bowerDir = 'src/bower-lib/';
@@ -125,10 +128,6 @@ module.exports = function(config, projectBase) {
 
 	gulp.task(
 		'commit-build',
-		shell.task([
-			'git add --all build/prod',
-			'git commit -m "New build."',
-			'git push',
-		])
+		shell.task(['git add --all build/prod', 'git commit -m "New build."', 'git push'])
 	);
 };
