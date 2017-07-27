@@ -1,0 +1,41 @@
+compiled-content($font-size, $computed-line-height)
+	img
+		@extend .img-responsive
+
+		// Center it if too small.
+		margin-left: auto
+		margin-right: auto
+
+		// Since images end with a hard line and no extra line spacing padding...
+		// We basically find the line-height padding in bettwen a line and cut it by half and add
+		// that much extra spacing.
+		margin-bottom: $font-size + (($computed-line-height - $font-size) / 2)
+
+	// Notice we put margin at the top when inside a P tag.
+	// This is to catch those instances that they put images inline with their text, the P
+	// tag never closes so we don't get the margin from the P to give it spacing.
+	p > img
+		margin-top: $font-size + (($computed-line-height - $font-size) / 2)
+
+	hr
+		margin-top: $computed-line-height
+		margin-bottom: $computed-line-height
+
+	h1, h2, h3, h4, h5, h6
+		&:first-child
+			margin-top: 0
+
+	// Widgets some times create empty P tags.
+	// This hides them so they don't add extra spacing to the page.
+	p:empty
+		display: none
+
+	table
+		@extend .table
+
+	// Removes the added spacing after iframes since they aren't block elements.
+	// They basically by default add their line spacing to the bottom.
+	iframe
+		display: block
+		margin-bottom: $font-size
+
