@@ -222,5 +222,15 @@ export class AppCommentWidgetComment extends Vue {
 			this.isHighlighted = true;
 			Scroll.to('comment-' + this.comment.id);
 		}
+
+		// Check if the permalink is within one of this comment's children.
+		if (this.children) {
+			for (const child of this.children) {
+				if (hash === '#comment-' + child.id) {
+					this.isShowingChildren = true;
+					break;
+				}
+			}
+		}
 	}
 }
