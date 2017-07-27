@@ -1,14 +1,11 @@
-<div class="timeline-list-item">
+<app-timeline-list-item>
+	<app-user-avatar-img
+		slot="bubble"
+		class="avatar-circle"
+		:user="app.user"
+		/>
 
-	<div class="timeline-list-item-bubble">
-		<app-user-avatar-img class="avatar-circle" :user="app.user" />
+	<div class="timeline-list-item-details">
+		<slot />
 	</div>
-
-	<div class="timeline-list-item-main">
-		<div class="timeline-list-item-details">
-
-			<slot />
-
-		</div>
-	</div>
-</div>
+</app-timeline-list-item>

@@ -3,10 +3,12 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./pagination.html';
 
 import { AppPagination } from '../../pagination/pagination';
+import { AppTimelineListItem } from '../../timeline-list/item/item';
 
 @View
 @Component({
 	components: {
+		AppTimelineListItem,
 		AppPagination,
 	},
 })

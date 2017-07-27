@@ -1,86 +1,85 @@
-<div class="message-thread-item timeline-list-item"
+<app-timeline-list-item
+	class="message-thread-item"
 	:id="id"
-	:class="{
-		active: isActive,
-		'new': isNew,
-	}"
+	:is-active="isActive"
+	:is-new="isNew"
 	>
 
-	<div class="timeline-list-item-bubble">
-		<app-user-avatar class="avatar-circle" :user="user" />
-	</div>
+	<app-user-avatar
+		slot="bubble"
+		class="avatar-circle"
+		:user="user"
+		/>
 
-	<div class="timeline-list-item-main">
-		<div class="timeline-list-item-details">
+	<div class="timeline-list-item-details">
 
-			<div class="message-thread-item-meta">
+		<div class="message-thread-item-meta">
 
-				<div class="message-thread-item-byline">
-					<span class="message-thread-item-author">
+			<div class="message-thread-item-byline">
+				<span class="message-thread-item-author">
+					<router-link
+						:to="{
+							name: 'profile.overview',
+							params: { username: user.username },
+						}"
+						class="link-unstyled"
+						>
+						{{ user.display_name }}
+					</router-link>
+
+					<small class="text-muted">
+						@{{ user.username }}
+					</small>
+				</span>
+
+				<span v-if="repliedTo">
+					<app-jolticon icon="share" />
+
+					<span class="message-thread-item-author tiny">
 						<router-link
 							:to="{
 								name: 'profile.overview',
-								params: { username: user.username },
+								params: { username: repliedTo.username },
 							}"
 							class="link-unstyled"
 							>
-							{{ user.display_name }}
+							{{ repliedTo.display_name }}
 						</router-link>
 
-						<small class="text-muted">
-							@{{ user.username }}
-						</small>
-					</span>
-
-					<span v-if="repliedTo">
-						<app-jolticon icon="share" />
-
-						<span class="message-thread-item-author tiny">
-							<router-link
-								:to="{
-									name: 'profile.overview',
-									params: { username: repliedTo.username },
-								}"
-								class="link-unstyled"
-								>
-								{{ repliedTo.display_name }}
-							</router-link>
-
-							<span class="text-muted">
-								@{{ repliedTo.username }}
-							</span>
+						<span class="text-muted">
+							@{{ repliedTo.username }}
 						</span>
 					</span>
+				</span>
 
-					<slot name="authors" />
-				</div>
-
-				<div class="message-thread-item-meta-sub">
-					<slot name="tags" />
-
-					<small class="text-muted"
-						:title="dateFilter( date, 'medium' )"
-						>
-						<app-time-ago :date="date" />
-					</small>
-
-					<slot name="meta" />
-				</div>
+				<slot name="authors" />
 			</div>
 
-			<slot />
+			<div class="message-thread-item-meta-sub">
+				<slot name="tags" />
 
-			<div class="timeline-list-item-controls">
-				<slot name="controls" />
+				<small class="text-muted"
+					:title="dateFilter( date, 'medium' )"
+					>
+					<app-time-ago :date="date" />
+				</small>
+
+				<slot name="meta" />
 			</div>
-
-			<div class="message-thread-item-replies" v-if="isShowingReplies">
-				<hr class="message-thread-item-replies-split">
-				<slot name="replies" />
-				<hr class="message-thread-item-replies-split">
-			</div>
-
 		</div>
+
+		<slot />
+
+		<div class="timeline-list-item-controls">
+			<slot name="controls" />
+		</div>
+
+		<div class="message-thread-item-replies" v-if="isShowingReplies">
+			<hr class="message-thread-item-replies-split">
+			<slot name="replies" />
+			<hr class="message-thread-item-replies-split">
+		</div>
+
 	</div>
 
-</div>
+</app-timeline-list-item>

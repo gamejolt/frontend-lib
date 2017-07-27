@@ -1,7 +1,10 @@
 @require '~styles/variables'
-@require '../../stylus/common/mixins'
+@require '../../../stylus/common/mixins'
 
-.timeline-list
+// Most of this styling needs to be done globally.
+>>> .timeline-list
+
+	$border-size = 2px
 
 	// For doing a full-bleed within the content.
 	&-full-bleed
@@ -59,7 +62,7 @@
 					padding-right: 0
 
 			@media $media-sm-up
-				border-left: 2px solid $gray-lighter
+				border-left: $border-size solid $gray-lighter
 				padding-left: ($timeline-list-icon-size / 2) + $timeline-list-avatar-margin
 
 		&-meta
@@ -160,34 +163,21 @@
 		/**
 		 * Active Item
 		 */
-		&.active
-			@media $media-xs
-				border-left: 3px solid $gj-blue
-
-		&.active &-bubble
+		&-bubble.active
 			background-color: $gj-blue
 			border-color: $gj-blue
 			color: $white
 
-		&.active &-main
-			border-color: $gj-blue
+		&-main.active
+			border-left: $border-size solid $gj-blue
 
 		/**
 		 * New Item
 		 */
-		&.new &-bubble
+		&-bubble.new
 			background-color: $gj-pink
 			border-color: $gj-pink
 			color: $white
 
-		&.new &-main
-			border-color: $gj-pink
-
-		// Nested timeline lists get forced to this color so that new and
-		// active don't overwrite.
-		& & &-main
-			border-color: $gray-lighter !important
-
-		& & &-bubble
-			background-color: $gray-lightest !important
-			border: 5px solid $white !important
+		&-main.new
+			border-left: $border-size solid $gj-pink

@@ -22,6 +22,7 @@ import { AppMessageThread } from '../../message-thread/message-thread';
 import { AppCommentWidgetAdd } from './add/add';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { AppMessageThreadPagination } from '../../message-thread/pagination/pagination';
+import { AppMessageThreadContent } from '../../message-thread/content/content';
 
 let incrementer = 0;
 
@@ -33,6 +34,7 @@ let incrementer = 0;
 		AppMessageThread,
 		AppMessageThreadAdd,
 		AppMessageThreadPagination,
+		AppMessageThreadContent,
 		AppCommentWidgetComment,
 		AppCommentWidgetAdd,
 	},
