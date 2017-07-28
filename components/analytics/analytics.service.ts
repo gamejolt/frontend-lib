@@ -3,7 +3,6 @@ import { appStore } from '../../vue/services/app/app-store';
 import { EventBus } from '../event-bus/event-bus.service';
 import VueRouter from 'vue-router';
 import { arrayRemove } from '../../utils/array';
-import { Meta } from '../meta/meta-service';
 
 const ga: any = (typeof window !== 'undefined' && (window as any).ga) || function() {};
 
@@ -167,9 +166,12 @@ export class Analytics {
 			path = window.location.pathname + window.location.search + window.location.hash;
 		}
 
+		// Pull the title.
+		const title = window.document.title;
+
 		const options = {
 			page: path,
-			title: Meta.title,
+			title: title,
 		};
 
 		// Now track the page view.
