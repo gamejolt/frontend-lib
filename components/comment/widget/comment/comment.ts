@@ -28,6 +28,7 @@ import { AppCommentWidgetAdd } from '../add/add';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 import { Scroll } from '../../../scroll/scroll.service';
 import { AppMessageThreadAdd } from '../../../message-thread/add/add';
+import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
 
 @View
 @Component({
@@ -49,6 +50,7 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 		AppTooltip,
 		AppPopoverTrigger,
 		AppScrollWhen,
+		AppAuthRequired,
 	},
 	filters: {
 		number,

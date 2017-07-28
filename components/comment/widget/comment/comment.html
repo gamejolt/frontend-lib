@@ -144,6 +144,7 @@
 				@click="isReplying = !isReplying"
 				v-app-tooltip="$gettext( 'Reply' )"
 				v-app-track-event="`comment-widget:reply-click`"
+				v-app-auth-required
 				>
 				<app-jolticon icon="reply" />
 			</button>
