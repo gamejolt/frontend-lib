@@ -29,10 +29,12 @@ import { Clipboard } from '../../../clipboard/clipboard-service';
 import { Scroll } from '../../../scroll/scroll.service';
 import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
+import { AppMessageThread } from '../../../message-thread/message-thread';
 
 @View
 @Component({
 	components: {
+		AppMessageThread,
 		AppMessageThreadItem,
 		AppMessageThreadAdd,
 		AppFadeCollapse,

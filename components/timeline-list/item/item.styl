@@ -25,21 +25,23 @@
 			margin-bottom: $line-height-computed
 
 		&-bubble
-			position: absolute
-			left: -($timeline-list-icon-size / 2)
-			top: 0
-			width: $timeline-list-icon-size
-			height: $timeline-list-icon-size
-			line-height: $timeline-list-icon-size
 			background-color: $gray-lightest
-			border: 5px solid $white
-			border-radius: 50%
 			text-align: center
-			z-index: 1
+			border-radius: 50%
 			color: $gray-light
 
 			@media $media-xs
 				display: none
+
+			@media $media-sm-up
+				position: absolute
+				left: -($timeline-list-icon-size / 2)
+				top: 0
+				width: $timeline-list-icon-size
+				height: $timeline-list-icon-size
+				line-height: $timeline-list-icon-size
+				border: 5px solid $white
+				z-index: 1
 
 			> .jolticon
 				position: relative
@@ -54,12 +56,6 @@
 			@media $media-xs
 				padding-left: ($grid-gutter-width-xs / 2)
 				padding-right: @padding-left
-
-				// When an item is nested inside another one on mobile we don't
-				// want to have any extra indentation.
-				.timeline-list-item .timeline-list-item &
-					padding-left: 0
-					padding-right: 0
 
 			@media $media-sm-up
 				border-left: $border-size solid $gray-lighter

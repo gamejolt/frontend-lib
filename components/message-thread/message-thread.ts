@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./message-thread.html';
 
 import { AppTimelineList } from '../timeline-list/timeline-list';
@@ -10,4 +10,6 @@ import { AppTimelineList } from '../timeline-list/timeline-list';
 		AppTimelineList,
 	},
 })
-export class AppMessageThread extends Vue {}
+export class AppMessageThread extends Vue {
+	@Prop(Boolean) isNested?: boolean;
+}

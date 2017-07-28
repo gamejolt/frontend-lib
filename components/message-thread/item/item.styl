@@ -3,6 +3,19 @@
 
 .message-thread-item
 
+	// Will show the avatar on mobile.
+	>>> .timeline-list-item-bubble
+		@media $media-xs
+			display: block
+			float: left
+			margin-top: 6px // Align it better with the text to the right.
+			margin-left: ($grid-gutter-width-xs / 2)
+			margin-right: ($grid-gutter-width-xs / 2)
+			width: $button-line-height
+			height: $button-line-height
+			line-height: $button-line-height
+			border: 0
+
 	&-meta
 		margin-bottom: 1em
 

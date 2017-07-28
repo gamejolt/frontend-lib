@@ -195,7 +195,7 @@
 	<!-- Child Comments -->
 	<div v-if="isShowingReplies" slot="replies">
 
-		<div v-if="isShowingChildren">
+		<app-message-thread v-if="isShowingChildren">
 			<app-comment-widget-comment
 				v-for="child of children"
 				:key="child.id"
@@ -204,7 +204,7 @@
 				:comment="child"
 				:parent="comment"
 				/>
-		</div>
+		</app-message-thread>
 
 		<!--
 			Don't include the form in the DOM until we need it. When the if is
