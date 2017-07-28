@@ -5,18 +5,22 @@ import { AuthModal } from './auth-modal.service';
 
 export const AppAuthRequired: Vue.DirectiveOptions = {
 	bind(el) {
-		el.addEventListener('click', e => {
-			if (appStore.state.user) {
-				return;
-			}
+		el.addEventListener(
+			'click',
+			e => {
+				if (appStore.state.user) {
+					return;
+				}
 
-			// Stop everything.
-			e.stopPropagation();
-			e.stopImmediatePropagation();
-			e.preventDefault();
+				// Stop everything.
+				e.stopPropagation();
+				e.stopImmediatePropagation();
+				e.preventDefault();
 
-			AuthModal.show();
-			Analytics.trackEvent('auth-required-modal', 'shown');
-		});
+				AuthModal.show();
+				Analytics.trackEvent('auth-required-modal', 'shown');
+			},
+			true
+		);
 	},
 };
