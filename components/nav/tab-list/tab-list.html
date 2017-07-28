@@ -13,6 +13,10 @@
 					<div class="tab-list-input" v-if="!Screen.isMobile">
 						<slot name="input" />
 					</div>
+
+					<div class="tab-list-controls" v-if="!Screen.isMobile">
+						<slot name="controls" />
+					</div>
 				</div>
 			</div>
 		</div>

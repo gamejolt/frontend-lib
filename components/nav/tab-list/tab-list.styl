@@ -38,11 +38,11 @@
 		@media $media-xs
 			float: none !important
 
-		> li
+		& > li
 			display: inline-block
 			margin: 0
 
-			> a
+			& > a
 				display: inline-block
 				padding: $tab-list-padding-v $tab-list-padding-h
 				margin: 0 3px
@@ -81,6 +81,13 @@
 			float: left
 			margin-top: 7px
 			margin-bottom: 0
+
+	&-controls
+		float: right
+
+		.btn
+			border-bottom-left-radius: 0
+			border-bottom-right-radius: 0
 
 	&-input
 		margin-bottom: $line-height-computed
