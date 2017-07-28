@@ -28,9 +28,8 @@ export function hijackLinks(router: VueRouter, host: string) {
 	}
 
 	document.body.addEventListener('click', e => {
-		// router-link will prevent the default browser behavior if it has
-		// handled the click. Just skip these.
-		if (e.defaultPrevented) {
+		// Should we handle this event?
+		if (!guardHijackEvent(e)) {
 			return;
 		}
 
@@ -67,6 +66,38 @@ export function hijackLinks(router: VueRouter, host: string) {
 		e.preventDefault();
 		router.push(href);
 	});
+}
+
+// Basically taken from vue-router router-link. Decides if we should do any
+// logic against this particular event.
+function guardHijackEvent(e: any) {
+	const ke = e as KeyboardEvent;
+	const me = e as MouseEvent;
+
+	// don't redirect with control keys
+	if (ke.metaKey || ke.altKey || ke.ctrlKey || ke.shiftKey) {
+		return false;
+	}
+
+	// don't redirect when preventDefault called
+	if (e.defaultPrevented) {
+		return false;
+	}
+
+	// don't redirect on right click
+	if (me.button !== undefined && me.button !== 0) {
+		return;
+	}
+
+	// don't redirect if `target="_blank"`
+	if (e.currentTarget && e.currentTarget.getAttribute) {
+		const target = e.currentTarget.getAttribute('target');
+		if (/\b_blank\b/i.test(target)) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 export class LocationRedirect {
