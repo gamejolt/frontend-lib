@@ -14,3 +14,14 @@ interface WebpackContext extends WebpackRequire {
 }
 
 declare var require: WebpackRequire;
+
+// Loaders
+declare module '!file-loader!*' {
+	const content: string;
+	export = content;
+}
+
+declare module '!json-loader!*' {
+	const content: any;
+	export = content;
+}
