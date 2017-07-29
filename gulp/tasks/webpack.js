@@ -120,8 +120,8 @@ module.exports = function(config) {
 				path: path.resolve(base, config.buildDir),
 				filename: config.production ? section + '.[name].[chunkhash:6].js' : section + '.[name].js',
 				chunkFilename: config.production
-					? section + '.[name].[id].[chunkhash:6].js'
-					: section + '.[name].[id].js',
+					? section + '.[name].[chunkhash:6].js'
+					: section + '.[name].js',
 				libraryTarget: libraryTarget,
 			},
 			resolve: {
