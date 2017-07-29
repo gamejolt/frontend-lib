@@ -245,17 +245,29 @@ module.exports = function(config) {
 				devNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
 
+				// Since form stuff is so large, we split it into an async chunk
+				// that will get loaded alongside any chunks that need it.
+				devNoop ||
+					serverNoop ||
+					new webpack.optimize.CommonsChunkPlugin({
+						name: 'app',
+						async: 'forms',
+						minChunks: function(module) {
+							return (
+								module.context &&
+								(module.context.indexOf('vee-validate') !== -1 ||
+									module.context.indexOf('gj-lib-client/components/form') !== -1)
+							);
+						},
+					}),
+
 				// Pull out vendor code from the main entry point.
 				devNoop ||
 					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'vendor',
 						minChunks: function(module) {
-							return (
-								module.context &&
-								(module.context.indexOf('node_modules') !== -1 ||
-									module.context.indexOf('bower-lib') !== -1)
-							);
+							return module.context && module.context.indexOf('node_modules') !== -1;
 						},
 					}),
 
@@ -266,6 +278,7 @@ module.exports = function(config) {
 					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'manifest',
+						minChunks: Infinity,
 					}),
 
 				devNoop || new ExtractTextPlugin('[name].[contenthash:6].css'),
