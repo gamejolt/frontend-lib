@@ -43,7 +43,9 @@ export class Meta extends MetaContainer {
 				document.title = title;
 			}
 			this._title = title;
-			Environment.ssrContext.meta.title = escapeString(title);
+
+			// We escape in the template, so no need to escape here.
+			Environment.ssrContext.meta.title = title;
 		}
 	}
 
