@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { WatchOptions } from 'vue';
-import { Module } from 'vuex/types';
+import { Module, Payload } from 'vuex/types';
 
 Vue.use(Vuex);
 
@@ -18,13 +18,19 @@ export abstract class VuexStore<S = any, A = any, M = any> {
 	readonly state: S;
 	readonly getters: any;
 
+	replaceState: (state: S) => void;
+	getServerState: () => any;
+
 	dispatch: VuexDispatch<A>;
 	commit: VuexCommit<M>;
 
+	subscribe: <P extends Payload>(fn: (mutation: P, state: S) => any) => () => void;
 	watch: VuexWatch<S>;
 
 	registerModule: <T>(path: string | string[], module: Module<T, S>) => void;
 	unregisterModule: (path: string | string[]) => void;
+
+	hotUpdate: any;
 }
 
 const storeInstance = new Vuex.Store({});
@@ -52,6 +58,7 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 
 		// These are private helpers. Don't want them to show in vue-devtools.
 		Object.defineProperties(state, {
+			__vuexGetters: { enumerable: false, writable: true, value: [] },
 			__vuexArgGetters: { enumerable: false, writable: true, value: [] },
 			__vuexMutations: { enumerable: false, writable: true, value: [] },
 			__vuexActions: { enumerable: false, writable: true, value: [] },
@@ -72,7 +79,7 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 		const instance = new target();
 		for (const key of Object.getOwnPropertyNames(instance)) {
 			if (!(key in storeInstance)) {
-				storeOptions.state[key] = instance[key];
+				state[key] = instance[key];
 			}
 		}
 
@@ -93,13 +100,15 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 			// getter, action, mutation, etc. Vuex getters are a bit mad to work
 			// with and can only be used in certain vuex scopes so they have
 			// limited usefulness.
-			Object.defineProperty(storeOptions.state, key, {
+			Object.defineProperty(state, key, {
 				enumerable: true,
 				get: () => {
-					const scope = getGetterScope(storeOptions.state);
+					const scope = getGetterScope(state);
 					return getter.apply(scope);
 				},
 			});
+
+			state.__vuexGetters.push(key);
 		}
 
 		// Apply the mutation and action decorators.
@@ -109,8 +118,55 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 
 		// Create the store instance. If it's the main store, we create it, if
 		// it's not the main store we just use our options object.
-		return options.store ? new Vuex.Store(storeOptions) : storeOptions;
+		if (!options.store) {
+			return storeOptions;
+		} else {
+			const _instance = new Vuex.Store(storeOptions) as VuexStore;
+
+			// Overload this so that we do our own replace state handler.
+			_instance.replaceState = (newState: any) =>
+				replaceState(_instance, newState, _instance.state);
+
+			_instance.getServerState = () => getServerState(_instance);
+
+			return _instance;
+		}
 	};
+}
+
+function isModule(store: any, key: string) {
+	return key in store._modules.root._children;
+}
+
+function replaceState(store: any, newState: any, currentState: any) {
+	for (const k in newState) {
+		if (currentState.__vuexGetters.indexOf(k) !== -1) {
+			// Don't overwrite getters when setting new state.
+			continue;
+		} else if (isModule(store, k)) {
+			// Recurse into submodules.
+			replaceState(store, newState[k], currentState[k]);
+		} else {
+			currentState[k] = newState[k];
+		}
+	}
+}
+
+function getServerState(store: any) {
+	const serverState = Object.assign({}, store.state);
+
+	// We remove any dynamic modules. They are always used for
+	// routes and we would rather bootstrap the route modules
+	// from the raw payload data.
+	const childModules = store._modules.root._children;
+	for (const childModuleName in childModules) {
+		const childModule = childModules[childModuleName];
+		if (childModule.runtime) {
+			delete serverState[childModuleName];
+		}
+	}
+
+	return serverState;
 }
 
 /**
