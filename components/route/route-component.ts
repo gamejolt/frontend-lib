@@ -163,7 +163,8 @@ export class BaseRouteComponent extends Vue {
 	 */
 	routeDestroy() {}
 
-	async created() {
+	// Don't allow this to be async. We want it to execute right away.
+	created() {
 		if (this.storeName && this.storeModule) {
 			this.$store.registerModule(this.storeName, new this.storeModule());
 		}
@@ -212,7 +213,7 @@ export class BaseRouteComponent extends Vue {
 			return;
 		}
 
-		this._reloadRoute(options.cache);
+		await this._reloadRoute(options.cache);
 
 		if (isLeafRoute(this.$options.name)) {
 			EventBus.emit('routeChangeAfter');
@@ -227,8 +228,8 @@ export class BaseRouteComponent extends Vue {
 		this.routeDestroy();
 	}
 
-	async reloadRoute() {
-		this._reloadRoute(false);
+	reloadRoute() {
+		return this._reloadRoute(false);
 	}
 
 	private async _reloadRoute(useCache = true) {
@@ -245,11 +246,7 @@ export class BaseRouteComponent extends Vue {
 		}
 	}
 
-	async resolveRoute(
-		route: VueRouter.Route,
-		resolver: RouteResolver,
-		shouldRefreshCache?: boolean
-	) {
+	resolveRoute(route: VueRouter.Route, resolver: RouteResolver, shouldRefreshCache?: boolean) {
 		const routeOptions = this.$options.routeOptions || {};
 
 		// console.log('RAWR RESOLVE ROUTE', this.$options.name);
@@ -310,10 +307,14 @@ export class BaseRouteComponent extends Vue {
 		// allows cache to show really fast but still pull correct and new data from
 		// the server.
 		if (shouldRefreshCache) {
-			const _resolver = RouteResolver.startResolve(this.$options, route);
-			_resolver.payload = await getPayload(this.$options, route);
-			this.resolveRoute(route, _resolver, false);
+			return this.refreshCache(route);
 		}
+	}
+
+	private async refreshCache(route: VueRouter.Route) {
+		const _resolver = RouteResolver.startResolve(this.$options, route);
+		_resolver.payload = await getPayload(this.$options, route);
+		await this.resolveRoute(route, _resolver, false);
 	}
 
 	/**
