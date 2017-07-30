@@ -44,7 +44,11 @@ class RouteResolver {
 	}
 
 	static isComponentResolving(name: string) {
-		return RouteResolver.resolvers.findIndex(i => i.componentName === name) === -1;
+		return RouteResolver.resolvers.findIndex(i => i.componentName === name) !== -1;
+	}
+
+	static clearResolvers() {
+		this.resolvers = [];
 	}
 }
 
@@ -74,7 +78,6 @@ export function RouteResolve(options: RouteOptions = {}) {
 					next: (to?: VueRouter.RawLocation | false | ((vm: Vue) => any) | void) => void
 				) {
 					const routeOptions = componentOptions.routeOptions || {};
-					// console.log('RAWR BEFORE ENTER', componentOptions.name);
 
 					// The router crawls through each matched route and calls
 					// beforeRouteEnter on them one by one. Since we continue to
@@ -120,7 +123,6 @@ export function RouteResolve(options: RouteOptions = {}) {
 							return;
 						}
 
-						// console.log('RAWR NEXT CALLED', vm.$options.name);
 						if (promise) {
 							vm.routeLoading = true;
 							resolver.payload = await promise;
@@ -171,6 +173,10 @@ export class BaseRouteComponent extends Vue {
 
 		this.routeInit();
 
+		// For some reason the @Watch decorator was attaching multiple times in
+		// very random scenarios.
+		this.$watch('$route', (to: any, from: any) => this._onRouteChange(to, from));
+
 		// TODO(SSR)
 		// // If we are in a browser context, the server may have set initial state
 		// // for the routed components. If this is the case we want to pull it
@@ -204,22 +210,6 @@ export class BaseRouteComponent extends Vue {
 		}
 	}
 
-	@Watch('$route')
-	async _onRouteChange(to: VueRouter.Route, from: VueRouter.Route) {
-		const options = this.$options.routeOptions || {};
-
-		// Only do work if the route params/query has actually changed.
-		if (this.canSkipRouteUpdate(from, to)) {
-			return;
-		}
-
-		await this._reloadRoute(options.cache);
-
-		if (isLeafRoute(this.$options.name)) {
-			EventBus.emit('routeChangeAfter');
-		}
-	}
-
 	destroyed() {
 		if (this.storeName) {
 			this.$store.unregisterModule(this.storeName);
@@ -230,6 +220,18 @@ export class BaseRouteComponent extends Vue {
 
 	reloadRoute() {
 		return this._reloadRoute(false);
+	}
+
+	private async _onRouteChange(to: VueRouter.Route, from: VueRouter.Route) {
+		const options = this.$options.routeOptions || {};
+
+		// Only do work if the route params/query has actually changed.
+		if (this.canSkipRouteUpdate(from, to)) {
+			return;
+		}
+
+
+		await this._reloadRoute(options.cache);
 	}
 
 	private async _reloadRoute(useCache = true) {
@@ -249,17 +251,23 @@ export class BaseRouteComponent extends Vue {
 	resolveRoute(route: VueRouter.Route, resolver: RouteResolver, shouldRefreshCache?: boolean) {
 		const routeOptions = this.$options.routeOptions || {};
 
-		// console.log('RAWR RESOLVE ROUTE', this.$options.name);
-
 		// We do a cache refresh if the cache was used for this route.
 		if (shouldRefreshCache === undefined) {
 			shouldRefreshCache = HistoryCache.has(route, routeOptions.cacheTag);
 		}
 
+		// If we are no longer resolving this resolver, let's early out.
+		if (!resolver.isValid(this.$route) || this.routeDestroyed) {
+			return;
+		}
+
+		// We want to remove the resolver before we do any of the early returns
+		// below, or it may be stuck in the resolvers list forever.
+		RouteResolver.removeResolver(resolver);
+
 		// Since this happens async, the component instance may be destroyed
 		// already.
-		if (!resolver.isValid(this.$route) || this.routeDestroyed) {
-			// console.log('RAWR RESOLVE ROUTE - ALREADY DESTROYED', this.$options.name);
+		if (this.routeDestroyed) {
 			return;
 		}
 
@@ -268,8 +276,8 @@ export class BaseRouteComponent extends Vue {
 			// If the payload errored out.
 			if (payload instanceof PayloadError) {
 				if (payload.type === PayloadError.ERROR_NEW_VERSION) {
-					// If it was a version change payload error, we want to refresh
-					// the page so that it gets the new code.
+					// If it was a version change payload error, we want to
+					// refresh the page so that it gets the new code.
 					window.location.reload();
 					return;
 				}
@@ -282,7 +290,11 @@ export class BaseRouteComponent extends Vue {
 
 				return;
 			} else if (payload instanceof LocationRedirect) {
-				return this.$router.replace(payload.location);
+				// We want to clear out all current resolvers before doing the
+				// redirect. They will re-resolve after the route changes.
+				RouteResolver.clearResolvers();
+				this.$router.replace(payload.location);
+				return;
 			}
 
 			this.$payload = payload;
@@ -296,16 +308,18 @@ export class BaseRouteComponent extends Vue {
 		this.routeLoading = false;
 		this.routeBootstrapped = true;
 
-		if (isLeafRoute(this.$options.name)) {
+		// We only want to emit the routeChangeAfter event once during a route
+		// change. This ensures that we only do it during the leaf node resolve
+		// and only if we aren't going to be refreshing cache after this. If we
+		// need to refresh cache, it means we'll go through the resolve again
+		// after fresh data, so we can just do the emit after that.
+		if (isLeafRoute(this.$options.name) && !shouldRefreshCache) {
 			EventBus.emit('routeChangeAfter');
 		}
 
-		RouteResolver.removeResolver(resolver);
-		// console.log('RAWR RESOLVE ROUTE - RESOLVED', this.$options.name);
-
 		// If we used cache, then we want to refresh the route again async. This
-		// allows cache to show really fast but still pull correct and new data from
-		// the server.
+		// allows cache to show really fast but still pull correct and new data
+		// from the server.
 		if (shouldRefreshCache) {
 			return this.refreshCache(route);
 		}
@@ -319,8 +333,8 @@ export class BaseRouteComponent extends Vue {
 
 	/**
 	 * If all of the previous params are the same, then the already activated
-	 * components can stay the same. We only initialize routes that have probably
-	 * changed between updates.
+	 * components can stay the same. We only initialize routes that have
+	 * probably changed between updates.
 	 */
 	private canSkipRouteUpdate(from: VueRouter.Route, to: VueRouter.Route) {
 		// TODO: We can probably try to be smarter about this in the future and
@@ -351,14 +365,11 @@ async function getPayload(
 	route: VueRouter.Route,
 	useCache = false
 ) {
-	// console.log('RAWR GET PAYLOAD', componentOptions.name);
-
 	const routeOptions = componentOptions.routeOptions || {};
 
 	if (useCache) {
 		const cache = HistoryCache.get(route, routeOptions.cacheTag);
 		if (cache) {
-			// console.log('RAWR GET PAYLOAD - USING CACHE', componentOptions.name);
 			return cache.data;
 		}
 	}
