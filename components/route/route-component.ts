@@ -197,9 +197,7 @@ export class BaseRouteComponent extends Vue {
 			// route changed, then it won't trigger the resolve flow. We have to
 			// manually trigger the resolve in this case.
 			const options = this.$options.routeOptions || {};
-			if (options.hasResolver && RouteResolver.isComponentResolving(this.$options.name!)) {
-				// console.log('RAWR FINALIZE AFTER CREATE', this.$options.name);
-				// TODO: Don't use cache?
+			if (options.hasResolver && !RouteResolver.isComponentResolving(this.$options.name!)) {
 				this._reloadRoute(false);
 			}
 		}
