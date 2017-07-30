@@ -1,4 +1,4 @@
-import { Environment, isPrerender } from '../environment/environment.service';
+import { Environment } from '../environment/environment.service';
 import VueRouter from 'vue-router';
 import { EventBus } from '../event-bus/event-bus.service';
 import { objectEquals } from '../../utils/object';
@@ -52,7 +52,7 @@ export class Ads {
 	}
 
 	static init(router: VueRouter) {
-		if (GJ_IS_SSR || GJ_IS_CLIENT || isPrerender) {
+		if (GJ_IS_SSR || GJ_IS_CLIENT) {
 			return;
 		}
 
@@ -111,7 +111,7 @@ export class Ads {
 	}
 
 	static sendBeacon(type: string, resource?: string, resourceId?: number) {
-		if (Environment.isPrerender || GJ_IS_SSR) {
+		if (GJ_IS_SSR) {
 			return;
 		}
 

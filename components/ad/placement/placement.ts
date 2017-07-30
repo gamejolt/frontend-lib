@@ -5,7 +5,6 @@ import * as View from '!view!./placement.html';
 import { Model } from '../../model/model.service';
 import { Screen } from '../../screen/screen-service';
 import { makeObservableService } from '../../../utils/vue';
-import { isPrerender } from '../../environment/environment.service';
 import { Game } from '../../game/game.model';
 import { AppAd } from '../ad';
 

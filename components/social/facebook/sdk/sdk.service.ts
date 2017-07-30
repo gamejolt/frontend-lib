@@ -1,4 +1,3 @@
-import { Environment } from '../../../environment/environment.service';
 import { Analytics } from '../../../analytics/analytics.service';
 
 function setupEvents() {
@@ -15,7 +14,7 @@ export class FacebookSdk {
 	private static isBootstrapped = false;
 
 	static load() {
-		if (Environment.isPrerender || GJ_IS_SSR) {
+		if (GJ_IS_SSR) {
 			return;
 		}
 

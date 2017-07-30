@@ -1,10 +1,8 @@
-import { Environment } from '../../../environment/environment.service';
-
 export class YoutubeSdk {
 	private static isBootstrapped = false;
 
 	static load() {
-		if (Environment.isPrerender || GJ_IS_SSR) {
+		if (GJ_IS_SSR) {
 			return;
 		}
 

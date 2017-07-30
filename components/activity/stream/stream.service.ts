@@ -15,7 +15,7 @@ export class ActivityStream {
 	private static async ensureConnection() {
 		// If we're prerendering, then we can't create a websocket connection or
 		// it'll never finish the request.
-		if (Environment.isPrerender || GJ_IS_SSR) {
+		if (GJ_IS_SSR) {
 			throw new Error(`Can't connect to stream if server-side rendering.`);
 		}
 

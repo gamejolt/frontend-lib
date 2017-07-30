@@ -26,12 +26,6 @@ export class AppFadeCollapse extends Vue {
 	private isRequired = false;
 
 	async mounted() {
-		// No need to do anything if prerendering.
-		// We want to show all the content.
-		if (Environment.isPrerender) {
-			return;
-		}
-
 		// Let it compile DOM.
 		await this.$nextTick();
 

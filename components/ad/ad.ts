@@ -3,7 +3,6 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./ad.html?style=./ad.styl';
 
 import { AdSlot, Ads } from './ads.service';
-import { isPrerender } from '../environment/environment.service';
 import { Model } from '../model/model.service';
 import { Game } from '../game/game.model';
 import { User } from '../user/user.model';
@@ -46,7 +45,6 @@ export class AppAd extends Vue {
 			Screen.isXs ||
 			GJ_IS_CLIENT ||
 			GJ_IS_SSR ||
-			isPrerender ||
 			(this.resource && this.resource instanceof Game && !this.resource._should_show_ads)
 		) {
 			return;

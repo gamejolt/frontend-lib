@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 
 import { routeError404, RouteError404 } from '../components/error/page/page.route';
 import { initScrollBehavior } from '../components/scroll/auto-scroll/autoscroll.service';
-import { isPrerender } from '../components/environment/environment.service';
 
 export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
 	Vue.use(VueRouter);
@@ -23,7 +22,7 @@ export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
  * be in router-link and tries to route them if it points to a correct route.
  */
 export function hijackLinks(router: VueRouter, host: string) {
-	if (GJ_IS_SSR || isPrerender) {
+	if (GJ_IS_SSR) {
 		return;
 	}
 

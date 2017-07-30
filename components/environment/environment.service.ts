@@ -1,7 +1,5 @@
 export const isClient = GJ_IS_CLIENT;
 export const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
-export const isPrerender =
-	typeof window !== 'undefined' && window.navigator.userAgent.search(/PhantomJS/) !== -1;
 
 interface SsrContext {
 	meta: any;
@@ -12,7 +10,6 @@ export class Environment {
 	static buildType: 'production' | 'development' = GJ_BUILD_TYPE;
 	static isClient = GJ_IS_CLIENT;
 	static isSecure = isSecure;
-	static isPrerender = isPrerender;
 
 	// SSR
 	static ssrContext: SsrContext = {
