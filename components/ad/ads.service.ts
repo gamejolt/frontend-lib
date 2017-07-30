@@ -1,7 +1,5 @@
 import { Environment, isPrerender } from '../environment/environment.service';
-import VueRouter from 'vue-router';
 import { EventBus } from '../event-bus/event-bus.service';
-import { objectEquals } from '../../utils/object';
 
 const DfpTagId = '1437670388518';
 
@@ -51,20 +49,12 @@ export class Ads {
 		return (window as any).googletag;
 	}
 
-	static init(router: VueRouter) {
+	static init() {
 		if (GJ_IS_SSR || GJ_IS_CLIENT || isPrerender) {
 			return;
 		}
 
-		router.afterEach((to, from) => {
-			// Don't change ads if just the hash has changed.
-			const fromParams = Object.assign({}, from.params, from.query);
-			const toParams = Object.assign({}, to.params, to.query);
-
-			if (to.name === from.name && objectEquals(fromParams, toParams)) {
-				return;
-			}
-
+		EventBus.on('routeChangeAfter', () => {
 			// Only if DFP is already loaded in.
 			if (!(window as any).googletag || !(window as any).googletag.pubads) {
 				return;
