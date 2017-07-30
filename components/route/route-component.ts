@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { Watch, Component } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import { createDecorator } from 'vue-class-component';
 import { EventBus } from '../event-bus/event-bus.service';
 import { objectEquals } from '../../utils/object';
@@ -75,13 +75,14 @@ export function RouteResolve(options: RouteOptions = {}) {
 					_from: VueRouter.Route,
 					next: (to?: VueRouter.RawLocation | false | ((vm: Vue) => any) | void) => void
 				) {
+					const name = componentOptions.name!;
 					const routeOptions = componentOptions.routeOptions || {};
 
 					// The router crawls through each matched route and calls
 					// beforeRouteEnter on them one by one. Since we continue to
 					// set the leaf route the last one is the only one that will
 					// be saved as the leaf.
-					setLeafRoute(componentOptions.name);
+					setLeafRoute(name);
 
 					// If we have component state from the server for any route
 					// components, then we want to instead bootstrap the
@@ -89,7 +90,7 @@ export function RouteResolve(options: RouteOptions = {}) {
 					// We'll bootstrap the data through the created() method
 					// instead. It will fail the hydration unless we set the
 					// data during the created() method.
-					if (serverComponentState[componentOptions.name!]) {
+					if (serverComponentState && serverComponentState[name]) {
 						console.log('skip payload fetch since we have state');
 						return next();
 					}
