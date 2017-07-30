@@ -11,10 +11,8 @@ import { arrayRemove } from '../../utils/array';
 
 // This is component state that the server may have returned to the browser. It
 // can be used to bootstrap components with initial data.
-const state =
-	typeof window !== 'undefined' &&
-	(window as any).__INITIAL_STATE__ &&
-	(window as any).__INITIAL_STATE__.components;
+const serverComponentState =
+	typeof window !== 'undefined' && window.__INITIAL_STATE__ && window.__INITIAL_STATE__.components;
 
 export interface RouteOptions {
 	lazy?: boolean;
@@ -85,33 +83,33 @@ export function RouteResolve(options: RouteOptions = {}) {
 					// be saved as the leaf.
 					setLeafRoute(componentOptions.name);
 
-					let promise: Promise<any> | undefined;
-					let payload: any;
-					let hasCache = routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
-
-					const resolver = RouteResolver.startResolve(componentOptions, to);
-
 					// If we have component state from the server for any route
 					// components, then we want to instead bootstrap the
 					// components from that data. Early out of this function.
 					// We'll bootstrap the data through the created() method
-					// instead.
-					if (state) {
-						payload = null;
-					} else if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
+					// instead. It will fail the hydration unless we set the
+					// data during the created() method.
+					if (serverComponentState[componentOptions.name!]) {
+						console.log('skip payload fetch since we have state');
+						return next();
+					}
+
+					let promise: Promise<any> | undefined;
+					let hasCache = routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
+					const resolver = RouteResolver.startResolve(componentOptions, to);
+
+					if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
 						promise = getPayload(componentOptions, to);
 					} else {
 						resolver.payload = await getPayload(componentOptions, to, routeOptions.cache);
 
-						// We store the payload on the component options. For
-						// browser we get loaded within the next() call below.
 						// For server next() doesn't call, so we have to pull
 						// this data within the created() hook. We also need
 						// this data within the server.js file. We can pull from
 						// all server locations from this options. Kind of
 						// hacky, though.
 						if (GJ_IS_SSR) {
-							componentOptions.__INITIAL_STATE__ = resolver;
+							componentOptions.__RESOLVER__ = resolver;
 						}
 					}
 
@@ -167,6 +165,8 @@ export class BaseRouteComponent extends Vue {
 
 	// Don't allow this to be async. We want it to execute right away.
 	created() {
+		const name = this.$options.name!;
+
 		if (this.storeName && this.storeModule) {
 			this.$store.registerModule(this.storeName, new this.storeModule());
 		}
@@ -177,34 +177,30 @@ export class BaseRouteComponent extends Vue {
 		// very random scenarios.
 		this.$watch('$route', (to: any, from: any) => this._onRouteChange(to, from));
 
-		// TODO(SSR)
-		// // If we are in a browser context, the server may have set initial state
-		// // for the routed components. If this is the case we want to pull it
-		// // into the component options so it can bootstrap fast.
-		// if (!GJ_IS_SSR && state) {
-		// 	const matched = this.$router.getMatchedComponents();
-		// 	if (matched.length) {
-		// 		matched.forEach((component: Vue.ComponentOptions<Vue>, i) => {
-		// 			component.__INITIAL_STATE__ = state[i];
-		// 			(window as any).__INITIAL_STATE__.components[i] = null;
-		// 		});
-		// 	}
-		// }
-
 		if (GJ_IS_SSR) {
 			// In SSR we have to store the resolver for each route component
 			// somewhere. Since we don't have an instance we instead put it into
 			// the component's static options. Yay for hacks! Let's use it and
 			// resolve it here.
-			if (this.$options.__INITIAL_STATE__) {
-				this.resolveRoute(this.$route, this.$options.__INITIAL_STATE__);
+			if (this.$options.__RESOLVER__) {
+				this.resolveRoute(this.$route, this.$options.__RESOLVER__);
 			}
+		} else if (serverComponentState && serverComponentState[name]) {
+			// If we are in a browser context, the server may have set initial
+			// state for the routed components. If this is the case we want to
+			// pull it into the component options so it can bootstrap fast.
+			const resolver = RouteResolver.startResolve(this.$options, this.$route);
+			resolver.payload = serverComponentState[name];
+			serverComponentState[name] = undefined;
+
+			// Make sure we don't refresh cache.
+			this.resolveRoute(this.$route, resolver, false);
 		} else {
 			// If this route component wasn't in the DOM (v-if maybe?) when the
 			// route changed, then it won't trigger the resolve flow. We have to
 			// manually trigger the resolve in this case.
 			const options = this.$options.routeOptions || {};
-			if (options.hasResolver && !RouteResolver.isComponentResolving(this.$options.name!)) {
+			if (options.hasResolver && !RouteResolver.isComponentResolving(name)) {
 				this._reloadRoute(false);
 			}
 		}
@@ -230,7 +226,6 @@ export class BaseRouteComponent extends Vue {
 			return;
 		}
 
-
 		await this._reloadRoute(options.cache);
 	}
 
@@ -248,6 +243,9 @@ export class BaseRouteComponent extends Vue {
 		}
 	}
 
+	// Make sure this function isn't an async func. We want to make sure it can
+	// do most of its work in the same tick so we can call it in the created()
+	// hook after SSR returns data to client.
 	resolveRoute(route: VueRouter.Route, resolver: RouteResolver, shouldRefreshCache?: boolean) {
 		const routeOptions = this.$options.routeOptions || {};
 
@@ -257,7 +255,7 @@ export class BaseRouteComponent extends Vue {
 		}
 
 		// If we are no longer resolving this resolver, let's early out.
-		if (!resolver.isValid(this.$route) || this.routeDestroyed) {
+		if (!resolver.isValid(this.$route)) {
 			return;
 		}
 
