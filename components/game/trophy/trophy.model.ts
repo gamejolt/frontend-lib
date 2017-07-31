@@ -32,6 +32,7 @@ export class GameTrophy extends Model {
 	experience: number;
 	img_thumbnail: string;
 	has_thumbnail: boolean;
+	is_owner: boolean;
 
 	constructor(data: any = {}) {
 		super(data);
