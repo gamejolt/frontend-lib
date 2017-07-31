@@ -2,7 +2,11 @@ export const isClient = GJ_IS_CLIENT;
 export const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
 
 interface SsrContext {
+	ua: string;
+	url: string;
 	meta: any;
+	errorCode?: number;
+	redirect?: string;
 }
 
 export class Environment {
@@ -11,8 +15,9 @@ export class Environment {
 	static isClient = GJ_IS_CLIENT;
 	static isSecure = isSecure;
 
-	// SSR
 	static ssrContext: SsrContext = {
+		ua: '',
+		url: '',
 		meta: {},
 	};
 

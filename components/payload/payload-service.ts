@@ -82,7 +82,9 @@ export class Payload {
 
 			return data.payload;
 		} catch (error) {
-			console.error('Payload error', error);
+			if (GJ_BUILD_TYPE === 'development') {
+				console.error('Payload error', error);
+			}
 
 			if (error instanceof PayloadError) {
 				throw this.handlePayloadError(error);
@@ -95,9 +97,7 @@ export class Payload {
 
 			this.checkPayloadUser(response, options);
 
-			if (options.errorHandler) {
-				throw options.errorHandler(error);
-			} else if (!options.noErrorRedirect) {
+			if (!options.noErrorRedirect) {
 				throw this.handlePayloadError(PayloadError.fromAxiosError(error));
 			} else {
 				throw error;
@@ -108,7 +108,7 @@ export class Payload {
 	private static checkPayloadVersion(data: any, options: RequestOptions) {
 		// We ignore completely if we're in the client.
 		// We don't want the client refreshing when an update to site is pushed out.
-		if (options.ignorePayloadVersion || GJ_IS_CLIENT) {
+		if (options.ignorePayloadVersion || GJ_IS_CLIENT || GJ_IS_SSR) {
 			return;
 		}
 
@@ -163,8 +163,11 @@ export class Payload {
 			// error and do a refresh of the page after it has the URL to
 			// reload.
 		} else if (error.type === PayloadError.ERROR_NOT_LOGGED) {
-			const redirect = encodeURIComponent(window.location.href);
-			window.location.href = Environment.authBaseUrl + '/login?redirect=' + redirect;
+			const redirect = encodeURIComponent(
+				GJ_IS_SSR ? Environment.ssrContext.url : window.location.href
+			);
+			const location = Environment.authBaseUrl + '/login?redirect=' + redirect;
+			this.store.commit('app/redirect', location);
 		} else if (error.type === PayloadError.ERROR_INVALID) {
 			this.store.commit('app/setError', 500);
 		} else if (

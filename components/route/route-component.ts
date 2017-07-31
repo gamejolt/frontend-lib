@@ -278,21 +278,17 @@ export class BaseRouteComponent extends Vue {
 					// If it was a version change payload error, we want to
 					// refresh the page so that it gets the new code.
 					window.location.reload();
-					return;
 				}
-
-				// TODO(rewrite): Is this needed anymore or does payload service
-				// handle just fine?
-				// if (vm.routeError) {
-				// 	vm.routeError(payload);
-				// }
-
 				return;
 			} else if (payload instanceof LocationRedirect) {
 				// We want to clear out all current resolvers before doing the
 				// redirect. They will re-resolve after the route changes.
-				RouteResolver.clearResolvers();
-				this.$router.replace(payload.location);
+				if (GJ_IS_SSR) {
+					this.$store.commit('app/redirect', this.$router.resolve(payload.location).href);
+				} else {
+					RouteResolver.clearResolvers();
+					this.$router.replace(payload.location);
+				}
 				return;
 			}
 

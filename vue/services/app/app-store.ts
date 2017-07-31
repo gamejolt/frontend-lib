@@ -1,6 +1,7 @@
 import { User } from '../../../components/user/user.model';
 import { VuexStore, VuexModule, VuexMutation } from '../../../utils/vuex';
 import { namespace, State, Action, Mutation } from 'vuex-class';
+import { Environment } from '../../../components/environment/environment.service';
 
 export const AppState = namespace('app', State);
 export const AppAction = namespace('app', Action);
@@ -13,6 +14,7 @@ export type Mutations = {
 	'app/clearUser': undefined;
 	'app/setError': number;
 	'app/clearError': undefined;
+	'app/redirect': string;
 };
 
 @VuexModule()
@@ -40,11 +42,21 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 	@VuexMutation
 	setError(error: Mutations['app/setError']) {
 		this.error = error;
+		Environment.ssrContext.errorCode = typeof error === 'string' ? 500 : error;
 	}
 
 	@VuexMutation
 	clearError() {
 		this.error = null;
+	}
+
+	@VuexMutation
+	redirect(location: Mutations['app/redirect']) {
+		if (GJ_IS_SSR) {
+			Environment.ssrContext.redirect = location;
+		} else {
+			window.location.href = location;
+		}
 	}
 }
 
