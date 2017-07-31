@@ -82,7 +82,7 @@ export class Payload {
 
 			return data.payload;
 		} catch (error) {
-			if (GJ_BUILD_TYPE === 'development') {
+			if (!GJ_IS_SSR) {
 				console.error('Payload error', error);
 			}
 
