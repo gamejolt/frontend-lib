@@ -10,6 +10,8 @@ export class Site extends Model {
 
 	user_id: number;
 	game_id: number;
+	domain_type: string;
+	domain?: string;
 	url: string;
 	theme: SiteTheme;
 	content_blocks: SiteContentBlock[];
@@ -38,6 +40,10 @@ export class Site extends Model {
 
 	$save() {
 		return this.$_save(`/web/dash/sites/save/${this.id}`, 'site');
+	}
+
+	$saveDomain() {
+		return this.$_save(`/web/dash/sites/save-domain/${this.id}`, 'site');
 	}
 
 	$activate() {
