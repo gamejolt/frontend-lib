@@ -123,7 +123,7 @@ module.exports = function(config) {
 			!config.server &&
 			config.production &&
 			config.offlineSupport &&
-			config.offlineSupport[section];
+			config.offlineSupport.indexOf(section) !== -1;
 
 		webpackSectionConfigs[section] = {
 			entry,
@@ -336,6 +336,9 @@ module.exports = function(config) {
 				hasOfflineSupport
 					? new OfflinePlugin({
 							excludes: ['vue-ssr-*'],
+							ServiceWorker: {
+								output: 'sjw.js',
+							},
 						})
 					: noop,
 				config.write ? new WriteFilePlugin() : noop,
