@@ -121,7 +121,7 @@ module.exports = function(config) {
 
 		let hasOfflineSupport =
 			!config.server &&
-			!config.production &&
+			config.production &&
 			config.offlineSupport &&
 			config.offlineSupport[section];
 
