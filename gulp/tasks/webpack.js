@@ -17,6 +17,7 @@ const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const OptimizeJsPlugin = require('optimize-js-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 module.exports = function(config) {
 	let base = path.resolve(config.projectBase);
@@ -91,7 +92,6 @@ module.exports = function(config) {
 	let webpackSectionTasks = [];
 	config.sections.forEach(function(section) {
 		let indexHtml = section === 'app' ? 'index.html' : section + '.html';
-
 		let appEntries = [path.resolve(base, 'src/' + section + '/main.ts')];
 
 		if (!config.production) {
@@ -107,6 +107,15 @@ module.exports = function(config) {
 			entry = {
 				server: [path.resolve(base, 'src/' + section + '/server.ts')],
 			};
+		}
+
+		let webAppManifest = undefined;
+		if (!config.server && config.webAppManifest && config.webAppManifest[section]) {
+			webAppManifest = config.webAppManifest[section];
+
+			for (const icon of webAppManifest.icons) {
+				icon.src = path.resolve(base, 'src/app/img/touch/' + icon.src);
+			}
 		}
 
 		webpackSectionConfigs[section] = {
@@ -307,6 +316,7 @@ module.exports = function(config) {
 						inject: true,
 						chunksSortMode: 'dependency',
 					}),
+				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
 				serverNoop ||
 					new VueSSRClientPlugin({
