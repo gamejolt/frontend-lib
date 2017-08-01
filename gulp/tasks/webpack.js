@@ -338,6 +338,7 @@ module.exports = function(config) {
 							excludes: ['vue-ssr-*'],
 							ServiceWorker: {
 								output: 'sjw.js',
+								publicPath: 'https://gamejolt.com/sjw.js',
 							},
 						})
 					: noop,
