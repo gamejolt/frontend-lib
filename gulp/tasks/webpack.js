@@ -17,6 +17,7 @@ const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const OptimizeJsPlugin = require('optimize-js-plugin');
+const OfflinePlugin = require('offline-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 module.exports = function(config) {
@@ -117,6 +118,12 @@ module.exports = function(config) {
 				icon.src = path.resolve(base, 'src/app/img/touch/' + icon.src);
 			}
 		}
+
+		let hasOfflineSupport =
+			!config.server &&
+			!config.production &&
+			config.offlineSupport &&
+			config.offlineSupport[section];
 
 		webpackSectionConfigs[section] = {
 			entry,
@@ -326,6 +333,11 @@ module.exports = function(config) {
 					new VueSSRServerPlugin({
 						filename: 'vue-ssr-server-bundle-' + section + '.json',
 					}),
+				hasOfflineSupport
+					? new OfflinePlugin({
+							excludes: ['vue-ssr-*'],
+						})
+					: noop,
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			],
