@@ -200,7 +200,7 @@
 													****
 													{{ cards[0].last4 }}
 												</span>
-												<small class="text-muted" v-if="cardsTax[ cards[0].id ].amount > 0">
+												<small class="text-muted" v-if="cardsTax[ cards[0].id ] && cardsTax[ cards[0].id ].amount > 0">
 													+{{ cardsTax[ cards[0].id ].amount | currency }}
 													<translate>tax</translate>
 												</small>
@@ -235,7 +235,7 @@
 												</span>
 												****
 												{{ card.last4 }}
-												<small class="text-muted" v-if="cardsTax[ card.id ].amount > 0">
+												<small class="text-muted" v-if="cardsTax[ card.id ] && cardsTax[ card.id ].amount > 0">
 													+{{ cardsTax[ card.id ].amount | currency }}
 													<translate>tax</translate>
 												</small>
