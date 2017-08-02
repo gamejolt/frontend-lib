@@ -31,6 +31,8 @@ export class AppResponsiveDimensions extends Vue {
 	@Watch('ratio')
 	private updateDimensions() {
 		const containerWidth = Ruler.width(this.$el.parentNode as HTMLElement);
-		this.height = `${containerWidth / this.ratio}px`;
+		const height = containerWidth / this.ratio;
+		this.height = `${height}px`;
+		this.$emit('change', [containerWidth, height]);
 	}
 }
