@@ -32,7 +32,7 @@
 			>
 	</div>
 
-	<div v-if="!!value">
+	<template v-if="!!value">
 		<div v-if="progress === undefined" class="form-upload-control-files">
 			<p>
 				<strong><translate>Selected files:</translate></strong>
@@ -49,14 +49,14 @@
 				</div>
 			</div>
 		</div>
-		<div v-else>
+		<template v-else>
 			<app-progress-bar :percent="progress * 100">
-				<span v-if="progress < 0.99">
+				<template v-if="progress < 0.99">
 					{{ progress | number({ style: 'percent' }) }}
-				</span>
-				<span v-else>
+				</template>
+				<template v-else>
 					<translate>Processing...</translate>
-				</span>
+				</template>
 			</app-progress-bar>
 
 			<div
@@ -67,6 +67,6 @@
 					<translate>Upload complete! Please wait while we process your file(s). This may take a few minutes, so don't close or refresh the page.</translate>
 				</p>
 			</div>
-		</div>
-	</div>
+		</template>
+	</template>
 </div>

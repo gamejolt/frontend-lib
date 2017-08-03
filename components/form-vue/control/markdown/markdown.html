@@ -60,7 +60,7 @@
 		</div>
 	</nav>
 
-	<div v-if="currentTab === 'edit'">
+	<template v-if="currentTab === 'edit'">
 		<textarea
 			v-if="editorMode === 'textarea'"
 			:id="id"
@@ -93,8 +93,7 @@
 			:type="mediaItemType"
 			:parent-id="mediaItemParentId"
 			/>
-	</div>
-
+	</template>
 	<div
 		v-else-if="currentTab === 'preview'"
 		class="well form-control-markdown-preview"

@@ -2,7 +2,7 @@
 	<div class="media-bar-lightbox-item-inner" v-if="isActive || isNext || isPrev">
 
 		<!-- Image -->
-		<div v-if="item.media_type === 'image'">
+		<template v-if="item.media_type === 'image'">
 			<div class="media-bar-lightbox-item-embed"
 				v-if="maxWidth && maxHeight"
 				>
@@ -20,10 +20,10 @@
 			<div class="media-bar-lightbox-item-caption" v-if="item.caption">
 				<h4>{{ item.caption }}</h4>
 			</div>
-		</div>
+		</template>
 
 		<!-- Video -->
-		<div v-if="item.media_type === 'video'">
+		<template v-else-if="item.media_type === 'video'">
 			<div class="media-bar-lightbox-item-embed"
 				v-if="isActive && maxWidth && maxHeight"
 				>
@@ -42,10 +42,10 @@
 				<!--TODO: This used to link links-->
 				<p v-if="item.description" v-text="item.description"></p>
 			</div>
-		</div>
+		</template>
 
 		<!-- Sketchfab -->
-		<div v-if="item.media_type === 'sketchfab'">
+		<template v-else-if="item.media_type === 'sketchfab'">
 			<div class="game-media-bar-lightbox-item-embed"
 				v-if="isActive && maxWidth && maxHeight"
 				>
@@ -57,7 +57,7 @@
 					:autoplay="true"
 					/>
 			</div>
-		</div>
+		</template>
 
 	</div>
 </div>

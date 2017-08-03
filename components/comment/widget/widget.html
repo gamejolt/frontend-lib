@@ -2,39 +2,30 @@
 	class="comment-widget"
 	:id="`comment-pagination-${id}`"
 	>
-	<div v-if="!hasBootstrapped && !hasError">
-		<app-loading />
+	<app-loading v-if="!hasBootstrapped && !hasError" />
+	<div v-else-if="hasError" class="alert alert-warning">
+		<translate>Couldn't fetch comments for game.</translate>
 	</div>
-
-	<div v-if="hasError">
-		<div class="alert alert-warning">
-			<translate>Couldn't fetch comments for game.</translate>
-		</div>
-	</div>
-
-	<div v-if="hasBootstrapped && !hasError">
-		<div v-if="!noIntro">
-			<div v-if="!commentsCount">
+	<div v-else-if="hasBootstrapped">
+		<template v-if="!noIntro">
+			<template v-if="!commentsCount">
 				<p>
 					<em><translate>Let us know your thoughts and be the first to comment!</translate></em>
 				</p>
 				<br>
-			</div>
-		</div>
+			</template>
+		</template>
 
 		<!-- Comment Add Form -->
-		<div>
-			<app-message-thread-add v-if="app.user">
-				<app-comment-widget-add
-					:resource="resource"
-					:resource-id="resourceId"
-					@submit="onCommentAdd"
-					/>
-			</app-message-thread-add>
-
-			<div v-else class="alert alert-info">
-				<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
-			</div>
+		<app-message-thread-add v-if="app.user">
+			<app-comment-widget-add
+				:resource="resource"
+				:resource-id="resourceId"
+				@submit="onCommentAdd"
+				/>
+		</app-message-thread-add>
+		<div v-else class="alert alert-info">
+			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
 		<app-message-thread-content v-if="allowTranslate">
@@ -51,7 +42,7 @@
 					</translate>
 				</button>
 
-				<div v-if="isShowingTranslations">
+				<template v-if="isShowingTranslations">
 					<button class="btn btn-block btn-outline"
 						@click="toggleTranslate"
 						>
@@ -66,7 +57,7 @@
 					<div class="small text-muted text-center">
 						<translate>Automatic translations use Google Translate and may not be completely accurate.</translate>
 					</div>
-				</div>
+				</template>
 			</div>
 		</app-message-thread-content>
 

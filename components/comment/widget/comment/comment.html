@@ -7,17 +7,17 @@
 	:is-showing-replies="isShowingReplies"
 	>
 
-	<span slot="tags" v-if="isOwner">
+	<template slot="tags" v-if="isOwner">
 
 		<span class="tag tag-active">
 			<translate>Dev</translate>
 		</span>
 
-	</span>
+	</template>
 
-	<span slot="meta">
+	<template slot="meta">
 
-		<span v-if="app.user && (app.user.id !== comment.user || app.user.permissionLevel >= 3)">
+		<template v-if="app.user && (app.user.id !== comment.user || app.user.permissionLevel >= 3)">
 			<span class="dot-separator"></span>
 
 			<a class="link-muted"
@@ -34,7 +34,7 @@
 				>
 				<app-jolticon icon="ellipsis-h" />
 			</a>
-		</span>
+		</template>
 
 		<app-popover
 			v-if="app.user"
@@ -60,7 +60,7 @@
 			</div>
 		</app-popover>
 
-	</span>
+	</template>
 
 	<app-fade-collapse
 		:collapse-height="300"
@@ -84,7 +84,6 @@
 	</a>
 
 	<div class="comment-videos" v-if="comment.videos.length">
-
 		<div class="row">
 			<div
 				class="col-xs-6 col-sm-4"
@@ -113,7 +112,7 @@
 		</p>
 	</div>
 
-	<div slot="controls">
+	<template slot="controls">
 
 		<span class="comment-vote-btn">
 			<button
@@ -138,7 +137,7 @@
 			Only show the reply if isn't a child.
 			We only show it on the parent comments.
 		-->
-		<span v-if="!isChild">
+		<template v-if="!isChild">
 			<button
 				class="btn btn-outline btn-sparse btn-circle"
 				@click="isReplying = !isReplying"
@@ -148,10 +147,9 @@
 				>
 				<app-jolticon icon="reply" />
 			</button>
+		</template>
 
-		</span>
-
-		<span v-if="canFollow">
+		<template v-if="canFollow">
 			<button
 				v-if="!widget.subscriptions[ comment.id ]"
 				class="btn btn-outline btn-sparse btn-circle"
@@ -171,7 +169,7 @@
 				>
 				<app-jolticon icon="subscribed" />
 			</button>
-		</span>
+		</template>
 
 		&nbsp;
 		&nbsp;
@@ -190,10 +188,10 @@
 			</translate>
 		</a>
 
-	</div>
+	</template>
 
 	<!-- Child Comments -->
-	<div v-if="isShowingReplies" slot="replies">
+	<template v-if="isShowingReplies" slot="replies">
 
 		<app-message-thread v-if="isShowingChildren">
 			<app-comment-widget-comment
@@ -221,6 +219,6 @@
 				/>
 		</app-message-thread-add>
 
-	</div>
+	</template>
 
 </app-message-thread-item>

@@ -1,6 +1,6 @@
 <app-form name="gamePackagePayment" ref="form">
 
-	<div v-if="checkoutStep === 'primary'">
+	<template v-if="checkoutStep === 'primary'">
 
 		<div class="alert alert-info full-bleed"
 			v-if="partner"
@@ -18,20 +18,20 @@
 		</div>
 
 		<p v-if="sellable.type === 'pwyw'">
-			<span v-if="!pricing.amount">
+			<template v-if="!pricing.amount">
 				<translate
 					:translate-params="{
 						developer: game.developer.display_name,
 					}"
 					>
-					Show {{ developer }} some love by supporting them.
+					Show %{ developer } some love by supporting them.
 				</translate>
-			</span>
-			<span v-else>
+			</template>
+			<template v-else>
 				<span v-translate="{ amount: formattedAmount }">
 					This developer suggests paying <b>%{ amount }</b>, but you're able to pay what you want.
 				</span>
-			</span>
+			</template>
 		</p>
 		<p v-else-if="sellable.type === 'paid'">
 			<span v-translate="{ amount: formattedAmount }">
@@ -40,12 +40,10 @@
 		</p>
 
 		<hr>
-	</div>
+	</template>
 
-	<div v-if="!isLoaded">
-		<app-loading />
-	</div>
-	<div v-else>
+	<app-loading v-if="!isLoaded" />
+	<template v-else>
 		<app-loading-fade :is-loading="isProcessing">
 			<div
 				v-if="checkoutStep === 'primary'"
@@ -140,40 +138,38 @@
 							If they don't have enough funds in their wallet for the order, we give 'em a message.
 						-->
 						<app-expand :when="valid">
-							<div v-if="app.user && walletBalance > 0">
-								<div v-if="hasSufficientWalletFunds">
-									<span
-										class="saved-card"
-										:class="{ disabled: isLoadingMethods }"
-										@click="collectAddress( 'wallet' )"
-										>
-										<div class="saved-card-avatar">
-											<img
-												:src="app.user.img_avatar"
-												class="img-responsive"
-												alt=""
-												v-app-tooltip="`${ app.user.display_name } (@${ app.user.username })`"
-												>
+							<div v-if="app.user && walletBalance > 0 && hasSufficientWalletFunds">
+								<span
+									class="saved-card"
+									:class="{ disabled: isLoadingMethods }"
+									@click="collectAddress( 'wallet' )"
+									>
+									<div class="saved-card-avatar">
+										<img
+											:src="app.user.img_avatar"
+											class="img-responsive"
+											alt=""
+											v-app-tooltip="`${ app.user.display_name } (@${ app.user.username })`"
+											>
+									</div>
+									<div class="saved-card-content">
+										<div class="saved-card-label">
+											<translate>Your Wallet</translate>
 										</div>
-										<div class="saved-card-content">
-											<div class="saved-card-label">
-												<translate>Your Wallet</translate>
-											</div>
-											<div class="small">
-												<translate>Balance:</translate>
-												{{ walletBalance | currency }}
+										<div class="small">
+											<translate>Balance:</translate>
+											{{ walletBalance | currency }}
 
-												<span class="text-muted" v-if="walletTax > 0">
-													+{{ walletTax | currency }}
-													<translate>tax</translate>
-												</span>
-											</div>
+											<span class="text-muted" v-if="walletTax > 0">
+												+{{ walletTax | currency }}
+												<translate>tax</translate>
+											</span>
 										</div>
-									</span>
-								</div>
+									</div>
+								</span>
 							</div>
 
-							<div v-if="app.user && cards.length">
+							<template v-if="app.user && cards.length">
 								<div class="saved-card-options">
 									<div class="saved-card-option">
 										<span
@@ -243,7 +239,7 @@
 										</div>
 									</app-popover>
 								</div>
-							</div>
+							</template>
 						</app-expand>
 
 						<button
@@ -252,12 +248,12 @@
 							@click.prevent="checkoutCard()"
 							>
 							<app-jolticon icon="credit-card" />
-							<span v-if="cards.length">
+							<template v-if="cards.length">
 								<translate>New Card</translate>
-							</span>
-							<span v-else>
+							</template>
+							<template v-else>
 								<translate>Card</translate>
-							</span>
+							</template>
 						</button>
 
 						<button
@@ -271,7 +267,7 @@
 					</div>
 				</div>
 			</div>
-			<div v-else-if="checkoutStep === 'address'">
+			<template v-else-if="checkoutStep === 'address'">
 
 				<div class="alert alert-info full-bleed">
 					<app-jolticon icon="info-circle" />
@@ -402,8 +398,8 @@
 					</div>
 				</div>
 
-			</div>
+			</template>
 		</app-loading-fade>
-	</div>
+	</template>
 
 </app-form>

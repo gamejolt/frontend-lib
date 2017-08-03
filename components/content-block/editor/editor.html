@@ -13,7 +13,7 @@
 					</span>
 				</p>
 
-				<span v-if="!site.game_id">
+				<template v-if="!site.game_id">
 					<button
 						class="btn"
 						v-app-tooltip="$gettext( 'Will show your profile bio.' )"
@@ -37,8 +37,8 @@
 						>
 						<translate>View all...</translate>
 					</a>
-				</span>
-				<span v-else>
+				</template>
+				<template v-else>
 					<button
 						class="btn"
 						v-app-tooltip="$gettext( 'Will show your game\'s media (screenshots, videos, etc).' )"
@@ -69,7 +69,7 @@
 						>
 						<translate>View all...</translate>
 					</a>
-				</span>
+				</template>
 
 			</div>
 			<div class="col-xs-3">

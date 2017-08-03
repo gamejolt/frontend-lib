@@ -7,14 +7,14 @@
 			<app-loading :centered="true" :no-color="true" :stationary="true" :hide-label="true" />
 		</div>
 
-		<div v-if="mediaItems && mediaItems.length">
+		<template v-if="mediaItems && mediaItems.length">
 			<app-media-bar-item
 				v-for="item of mediaItems"
 				:key="item.id"
 				:item="item"
 				>
 			</app-media-bar-item>
-		</div>
+		</template>
 
 	</div>
 </div>

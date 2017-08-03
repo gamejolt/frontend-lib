@@ -2,11 +2,11 @@
 
 	<div class="list-group" id="theme-selector-selection">
 		<a class="list-group-item has-icon" v-app-popover-trigger="`theme-selector-options`">
-			<div v-if="!current">
+			<template v-if="!current">
 				<app-jolticon icon="chevron-down" class="list-group-item-icon" />
 				<em><translate>Please choose a theme...</translate></em>
-			</div>
-			<div v-else>
+			</template>
+			<template v-else>
 				<div class="list-group-item-heading">
 					<app-jolticon icon="chevron-down" class="list-group-item-icon" />
 					<strong>{{ current.name }}</strong>
@@ -17,7 +17,7 @@
 				<p class="list-group-item-text">
 					{{ current.description }}
 				</p>
-			</div>
+			</template>
 		</a>
 	</div>
 

@@ -32,7 +32,7 @@
 					</small>
 				</span>
 
-				<span v-if="repliedTo">
+				<template v-if="repliedTo">
 					<app-jolticon icon="share" />
 
 					<span class="message-thread-item-author tiny">
@@ -50,7 +50,7 @@
 							@{{ repliedTo.username }}
 						</span>
 					</span>
-				</span>
+				</template>
 
 				<slot name="authors" />
 			</div>

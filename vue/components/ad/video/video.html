@@ -1,9 +1,11 @@
 <div class="ad-video">
-	<h3 class="sans-margin-bottom">View ad. Be upset. Keep us running.</h3>
+	<h3 class="sans-margin-bottom">
+		<translate>View ad. Be upset. Keep us running.</translate>
+	</h3>
 	<p class="text-muted">
 		This ad supports the developer! Hang tight, your {{ resourceLabel }} will begin
-		<span v-if="timeRemaining">in {{ timeRemaining | time }}...</span>
-		<span v-else>soon...</span>
+		<template v-if="timeRemaining">in {{ timeRemaining | time }}...</template>
+		<template v-else>soon...</template>
 	</p>
 
 	<div class="ad-video-player">

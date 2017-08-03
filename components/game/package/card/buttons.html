@@ -38,11 +38,11 @@
 		v-app-track-event="`game-package-card:more-options`"
 		>
 		<app-jolticon icon="ellipsis-h" />
-		<span v-if="card.otherOnly">
+		<template v-if="card.otherOnly">
 			<app-jolticon icon="download" />
 			<translate>Download</translate>
 			<app-jolticon class="jolticon-addon" icon="other-os" />
-		</span>
+		</template>
 		<!--<translate v-if="!card.otherOnly">more</translate>-->
 	</button>
 

@@ -11,7 +11,7 @@
 		<!--
 			We show the filename if it's an "Other" build.
 		-->
-		<span v-if="!extraBuild.build.os_other">
+		<template v-if="!extraBuild.build.os_other">
 			<translate v-if="extraBuild.build.type === 'downloadable'">
 				Download
 			</translate>
@@ -24,11 +24,10 @@
 			<translate v-else>
 				Play
 			</translate>
-		</span>
-
-		<span v-else>
+		</template>
+		<template v-else>
 			{{ extraBuild.build.primary_file.filename }}
-		</span>
+		</template>
 
 		<small v-if="extraBuild.arch === '64'">
 			<translate>64-bit</translate>

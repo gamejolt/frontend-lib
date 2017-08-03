@@ -17,7 +17,7 @@
 		</a>
 
 		<div class="growl-inner">
-			<div v-if="!growl.component">
+			<template v-if="!growl.component">
 				<div class="growl-icon" v-if="!!growl.icon">
 					<img class="img-responsive" :src="growl.icon" alt="">
 				</div>
@@ -27,7 +27,7 @@
 					</h4>
 					<p>{{ growl.message }}</p>
 				</div>
-			</div>
+			</template>
 			<app-growl-dynamic
 				v-else
 				:component="growl.component"

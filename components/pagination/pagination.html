@@ -3,7 +3,7 @@
 	<!--
 		Number pagination type
 	-->
-	<div v-if="!pager && !Screen.isXs">
+	<template v-if="!pager && !Screen.isXs">
 		<div class="pagination"
 			v-if="totalItems > itemsPerPage"
 			>
@@ -85,12 +85,12 @@
 				</router-link>
 			</div>
 		</div>
-	</div>
+	</template>
 
 	<!--
 		Pager type
 	-->
-	<div v-if="pager || Screen.isXs">
+	<template v-else-if="pager || Screen.isXs">
 		<div class="pager" :class="{ reverse: reverseButtons }">
 			<div class="pagination-item previous" v-if="hasPrevious" @click.capture="onPageClick( $event, prevPage )">
 				<router-link
@@ -118,6 +118,6 @@
 				<span v-if="!hasNext">{{ (nextText || 'Next &raquo;') }}</span>
 			</div>
 		</div>
-	</div>
+	</template>
 
 </div>
