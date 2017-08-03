@@ -2,7 +2,6 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import * as View from '!view!./fade-collapse.html?style=./fade-collapse.styl';
 
-import { Environment } from '../environment/environment.service';
 import { Scroll } from '../scroll/scroll.service';
 import { Screen } from '../screen/screen-service';
 
