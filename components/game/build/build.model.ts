@@ -162,6 +162,7 @@ export class GameBuild extends Model {
 	embed_height: number;
 	java_class_name: string;
 	browser_disable_right_click: boolean;
+	https_enabled: boolean;
 	added_on: number;
 	updated_on: number;
 	modified_on: number;

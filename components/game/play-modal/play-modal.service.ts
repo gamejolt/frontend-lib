@@ -51,7 +51,9 @@ export class GamePlayModal {
 		// Safari doesn't allow you to set cookies on a domain that isn't the
 		// same as the current domain. That means our cookie signing breaks in
 		// the iframe. To fix we have to open a new tab to the gameserver.
-		if (Device.browser().indexOf('Safari') !== -1) {
+		// We also open the game in a new tab if it's not https enabled so the
+		// site doesn't complain about mixed security elements.
+		if (!build.https_enabled || Device.browser().indexOf('Safari') !== -1) {
 			// We have to open the window first before getting the URL. The
 			// browser will block the popup unless it's done directly in the
 			// onclick handler. Once we have the download URL we can direct the
@@ -82,8 +84,8 @@ export class GamePlayModal {
 		const payload = await build.getDownloadUrl({ key: options.key });
 		let url = payload.url;
 
-		// TODO: Get rid of this once we switch to https-only.
-		if (!Environment.isSecure) {
+		// TODO: Get rid of the Environment.isSecure check once we switch to https-only.
+		if (!build.https_enabled || !Environment.isSecure) {
 			url = url.replace('https://', 'http://');
 		}
 
