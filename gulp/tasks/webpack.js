@@ -65,7 +65,7 @@ module.exports = function(config) {
 
 	// Inline allows us to debug by setting breakpoints.
 	// Eval may be faster, but it doesn't allow setting breakpoints.
-	let devtool = undefined;
+	let devtool = 'source-map';
 	if (!config.production) {
 		devtool = !config.server ? 'cheap-module-inline-source-map' : 'source-map';
 	}
@@ -137,6 +137,7 @@ module.exports = function(config) {
 				chunkFilename: config.production
 					? section + '.[name].[chunkhash:6].js'
 					: section + '.[name].js',
+				sourceMapFilename: 'maps/[name].[hash:6].map',
 				libraryTarget: libraryTarget,
 			},
 			resolve: {
@@ -251,6 +252,7 @@ module.exports = function(config) {
 				// ]),
 				devNoop ||
 					new webpack.optimize.UglifyJsPlugin({
+						sourceMap: true,
 						compress: {
 							warnings: false,
 							screw_ie8: true,
