@@ -137,7 +137,7 @@ module.exports = function(config) {
 				chunkFilename: config.production
 					? section + '.[name].[chunkhash:6].js'
 					: section + '.[name].js',
-				sourceMapFilename: 'maps/[name].[hash:6].map',
+				sourceMapFilename: 'maps/[name].[chunkhash:6].map',
 				libraryTarget: libraryTarget,
 			},
 			resolve: {
