@@ -10,7 +10,7 @@ export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
 	const routes = [...appRoutes, routeError404];
 
 	return new VueRouter({
-		mode: !GJ_IS_CLIENT ? 'history' : undefined,
+		mode: !GJ_IS_CLIENT ? 'history' : 'hash',
 		routes,
 		scrollBehavior: initScrollBehavior(),
 	});
