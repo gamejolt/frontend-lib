@@ -139,6 +139,13 @@ export class Api {
 	}
 
 	private static createRequest(method: string, url: string, data: any, options: RequestOptions) {
+		// For SSR we pass in the frontend cookie of "ssr" so that the server
+		// knows that this is an SSR request and shouldn't store session data.
+		const headers: any = {};
+		if (GJ_IS_SSR) {
+			headers.cookie = 'frontend=ssr;';
+		}
+
 		// An upload request.
 		if (options.file) {
 			// We have to send it over as form data instead of JSON data.
@@ -158,6 +165,7 @@ export class Api {
 				method,
 				url,
 				data: formData,
+				headers,
 				withCredentials: options.withCredentials,
 				ignoreLoadingBar: options.ignoreLoadingBar,
 				onUploadProgress: (e: ProgressEvent) => {
@@ -181,6 +189,7 @@ export class Api {
 			method,
 			url,
 			data,
+			headers,
 			withCredentials: options.withCredentials,
 			ignoreLoadingBar: options.ignoreLoadingBar,
 		});
