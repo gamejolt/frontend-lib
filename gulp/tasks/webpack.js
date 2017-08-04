@@ -16,7 +16,6 @@ const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-const OptimizeJsPlugin = require('optimize-js-plugin');
 const OfflinePlugin = require('offline-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
@@ -257,7 +256,6 @@ module.exports = function(config) {
 							screw_ie8: true,
 						},
 					}),
-				devNoop || new OptimizeJsPlugin(),
 				devNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
 
