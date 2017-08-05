@@ -28,8 +28,13 @@ module.exports = function(config) {
 	let browserNoop = config.server ? undefined : noop;
 	let serverNoop = !config.server ? undefined : noop;
 
+	const externalModules = ['client-voodoo'];
+	if (!config.client) {
+		externalModules.push('nw.gui');
+	}
+
 	let externals = {};
-	for (let extern of ['client-voodoo']) {
+	for (let extern of externalModules) {
 		externals[extern] = {
 			commonjs: extern,
 		};
