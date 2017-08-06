@@ -26,8 +26,6 @@ export function hijackLinks(router: VueRouter, host: string) {
 		return;
 	}
 
-	return;
-
 	document.body.addEventListener('click', e => {
 		// Should we handle this event?
 		if (!guardHijackEvent(e)) {
