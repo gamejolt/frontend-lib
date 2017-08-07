@@ -34,12 +34,7 @@ module.exports = function(config) {
 	}
 
 	let externals = {};
-<<<<<<< HEAD
 	for (let extern of externalModules) {
-=======
-	let externalLibs = config.client ? ['client-voodoo'] : ['client-voodoo', 'nw.gui'];
-	for (let extern of externalLibs) {
->>>>>>> a321937... Fix client + site watching
 		externals[extern] = {
 			commonjs: extern,
 		};
