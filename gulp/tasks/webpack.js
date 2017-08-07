@@ -34,7 +34,12 @@ module.exports = function(config) {
 	}
 
 	let externals = {};
+<<<<<<< HEAD
 	for (let extern of externalModules) {
+=======
+	let externalLibs = config.client ? ['client-voodoo'] : ['client-voodoo', 'nw.gui'];
+	for (let extern of externalLibs) {
+>>>>>>> a321937... Fix client + site watching
 		externals[extern] = {
 			commonjs: extern,
 		};
@@ -74,7 +79,15 @@ module.exports = function(config) {
 	// Eval may be faster, but it doesn't allow setting breakpoints.
 	let devtool = 'source-map';
 	if (!config.production) {
-		devtool = !config.server ? 'cheap-module-inline-source-map' : 'source-map';
+		if (config.server) {
+			devTool = 'source-map';
+		} else if (config.client) {
+			// The old node-webkit versions of the client (currently 0.12.3) have trouble processing inline source maps in webpack 2.
+			// They have an issue with the //# prefix. Using @ forces it back to webpack 1's //@ for inline sourcemaps.
+			devTool = '@cheap-module-inline-source-map';
+		} else {
+			devTool = 'cheap-module-inline-source-map';
+		}
 	}
 
 	function stylesLoader(loaders, options) {
