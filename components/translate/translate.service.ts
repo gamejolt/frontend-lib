@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import { arrayIndexBy } from '../../utils/array';
 
+const LangStorageKey = 'lang';
+const translator = new Vue();
+
 export function getTranslationLang() {
 	return (typeof localStorage !== 'undefined' && localStorage.getItem(LangStorageKey)) || 'en_US';
 }
@@ -14,14 +17,6 @@ export const TranslationLangs = [
 		code: 'en_US',
 		label: 'English',
 	},
-	// {
-	// 	code: 'en',
-	// 	label: 'English (UK)',
-	// },
-	// {
-	// 	code: 'en_AU',
-	// 	label: 'English (Australia)',
-	// },
 	{
 		// Dutch
 		code: 'nl',
@@ -155,9 +150,6 @@ export const TranslationLangs = [
 ];
 
 export const TranslationLangsByCode = arrayIndexBy(TranslationLangs, 'code');
-
-const LangStorageKey = 'lang';
-const translator = new Vue();
 
 export class Translate {
 	static $gettext(msgid: string) {
