@@ -95,14 +95,15 @@ export function RouteResolve(options: RouteOptions = {}) {
 						return next();
 					}
 
-					let promise: Promise<any> | undefined;
-					let hasCache = routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
+					let promise: Promise<{ fromCache: boolean; payload: any }> | undefined;
+					let hasCache = !!routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
 					const resolver = RouteResolver.startResolve(componentOptions, to);
 
 					if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
-						promise = getPayload(componentOptions, to);
+						promise = getPayload(componentOptions, to, false);
 					} else {
-						resolver.payload = await getPayload(componentOptions, to, routeOptions.cache);
+						const { payload } = await getPayload(componentOptions, to, !!routeOptions.cache);
+						resolver.payload = payload;
 
 						// For server next() doesn't call, so we have to pull
 						// this data within the created() hook. We also need
@@ -124,7 +125,8 @@ export function RouteResolve(options: RouteOptions = {}) {
 
 						if (promise) {
 							vm.routeLoading = true;
-							resolver.payload = await promise;
+							const { payload } = await promise;
+							resolver.payload = payload;
 						}
 
 						await vm.resolveRoute(to, resolver);
@@ -227,7 +229,7 @@ export class BaseRouteComponent extends Vue {
 			return;
 		}
 
-		await this._reloadRoute(options.cache);
+		await this._reloadRoute(!!options.cache);
 	}
 
 	private async _reloadRoute(useCache = true) {
@@ -239,8 +241,12 @@ export class BaseRouteComponent extends Vue {
 		if (options.hasResolver) {
 			const resolver = RouteResolver.startResolve(this.$options, to);
 			this.routeLoading = true;
-			resolver.payload = await getPayload(this.$options, to, useCache);
-			await this.resolveRoute(to, resolver, useCache);
+
+			const { fromCache, payload } = await getPayload(this.$options, to, useCache);
+			resolver.payload = payload;
+
+			// If this was resolved from cache, we pass in to refresh the cache.
+			await this.resolveRoute(to, resolver, fromCache);
 		}
 	}
 
@@ -321,9 +327,10 @@ export class BaseRouteComponent extends Vue {
 	}
 
 	private async refreshCache(route: VueRouter.Route) {
-		const _resolver = RouteResolver.startResolve(this.$options, route);
-		_resolver.payload = await getPayload(this.$options, route);
-		await this.resolveRoute(route, _resolver, false);
+		const resolver = RouteResolver.startResolve(this.$options, route);
+		const { payload } = await getPayload(this.$options, route, false);
+		resolver.payload = payload;
+		await this.resolveRoute(route, resolver, false);
 	}
 
 	/**
@@ -358,22 +365,23 @@ function isLeafRoute(name?: string) {
 async function getPayload(
 	componentOptions: Vue.ComponentOptions<Vue>,
 	route: VueRouter.Route,
-	useCache = false
+	useCache: boolean
 ) {
 	const routeOptions = componentOptions.routeOptions || {};
 
 	if (useCache) {
 		const cache = HistoryCache.get(route, routeOptions.cacheTag);
 		if (cache) {
-			return cache.data;
+			return { fromCache: true, payload: cache.data };
 		}
 	}
 
 	try {
-		return await (componentOptions.methods as any).routeResolve(route);
+		const payload = await (componentOptions.methods as any).routeResolve(route);
+		return { fromCache: false, payload };
 	} catch (e) {
 		if (e instanceof PayloadError) {
-			return e;
+			return { fromCache: false, payload: e };
 		}
 		throw e;
 	}
