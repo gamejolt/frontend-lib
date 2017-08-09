@@ -352,6 +352,7 @@ module.exports = function(config) {
 					? new OfflinePlugin({
 							excludes: ['**/.*', '**/*.map', 'vue-ssr-*'],
 							ServiceWorker: {
+								events: true,
 								output: 'sjw.js',
 								publicPath: 'https://gamejolt.com/sjw.js',
 							},
