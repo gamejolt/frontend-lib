@@ -6,6 +6,7 @@ import * as View from '!view!./bar.html?style=./bar.styl';
 @View
 @Component({})
 export class AppLoadingBar extends Vue {
+	routeChanging = false;
 	requestCount = 0;
 	completedCount = 0;
 	shouldShow = false;
@@ -25,11 +26,20 @@ export class AppLoadingBar extends Vue {
 		// We hook into router so that we can show loading bar while the async
 		// component chunks are being loaded by webpack.
 		this.$router.beforeEach((_to, _from, next) => {
+			// If we hit before each while in the middle of a route change, it
+			// means that the previous one never resolved, so we should mark a
+			// request as having been completed first.
+			if (this.routeChanging) {
+				this.addComplete();
+			}
+
+			this.routeChanging = true;
 			this.addRequest();
 			next();
 		});
 
 		this.$router.beforeResolve((_to, _from, next) => {
+			this.routeChanging = false;
 			this.addComplete();
 			next();
 		});
