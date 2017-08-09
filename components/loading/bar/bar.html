@@ -1,5 +1,5 @@
 <transition>
-	<div class="loading-bar anim-fade-enter anim-fade-leave" v-if="width > 0">
+	<div class="loading-bar anim-fade-enter anim-fade-leave" v-if="width > 0 && shouldShow">
 		<div class="loading-bar-bar" :style="{ width: width + '%' }"></div>
 	</div>
 </transition>
