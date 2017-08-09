@@ -38,12 +38,12 @@ export class AppPopover extends Vue {
 	isAppendedToBody = false;
 	arrowLeft?: string = undefined;
 	arrowTop?: string = undefined;
+	popoverElem: HTMLElement;
 
 	private transitioning: 'enter' | 'leave' | false = false;
 
 	attachedTrigger?: PopoverTrigger;
 
-	private originalParent: HTMLElement;
 	private context: HTMLElement | null;
 	private backdropElem?: HTMLElement;
 
@@ -53,7 +53,9 @@ export class AppPopover extends Vue {
 	Screen = makeObservableService(Screen);
 
 	mounted() {
-		this.originalParent = this.$el.parentNode as HTMLElement;
+		// Store a reference to the inner popover since we may append it to the
+		// body later and lose reference to it.
+		this.popoverElem = this.$refs.popover as HTMLElement;
 		this.context = document.getElementById('popover-context');
 
 		// Track this popover.
@@ -61,20 +63,21 @@ export class AppPopover extends Vue {
 	}
 
 	destroyed() {
-		// There is some times a race condition when we reload a page where it re-registers the popover for the view
-		// before we have a chance to deregister the old one.
-		// We check to make sure that the ID referenced is this exact popover controller, otherwise we skip the deregistration
-		// since it was already overriden and effectively deregistered.
+		// There is some times a race condition when we reload a page where it
+		// re-registers the popover for the view before we have a chance to
+		// deregister the old one. We check to make sure that the ID referenced
+		// is this exact popover controller, otherwise we skip the
+		// deregistration since it was already overriden and effectively
+		// deregistered.
 		if (Popover.getPopover(this.popoverId) === this) {
 			Popover.deregisterPopover(this.popoverId);
 		}
 
-		// Gotta make sure to clean up after itself complete.
-		// This includes the popover backdrop and what not.
-		// Passing true will set the element to remove itself from the DOM now that we're done with it.
-		// This ensures that even if the popover is appended to the body, if the scope it was attached to is destroyed,
-		// it's still cleaned up.
-		this.hide(true);
+		// Gotta make sure to clean up after itself completey. This includes the
+		// popover backdrop and what not. Forcing the remove ensures that if
+		// it's been appended to the body it will still remove from the DOM.
+		this.hide();
+		this.remove();
 	}
 
 	// If we are attached to an on "hover" trigger, then we want need to make
@@ -137,19 +140,22 @@ export class AppPopover extends Vue {
 			return;
 		}
 
+		const elem = this.popoverElem;
+
 		this.transitioning = 'enter';
 		this.isVisible = true;
 
 		this.$emit('focused');
-		this.$el.dispatchEvent(new Event('focused'));
 
-		// Should it be appended to the body instead of where it lives currently?
-		// We check this every time we need to show.
+		// Should it be appended to the body instead of where it lives
+		// currently? We check this every time we need to show. We append the
+		// inner popover element instead of `$el` so that we maintain the DOM
+		// reference and can react on `destroyed` events and what not.
 		if (this.appendToBody && !this.isAppendedToBody) {
-			document.body.appendChild(this.$el);
+			document.body.appendChild(elem);
 			this.isAppendedToBody = true;
 		} else if (!this.appendToBody && this.isAppendedToBody) {
-			this.originalParent.appendChild(this.$el);
+			this.$el.appendChild(elem);
 			this.isAppendedToBody = false;
 		}
 
@@ -164,19 +170,19 @@ export class AppPopover extends Vue {
 		if (this.trackElementWidth && !Screen.isWindowXs) {
 			widthElem = document.querySelector(this.trackElementWidth) as HTMLElement | undefined;
 			if (widthElem) {
-				this.$el.style.width = widthElem.offsetWidth + 'px';
-				this.$el.style.maxWidth = 'none';
+				elem.style.width = widthElem.offsetWidth + 'px';
+				elem.style.maxWidth = 'none';
 			}
 		}
 
 		// If no element to base our width on, reset.
 		if (!widthElem) {
-			this.$el.style.maxWidth = '';
-			this.$el.style.width = '';
+			elem.style.maxWidth = '';
+			elem.style.width = '';
 		}
 
-		const popoverWidth = Ruler.outerWidth(this.$el);
-		const popoverHeight = Ruler.outerHeight(this.$el);
+		const popoverWidth = Ruler.outerWidth(elem);
+		const popoverHeight = Ruler.outerHeight(elem);
 
 		// If we're appending to body, then we're positioning it relative to the whole screen.
 		// If we're keeping it in place, then we position relative to the parent positioner.
@@ -203,28 +209,28 @@ export class AppPopover extends Vue {
 			// Align to the right if the trigger is past the window mid line.
 			// Always go by the trigger offset.
 			if (this.positionHorizontal === 'left' || triggerOffset.left > Screen.windowWidth / 2) {
-				this.$el.style.left = triggerRight - popoverWidth + 'px';
+				elem.style.left = triggerRight - popoverWidth + 'px';
 			} else {
-				this.$el.style.left = triggerLeft + 'px';
+				elem.style.left = triggerLeft + 'px';
 			}
 
 			if (this.position === 'bottom') {
-				this.$el.style.top = triggerBottom + 'px';
+				elem.style.top = triggerBottom + 'px';
 			} else if (this.position === 'top') {
-				this.$el.style.bottom = triggerTop + 'px';
+				elem.style.bottom = triggerTop + 'px';
 			}
 		} else if (this.position === 'left' || this.position === 'right') {
 			// Align to the right if the trigger is past the window mid line.
 			if (triggerTop > Screen.windowHeight / 2) {
-				this.$el.style.top = triggerBottom - popoverHeight + 'px';
+				elem.style.top = triggerBottom - popoverHeight + 'px';
 			} else {
-				this.$el.style.top = triggerTop + 'px';
+				elem.style.top = triggerTop + 'px';
 			}
 
 			if (this.position === 'left') {
-				this.$el.style.right = triggerLeft + 'px';
+				elem.style.right = triggerLeft + 'px';
 			} else if (this.position === 'right') {
-				this.$el.style.left = triggerRight + 'px';
+				elem.style.left = triggerRight + 'px';
 			}
 		}
 
@@ -232,16 +238,16 @@ export class AppPopover extends Vue {
 		// Unless the popover is smaller than the element, then we align to center of popover.
 		// The extra spacing is for the popover element around the edges.
 		// If we want to position the arrow correctly, we need to subtract half of this.
-		const elementStyles = window.getComputedStyle(this.$el);
+		const elementStyles = window.getComputedStyle(elem);
 		if (this.position === 'top' || this.position === 'bottom') {
 			const extraSpacing = elementStyles.left
-				? (popoverWidth - Ruler.width(this.$el)) / 2 + parseFloat(elementStyles.left)
+				? (popoverWidth - Ruler.width(elem)) / 2 + parseFloat(elementStyles.left)
 				: 0;
 			this.arrowLeft =
 				triggerLeft + Math.min(triggerWidth / 2, popoverWidth / 2) - extraSpacing + 'px';
 		} else if (this.position === 'left' || this.position === 'right') {
 			const extraSpacing = elementStyles.top
-				? (popoverHeight - Ruler.height(this.$el)) / 2 + parseFloat(elementStyles.top)
+				? (popoverHeight - Ruler.height(elem)) / 2 + parseFloat(elementStyles.top)
 				: 0;
 			this.arrowTop =
 				triggerTop + Math.min(triggerHeight / 2, popoverHeight / 2) - extraSpacing + 'px';
@@ -266,7 +272,7 @@ export class AppPopover extends Vue {
 	/**
 	 * Hide this element and possibly remove from the DOM.
 	 */
-	hide(shouldRemove = false) {
+	hide() {
 		if (!this.isVisible) {
 			return;
 		}
@@ -277,11 +283,11 @@ export class AppPopover extends Vue {
 		// Basically, if "show" is called within this time, we'll stop the
 		// leave transition and show it.
 		setTimeout(() => {
-			this._hide(shouldRemove);
+			this._hide();
 		}, 100);
 	}
 
-	async _hide(shouldRemove = false) {
+	_hide() {
 		if (this.transitioning !== 'leave') {
 			return;
 		}
@@ -294,20 +300,18 @@ export class AppPopover extends Vue {
 			this.backdropElem.parentNode!.removeChild(this.backdropElem);
 		}
 
-		if (this.transitioning !== 'leave') {
-			return;
-		}
-
-		if (shouldRemove && this.$el.parentNode) {
-			this.$el.parentNode.removeChild(this.$el);
-		}
-
 		this.isVisible = false;
 		this.transitioning = false;
 	}
 
+	private remove() {
+		const elem = this.popoverElem;
+		if (elem && elem.parentNode) {
+			elem.parentNode.removeChild(elem);
+		}
+	}
+
 	_onLeft() {
 		this.$emit('blurred');
-		this.$el.dispatchEvent(new Event('blurred'));
 	}
 }
