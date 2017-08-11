@@ -27,11 +27,19 @@ export class AppFormControl extends BaseFormControl {
 	}
 
 	get validationRules() {
-		return {
+		const rules = {
 			...this.baseRules,
-			decimal: this.type === 'currency' ? 2 : undefined,
-			email: this.type === 'email',
 		};
+
+		if (this.type === 'currency') {
+			rules.decimal = 2;
+		}
+
+		if (this.type === 'email') {
+			rules.email = true;
+		}
+
+		return rules;
 	}
 
 	mounted() {
