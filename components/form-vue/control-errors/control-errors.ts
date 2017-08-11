@@ -19,6 +19,7 @@ const ErrorMessagesBase: { [k: string]: string } = {
 	email: `Please enter a valid email address.`,
 	number: `Please enter a valid number.`,
 	currency: `Please enter a valid amount.`,
+	decimal: `Please enter a valid amount.`,
 	min_value: `The {} entered is too low.`,
 	max_value: `The {} entered is too high.`,
 	availability: `This {} is already in use.`,
