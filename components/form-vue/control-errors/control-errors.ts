@@ -52,7 +52,7 @@ export class AppFormControlErrors extends Vue {
 
 	get _label() {
 		const ourLabel = this.label;
-		const groupLabel = this.group.label;
+		const groupLabel = this.group.humanLabel;
 		return (ourLabel || groupLabel || '').toLowerCase();
 	}
 

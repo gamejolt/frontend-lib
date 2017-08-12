@@ -5,12 +5,14 @@ import { BaseFormControl } from '../base';
 import { AppProgressBar } from '../../../progress/bar/bar';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { number } from '../../../../vue/filters/number';
+import { AppFormControlUploadFile } from './file';
 
 @View
 @Component({
 	components: {
 		AppJolticon,
 		AppProgressBar,
+		AppFormControlUploadFile,
 	},
 	filters: {
 		number,
@@ -25,7 +27,7 @@ export class AppFormControlUpload extends BaseFormControl {
 	@Prop(Number) validateDelay: number;
 
 	$refs: {
-		input: HTMLInputElement;
+		input: AppFormControlUploadFile;
 	};
 
 	value: File | File[] | null = [];
@@ -92,18 +94,11 @@ export class AppFormControlUpload extends BaseFormControl {
 	}
 
 	showFileSelect() {
-		this.$refs.input.click();
+		this.$refs.input.showFileSelect();
 	}
 
 	// Normal file select.
-	onChange() {
-		let files: File[] = [];
-		const fileList = this.$refs.input.files;
-		if (fileList) {
-			for (let i = 0; i < fileList.length; ++i) {
-				files.push(fileList.item(i));
-			}
-		}
+	onChange(files: File[]) {
 		this.setFiles(files);
 	}
 

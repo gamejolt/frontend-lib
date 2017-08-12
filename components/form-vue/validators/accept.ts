@@ -10,7 +10,7 @@ export function FormValidatorAccept(files: File | File[], args: [string]) {
 		}
 
 		const ext = '.' + pieces.pop();
-		if (ext && acceptTypes.indexOf(ext) == -1) {
+		if (ext && acceptTypes.indexOf(ext) === -1) {
 			return false;
 		}
 
