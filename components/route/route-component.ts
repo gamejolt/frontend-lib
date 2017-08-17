@@ -8,6 +8,7 @@ import { HistoryCache } from '../history/cache/cache.service';
 import { PayloadError } from '../payload/payload-service';
 import { LocationRedirect } from '../../utils/router';
 import { arrayRemove } from '../../utils/array';
+import { Meta } from '../meta/meta-service';
 
 // This is component state that the server may have returned to the browser. It
 // can be used to bootstrap components with initial data.
@@ -91,7 +92,6 @@ export function RouteResolve(options: RouteOptions = {}) {
 					// instead. It will fail the hydration unless we set the
 					// data during the created() method.
 					if (serverComponentState && serverComponentState[name]) {
-						console.log('skip payload fetch since we have state');
 						return next();
 					}
 
@@ -149,6 +149,10 @@ export class BaseRouteComponent extends Vue {
 
 	async routeResolve(this: undefined, _route: VueRouter.Route): Promise<any> {}
 
+	get routeTitle(): null | string {
+		return null;
+	}
+
 	/**
 	 * Called to initialize the route either at the first route to this
 	 * component or after the $route object changes.
@@ -179,6 +183,17 @@ export class BaseRouteComponent extends Vue {
 		// For some reason the @Watch decorator was attaching multiple times in
 		// very random scenarios.
 		this.$watch('$route', (to: any, from: any) => this._onRouteChange(to, from));
+
+		// Set up to watch the route title change.
+		if (this.routeTitle) {
+			Meta.title = this.routeTitle;
+		}
+
+		this.$watch('routeTitle', (title: string | null) => {
+			if (title) {
+				Meta.title = title;
+			}
+		});
 
 		if (GJ_IS_SSR) {
 			// In SSR we have to store the resolver for each route component
@@ -308,6 +323,13 @@ export class BaseRouteComponent extends Vue {
 		this.routed();
 		this.routeLoading = false;
 		this.routeBootstrapped = true;
+
+		// Now that we've routed, make sure our title is up to date. We have to
+		// do this outside the watcher that we set up in "created()" so that SSR
+		// also gets updated.
+		if (this.routeTitle) {
+			Meta.title = this.routeTitle;
+		}
 
 		// We only want to emit the routeChangeAfter event once during a route
 		// change. This ensures that we only do it during the leaf node resolve
