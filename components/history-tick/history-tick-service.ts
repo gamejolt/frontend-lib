@@ -34,7 +34,7 @@ export class HistoryTick {
 		return this._sources[resource + ':' + resourceId];
 	}
 
-	static sendBeacon(type: string, resourceId: number, options: BeaconOptions = {}) {
+	static sendBeacon(type: string, resourceId?: number, options: BeaconOptions = {}) {
 		if (GJ_IS_SSR) {
 			return;
 		}
@@ -70,12 +70,18 @@ export class HistoryTick {
 				queryParams.push('key=' + options.key);
 			}
 
+			let url = `${Environment.apiHost}/tick/${type}`;
+			if (resourceId) {
+				url += `/${resourceId}`;
+			}
+			url += `?${queryParams.join('&')}`;
+
 			// This is enough to send the beacon.
 			// No need to add it to the page.
 			const img = window.document.createElement('img');
 			img.width = 1;
 			img.height = 1;
-			img.src = `${Environment.apiHost}/tick/${type}/${resourceId}?${queryParams.join('&')}`;
+			img.src = url;
 
 			// Always resolve.
 			img.onload = img.onerror = () => {
