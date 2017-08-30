@@ -28,15 +28,16 @@ module.exports = function(config) {
 	let browserNoop = config.server ? undefined : noop;
 	let serverNoop = !config.server ? undefined : noop;
 
-	const externalModules = ['client-voodoo'];
+	const externalModules = [];
 	if (!config.client) {
-		externalModules.push('nw.gui');
+		externalModules.push('nw.gui', 'client-voodoo', 'sanitize-filename');
 	}
 
 	let externals = {};
 	for (let extern of externalModules) {
 		externals[extern] = {
 			commonjs: extern,
+			commonjs2: extern,
 		};
 	}
 
@@ -142,6 +143,11 @@ module.exports = function(config) {
 		webpackSectionConfigs[section] = {
 			entry,
 			target: webpackTarget,
+			context: path.resolve(base, config.buildDir),
+			node: {
+				__filename: true,
+				__dirname: true,
+			},
 			devServer: {
 				outputPath: path.resolve(base, config.buildDir),
 			},
@@ -237,7 +243,7 @@ module.exports = function(config) {
 				new webpack.DefinePlugin({
 					GJ_ENVIRONMENT: JSON.stringify(!config.developmentEnv ? 'production' : 'development'),
 					GJ_BUILD_TYPE: JSON.stringify(config.production ? 'production' : 'development'),
-					GJ_IS_CLIENT: JSON.stringify(config.client),
+					GJ_IS_CLIENT: JSON.stringify(!!config.client),
 					GJ_IS_SSR: JSON.stringify(config.server),
 					GJ_VERSION: JSON.stringify(require(path.resolve(process.cwd(), 'package.json')).version),
 

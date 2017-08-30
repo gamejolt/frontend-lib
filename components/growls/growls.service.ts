@@ -46,9 +46,10 @@ export class Growls {
 	static add() {
 		const type = arguments[0];
 
-		let options: GrowlOptions = typeof arguments[1] === 'object'
-			? arguments[1]
-			: { message: arguments[1], title: arguments[2] || undefined };
+		let options: GrowlOptions =
+			typeof arguments[1] === 'object'
+				? arguments[1]
+				: { message: arguments[1], title: arguments[2] || undefined };
 
 		if (!options.title) {
 			if (type === 'error') {

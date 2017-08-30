@@ -146,6 +146,11 @@ export class Api {
 			headers.cookie = 'frontend=ssr;';
 		}
 
+		if (GJ_IS_CLIENT) {
+			// Modify all HTTP requests to include the client version.
+			headers['x-gj-client-version'] = GJ_VERSION;
+		}
+
 		// An upload request.
 		if (options.file) {
 			// We have to send it over as form data instead of JSON data.

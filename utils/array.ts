@@ -37,6 +37,21 @@ export function arrayIndexByFunc<T>(values: T[], fn: (item: T) => any): { [k: st
 	return indexed;
 }
 
+// What indexBy should've been, where there may be multiple items per key
+export function arrayGroupBy<T>(values: T[], field: keyof T): { [k: string]: T[] } {
+	const indexed: { [k: string]: T[] } = {};
+	values.forEach(item => {
+		const k = item[field] + '';
+		const arr = indexed[k];
+		if (arr) {
+			arr.push(item);
+		} else {
+			indexed[k] = [item];
+		}
+	});
+	return indexed;
+}
+
 export function arrayRemove<T>(arr: T[], predicate: (v: T) => boolean) {
 	const idx = arr.findIndex(predicate);
 	if (idx !== -1) {

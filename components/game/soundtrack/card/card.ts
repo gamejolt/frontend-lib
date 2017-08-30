@@ -62,6 +62,7 @@ export class AppGameSoundtrackCard extends Vue {
 
 		if (GJ_IS_CLIENT) {
 			const gui = require('nw.gui') as typeof nwGui;
+			// TODO(rewrite) this may be broken because the url it generates isn't external friendly.
 			gui.Shell.openExternal(Environment.baseUrl + this.$router.resolve(location).href);
 		}
 

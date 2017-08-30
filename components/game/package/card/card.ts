@@ -25,18 +25,27 @@ import { GameDownloader } from '../../downloader/downloader.service';
 import { AppGamePackageCardButtons } from './buttons';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
 import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
+import { LocalDbPackage } from '../../../../../../app/components/client/local-db/package/package.model';
+import { AppClientPackageCardButtons } from '../../../../../../app/components/client/package-card-buttons/package-card-buttons';
+import { EventBus } from '../../../event-bus/event-bus.service';
+
+const components: { [name: string]: new () => Vue } = {
+	AppCard,
+	AppJolticon,
+	AppTimeAgo,
+	AppFadeCollapse,
+	AppExpand,
+	AppCountdown,
+	AppGamePackageCardButtons,
+};
+
+if (GJ_IS_CLIENT) {
+	components.AppClientPackageCardButtons = AppClientPackageCardButtons;
+}
 
 @View
 @Component({
-	components: {
-		AppCard,
-		AppJolticon,
-		AppTimeAgo,
-		AppFadeCollapse,
-		AppExpand,
-		AppCountdown,
-		AppGamePackageCardButtons,
-	},
+	components,
 	directives: {
 		AppTooltip,
 		AppTrackEvent,
@@ -67,6 +76,7 @@ export class AppGamePackageCard extends Vue {
 	sale = false;
 	salePercentageOff = '';
 	saleOldPricing: SellablePricing | null = null;
+	localPackage: LocalDbPackage | null = null;
 
 	get card() {
 		return new GamePackageCardModel(this.releases, this.builds);
@@ -91,7 +101,7 @@ export class AppGamePackageCard extends Vue {
 	}
 
 	created() {
-		// TODO(rewrite)
+		// TODO(rewrite,cros)
 		// // If this game is in their installed games, this will populate.
 		// this.installedBuild = null;
 
@@ -105,6 +115,15 @@ export class AppGamePackageCard extends Vue {
 					100).toFixed(0);
 			}
 		}
+
+		// Event to be able to open up the payment form.
+		EventBus.on('GamePackageCard.showPaymentOptions', (package_: GamePackage) => {
+			// Ennsure that the payment well opens with the correct build
+			// for "skip paying".
+			if (this.package.id === package_.id) {
+				this.showPayment(this.card.downloadableBuild ? this.card.downloadableBuild : undefined);
+			}
+		});
 	}
 
 	buildClick(build: GameBuild, fromExtraSection = false) {
@@ -124,6 +143,8 @@ export class AppGamePackageCard extends Vue {
 		if (build.type === GameBuild.TYPE_ROM && fromExtraSection) {
 			operation = 'download';
 		}
+
+		console.log(`${operation}ing build`);
 
 		if (operation === 'download') {
 			this.download(build);
