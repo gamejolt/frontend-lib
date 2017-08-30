@@ -19,6 +19,7 @@ const ErrorMessagesBase: { [k: string]: string } = {
 	email: `Please enter a valid email address.`,
 	number: `Please enter a valid number.`,
 	currency: `Please enter a valid amount.`,
+	decimal: `Please enter a valid amount.`,
 	min_value: `The {} entered is too low.`,
 	max_value: `The {} entered is too high.`,
 	availability: `This {} is already in use.`,
@@ -51,7 +52,7 @@ export class AppFormControlErrors extends Vue {
 
 	get _label() {
 		const ourLabel = this.label;
-		const groupLabel = this.group.label;
+		const groupLabel = this.group.humanLabel;
 		return (ourLabel || groupLabel || '').toLowerCase();
 	}
 

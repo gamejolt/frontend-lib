@@ -1,31 +1,34 @@
-<transition name="popover-anim"
-	@after-leave="_onLeft"
-	>
-	<div class="popover"
-		v-show="isVisible"
-		:class="[ this.position ]"
-		:style="{
-			position: positionBy === 'fixed' ? 'fixed' : 'absolute',
-		}"
+<div style="display: inline">
+	<transition name="popover-anim"
+		@after-leave="_onLeft"
 		>
-		<div class="arrow"
+		<div class="popover"
+			ref="popover"
+			v-show="isVisible"
+			:class="[ this.position ]"
 			:style="{
-				left: arrowLeft,
-				top: arrowTop,
+				position: positionBy === 'fixed' ? 'fixed' : 'absolute',
 			}"
 			>
-		</div>
+			<div class="arrow"
+				:style="{
+					left: arrowLeft,
+					top: arrowTop,
+				}"
+				>
+			</div>
 
-		<div class="popover-content scrollable"
-			:style="{ 'max-height': appendToBody && !noMaxHeight ? (Screen.windowHeight - 100) + 'px' : undefined }"
-			:class="{
-				'popover-no-max-height': noMaxHeight,
-			}"
-			@mouseenter="onMouseEnter"
-			@mouseleave="onMouseLeave"
-			@click="onClick"
-			>
-			<slot></slot>
+			<div class="popover-content scrollable"
+				:style="{ 'max-height': appendToBody && !noMaxHeight ? (Screen.windowHeight - 100) + 'px' : undefined }"
+				:class="{
+					'popover-no-max-height': noMaxHeight,
+				}"
+				@mouseenter="onMouseEnter"
+				@mouseleave="onMouseLeave"
+				@click="onClick"
+				>
+				<slot></slot>
+			</div>
 		</div>
-	</div>
-</transition>
+	</transition>
+</div>

@@ -22,6 +22,7 @@ export class GamePackage extends Model {
 	published_on: number;
 	updated_on: number;
 	visibility: string;
+	partner_visibility: boolean;
 	status: string;
 	is_game_owner: boolean;
 

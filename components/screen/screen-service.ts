@@ -87,15 +87,6 @@ export class Screen {
 	static resizeChanges = new Subject<void>();
 
 	/**
-	 * Sets up a "spy" on the resize event.
-	 * Will remember to remove the handler when the scope is destroyed.
-	 */
-	static setResizeSpy(scope: any, onResize: Function) {
-		const resizeChange$ = this.resizeChanges.subscribe(() => onResize());
-		scope.$on('$destroy', () => resizeChange$.unsubscribe());
-	}
-
-	/**
 	 * Simply recalculates the breakpoint checks.
 	 * Shouldn't need to call this often.
 	 */

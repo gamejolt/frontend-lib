@@ -113,7 +113,7 @@ export class Notification extends Model {
 			this.jolticon = 'jolticon-blog-article';
 			this.is_game_based = true;
 		} else if (this.type === Notification.TYPE_SELLABLE_SELL) {
-			this.action_model = new OrderItem(data.action_resource_Model);
+			this.action_model = new OrderItem(data.action_resource_model);
 			this.jolticon = 'jolticon-heart';
 			this.is_user_based = true;
 		}

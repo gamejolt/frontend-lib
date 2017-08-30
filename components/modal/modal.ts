@@ -16,7 +16,9 @@ bootstrapShortkey();
 @Component({})
 export class AppModal extends Vue {
 	modal: Modal = null as any;
+
 	private backdrop?: AppBackdrop;
+	private beforeEachDeregister?: Function;
 
 	created() {
 		const parent = findRequiredVueParent(this, BaseModal);
@@ -29,6 +31,11 @@ export class AppModal extends Vue {
 				className: 'modal-backdrop',
 			});
 		}
+
+		this.beforeEachDeregister = this.$router.beforeEach((_to, _from, next) => {
+			this.dismissRouteChange();
+			next();
+		});
 	}
 
 	destroyed() {
@@ -37,6 +44,15 @@ export class AppModal extends Vue {
 			this.backdrop.remove();
 			this.backdrop = undefined;
 		}
+
+		if (this.beforeEachDeregister) {
+			this.beforeEachDeregister();
+			this.beforeEachDeregister = undefined;
+		}
+	}
+
+	dismissRouteChange() {
+		this.dismiss();
 	}
 
 	dismissEsc() {

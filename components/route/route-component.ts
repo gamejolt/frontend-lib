@@ -8,6 +8,7 @@ import { HistoryCache } from '../history/cache/cache.service';
 import { PayloadError } from '../payload/payload-service';
 import { LocationRedirect } from '../../utils/router';
 import { arrayRemove } from '../../utils/array';
+import { Meta } from '../meta/meta-service';
 
 // This is component state that the server may have returned to the browser. It
 // can be used to bootstrap components with initial data.
@@ -91,18 +92,18 @@ export function RouteResolve(options: RouteOptions = {}) {
 					// instead. It will fail the hydration unless we set the
 					// data during the created() method.
 					if (serverComponentState && serverComponentState[name]) {
-						console.log('skip payload fetch since we have state');
 						return next();
 					}
 
-					let promise: Promise<any> | undefined;
-					let hasCache = routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
+					let promise: Promise<{ fromCache: boolean; payload: any }> | undefined;
+					let hasCache = !!routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
 					const resolver = RouteResolver.startResolve(componentOptions, to);
 
 					if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
-						promise = getPayload(componentOptions, to);
+						promise = getPayload(componentOptions, to, false);
 					} else {
-						resolver.payload = await getPayload(componentOptions, to, routeOptions.cache);
+						const { payload } = await getPayload(componentOptions, to, !!routeOptions.cache);
+						resolver.payload = payload;
 
 						// For server next() doesn't call, so we have to pull
 						// this data within the created() hook. We also need
@@ -124,7 +125,8 @@ export function RouteResolve(options: RouteOptions = {}) {
 
 						if (promise) {
 							vm.routeLoading = true;
-							resolver.payload = await promise;
+							const { payload } = await promise;
+							resolver.payload = payload;
 						}
 
 						await vm.resolveRoute(to, resolver);
@@ -146,6 +148,10 @@ export class BaseRouteComponent extends Vue {
 	storeModule?: any;
 
 	async routeResolve(this: undefined, _route: VueRouter.Route): Promise<any> {}
+
+	get routeTitle(): null | string {
+		return null;
+	}
 
 	/**
 	 * Called to initialize the route either at the first route to this
@@ -177,6 +183,17 @@ export class BaseRouteComponent extends Vue {
 		// For some reason the @Watch decorator was attaching multiple times in
 		// very random scenarios.
 		this.$watch('$route', (to: any, from: any) => this._onRouteChange(to, from));
+
+		// Set up to watch the route title change.
+		if (this.routeTitle) {
+			Meta.title = this.routeTitle;
+		}
+
+		this.$watch('routeTitle', (title: string | null) => {
+			if (title) {
+				Meta.title = title;
+			}
+		});
 
 		if (GJ_IS_SSR) {
 			// In SSR we have to store the resolver for each route component
@@ -227,7 +244,7 @@ export class BaseRouteComponent extends Vue {
 			return;
 		}
 
-		await this._reloadRoute(options.cache);
+		await this._reloadRoute(!!options.cache);
 	}
 
 	private async _reloadRoute(useCache = true) {
@@ -239,8 +256,12 @@ export class BaseRouteComponent extends Vue {
 		if (options.hasResolver) {
 			const resolver = RouteResolver.startResolve(this.$options, to);
 			this.routeLoading = true;
-			resolver.payload = await getPayload(this.$options, to, useCache);
-			await this.resolveRoute(to, resolver, useCache);
+
+			const { fromCache, payload } = await getPayload(this.$options, to, useCache);
+			resolver.payload = payload;
+
+			// If this was resolved from cache, we pass in to refresh the cache.
+			await this.resolveRoute(to, resolver, fromCache);
 		}
 	}
 
@@ -303,6 +324,13 @@ export class BaseRouteComponent extends Vue {
 		this.routeLoading = false;
 		this.routeBootstrapped = true;
 
+		// Now that we've routed, make sure our title is up to date. We have to
+		// do this outside the watcher that we set up in "created()" so that SSR
+		// also gets updated.
+		if (this.routeTitle) {
+			Meta.title = this.routeTitle;
+		}
+
 		// We only want to emit the routeChangeAfter event once during a route
 		// change. This ensures that we only do it during the leaf node resolve
 		// and only if we aren't going to be refreshing cache after this. If we
@@ -321,9 +349,10 @@ export class BaseRouteComponent extends Vue {
 	}
 
 	private async refreshCache(route: VueRouter.Route) {
-		const _resolver = RouteResolver.startResolve(this.$options, route);
-		_resolver.payload = await getPayload(this.$options, route);
-		await this.resolveRoute(route, _resolver, false);
+		const resolver = RouteResolver.startResolve(this.$options, route);
+		const { payload } = await getPayload(this.$options, route, false);
+		resolver.payload = payload;
+		await this.resolveRoute(route, resolver, false);
 	}
 
 	/**
@@ -358,22 +387,23 @@ function isLeafRoute(name?: string) {
 async function getPayload(
 	componentOptions: Vue.ComponentOptions<Vue>,
 	route: VueRouter.Route,
-	useCache = false
+	useCache: boolean
 ) {
 	const routeOptions = componentOptions.routeOptions || {};
 
 	if (useCache) {
 		const cache = HistoryCache.get(route, routeOptions.cacheTag);
 		if (cache) {
-			return cache.data;
+			return { fromCache: true, payload: cache.data };
 		}
 	}
 
 	try {
-		return await (componentOptions.methods as any).routeResolve(route);
+		const payload = await (componentOptions.methods as any).routeResolve(route);
+		return { fromCache: false, payload };
 	} catch (e) {
 		if (e instanceof PayloadError) {
-			return e;
+			return { fromCache: false, payload: e };
 		}
 		throw e;
 	}

@@ -2,16 +2,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./control.html';
 
 import { BaseFormControl } from './base';
-
 import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';
-import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-
-const currencyFormatter = new Intl.NumberFormat(undefined, {
-	style: 'decimal',
-	minimumFractionDigits: 2,
-	maximumFractionDigits: 2,
-	useGrouping: false,
-});
 
 @View
 @Component({})
@@ -30,58 +21,43 @@ export class AppFormControl extends BaseFormControl {
 
 	get controlType() {
 		if (this.type === 'currency') {
-			return 'text';
+			return 'number';
 		}
 		return this.type;
 	}
 
 	get validationRules() {
-		return {
+		const rules = {
 			...this.baseRules,
-			email: this.type === 'email',
 		};
-	}
 
-	get _mask() {
-		let mask = this.mask;
 		if (this.type === 'currency') {
-			mask = createNumberMask({
-				prefix: '',
-				includeThousandsSeparator: false,
-				allowDecimal: true,
-			});
+			rules.decimal = 2;
 		}
 
-		return mask;
+		if (this.type === 'email') {
+			rules.email = true;
+		}
+
+		return rules;
 	}
 
 	mounted() {
-		const mask = this._mask;
+		const mask = this.mask;
 		if (mask) {
 			this.maskedInputElem = createTextMaskInputElement({
 				inputElement: this.$el,
 				mask,
 			});
-			this.maskedInputElem.update(this.formatValue(this.value));
+			this.maskedInputElem.update(this.value);
 		}
-	}
-
-	private formatValue(value: string) {
-		if (this.type === 'currency') {
-			if (!value) {
-				return '0.00';
-			}
-			return currencyFormatter.format(parseFloat(value));
-		}
-
-		return value;
 	}
 
 	onChange() {
 		if (this.maskedInputElem) {
-			this.maskedInputElem.update(this.formatValue(this.$el.value));
+			this.maskedInputElem.update(this.$el.value);
 		}
 
-		this.applyValue(this.formatValue(this.$el.value));
+		this.applyValue(this.$el.value);
 	}
 }

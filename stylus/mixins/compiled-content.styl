@@ -39,3 +39,8 @@ compiled-content($font-size, $computed-line-height)
 		display: block
 		margin-bottom: $font-size
 
+	// Style hashtags as normal tags.
+	.hashtag
+		@extend .tag
+		&:hover
+			@extend .tag-active

@@ -1,14 +1,17 @@
 import Vue from 'vue';
 import Axios from 'axios';
-import { Component, Watch } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import * as View from '!view!./bar.html?style=./bar.styl';
 
 @View
 @Component({})
 export class AppLoadingBar extends Vue {
+	routeChanging = false;
 	requestCount = 0;
 	completedCount = 0;
+	shouldShow = false;
 
+	private showTimeout?: NodeJS.Timer;
 	private clearTimeout?: NodeJS.Timer;
 
 	get width() {
@@ -20,6 +23,27 @@ export class AppLoadingBar extends Vue {
 	}
 
 	mounted() {
+		// We hook into router so that we can show loading bar while the async
+		// component chunks are being loaded by webpack.
+		this.$router.beforeEach((_to, _from, next) => {
+			// If we hit before each while in the middle of a route change, it
+			// means that the previous one never resolved, so we should mark a
+			// request as having been completed first.
+			if (this.routeChanging) {
+				this.addComplete();
+			}
+
+			this.routeChanging = true;
+			this.addRequest();
+			next();
+		});
+
+		this.$router.beforeResolve((_to, _from, next) => {
+			this.routeChanging = false;
+			this.addComplete();
+			next();
+		});
+
 		Axios.interceptors.request.use(
 			config => {
 				this.addRequest(config);
@@ -43,20 +67,8 @@ export class AppLoadingBar extends Vue {
 		);
 	}
 
-	@Watch('requestCount')
-	@Watch('completedCount')
-	onCountChange() {
-		if (!this.requestCount) {
-			return;
-		}
-
-		if (this.completedCount >= this.requestCount) {
-			this.clear();
-		}
-	}
-
-	private addRequest(config: any) {
-		if (config.ignoreLoadingBar) {
+	private addRequest(config?: any) {
+		if (config && config.ignoreLoadingBar) {
 			return;
 		}
 
@@ -66,22 +78,41 @@ export class AppLoadingBar extends Vue {
 			this.clearTimeout = undefined;
 		}
 
+		if (!this.showTimeout) {
+			this.show();
+		}
+
 		++this.requestCount;
 	}
 
-	private addComplete(config: any) {
-		if (config.ignoreLoadingBar) {
+	private addComplete(config?: any) {
+		if (config && config.ignoreLoadingBar) {
 			return;
 		}
 
 		++this.completedCount;
+		if (this.completedCount >= this.requestCount) {
+			this.clear();
+		}
+	}
+
+	private show() {
+		this.showTimeout = setTimeout(() => {
+			this.shouldShow = true;
+		}, 300);
 	}
 
 	private clear() {
+		if (this.showTimeout) {
+			clearTimeout(this.showTimeout);
+			this.showTimeout = undefined;
+		}
+
 		// Wait for the 100% width to show first.
 		this.clearTimeout = setTimeout(() => {
 			this.requestCount = 0;
 			this.completedCount = 0;
+			this.shouldShow = false;
 		}, 300);
 	}
 }

@@ -7,5 +7,9 @@ declare module 'vue/types/vue' {
 		$ngettext: (msgid: string, plural: string, n: number) => string;
 		$npgettext: (context: string, msgid: string, plural: string, n: number) => string;
 		$gettextInterpolate: (msgid: string, context: any) => string;
+		$language: {
+			current: string;
+			addTranslations: (translations: any) => void;
+		};
 	}
 }

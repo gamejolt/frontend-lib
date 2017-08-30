@@ -13,15 +13,23 @@ export class AppSocialYoutubeSubscribe extends Vue {
 	theme: string;
 
 	render(h: Vue.CreateElement) {
-		return h('div', {
-			staticClass: 'g-ytsubscribe',
-			attrs: {
-				'data-channelid': this.channel,
-				'data-layout': this.layout,
-				'data-theme': this.theme,
-				'data-count': 'default',
+		return h(
+			'div',
+			{
+				staticClass: 'social-youtube-subscribe',
 			},
-		});
+			[
+				h('div', {
+					staticClass: 'g-ytsubscribe',
+					attrs: {
+						'data-channelid': this.channel,
+						'data-layout': this.layout,
+						'data-theme': this.theme,
+						'data-count': 'default',
+					},
+				}),
+			]
+		);
 	}
 
 	mounted() {
