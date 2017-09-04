@@ -25,6 +25,8 @@ import { GameDownloader } from '../../downloader/downloader.service';
 import { AppGamePackageCardButtons } from './buttons';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
 import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
+import { LinkedKey } from '../../../linked-key/linked-key.model';
+import { Clipboard } from '../../../clipboard/clipboard-service';
 
 @View
 @Component({
@@ -68,8 +70,14 @@ export class AppGamePackageCard extends Vue {
 	salePercentageOff = '';
 	saleOldPricing: SellablePricing | null = null;
 
+	get providerTexts(): { [provider: string]: string } {
+		return {
+			steam: this.$gettext('Copy Steam key'),
+		};
+	}
+
 	get card() {
-		return new GamePackageCardModel(this.releases, this.builds);
+		return new GamePackageCardModel(this.releases, this.builds, this.linkedKeys);
 	}
 
 	get isOwned() {
@@ -80,6 +88,14 @@ export class AppGamePackageCard extends Vue {
 		}
 
 		return this.sellable && this.sellable.is_owned ? true : false;
+	}
+
+	get linkedKeys() {
+		if (!this.sellable) {
+			return [];
+		}
+
+		return this.sellable.linked_keys || [];
 	}
 
 	get canBuy() {
@@ -174,5 +190,17 @@ export class AppGamePackageCard extends Vue {
 		}
 
 		return amountStr;
+	}
+
+	providerText(key: LinkedKey) {
+		const text = this.providerTexts[key.provider];
+		if (text) {
+			return text;
+		}
+		return `Copy ${key.provider} key`;
+	}
+
+	copyProviderKey(key: LinkedKey) {
+		Clipboard.copy(key.key);
 	}
 }

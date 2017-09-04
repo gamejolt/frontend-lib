@@ -4,7 +4,7 @@ export class LinkedKey extends Model {
 	static readonly PROVIDER_STEAM = 'steam';
 
 	key: string;
-	provider: typeof LinkedKey['PROVIDER_STEAM'];
+	provider: string;
 
 	constructor(data: any = {}) {
 		super(data);

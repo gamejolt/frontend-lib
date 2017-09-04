@@ -184,6 +184,27 @@
 			</div>
 		</template>
 
+		<template v-if="linkedKeys.length">
+			<hr>
+			<div class="alert alert-warning">
+				<translate>The developer decided to stop updating this package on Game Jolt. We got you keys get the latest versions on other platforms.</translate>
+			</div>
+
+			<div
+				class="linked-key"
+				v-for="linkedKey of linkedKeys"
+				:key="linkedKey.key"
+				>
+				<!-- TODO(cros) how the hell do you put these side by side? -->
+				<input class="form-control" :value="linkedKey.key">
+				&nbsp;
+				<button class="btn btn-outline" @click="copyProviderKey(linkedKey)">
+					<app-jolticon icon="link" />
+					{{ providerText( linkedKey ) }}
+				</button>
+			</div>
+		</template>
+
 	</div>
 
 	<app-expand :when="isWhatOpen" class="package-card-well-expander">
