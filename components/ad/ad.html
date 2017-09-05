@@ -1,5 +1,7 @@
-<div class="ad"
+<div
+	class="ad"
 	v-if="slot"
+	:key="slot.id"
 	:class="{
 		'ad-leaderboard': size === 'leaderboard',
 		'ad-rectangle': size === 'rectangle',
@@ -8,4 +10,6 @@
 	<div class="ad-inner">
 		<div :id="slot.id"></div>
 	</div>
+
+	<pre v-if="isDebugEnabled" class="text-left">{{ debugInfo }}</pre>
 </div>

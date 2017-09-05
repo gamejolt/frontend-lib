@@ -1,15 +1,23 @@
-import { Environment } from '../environment/environment.service';
 import VueRouter from 'vue-router';
+import { Environment } from '../environment/environment.service';
 import { EventBus } from '../event-bus/event-bus.service';
 import { objectEquals } from '../../utils/object';
+import { AdSlot, AdSlotTargetingMap } from './slot';
 
 const DfpTagId = '1437670388518';
-
-export class AdSlot {
-	public isUsed = false;
-
-	constructor(public adUnit: string, public sizes: [number, number][], public id: string) {}
-}
+const DfpNetworkId = '27005478';
+const DefaultAdUnit = 'others';
+const DfpAdUnitCodes = [
+	'others',
+	'homepage',
+	'gamesdir',
+	'gamepage',
+	'devlogs',
+	'devprofile',
+	'forums',
+	'search',
+	'user',
+];
 
 export class Ads {
 	static readonly TYPE_DISPLAY = 'display';
@@ -20,24 +28,7 @@ export class Ads {
 	static readonly RESOURCE_TYPE_USER = 3;
 	static readonly RESOURCE_TYPE_FIRESIDE_POST = 4;
 
-	static readonly TAG_SLOTS = [
-		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-10`),
-		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-11`),
-		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-12`),
-		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-13`),
-		new AdSlot('/27005478/web-display-leaderboard', [[728, 90]], `div-gpt-ad-${DfpTagId}-14`),
-
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-20`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-21`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-22`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-23`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-24`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-25`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-26`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-27`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-28`),
-		new AdSlot('/27005478/web-display-rectangle', [[300, 250]], `div-gpt-ad-${DfpTagId}-29`),
-	];
+	private static slots: AdSlot[] = [];
 
 	/**
 	 * These are slots that have been sent to the DFP tag and we get back a
@@ -45,10 +36,24 @@ export class Ads {
 	 */
 	static definedSlots: any = {};
 
+	private static globalTargeting: AdSlotTargetingMap = {};
+	private static adUnit = DefaultAdUnit;
 	private static ensurePromise: Promise<void> | null = null;
 
+	static routeResolved = false;
+
 	static get googletag() {
-		return (window as any).googletag;
+		const _window = window as any;
+
+		if (!_window.googletag) {
+			_window.googletag = {};
+		}
+
+		if (!_window.googletag.cmd) {
+			_window.googletag.cmd = [];
+		}
+
+		return _window.googletag;
 	}
 
 	static init(router: VueRouter) {
@@ -57,16 +62,20 @@ export class Ads {
 		}
 
 		router.beforeEach((to, from, next) => {
-			// No need to wait.
-			next();
+			this.clearGlobalTargeting().clearAdUnit();
 
 			// Don't change ads if just the hash has changed.
 			const fromParams = Object.assign({}, from.params, from.query);
 			const toParams = Object.assign({}, to.params, to.query);
 
 			if (to.name === from.name && objectEquals(fromParams, toParams)) {
-				return;
+				return next();
 			}
+
+			this.routeResolved = false;
+
+			// No need to wait.
+			next();
 
 			// Only if DFP is already loaded in.
 			if (!(window as any).googletag || !(window as any).googletag.pubads) {
@@ -82,12 +91,68 @@ export class Ads {
 			// Updating the correlator tells the service that a new page view
 			// has ocurred.
 			(window as any).googletag.pubads().updateCorrelator();
+		});
 
-			// Broadcast an event so our ads know that a new page change
-			// happened and they should refresh themselves. We do it this way so
-			// that the logic of whether or not the states are a match is
-			// preserved.
-			EventBus.emit('$adsRefreshed');
+		EventBus.on('routeChangeAfter', () => {
+			if (!this.routeResolved) {
+				this.routeResolved = true;
+
+				// Broadcast an event so our ads know that a new page change
+				// happened and they should refresh themselves. We do it this
+				// way so that the logic of whether or not the states are a
+				// match is preserved.
+				EventBus.emit('$adsRefreshed');
+			}
+		});
+	}
+
+	static setGlobalTargeting(targeting: AdSlotTargetingMap) {
+		this.globalTargeting = targeting;
+		return this;
+	}
+
+	static getGlobalTargeting() {
+		return this.globalTargeting;
+	}
+
+	private static clearGlobalTargeting() {
+		this.globalTargeting = {};
+		return this;
+	}
+
+	static setAdUnit(adUnit: string) {
+		if (DfpAdUnitCodes.indexOf(adUnit) === -1) {
+			throw new Error(`Invalid ad unit code: ${adUnit}`);
+		}
+
+		this.adUnit = adUnit;
+		return this;
+	}
+
+	static getAdUnit() {
+		return `/${DfpNetworkId}/${this.adUnit}`;
+	}
+
+	private static clearAdUnit() {
+		this.adUnit = DefaultAdUnit;
+		return this;
+	}
+
+	static async setSlotTargeting(slot: AdSlot, targeting: AdSlotTargetingMap) {
+		await this.ensure();
+		this.googletag.cmd.push(() => {
+			const definedSlot = this.definedSlots[slot.id];
+			if (definedSlot) {
+				definedSlot.clearTargeting();
+				Object.keys(targeting).forEach(k => {
+					const val = targeting[k];
+					if (!val || (Array.isArray(val) && val.length === 0)) {
+						return;
+					}
+
+					definedSlot.setTargeting(k, targeting[k]);
+				});
+			}
 		});
 	}
 
@@ -102,11 +167,11 @@ export class Ads {
 		});
 	}
 
-	static async refreshSlots(slots: AdSlot[]) {
+	static async refresh(id: string) {
 		await this.ensure();
 		this.googletag.cmd.push(() => {
-			const definedSlots = slots.map(slot => this.definedSlots[slot.id]);
-			this.googletag.pubads().refresh(definedSlots, { changeCorrelator: false });
+			const definedSlot = this.definedSlots[id];
+			this.googletag.pubads().refresh([definedSlot], { changeCorrelator: false });
 		});
 	}
 
@@ -139,17 +204,29 @@ export class Ads {
 		img.src = `${Environment.apiHost}/adserver/log/${type}?${queryString}`;
 	}
 
-	static getAdSlot(slotId: string) {
-		return this.TAG_SLOTS.find(slot => slot.id === slotId);
-	}
-
 	static getUnusedAdSlot(size: 'rectangle' | 'leaderboard') {
-		const adUnit =
-			size === 'rectangle'
-				? '/27005478/web-display-rectangle'
-				: '/27005478/web-display-leaderboard';
+		const adUnit = this.getAdUnit();
 
-		return this.TAG_SLOTS.find(slot => slot.adUnit === adUnit && !slot.isUsed);
+		// Try to reuse a slot.
+		const slot = this.slots.find(i => i.adUnit === adUnit && i.size === size && !i.isUsed);
+		if (slot) {
+			return slot;
+		}
+
+		const id = `div-gpt-ad-${DfpTagId}-${this.slots.length}`;
+		const newSlot = new AdSlot(adUnit, size, id);
+		newSlot.isUsed = true;
+
+		this.slots.push(newSlot);
+
+		// Set the slot to register itself once the google tag is loaded.
+		this.googletag.cmd.push(() => {
+			this.definedSlots[newSlot.id] = this.googletag
+				.defineSlot(newSlot.adUnit, newSlot.slotSizes, newSlot.id)
+				.addService(this.googletag.pubads());
+		});
+
+		return newSlot;
 	}
 
 	private static ensure() {
@@ -180,13 +257,6 @@ export class Ads {
 	private static initServices() {
 		// Don't enable single request mode, otherwise page impressions are
 		// wrong when calling display/refresh in random spots on the page.
-
-		this.TAG_SLOTS.forEach(slot => {
-			this.definedSlots[slot.id] = this.googletag
-				.defineSlot(slot.adUnit, slot.sizes, slot.id)
-				.addService(this.googletag.pubads());
-		});
-
 		this.googletag.enableServices();
 	}
 }

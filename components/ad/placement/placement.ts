@@ -7,6 +7,7 @@ import { Screen } from '../../screen/screen-service';
 import { makeObservableService } from '../../../utils/vue';
 import { Game } from '../../game/game.model';
 import { AppAd } from '../ad';
+import { AdSlotPosValidator, AdSlotPos } from '../slot';
 
 @View
 @Component({
@@ -16,6 +17,12 @@ import { AppAd } from '../ad';
 })
 export class AppAdPlacement extends Vue {
 	@Prop(Object) resource?: Model;
+
+	@Prop({
+		type: String,
+		validator: AdSlotPosValidator,
+	})
+	pos?: AdSlotPos;
 
 	@Prop(Boolean) hiddenXs?: boolean;
 	@Prop(Boolean) hiddenSm?: boolean;
