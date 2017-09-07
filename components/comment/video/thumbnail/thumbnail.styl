@@ -1,17 +1,45 @@
 @require '~styles/variables'
+@require '../../../../stylus/common/mixins'
 
 .comment-video-thumbnail
-	position: relative
 	margin-bottom: $grid-gutter-width-xs
 
 	@media $media-sm-up
 		margin-bottom: $grid-gutter-width
 
-	&-inner
-		display: block
+.-thumb
+	position: relative
+	display: block
+	height: 0
+	padding-top: 56.25% // HD 16:9
+	overflow: hidden
+	background-color: $gray-lightest
+	border-radius: $border-radius-base
 
-		img
-			border-radius: $border-radius-base
+	> .inner
+		position: absolute
+		top: 0
+		left: 0
+		width: 100%
+		height: 100%
+
+		.jolticon
+			position: absolute
+			font-size: 16px * 4
+			left: 50%
+			margin-left: -(@font-size / 2)
+			top: @left
+			margin-top: @margin-left
+			color: $gray-lighter
+
+	img
+		position: relative
+		border-radius: $border-radius-base
+		opacity: 0
+		transition: opacity 500ms
+
+		&.loaded
+			opacity: 1
 
 	.play-button-overlay
 		display: none
@@ -20,30 +48,43 @@
 		.play-button-overlay
 			display: block
 
-	&-game
-	&-user
-		display: block
-		position: absolute
-		bottom: 5px
-		border: 2px solid $gray-light
-		border-radius: $border-radius-base
-		padding: 2px
-		background-color: $gray-darkest
+.-controls
+	position: absolute
+	top: 5px
+	right: 5px
+	z-index: 2
 
-		>>> img
-			border-radius: ($border-radius-base / 2)
+.-meta
+	padding-top: $comment-video-thumbnail-meta-spacing
 
-		&:hover
-			border-color: $white
+	>>> .user-avatar
+		float: left
+		width: $comment-video-thumbnail-avatar-size
+		height: @height
 
-	&-game
-		left: 5px
-		width: 50px
+.-user
+	text-overflow()
+	display: block
+	margin-left: $comment-video-thumbnail-avatar-size + $comment-video-thumbnail-meta-spacing
+	color: $text-muted
+	font-weight: bold
+	font-size: $font-size-h6
 
-		@media $media-md-up
-			width: 75px
+.-title
+	text-overflow()
+	display: block
+	margin: 0
+	margin-left: $comment-video-thumbnail-avatar-size + $comment-video-thumbnail-meta-spacing
+	line-height: 1.3
+	font-weight: bold
+	color: $gray-darker
 
-	&-user
-		right: 5px
-		width: 35px
-		height: 35px
+	.fill-dark &
+	.fill-darker &
+	.fill-darkest &
+		color: $gray-lightest
+
+.-user
+.-title
+	&:hover
+		text-decoration: underline

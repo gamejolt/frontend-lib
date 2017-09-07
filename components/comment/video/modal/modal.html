@@ -1,0 +1,125 @@
+<app-modal>
+
+	<div class="modal-controls">
+		<button class="btn btn-danger-outline" @click="modal.dismiss()">
+			<app-jolticon icon="remove" />
+			<translate>Close</translate>
+		</button>
+	</div>
+
+	<div class="modal-body">
+
+		<div class="fill-darkest full-bleed">
+			<app-responsive-dimensions
+				:ratio="16 / 9"
+				>
+				<app-video-embed
+					v-if="video"
+					video-provider="youtube"
+					:video-id="video.video_id"
+					:autoplay="true"
+					/>
+			</app-responsive-dimensions>
+		</div>
+
+		<br>
+
+		<div class="row">
+			<div class="col-sm-8">
+
+				<h2 class="section-header">
+					{{ video.title }}
+				</h2>
+				<hr class="underbar">
+
+				<div class="clearfix">
+
+					<app-comment-video-like-widget
+						class="-like-btn"
+						:video="video"
+						/>
+
+					<!-- <button
+						class="-like-btn btn btn-block-xs"
+						v-if="canVote"
+						:class="{
+							'btn-success active': !!comment.user_vote,
+							'btn-outline': !comment.user_vote,
+						}"
+						@click="toggleVote"
+						v-app-track-event="`comment-video-lightbox:change-like`"
+						>
+						<span class="btn-badge" v-if="comment.votes > 0">
+							{{ comment.votes | number }}
+						</span>
+						<app-jolticon icon="thumbs-up" />
+						<translate v-if="!comment.user_vote">Like</translate>
+						<translate v-else>Liked!</translate>
+					</button> -->
+
+					<div class="-user-info">
+						<div class="-avatar">
+							<app-user-avatar :user="user" />
+						</div>
+						<div class="-content">
+							<div>
+								<router-link :to="user.url" class="link-unstyled">
+									<strong>{{ user.display_name }}</strong>
+									<small class="text-muted">@{{ user.username }}</small>
+								</router-link>
+							</div>
+
+							<div class="social-widgets">
+								<app-user-follow-widget
+									:user="user"
+									:outline="true"
+									size="sm"
+									event-label="video-modal"
+									/>
+
+								<span class="dot-separator"></span>
+
+								<app-social-youtube-subscribe
+									:channel="video.channel_id"
+									theme="dark"
+									/>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+
+				<hr>
+
+				<app-fade-collapse
+					:collapse-height="300"
+					:is-open="showFullDescription"
+					@require-change="canToggleDescription = $event"
+					>
+					<div class="comment-content" v-html="comment.comment_compiled"></div>
+				</app-fade-collapse>
+
+				<a class="hidden-text-expander"
+					v-if="canToggleDescription"
+					@click="showFullDescription = !showFullDescription"
+					v-app-track-event="`comment-video:toggle-full-description`"
+					>
+				</a>
+
+			</div>
+			<div class="col-sm-4">
+				<div class="visible-xs">
+					<h3 :class="{ 'section-header': Screen.isDesktop }">
+						<translate>Game in Video</translate>
+					</h3>
+					<hr class="underbar">
+				</div>
+
+				<app-game-thumbnail :game="game" />
+			</div>
+		</div>
+
+	</div>
+
+</app-modal>

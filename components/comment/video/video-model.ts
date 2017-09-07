@@ -8,7 +8,7 @@ export class CommentVideo extends Model {
 	img_thumbnail: string;
 
 	comment: Comment;
-	game: any;
+	game: Game;
 
 	constructor(data: any = {}) {
 		super(data);
