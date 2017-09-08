@@ -15,6 +15,7 @@ module.exports = function(config, projectBase) {
 	config.analyze = argv.analyze || false;
 	config.server = argv.server || false;
 	config.client = argv.client || false;
+	config.noClean = argv.noClean || false;
 
 	// Whether or not the environment of angular should be production or development.
 	// Even when not doing prod builds we use the prod environment by default.
