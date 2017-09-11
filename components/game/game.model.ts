@@ -10,6 +10,12 @@ import { Registry } from '../registry/registry.service';
 import { Site } from '../site/site-model';
 import { appStore } from '../../vue/services/app/app-store';
 
+export interface CustomMessage {
+	type: 'info' | 'alert';
+	message: string;
+	class: string;
+}
+
 export class Game extends Model {
 	static readonly STATUS_HIDDEN = 0;
 	static readonly STATUS_VISIBLE = 1;
@@ -27,7 +33,6 @@ export class Game extends Model {
 	title: string;
 	slug: string;
 	path: string;
-	alert_text: string;
 	img_thumbnail: string;
 	has_animated_thumbnail: boolean;
 	img_thumbnail_webm: string;

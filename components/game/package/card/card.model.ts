@@ -25,7 +25,7 @@ export class GamePackageCardModel {
 	otherOnly = false;
 	linkedKeys: LinkedKey[] = [];
 
-	constructor(releases: GameRelease[], builds: GameBuild[], linkedKeys: LinkedKey[]) {
+	constructor(releases: GameRelease[], builds: GameBuild[], linkedKeys?: LinkedKey[]) {
 		if (builds) {
 			const os = Device.os();
 			const arch = Device.arch();
@@ -182,8 +182,10 @@ export class GamePackageCardModel {
 			}
 		}
 
-		for (let linkedKey of linkedKeys) {
-			this.linkedKeys.push(linkedKey);
+		if (linkedKeys) {
+			for (let linkedKey of linkedKeys) {
+				this.linkedKeys.push(linkedKey);
+			}
 		}
 	}
 }
