@@ -8,7 +8,6 @@ import { Model } from '../model/model.service';
 import { Game } from '../game/game.model';
 import { User } from '../user/user.model';
 import { FiresidePost } from '../fireside/post/post-model';
-import { EventBus } from '../event-bus/event-bus.service';
 import { Screen } from '../screen/screen-service';
 import { AdSlot, AdSlotPos, AdSlotPosValidator } from './slot';
 import { AppStore } from '../../vue/services/app/app-store';
@@ -31,10 +30,9 @@ export class AppAd extends Vue {
 
 	slot: AdSlot | null = null;
 	refreshCount = 0;
+	hasDisplayed = false;
+	isDestroyed = false;
 	debugInfo: any = null;
-
-	private isDestroyed = false;
-	private adsRefreshedEvent?: () => void = null as any;
 
 	get resourceInfo() {
 		let resource: string = undefined as any;
@@ -68,32 +66,17 @@ export class AppAd extends Vue {
 			return;
 		}
 
-		if (Ads.routeResolved) {
-			this.display();
-		}
-
-		// When the state changes we want to refresh this ad if the scope hasn't
-		// been destroyed. This is for ads that are in a parent state outside
-		// the changed view.
-		EventBus.on(
-			'$adsRefreshed',
-			(this.adsRefreshedEvent = () => {
-				// We need the destroyed event to trigger first. Setting a timeout
-				// to 0 will cause it to run on next loop which will push this event
-				// past any destroyed event that may happen.
-				setTimeout(() => this.display(), 0);
-			})
-		);
+		Ads.addAd(this);
 	}
 
-	destroyed() {
+	beforeDestroy() {
 		if (this.slot) {
 			this.slot.isUsed = false;
+			this.slot = null;
 		}
 		this.isDestroyed = true;
 
-		EventBus.off('$adsRefreshed', this.adsRefreshedEvent);
-		this.adsRefreshedEvent = undefined;
+		Ads.removeAd(this);
 	}
 
 	private getTargeting() {
@@ -108,7 +91,7 @@ export class AppAd extends Vue {
 		return targeting;
 	}
 
-	private refreshAdSlot() {
+	refreshAdSlot() {
 		if (this.slot) {
 			this.slot.isUsed = false;
 		}
@@ -123,10 +106,7 @@ export class AppAd extends Vue {
 	 * Used to display the initial ad in this slot. Separated into its own
 	 * function so it can be async.
 	 */
-	private async display() {
-		const oldAdSlot = this.slot;
-		this.refreshAdSlot();
-
+	async display() {
 		// Let Vue compile it into the DOM.
 		await this.$nextTick();
 
@@ -147,11 +127,12 @@ export class AppAd extends Vue {
 
 		// If the slot has changed we need to display if for the first time,
 		// otherwise just refresh it.
-		if (oldAdSlot !== this.slot) {
-			await Ads.display(this.slot.id);
+		if (!this.hasDisplayed) {
+			this.hasDisplayed = true;
+			Ads.display(this.slot);
 		} else {
 			++this.refreshCount;
-			await Ads.refresh(this.slot.id);
+			Ads.refresh(this.slot);
 		}
 	}
 

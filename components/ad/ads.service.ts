@@ -3,6 +3,9 @@ import { Environment } from '../environment/environment.service';
 import { EventBus } from '../event-bus/event-bus.service';
 import { objectEquals } from '../../utils/object';
 import { AdSlot, AdSlotTargetingMap } from './slot';
+import { Prebid } from './prebid.service';
+import { AppAd } from './ad';
+import { arrayRemove } from '../../utils/array';
 
 const DfpTagId = '1437670388518';
 const DfpNetworkId = '27005478';
@@ -28,6 +31,8 @@ export class Ads {
 	static readonly RESOURCE_TYPE_USER = 3;
 	static readonly RESOURCE_TYPE_FIRESIDE_POST = 4;
 
+	private static isTagCreated = false;
+	private static ads: AppAd[] = [];
 	private static slots: AdSlot[] = [];
 
 	/**
@@ -38,7 +43,6 @@ export class Ads {
 
 	private static globalTargeting: AdSlotTargetingMap = {};
 	private static adUnit = DefaultAdUnit;
-	private static ensurePromise: Promise<void> | null = null;
 
 	static routeResolved = false;
 
@@ -78,7 +82,7 @@ export class Ads {
 			next();
 
 			// Only if DFP is already loaded in.
-			if (!(window as any).googletag || !(window as any).googletag.pubads) {
+			if (!this.googletag.pubads) {
 				return;
 			}
 
@@ -86,22 +90,56 @@ export class Ads {
 			// force a refresh of the ad slots to happen on next display/refresh
 			// call. If we didn't do this then the slots would always show the
 			// same exact ads.
-			(window as any).googletag.pubads().clear();
+			this.googletag.pubads().clear();
 
 			// Updating the correlator tells the service that a new page view
 			// has ocurred.
-			(window as any).googletag.pubads().updateCorrelator();
+			this.googletag.pubads().updateCorrelator();
 		});
 
 		EventBus.on('routeChangeAfter', () => {
 			if (!this.routeResolved) {
 				this.routeResolved = true;
+				this.displayAds(this.ads);
+			}
+		});
+	}
 
-				// Broadcast an event so our ads know that a new page change
-				// happened and they should refresh themselves. We do it this
-				// way so that the logic of whether or not the states are a
-				// match is preserved.
-				EventBus.emit('$adsRefreshed');
+	static addAd(ad: AppAd) {
+		this.ads.push(ad);
+
+		// If the route already resolved then this ad was mounted after the
+		// fact. We have to call the initial display.
+		if (this.routeResolved) {
+			this.displayAds([ad]);
+		}
+	}
+
+	static removeAd(ad: AppAd) {
+		arrayRemove(this.ads, i => i === ad);
+	}
+
+	private static async displayAds(ads: AppAd[]) {
+		if (!ads.length) {
+			return;
+		}
+
+		for (const ad of ads) {
+			ad.refreshAdSlot();
+		}
+
+		const units = ads.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
+		console.log('made units', units);
+
+		const bids = await Prebid.getBids(units);
+		console.log('got bids', bids);
+
+		this.run(() => {
+			Prebid.setGptTargeting(Object.keys(bids));
+
+			console.log('displaying ads');
+			for (const ad of ads) {
+				ad.display();
 			}
 		});
 	}
@@ -139,8 +177,7 @@ export class Ads {
 	}
 
 	static async setSlotTargeting(slot: AdSlot, targeting: AdSlotTargetingMap) {
-		await this.ensure();
-		this.googletag.cmd.push(() => {
+		this.run(() => {
 			const definedSlot = this.definedSlots[slot.id];
 			if (definedSlot) {
 				definedSlot.clearTargeting();
@@ -156,21 +193,19 @@ export class Ads {
 		});
 	}
 
-	static async display(id: string) {
-		if (GJ_BUILD_TYPE === 'development') {
-			return;
-		}
+	static display(slot: AdSlot) {
+		// if (GJ_BUILD_TYPE === 'development') {
+		// 	return;
+		// }
 
-		await this.ensure();
-		this.googletag.cmd.push(() => {
-			this.googletag.display(id);
+		this.run(() => {
+			this.googletag.display(slot.id);
 		});
 	}
 
-	static async refresh(id: string) {
-		await this.ensure();
-		this.googletag.cmd.push(() => {
-			const definedSlot = this.definedSlots[id];
+	static refresh(slot: AdSlot) {
+		this.run(() => {
+			const definedSlot = this.definedSlots[slot.id];
 			this.googletag.pubads().refresh([definedSlot], { changeCorrelator: false });
 		});
 	}
@@ -220,43 +255,42 @@ export class Ads {
 		this.slots.push(newSlot);
 
 		// Set the slot to register itself once the google tag is loaded.
-		this.googletag.cmd.push(() => {
+		this.run(() => {
 			this.definedSlots[newSlot.id] = this.googletag
 				.defineSlot(newSlot.adUnit, newSlot.slotSizes, newSlot.id)
 				.addService(this.googletag.pubads());
+
+			this.googletag.enableServices();
 		});
 
 		return newSlot;
 	}
 
-	private static ensure() {
-		if (!this.ensurePromise) {
-			this.ensurePromise = new Promise<void>(async resolve => {
-				await this.createTag();
-				this.googletag.cmd.push(() => this.initServices());
-				resolve();
-			});
-		}
-		return this.ensurePromise;
+	private static run(cmd: Function) {
+		this.createTag();
+		this.googletag.cmd.push(cmd);
 	}
 
 	private static createTag() {
-		return new Promise(resolve => {
-			const gads = document.createElement('script');
-			const node = document.getElementsByTagName('script')[0] as HTMLScriptElement;
+		if (this.isTagCreated) {
+			return;
+		}
+		this.isTagCreated = true;
 
-			gads.async = true;
-			gads.type = 'text/javascript';
-			gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
+		const gads = document.createElement('script');
+		const node = document.getElementsByTagName('script')[0] as HTMLScriptElement;
 
-			node.parentNode!.insertBefore(gads, node);
-			gads.onload = resolve;
-		});
-	}
+		gads.async = true;
+		gads.type = 'text/javascript';
+		gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
 
-	private static initServices() {
-		// Don't enable single request mode, otherwise page impressions are
-		// wrong when calling display/refresh in random spots on the page.
-		this.googletag.enableServices();
+		node.parentNode!.insertBefore(gads, node);
+
+		// this.googletag.cmd.push(() => {
+		// 	console.log('enable services');
+		// 	// Don't load the ad calls initially. We will manually call
+		// 	// display/refresh.
+		// 	// TODO: Do we need this?
+		// 	// this.googletag.pubads().disableInitialLoad();
 	}
 }
