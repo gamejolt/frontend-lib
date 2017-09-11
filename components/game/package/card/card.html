@@ -196,7 +196,7 @@
 				<input class="form-control" :value="linkedKey.key">
 				&nbsp;
 				<button class="btn btn-outline" @click="copyProviderKey(linkedKey)">
-					<app-jolticon icon="link" />
+					<app-jolticon :icon="providerIcon( linkedKey )" />
 					{{ providerText( linkedKey ) }}
 				</button>
 			</div>

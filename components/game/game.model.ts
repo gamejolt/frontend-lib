@@ -27,6 +27,7 @@ export class Game extends Model {
 	title: string;
 	slug: string;
 	path: string;
+	alert_text: string;
 	img_thumbnail: string;
 	has_animated_thumbnail: boolean;
 	img_thumbnail_webm: string;
