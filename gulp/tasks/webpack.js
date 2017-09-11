@@ -410,6 +410,10 @@ module.exports = function(config) {
 		})
 	);
 
-	gulp.task('compile', gulp.series(webpackSectionTasks));
-	gulp.task('default', gulp.series('clean:pre', 'translations:compile', 'compile'));
+	if (!config.noClean) {
+		webpackSectionTasks.unshift('clean:pre');
+	}
+
+	webpackSectionTasks.unshift('translations:compile');
+	gulp.task('default', gulp.series(webpackSectionTasks));
 };

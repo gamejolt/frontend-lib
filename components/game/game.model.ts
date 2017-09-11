@@ -58,6 +58,7 @@ export class Game extends Model {
 	download_count: number;
 	bundle_only: boolean;
 	ga_tracking_id: string;
+	should_show_ads: boolean;
 	ads_enabled: boolean;
 	comments_enabled: boolean;
 
@@ -117,13 +118,17 @@ export class Game extends Model {
 		Registry.store('Game', this);
 	}
 
+	get is_paid_game() {
+		return this.sellable && this.sellable.type === 'paid';
+	}
+
 	get _can_buy_primary_sellable() {
-		return this.sellable && this.sellable.type === 'paid' && !this.sellable.is_owned;
+		return this.is_paid_game && !this.sellable.is_owned;
 	}
 
 	// We don't want to show ads if this game has sellable items.
 	get _should_show_ads() {
-		return this.ads_enabled && (!this.sellable || this.sellable.type === 'free');
+		return this.should_show_ads && (!this.sellable || this.sellable.type === 'free');
 	}
 
 	get _is_finished() {
