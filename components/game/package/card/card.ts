@@ -70,10 +70,6 @@ export class AppGamePackageCard extends Vue {
 	salePercentageOff = '';
 	saleOldPricing: SellablePricing | null = null;
 
-	providerTexts: { [provider: string]: string } = {
-		steam: this.$gettext('Copy Steam key'),
-	};
-
 	providerIcons: { [provider: string]: string } = {
 		steam: 'steam',
 	};
@@ -192,18 +188,6 @@ export class AppGamePackageCard extends Vue {
 		}
 
 		return amountStr;
-	}
-
-	providerText(key: LinkedKey) {
-		const text = this.providerTexts[key.provider];
-		if (text) {
-			return text;
-		}
-		return this.$gettextInterpolate(`Copy %{ provider } key`, { provider: key.provider });
-	}
-
-	providerIcon(key: LinkedKey) {
-		return this.providerIcons[key.provider] || 'link';
 	}
 
 	copyProviderKey(key: LinkedKey) {

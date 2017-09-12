@@ -5,6 +5,7 @@ export class LinkedKey extends Model {
 
 	key: string;
 	provider: string;
+	provider_label: string;
 
 	constructor(data: any = {}) {
 		super(data);
