@@ -184,6 +184,41 @@
 			</div>
 		</template>
 
+		<template v-if="linkedKeys.length">
+			<hr>
+
+			<div class="alert alert-info">
+				<translate>You also get access to keys for these other platforms.</translate>
+			</div>
+
+			<div
+				class="clearfix"
+				v-for="linkedKey of linkedKeys"
+				:key="linkedKey.key"
+				>
+				<div class="pull-right">
+					&nbsp;
+					<button
+						class="btn btn-outline"
+						@click="copyProviderKey(linkedKey)"
+						>
+						<translate>Copy</translate>
+					</button>
+				</div>
+
+				<div class="input-group">
+					<span class="input-group-addon">
+						<app-jolticon
+							v-if="providerIcons[linkedKey.provider]"
+							:icon="providerIcons[linkedKey.provider]"
+							/>
+						<strong>{{ linkedKey.provider_label }}</strong>
+					</span>
+					<input class="form-control" :value="linkedKey.key">
+				</div>
+			</div>
+		</template>
+
 	</div>
 
 	<app-expand :when="isWhatOpen" class="package-card-well-expander">
