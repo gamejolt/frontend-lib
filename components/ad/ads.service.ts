@@ -3,6 +3,12 @@ import { Environment } from '../environment/environment.service';
 import { EventBus } from '../event-bus/event-bus.service';
 import { objectEquals } from '../../utils/object';
 import { AdSlot, AdSlotTargetingMap } from './slot';
+import { AppAd } from './ad';
+import { arrayRemove } from '../../utils/array';
+import { Model } from '../model/model.service';
+import { Screen } from '../screen/screen-service';
+import { Game } from '../game/game.model';
+import { makeObservableService } from '../../utils/vue';
 
 const DfpTagId = '1437670388518';
 const DfpNetworkId = '27005478';
@@ -28,6 +34,8 @@ export class Ads {
 	static readonly RESOURCE_TYPE_USER = 3;
 	static readonly RESOURCE_TYPE_FIRESIDE_POST = 4;
 
+	private static isTagCreated = false;
+	private static ads: AppAd[] = [];
 	private static slots: AdSlot[] = [];
 
 	/**
@@ -36,13 +44,13 @@ export class Ads {
 	 */
 	static definedSlots: any = {};
 
-	private static globalTargeting: AdSlotTargetingMap = {};
+	static isPageDisabled = false;
+	static globalTargeting: AdSlotTargetingMap = {};
+	static resource: Model | null = null;
 	private static adUnit = DefaultAdUnit;
-	private static ensurePromise: Promise<void> | null = null;
+	private static routeResolved = false;
 
-	static routeResolved = false;
-
-	static get googletag() {
+	private static get googletag() {
 		const _window = window as any;
 
 		if (!_window.googletag) {
@@ -56,13 +64,36 @@ export class Ads {
 		return _window.googletag;
 	}
 
+	static get shouldShow() {
+		if (GJ_IS_CLIENT || GJ_IS_SSR || Screen.isXs) {
+			return false;
+		}
+
+		if (this.isPageDisabled) {
+			return false;
+		}
+
+		if (this.resource && this.resource instanceof Game && !this.resource._should_show_ads) {
+			return false;
+		}
+
+		return true;
+	}
+
 	static init(router: VueRouter) {
 		if (GJ_IS_SSR || GJ_IS_CLIENT) {
 			return;
 		}
 
+		// Make this observable in Vue.
+		makeObservableService(this);
+
 		router.beforeEach((to, from, next) => {
-			this.clearGlobalTargeting().clearAdUnit();
+			// Clear all our route-level settings.
+			this.adUnit = DefaultAdUnit;
+			this.globalTargeting = {};
+			this.resource = null;
+			this.isPageDisabled = false;
 
 			// Don't change ads if just the hash has changed.
 			const fromParams = Object.assign({}, from.params, from.query);
@@ -78,7 +109,7 @@ export class Ads {
 			next();
 
 			// Only if DFP is already loaded in.
-			if (!(window as any).googletag || !(window as any).googletag.pubads) {
+			if (!this.googletag.pubads) {
 				return;
 			}
 
@@ -86,38 +117,33 @@ export class Ads {
 			// force a refresh of the ad slots to happen on next display/refresh
 			// call. If we didn't do this then the slots would always show the
 			// same exact ads.
-			(window as any).googletag.pubads().clear();
+			this.googletag.pubads().clear();
 
 			// Updating the correlator tells the service that a new page view
 			// has ocurred.
-			(window as any).googletag.pubads().updateCorrelator();
+			this.googletag.pubads().updateCorrelator();
 		});
 
 		EventBus.on('routeChangeAfter', () => {
 			if (!this.routeResolved) {
 				this.routeResolved = true;
-
-				// Broadcast an event so our ads know that a new page change
-				// happened and they should refresh themselves. We do it this
-				// way so that the logic of whether or not the states are a
-				// match is preserved.
-				EventBus.emit('$adsRefreshed');
+				this.displayAds(this.ads);
 			}
 		});
 	}
 
-	static setGlobalTargeting(targeting: AdSlotTargetingMap) {
-		this.globalTargeting = targeting;
-		return this;
+	static addAd(ad: AppAd) {
+		this.ads.push(ad);
+
+		// If the route already resolved then this ad was mounted after the
+		// fact. We have to call the initial display.
+		if (this.routeResolved) {
+			this.displayAds([ad]);
+		}
 	}
 
-	static getGlobalTargeting() {
-		return this.globalTargeting;
-	}
-
-	private static clearGlobalTargeting() {
-		this.globalTargeting = {};
-		return this;
+	static removeAd(ad: AppAd) {
+		arrayRemove(this.ads, i => i === ad);
 	}
 
 	static setAdUnit(adUnit: string) {
@@ -129,18 +155,8 @@ export class Ads {
 		return this;
 	}
 
-	static getAdUnit() {
-		return `/${DfpNetworkId}/${this.adUnit}`;
-	}
-
-	private static clearAdUnit() {
-		this.adUnit = DefaultAdUnit;
-		return this;
-	}
-
 	static async setSlotTargeting(slot: AdSlot, targeting: AdSlotTargetingMap) {
-		await this.ensure();
-		this.googletag.cmd.push(() => {
+		this.run(() => {
 			const definedSlot = this.definedSlots[slot.id];
 			if (definedSlot) {
 				definedSlot.clearTargeting();
@@ -156,30 +172,61 @@ export class Ads {
 		});
 	}
 
-	static async display(id: string) {
+	private static async displayAds(ads: AppAd[]) {
+		// Copies the current set of ads so that it doesn't change during the async/await.
+		const adsToDisplay = ads.map(i => i);
+
+		if (!this.shouldShow) {
+			// console.log('not showing ads');
+			return;
+		}
+
+		if (!adsToDisplay.length) {
+			return;
+		}
+
+		for (const ad of adsToDisplay) {
+			ad.refreshAdSlot();
+		}
+
+		// const units = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
+		// // console.log('made units', units);
+
+		// const bids = await Prebid.getBids(units);
+		// // console.log('got bids', bids);
+
+		this.run(() => {
+			// Prebid.setGptTargeting(Object.keys(bids));
+
+			// console.log('displaying ads');
+			for (const ad of adsToDisplay) {
+				ad.display();
+			}
+		});
+	}
+
+	static display(slot: AdSlot) {
 		if (GJ_BUILD_TYPE === 'development') {
 			return;
 		}
 
-		await this.ensure();
-		this.googletag.cmd.push(() => {
-			this.googletag.display(id);
+		this.run(() => {
+			this.googletag.display(slot.id);
 		});
 	}
 
-	static async refresh(id: string) {
-		await this.ensure();
-		this.googletag.cmd.push(() => {
-			const definedSlot = this.definedSlots[id];
+	static refresh(slot: AdSlot) {
+		if (GJ_BUILD_TYPE === 'development') {
+			return;
+		}
+
+		this.run(() => {
+			const definedSlot = this.definedSlots[slot.id];
 			this.googletag.pubads().refresh([definedSlot], { changeCorrelator: false });
 		});
 	}
 
 	static sendBeacon(type: string, resource?: string, resourceId?: number) {
-		if (GJ_IS_SSR) {
-			return;
-		}
-
 		let queryString = '';
 
 		// Cache busting.
@@ -205,7 +252,7 @@ export class Ads {
 	}
 
 	static getUnusedAdSlot(size: 'rectangle' | 'leaderboard') {
-		const adUnit = this.getAdUnit();
+		const adUnit = `/${DfpNetworkId}/${this.adUnit}`;
 
 		// Try to reuse a slot.
 		const slot = this.slots.find(i => i.adUnit === adUnit && i.size === size && !i.isUsed);
@@ -220,43 +267,35 @@ export class Ads {
 		this.slots.push(newSlot);
 
 		// Set the slot to register itself once the google tag is loaded.
-		this.googletag.cmd.push(() => {
+		this.run(() => {
 			this.definedSlots[newSlot.id] = this.googletag
 				.defineSlot(newSlot.adUnit, newSlot.slotSizes, newSlot.id)
 				.addService(this.googletag.pubads());
+
+			this.googletag.enableServices();
 		});
 
 		return newSlot;
 	}
 
-	private static ensure() {
-		if (!this.ensurePromise) {
-			this.ensurePromise = new Promise<void>(async resolve => {
-				await this.createTag();
-				this.googletag.cmd.push(() => this.initServices());
-				resolve();
-			});
-		}
-		return this.ensurePromise;
+	private static run(cmd: Function) {
+		this.createTag();
+		this.googletag.cmd.push(cmd);
 	}
 
 	private static createTag() {
-		return new Promise(resolve => {
-			const gads = document.createElement('script');
-			const node = document.getElementsByTagName('script')[0] as HTMLScriptElement;
+		if (this.isTagCreated) {
+			return;
+		}
+		this.isTagCreated = true;
 
-			gads.async = true;
-			gads.type = 'text/javascript';
-			gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
+		const gads = document.createElement('script');
+		const node = document.getElementsByTagName('script')[0] as HTMLScriptElement;
 
-			node.parentNode!.insertBefore(gads, node);
-			gads.onload = resolve;
-		});
-	}
+		gads.async = true;
+		gads.type = 'text/javascript';
+		gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
 
-	private static initServices() {
-		// Don't enable single request mode, otherwise page impressions are
-		// wrong when calling display/refresh in random spots on the page.
-		this.googletag.enableServices();
+		node.parentNode!.insertBefore(gads, node);
 	}
 }

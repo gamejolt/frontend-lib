@@ -1,6 +1,6 @@
 <div
 	class="ad"
-	v-if="slot"
+	v-if="shouldShow"
 	:key="slot.id"
 	:class="{
 		'ad-leaderboard': size === 'leaderboard',
