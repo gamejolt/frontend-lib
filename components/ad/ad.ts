@@ -4,11 +4,9 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./ad.html?style=./ad.styl';
 
 import { Ads } from './ads.service';
-import { Model } from '../model/model.service';
 import { Game } from '../game/game.model';
 import { User } from '../user/user.model';
 import { FiresidePost } from '../fireside/post/post-model';
-import { Screen } from '../screen/screen-service';
 import { AdSlot, AdSlotPos, AdSlotPosValidator } from './slot';
 import { AppStore } from '../../vue/services/app/app-store';
 
@@ -24,8 +22,6 @@ export class AppAd extends Vue {
 	})
 	pos?: AdSlotPos;
 
-	@Prop(Object) resource?: Model;
-
 	@State app: AppStore;
 
 	slot: AdSlot | null = null;
@@ -38,18 +34,23 @@ export class AppAd extends Vue {
 		let resource: string = undefined as any;
 		let resourceId: number = undefined as any;
 
-		if (this.resource instanceof Game) {
+		const adResource = Ads.resource;
+		if (adResource instanceof Game) {
 			resource = 'Game';
-			resourceId = this.resource.id;
-		} else if (this.resource instanceof User) {
+			resourceId = adResource.id;
+		} else if (adResource instanceof User) {
 			resource = 'User';
-			resourceId = this.resource.id;
-		} else if (this.resource instanceof FiresidePost) {
+			resourceId = adResource.id;
+		} else if (adResource instanceof FiresidePost) {
 			resource = 'Fireside_Post';
-			resourceId = this.resource.id;
+			resourceId = adResource.id;
 		}
 
 		return { resource, resourceId };
+	}
+
+	get shouldShow() {
+		return Ads.shouldShow && this.slot && !this.isDestroyed;
 	}
 
 	get isDebugEnabled() {
@@ -57,15 +58,6 @@ export class AppAd extends Vue {
 	}
 
 	mounted() {
-		if (
-			Screen.isXs ||
-			GJ_IS_CLIENT ||
-			GJ_IS_SSR ||
-			(this.resource && this.resource instanceof Game && !this.resource._should_show_ads)
-		) {
-			return;
-		}
-
 		Ads.addAd(this);
 	}
 
@@ -77,18 +69,6 @@ export class AppAd extends Vue {
 		this.isDestroyed = true;
 
 		Ads.removeAd(this);
-	}
-
-	private getTargeting() {
-		const targeting = Object.assign({}, Ads.getGlobalTargeting());
-
-		if (this.pos) {
-			targeting.pos = this.pos;
-		}
-
-		targeting.signedin = this.app.user ? 'y' : 'n';
-
-		return targeting;
 	}
 
 	refreshAdSlot() {
@@ -110,7 +90,7 @@ export class AppAd extends Vue {
 		// Let Vue compile it into the DOM.
 		await this.$nextTick();
 
-		if (!this.slot || this.isDestroyed) {
+		if (!this.shouldShow || !this.slot) {
 			return;
 		}
 
@@ -136,12 +116,27 @@ export class AppAd extends Vue {
 		}
 	}
 
+	private getTargeting() {
+		const targeting = Object.assign({}, Ads.globalTargeting);
+
+		if (this.pos) {
+			targeting.pos = this.pos;
+		}
+
+		targeting.signedin = this.app.user ? 'y' : 'n';
+
+		return targeting;
+	}
+
 	private generateDebugInfo() {
+		const resource = Ads.resource;
+
 		this.debugInfo = {
 			adUnit: this.slot && this.slot.adUnit,
 			sizes: this.slot && this.slot.slotSizes,
 			refreshCount: this.refreshCount,
 			targeting: this.getTargeting(),
+			resourceId: resource && resource.id,
 		};
 	}
 }

@@ -3,9 +3,12 @@ import { Environment } from '../environment/environment.service';
 import { EventBus } from '../event-bus/event-bus.service';
 import { objectEquals } from '../../utils/object';
 import { AdSlot, AdSlotTargetingMap } from './slot';
-import { Prebid } from './prebid.service';
 import { AppAd } from './ad';
 import { arrayRemove } from '../../utils/array';
+import { Model } from '../model/model.service';
+import { Screen } from '../screen/screen-service';
+import { Game } from '../game/game.model';
+import { makeObservableService } from '../../utils/vue';
 
 const DfpTagId = '1437670388518';
 const DfpNetworkId = '27005478';
@@ -41,12 +44,13 @@ export class Ads {
 	 */
 	static definedSlots: any = {};
 
-	private static globalTargeting: AdSlotTargetingMap = {};
+	static isPageDisabled = false;
+	static globalTargeting: AdSlotTargetingMap = {};
+	static resource: Model | null = null;
 	private static adUnit = DefaultAdUnit;
+	private static routeResolved = false;
 
-	static routeResolved = false;
-
-	static get googletag() {
+	private static get googletag() {
 		const _window = window as any;
 
 		if (!_window.googletag) {
@@ -60,13 +64,36 @@ export class Ads {
 		return _window.googletag;
 	}
 
+	static get shouldShow() {
+		if (GJ_IS_CLIENT || GJ_IS_SSR || Screen.isXs) {
+			return false;
+		}
+
+		if (this.isPageDisabled) {
+			return false;
+		}
+
+		if (this.resource && this.resource instanceof Game && !this.resource._should_show_ads) {
+			return false;
+		}
+
+		return true;
+	}
+
 	static init(router: VueRouter) {
 		if (GJ_IS_SSR || GJ_IS_CLIENT) {
 			return;
 		}
 
+		// Make this observable in Vue.
+		makeObservableService(this);
+
 		router.beforeEach((to, from, next) => {
-			this.clearGlobalTargeting().clearAdUnit();
+			// Clear all our route-level settings.
+			this.adUnit = DefaultAdUnit;
+			this.globalTargeting = {};
+			this.resource = null;
+			this.isPageDisabled = false;
 
 			// Don't change ads if just the hash has changed.
 			const fromParams = Object.assign({}, from.params, from.query);
@@ -119,60 +146,12 @@ export class Ads {
 		arrayRemove(this.ads, i => i === ad);
 	}
 
-	private static async displayAds(ads: AppAd[]) {
-		if (!ads.length) {
-			return;
-		}
-
-		for (const ad of ads) {
-			ad.refreshAdSlot();
-		}
-
-		const units = ads.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
-		console.log('made units', units);
-
-		const bids = await Prebid.getBids(units);
-		console.log('got bids', bids);
-
-		this.run(() => {
-			Prebid.setGptTargeting(Object.keys(bids));
-
-			console.log('displaying ads');
-			for (const ad of ads) {
-				ad.display();
-			}
-		});
-	}
-
-	static setGlobalTargeting(targeting: AdSlotTargetingMap) {
-		this.globalTargeting = targeting;
-		return this;
-	}
-
-	static getGlobalTargeting() {
-		return this.globalTargeting;
-	}
-
-	private static clearGlobalTargeting() {
-		this.globalTargeting = {};
-		return this;
-	}
-
 	static setAdUnit(adUnit: string) {
 		if (DfpAdUnitCodes.indexOf(adUnit) === -1) {
 			throw new Error(`Invalid ad unit code: ${adUnit}`);
 		}
 
 		this.adUnit = adUnit;
-		return this;
-	}
-
-	static getAdUnit() {
-		return `/${DfpNetworkId}/${this.adUnit}`;
-	}
-
-	private static clearAdUnit() {
-		this.adUnit = DefaultAdUnit;
 		return this;
 	}
 
@@ -193,10 +172,43 @@ export class Ads {
 		});
 	}
 
+	private static async displayAds(ads: AppAd[]) {
+		// Copies the current set of ads so that it doesn't change during the async/await.
+		const adsToDisplay = ads.map(i => i);
+
+		if (!this.shouldShow) {
+			// console.log('not showing ads');
+			return;
+		}
+
+		if (!adsToDisplay.length) {
+			return;
+		}
+
+		for (const ad of adsToDisplay) {
+			ad.refreshAdSlot();
+		}
+
+		// const units = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
+		// // console.log('made units', units);
+
+		// const bids = await Prebid.getBids(units);
+		// // console.log('got bids', bids);
+
+		this.run(() => {
+			// Prebid.setGptTargeting(Object.keys(bids));
+
+			// console.log('displaying ads');
+			for (const ad of adsToDisplay) {
+				ad.display();
+			}
+		});
+	}
+
 	static display(slot: AdSlot) {
-		// if (GJ_BUILD_TYPE === 'development') {
-		// 	return;
-		// }
+		if (GJ_BUILD_TYPE === 'development') {
+			return;
+		}
 
 		this.run(() => {
 			this.googletag.display(slot.id);
@@ -204,6 +216,10 @@ export class Ads {
 	}
 
 	static refresh(slot: AdSlot) {
+		if (GJ_BUILD_TYPE === 'development') {
+			return;
+		}
+
 		this.run(() => {
 			const definedSlot = this.definedSlots[slot.id];
 			this.googletag.pubads().refresh([definedSlot], { changeCorrelator: false });
@@ -211,10 +227,6 @@ export class Ads {
 	}
 
 	static sendBeacon(type: string, resource?: string, resourceId?: number) {
-		if (GJ_IS_SSR) {
-			return;
-		}
-
 		let queryString = '';
 
 		// Cache busting.
@@ -240,7 +252,7 @@ export class Ads {
 	}
 
 	static getUnusedAdSlot(size: 'rectangle' | 'leaderboard') {
-		const adUnit = this.getAdUnit();
+		const adUnit = `/${DfpNetworkId}/${this.adUnit}`;
 
 		// Try to reuse a slot.
 		const slot = this.slots.find(i => i.adUnit === adUnit && i.size === size && !i.isUsed);
@@ -285,12 +297,5 @@ export class Ads {
 		gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
 
 		node.parentNode!.insertBefore(gads, node);
-
-		// this.googletag.cmd.push(() => {
-		// 	console.log('enable services');
-		// 	// Don't load the ad calls initially. We will manually call
-		// 	// display/refresh.
-		// 	// TODO: Do we need this?
-		// 	// this.googletag.pubads().disableInitialLoad();
 	}
 }

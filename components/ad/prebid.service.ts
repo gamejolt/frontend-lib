@@ -1,4 +1,5 @@
 import { AdSlot } from './slot';
+import { loadScript } from '../../utils/utils';
 const GetBidsTimeout = 700;
 
 interface AdUnitBid {
@@ -15,7 +16,7 @@ interface AdUnit {
 export class Prebid {
 	private static isTagCreated = false;
 
-	static get pbjs() {
+	private static get pbjs() {
 		const _window = window as any;
 
 		if (!_window.pbjs) {
@@ -81,18 +82,21 @@ export class Prebid {
 		}
 		this.isTagCreated = true;
 
-		const script = document.createElement('script');
-		const node = document.getElementsByTagName('script')[0] as HTMLScriptElement;
+		loadScript(require('!file-loader!./prebid.vendor.js'));
 
-		script.async = true;
-		script.type = 'text/javascript';
-		script.src = 'https://acdn.adnxs.com/prebid/not-for-prod/prebid.js';
-
-		node.parentNode!.insertBefore(script, node);
+		if (GJ_BUILD_TYPE === 'production') {
+			this.pbjs.que.push(() => {
+				this.pbjs.enableAnalytics([
+					{
+						provider: 'ga',
+						options: {},
+					},
+				]);
+			});
+		}
 
 		this.pbjs.que.push(() => {
 			this.pbjs.setConfig({
-				// debug: true,
 				bidderTimeout: GetBidsTimeout,
 				publisherDomain: 'https://gamejolt.com',
 			});
