@@ -22,6 +22,7 @@ export class Environment {
 	};
 
 	// Production defaults.
+	static baseUrlInsecure = 'http://gamejolt.com';
 	static baseUrl = 'https://gamejolt.com';
 	static wttfBaseUrl = 'https://gamejolt.com';
 	static authBaseUrl = 'https://gamejolt.com';
