@@ -400,6 +400,7 @@ module.exports = function(config) {
 						},
 					],
 				},
+				public: 'development.gamejolt.com',
 				quiet: true,
 				hot: !config.server,
 			});
