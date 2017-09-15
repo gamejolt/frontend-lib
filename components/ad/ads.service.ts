@@ -9,6 +9,7 @@ import { Model } from '../model/model.service';
 import { Screen } from '../screen/screen-service';
 import { Game } from '../game/game.model';
 import { makeObservableService } from '../../utils/vue';
+import { Prebid } from './prebid.service';
 
 const DfpTagId = '1437670388518';
 const DfpNetworkId = '27005478';
@@ -46,6 +47,7 @@ export class Ads {
 
 	static isPageDisabled = false;
 	static globalTargeting: AdSlotTargetingMap = {};
+	static bidTargeting: AdSlotTargetingMap = {};
 	static resource: Model | null = null;
 	private static adUnit = DefaultAdUnit;
 	private static routeResolved = false;
@@ -92,6 +94,7 @@ export class Ads {
 			// Clear all our route-level settings.
 			this.adUnit = DefaultAdUnit;
 			this.globalTargeting = {};
+			this.bidTargeting = {};
 			this.resource = null;
 			this.isPageDisabled = false;
 
@@ -177,7 +180,6 @@ export class Ads {
 		const adsToDisplay = ads.map(i => i);
 
 		if (!this.shouldShow) {
-			// console.log('not showing ads');
 			return;
 		}
 
@@ -189,16 +191,11 @@ export class Ads {
 			ad.refreshAdSlot();
 		}
 
-		// const units = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
-		// // console.log('made units', units);
-
-		// const bids = await Prebid.getBids(units);
-		// // console.log('got bids', bids);
+		const units = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
+		const bids = await Prebid.getBids(units);
+		this.storeBidTargeting(bids);
 
 		this.run(() => {
-			// Prebid.setGptTargeting(Object.keys(bids));
-
-			// console.log('displaying ads');
 			for (const ad of adsToDisplay) {
 				ad.display();
 			}
@@ -297,5 +294,16 @@ export class Ads {
 		gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
 
 		node.parentNode!.insertBefore(gads, node);
+	}
+
+	private static storeBidTargeting(bids: any) {
+		for (const slotId in bids) {
+			const bid = bids[slotId].bids && bids[slotId].bids[0];
+			if (!bid) {
+				continue;
+			}
+
+			this.bidTargeting[slotId] = bid.adserverTargeting;
+		}
 	}
 }

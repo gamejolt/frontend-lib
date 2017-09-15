@@ -7,7 +7,7 @@ import { Ads } from './ads.service';
 import { Game } from '../game/game.model';
 import { User } from '../user/user.model';
 import { FiresidePost } from '../fireside/post/post-model';
-import { AdSlot, AdSlotPos, AdSlotPosValidator } from './slot';
+import { AdSlot, AdSlotPos, AdSlotPosValidator, AdSlotTargetingMap } from './slot';
 import { AppStore } from '../../vue/services/app/app-store';
 
 @View
@@ -116,8 +116,13 @@ export class AppAd extends Vue {
 		}
 	}
 
-	private getTargeting() {
-		const targeting = Object.assign({}, Ads.globalTargeting);
+	private getTargeting(): AdSlotTargetingMap {
+		if (!this.slot) {
+			return {};
+		}
+
+		// Pull in any targeting for bids that may be set for this slot.
+		const targeting = Object.assign({}, Ads.globalTargeting, Ads.bidTargeting[this.slot.id] || {});
 
 		if (this.pos) {
 			targeting.pos = this.pos;

@@ -38,7 +38,7 @@ export class Prebid {
 				{
 					bidder: 'appnexus',
 					params: {
-						placementId: '10433394',
+						placementId: '12085509',
 					},
 				},
 			],
@@ -62,12 +62,6 @@ export class Prebid {
 					bidsBackHandler: (response: any) => handleBids(response),
 				});
 			});
-		});
-	}
-
-	static setGptTargeting(codes: string[]) {
-		this.run(() => {
-			this.pbjs.setTargetingForGPTAsync(codes);
 		});
 	}
 
