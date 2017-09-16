@@ -169,6 +169,8 @@ export class AppCommentWidget extends Vue {
 			// If they replied to a comment, obviously don't want to change back to the first page.
 			this.changePage(isReplying ? this.currentPage : 1);
 		}
+
+		this.$emit('add', formModel);
 	}
 
 	onPageChange(page: number) {
