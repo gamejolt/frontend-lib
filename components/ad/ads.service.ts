@@ -11,6 +11,9 @@ import { Game } from '../game/game.model';
 import { makeObservableService } from '../../utils/vue';
 import { Prebid } from './prebid.service';
 
+// To show ads on the page for dev, just change this to true.
+const DevDisabled = GJ_BUILD_TYPE === 'development';
+
 const DfpTagId = '1437670388518';
 const DfpNetworkId = '27005478';
 const DefaultAdUnit = 'others';
@@ -191,9 +194,11 @@ export class Ads {
 			ad.refreshAdSlot();
 		}
 
-		const units = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
-		const bids = await Prebid.getBids(units);
-		this.storeBidTargeting(bids);
+		if (!DevDisabled) {
+			const units = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
+			const bids = await Prebid.getBids(units);
+			this.storeBidTargeting(bids);
+		}
 
 		this.run(() => {
 			for (const ad of adsToDisplay) {
@@ -203,7 +208,7 @@ export class Ads {
 	}
 
 	static display(slot: AdSlot) {
-		if (GJ_BUILD_TYPE === 'development') {
+		if (DevDisabled) {
 			return;
 		}
 
@@ -213,7 +218,7 @@ export class Ads {
 	}
 
 	static refresh(slot: AdSlot) {
-		if (GJ_BUILD_TYPE === 'development') {
+		if (DevDisabled) {
 			return;
 		}
 
