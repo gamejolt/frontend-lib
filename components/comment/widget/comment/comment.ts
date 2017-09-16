@@ -171,6 +171,15 @@ export class AppCommentWidgetComment extends Vue {
 	}
 
 	onReplyAdd(formModel: Comment) {
+		// This will make sure the page scrolls to the new comment and highlights it.
+		this.isShowingChildren = true;
+		this.$router.replace({
+			name: this.$route.name,
+			params: this.$route.params,
+			query: this.$route.query,
+			hash: '#comment-' + formModel.id,
+		});
+
 		this.widget.onCommentAdd(formModel, true);
 	}
 
