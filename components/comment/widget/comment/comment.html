@@ -211,7 +211,7 @@
 		-->
 		<app-message-thread-add v-if="isReplying">
 			<app-comment-widget-add
-				v-app-scroll-when="true"
+				v-app-scroll-when.animate="true"
 				:resource="resource"
 				:resource-id="resourceId"
 				:parent-id="comment.id"
