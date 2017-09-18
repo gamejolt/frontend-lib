@@ -145,8 +145,7 @@ export class Notification extends Model {
 				return {
 					name: 'discover.games.view.devlog.view',
 					params: {
-						slug: (this.to_model as Game).slug,
-						id: this.to_model.id + '',
+						...(this.to_model as Game).routeParams,
 						postSlug: (this.action_model as FiresidePost).slug,
 					},
 				};

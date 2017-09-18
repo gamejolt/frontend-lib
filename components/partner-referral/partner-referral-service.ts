@@ -1,7 +1,9 @@
 import VueRouter from 'vue-router';
 
+type ResourceIdInput = number | string;
+
 export class PartnerReferral {
-	static trackReferrer(resource: string, resourceId: number, route: VueRouter.Route) {
+	static trackReferrer(resource: string, resourceId: ResourceIdInput, route: VueRouter.Route) {
 		if (GJ_IS_SSR) {
 			return;
 		}
@@ -12,7 +14,7 @@ export class PartnerReferral {
 		}
 	}
 
-	static getReferrer(resource: string, resourceId: number) {
+	static getReferrer(resource: string, resourceId: ResourceIdInput) {
 		if (GJ_IS_SSR) {
 			return null;
 		}
