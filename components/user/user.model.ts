@@ -1,6 +1,5 @@
 import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
-import { Registry } from '../registry/registry.service';
 import { MediaItem } from '../media-item/media-item-model';
 
 export class User extends Model {
@@ -71,8 +70,6 @@ export class User extends Model {
 		if (data.avatar_media_item) {
 			this.avatar_media_item = new MediaItem(data.avatar_media_item);
 		}
-
-		Registry.store('User', this);
 	}
 
 	static touch() {
