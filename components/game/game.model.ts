@@ -5,8 +5,7 @@ import { Api } from '../api/api.service';
 import { GamePackage } from './package/package.model';
 import { GameBuild } from './build/build.model';
 import { Sellable } from '../sellable/sellable.model';
-import { getProvider } from '../../utils/utils';
-import { Registry } from '../registry/registry.service';
+import { Registry, RegistryModel } from '../registry/registry.service';
 import { Site } from '../site/site-model';
 import { appStore } from '../../vue/services/app/app-store';
 
@@ -16,7 +15,7 @@ export interface CustomMessage {
 	class: string;
 }
 
-export class Game extends Model {
+export class Game extends Model implements RegistryModel {
 	static readonly STATUS_HIDDEN = 0;
 	static readonly STATUS_VISIBLE = 1;
 	static readonly STATUS_REMOVED = 2;
@@ -124,6 +123,10 @@ export class Game extends Model {
 		Registry.store('Game', this);
 	}
 
+	get registryId() {
+		return '@' + this.developer.username + '/' + this.slug;
+	}
+
 	get is_paid_game() {
 		return this.sellable && this.sellable.type === 'paid';
 	}
@@ -172,48 +175,24 @@ export class Game extends Model {
 	get routeLocation() {
 		return {
 			name: 'discover.games.view.overview',
-			params: this.getSrefParams(),
+			params: this.routeParams,
 		};
 	}
 
-	getSref(page = '', includeParams = false) {
-		let sref = '';
-
-		if (page === 'dashboard') {
-			sref = 'dash.games.manage.game.overview';
-		} else if (page === 'edit') {
-			sref = 'dash.games.manage.game.details';
-		} else {
-			sref = 'discover.games.view.overview';
-		}
-
-		if (includeParams) {
-			sref += '( ' + JSON.stringify(this.getSrefParams(page)) + ' )';
-		}
-
-		return sref;
-	}
-
-	getSrefParams(page = '') {
-		if (['dashboard', 'edit'].indexOf(page) !== -1) {
-			return { id: this.id };
-		}
-
+	get routeParams() {
 		return {
-			id: this.id,
-			category: this.category_slug,
+			id: this.id + '',
+			username: this.developer.username,
 			slug: this.slug,
 		};
 	}
 
 	getUrl(page = '') {
 		if (page === 'soundtrack') {
-			return '/games/' + this.slug + '/' + this.id + '/download/soundtrack';
+			return `/@${this.developer.username}/${this.slug}/download/soundtrack`;
 		} else if (!page) {
-			return '/games/' + this.slug + '/' + this.id;
+			return `/@${this.developer.username}/${this.slug}`;
 		}
-
-		return getProvider<any>('$state').href(this.getSref(page), this.getSrefParams(page));
 	}
 
 	hasDesktopSupport(): boolean {

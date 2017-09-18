@@ -13,7 +13,7 @@
 
 		<router-link class="comment-video-thumbnail-game"
 			v-if="showGame"
-			:to="{ name: 'discover.games.view.overview', params: { slug: video.game.slug, id: video.game.id } }"
+			:to="video.game.routeLocation"
 			v-app-tooltip="video.game.title"
 			v-app-track-event="`comment-video-thumbnail:game`"
 			>

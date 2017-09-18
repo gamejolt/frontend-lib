@@ -3,9 +3,11 @@ import { Environment } from '../environment/environment.service';
 import { Device } from '../device/device.service';
 import { Referrer } from '../referrer/referrer.service';
 
+type ResourceIdInput = number | string;
+
 export interface BeaconOptions {
 	sourceResource?: string;
-	sourceResourceId?: number;
+	sourceResourceId?: ResourceIdInput;
 	key?: string;
 }
 
@@ -22,7 +24,7 @@ export class HistoryTick {
 	 * If you get to this resource through different means we'll still just
 	 * track the initial way of getting there.
 	 */
-	static trackSource(resource: string, resourceId: number) {
+	static trackSource(resource: string, resourceId: ResourceIdInput) {
 		// Look specifically for undefined and not just null.
 		// There may have been a null referrer if we got here through a direct page hit.
 		if (typeof this._sources[resource + ':' + resourceId] === 'undefined') {
@@ -30,11 +32,11 @@ export class HistoryTick {
 		}
 	}
 
-	static getSource(resource: string, resourceId: number) {
+	static getSource(resource: string, resourceId: ResourceIdInput) {
 		return this._sources[resource + ':' + resourceId];
 	}
 
-	static sendBeacon(type: string, resourceId?: number, options: BeaconOptions = {}) {
+	static sendBeacon(type: string, resourceId?: ResourceIdInput, options: BeaconOptions = {}) {
 		if (GJ_IS_SSR) {
 			return;
 		}

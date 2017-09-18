@@ -47,9 +47,8 @@ export class GameDownloader {
 				Environment.baseUrl +
 					router.resolve({
 						name: 'discover.games.view.download.build',
-						query: {
-							slug: game.slug,
-							id: game.id + '',
+						params: {
+							...game.routeParams,
 							buildId: build.id + '',
 						},
 					}).href
@@ -101,8 +100,7 @@ export class GameDownloader {
 			router.push({
 				name: 'discover.games.view.download.build',
 				params: {
-					slug: game.slug,
-					id: game.id + '',
+					...game.routeParams,
 					buildId: build.id + '',
 				},
 			});

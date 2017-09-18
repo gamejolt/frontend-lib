@@ -57,7 +57,7 @@ export class AppGameSoundtrackCard extends Vue {
 	download() {
 		const location = {
 			name: 'discover.games.view.download.soundtrack',
-			params: { slug: this.game.slug, id: this.game.id + '' },
+			params: this.game.routeParams,
 		};
 
 		if (GJ_IS_CLIENT) {
