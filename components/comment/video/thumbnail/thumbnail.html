@@ -4,6 +4,7 @@
 		v-app-track-event="`comment-video-thumbnail:click`"
 		>
 		<div
+			v-if="hideFollow"
 			class="-controls"
 			@click.stop
 			>
@@ -21,31 +22,15 @@
 		<div class="inner">
 			<app-jolticon icon="video" />
 
-			<!-- <template v-if="isHydrated"> -->
-				<img
-					class="img-responsive"
-					:class="{
-						loaded: isLoaded,
-					}"
-					:src="video.img_thumbnail"
-					:alt="video.title"
-					@load="onThumbLoaded"
-					>
-				<!-- <app-game-thumbnail-img
-					:game="game"
-					:class="{
-						loaded: isThumbnailLoaded,
-					}"
-					@loaded="onThumbnailLoad"
-					/> -->
-
-				<!-- <app-video
-					v-if="shouldShowVideo"
-					:poster="game.thumbnail_media_item.mediaserver_url"
-					:webm="game.thumbnail_media_item.mediaserver_url_webm"
-					:mp4="game.thumbnail_media_item.mediaserver_url_mp4"
-					/>
-			</template> -->
+			<img
+				class="img-responsive"
+				:class="{
+					loaded: isLoaded,
+				}"
+				:src="video.img_thumbnail"
+				:alt="video.title"
+				@load="onThumbLoaded"
+				>
 		</div>
 	</a>
 

@@ -25,6 +25,7 @@ import { AppUserFollowWidget } from '../../../user/follow-widget/follow-widget';
 })
 export class AppCommentVideoThumbnail extends Vue {
 	@Prop(CommentVideo) video: CommentVideo;
+	@Prop(Boolean) hideFollow?: boolean;
 
 	isLoaded = false;
 
