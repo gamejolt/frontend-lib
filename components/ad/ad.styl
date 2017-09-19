@@ -1,39 +1,32 @@
 @require '~styles/variables'
 
-.ad-leaderboard
-.ad-rectangle
+.ad-leaderboard, .ad-rectangle
 	text-align: center
 
 	.ad-inner
 		margin: 0 auto
 
-		// Specifically to get Google Ads to center correctly.
-		> div > div
-			margin: 0 auto
-
 	.text-left &
 		text-align: left
-
-		.ad-inner
-			&
-			> div > div
-				margin: 0
 
 .ad-inner
 	background-color: $gray-lightest
 	border-radius: $border-radius-base
 
-.ad-leaderboard .ad-inner
-	width: 728px
-	height: 90px
+.ad-leaderboard
+	.ad-inner, >>> .ad-slot > div
+		width: 728px !important
+		height: 90px !important
 
-.ad-rectangle .ad-inner
-	width: 300px
-	height: 250px
+.ad-rectangle
+	.ad-inner, >>> .ad-slot > div
+		width: 300px !important
+		height: 250px !important
 
-.ad-skyscraper .ad-inner
-	width: 160px
-	height: 600px
+.ad-skyscraper
+	.ad-inner, >>> .ad-slot > div
+		width: 160px !important
+		height: 600px !important
 
 >>> .ad-label
 	color: $text-muted
