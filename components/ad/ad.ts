@@ -20,7 +20,7 @@ export class AppAd extends Vue {
 		type: String,
 		validator: AdSlotPosValidator,
 	})
-	pos?: AdSlotPos;
+	pos: AdSlotPos;
 
 	@State app: AppStore;
 
@@ -78,6 +78,7 @@ export class AppAd extends Vue {
 
 		this.slot = Ads.getUnusedAdSlot(this.size) || null;
 		if (this.slot) {
+			this.slot.pos = this.pos;
 			this.slot.isUsed = true;
 		}
 	}

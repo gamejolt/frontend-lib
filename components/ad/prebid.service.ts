@@ -1,4 +1,4 @@
-import { AdSlot } from './slot';
+import { AdSlot, AdSlotPos } from './slot';
 import { loadScript } from '../../utils/utils';
 const GetBidsTimeout = 700;
 
@@ -12,6 +12,40 @@ interface AdUnit {
 	sizes: [number, number][];
 	bids: AdUnitBid[];
 }
+
+interface AppNexusPlacement {
+	pos: AdSlotPos;
+	size: string;
+	id: string;
+}
+
+const AppNexusPlacements: AppNexusPlacement[] = [
+	{
+		pos: 'top',
+		size: 'rectangle',
+		id: '12095780',
+	},
+	{
+		pos: 'top',
+		size: 'leaderboard',
+		id: '12095779',
+	},
+	{
+		pos: 'bottom',
+		size: 'rectangle',
+		id: '12095790',
+	},
+	{
+		pos: 'bottom',
+		size: 'leaderboard',
+		id: '12095782',
+	},
+	{
+		pos: 'footer',
+		size: 'rectangle',
+		id: '12095977',
+	},
+];
 
 export class Prebid {
 	private static isTagCreated = false;
@@ -31,6 +65,8 @@ export class Prebid {
 	}
 
 	static makeAdUnitFromSlot(slot: AdSlot) {
+		const placement = AppNexusPlacements.find(i => i.pos === slot.pos && i.size === slot.size);
+
 		return {
 			code: slot.id,
 			sizes: slot.slotSizes,
@@ -38,7 +74,7 @@ export class Prebid {
 				{
 					bidder: 'appnexus',
 					params: {
-						placementId: '12085509',
+						placementId: (placement && placement.id) || '12085509',
 					},
 				},
 			],
