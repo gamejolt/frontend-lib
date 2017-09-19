@@ -299,6 +299,10 @@ export class Ads {
 		gads.src = 'https://www.googletagservices.com/tag/js/gpt.js';
 
 		node.parentNode!.insertBefore(gads, node);
+
+		this.googletag.cmd.push(() => {
+			this.googletag.pubads().setForceSafeFrame(true);
+		});
 	}
 
 	private static storeBidTargeting(bids: any) {
