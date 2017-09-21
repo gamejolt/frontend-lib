@@ -31,6 +31,10 @@ export abstract class VuexStore<S = any, A = any, M = any> {
 	unregisterModule: (path: string | string[]) => void;
 
 	hotUpdate: any;
+
+	hydrateState(_key: keyof S, _value: any) {
+		return false;
+	}
 }
 
 const storeInstance = new Vuex.Store({});
@@ -58,6 +62,7 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 
 		// These are private helpers. Don't want them to show in vue-devtools.
 		Object.defineProperties(state, {
+			__vuexHydrateState: { enumerable: false, writable: true },
 			__vuexGetters: { enumerable: false, writable: true, value: [] },
 			__vuexArgGetters: { enumerable: false, writable: true, value: [] },
 			__vuexMutations: { enumerable: false, writable: true, value: [] },
@@ -81,6 +86,10 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 			if (!(key in storeInstance)) {
 				state[key] = instance[key];
 			}
+		}
+
+		if (target.prototype.hydrateState) {
+			state.__vuexHydrateState = target.prototype.hydrateState.bind(state);
 		}
 
 		// Copy over getters.
@@ -147,7 +156,11 @@ function replaceState(store: any, newState: any, currentState: any) {
 			// Recurse into submodules.
 			replaceState(store, newState[k], currentState[k]);
 		} else {
-			currentState[k] = newState[k];
+			// If there is a hydrateState method, but it returns false, we just want to copy over
+			// the value like normal.
+			if (!currentState.__vuexHydrateState || !currentState.__vuexHydrateState(k, newState[k])) {
+				currentState[k] = newState[k];
+			}
 		}
 	}
 }

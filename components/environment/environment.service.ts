@@ -4,6 +4,7 @@ export const isSecure = typeof window !== 'undefined' && window.location.protoco
 interface SsrContext {
 	ua: string;
 	url: string;
+	authCookie: string;
 	meta: any;
 	errorCode?: number;
 	redirect?: string;
@@ -14,15 +15,16 @@ export class Environment {
 	static buildType: 'production' | 'development' = GJ_BUILD_TYPE;
 	static isClient = GJ_IS_CLIENT;
 	static isSecure = isSecure;
+	static isCrawler = false;
 
 	static ssrContext: SsrContext = {
 		ua: '',
 		url: '',
+		authCookie: '',
 		meta: {},
 	};
 
 	// Production defaults.
-	static baseUrlInsecure = 'http://gamejolt.com';
 	static baseUrl = 'https://gamejolt.com';
 	static baseUrlInsecure = 'http://gamejolt.com';
 	static wttfBaseUrl = 'https://gamejolt.com';

@@ -80,14 +80,14 @@ export class Api {
 		options: RequestOptions = {}
 	): Promise<any> {
 		options = {
-			...<RequestOptions>{
+			...(<RequestOptions>{
 				ignoreLoadingBar: false,
 				processPayload: true,
 				withCredentials: true,
 				sanitizeComplexData: true,
 				allowComplexData: [],
 				detach: false,
-			},
+			}),
 			...options,
 		};
 
@@ -143,7 +143,8 @@ export class Api {
 		// knows that this is an SSR request and shouldn't store session data.
 		const headers: any = {};
 		if (GJ_IS_SSR) {
-			headers.cookie = 'frontend=ssr;';
+			// headers.cookie = 'frontend=ssr;';
+			headers.cookie = `frontend=${Environment.ssrContext.authCookie};`;
 		}
 
 		// An upload request.

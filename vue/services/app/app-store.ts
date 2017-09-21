@@ -23,6 +23,22 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 	userBootstrapped = false;
 	error: number | string | null = null;
 
+	// Whether or not this page view was server-side rendered.
+	hydrated = false;
+
+	hydrateState(k: keyof AppStore, value: any) {
+		if (k === 'user' && value) {
+			this.user = new User(value);
+		} else if (k === 'hydrated') {
+			// If we hydrated from ssr vuex, then we know that we should mark as ssr.
+			this.hydrated = true;
+		} else {
+			return false;
+		}
+
+		return true;
+	}
+
 	@VuexMutation
 	setUser(user: Mutations['app/setUser']) {
 		if (this.user) {
