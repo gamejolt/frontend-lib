@@ -31,7 +31,6 @@ export class AppThemeSelector extends Vue {
 	}
 
 	select(id: number) {
-		this.currentTemplate = id;
 		this.current = this.templates.find(t => t.id === this.currentTemplate) || null;
 		this.$emit('change', id);
 		Popover.hideAll();

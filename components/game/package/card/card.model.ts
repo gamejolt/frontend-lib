@@ -2,6 +2,7 @@ import { GameBuild } from '../../build/build.model';
 import { GameRelease } from '../../release/release.model';
 import { Device } from '../../../device/device.service';
 import { arrayUnique } from '../../../../utils/array';
+import { LinkedKey } from '../../../linked-key/linked-key.model';
 
 interface ExtraBuild {
 	type: string;
@@ -22,8 +23,9 @@ export class GamePackageCardModel {
 	showcasedOsIcon = '';
 	showcasedBrowserIcon = '';
 	otherOnly = false;
+	linkedKeys: LinkedKey[] = [];
 
-	constructor(releases: GameRelease[], builds: GameBuild[]) {
+	constructor(releases: GameRelease[], builds: GameBuild[], linkedKeys?: LinkedKey[]) {
 		if (builds) {
 			const os = Device.os();
 			const arch = Device.arch();
@@ -177,6 +179,12 @@ export class GamePackageCardModel {
 			if (!this.downloadableBuild && !this.browserBuild && otherBuilds.length) {
 				this.otherOnly = true;
 				this.showcasedRelease = releases[0];
+			}
+		}
+
+		if (linkedKeys) {
+			for (let linkedKey of linkedKeys) {
+				this.linkedKeys.push(linkedKey);
 			}
 		}
 	}

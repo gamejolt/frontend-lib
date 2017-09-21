@@ -13,6 +13,7 @@ import { AppFormControlMarkdown } from '../../form-vue/control/markdown/markdown
 })
 export class FormContentBlockEditor extends BaseForm<SiteContentBlock> {
 	modelClass = SiteContentBlock;
+	warnOnDiscard = false;
 
 	@Prop(String) mode: string;
 

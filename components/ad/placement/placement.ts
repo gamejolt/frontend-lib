@@ -5,9 +5,9 @@ import * as View from '!view!./placement.html';
 import { Model } from '../../model/model.service';
 import { Screen } from '../../screen/screen-service';
 import { makeObservableService } from '../../../utils/vue';
-import { Game } from '../../game/game.model';
 import { AppAd } from '../ad';
 import { AdSlotPosValidator, AdSlotPos } from '../slot';
+import { Ads } from '../ads.service';
 
 @View
 @Component({
@@ -16,8 +16,6 @@ import { AdSlotPosValidator, AdSlotPos } from '../slot';
 	},
 })
 export class AppAdPlacement extends Vue {
-	@Prop(Object) resource?: Model;
-
 	@Prop({
 		type: String,
 		validator: AdSlotPosValidator,
@@ -35,11 +33,7 @@ export class AppAdPlacement extends Vue {
 	Screen = makeObservableService(Screen);
 
 	get isVisible() {
-		if (
-			Screen.isXs ||
-			GJ_IS_CLIENT ||
-			(this.resource && this.resource instanceof Game && !this.resource._should_show_ads)
-		) {
+		if (!Ads.shouldShow) {
 			return false;
 		}
 

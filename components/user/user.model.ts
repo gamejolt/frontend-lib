@@ -1,6 +1,6 @@
 import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
-import { Registry } from '../registry/registry.service';
+import { MediaItem } from '../media-item/media-item-model';
 
 export class User extends Model {
 	static readonly TYPE_GAMER = 'User';
@@ -20,6 +20,8 @@ export class User extends Model {
 	permission_level: number;
 	is_verified: boolean;
 	is_partner: boolean;
+	avatar_media_item?: MediaItem;
+	disable_gravatar: boolean;
 
 	created_on: number;
 	last_logged_on: number;
@@ -68,7 +70,9 @@ export class User extends Model {
 			this.is_developer = true;
 		}
 
-		Registry.store('User', this);
+		if (data.avatar_media_item) {
+			this.avatar_media_item = new MediaItem(data.avatar_media_item);
+		}
 	}
 
 	static touch() {
@@ -103,6 +107,18 @@ export class User extends Model {
 	$save() {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
 		return this.$_save('/web/dash/profile/save', 'user');
+	}
+
+	$saveAvatar() {
+		// You can only save yourself, so we don't pass in an ID to the endpoint.
+		return this.$_save('/web/dash/avatar/save', 'user', {
+			file: this.file,
+			allowComplexData: ['crop'],
+		});
+	}
+
+	$clearAvatar() {
+		return this.$_save('/web/dash/avatar/clear', 'user');
 	}
 
 	$saveEmailPreferences() {

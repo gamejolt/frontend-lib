@@ -1,5 +1,6 @@
 import { Model } from '../model/model.service';
 import { SellablePricing } from './pricing/pricing.model';
+import { LinkedKey } from '../linked-key/linked-key.model';
 
 export class Sellable extends Model {
 	static readonly TYPE_FREE = 'free';
@@ -15,12 +16,17 @@ export class Sellable extends Model {
 	title: string;
 	description: string;
 	is_owned: boolean;
+	linked_keys: LinkedKey[];
 
 	constructor(data: any = {}) {
 		super(data);
 
 		if (data.pricings) {
 			this.pricings = SellablePricing.populate(data.pricings);
+		}
+
+		if (data.linked_keys) {
+			this.linked_keys = LinkedKey.populate(data.linked_keys);
 		}
 	}
 }

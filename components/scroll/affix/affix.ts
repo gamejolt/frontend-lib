@@ -42,7 +42,7 @@ export class AppScrollAffix extends Vue {
 			// If we resized, then the element width most likely changed.
 			// Pull from the placeholder which should be the source of the true width now.
 			if (this.isAffixed) {
-				const placeholder = this.getPlaceholder();
+				const placeholder = this.placeholder;
 				if (placeholder) {
 					this.width = Ruler.outerWidth(placeholder) + 'px';
 				}
@@ -94,7 +94,7 @@ export class AppScrollAffix extends Vue {
 		this.check();
 	}
 
-	private getPlaceholder() {
+	private get placeholder() {
 		return this.$el.getElementsByClassName('gj-scroll-affix-placeholder')[0] as HTMLElement;
 	}
 
@@ -144,7 +144,7 @@ export class AppScrollAffix extends Vue {
 		// If we're scrolled past, then the placeholder will have the correct position.
 		let top = 0;
 		if (this.isAffixed) {
-			const placeholder = this.getPlaceholder();
+			const placeholder = this.placeholder;
 			if (!placeholder) {
 				throw new Error(`Couldn't find placeholder.`);
 			}
