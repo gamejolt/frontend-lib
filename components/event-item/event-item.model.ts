@@ -12,7 +12,7 @@ export class EventItem extends Model {
 
 	type: 'comment-video-add' | 'game-publish' | 'devlog-post-add';
 	added_on: number;
-	from: any;
+	from: User;
 	action: any;
 	to: any;
 
@@ -38,6 +38,28 @@ export class EventItem extends Model {
 			this.action = new FiresidePost(data.action_resource_model);
 			this.from = new User(data.from_resource_model);
 			this.to = new Game(data.to_resource_model);
+		}
+	}
+
+	set game(game: Game | undefined) {
+		if (game) {
+			if (this.type === EventItem.TYPE_GAME_PUBLISH) {
+				this.action = game;
+			} else if (this.type === EventItem.TYPE_DEVLOG_POST_ADD) {
+				this.to = game;
+			} else if (this.type === EventItem.TYPE_COMMENT_VIDEO_ADD) {
+				(this.action as CommentVideo).game = game;
+			}
+		}
+	}
+
+	get game() {
+		if (this.type === EventItem.TYPE_GAME_PUBLISH) {
+			return this.action as Game;
+		} else if (this.type === EventItem.TYPE_DEVLOG_POST_ADD) {
+			return this.to as Game;
+		} else if (this.type === EventItem.TYPE_COMMENT_VIDEO_ADD) {
+			return (this.action as CommentVideo).game;
 		}
 	}
 }
