@@ -43,6 +43,9 @@ export class User extends Model {
 
 	level_next_percentage: number;
 
+	follower_count: number;
+	is_following: boolean;
+
 	// Fireside.
 	can_manage: boolean;
 	fireside_ga_tracking_id: string;
@@ -77,6 +80,28 @@ export class User extends Model {
 			return Promise.resolve();
 		}
 		return Api.sendRequest('/web/touch');
+	}
+
+	async $follow() {
+		const response = await Api.sendRequest('/web/profile/follow/' + this.id, {}, { detach: true });
+
+		this.is_following = true;
+		++this.follower_count;
+
+		return response;
+	}
+
+	async $unfollow() {
+		const response = await Api.sendRequest(
+			'/web/profile/unfollow/' + this.id,
+			{},
+			{ detach: true }
+		);
+
+		this.is_following = false;
+		--this.follower_count;
+
+		return response;
 	}
 
 	$save() {

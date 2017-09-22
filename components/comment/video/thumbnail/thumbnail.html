@@ -1,38 +1,57 @@
-<div>
-	<div class="comment-video-thumbnail">
-		<a class="comment-video-thumbnail-inner"
-			@click="isLightboxActive = true"
-			v-app-track-event="`comment-video-thumbnail:click`"
+<div class="comment-video-thumbnail">
+	<a class="-thumb"
+		@click="showModal()"
+		v-app-track-event="`comment-video-thumbnail:click`"
+		>
+		<div
+			v-if="hideFollow"
+			class="-controls"
+			@click.stop
 			>
-			<div class="play-button-overlay play-button-overlay-small">
-				<app-jolticon icon="play" />
-			</div>
+			<app-user-follow-widget
+				:user="user"
+				:sparse="true"
+				event-label="video-thumb"
+				/>
+		</div>
 
-			<img class="img-responsive" :src="video.img_thumbnail" alt="Video Comment">
-		</a>
+		<div class="play-button-overlay play-button-overlay-small">
+			<app-jolticon icon="play" />
+		</div>
 
-		<router-link class="comment-video-thumbnail-game"
-			v-if="showGame"
-			:to="{ name: 'discover.games.view.overview', params: { slug: video.game.slug, id: video.game.id } }"
-			v-app-tooltip="video.game.title"
-			v-app-track-event="`comment-video-thumbnail:game`"
-			>
-			<app-game-thumbnail-img :game="video.game" />
-		</router-link>
+		<div class="inner">
+			<app-jolticon icon="video" />
 
-		<router-link class="comment-video-thumbnail-user"
-			v-if="showUser"
-			:to="{ name: 'profile.overview', params: { username: video.comment.user.username } }"
-			v-app-tooltip="`${video.comment.user.display_name} (@${video.comment.user.username})`"
+			<img
+				class="img-responsive"
+				:class="{
+					loaded: isLoaded,
+				}"
+				:src="video.img_thumbnail"
+				:alt="video.title"
+				@load="onThumbLoaded"
+				>
+		</div>
+	</a>
+
+	<div class="-meta">
+		<app-user-avatar :user="user" />
+
+		<router-link
+			class="-user"
+			:to="{ name: 'profile.overview', params: { username: user.username } }"
+			:title="`${user.display_name} (@${user.username})`"
 			v-app-track-event="`comment-video-thumbnail:user`"
 			>
-			<img :src="video.comment.user.img_avatar" class="img-responsive" alt="">
+			{{ user.display_name }}
 		</router-link>
-	</div>
 
-	<app-comment-video-lightbox
-		v-if="isLightboxActive"
-		:video="video"
-		@closed="isLightboxActive = false"
-		/>
+		<a
+			class="-title"
+			@click="showModal()"
+			v-app-track-event="`comment-video-thumbnail:title`"
+			>
+			{{ video.title }}
+		</a>
+	</div>
 </div>

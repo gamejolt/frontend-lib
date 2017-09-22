@@ -13,6 +13,7 @@ import { appStore } from '../../../vue/services/app/app-store';
 import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
 import { KeyGroup } from '../../key-group/key-group.model';
+import { User } from '../../user/user.model';
 
 export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
@@ -24,7 +25,7 @@ export class FiresidePost extends Model {
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
-	type: 'text' | 'media' | 'video' | 'sketchfab';
+	type: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
 	hash: string;
 	title: string;
 	lead: string;
@@ -35,8 +36,8 @@ export class FiresidePost extends Model {
 	published_on: number;
 	like_count: number;
 	comment_count: number;
-	user: any;
-	game: any;
+	user: User;
+	game: Game;
 	slug: string;
 	subline: string;
 	content_compiled: string;

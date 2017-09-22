@@ -1,0 +1,29 @@
+<div v-if="canVote">
+	<button
+		class="btn"
+		:class="{
+			'btn-outline': !comment.user_vote,
+			'btn-success active': !!comment.user_vote,
+			'btn-sparse': sparse,
+			'btn-circle': circle,
+		}"
+		:disabled="isProcessing"
+		v-app-auth-required
+		@click="toggle"
+		>
+		<span class="btn-badge" v-if="!sparse && comment.votes > 0">
+			{{ comment.votes | number }}
+		</span>
+
+		<app-jolticon icon="heart" />
+
+		<span class="hidden-xs" v-if="!sparse">
+			<translate v-if="!comment.user_vote">Like</translate>
+			<translate v-else>Liked!</translate>
+		</span>
+	</button>
+	<span class="blip light filled" v-if="sparse && comment.votes > 0">
+		<span class="blip-caret"></span>
+		<span class="blip-count">{{ comment.votes | number }}</span>
+	</span>
+</div>
