@@ -39,24 +39,6 @@
 						:video="video"
 						/>
 
-					<!-- <button
-						class="-like-btn btn btn-block-xs"
-						v-if="canVote"
-						:class="{
-							'btn-success active': !!comment.user_vote,
-							'btn-outline': !comment.user_vote,
-						}"
-						@click="toggleVote"
-						v-app-track-event="`comment-video-lightbox:change-like`"
-						>
-						<span class="btn-badge" v-if="comment.votes > 0">
-							{{ comment.votes | number }}
-						</span>
-						<app-jolticon icon="thumbs-up" />
-						<translate v-if="!comment.user_vote">Like</translate>
-						<translate v-else>Liked!</translate>
-					</button> -->
-
 					<div class="-user-info">
 						<div class="-avatar">
 							<app-user-avatar :user="user" />

@@ -51,8 +51,7 @@ export default class AppCommentVideoModal extends BaseModal {
 	showFullDescription = true;
 
 	created() {
-		HistoryTick.sendBeacon('comment-video', this.video.id);
-		console.log('test', this.video);
+		this.video.$viewed();
 	}
 
 	get comment() {
