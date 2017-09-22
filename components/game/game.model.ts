@@ -59,9 +59,6 @@ export class Game extends Model {
 	creation_tool_human: string;
 	category_slug: string;
 	web_site: string;
-	view_count: number;
-	play_count: number;
-	download_count: number;
 	bundle_only: boolean;
 	ga_tracking_id: string;
 	should_show_ads: boolean;
