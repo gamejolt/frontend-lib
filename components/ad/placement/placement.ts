@@ -2,7 +2,6 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import * as View from '!view!./placement.html';
 
-import { Model } from '../../model/model.service';
 import { Screen } from '../../screen/screen-service';
 import { makeObservableService } from '../../../utils/vue';
 import { AppAd } from '../ad';
