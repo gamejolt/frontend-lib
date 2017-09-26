@@ -35,6 +35,10 @@ export class PayloadError {
 			response.status || undefined
 		);
 	}
+
+	static fromHttpError(status: number) {
+		return new PayloadError(PayloadError.ERROR_HTTP_ERROR, undefined, status);
+	}
 }
 
 export class Payload {
@@ -52,11 +56,11 @@ export class Payload {
 		options: RequestOptions = {}
 	): Promise<any> {
 		options = {
-			...<RequestOptions>{
+			...(<RequestOptions>{
 				ignorePayloadUser: false,
 				ignorePayloadVersion: false,
 				noErrorRedirect: false,
-			},
+			}),
 			...options,
 		};
 

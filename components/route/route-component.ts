@@ -67,73 +67,71 @@ export function RouteResolve(options: RouteOptions = {}) {
 		// method. We need to do it this way since we need access to the
 		// componentOptions.
 		componentOptions.mixins = componentOptions.mixins || [];
-		componentOptions.mixins.push(
-			{
-				// This will get called by the browser and server. We call their
-				// annotated function for fetching the data for the route.
-				async beforeRouteEnter(
-					to: VueRouter.Route,
-					_from: VueRouter.Route,
-					next: (to?: VueRouter.RawLocation | false | ((vm: Vue) => any) | void) => void
-				) {
-					const name = componentOptions.name!;
-					const routeOptions = componentOptions.routeOptions || {};
+		componentOptions.mixins.push({
+			// This will get called by the browser and server. We call their
+			// annotated function for fetching the data for the route.
+			async beforeRouteEnter(
+				to: VueRouter.Route,
+				_from: VueRouter.Route,
+				next: (to?: VueRouter.RawLocation | false | ((vm: Vue) => any) | void) => void
+			) {
+				const name = componentOptions.name!;
+				const routeOptions = componentOptions.routeOptions || {};
 
-					// The router crawls through each matched route and calls
-					// beforeRouteEnter on them one by one. Since we continue to
-					// set the leaf route the last one is the only one that will
-					// be saved as the leaf.
-					setLeafRoute(name);
+				// The router crawls through each matched route and calls
+				// beforeRouteEnter on them one by one. Since we continue to
+				// set the leaf route the last one is the only one that will
+				// be saved as the leaf.
+				setLeafRoute(name);
 
-					// If we have component state from the server for any route
-					// components, then we want to instead bootstrap the
-					// components from that data. Early out of this function.
-					// We'll bootstrap the data through the created() method
-					// instead. It will fail the hydration unless we set the
-					// data during the created() method.
-					if (serverComponentState && serverComponentState[name]) {
-						return next();
+				// If we have component state from the server for any route
+				// components, then we want to instead bootstrap the
+				// components from that data. Early out of this function.
+				// We'll bootstrap the data through the created() method
+				// instead. It will fail the hydration unless we set the
+				// data during the created() method.
+				if (serverComponentState && serverComponentState[name]) {
+					return next();
+				}
+
+				let promise: Promise<{ fromCache: boolean; payload: any }> | undefined;
+				let hasCache = !!routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
+				const resolver = RouteResolver.startResolve(componentOptions, to);
+
+				if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
+					promise = getPayload(componentOptions, to, false);
+				} else {
+					const { payload } = await getPayload(componentOptions, to, !!routeOptions.cache);
+					resolver.payload = payload;
+
+					// For server next() doesn't call, so we have to pull
+					// this data within the created() hook. We also need
+					// this data within the server.js file. We can pull from
+					// all server locations from this options. Kind of
+					// hacky, though.
+					if (GJ_IS_SSR) {
+						componentOptions.__RESOLVER__ = resolver;
+					}
+				}
+
+				next(async (vm: BaseRouteComponent) => {
+					// SSR still calls next() but won't re-render the route
+					// component, so it's pointless to do things here.
+					// Instead we do it in the component created() func.
+					if (GJ_IS_SSR) {
+						return;
 					}
 
-					let promise: Promise<{ fromCache: boolean; payload: any }> | undefined;
-					let hasCache = !!routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
-					const resolver = RouteResolver.startResolve(componentOptions, to);
-
-					if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
-						promise = getPayload(componentOptions, to, false);
-					} else {
-						const { payload } = await getPayload(componentOptions, to, !!routeOptions.cache);
+					if (promise) {
+						vm.routeLoading = true;
+						const { payload } = await promise;
 						resolver.payload = payload;
-
-						// For server next() doesn't call, so we have to pull
-						// this data within the created() hook. We also need
-						// this data within the server.js file. We can pull from
-						// all server locations from this options. Kind of
-						// hacky, though.
-						if (GJ_IS_SSR) {
-							componentOptions.__RESOLVER__ = resolver;
-						}
 					}
 
-					next(async (vm: BaseRouteComponent) => {
-						// SSR still calls next() but won't re-render the route
-						// component, so it's pointless to do things here.
-						// Instead we do it in the component created() func.
-						if (GJ_IS_SSR) {
-							return;
-						}
-
-						if (promise) {
-							vm.routeLoading = true;
-							const { payload } = await promise;
-							resolver.payload = payload;
-						}
-
-						await vm.resolveRoute(to, resolver);
-					});
-				},
-			} as Vue.ComponentOptions<Vue>
-		);
+					await vm.resolveRoute(to, resolver);
+				});
+			},
+		} as Vue.ComponentOptions<Vue>);
 	});
 }
 
@@ -299,6 +297,8 @@ export class BaseRouteComponent extends Vue {
 					// If it was a version change payload error, we want to
 					// refresh the page so that it gets the new code.
 					window.location.reload();
+				} else if (payload.type === PayloadError.ERROR_HTTP_ERROR) {
+					this.$store.commit('app/setError', payload.status || 500);
 				}
 				return;
 			} else if (payload instanceof LocationRedirect) {
