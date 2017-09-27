@@ -350,7 +350,7 @@ module.exports = function(config) {
 					}),
 				hasOfflineSupport
 					? new OfflinePlugin({
-							excludes: ['**/.*', '**/*.map', 'vue-ssr-*'],
+							excludes: ['**/.*', '**/*.map', 'vue-ssr-*', '**/*gameApiDocContent*'],
 							ServiceWorker: {
 								events: true,
 								output: 'sjw.js',
