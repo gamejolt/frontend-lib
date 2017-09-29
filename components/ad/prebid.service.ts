@@ -13,37 +13,67 @@ interface AdUnit {
 	bids: AdUnitBid[];
 }
 
-interface AppNexusPlacement {
+interface AdPlacementVendorParam {
 	pos: AdSlotPos;
 	size: string;
-	id: string;
+	appNexus: object;
+	indexExchange: any;
 }
 
-const AppNexusPlacements: AppNexusPlacement[] = [
+const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'top',
 		size: 'rectangle',
-		id: '12095780',
+		appNexus: {
+			placementId: '12095780',
+		},
+		indexExchange: {
+			siteID: '220482',
+		},
 	},
 	{
 		pos: 'top',
 		size: 'leaderboard',
-		id: '12095779',
+		appNexus: {
+			placementId: '12095779',
+		},
+		indexExchange: {
+			// id: 'Top Leaderboard',
+			siteID: '220483',
+		},
 	},
 	{
 		pos: 'bottom',
 		size: 'rectangle',
-		id: '12095790',
+		appNexus: {
+			placementId: '12095790',
+		},
+		indexExchange: {
+			// id: 'Top Leaderboard',
+			siteID: '220484',
+		},
 	},
 	{
 		pos: 'bottom',
 		size: 'leaderboard',
-		id: '12095782',
+		appNexus: {
+			placementId: '12095782',
+		},
+		indexExchange: {
+			// id: 'Top Leaderboard',
+			siteID: '220485',
+		},
 	},
 	{
 		pos: 'footer',
 		size: 'rectangle',
-		id: '12095977',
+		appNexus: {
+			placementId: '12095977',
+		},
+		indexExchange: {
+			// id: 'Top Leaderboard',
+			siteID: '220486',
+		},
 	},
 ];
 
@@ -65,17 +95,22 @@ export class Prebid {
 	}
 
 	static makeAdUnitFromSlot(slot: AdSlot) {
-		const placement = AppNexusPlacements.find(i => i.pos === slot.pos && i.size === slot.size);
+		const placement = AdPlacementVendorParams.find(i => i.pos === slot.pos && i.size === slot.size);
+		if (!placement) {
+			throw new Error(`Couldn't get params for placement.`);
+		}
 
 		return {
 			code: slot.id,
 			sizes: slot.slotSizes,
 			bids: [
+				// {
+				// 	bidder: 'appnexus',
+				// 	params: placement.appNexus,
+				// },
 				{
-					bidder: 'appnexus',
-					params: {
-						placementId: (placement && placement.id) || '12085509',
-					},
+					bidder: 'indexExchange',
+					params: placement.indexExchange,
 				},
 			],
 		};
