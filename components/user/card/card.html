@@ -1,0 +1,101 @@
+<div class="user-card">
+	<app-tooltip-container>
+		<div class="-user-info -well fill-darker">
+			<router-link
+				:to="user.url"
+				class="-avatar"
+				>
+				<app-user-avatar-img
+					:user="user"
+					/>
+			</router-link>
+
+			<app-jolticon
+				v-if="user.is_verified"
+				icon="verified"
+				:big="true"
+				class="-verified"
+				v-app-tooltip="$gettext( 'profile.verified_tooltip' )"
+				/>
+
+			<div class="-user-info-inner">
+				<div class="-display-name">
+					<router-link
+						:to="user.url"
+						class="link-unstyled"
+						>
+						{{ user.display_name }}
+					</router-link>
+				</div>
+
+				<div class="-username">
+					<router-link
+						:to="user.url"
+						class="link-unstyled"
+						>
+						@{{ user.username }}
+					</router-link>
+				</div>
+			</div>
+
+			<div class="-follow">
+				<app-user-follow-widget
+					class="btn-block"
+					:user="user"
+					:outline="true"
+					/>
+			</div>
+		</div>
+
+		<div class="-stats -well" v-if="showExtraInfo">
+			<ul class="stat-list">
+				<li class="stat-big stat-big-smaller">
+					<div class="stat-big-label">
+						<translate>Followers</translate>
+					</div>
+					<div class="stat-big-digit">
+						{{ user.follower_count | number }}
+					</div>
+				</li>
+				<li class="stat-big stat-big-smaller" v-if="gamesCount">
+					<router-link
+						class="link-unstyled"
+						:to="{
+							name: 'library.collection.developer',
+							params: { id: user.username },
+						}"
+						>
+						<div class="stat-big-label">
+							<translate>Games</translate>
+						</div>
+						<div class="stat-big-digit">
+							{{ gamesCount | number }}
+						</div>
+					</router-link>
+				</li>
+				<li class="stat-big stat-big-smaller" v-if="videosCount">
+					<router-link
+						class="link-unstyled"
+						:to="{
+							name: 'profile.videos.list',
+							params: { username: user.username },
+						}"
+						>
+						<div class="stat-big-label">
+							<translate>Videos</translate>
+						</div>
+						<div class="stat-big-digit">
+							{{ videosCount | number }}
+						</div>
+					</router-link>
+				</li>
+				<li class="stat-big" v-if="!isLoaded">
+					<app-loading
+						:stationary="true"
+						:hide-label="true"
+						/>
+				</li>
+			</ul>
+		</div>
+	</app-tooltip-container>
+</div>
