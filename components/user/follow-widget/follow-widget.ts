@@ -11,6 +11,7 @@ import { number } from '../../../vue/filters/number';
 import { User } from '../user.model';
 import { AppStore } from '../../../vue/services/app/app-store';
 import { Growls } from '../../growls/growls.service';
+import { findTooltipContainer } from '../../tooltip/container/container';
 
 @View
 @Component({
@@ -36,6 +37,10 @@ export class AppUserFollowWidget extends Vue {
 	@State app: AppStore;
 
 	isProcessing = false;
+
+	get tooltipContainer() {
+		return findTooltipContainer(this);
+	}
 
 	async onClick() {
 		if (!this.app.user || this.isProcessing) {
