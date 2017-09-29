@@ -1,6 +1,7 @@
 <div class="fade-collapse"
 	:class="{
 		'fade-collapse-collapsed': this.isCollapsed,
+		'-animate': this.animate,
 	}"
 	@transitionend="afterTransition"
 	>

@@ -18,6 +18,8 @@ const Threshold = 50;
 export class AppFadeCollapse extends Vue {
 	@Prop(Number) collapseHeight: number;
 	@Prop(Boolean) isOpen?: boolean;
+	@Prop({ type: Boolean, default: true })
+	animate?: boolean;
 
 	private isPrimed = false;
 	private isCollapsed = false;
@@ -77,7 +79,7 @@ export class AppFadeCollapse extends Vue {
 			if (Scroll.getScrollTop() > scrollTo) {
 				// If we're on a tiny screen, don't animate the scroll.
 				// Just set it and move on.
-				if (Screen.isXs) {
+				if (Screen.isXs || !this.animate) {
 					Scroll.to(scrollTo, { animate: false });
 				} else {
 					// Otherwise set up a scroll animation to follow the bottom of the element as it collapses.
