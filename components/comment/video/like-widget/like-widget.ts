@@ -43,7 +43,7 @@ export class AppCommentVideoLikeWidget extends Vue {
 			return false;
 		} else if (this.video.comment.user.id === this.app.user.id) {
 			return false;
-		} else if (this.video.game.developer.id === this.app.user.id) {
+		} else if (this.video.game.hasPerms()) {
 			return false;
 		}
 
