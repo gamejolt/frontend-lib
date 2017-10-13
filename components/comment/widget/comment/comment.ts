@@ -125,12 +125,9 @@ export class AppCommentWidgetComment extends Vue {
 		// Can't vote on this comment if...
 		// they aren't logged in
 		// they wrote the comment
-		// the resource belongs to them (they will just upvote stuff that is nice)
 		if (!this.app.user) {
 			return false;
 		} else if (this.comment.user.id === this.app.user.id) {
-			return false;
-		} else if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id) {
 			return false;
 		}
 
