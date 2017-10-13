@@ -122,16 +122,9 @@ export class AppCommentWidgetComment extends Vue {
 	}
 
 	get canVote() {
-		// Can't vote on this comment if...
-		// they aren't logged in
-		// they wrote the comment
-		if (!this.app.user) {
-			return false;
-		} else if (this.comment.user.id === this.app.user.id) {
-			return false;
-		}
-
-		return true;
+		// Can't vote on this comment if they wrote the comment. We allow them to try voting if
+		// guest since we show the auth required popup.
+		return !this.app.user || this.comment.user.id !== this.app.user.id;
 	}
 
 	get votingTooltip() {
