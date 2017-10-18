@@ -61,6 +61,11 @@ export class User extends Model {
 	revenue_payout_minimum?: number;
 	revenue_wallet_maximum?: number;
 
+	// Halloween 2017
+	halloween_2017_opted_out?: boolean;
+	halloween_2017_breakdown?: { [type: string]: Halloween2017MonsterBreakdown };
+	halloween_2017_level?: number;
+
 	constructor(data: any = {}) {
 		super(data);
 
@@ -126,6 +131,10 @@ export class User extends Model {
 		return this.$_save('/web/dash/email-preferences/save', 'user');
 	}
 
+	$saveSettings() {
+		return this.$_save('/web/dash/settings/save', 'user');
+	}
+
 	$saveFireside() {
 		return this.$_save('/fireside/dash/profile/save', 'user');
 	}
@@ -138,5 +147,15 @@ export class User extends Model {
 		return this.$_save('/web/dash/linked-accounts/unlink/' + provider, 'user');
 	}
 }
+
+export type Halloween2017MonsterBreakdown = {
+	rank: string;
+	current: number;
+	start: number;
+	end: number;
+
+	type: string;
+	imgUrl: string;
+};
 
 Model.create(User);
