@@ -17,7 +17,7 @@
 
 	<template slot="meta">
 
-		<template v-if="app.user && (app.user.id !== comment.user || app.user.permissionLevel >= 3)">
+		<template v-if="app.user && (app.user.id !== comment.user_id || app.user.permissionLevel >= 3)">
 			<span class="dot-separator"></span>
 
 			<a class="link-muted"

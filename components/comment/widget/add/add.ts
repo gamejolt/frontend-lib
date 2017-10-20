@@ -28,4 +28,8 @@ export class AppCommentWidgetAdd extends BaseForm<Comment> implements FormOnInit
 			this.setField('parent_id', this.parentId);
 		}
 	}
+
+	onCancel() {
+		this.$emit('cancel');
+	}
 }

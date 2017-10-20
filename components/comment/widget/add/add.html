@@ -17,12 +17,22 @@
 		<app-form-control-errors label="comment" />
 	</app-form-group>
 
-	<app-form-button
-		v-if="changed"
-		class="btn-block-xs"
-		icon="add-comment"
-		>
-		<translate>Add Comment</translate>
-	</app-form-button>
+	<template v-if="changed">
+		<app-form-button
+			class="btn-block-xs"
+			:icon="method === 'add' ? 'add-comment' : 'edit'"
+			>
+			<translate v-if="method === 'add'">Add Comment</translate>
+			<translate v-if="method === 'edit'">Save</translate>
+		</app-form-button>
+
+		<button
+			class="btn btn-danger-outline"
+			v-if="method === 'edit'"
+			@click.prevent="onCancel"
+			>
+			<translate>Cancel</translate>
+		</button>
+	</template>
 
 </app-form>

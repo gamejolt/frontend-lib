@@ -20,10 +20,11 @@ export class Comment extends Model {
 	user_vote?: CommentVote;
 	status: number;
 	posted_on: number;
+	modified_on?: number;
 	lang: string;
 	videos: CommentVideo[] = [];
 
-	isVotePending: boolean = false;
+	isVotePending = false;
 
 	get permalink() {
 		return Environment.baseUrl + '/x/permalink/comment/' + this.id;
@@ -79,9 +80,15 @@ export class Comment extends Model {
 	}
 
 	$save() {
-		return this.$_save(`/comments/add/${this.resource}/${this.resource_id}`, 'comment', {
-			detach: true,
-		});
+		if (!this.id) {
+			return this.$_save(`/comments/save`, 'comment', {
+				detach: true,
+			});
+		} else {
+			return this.$_save(`/comments/save/${this.id}`, 'comment', {
+				detach: true,
+			});
+		}
 	}
 
 	async $like() {
