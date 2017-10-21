@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./card.html?style=./card.styl';
+import View from '!view!./card.html?style=./card.styl';
 
 import { User } from '../user.model';
 import { AppUserFollowWidget } from '../follow-widget/follow-widget';

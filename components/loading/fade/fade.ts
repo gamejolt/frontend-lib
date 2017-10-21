@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./fade.html?style=./fade.styl';
+import View from '!view!./fade.html?style=./fade.styl';
 
 import { AppLoading } from '../../../vue/components/loading/loading';
 

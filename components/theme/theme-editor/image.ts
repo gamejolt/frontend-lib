@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./image.html?style=./image.styl';
+import View from '!view!./image.html?style=./image.styl';
 import { FormThemeEditorImage } from './image-form';
 
 @View

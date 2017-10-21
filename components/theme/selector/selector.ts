@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./selector.html';
+import View from '!view!./selector.html';
 
 import { SiteTemplate } from '../../site/template/template-model';
 import { Popover } from '../../popover/popover.service';

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import * as View from '!view!./modal.html?style=./modal.styl';
+import View from '!view!./modal.html?style=./modal.styl';
 import './modal-content.styl';
 
 import { Modal } from './modal.service';

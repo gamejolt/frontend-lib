@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./user-avatar.html?style=./user-avatar.styl';
+import View from '!view!./user-avatar.html?style=./user-avatar.styl';
 
 import { User } from '../user.model';
 import { Environment } from '../../environment/environment.service';

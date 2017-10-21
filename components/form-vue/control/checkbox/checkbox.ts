@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./checkbox.html';
+import View from '!view!./checkbox.html';
 
 import { BaseFormControl } from '../base';
 

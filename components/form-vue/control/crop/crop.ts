@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./crop.html';
+import View from '!view!./crop.html';
 
 import { BaseFormControl } from '../base';
 import { AppImgCrop } from '../../../img/crop/crop';

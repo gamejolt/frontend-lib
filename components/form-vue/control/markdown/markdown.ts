@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./markdown.html?style=./markdown.styl';
+import View from '!view!./markdown.html?style=./markdown.styl';
 
 import { BaseFormControl } from '../base';
 import { Screen } from '../../../screen/screen-service';
