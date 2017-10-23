@@ -56,12 +56,24 @@
 					<translate>Edit Comment</translate>
 				</a>
 				<a class="list-group-item has-icon"
+					v-if="app.user.id === comment.user.id || (widget.resourceOwner && widget.resourceOwner.id === app.user.id)"
+					@click="removeComment"
+					>
+					<app-jolticon icon="remove warning" />
+					<translate>Remove Comment</translate>
+				</a>
+				<a class="list-group-item has-icon"
 					v-if="app.user.permission_level >= 3"
 					:href="`${Environment.baseUrl}/moderate/comments/remove/${ comment.id}`"
 					target="_blank"
 					>
 					<app-jolticon icon="remove warning" />
-					<translate>Remove Comment</translate>
+					<template v-if="app.user.id === comment.user.id || (widget.resourceOwner && widget.resourceOwner.id === app.user.id)">
+						<translate>Remove Comment (Moderate)</translate>
+					</template>
+					<template v-else>
+						<translate>Remove Comment</translate>
+					</template>
 				</a>
 			</div>
 		</app-popover>

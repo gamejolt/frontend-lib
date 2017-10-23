@@ -91,6 +91,16 @@ export class Comment extends Model {
 		}
 	}
 
+	$remove() {
+		if (!this.id) {
+			throw new Error('Tried removing a comment that does not exist');
+		} else {
+			return this.$_remove(`/comments/remove/${this.id}`, {
+				detach: true,
+			});
+		}
+	}
+
 	async $like() {
 		if (this.isVotePending) {
 			return;

@@ -31,6 +31,7 @@ import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
 import { AppMessageThread } from '../../../message-thread/message-thread';
 import { Popover } from '../../../popover/popover.service';
+import { ModalConfirm } from '../../../modal/confirm/confirm-service';
 
 @View
 @Component({
@@ -184,6 +185,29 @@ export class AppCommentWidgetComment extends Vue {
 	onCommentEdited(formModel: Comment) {
 		this.isEditing = false;
 		this.widget.onCommentEdited(formModel);
+	}
+
+	async removeComment() {
+		this.isEditing = false;
+		Popover.hideAll();
+
+		const result = await ModalConfirm.show(
+			this.$gettext(`Are you sure you want to remove this comment?`),
+			undefined,
+			'yes'
+		);
+
+		if (!result) {
+			return;
+		}
+
+		try {
+			await this.comment.$remove();
+		} catch (err) {
+			console.warn('Failed to remove comment');
+			return;
+		}
+		this.widget.onCommentRemoved(this.comment);
 	}
 
 	onVoteClick() {
