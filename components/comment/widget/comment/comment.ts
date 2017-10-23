@@ -30,6 +30,7 @@ import { Scroll } from '../../../scroll/scroll.service';
 import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
 import { AppMessageThread } from '../../../message-thread/message-thread';
+import { Popover } from '../../../popover/popover.service';
 
 @View
 @Component({
@@ -56,6 +57,7 @@ import { AppMessageThread } from '../../../message-thread/message-thread';
 	},
 	filters: {
 		number,
+		date,
 	},
 })
 export class AppCommentWidgetComment extends Vue {
@@ -75,11 +77,12 @@ export class AppCommentWidgetComment extends Vue {
 	isShowingChildren = false;
 	isReplying = false;
 	isHighlighted = false;
+	isEditing = false;
 
 	widget: AppCommentWidget;
 
-	date = date;
-	Environment = Environment;
+	readonly date = date;
+	readonly Environment = Environment;
 
 	created() {
 		this.widget = findRequiredVueParent(this, AppCommentWidget);
@@ -171,6 +174,16 @@ export class AppCommentWidgetComment extends Vue {
 		});
 
 		this.widget.onCommentAdd(formModel, true);
+	}
+
+	startEdit() {
+		this.isEditing = true;
+		Popover.hideAll();
+	}
+
+	onCommentEdited(formModel: Comment) {
+		this.isEditing = false;
+		this.widget.onCommentEdited(formModel);
 	}
 
 	onVoteClick() {

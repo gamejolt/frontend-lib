@@ -173,6 +173,31 @@ export class AppCommentWidget extends Vue {
 		this.$emit('add', formModel);
 	}
 
+	onCommentEdited(formModel: Comment) {
+		Analytics.trackEvent('comment-widget', 'edit');
+
+		// Was it marked as possible spam?
+		if (formModel.status === Comment.STATUS_SPAM) {
+			Growls.success(
+				this.$gettext(
+					'Your comment has been marked for review. Please allow some time for it to show on the site.'
+				),
+				this.$gettext('Almost there...')
+			);
+
+			if (Analytics) {
+				Analytics.trackEvent('comment-widget', 'spam');
+			}
+		} else {
+			// Otherwise refresh.
+			// Force us back to the first page, but only if we weren't replying.
+			// If they replied to a comment, obviously don't want to change back to the first page.
+			this.changePage(this.currentPage);
+		}
+
+		this.$emit('edit', formModel);
+	}
+
 	onPageChange(page: number) {
 		this.changePage(page);
 		Scroll.to(`comment-pagination-${this.id}`, { animate: false });

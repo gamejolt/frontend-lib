@@ -17,16 +17,16 @@
 
 	<template slot="meta">
 
-		<template v-if="app.user && (app.user.id !== comment.user_id || app.user.permissionLevel >= 3)">
-			<span class="dot-separator"></span>
+		<span class="dot-separator"></span>
 
-			<a class="link-muted"
-				@click="copyPermalink"
-				v-app-tooltip="$gettext( `Copy Link to Clipboard` )"
-				>
-				<app-jolticon icon="link" class="middle" />
-			</a>
+		<a class="link-muted"
+			@click="copyPermalink"
+			v-app-tooltip="$gettext( `Copy Link to Clipboard` )"
+			>
+			<app-jolticon icon="link" class="middle" />
+		</a>
 
+		<template v-if="app.user">
 			<a
 				class="link-muted"
 				v-app-tooltip="$gettext( 'More Options' )"
@@ -37,17 +37,23 @@
 		</template>
 
 		<app-popover
-			v-if="app.user"
 			:popover-id="`comment-more-options-${comment.id}`"
 			:append-to-body="true"
 			>
 			<div class="list-group list-group-dark">
 				<a class="list-group-item has-icon"
-					v-if="app.user.id !== comment.user"
+					v-if="app.user.id !== comment.user.id"
 					@click="report"
 					>
 					<app-jolticon icon="flag warning" />
 					<translate>Report Comment</translate>
+				</a>
+				<a class="list-group-item has-icon"
+					v-else
+					@click="startEdit"
+					>
+					<app-jolticon icon="edit" />
+					<translate>Edit Comment</translate>
 				</a>
 				<a class="list-group-item has-icon"
 					v-if="app.user.permission_level >= 3"
@@ -62,132 +68,149 @@
 
 	</template>
 
-	<app-fade-collapse
-		:collapse-height="300"
-		:is-open="showFullContent"
-		@require-change="canToggleContent = $event"
-		>
-		<div class="comment-content"
-			v-html="widget.isShowingTranslations && widget.translations[ comment.id ]
-				? widget.translations[ comment.id ].content
-				: comment.comment_compiled
-			"
+	<template v-if="!isEditing">
+		<app-fade-collapse
+			:collapse-height="300"
+			:is-open="showFullContent"
+			@require-change="canToggleContent = $event"
 			>
-		</div>
-	</app-fade-collapse>
-
-	<a class="hidden-text-expander"
-		v-if="canToggleContent"
-		@click="showFullContent = !showFullContent"
-		v-app-track-event="`comment-widget:toggle-full-content`"
-		>
-	</a>
-
-	<div class="comment-videos" v-if="comment.videos.length">
-		<div class="row">
-			<div
-				class="col-xs-6 col-sm-4"
-				v-for="video of comment.videos.slice( 0, showAllVideos ? 10 : 2)"
-				:key="video.id"
+			<div class="comment-content"
+				v-html="widget.isShowingTranslations && widget.translations[ comment.id ]
+					? widget.translations[ comment.id ].content
+					: comment.comment_compiled
+				"
 				>
-				<app-comment-video-thumbnail :video="video" />
 			</div>
-		</div>
 
-		<p class="comment-videos-more-link"
-			v-if="comment.videos.length > 2 && !showAllVideos"
+			<p class="text-muted small" v-if="comment.modified_on">
+				<b><translate>Last modified on</translate></b>
+				<span :title="date( comment.modified_on, 'medium' )">
+					{{ comment.modified_on | date( 'longDate' ) }}
+				</span>
+			</p>
+		</app-fade-collapse>
+
+		<a class="hidden-text-expander"
+			v-if="canToggleContent"
+			@click="showFullContent = !showFullContent"
+			v-app-track-event="`comment-widget:toggle-full-content`"
 			>
-			<a class="small link-muted"
-				@click="showAllVideos = true"
-				v-app-track-event="`comment-widget:more-videos`"
-				>
-				<translate
-					:translate-n="comment.videos.length - 2"
-					:translate-params="{ count: comment.videos.length - 2 }"
-					translate-plural="+%{ count } more videos"
-					>
-					+%{ count } more video
-				</translate>
-			</a>
-		</p>
-	</div>
-
-	<template slot="controls">
-
-		<span class="comment-vote-btn" v-app-auth-required>
-			<button
-				class="btn btn-outline btn-sparse btn-circle"
-				:class="{
-					'active btn-success': comment.user_vote
-				}"
-				@click="onVoteClick"
-				:disabled="!canVote"
-				v-app-tooltip="votingTooltip"
-				v-app-track-event="`comment-widget:vote-click`"
-				>
-				<app-jolticon icon="heart" />
-			</button>
-			<span class="blip light filled" v-if="comment.votes > 0">
-				<span class="blip-caret"></span>
-				<span class="blip-count">{{ comment.votes | number }}</span>
-			</span>
-		</span>
-
-		<!--
-			Only show the reply if isn't a child.
-			We only show it on the parent comments.
-		-->
-		<template v-if="!isChild">
-			<button
-				class="btn btn-outline btn-sparse btn-circle"
-				@click="isReplying = !isReplying"
-				v-app-tooltip="$gettext( 'Reply' )"
-				v-app-track-event="`comment-widget:reply-click`"
-				v-app-auth-required
-				>
-				<app-jolticon icon="reply" />
-			</button>
-		</template>
-
-		<template v-if="canFollow">
-			<button
-				v-if="!widget.subscriptions[ comment.id ]"
-				class="btn btn-outline btn-sparse btn-circle"
-				@click="onFollowClick"
-				v-app-tooltip="$gettext( `Get notifications when people post new replies to this thread.` )"
-				v-app-track-event="`comment-widget:follow-click`"
-				>
-				<app-jolticon icon="subscribe" />
-			</button>
-
-			<button
-				v-else
-				class="btn btn-success active btn-sparse btn-circle"
-				@click="onFollowClick"
-				v-app-tooltip="$gettext( `You're following this comment thread and will be notified of replies.` )"
-				v-app-track-event="`comment-widget:follow-click`"
-				>
-				<app-jolticon icon="subscribed" />
-			</button>
-		</template>
-
-		&nbsp;
-		&nbsp;
-
-		<a
-			v-if="children && children.length"
-			class="small"
-			@click="isShowingChildren = !isShowingChildren"
-			>
-			<translate
-				:translate-n="children.length"
-				:translate-params="{ count: children.length }"
-				translate-plural="+%{ count } replies"
-				>
-				+%{ count } reply
-			</translate>
 		</a>
 
+		<div class="comment-videos" v-if="comment.videos.length">
+			<div class="row">
+				<div
+					class="col-xs-6 col-sm-4"
+					v-for="video of comment.videos.slice( 0, showAllVideos ? 10 : 2)"
+					:key="video.id"
+					>
+					<app-comment-video-thumbnail :video="video" />
+				</div>
+			</div>
+
+			<p class="comment-videos-more-link"
+				v-if="comment.videos.length > 2 && !showAllVideos"
+				>
+				<a class="small link-muted"
+					@click="showAllVideos = true"
+					v-app-track-event="`comment-widget:more-videos`"
+					>
+					<translate
+						:translate-n="comment.videos.length - 2"
+						:translate-params="{ count: comment.videos.length - 2 }"
+						translate-plural="+%{ count } more videos"
+						>
+						+%{ count } more video
+					</translate>
+				</a>
+			</p>
+		</div>
+
+		<template slot="controls">
+
+			<span class="comment-vote-btn" v-app-auth-required>
+				<button
+					class="btn btn-outline btn-sparse btn-circle"
+					:class="{
+						'active btn-success': comment.user_vote
+					}"
+					@click="onVoteClick"
+					:disabled="!canVote"
+					v-app-tooltip="votingTooltip"
+					v-app-track-event="`comment-widget:vote-click`"
+					>
+					<app-jolticon icon="heart" />
+				</button>
+				<span class="blip light filled" v-if="comment.votes > 0">
+					<span class="blip-caret"></span>
+					<span class="blip-count">{{ comment.votes | number }}</span>
+				</span>
+			</span>
+
+			<!--
+				Only show the reply if isn't a child.
+				We only show it on the parent comments.
+			-->
+			<template v-if="!isChild">
+				<button
+					class="btn btn-outline btn-sparse btn-circle"
+					@click="isReplying = !isReplying"
+					v-app-tooltip="$gettext( 'Reply' )"
+					v-app-track-event="`comment-widget:reply-click`"
+					v-app-auth-required
+					>
+					<app-jolticon icon="reply" />
+				</button>
+			</template>
+
+			<template v-if="canFollow">
+				<button
+					v-if="!widget.subscriptions[ comment.id ]"
+					class="btn btn-outline btn-sparse btn-circle"
+					@click="onFollowClick"
+					v-app-tooltip="$gettext( `Get notifications when people post new replies to this thread.` )"
+					v-app-track-event="`comment-widget:follow-click`"
+					>
+					<app-jolticon icon="subscribe" />
+				</button>
+
+				<button
+					v-else
+					class="btn btn-success active btn-sparse btn-circle"
+					@click="onFollowClick"
+					v-app-tooltip="$gettext( `You're following this comment thread and will be notified of replies.` )"
+					v-app-track-event="`comment-widget:follow-click`"
+					>
+					<app-jolticon icon="subscribed" />
+				</button>
+			</template>
+
+			&nbsp;
+			&nbsp;
+
+			<a
+				v-if="children && children.length"
+				class="small"
+				@click="isShowingChildren = !isShowingChildren"
+				>
+				<translate
+					:translate-n="children.length"
+					:translate-params="{ count: children.length }"
+					translate-plural="+%{ count } replies"
+					>
+					+%{ count } reply
+				</translate>
+			</a>
+
+		</template>
+	</template>
+	<template v-else>
+		<app-comment-widget-add
+			v-app-scroll-when.animate="true"
+			:model="comment"
+			@submit="onCommentEdited"
+			@cancel="isEditing = false"
+			/>
 	</template>
 
 	<!-- Child Comments -->

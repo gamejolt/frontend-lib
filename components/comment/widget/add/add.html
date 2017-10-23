@@ -1,7 +1,7 @@
 <app-form name="commentAddForm">
 
 	<app-form-group
-		:class="{ 'sans-margin-bottom': !changed }"
+		:class="{ 'sans-margin-bottom': !changed && method !== 'edit' }"
 		name="comment"
 		:label="$gettext( 'Leave a Comment' )"
 		:hide-label="true"
@@ -17,22 +17,21 @@
 		<app-form-control-errors label="comment" />
 	</app-form-group>
 
-	<template v-if="changed">
-		<app-form-button
-			class="btn-block-xs"
-			:icon="method === 'add' ? 'add-comment' : 'edit'"
-			>
-			<translate v-if="method === 'add'">Add Comment</translate>
-			<translate v-if="method === 'edit'">Save</translate>
-		</app-form-button>
+	<app-form-button
+		class="btn-block-xs"
+		v-if="changed"
+		:icon="method === 'add' ? 'add-comment' : 'edit'"
+		>
+		<translate v-if="method === 'add'">Add Comment</translate>
+		<translate v-if="method === 'edit'">Save</translate>
+	</app-form-button>
 
-		<button
-			class="btn btn-danger-outline"
-			v-if="method === 'edit'"
-			@click.prevent="onCancel"
-			>
-			<translate>Cancel</translate>
-		</button>
-	</template>
+	<button
+		class="btn btn-danger-outline"
+		v-if="method === 'edit'"
+		@click.prevent="onCancel"
+		>
+		<translate>Cancel</translate>
+	</button>
 
 </app-form>
