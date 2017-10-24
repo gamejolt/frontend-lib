@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./select.html';
+import View from '!view!./select.html';
 
 import { BaseFormControl } from '../base';
 

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./widget-game-packages.html?style=./widget-game-packages.styl';
+import View from '!view!./widget-game-packages.html?style=./widget-game-packages.styl';
 
 import { Sellable } from '../../sellable/sellable.model';
 import { Environment } from '../../environment/environment.service';

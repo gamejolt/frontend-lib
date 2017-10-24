@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./growl.html?style=./growl.styl';
+import View from '!view!./growl.html?style=./growl.styl';
 
 import { Growl } from './growls.service';
 import { makeObservableService } from '../../utils/vue';

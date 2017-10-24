@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./playlist.html?style=./playlist.styl';
+import View from '!view!./playlist.html?style=./playlist.styl';
 
 import { GameSong } from '../../game/song/song.model';
 import { AppAudioPlayer } from '../player/player';

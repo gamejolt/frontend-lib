@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./editor.html';
+import View from '!view!./editor.html';
 
 import { SiteContentBlock } from '../../site/content-block/content-block-model';
 import { Environment } from '../../environment/environment.service';

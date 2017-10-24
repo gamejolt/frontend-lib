@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./rating-growl.html';
+import View from '!view!./rating-growl.html';
 
 import { AppRatingWidget } from '../../../../../app/components/rating/widget/widget';
 import { Game } from '../game.model';

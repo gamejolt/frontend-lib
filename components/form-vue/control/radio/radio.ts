@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./radio.html';
+import View from '!view!./radio.html';
 
 import { BaseFormControl } from '../base';
 

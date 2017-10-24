@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Subscription } from 'rxjs/Subscription';
-import * as View from '!view!./lightbox.html?style=./lightbox.styl';
+import View from '!view!./lightbox.html?style=./lightbox.styl';
 
 import { Screen } from '../../screen/screen-service';
 import { AppMediaBar } from '../media-bar';

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./datetime-picker.html?style=./datetime-picker.styl';
+import View from '!view!./datetime-picker.html?style=./datetime-picker.styl';
 
 import { AppDatepicker } from '../datepicker/datepicker';
 import { AppTimepicker } from '../timepicker/timepicker';

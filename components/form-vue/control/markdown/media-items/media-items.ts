@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./media-items.html?style=./media-items.styl';
+import View from '!view!./media-items.html?style=./media-items.styl';
 
 import { BaseForm, FormOnInit, FormOnSubmit, FormOnLoad } from '../../../form.service';
 import { Api } from '../../../../api/api.service';

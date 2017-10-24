@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./login.html';
+import View from '!view!./login.html';
 import './login.styl';
 
 import { Connection } from '../../connection/connection-service';

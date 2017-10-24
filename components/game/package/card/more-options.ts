@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./more-options.html';
+import View from '!view!./more-options.html';
 
 import { GamePackageCardModel } from './card.model';
 import { GameBuild } from '../../build/build.model';
