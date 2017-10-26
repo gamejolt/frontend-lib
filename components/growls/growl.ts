@@ -60,7 +60,7 @@ export class AppGrowl extends Vue {
 		// We store the promise so we can cancel.
 		this.leaveTimer = setTimeout(() => {
 			this.remove();
-		}, 2500);
+		}, 4000);
 	}
 
 	/**
