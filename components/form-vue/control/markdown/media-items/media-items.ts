@@ -31,6 +31,7 @@ export class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
 	implements FormOnInit, FormOnLoad, FormOnSubmit {
 	@Prop(String) type: string;
 	@Prop(Number) parentId: number;
+	@Prop(Boolean) disabled?: boolean;
 
 	resetOnSubmit = true;
 	reloadOnSubmit = true;
