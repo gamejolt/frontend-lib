@@ -2,6 +2,7 @@ import { Model } from '../model/model.service';
 import { Registry } from '../registry/registry.service';
 import { arrayRemove } from '../../utils/array';
 import { Api } from '../api/api.service';
+import { Screen } from '../screen/screen-service';
 
 export type HalloweenMonsterType = 'pumpkin' | 'candy' | 'zombie' | 'witch' | 'vampire';
 
@@ -19,7 +20,9 @@ export class HalloweenMonster extends Model {
 	}
 
 	static add(monster: HalloweenMonster) {
-		this.encounters.push(monster);
+		if (Screen.isDesktop) {
+			this.encounters.push(monster);
+		}
 	}
 
 	static remove(monster: HalloweenMonster) {
