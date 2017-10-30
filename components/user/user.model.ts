@@ -1,6 +1,7 @@
 import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
 import { MediaItem } from '../media-item/media-item-model';
+import { HalloweenMonsterType } from '../halloween-monster/halloween-monster.model';
 
 export class User extends Model {
 	static readonly TYPE_GAMER = 'User';
@@ -63,7 +64,7 @@ export class User extends Model {
 
 	// Halloween 2017
 	halloween_2017_opted_out?: boolean;
-	halloween_2017_breakdown?: { [type: string]: Halloween2017MonsterBreakdown };
+	halloween_2017_breakdown?: { [key in HalloweenMonsterType]: Halloween2017MonsterBreakdown };
 	halloween_2017_level?: number;
 
 	constructor(data: any = {}) {
