@@ -17,7 +17,7 @@ export class GameRatingGrowl {
 		}
 
 		// Don't show when this is the developer of the game.
-		if (appStore.state.user.id === game.developer.id) {
+		if (game.hasPerms()) {
 			return;
 		}
 

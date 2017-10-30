@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./widget-game-list.html?style=./widget-game-list.styl';
+import View from '!view!./widget-game-list.html?style=./widget-game-list.styl';
 
 import { Game } from '../../game/game.model';
 import { AppGameThumbnailImg } from '../../game/thumbnail-img/thumbnail-img';

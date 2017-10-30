@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./timepicker.html?style=./timepicker.styl';
+import View from '!view!./timepicker.html?style=./timepicker.styl';
 import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 
 @View

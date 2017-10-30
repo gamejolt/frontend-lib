@@ -2,7 +2,7 @@ import * as nwGui from 'nw.gui';
 
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./card.html';
+import View from '!view!./card.html';
 
 import { Game } from '../../game.model';
 import { GameSong } from '../../song/song.model';

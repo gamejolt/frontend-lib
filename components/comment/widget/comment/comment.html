@@ -17,6 +17,7 @@
 
 	<template slot="meta">
 
+		<!-- TODO(collaborators) do we need to check if the comment belongs to a game and if the user has permission for it here? -->
 		<template v-if="app.user && (app.user.id !== comment.user || app.user.permissionLevel >= 3)">
 			<span class="dot-separator"></span>
 
@@ -42,8 +43,9 @@
 			:append-to-body="true"
 			>
 			<div class="list-group list-group-dark">
+				<!-- TODO(collaborators) do we need to check if the comment belongs to a game and if the user has permission for it here? -->
 				<a class="list-group-item has-icon"
-					v-if="app.user.id !== comment.user"
+					v-if="app.user.id !== comment.user.id"
 					@click="report"
 					>
 					<app-jolticon icon="flag warning" />

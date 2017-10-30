@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Subscription } from 'rxjs/Subscription';
-import * as View from '!view!./embed.html?style=./embed.styl';
+import View from '!view!./embed.html?style=./embed.styl';
 
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';

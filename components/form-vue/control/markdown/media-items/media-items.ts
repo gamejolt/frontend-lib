@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./media-items.html?style=./media-items.styl';
+import View from '!view!./media-items.html?style=./media-items.styl';
 
 import { BaseForm, FormOnInit, FormOnSubmit, FormOnLoad } from '../../../form.service';
 import { Api } from '../../../../api/api.service';
@@ -31,6 +31,7 @@ export class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
 	implements FormOnInit, FormOnLoad, FormOnSubmit {
 	@Prop(String) type: string;
 	@Prop(Number) parentId: number;
+	@Prop(Boolean) disabled?: boolean;
 
 	resetOnSubmit = true;
 	reloadOnSubmit = true;

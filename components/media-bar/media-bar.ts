@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./media-bar.html?style=./media-bar.styl';
+import View from '!view!./media-bar.html?style=./media-bar.styl';
 
 import { Screen } from '../../../../lib/gj-lib-client/components/screen/screen-service';
 import { Analytics } from '../analytics/analytics.service';

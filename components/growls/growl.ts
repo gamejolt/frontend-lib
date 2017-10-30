@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./growl.html?style=./growl.styl';
+import View from '!view!./growl.html?style=./growl.styl';
 
 import { Growl } from './growls.service';
 import { makeObservableService } from '../../utils/vue';
@@ -60,7 +60,7 @@ export class AppGrowl extends Vue {
 		// We store the promise so we can cancel.
 		this.leaveTimer = setTimeout(() => {
 			this.remove();
-		}, 2500);
+		}, 4000);
 	}
 
 	/**

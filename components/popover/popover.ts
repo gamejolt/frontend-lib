@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./popover.html';
+import View from '!view!./popover.html';
 
 import { Popover } from './popover.service';
 import { Ruler } from '../ruler/ruler-service';

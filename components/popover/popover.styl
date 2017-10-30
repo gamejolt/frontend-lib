@@ -10,9 +10,7 @@
 	z-index: $zindex-popover
 	max-width: $popover-size
 	text-align: left // Reset given new insertion method
-
-	// Overrides for proper insertion
-	white-space: normal
+	white-space: normal // Overrides for proper insertion
 
 	// Mainly for testing.
 	// It just shows the popover in the page with no fanciness of hide/show.
@@ -31,7 +29,7 @@
 
 	&.popover-anim-leave-active
 		@extend .anim-fade-out-shrink
-		display: block  // Force it visible while removing.
+		display: block // Force it visible while removing.
 		z-index: $zindex-popover - 1
 
 	// When active show it visible.
@@ -40,7 +38,7 @@
 
 	&.top
 		& > .arrow
-			caret( $popover-border-color, 'down', $popover-arrow-size )
+			caret($popover-border-color, 'down', $popover-arrow-size)
 			bottom: -($popover-arrow-size - $popover-extra-margin)
 
 		&.popover-anim-enter-active
@@ -48,7 +46,7 @@
 
 	&.right
 		& > .arrow
-			caret( $popover-border-color, 'left', $popover-arrow-size )
+			caret($popover-border-color, 'left', $popover-arrow-size)
 			left: -($popover-arrow-size - $popover-extra-margin)
 
 		&.popover-anim-enter-active
@@ -56,7 +54,7 @@
 
 	&.bottom
 		& > .arrow
-			caret( $popover-border-color, 'up', $popover-arrow-size )
+			caret($popover-border-color, 'up', $popover-arrow-size)
 			top: -($popover-arrow-size - $popover-extra-margin)
 
 		&.popover-anim-enter-active
@@ -64,7 +62,7 @@
 
 	&.left
 		& > .arrow
-			caret( $popover-border-color, 'right', $popover-arrow-size )
+			caret($popover-border-color, 'right', $popover-arrow-size)
 			right: -($popover-arrow-size - $popover-extra-margin)
 
 		&.popover-anim-enter-active
@@ -77,7 +75,7 @@
 	background-clip: padding-box
 	border: 2px solid $popover-border-color
 	border-radius: $border-radius-base
-	box-shadow 5px 5px 10px rgba( 0, 0, 0, 0.1 )
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
 
 	&.popover-no-max-height
 		max-height: none
@@ -95,8 +93,7 @@
 	.popover.left &
 		margin-right: $popover-extra-margin
 
-	> nav.pills > ul
-	> .btn
+	> nav.pills > ul, > .btn
 		margin-bottom: $popover-spacing
 
 	> nav.platform-list
@@ -104,6 +101,9 @@
 		margin-top: $popover-spacing * 2
 
 	.alert
+		margin-bottom: 0
+
+	.well
 		margin-bottom: 0
 
 .popover-no-collapse
@@ -122,7 +122,6 @@
  * Mobile
  */
 @media $media-xs
-
 	// Shade the body when we open the popover.
 	// We only show the backdrop on XS displays.
 	.popover-backdrop

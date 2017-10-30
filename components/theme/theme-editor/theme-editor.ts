@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./theme-editor.html?style=./theme-editor.styl';
+import View from '!view!./theme-editor.html?style=./theme-editor.styl';
 
 import { SiteTemplate } from '../../site/template/template-model';
 import { Api } from '../../api/api.service';

@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./date.html';
+import View from '!view!./date.html';
 
 import { BaseFormControl } from '../base';
 import { AppDatetimePicker } from '../../../datetime-picker/datetime-picker';

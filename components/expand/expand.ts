@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./expand.html?style=./expand.styl';
+import View from '!view!./expand.html?style=./expand.styl';
 
 @View
 @Component({})
