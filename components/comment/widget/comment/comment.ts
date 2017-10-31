@@ -105,6 +105,49 @@ export class AppCommentWidgetComment extends Vue {
 		return this.widget.resourceOwner.id === this.comment.user.id;
 	}
 
+	get isCollaborator() {
+		if (!this.widget.collaborators.length) {
+			return false;
+		}
+
+		return !!this.widget.collaborators.find(
+			collaborator => collaborator.user_id === this.comment.user.id
+		);
+	}
+
+	get canRemove() {
+		if (!this.app.user) {
+			return false;
+		}
+
+		// The comment author can remove.
+		if (this.app.user.id === this.comment.user.id) {
+			return true;
+		}
+
+		// The owner of the resource the comment is attached to can remove.
+		if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id) {
+			return true;
+		}
+
+		// A collaborator for the game the comment is attached to can remove,
+		// if they have the comments permission.
+		if (this.widget.collaborators) {
+			const collaborator = this.widget.collaborators.find(
+				item => item.user_id === this.app.user!.id
+			);
+
+			if (
+				collaborator &&
+				(collaborator.perms.indexOf('comments') !== -1 || collaborator.perms.indexOf('all') !== -1)
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	get isShowingReplies() {
 		return (this.children && this.children.length && this.isShowingChildren) || this.isReplying;
 	}

@@ -7,34 +7,33 @@
 	:is-showing-replies="isShowingReplies"
 	>
 
-	<template slot="tags" v-if="isOwner">
+	<template slot="tags" v-if="isOwner || isCollaborator">
 
 		<span class="tag tag-active">
-			<translate>Dev</translate>
+			<translate v-if="isOwner">Dev</translate>
+			<translate v-else>Collaborator</translate>
 		</span>
 
 	</template>
 
 	<template slot="meta">
 
-		<template v-if="app.user && (app.user.id !== comment.user || app.user.permissionLevel >= 3)">
-			<span class="dot-separator"></span>
+		<span class="dot-separator"></span>
 
-			<a class="link-muted"
-				@click="copyPermalink"
-				v-app-tooltip="$gettext( `Copy Link to Clipboard` )"
-				>
-				<app-jolticon icon="link" class="middle" />
-			</a>
+		<a class="link-muted"
+			@click="copyPermalink"
+			v-app-tooltip="$gettext( `Copy Link to Clipboard` )"
+			>
+			<app-jolticon icon="link" class="middle" />
+		</a>
 
-			<a
-				class="link-muted"
-				v-app-tooltip="$gettext( 'More Options' )"
-				v-app-popover-trigger="`comment-more-options-${comment.id}`"
-				>
-				<app-jolticon icon="ellipsis-h" class="middle" />
-			</a>
-		</template>
+		<a
+			class="link-muted"
+			v-app-tooltip="$gettext( 'More Options' )"
+			v-app-popover-trigger="`comment-more-options-${comment.id}`"
+			>
+			<app-jolticon icon="ellipsis-h" class="middle" />
+		</a>
 
 		<app-popover
 			:popover-id="`comment-more-options-${comment.id}`"
@@ -56,8 +55,9 @@
 					<app-jolticon icon="edit" />
 					<translate>Edit Comment</translate>
 				</a>
+
 				<a class="list-group-item has-icon"
-					v-if="app.user.id === comment.user.id || (widget.resourceOwner && widget.resourceOwner.id === app.user.id)"
+					v-if="canRemove"
 					@click="removeComment"
 					>
 					<app-jolticon icon="remove warning" />

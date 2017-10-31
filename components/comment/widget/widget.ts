@@ -23,6 +23,7 @@ import { AppCommentWidgetAdd } from './add/add';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { AppMessageThreadPagination } from '../../message-thread/pagination/pagination';
 import { AppMessageThreadContent } from '../../message-thread/content/content';
+import { GameCollaborator } from '../../game/collaborator/collaborator.model';
 
 let incrementer = 0;
 
@@ -71,6 +72,7 @@ export class AppCommentWidget extends Vue {
 	translations: { [k: string]: Translation } = {};
 
 	subscriptions: { [k: string]: Subscription } = {};
+	collaborators: GameCollaborator[] = [];
 
 	get loginUrl() {
 		return Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent(this.$route.fullPath);
@@ -134,6 +136,10 @@ export class AppCommentWidget extends Vue {
 				}
 				this.subscriptions = indexed;
 			}
+
+			this.collaborators = payload.collaborators
+				? GameCollaborator.populate(payload.collaborators)
+				: [];
 
 			this.translations = {};
 			this.isTranslating = false;
