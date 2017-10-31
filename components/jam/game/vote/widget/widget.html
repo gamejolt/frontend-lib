@@ -17,8 +17,9 @@
 
 			<!--
 				Developers can't vote on their own games.
+				TODO(collaborators) in the vue branch should do a perm check.
 			-->
-			<p ng-if="App.user.id == ctrl.game.developer.id">
+			<p ng-if="App.user.id == 0 + ctrl.game.developer.id"> <!-- The 0 + is only here to make sure this file will conflict with the vue branch. -->
 				Nice try, my friend, but you can't vote on your own game!
 			</p>
 
@@ -29,7 +30,8 @@
 				The jam organizers have restricted voting to jam participants.
 			</p>
 
-			<div ng-if="App.user.id != ctrl.game.developer.id && !(ctrl.jam.voting_user_restriction == 'participants' && !ctrl.isParticipant)">
+			<!-- TODO(collaborators) in the vue branch should do a perm check. -->
+			<div ng-if="App.user.id != 0 + ctrl.game.developer.id && !(ctrl.jam.voting_user_restriction == 'participants' && !ctrl.isParticipant)"> <!-- The 0 + is only here to make sure this file will conflict with the vue branch. -->
 
 				<p ng-if="ctrl.jam.voting_type == 'categories'">Vote for this game by rating it in each of the categories below. If a particular category doesn't apply for this game, please choose <code>n/a</code>. For example, it would be appropriate to choose <code>n/a</code> for a "Graphics" category when rating a text-based game.</p>
 

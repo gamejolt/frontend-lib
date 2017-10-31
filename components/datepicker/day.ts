@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./day.html';
+import View from '!view!./day.html';
 
 import { findRequiredVueParent } from '../../utils/vue';
 import { AppDatepicker, DatepickerDate } from './datepicker';

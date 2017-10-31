@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import * as Chart from 'chart.js';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./graph.html?style=./graph.styl';
+import View from '!view!./graph.html?style=./graph.styl';
 
 import { date } from '../../vue/filters/date';
 

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import * as nwGui from 'nw.gui';
-import * as View from '!view!./lang-selector.html?style=./lang-selector.styl';
+import View from '!view!./lang-selector.html?style=./lang-selector.styl';
 
 import { Analytics } from '../../analytics/analytics.service';
 import { getTranslationLang, TranslationLangs, setTranslationLang } from '../translate.service';

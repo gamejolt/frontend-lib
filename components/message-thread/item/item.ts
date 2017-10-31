@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./item.html?style=./item.styl';
+import View from '!view!./item.html?style=./item.styl';
 
 import { User } from '../../user/user.model';
 import { date } from '../../../vue/filters/date';

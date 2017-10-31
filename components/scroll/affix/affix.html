@@ -1,5 +1,6 @@
 <div>
 	<div
+		ref="placeholder"
 		class="gj-scroll-affix-placeholder"
 		v-if="isAffixed"
 		:style="{ height: placeholderHeight + 'px' }"
@@ -7,6 +8,7 @@
 	</div>
 
 	<div
+		ref="container"
 		class="scroll-affix-container"
 		:style="{ width }"
 		:class="attachedClass"

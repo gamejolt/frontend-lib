@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./codemirror.html';
+import View from '!view!./codemirror.html';
 
 import './codemirror.styl';
 

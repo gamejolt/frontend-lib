@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./card.html';
+import View from '!view!./card.html';
 
 require('./card.styl');
 

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./thumbnail-img.html';
+import View from '!view!./thumbnail-img.html';
 
 import { AppImgResponsive } from '../../img/responsive/responsive';
 import { Game } from '../game.model';

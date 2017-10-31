@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import * as View from '!view!./minbar.html?style=./minbar.styl';
+import View from '!view!./minbar.html?style=./minbar.styl';
 
 import { Screen } from '../screen/screen-service';
 import { AppTooltip } from '../tooltip/tooltip';

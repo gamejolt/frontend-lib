@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./control.html';
+import View from '!view!./control.html';
 
 import { BaseFormControl } from './base';
 import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';

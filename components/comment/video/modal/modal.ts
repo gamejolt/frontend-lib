@@ -1,6 +1,6 @@
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import * as View from '!view!./modal.html?style=./modal.styl';
+import View from '!view!./modal.html?style=./modal.styl';
 
 import { BaseModal } from '../../../modal/base';
 import { CommentVideo } from '../video-model';
@@ -75,7 +75,7 @@ export default class AppCommentVideoModal extends BaseModal {
 			return false;
 		} else if (this.video.comment.user.id === this.app.user.id) {
 			return false;
-		} else if (this.video.game.developer.id === this.app.user.id) {
+		} else if (this.video.game.hasPerms()) {
 			return false;
 		}
 

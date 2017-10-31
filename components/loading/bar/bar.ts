@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Axios from 'axios';
 import { Component } from 'vue-property-decorator';
-import * as View from '!view!./bar.html?style=./bar.styl';
+import View from '!view!./bar.html?style=./bar.styl';
 
 @View
 @Component({})

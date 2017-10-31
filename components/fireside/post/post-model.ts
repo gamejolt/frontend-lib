@@ -38,6 +38,7 @@ export class FiresidePost extends Model {
 	comment_count: number;
 	user: User;
 	game: Game;
+	as_game_owner: boolean;
 	slug: string;
 	subline: string;
 	content_compiled: string;
@@ -147,12 +148,14 @@ export class FiresidePost extends Model {
 	}
 
 	$viewed() {
+		// TODO(collaborators) block collaborators from logging ticks on posts they own
 		if (!appStore.state.user || this.user.id !== appStore.state.user.id) {
 			HistoryTick.sendBeacon('fireside-post', this.id);
 		}
 	}
 
 	$expanded() {
+		// TODO(collaborators) block collaborators from logging ticks on posts they own
 		if (!appStore.state.user || this.user.id !== appStore.state.user.id) {
 			HistoryTick.sendBeacon('fireside-post-expand', this.id);
 		}

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./widget-game-media.html';
+import View from '!view!./widget-game-media.html';
 
 import { AppMediaBar } from '../../media-bar/media-bar';
 import { MediaItem } from '../../media-item/media-item-model';

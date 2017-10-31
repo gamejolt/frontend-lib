@@ -1,7 +1,6 @@
-<div class="fireside-post-like-widget" v-if="!app.user || app.user.id !== post.user.id">
+<div class="fireside-post-like-widget" v-app-auth-required>
 	<button
 		class="btn"
-		v-app-auth-required
 		@click="toggleLike"
 		:class="{
 			'btn-outline': !post.user_like,
@@ -9,6 +8,7 @@
 			'btn-sparse': isSparse,
 			'btn-circle': circle,
 		}"
+		:disabled="app.user && app.user.id === post.user.id"
 		v-app-tooltip="tooltip"
 		>
 		<span class="btn-badge" v-if="!isSparse && post.like_count">

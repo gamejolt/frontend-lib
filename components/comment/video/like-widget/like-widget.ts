@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { State } from 'vuex-class';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./like-widget.html';
+import View from '!view!./like-widget.html';
 
 import { CommentVideo } from '../video-model';
 import { AppStore } from '../../../../vue/services/app/app-store';
@@ -43,7 +43,7 @@ export class AppCommentVideoLikeWidget extends Vue {
 			return false;
 		} else if (this.video.comment.user.id === this.app.user.id) {
 			return false;
-		} else if (this.video.game.developer.id === this.app.user.id) {
+		} else if (this.video.game.hasPerms()) {
 			return false;
 		}
 

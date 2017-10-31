@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./jolticon.html';
+import View from '!view!./jolticon.html';
 
 @View
 @Component({})

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { State } from 'vuex-class';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./widget.html?style=./widget.styl';
+import View from '!view!./widget.html?style=./widget.styl';
 
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';

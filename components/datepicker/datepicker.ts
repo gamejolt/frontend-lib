@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./datepicker.html';
+import View from '!view!./datepicker.html';
 import './datepicker.styl';
 import { AppDatepickerDay } from './day';
 import { date as dateFilter } from '../../vue/filters/date';

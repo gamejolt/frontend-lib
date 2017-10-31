@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./group.html';
+import View from '!view!./group.html';
 
 import { AppForm } from '../form';
 import { findRequiredVueParent } from '../../../utils/vue';

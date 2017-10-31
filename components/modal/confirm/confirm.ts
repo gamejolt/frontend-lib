@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./confirm.html';
+import View from '!view!./confirm.html';
 
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { BaseModal } from '../base';

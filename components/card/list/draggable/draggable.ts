@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./draggable.html';
+import View from '!view!./draggable.html';
 
 import { AppCardList } from '../list';
 import { findRequiredVueParent } from '../../../../utils/vue';

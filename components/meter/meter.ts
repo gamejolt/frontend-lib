@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./meter.html?style=./meter.styl';
+import View from '!view!./meter.html?style=./meter.styl';
 
 @View
 @Component({})
