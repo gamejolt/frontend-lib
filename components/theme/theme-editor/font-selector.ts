@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./font-selector.html?style=./font-selector.styl';
+import View from '!view!./font-selector.html?style=./font-selector.styl';
 
 import { Api } from '../../api/api.service';
 import { AppThemeEditorFontSelectorStyleInjector } from './font-selector-style-injector';

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./thumbnail.html?style=./thumbnail.styl';
+import View from '!view!./thumbnail.html?style=./thumbnail.styl';
 import './thumbnail-content.styl';
 
 import { CommentVideo } from '../video-model';

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./affix.html?style=./affix.styl';
+import View from '!view!./affix.html?style=./affix.styl';
 
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';

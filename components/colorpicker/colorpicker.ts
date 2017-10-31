@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./colorpicker.html?style=./colorpicker.styl';
+import View from '!view!./colorpicker.html?style=./colorpicker.styl';
 
 import { Sketch } from 'vue-color';
 import { AppPopover } from '../popover/popover';

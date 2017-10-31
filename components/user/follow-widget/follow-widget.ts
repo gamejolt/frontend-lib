@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import * as View from '!view!./follow-widget.html';
+import View from '!view!./follow-widget.html';
 
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppAuthRequired } from '../../auth/auth-required-directive.vue';

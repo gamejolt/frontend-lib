@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import * as View from '!view!./comment.html?style=./comment.styl';
+import View from '!view!./comment.html?style=./comment.styl';
 import './comment-content.styl';
 
 import { Environment } from '../../../environment/environment.service';

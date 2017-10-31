@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./join-form.html';
+import View from '!view!./join-form.html';
 
 import { Connection } from '../../connection/connection-service';
 import { makeObservableService } from '../../../utils/vue';

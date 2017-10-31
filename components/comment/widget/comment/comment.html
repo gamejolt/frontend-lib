@@ -17,16 +17,16 @@
 
 	<template slot="meta">
 
-		<span class="dot-separator"></span>
+		<template v-if="app.user && (app.user.id !== comment.user || app.user.permissionLevel >= 3)">
+			<span class="dot-separator"></span>
 
-		<a class="link-muted"
-			@click="copyPermalink"
-			v-app-tooltip="$gettext( `Copy Link to Clipboard` )"
-			>
-			<app-jolticon icon="link" class="middle" />
-		</a>
+			<a class="link-muted"
+				@click="copyPermalink"
+				v-app-tooltip="$gettext( `Copy Link to Clipboard` )"
+				>
+				<app-jolticon icon="link" class="middle" />
+			</a>
 
-		<template v-if="app.user">
 			<a
 				class="link-muted"
 				v-app-tooltip="$gettext( 'More Options' )"
@@ -41,6 +41,7 @@
 			:append-to-body="true"
 			>
 			<div class="list-group list-group-dark">
+				<!-- TODO(collaborators) do we need to check if the comment belongs to a game and if the user has permission for it here? -->
 				<a class="list-group-item has-icon"
 					v-if="app.user.id !== comment.user.id"
 					@click="report"

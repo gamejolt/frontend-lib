@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./modal.html';
+import View from '!view!./modal.html';
 
 import { Comment } from '../../comment/comment-model';
 import { User } from '../../user/user.model';

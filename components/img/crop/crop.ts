@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Cropper from 'cropperjs';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./crop.html?style=./crop.styl';
+import View from '!view!./crop.html?style=./crop.styl';
 import 'cropperjs/dist/cropper.css';
 
 interface CropData {

@@ -86,11 +86,12 @@
 					mode: 'gfm',
 				}"
 				/>
-		</div>
 
+		</div>
 		<app-form-control-markdown-media-items
 			v-if="showMediaItems"
 			:type="mediaItemType"
+			:disabled="disabled"
 			:parent-id="mediaItemParentId"
 			/>
 	</template>

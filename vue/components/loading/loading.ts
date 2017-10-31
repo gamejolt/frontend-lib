@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./loading.html?style=./loading.styl';
+import View from '!view!./loading.html?style=./loading.styl';
 
 import { importContext } from '../../../utils/utils';
 

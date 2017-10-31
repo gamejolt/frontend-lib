@@ -1,5 +1,5 @@
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./editor-form.html';
+import View from '!view!./editor-form.html';
 
 import { BaseForm } from '../../form-vue/form.service';
 import { SiteContentBlock } from '../../site/content-block/content-block-model';

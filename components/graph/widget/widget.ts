@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./widget.html';
+import View from '!view!./widget.html';
 
 import { Api } from '../../api/api.service';
 import { Graph } from '../graph.service';

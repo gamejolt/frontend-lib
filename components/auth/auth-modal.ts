@@ -1,5 +1,5 @@
 import { Component } from 'vue-property-decorator';
-import * as View from '!view!./auth-modal.html';
+import View from '!view!./auth-modal.html';
 
 import { BaseModal } from '../modal/base';
 import { AppAuthJoin } from './join/join';
