@@ -28,6 +28,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095780',
 		},
 		indexExchange: {
+			id: '01',
 			siteID: '220482',
 		},
 	},
@@ -38,7 +39,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095779',
 		},
 		indexExchange: {
-			// id: 'Top Leaderboard',
+			id: '02',
 			siteID: '220483',
 		},
 	},
@@ -49,7 +50,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095790',
 		},
 		indexExchange: {
-			// id: 'Top Leaderboard',
+			id: '03',
 			siteID: '220484',
 		},
 	},
@@ -60,7 +61,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095782',
 		},
 		indexExchange: {
-			// id: 'Top Leaderboard',
+			id: '04',
 			siteID: '220485',
 		},
 	},
@@ -71,7 +72,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095977',
 		},
 		indexExchange: {
-			// id: 'Top Leaderboard',
+			id: '05',
 			siteID: '220486',
 		},
 	},
@@ -79,6 +80,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 
 export class Prebid {
 	private static isTagCreated = false;
+	static forcedBidder?: string;
 
 	private static get pbjs() {
 		const _window = window as any;
@@ -100,20 +102,26 @@ export class Prebid {
 			throw new Error(`Couldn't get params for placement.`);
 		}
 
-		return {
+		const unit = {
 			code: slot.id,
 			sizes: slot.slotSizes,
 			bids: [
-				// {
-				// 	bidder: 'appnexus',
-				// 	params: placement.appNexus,
-				// },
+				{
+					bidder: 'appnexus',
+					params: placement.appNexus,
+				},
 				{
 					bidder: 'indexExchange',
 					params: placement.indexExchange,
 				},
 			],
 		};
+
+		if (this.forcedBidder) {
+			unit.bids = unit.bids.filter(i => i.bidder === this.forcedBidder);
+		}
+
+		return unit;
 	}
 
 	static getBids(adUnits: AdUnit[]) {
@@ -149,16 +157,17 @@ export class Prebid {
 
 		loadScript(require('!file-loader!./prebid.vendor.js'));
 
-		if (GJ_BUILD_TYPE === 'production') {
-			this.pbjs.que.push(() => {
-				this.pbjs.enableAnalytics([
-					{
-						provider: 'ga',
-						options: {},
-					},
-				]);
-			});
-		}
+		// SO MANY EVENTS!
+		// if (GJ_BUILD_TYPE === 'production') {
+		// 	this.pbjs.que.push(() => {
+		// 		this.pbjs.enableAnalytics([
+		// 			{
+		// 				provider: 'ga',
+		// 				options: {},
+		// 			},
+		// 		]);
+		// 	});
+		// }
 
 		this.pbjs.que.push(() => {
 			this.pbjs.setConfig({
