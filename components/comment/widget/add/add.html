@@ -23,7 +23,7 @@
 		:icon="method === 'add' ? 'add-comment' : 'edit'"
 		>
 		<translate v-if="method === 'add'">Add Comment</translate>
-		<translate v-if="method === 'edit'">Save</translate>
+		<translate v-else-if="method === 'edit'">Save</translate>
 	</app-form-button>
 
 	<button

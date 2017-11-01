@@ -166,9 +166,7 @@ export class AppCommentWidget extends Vue {
 				this.$gettext('Almost there...')
 			);
 
-			if (Analytics) {
-				Analytics.trackEvent('comment-widget', 'spam');
-			}
+			Analytics.trackEvent('comment-widget', 'spam');
 		} else {
 			// Otherwise refresh.
 			// Force us back to the first page, but only if we weren't replying.
@@ -191,9 +189,7 @@ export class AppCommentWidget extends Vue {
 				this.$gettext('Almost there...')
 			);
 
-			if (Analytics) {
-				Analytics.trackEvent('comment-widget', 'spam');
-			}
+			Analytics.trackEvent('comment-widget', 'spam');
 		} else {
 			// Otherwise refresh.
 			// Force us back to the first page, but only if we weren't replying.
@@ -224,9 +220,7 @@ export class AppCommentWidget extends Vue {
 		this.currentPage = page || 1;
 		this.refreshComments();
 
-		if (Analytics) {
-			Analytics.trackEvent('comment-widget', 'change-page', this.currentPage + '');
-		}
+		Analytics.trackEvent('comment-widget', 'change-page', this.currentPage + '');
 	}
 
 	async toggleTranslate() {
