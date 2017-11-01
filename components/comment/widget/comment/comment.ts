@@ -30,6 +30,8 @@ import { Scroll } from '../../../scroll/scroll.service';
 import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
 import { AppMessageThread } from '../../../message-thread/message-thread';
+import { Popover } from '../../../popover/popover.service';
+import { ModalConfirm } from '../../../modal/confirm/confirm-service';
 
 @View
 @Component({
@@ -56,6 +58,7 @@ import { AppMessageThread } from '../../../message-thread/message-thread';
 	},
 	filters: {
 		number,
+		date,
 	},
 })
 export class AppCommentWidgetComment extends Vue {
@@ -75,11 +78,12 @@ export class AppCommentWidgetComment extends Vue {
 	isShowingChildren = false;
 	isReplying = false;
 	isHighlighted = false;
+	isEditing = false;
 
 	widget: AppCommentWidget;
 
-	date = date;
-	Environment = Environment;
+	readonly date = date;
+	readonly Environment = Environment;
 
 	created() {
 		this.widget = findRequiredVueParent(this, AppCommentWidget);
@@ -99,6 +103,49 @@ export class AppCommentWidgetComment extends Vue {
 		}
 
 		return this.widget.resourceOwner.id === this.comment.user.id;
+	}
+
+	get isCollaborator() {
+		if (!this.widget.collaborators.length) {
+			return false;
+		}
+
+		return !!this.widget.collaborators.find(
+			collaborator => collaborator.user_id === this.comment.user.id
+		);
+	}
+
+	get canRemove() {
+		if (!this.app.user) {
+			return false;
+		}
+
+		// The comment author can remove.
+		if (this.app.user.id === this.comment.user.id) {
+			return true;
+		}
+
+		// The owner of the resource the comment is attached to can remove.
+		if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id) {
+			return true;
+		}
+
+		// A collaborator for the game the comment is attached to can remove,
+		// if they have the comments permission.
+		if (this.widget.collaborators) {
+			const collaborator = this.widget.collaborators.find(
+				item => item.user_id === this.app.user!.id
+			);
+
+			if (
+				collaborator &&
+				(collaborator.perms.indexOf('comments') !== -1 || collaborator.perms.indexOf('all') !== -1)
+			) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	get isShowingReplies() {
@@ -171,6 +218,39 @@ export class AppCommentWidgetComment extends Vue {
 		});
 
 		this.widget.onCommentAdd(formModel, true);
+	}
+
+	startEdit() {
+		this.isEditing = true;
+		Popover.hideAll();
+	}
+
+	onCommentEdited(formModel: Comment) {
+		this.isEditing = false;
+		this.widget.onCommentEdited(formModel);
+	}
+
+	async removeComment() {
+		this.isEditing = false;
+		Popover.hideAll();
+
+		const result = await ModalConfirm.show(
+			this.$gettext(`Are you sure you want to remove this comment?`),
+			undefined,
+			'yes'
+		);
+
+		if (!result) {
+			return;
+		}
+
+		try {
+			await this.comment.$remove();
+		} catch (err) {
+			console.warn('Failed to remove comment');
+			return;
+		}
+		this.widget.onCommentRemoved(this.comment);
 	}
 
 	onVoteClick() {

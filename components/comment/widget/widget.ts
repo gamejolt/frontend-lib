@@ -23,6 +23,7 @@ import { AppCommentWidgetAdd } from './add/add';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { AppMessageThreadPagination } from '../../message-thread/pagination/pagination';
 import { AppMessageThreadContent } from '../../message-thread/content/content';
+import { GameCollaborator } from '../../game/collaborator/collaborator.model';
 
 let incrementer = 0;
 
@@ -71,6 +72,7 @@ export class AppCommentWidget extends Vue {
 	translations: { [k: string]: Translation } = {};
 
 	subscriptions: { [k: string]: Subscription } = {};
+	collaborators: GameCollaborator[] = [];
 
 	get loginUrl() {
 		return Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent(this.$route.fullPath);
@@ -135,6 +137,10 @@ export class AppCommentWidget extends Vue {
 				this.subscriptions = indexed;
 			}
 
+			this.collaborators = payload.collaborators
+				? GameCollaborator.populate(payload.collaborators)
+				: [];
+
 			this.translations = {};
 			this.isTranslating = false;
 			this.isShowingTranslations = false;
@@ -160,9 +166,7 @@ export class AppCommentWidget extends Vue {
 				this.$gettext('Almost there...')
 			);
 
-			if (Analytics) {
-				Analytics.trackEvent('comment-widget', 'spam');
-			}
+			Analytics.trackEvent('comment-widget', 'spam');
 		} else {
 			// Otherwise refresh.
 			// Force us back to the first page, but only if we weren't replying.
@@ -171,6 +175,39 @@ export class AppCommentWidget extends Vue {
 		}
 
 		this.$emit('add', formModel);
+	}
+
+	onCommentEdited(formModel: Comment) {
+		Analytics.trackEvent('comment-widget', 'edit');
+
+		// Was it marked as possible spam?
+		if (formModel.status === Comment.STATUS_SPAM) {
+			Growls.success(
+				this.$gettext(
+					'Your comment has been marked for review. Please allow some time for it to show on the site.'
+				),
+				this.$gettext('Almost there...')
+			);
+
+			Analytics.trackEvent('comment-widget', 'spam');
+		} else {
+			// Otherwise refresh.
+			// Force us back to the first page, but only if we weren't replying.
+			// If they replied to a comment, obviously don't want to change back to the first page.
+			this.changePage(this.currentPage);
+		}
+
+		this.$emit('edit', formModel);
+	}
+
+	onCommentRemoved(formModel: Comment) {
+		Analytics.trackEvent('comment-widget', 'remove');
+
+		// Otherwise refresh.
+		// Force us back to the first page, but only if we weren't replying.
+		// If they replied to a comment, obviously don't want to change back to the first page.
+		this.changePage(this.currentPage);
+		this.$emit('remove', formModel);
 	}
 
 	onPageChange(page: number) {
@@ -183,9 +220,7 @@ export class AppCommentWidget extends Vue {
 		this.currentPage = page || 1;
 		this.refreshComments();
 
-		if (Analytics) {
-			Analytics.trackEvent('comment-widget', 'change-page', this.currentPage + '');
-		}
+		Analytics.trackEvent('comment-widget', 'change-page', this.currentPage + '');
 	}
 
 	async toggleTranslate() {

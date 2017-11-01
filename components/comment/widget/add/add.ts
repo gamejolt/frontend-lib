@@ -20,12 +20,18 @@ export class AppCommentWidgetAdd extends BaseForm<Comment> implements FormOnInit
 	resetOnSubmit = true;
 
 	onInit() {
-		this.setField('comment', '');
-		this.setField('resource', this.resource);
-		this.setField('resource_id', this.resourceId);
+		if (!this.model) {
+			this.setField('comment', '');
+			this.setField('resource', this.resource);
+			this.setField('resource_id', this.resourceId);
 
-		if (this.parentId) {
-			this.setField('parent_id', this.parentId);
+			if (this.parentId) {
+				this.setField('parent_id', this.parentId);
+			}
 		}
+	}
+
+	onCancel() {
+		this.$emit('cancel');
 	}
 }
