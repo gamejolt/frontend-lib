@@ -248,9 +248,7 @@ module.exports = function(config) {
 					GJ_VERSION: JSON.stringify(require(path.resolve(process.cwd(), 'package.json')).version),
 
 					// This sets vue in production mode.
-					'process.env': {
-						NODE_ENV: JSON.stringify(config.production ? 'production' : 'development'),
-					},
+					'process.env.NODE_ENV': JSON.stringify(config.production ? 'production' : 'development'),
 				}),
 				new webpack.LoaderOptionsPlugin({
 					options: {
