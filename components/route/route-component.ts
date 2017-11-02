@@ -160,11 +160,8 @@ export class BaseRouteComponent extends Vue {
 	/**
 	 * Called after routeResolve resolves with data. `$payload` will be set with
 	 * whatever was resolved.
-	 * If the route uses cache, routed may be called twice.
-	 * first time from ache data - _fromCache would be true,
-	 * second time from the actual payload - _fromCache would be false.
 	 */
-	routed(_fromCache: boolean) {}
+	routed() {}
 
 	/**
 	 * Called when the route component is completely destroyed.
@@ -323,7 +320,7 @@ export class BaseRouteComponent extends Vue {
 			}
 		}
 
-		this.routed(shouldRefreshCache);
+		this.routed();
 		this.routeLoading = false;
 		this.routeBootstrapped = true;
 
