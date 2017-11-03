@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue, { ComponentOptions } from 'vue';
+import { Route, RawLocation } from 'vue-router';
 import { Component } from 'vue-property-decorator';
 import { createDecorator } from 'vue-class-component';
 import { EventBus } from '../event-bus/event-bus.service';
@@ -26,13 +26,13 @@ class RouteResolver {
 
 	payload: any | PayloadError | LocationRedirect;
 
-	constructor(public componentName: string, public route: VueRouter.Route) {}
+	constructor(public componentName: string, public route: Route) {}
 
-	isValid(currentRoute: VueRouter.Route) {
+	isValid(currentRoute: Route) {
 		return RouteResolver.resolvers.indexOf(this) !== -1 && this.route === currentRoute;
 	}
 
-	static startResolve(componentOptions: Vue.ComponentOptions<Vue>, to: VueRouter.Route) {
+	static startResolve(componentOptions: ComponentOptions<Vue>, to: Route) {
 		const resolver = new RouteResolver(componentOptions.name!, to);
 		RouteResolver.resolvers.push(resolver);
 		return resolver;
@@ -52,7 +52,7 @@ class RouteResolver {
 }
 
 export function RouteResolve(options: RouteOptions = {}) {
-	return createDecorator((componentOptions: Vue.ComponentOptions<Vue>, key: string) => {
+	return createDecorator((componentOptions: ComponentOptions<Vue>, key: string) => {
 		if (key !== 'routeResolve') {
 			throw new Error(`Decorated route resolve function must be called "routeResolve".`);
 		}
@@ -71,9 +71,9 @@ export function RouteResolve(options: RouteOptions = {}) {
 			// This will get called by the browser and server. We call their
 			// annotated function for fetching the data for the route.
 			async beforeRouteEnter(
-				to: VueRouter.Route,
-				_from: VueRouter.Route,
-				next: (to?: VueRouter.RawLocation | false | ((vm: Vue) => any) | void) => void
+				to: Route,
+				_from: Route,
+				next: (to?: RawLocation | false | ((vm: Vue) => any) | void) => void
 			) {
 				const name = componentOptions.name!;
 				const routeOptions = componentOptions.routeOptions || {};
@@ -131,13 +131,12 @@ export function RouteResolve(options: RouteOptions = {}) {
 					await vm.resolveRoute(to, resolver);
 				});
 			},
-		} as Vue.ComponentOptions<Vue>);
+		} as ComponentOptions<Vue>);
 	});
 }
 
 @Component({})
 export class BaseRouteComponent extends Vue {
-	$payload: any;
 	routeDestroyed = false;
 	routeLoading = false;
 	routeBootstrapped = false;
@@ -145,7 +144,7 @@ export class BaseRouteComponent extends Vue {
 	storeName?: string;
 	storeModule?: any;
 
-	async routeResolve(this: undefined, _route: VueRouter.Route): Promise<any> {}
+	async routeResolve(this: undefined, _route: Route): Promise<any> {}
 
 	get routeTitle(): null | string {
 		return null;
@@ -158,10 +157,9 @@ export class BaseRouteComponent extends Vue {
 	routeInit(): void {}
 
 	/**
-	 * Called after routeResolve resolves with data. `$payload` will be set with
-	 * whatever was resolved.
+	 * Called after routeResolve resolves with data.
 	 */
-	routed() {}
+	routed(_payload: any) {}
 
 	/**
 	 * Called when the route component is completely destroyed.
@@ -234,7 +232,7 @@ export class BaseRouteComponent extends Vue {
 		return this._reloadRoute(false);
 	}
 
-	private async _onRouteChange(to: VueRouter.Route, from: VueRouter.Route) {
+	private async _onRouteChange(to: Route, from: Route) {
 		const options = this.$options.routeOptions || {};
 
 		// Only do work if the route params/query has actually changed.
@@ -266,7 +264,7 @@ export class BaseRouteComponent extends Vue {
 	// Make sure this function isn't an async func. We want to make sure it can
 	// do most of its work in the same tick so we can call it in the created()
 	// hook after SSR returns data to client.
-	resolveRoute(route: VueRouter.Route, resolver: RouteResolver, shouldRefreshCache?: boolean) {
+	resolveRoute(route: Route, resolver: RouteResolver, shouldRefreshCache?: boolean) {
 		const routeOptions = this.$options.routeOptions || {};
 
 		// We do a cache refresh if the cache was used for this route.
@@ -313,14 +311,12 @@ export class BaseRouteComponent extends Vue {
 				return;
 			}
 
-			this.$payload = payload;
-
 			if (routeOptions.cache) {
 				HistoryCache.store(route, payload, routeOptions.cacheTag);
 			}
 		}
 
-		this.routed();
+		this.routed(payload);
 		this.routeLoading = false;
 		this.routeBootstrapped = true;
 
@@ -348,7 +344,7 @@ export class BaseRouteComponent extends Vue {
 		}
 	}
 
-	private async refreshCache(route: VueRouter.Route) {
+	private async refreshCache(route: Route) {
 		const resolver = RouteResolver.startResolve(this.$options, route);
 		const { payload } = await getPayload(this.$options, route, false);
 		resolver.payload = payload;
@@ -360,7 +356,7 @@ export class BaseRouteComponent extends Vue {
 	 * components can stay the same. We only initialize routes that have
 	 * probably changed between updates.
 	 */
-	private canSkipRouteUpdate(from: VueRouter.Route, to: VueRouter.Route) {
+	private canSkipRouteUpdate(from: Route, to: Route) {
 		// TODO: We can probably try to be smarter about this in the future and
 		// only update if params that affect the route have changed.
 		return objectEquals(to.params, from.params) && objectEquals(to.query, from.query);
@@ -385,8 +381,8 @@ function isLeafRoute(name?: string) {
  * cache data.
  */
 async function getPayload(
-	componentOptions: Vue.ComponentOptions<Vue>,
-	route: VueRouter.Route,
+	componentOptions: ComponentOptions<Vue>,
+	route: Route,
 	useCache: boolean
 ) {
 	const routeOptions = componentOptions.routeOptions || {};
