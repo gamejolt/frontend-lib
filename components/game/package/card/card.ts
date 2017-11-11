@@ -118,7 +118,7 @@ export class AppGamePackageCard extends Vue {
 
 		// Event to be able to open up the payment form.
 		EventBus.on('GamePackageCard.showPaymentOptions', (package_: GamePackage) => {
-			// Ennsure that the payment well opens with the correct build
+			// Ensure that the payment well opens with the correct build
 			// for "skip paying".
 			if (this.package.id === package_.id) {
 				this.showPayment(this.card.downloadableBuild ? this.card.downloadableBuild : undefined);
