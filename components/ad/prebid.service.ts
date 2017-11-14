@@ -17,7 +17,8 @@ interface AdPlacementVendorParam {
 	pos: AdSlotPos;
 	size: string;
 	appNexus: object;
-	indexExchange: any;
+	indexExchange: object;
+	rubicon: object;
 }
 
 const AdPlacementVendorParams: AdPlacementVendorParam[] = [
@@ -31,6 +32,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			id: '01',
 			siteID: '220482',
 		},
+		rubicon: {
+			accountId: '17266',
+			siteId: '160384',
+			zoneId: '769840',
+			position: 'atf',
+		},
 	},
 	{
 		pos: 'top',
@@ -41,6 +48,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 		indexExchange: {
 			id: '02',
 			siteID: '220483',
+		},
+		rubicon: {
+			accountId: '17266',
+			siteId: '160384',
+			zoneId: '769780',
+			position: 'atf',
 		},
 	},
 	{
@@ -53,6 +66,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			id: '03',
 			siteID: '220484',
 		},
+		rubicon: {
+			accountId: '17266',
+			siteId: '160384',
+			zoneId: '769842',
+			position: 'btf',
+		},
 	},
 	{
 		pos: 'bottom',
@@ -64,6 +83,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			id: '04',
 			siteID: '220485',
 		},
+		rubicon: {
+			accountId: '17266',
+			siteId: '160384',
+			zoneId: '769822',
+			position: 'btf',
+		},
 	},
 	{
 		pos: 'footer',
@@ -74,6 +99,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 		indexExchange: {
 			id: '05',
 			siteID: '220486',
+		},
+		rubicon: {
+			accountId: '17266',
+			siteId: '160384',
+			zoneId: '769844',
+			position: 'btf',
 		},
 	},
 ];
@@ -113,6 +144,10 @@ export class Prebid {
 				{
 					bidder: 'indexExchange',
 					params: placement.indexExchange,
+				},
+				{
+					bidder: 'rubicon',
+					params: placement.rubicon,
 				},
 			],
 		};
