@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./dismissable.html';
+import View from '!view!./dismissable.html';
 import { AppExpand } from '../../expand/expand';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 

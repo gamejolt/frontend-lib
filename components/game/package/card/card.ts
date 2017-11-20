@@ -31,7 +31,7 @@ import { EventBus } from '../../../event-bus/event-bus.service';
 import { LinkedKey } from '../../../linked-key/linked-key.model';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 
-let components: { [name: string]: new () => Vue } = {
+let components: any = {
 	AppCard,
 	AppJolticon,
 	AppTimeAgo,
@@ -42,7 +42,7 @@ let components: { [name: string]: new () => Vue } = {
 };
 
 if (GJ_IS_CLIENT) {
-	components = {...components, AppClientPackageCardButtons};
+	components = { ...components, AppClientPackageCardButtons };
 }
 
 @View
@@ -126,7 +126,8 @@ export class AppGamePackageCard extends Vue {
 				this.sale = true;
 				this.salePercentageOff = ((this.saleOldPricing.amount - this.pricing.amount) /
 					this.saleOldPricing.amount *
-					100).toFixed(0);
+					100
+				).toFixed(0);
 			}
 		}
 
