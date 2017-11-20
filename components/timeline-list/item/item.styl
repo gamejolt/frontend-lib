@@ -3,12 +3,10 @@
 
 // Most of this styling needs to be done globally.
 >>> .timeline-list
-
 	$border-size = 2px
 
 	// For doing a full-bleed within the content.
 	&-full-bleed
-
 		@media $media-xs
 			margin-left: -($grid-gutter-width-xs / 2)
 			margin-right: @margin-left
@@ -62,7 +60,7 @@
 
 			@media $media-sm-up
 				border-left: $border-size solid $gray-lighter
-				padding-left: ($timeline-list-icon-size / 2) + $timeline-list-avatar-margin
+				padding-left: $timeline-list-avatar-margin + ($timeline-list-icon-size / 2)
 
 		&-meta
 			margin-top: 6px
@@ -73,8 +71,7 @@
 			font-weight: bold
 			color: $gray
 
-			strong
-			b
+			strong, b
 				color: $black
 
 		&-header
@@ -99,7 +96,7 @@
 				@media $media-sm-up
 					padding-top: ($grid-gutter-width / 2)
 					padding-bottom: @padding-top
-					padding-left: ($timeline-list-icon-size / 2) + $timeline-list-avatar-margin
+					padding-left: $timeline-list-avatar-margin + ($timeline-list-icon-size / 2)
 					padding-right: @padding-top
 
 				.timeline-list-item-meta
@@ -114,9 +111,7 @@
 					@media $media-sm-up
 						font-size: $font-size-h3
 
-					&
-					strong
-					b
+					&, strong, b
 						color: $white
 
 		&-details
@@ -128,12 +123,12 @@
 			p:last-child
 				margin-bottom: 0
 
-		&-thumb
-		&-avatar
+		&-thumb, &-avatar
 			float: left
 			width: $timeline-list-avatar-size
 			height: $timeline-list-avatar-size
 			margin-right: $timeline-list-avatar-margin
+			border-radius: $border-radius-base
 
 		&-thumb
 			background-color: $gray-lightest
@@ -150,7 +145,6 @@
 				margin-left: ($timeline-list-icon-size / 2)
 
 		&-controls
-
 			.btn-circle
 				margin-right: 5px
 

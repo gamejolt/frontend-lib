@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./card.html?style=./card.styl';
+import View from '!view!./card.html?style=./card.styl';
 
 import { Game } from '../../game.model';
 import { GamePackage } from '../package.model';
@@ -28,8 +28,10 @@ import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.servi
 import { LocalDbPackage } from '../../../../../../app/components/client/local-db/package/package.model';
 import { AppClientPackageCardButtons } from '../../../../../../app/components/client/package-card-buttons/package-card-buttons';
 import { EventBus } from '../../../event-bus/event-bus.service';
+import { LinkedKey } from '../../../linked-key/linked-key.model';
+import { Clipboard } from '../../../clipboard/clipboard-service';
 
-const components: { [name: string]: new () => Vue } = {
+let components: { [name: string]: new () => Vue } = {
 	AppCard,
 	AppJolticon,
 	AppTimeAgo,
@@ -40,7 +42,7 @@ const components: { [name: string]: new () => Vue } = {
 };
 
 if (GJ_IS_CLIENT) {
-	components.AppClientPackageCardButtons = AppClientPackageCardButtons;
+	components = {...components, AppClientPackageCardButtons};
 }
 
 @View
@@ -78,8 +80,12 @@ export class AppGamePackageCard extends Vue {
 	saleOldPricing: SellablePricing | null = null;
 	localPackage: LocalDbPackage | null = null;
 
+	providerIcons: { [provider: string]: string } = {
+		steam: 'steam',
+	};
+
 	get card() {
-		return new GamePackageCardModel(this.releases, this.builds);
+		return new GamePackageCardModel(this.releases, this.builds, this.linkedKeys);
 	}
 
 	get isOwned() {
@@ -90,6 +96,14 @@ export class AppGamePackageCard extends Vue {
 		}
 
 		return this.sellable && this.sellable.is_owned ? true : false;
+	}
+
+	get linkedKeys() {
+		if (!this.sellable) {
+			return [];
+		}
+
+		return this.sellable.linked_keys || [];
 	}
 
 	get canBuy() {
@@ -195,5 +209,9 @@ export class AppGamePackageCard extends Vue {
 		}
 
 		return amountStr;
+	}
+
+	copyProviderKey(key: LinkedKey) {
+		Clipboard.copy(key.key);
 	}
 }

@@ -1,6 +1,7 @@
 import { Model } from '../../model/model.service';
 import { Comment } from '../comment-model';
 import { Game } from '../../game/game.model';
+import { HistoryTick } from '../../history-tick/history-tick-service';
 
 export class CommentVideo extends Model {
 	video_id: string;
@@ -8,7 +9,7 @@ export class CommentVideo extends Model {
 	img_thumbnail: string;
 
 	comment: Comment;
-	game: any;
+	game: Game;
 
 	constructor(data: any = {}) {
 		super(data);
@@ -20,6 +21,10 @@ export class CommentVideo extends Model {
 		if (data.game) {
 			this.game = new Game(data.game);
 		}
+	}
+
+	$viewed() {
+		return HistoryTick.sendBeacon('comment-video', this.id);
 	}
 }
 

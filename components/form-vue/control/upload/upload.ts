@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./upload.html?style=./upload.styl';
+import View from '!view!./upload.html?style=./upload.styl';
 
 import { BaseFormControl } from '../base';
 import { AppProgressBar } from '../../../progress/bar/bar';

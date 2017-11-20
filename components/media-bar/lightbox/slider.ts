@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import * as View from '!view!./slider.html';
+import View from '!view!./slider.html';
 
 import { AppMediaBarLightbox } from './lightbox';
 import { findRequiredVueParent } from '../../../utils/vue';

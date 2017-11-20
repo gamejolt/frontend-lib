@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./video.html?style=./video.styl';
+import View from '!view!./video.html?style=./video.styl';
 
 import { AppLoading } from '../../vue/components/loading/loading';
 

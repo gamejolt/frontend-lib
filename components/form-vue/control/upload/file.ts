@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./file.html';
+import View from '!view!./file.html';
 
 @View
 @Component({})

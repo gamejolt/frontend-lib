@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./form.html';
+import View from '!view!./form.html';
 import * as VeeValidate from 'vee-validate';
 
 import { findRequiredVueParent } from '../../utils/vue';
@@ -106,6 +106,9 @@ export class AppForm extends Vue {
 	}
 
 	async submit() {
+		// Wait until all form controls have settled into their final values.
+		await this.$nextTick();
+
 		// Gotta validate all controls first.
 		await this.validate();
 

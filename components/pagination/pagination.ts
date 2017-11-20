@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./pagination.html?style=./pagination.styl';
+import View from '!view!./pagination.html?style=./pagination.styl';
 
 import { Screen } from '../screen/screen-service';
 import { makeObservableService } from '../../utils/vue';

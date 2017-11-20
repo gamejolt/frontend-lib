@@ -1,6 +1,6 @@
 import { Component, Prop } from 'vue-property-decorator';
 // TODO(rewrite,cros) styles are broken
-import * as View from '!view!./play-modal.html?style=./play-modal.styl';
+import View from '!view!./play-modal.html?style=./play-modal.styl';
 
 import { BaseModal } from '../../modal/base';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';

@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./toggle.html?style=./toggle.styl';
+import View from '!view!./toggle.html?style=./toggle.styl';
 
 import { BaseFormControl } from '../base';
 

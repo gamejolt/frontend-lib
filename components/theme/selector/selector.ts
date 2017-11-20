@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./selector.html';
+import View from '!view!./selector.html';
 
 import { SiteTemplate } from '../../site/template/template-model';
 import { Popover } from '../../popover/popover.service';
@@ -31,7 +31,6 @@ export class AppThemeSelector extends Vue {
 	}
 
 	select(id: number) {
-		this.currentTemplate = id;
 		this.current = this.templates.find(t => t.id === this.currentTemplate) || null;
 		this.$emit('change', id);
 		Popover.hideAll();

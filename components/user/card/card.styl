@@ -1,0 +1,47 @@
+@require '~styles/variables'
+@require '../../../stylus/common/mixins'
+
+.user-card
+	background-color: $gray-lightest
+	border-radius: $border-radius-base
+
+>>> .popover .user-card
+	min-width: 300px
+
+.-well
+	padding: ($grid-gutter-width / 2)
+
+	@media $media-xs
+		padding: ($grid-gutter-width-xs / 2)
+
+hr
+	margin: 0
+
+.-user-info
+	clearfix()
+
+	&-inner
+		margin-left: 50px + ($grid-gutter-width / 2)
+
+.-verified
+	float: right
+	margin-left: ($grid-gutter-width / 2)
+	color: $gj-green
+
+.-avatar
+	width: 50px
+	float: left
+
+.-display-name
+	text-overflow()
+	font-weight: bold
+	font-size: $font-size-large
+
+.-username
+	text-overflow()
+	font-size: $font-size-small
+	color: $text-muted
+
+.-follow
+	clear: both
+	margin-top: $line-height-computed

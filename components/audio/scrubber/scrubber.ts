@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import * as View from '!view!./scrubber.html?style=./scrubber.styl';
+import View from '!view!./scrubber.html?style=./scrubber.styl';
 
 import { Ruler } from '../../ruler/ruler-service';
 

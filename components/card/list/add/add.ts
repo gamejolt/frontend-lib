@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./add.html?style=./add.styl';
+import View from '!view!./add.html?style=./add.styl';
 
 import { AppExpand } from '../../../expand/expand';
 import { AppCardList } from '../list';

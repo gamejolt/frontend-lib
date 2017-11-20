@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./purchase-modal.html?style=./purchase-modal.styl';
+import View from '!view!./purchase-modal.html?style=./purchase-modal.styl';
 
 import { BaseModal } from '../../../modal/base';
 import { GamePackage } from '../package.model';

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./widget-soundcloud.html?style=./widget-soundcloud.styl';
+import View from '!view!./widget-soundcloud.html?style=./widget-soundcloud.styl';
 
 @View
 @Component({})

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-interface GrowlOptions {
+export interface GrowlOptions {
 	message?: string;
 	title?: string;
 	sticky?: boolean;

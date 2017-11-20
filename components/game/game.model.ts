@@ -9,6 +9,25 @@ import { getProvider } from '../../utils/utils';
 import { Registry } from '../registry/registry.service';
 import { Site } from '../site/site-model';
 import { appStore } from '../../vue/services/app/app-store';
+import { GameCollaborator } from './collaborator/collaborator.model';
+
+export interface CustomMessage {
+	type: 'info' | 'alert';
+	message: string;
+	class: string;
+}
+
+export type Perm =
+	| 'all'
+	| 'analytics'
+	| 'sales'
+	| 'details'
+	| 'media'
+	| 'devlogs'
+	| 'comments'
+	| 'ratings'
+	| 'builds'
+	| 'game-api';
 
 export class Game extends Model {
 	static readonly STATUS_HIDDEN = 0;
@@ -53,11 +72,9 @@ export class Game extends Model {
 	creation_tool_human: string;
 	category_slug: string;
 	web_site: string;
-	view_count: number;
-	play_count: number;
-	download_count: number;
 	bundle_only: boolean;
 	ga_tracking_id: string;
+	should_show_ads: boolean;
 	ads_enabled: boolean;
 	comments_enabled: boolean;
 
@@ -88,6 +105,9 @@ export class Game extends Model {
 	tigrs_humor: number;
 	tigrs_gambling: number;
 
+	// collaborator perms
+	perms?: Perm[];
+
 	constructor(data: any = {}) {
 		super(data);
 
@@ -107,23 +127,25 @@ export class Game extends Model {
 			this.site = new Site(data.site);
 		}
 
-		// Should show as owned for the dev of the game.
-		if (this.sellable && this.sellable.type !== 'free' && this.developer) {
-			if (appStore.state.user && appStore.state.user.id === this.developer.id) {
-				this.sellable.is_owned = true;
-			}
+		// Should show as owned for the dev and collaborators of the game.
+		if (this.sellable && this.sellable.type !== 'free' && this.hasPerms()) {
+			this.sellable.is_owned = true;
 		}
 
 		Registry.store('Game', this);
 	}
 
+	get is_paid_game() {
+		return this.sellable && this.sellable.type === 'paid';
+	}
+
 	get _can_buy_primary_sellable() {
-		return this.sellable && this.sellable.type === 'paid' && !this.sellable.is_owned;
+		return this.is_paid_game && !this.sellable.is_owned;
 	}
 
 	// We don't want to show ads if this game has sellable items.
 	get _should_show_ads() {
-		return this.ads_enabled && (!this.sellable || this.sellable.type === 'free');
+		return this.should_show_ads && (!this.sellable || this.sellable.type === 'free');
 	}
 
 	get _is_finished() {
@@ -226,6 +248,24 @@ export class Game extends Model {
 			compat.type_applet ||
 			compat.type_silverlight
 		);
+	}
+
+	hasPerms(required?: Perm | Perm[], either?: boolean) {
+		if (!this.perms) {
+			return false;
+		}
+
+		if (!required || this.perms.indexOf('all') !== -1) {
+			return true;
+		}
+
+		required = Array.isArray(required) ? required : [required];
+		const missingPerms = required.filter(perm => this.perms!.indexOf(perm) === -1);
+		if (either) {
+			return missingPerms.length !== required.length;
+		} else {
+			return missingPerms.length === 0;
+		}
 	}
 
 	/**
@@ -414,6 +454,19 @@ export class Game extends Model {
 			'/web/dash/developer/games/set-canceled/' + this.id + '/' + (isCanceled ? '1' : '0'),
 			'game'
 		);
+	}
+
+	async $inviteCollaborator(username: string, role: typeof GameCollaborator.prototype.role) {
+		const response = await Api.sendRequest(
+			'/web/dash/developer/games/collaborators/invite/' + this.id,
+			{
+				username,
+				role,
+			}
+		);
+
+		await GameCollaborator.processCreate(response, 'collaborator');
+		return new GameCollaborator(response.collaborator);
 	}
 
 	$remove() {

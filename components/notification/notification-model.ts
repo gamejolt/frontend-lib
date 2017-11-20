@@ -17,6 +17,8 @@ import { Sellable } from '../sellable/sellable.model';
 import { Translate } from '../translate/translate.service';
 import { OrderItem } from '../order/item/item.model';
 import { GameLibraryGame } from '../game-library/game/game.model';
+import { Subscription } from '../subscription/subscription.model';
+import { GameCollaborator } from '../game/collaborator/collaborator.model';
 
 export class Notification extends Model {
 	static TYPE_COMMENT_ADD = 'comment-add';
@@ -28,6 +30,8 @@ export class Notification extends Model {
 	static TYPE_GAME_FOLLOW = 'game-follow';
 	static TYPE_DEVLOG_POST_ADD = 'devlog-post-add';
 	static TYPE_SELLABLE_SELL = 'sellable-sell';
+	static TYPE_USER_FOLLOW = 'user-follow';
+	static TYPE_COLLABORATOR_INVITE = 'collaborator-invite';
 
 	user_id: number;
 	type: string;
@@ -47,7 +51,9 @@ export class Notification extends Model {
 		| GameRating
 		| GameLibraryGame
 		| FiresidePost
-		| OrderItem;
+		| OrderItem
+		| Subscription
+		| GameCollaborator;
 
 	to_resource: string;
 	to_resource_id: number;
@@ -116,6 +122,14 @@ export class Notification extends Model {
 			this.action_model = new OrderItem(data.action_resource_model);
 			this.jolticon = 'jolticon-heart';
 			this.is_user_based = true;
+		} else if (this.type === Notification.TYPE_USER_FOLLOW) {
+			this.action_model = new Subscription(data.action_resource_model);
+			this.jolticon = 'jolticon-subscribe';
+			this.is_user_based = true;
+		} else if (this.type === Notification.TYPE_COLLABORATOR_INVITE) {
+			this.action_model = new GameCollaborator(data.action_resource_model);
+			this.jolticon = 'jolticon-wrench';
+			this.is_user_based = true;
 		}
 
 		// Keep memory clean after bootstrapping the models.
@@ -135,11 +149,17 @@ export class Notification extends Model {
 			case Notification.TYPE_FRIENDSHIP_ACCEPT:
 				return this.from_model!.url;
 
+			case Notification.TYPE_USER_FOLLOW:
+				return this.from_model!.url;
+
 			case Notification.TYPE_GAME_RATING_ADD:
 				return (this.to_model as Game).routeLocation;
 
 			case Notification.TYPE_GAME_FOLLOW:
 				return this.from_model!.url;
+
+			case Notification.TYPE_COLLABORATOR_INVITE:
+				return (this.to_model as Game).routeLocation;
 
 			case Notification.TYPE_DEVLOG_POST_ADD:
 				return {

@@ -1,5 +1,14 @@
 <span>
-	<a v-if="user" class="user-avatar" :href="href" :title="user.display_name">
+	<a
+		v-if="user"
+		class="user-avatar"
+		:href="href"
+		:title="user.display_name"
+		v-app-popover-trigger.hover="{
+			id: `user-card-hover-${user.id}`,
+			disabled: !shouldShowHoverCard,
+		}"
+		>
 		<app-user-avatar-img :user="user" />
 		<div class="avatar-name" v-if="showName">
 			{{ user.display_name }}
@@ -7,6 +16,18 @@
 			@{{ user.username }}
 		</div>
 	</a>
-
 	<app-user-avatar-img v-else title="Guest" />
+
+	<app-popover
+		v-if="shouldShowHoverCard"
+		:popover-id="`user-card-hover-${user.id}`"
+		:append-to-body="true"
+		@focused="onCardShown"
+		>
+		<app-user-card
+			v-if="isHoverCardBootstrapped"
+			:user="user"
+			:show-extra-info="true"
+			/>
+	</app-popover>
 </span>

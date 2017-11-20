@@ -89,7 +89,7 @@ export class BaseForm<T> extends Vue {
 	}
 
 	created() {
-		this._init();
+		this.privateInit();
 	}
 
 	mounted() {
@@ -116,7 +116,7 @@ export class BaseForm<T> extends Vue {
 		}
 	}
 
-	private _init() {
+	private privateInit() {
 		// Is a base model defined? If so, then we're editing.
 		if (this.model) {
 			this.method = 'edit';
@@ -238,7 +238,7 @@ export class BaseForm<T> extends Vue {
 
 			// If we should reset on successful submit, let's do that now.
 			if (this.resetOnSubmit) {
-				this._init();
+				this.privateInit();
 
 				// Reset again in case init triggered changes.
 				this.changed = false;

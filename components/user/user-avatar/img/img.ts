@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import * as View from '!view!./img.html?style=./img.styl';
+import View from '!view!./img.html?style=./img.styl';
 
 import { User } from '../../user.model';
 

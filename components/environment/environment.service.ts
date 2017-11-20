@@ -22,10 +22,9 @@ export class Environment {
 	};
 
 	// Production defaults.
-	static baseUrl = 'http://gamejolt.com';
-	static secureBaseUrl = 'https://gamejolt.com';
-
-	static wttfBaseUrl = 'http://gamejolt.com';
+	static baseUrlInsecure = 'http://gamejolt.com';
+	static baseUrl = 'https://gamejolt.com';
+	static wttfBaseUrl = 'https://gamejolt.com';
 	static authBaseUrl = 'https://gamejolt.com';
 	static checkoutBaseUrl = 'https://gamejolt.com';
 
@@ -46,8 +45,7 @@ export class Environment {
 
 if (Environment.env === 'development') {
 	Environment.baseUrl = 'http://localhost:8080';
-	Environment.secureBaseUrl = 'http://localhost:8080';
-
+	Environment.baseUrlInsecure = 'http://localhost:8080';
 	Environment.wttfBaseUrl = 'http://localhost:8080';
 	Environment.authBaseUrl = 'http://localhost:8080';
 	Environment.checkoutBaseUrl = 'http://localhost:8080';
