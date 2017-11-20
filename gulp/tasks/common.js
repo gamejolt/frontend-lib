@@ -50,6 +50,9 @@ module.exports = function(config, projectBase) {
 	if (config.server) {
 		config.write = true;
 		config.buildDir += '-server';
+	} else if (config.client) {
+		config.write = true;
+		config.buildDir += '-client';
 	}
 
 	// require( './styles.js' )( config );
