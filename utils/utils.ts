@@ -62,16 +62,6 @@ export function loadScript(src: string) {
 	});
 }
 
-export function LoaderFunc() {
-	return function(
-		_: any,
-		__: string,
-		descriptor: TypedPropertyDescriptor<(...args: any[]) => Promise<any>>
-	) {
-		return descriptor;
-	};
-}
-
 export function sleep(ms: number) {
 	return new Promise(resolve => {
 		setTimeout(resolve, ms);
