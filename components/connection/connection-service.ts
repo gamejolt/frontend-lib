@@ -9,12 +9,12 @@ export class Connection {
 
 	private static store: VuexStore;
 
-	static get isOnline() {
-		return !this.isDeviceOffline && !this.hasRequestFailure;
+	static get isOffline() {
+		return this.isDeviceOffline || this.hasRequestFailure;
 	}
 
 	static get isClientOffline() {
-		return GJ_IS_CLIENT && !this.isOnline;
+		return GJ_IS_CLIENT && this.isOffline;
 	}
 
 	static init(store: VuexStore) {
