@@ -2,7 +2,7 @@
 
 	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
 		:class="{ 'btn-dark-variant': darkVariant }"
-		:disabled="!Connection.isOnline"
+		:disabled="Connection.isClientOffline"
 		@click="linkedAccountLogin( 'facebook' )"
 		>
 		<app-jolticon icon="facebook" />
@@ -11,7 +11,7 @@
 
 	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
 		:class="{ 'btn-dark-variant': darkVariant }"
-		:disabled="!Connection.isOnline"
+		:disabled="Connection.isClientOffline"
 		@click="linkedAccountLogin( 'google' )"
 		>
 		<app-jolticon icon="google-plus" />
@@ -20,7 +20,7 @@
 
 	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
 		:class="{ 'btn-dark-variant': darkVariant }"
-		:disabled="!Connection.isOnline"
+		:disabled="Connection.isClientOffline"
 		@click="linkedAccountLogin( 'twitter' )"
 		>
 		<app-jolticon icon="twitter" />
@@ -29,7 +29,7 @@
 
 	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
 		:class="{ 'btn-dark-variant': darkVariant }"
-		:disabled="!Connection.isOnline"
+		:disabled="Connection.isClientOffline"
 		@click="linkedAccountLogin( 'twitch' )"
 		>
 		<app-jolticon icon="twitch" />
