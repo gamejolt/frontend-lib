@@ -19,6 +19,26 @@ import { OrderItem } from '../order/item/item.model';
 import { GameLibraryGame } from '../game-library/game/game.model';
 import { Subscription } from '../subscription/subscription.model';
 import { GameCollaborator } from '../game/collaborator/collaborator.model';
+import { Mention } from '../mention/mention.model';
+import { assertNever } from '../../utils/utils';
+
+function getRouteLocationForModel(model: Game | User | FiresidePost) {
+	if (model instanceof User) {
+		return model.url;
+	} else if (model instanceof Game) {
+		return model.routeLocation;
+	} else if (model instanceof FiresidePost && !!model.game) {
+		return {
+			name: 'discover.games.view.devlog.view',
+			params: {
+				slug: model.game.slug,
+				id: model.game.id + '',
+				postSlug: model.slug,
+			},
+		};
+	}
+	return '';
+}
 
 export class Notification extends Model {
 	static TYPE_COMMENT_ADD = 'comment-add';
@@ -32,6 +52,7 @@ export class Notification extends Model {
 	static TYPE_SELLABLE_SELL = 'sellable-sell';
 	static TYPE_USER_FOLLOW = 'user-follow';
 	static TYPE_COLLABORATOR_INVITE = 'collaborator-invite';
+	static TYPE_MENTION = 'mention';
 
 	user_id: number;
 	type: string;
@@ -53,7 +74,8 @@ export class Notification extends Model {
 		| FiresidePost
 		| OrderItem
 		| Subscription
-		| GameCollaborator;
+		| GameCollaborator
+		| Mention;
 
 	to_resource: string;
 	to_resource_id: number;
@@ -130,6 +152,10 @@ export class Notification extends Model {
 			this.action_model = new GameCollaborator(data.action_resource_model);
 			this.jolticon = 'jolticon-wrench';
 			this.is_user_based = true;
+		} else if (this.type === Notification.TYPE_MENTION) {
+			this.action_model = new Mention(data.action_resource_model);
+			this.jolticon = 'jolticon-comment';
+			this.is_user_based = true;
 		}
 
 		// Keep memory clean after bootstrapping the models.
@@ -147,34 +173,49 @@ export class Notification extends Model {
 		switch (this.type) {
 			case Notification.TYPE_FRIENDSHIP_REQUEST:
 			case Notification.TYPE_FRIENDSHIP_ACCEPT:
-				return this.from_model!.url;
+				return getRouteLocationForModel(this.from_model!);
 
 			case Notification.TYPE_USER_FOLLOW:
-				return this.from_model!.url;
+				return getRouteLocationForModel(this.from_model!);
 
 			case Notification.TYPE_GAME_RATING_ADD:
-				return (this.to_model as Game).routeLocation;
+				return getRouteLocationForModel(this.to_model as Game);
 
 			case Notification.TYPE_GAME_FOLLOW:
-				return this.from_model!.url;
+				return getRouteLocationForModel(this.from_model!);
 
 			case Notification.TYPE_COLLABORATOR_INVITE:
-				return (this.to_model as Game).routeLocation;
+				return getRouteLocationForModel(this.to_model as Game);
 
 			case Notification.TYPE_DEVLOG_POST_ADD:
-				return {
-					name: 'discover.games.view.devlog.view',
-					params: {
-						slug: (this.to_model as Game).slug,
-						id: this.to_model.id + '',
-						postSlug: (this.action_model as FiresidePost).slug,
-					},
-				};
+				return getRouteLocationForModel(this.action_model as FiresidePost);
 
 			case Notification.TYPE_SELLABLE_SELL:
 				return {
 					name: 'dash.main.overview',
 				};
+
+			case Notification.TYPE_MENTION: {
+				const mention = this.action_model as Mention;
+				switch (mention.resource) {
+					case 'Comment':
+					case 'Forum_Post':
+						// Pull through the "go" func below since we can't statically get it.
+						return '';
+
+					case 'Game':
+						return getRouteLocationForModel(this.to_model as Game);
+
+					case 'User':
+						return getRouteLocationForModel(this.to_model as User);
+
+					case 'Fireside_Post':
+						return getRouteLocationForModel(this.to_model as FiresidePost);
+
+					default:
+						return assertNever(mention.resource);
+				}
+			}
 		}
 
 		// Must pull asynchronously when they click on the notification.
@@ -187,29 +228,35 @@ export class Notification extends Model {
 		} else if (
 			this.type === Notification.TYPE_COMMENT_ADD ||
 			this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ||
+			this.type === Notification.TYPE_MENTION ||
 			this.type === Notification.TYPE_FORUM_POST_ADD
 		) {
 			// Need to fetch the URL first.
 			let url: string;
+			let model = this.action_model;
+
+			if (this.action_model instanceof Mention) {
+				if (this.action_model.comment) {
+					model = this.action_model.comment;
+				} else if (this.action_model.forum_post) {
+					model = this.action_model.forum_post;
+				} else {
+					throw new Error(`Invalid mention model.`);
+				}
+			}
 
 			try {
-				if (
-					this.type === Notification.TYPE_COMMENT_ADD ||
-					this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER
-				) {
-					url = await Comment.getCommentUrl(this.action_resource_id);
-				} else if (this.type === Notification.TYPE_FORUM_POST_ADD) {
-					url = await ForumPost.getPostUrl(this.action_resource_id);
+				if (model instanceof Comment) {
+					url = await Comment.getCommentUrl(model.id);
+				} else if (model instanceof ForumPost) {
+					url = await ForumPost.getPostUrl(model.id);
 				} else {
 					throw new Error('Invalid type.');
 				}
 
-				console.log('got', url);
-
 				// If we're going to a URL within this domain, then we want to strip off the domain stuff
 				// and go to the URL. Otherwise we need to do a full-page change to the domain/url.
 				const search = Environment.baseUrl;
-				console.log('search', search);
 				if (url.search(search) === 0) {
 					url = url.replace(search, '');
 					router.push(url);
