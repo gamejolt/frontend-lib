@@ -71,3 +71,8 @@ export function LoaderFunc() {
 		return descriptor;
 	};
 }
+
+// For exhaustive switch matching: https://www.typescriptlang.org/docs/handbook/advanced-types.html
+export function assertNever(x: never): never {
+	throw new Error('Unexpected object: ' + x);
+}
