@@ -7,6 +7,10 @@ if (!GJ_IS_SSR) {
 	const VTooltip: any = mod.default;
 	AppTooltip = mod.VTooltip;
 
+	// Allows the tooltip to float above any scroll boundaries, otherwise it may not position
+	// correctly for things with overflow:hidden.
+	(AppTooltip as any).options.defaultBoundariesElement = 'window';
+
 	// Hide on mobile sizes.
 	VTooltip.enabled = window.innerWidth > 768;
 }
