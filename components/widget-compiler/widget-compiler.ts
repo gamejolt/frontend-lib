@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 import { WidgetCompiler, WidgetCompilerContext } from './widget-compiler.service';
@@ -15,7 +15,7 @@ export class AppWidgetCompiler extends Vue {
 	})
 	context: WidgetCompilerContext;
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		if (!this.content) {
 			return h('div');
 		}

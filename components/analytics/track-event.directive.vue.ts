@@ -1,7 +1,7 @@
-import Vue from 'vue';
+import { DirectiveOptions } from 'vue';
 import { Analytics } from './analytics.service';
 
-export const AppTrackEvent: Vue.DirectiveOptions = {
+export const AppTrackEvent: DirectiveOptions = {
 	bind(el, binding) {
 		el.addEventListener('click', () => {
 			if (binding.value) {

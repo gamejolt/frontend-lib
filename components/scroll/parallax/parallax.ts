@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop } from 'vue-property-decorator';
 
@@ -55,7 +55,7 @@ export class AppScrollParallax extends Vue {
 		this.recalc();
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('div', { staticClass: 'scroll-parallax' }, this.$slots.default);
 	}
 

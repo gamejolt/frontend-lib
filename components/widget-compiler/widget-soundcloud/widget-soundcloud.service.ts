@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { CreateElement } from 'vue';
 import { WidgetCompilerWidget } from '../widget';
 import { WidgetCompilerContext } from '../widget-compiler.service';
 import { AppWidgetCompilerWidgetSoundcloud } from './widget-soundcloud';
@@ -6,7 +6,7 @@ import { AppWidgetCompilerWidgetSoundcloud } from './widget-soundcloud';
 export class WidgetCompilerWidgetSoundcloud extends WidgetCompilerWidget {
 	readonly name = 'soundcloud';
 
-	compile(h: Vue.CreateElement, _context: WidgetCompilerContext, params: string[] = []) {
+	compile(h: CreateElement, _context: WidgetCompilerContext, params: string[] = []) {
 		if (!params || !params.length) {
 			throw new Error(`Invalid params for widget.`);
 		}

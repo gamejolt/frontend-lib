@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { VNodeDirective, DirectiveOptions } from 'vue';
 import { Popover } from './popover.service';
 import { PopoverTrigger } from './popover';
 import 'core-js/es6/map';
@@ -65,11 +65,11 @@ class VuePopoverTrigger implements PopoverTrigger {
 	}
 }
 
-function getPopoverId(binding: Vue.VNodeDirective): string {
+function getPopoverId(binding: VNodeDirective): string {
 	return typeof binding.value === 'string' ? binding.value : binding.value.id;
 }
 
-function getTriggerEvent(binding: Vue.VNodeDirective) {
+function getTriggerEvent(binding: VNodeDirective) {
 	let triggerEvent = 'click';
 	if (binding.modifiers['hover']) {
 		triggerEvent = 'hover';
@@ -82,11 +82,11 @@ function getTriggerEvent(binding: Vue.VNodeDirective) {
 	return triggerEvent;
 }
 
-function getDisabled(binding: Vue.VNodeDirective): boolean {
+function getDisabled(binding: VNodeDirective): boolean {
 	return typeof binding.value === 'string' ? false : binding.value.disabled;
 }
 
-export const AppPopoverTrigger: Vue.DirectiveOptions = {
+export const AppPopoverTrigger: DirectiveOptions = {
 	inserted(el, binding) {
 		const trigger = new VuePopoverTrigger(el, getPopoverId(binding), getTriggerEvent(binding));
 		trigger.disabled = getDisabled(binding);

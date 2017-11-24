@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 import { Modal } from './modal.service';
@@ -7,7 +7,7 @@ import { Modal } from './modal.service';
 export class AppModalWrapper extends Vue {
 	@Prop(Modal) modal: Modal;
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h(this.modal.component, {
 			props: {
 				modal: this.modal,

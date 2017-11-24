@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { ModuleTree, Module as _Module } from 'vuex';
 import { WatchOptions } from 'vue';
 import { Module, Payload } from 'vuex/types';
 
@@ -43,7 +43,7 @@ let queuedDecorators: QueuedDecoratorCallback[] = [];
 
 interface VuexModuleOptions {
 	store?: boolean;
-	modules?: Vuex.ModuleTree<any>;
+	modules?: ModuleTree<any>;
 	namespaced?: boolean;
 }
 
@@ -67,7 +67,7 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 			__vuexMutationScope: { enumerable: false, writable: true },
 		});
 
-		const storeOptions: Vuex.Module<any, any> = {
+		const storeOptions: _Module<any, any> = {
 			modules: options.modules || {},
 			namespaced: !options.store,
 			state,
@@ -90,7 +90,7 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 			}
 
 			const desc = Object.getOwnPropertyDescriptor(target.prototype, key);
-			const getter = desc.get;
+			const getter = desc && desc.get;
 			if (!getter) {
 				continue;
 			}

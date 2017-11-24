@@ -59,8 +59,10 @@ export class GamePlayModal {
 			// onclick handler. Once we have the download URL we can direct the
 			// window that we now have the reference to.
 			const win = window.open('');
-			const downloadUrl = await this.getDownloadUrl(build, { key: options.key });
-			win.location.href = downloadUrl;
+			if (win) {
+				const downloadUrl = await this.getDownloadUrl(build, { key: options.key });
+				win.location.href = downloadUrl;
+			}
 			return;
 		}
 

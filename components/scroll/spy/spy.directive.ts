@@ -1,5 +1,5 @@
 import 'core-js/es6/map';
-import Vue from 'vue';
+import { DirectiveOptions } from 'vue';
 
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
@@ -96,7 +96,7 @@ if (!GJ_IS_SSR) {
 	});
 }
 
-export const AppScrollSpy: Vue.DirectiveOptions = {
+export const AppScrollSpy: DirectiveOptions = {
 	bind(el, binding) {
 		const id: string = binding.value || (el.getAttribute('href') || '').substring(1);
 		if (!id) {

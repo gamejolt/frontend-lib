@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import { State } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
-import * as View400 from '!view!./page-400.html';
-import * as View403 from '!view!./page-403.html';
-import * as View500 from '!view!./page-500.html';
-import * as View404 from '!view!./page-404.html';
-import * as ViewOffline from '!view!./page-offline.html';
+import View400 from '!view!./page-400.html';
+import View403 from '!view!./page-403.html';
+import View500 from '!view!./page-500.html';
+import View404 from '!view!./page-404.html';
+import ViewOffline from '!view!./page-offline.html';
 
 import { AppStore } from '../../../vue/services/app/app-store';
 

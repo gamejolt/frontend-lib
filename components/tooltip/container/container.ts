@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component } from 'vue-property-decorator';
 import { findVueParent } from '../../../utils/vue';
 
@@ -16,7 +16,7 @@ let containers = 0;
 export class AppTooltipContainer extends Vue {
 	containerId = ++containers;
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h(
 			'div',
 			{

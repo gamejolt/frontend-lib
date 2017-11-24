@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { CreateElement } from 'vue';
 import { WidgetCompilerWidget } from '../widget';
 import { WidgetCompilerContext } from '../widget-compiler.service';
 import { AppWidgetCompilerWidgetGamePackages } from './widget-game-packages';
@@ -6,7 +6,7 @@ import { AppWidgetCompilerWidgetGamePackages } from './widget-game-packages';
 export class WidgetCompilerWidgetGamePackages extends WidgetCompilerWidget {
 	readonly name = 'game-packages';
 
-	compile(h: Vue.CreateElement, context: WidgetCompilerContext, params: string[] = []) {
+	compile(h: CreateElement, context: WidgetCompilerContext, params: string[] = []) {
 		const namedParams = this.namedParams(params);
 
 		return h(AppWidgetCompilerWidgetGamePackages, {

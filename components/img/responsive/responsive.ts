@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
@@ -29,7 +29,7 @@ export class AppImgResponsive extends Vue {
 		this.updateSrc();
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('img', {
 			staticClass: 'img-responsive',
 			domProps: {

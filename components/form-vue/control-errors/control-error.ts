@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
 import { findRequiredVueParent } from '../../../utils/vue';
@@ -19,14 +19,12 @@ export class AppFormControlError extends Vue {
 	}
 
 	private setOverride() {
-		const errors = findRequiredVueParent(
-			this,
-			require('./control-errors').AppFormControlErrors as typeof AppFormControlErrors
-		);
+		const errors = findRequiredVueParent(this, require('./control-errors')
+			.AppFormControlErrors as typeof AppFormControlErrors);
 		errors.setMessageOverride(this.when, this.message);
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('span');
 	}
 }

@@ -19,7 +19,7 @@ import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { AppCommentWidgetComment } from './comment/comment';
 import { AppLoadingFade } from '../../loading/fade/fade';
 import { AppMessageThread } from '../../message-thread/message-thread';
-import { AppCommentWidgetAdd } from './add/add';
+import { AppCommentWidgetAdd } from '../add/add';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { AppMessageThreadPagination } from '../../message-thread/pagination/pagination';
 import { AppMessageThreadContent } from '../../message-thread/content/content';

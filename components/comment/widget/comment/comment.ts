@@ -24,7 +24,7 @@ import { AppMessageThreadItem } from '../../../message-thread/item/item';
 import { number } from '../../../../vue/filters/number';
 import { AppExpand } from '../../../expand/expand';
 import { AppScrollWhen } from '../../../scroll/scroll-when.directive.vue';
-import { AppCommentWidgetAdd } from '../add/add';
+import { AppCommentWidgetAdd } from '../../add/add';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 import { Scroll } from '../../../scroll/scroll.service';
 import { AppMessageThreadAdd } from '../../../message-thread/add/add';

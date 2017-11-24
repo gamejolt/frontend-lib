@@ -1,9 +1,9 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component } from 'vue-property-decorator';
 
 @Component({})
 export class AppPopoverContext extends Vue {
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('div', { domProps: { id: 'popover-context' } }, this.$slots.default);
 	}
 }

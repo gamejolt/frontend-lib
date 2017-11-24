@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
@@ -61,7 +61,7 @@ export class AppAutoscrollAnchor extends Vue {
 		}
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('div', this.$slots.default);
 	}
 }

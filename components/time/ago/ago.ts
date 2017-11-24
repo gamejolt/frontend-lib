@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import * as distance from 'date-fns/distance_in_words_to_now';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
@@ -59,7 +59,7 @@ export class AppTimeAgo extends Vue {
 		}
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('span', this.timeAgo);
 	}
 }

@@ -5,10 +5,8 @@ import { Api } from '../api/api.service';
 import { GamePackage } from './package/package.model';
 import { GameBuild } from './build/build.model';
 import { Sellable } from '../sellable/sellable.model';
-import { getProvider } from '../../utils/utils';
 import { Registry } from '../registry/registry.service';
 import { Site } from '../site/site-model';
-import { appStore } from '../../vue/services/app/app-store';
 import { GameCollaborator } from './collaborator/collaborator.model';
 
 export interface CustomMessage {
@@ -220,11 +218,8 @@ export class Game extends Model {
 	getUrl(page = '') {
 		if (page === 'soundtrack') {
 			return '/games/' + this.slug + '/' + this.id + '/download/soundtrack';
-		} else if (!page) {
-			return '/games/' + this.slug + '/' + this.id;
 		}
-
-		return getProvider<any>('$state').href(this.getSref(page), this.getSrefParams(page));
+		return '/games/' + this.slug + '/' + this.id;
 	}
 
 	hasDesktopSupport(): boolean {

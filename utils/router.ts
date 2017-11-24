@@ -1,10 +1,10 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
+import VueRouter, { Route, RouteConfig, Location } from 'vue-router';
 
 import { routeError404, RouteError404 } from '../components/error/page/page.route';
 import { initScrollBehavior } from '../components/scroll/auto-scroll/autoscroll.service';
 
-export function initRouter(appRoutes: VueRouter.RouteConfig[]) {
+export function initRouter(appRoutes: RouteConfig[]) {
 	Vue.use(VueRouter);
 
 	const routes = [...appRoutes, routeError404];
@@ -100,9 +100,9 @@ function guardHijackEvent(e: any) {
 }
 
 export class LocationRedirect {
-	constructor(public location: VueRouter.Location) {}
+	constructor(public location: Location) {}
 
-	static fromRoute(from: VueRouter.Route, params: any, query: any = {}) {
+	static fromRoute(from: Route, params: any, query: any = {}) {
 		return new LocationRedirect({
 			name: from.name,
 			params: Object.assign({}, from.params, params),
@@ -113,7 +113,7 @@ export class LocationRedirect {
 	}
 }
 
-export function enforceLocation(route: VueRouter.Route, params: any, query: any = {}) {
+export function enforceLocation(route: Route, params: any, query: any = {}) {
 	for (const key in params) {
 		if (route.params[key] !== params[key]) {
 			return LocationRedirect.fromRoute(route, params, query);

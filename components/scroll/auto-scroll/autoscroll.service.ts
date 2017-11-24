@@ -1,4 +1,4 @@
-import VueRouter from 'vue-router';
+import { Route } from 'vue-router';
 import { Scroll } from '../scroll.service';
 
 /**
@@ -23,8 +23,8 @@ export function initScrollBehavior() {
 	}
 
 	return function scrollBehavior(
-		to: VueRouter.Route,
-		_from: VueRouter.Route,
+		to: Route,
+		_from: Route,
 		savedPosition?: { x: number; y: number }
 	) {
 		// Skip one auto scroll trigger.

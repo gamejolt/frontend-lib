@@ -1,7 +1,7 @@
-import Vue from 'vue';
+import { DirectiveOptions } from 'vue';
 import * as autosize from 'autosize';
 
-export const AppFormAutosize: Vue.DirectiveOptions = {
+export const AppFormAutosize: DirectiveOptions = {
 	inserted(el) {
 		autosize(el);
 	},

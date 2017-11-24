@@ -1,7 +1,7 @@
-import Vue from 'vue';
+import { DirectiveOptions } from 'vue';
 import { Scroll } from '../scroll.service';
 
-export const AppScrollTo: Vue.DirectiveOptions = {
+export const AppScrollTo: DirectiveOptions = {
 	bind(el, binding) {
 		el.addEventListener('click', e => {
 			e.preventDefault();

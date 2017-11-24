@@ -10,43 +10,6 @@ export function asyncComponentLoader(loader: Promise<any>) {
 	return loader.then(mod => mod.default);
 }
 
-export function getProvider<T>(token: any): T {
-	const injector = angular.element(window.document).injector();
-	if (!injector) {
-		throw new Error('Injector is not yet bootstrapped into the app.');
-	}
-
-	return injector.get(token);
-}
-
-export function hasProvider(token: any): boolean {
-	const injector = angular.element(window.document).injector();
-	if (!injector) {
-		throw new Error('Injector is not yet bootstrapped into the app.');
-	}
-
-	return injector.has(token);
-}
-
-/**
- * Can be used to wrap a require.ensure callback in $ocLazyLoad.
- */
-export function lazyload(func: Function): Promise<void> {
-	return new Promise<void>(async resolve => {
-		const $ocLazyLoad = getProvider<any>('$ocLazyLoad');
-		$ocLazyLoad.toggleWatch(true);
-		await Promise.resolve(func());
-		$ocLazyLoad.toggleWatch(false);
-		await $ocLazyLoad.inject();
-		resolve();
-	});
-}
-
-// await require.ensure( [], () => lazyload( () =>
-// {
-// 	require( 'angular-hammer' );
-// } ), 'hammer' );
-
 export function loadScript(src: string) {
 	return new Promise((resolve, reject) => {
 		const script = window.document.createElement('script');
