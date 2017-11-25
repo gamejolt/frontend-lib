@@ -10,9 +10,6 @@ export class AppExpand extends Vue {
 
 	inDom = false;
 
-	// Used for a hack to force browser reflow.
-	private reflow: number;
-
 	created() {
 		this.inDom = !!this.when;
 	}
@@ -46,13 +43,17 @@ export class AppExpand extends Vue {
 		} else {
 			this.$el.style.height = this.$el.scrollHeight + 'px';
 
-			// This hack forces a browser reflow.
+			// Reading offsetWidth forces a browser reflow.
 			// This way the change from explicit height to 0 is noticed.
-			this.reflow = this.$el.offsetWidth;
+			this.forceReflow();
 
 			this.$el.classList.add('transition');
 			this.$el.style.height = '0';
 		}
+	}
+
+	private forceReflow() {
+		return this.$el.offsetWidth;
 	}
 
 	// For clean up work after transitions.

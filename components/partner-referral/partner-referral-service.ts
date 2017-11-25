@@ -1,7 +1,7 @@
-import VueRouter from 'vue-router';
+import { Route } from 'vue-router';
 
 export class PartnerReferral {
-	static trackReferrer(resource: string, resourceId: number, route: VueRouter.Route) {
+	static trackReferrer(resource: string, resourceId: number, route: Route) {
 		if (GJ_IS_SSR) {
 			return;
 		}

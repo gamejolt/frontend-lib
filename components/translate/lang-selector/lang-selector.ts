@@ -27,7 +27,7 @@ export class AppTranslateLangSelector extends Vue {
 			window.location.reload();
 		} else {
 			const gui = require('nw.gui') as typeof nwGui;
-			gui.Window.get().reloadDev();
+			(gui.Window.get() as any).reloadDev();
 		}
 	}
 }

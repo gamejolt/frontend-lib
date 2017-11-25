@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { CreateElement, VNode } from 'vue';
 import { WidgetCompilerWidget } from './widget';
 import { WidgetCompilerWidgetYoutube } from './widget-youtube/widget-youtube.service';
 import { WidgetCompilerWidgetVimeo } from './widget-vimeo/widget-vimeo.service';
@@ -37,12 +37,12 @@ export class WidgetCompiler {
 		return this.contentClass;
 	}
 
-	static compile(h: Vue.CreateElement, context: WidgetCompilerContext, content: string) {
+	static compile(h: CreateElement, context: WidgetCompilerContext, content: string) {
 		if (!content) {
 			return undefined;
 		}
 
-		let children: Vue.VNode[] = [];
+		let children: VNode[] = [];
 		let workingInput = content;
 
 		// Loop through each match that looks like a widget.
@@ -102,7 +102,7 @@ export class WidgetCompiler {
 	 * and call its compilation function.
 	 */
 	private static processWidgetMatch(
-		h: Vue.CreateElement,
+		h: CreateElement,
 		context: WidgetCompilerContext,
 		match: string
 	) {

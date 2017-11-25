@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
 import { GameSong } from '../../game/song/song.model';
@@ -22,7 +22,7 @@ export class AppAudioPlayer extends Vue {
 		this.setup();
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('audio', {
 			domProps: {
 				src: this.song.url,

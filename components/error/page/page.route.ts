@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue, { CreateElement } from 'vue';
+import { RouteConfig } from 'vue-router';
 import { Component } from 'vue-property-decorator';
 import { AppStore, AppMutation } from '../../../vue/services/app/app-store';
 
@@ -12,12 +12,12 @@ export class RouteError404 extends Vue {
 		this.setError(404);
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('div');
 	}
 }
 
-export const routeError404: VueRouter.RouteConfig = {
+export const routeError404: RouteConfig = {
 	name: 'error.404',
 	path: '*',
 	component: RouteError404,

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import './placeholder.styl';
 
@@ -8,7 +8,7 @@ export class AppLazyPlaceholder extends Vue {
 	@Prop({ type: String, default: 'div' })
 	tag: string;
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h(
 			this.tag,
 			{

@@ -15,6 +15,8 @@ export type Perm =
 	| 'builds'
 	| 'game-api';
 
+export type GameCollaboratorRole = 'owner' | 'collaborator' | 'community-manager' | 'developer';
+
 export class GameCollaborator extends Model {
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_INVITE = 'invite';
@@ -28,11 +30,7 @@ export class GameCollaborator extends Model {
 	user_id: number;
 	status: typeof GameCollaborator.STATUS_ACTIVE | typeof GameCollaborator.STATUS_INVITE;
 	username: string; // for submitting
-	role:
-		| typeof GameCollaborator.ROLE_OWNER
-		| typeof GameCollaborator.ROLE_COLLABORATOR
-		| typeof GameCollaborator.ROLE_COMMUNITY_MANAGER
-		| typeof GameCollaborator.ROLE_DEVELOPER;
+	role: GameCollaboratorRole;
 	perms: Perm[];
 	added_on: number;
 	accepted_on: number;

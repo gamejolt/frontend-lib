@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import '../../social.styl';
 
@@ -10,7 +10,7 @@ export class AppSocialFacebookLike extends Vue {
 	@Prop({ type: Boolean, default: true })
 	showShare: boolean;
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('div', {
 			staticClass: 'fb-like',
 			attrs: {

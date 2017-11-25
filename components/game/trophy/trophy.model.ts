@@ -2,6 +2,8 @@ import { Model } from '../../model/model.service';
 import { UserGameTrophy } from '../../user/game-trophy/game-trophy.model';
 import { Api } from '../../api/api.service';
 
+export type GameTrophyDifficulty = 1 | 2 | 3 | 4;
+
 export class GameTrophy extends Model {
 	static readonly DIFFICULTY_BRONZE = 1;
 	static readonly DIFFICULTY_SILVER = 2;

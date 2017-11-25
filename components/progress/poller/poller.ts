@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 import { Api } from '../../api/api.service';
@@ -42,7 +42,7 @@ export class AppProgressPoller extends Vue {
 		this.clearInterval();
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('span');
 	}
 

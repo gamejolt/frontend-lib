@@ -1,9 +1,9 @@
 import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./add.html';
 
-import { BaseForm, FormOnInit } from '../../../form-vue/form.service';
-import { Comment } from '../../comment-model';
-import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markdown';
+import { BaseForm, FormOnInit } from '../../form-vue/form.service';
+import { Comment } from '../comment-model';
+import { AppFormControlMarkdown } from '../../form-vue/control/markdown/markdown';
 
 @View
 @Component({
@@ -12,7 +12,7 @@ import { AppFormControlMarkdown } from '../../../form-vue/control/markdown/markd
 	},
 })
 export class AppCommentWidgetAdd extends BaseForm<Comment> implements FormOnInit {
-	@Prop(String) resource: string;
+	@Prop(String) resource: 'Game' | 'FiresidePost';
 	@Prop(Number) resourceId: number;
 	@Prop(Number) parentId?: number;
 

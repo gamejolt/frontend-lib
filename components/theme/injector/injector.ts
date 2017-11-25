@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
@@ -24,7 +24,7 @@ export class AppThemeInjector extends Vue {
 		this.refreshStyles(this.definition, this.theme);
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('style');
 	}
 
@@ -90,7 +90,9 @@ export class AppThemeInjector extends Vue {
 						continue;
 					}
 
-					const rule = `${injection.selector} { ${injection.property}: ${propertyValue} !important }`;
+					const rule = `${injection.selector} { ${injection.property}: ${
+						propertyValue
+					} !important }`;
 					styles.push(rule);
 				}
 			}

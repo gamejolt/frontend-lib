@@ -1,9 +1,9 @@
-import Vue from 'vue';
+import { DirectiveOptions } from 'vue';
 import { appStore } from '../../vue/services/app/app-store';
 import { Analytics } from '../analytics/analytics.service';
 import { AuthModal } from './auth-modal.service';
 
-export const AppAuthRequired: Vue.DirectiveOptions = {
+export const AppAuthRequired: DirectiveOptions = {
 	bind(el) {
 		el.addEventListener(
 			'click',

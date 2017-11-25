@@ -192,17 +192,16 @@ export class Prebid {
 
 		loadScript(require('!file-loader!./prebid.vendor.js'));
 
-		// SO MANY EVENTS!
-		// if (GJ_BUILD_TYPE === 'production') {
-		// 	this.pbjs.que.push(() => {
-		// 		this.pbjs.enableAnalytics([
-		// 			{
-		// 				provider: 'ga',
-		// 				options: {},
-		// 			},
-		// 		]);
-		// 	});
-		// }
+		if (GJ_BUILD_TYPE === 'production') {
+			this.pbjs.que.push(() => {
+				this.pbjs.enableAnalytics([
+					{
+						provider: 'ga',
+						options: {},
+					},
+				]);
+			});
+		}
 
 		this.pbjs.que.push(() => {
 			this.pbjs.setConfig({

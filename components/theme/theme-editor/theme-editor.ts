@@ -40,12 +40,7 @@ export class AppThemeEditor extends Vue {
 	templateObj: SiteTemplate = {} as any;
 	definition: any = {};
 
-	private initialTheme: any = null;
-
 	async created() {
-		// Save the initial content, as well.
-		this.initialTheme = Object.assign({}, this.theme);
-
 		const response = await Api.sendRequest('/sites-io/get-template/' + this.template, undefined, {
 			detach: true,
 		});

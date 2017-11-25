@@ -18,8 +18,6 @@ export class Connection {
 	}
 
 	static init(store: VuexStore) {
-		this.store = store;
-
 		if (GJ_IS_SSR) {
 			return;
 		}

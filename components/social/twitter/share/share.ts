@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import '../../social.styl';
 
@@ -11,7 +11,7 @@ export class AppSocialTwitterShare extends Vue {
 	@Prop({ type: String, default: 'small' })
 	size: string;
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('a', {
 			staticClass: 'twitter-share-button',
 			attrs: {

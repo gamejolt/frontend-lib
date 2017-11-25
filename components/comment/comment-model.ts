@@ -11,7 +11,7 @@ export class Comment extends Model {
 	static readonly STATUS_SPAM = 2;
 
 	parent_id: number;
-	resource: string;
+	resource: 'Game' | 'FiresidePost';
 	resource_id: number;
 	user: User;
 	comment?: string;

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import '../../social.styl';
 
@@ -8,7 +8,7 @@ import { FacebookSdk } from '../sdk/sdk.service';
 export class AppSocialFacebookShare extends Vue {
 	@Prop(String) url: string;
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('div', {
 			staticClass: 'fb-share-button',
 			attrs: {

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { DirectiveOptions } from 'vue';
 import { Scroll } from '../scroll.service';
 
 // I'm not sure of a better way to do this with Vue. When I tried to attach to
@@ -25,7 +25,7 @@ if (!GJ_IS_SSR) {
 	);
 }
 
-export const AppNoAutoscroll: Vue.DirectiveOptions = {
+export const AppNoAutoscroll: DirectiveOptions = {
 	bind(el) {
 		el.dataset.gjAutoscroll = 'disabled';
 	},

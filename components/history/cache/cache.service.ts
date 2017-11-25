@@ -1,4 +1,4 @@
-import VueRouter from 'vue-router';
+import { Route } from 'vue-router';
 
 const MAX_ITEMS = 10;
 
@@ -11,15 +11,15 @@ interface HistoryCacheState {
 export class HistoryCache {
 	private static states: HistoryCacheState[] = [];
 
-	static get(route: VueRouter.Route, tag?: string) {
+	static get(route: Route, tag?: string) {
 		return this.states.find(item => item.url === route.fullPath && item.tag === tag);
 	}
 
-	static has(route: VueRouter.Route, tag?: string) {
+	static has(route: Route, tag?: string) {
 		return !!this.get(route, tag);
 	}
 
-	static store(route: VueRouter.Route, data: any, tag?: string) {
+	static store(route: Route, data: any, tag?: string) {
 		const state = this.get(route, tag);
 
 		if (state) {

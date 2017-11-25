@@ -1,7 +1,8 @@
 import Vue from 'vue';
-import Cropper from 'cropperjs';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./crop.html?style=./crop.styl';
+
+import * as Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 
 interface CropData {
@@ -51,15 +52,12 @@ export class AppImgCrop extends Vue {
 					}
 				}
 
-				this.$emit(
-					'input',
-					{
-						x: e.detail.x,
-						y: e.detail.y,
-						x2: e.detail.x + e.detail.width,
-						y2: e.detail.y + e.detail.height,
-					} as CropData
-				);
+				this.$emit('input', {
+					x: e.detail.x,
+					y: e.detail.y,
+					x2: e.detail.x + e.detail.width,
+					y2: e.detail.y + e.detail.height,
+				} as CropData);
 			},
 			ready: () => {
 				if (this.disabled) {

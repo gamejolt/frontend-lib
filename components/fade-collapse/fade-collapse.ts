@@ -21,8 +21,8 @@ export class AppFadeCollapse extends Vue {
 	@Prop({ type: Boolean, default: true })
 	animate?: boolean;
 
+	isCollapsed = false;
 	private isPrimed = false;
-	private isCollapsed = false;
 	private frameRequestHandle?: number = undefined;
 	private isRequired = false;
 

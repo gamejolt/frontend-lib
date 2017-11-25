@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
@@ -24,7 +24,7 @@ export class AppResponsiveDimensions extends Vue {
 		}
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('div', { style: { height: this.height } }, this.$slots.default);
 	}
 

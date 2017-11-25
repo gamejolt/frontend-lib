@@ -147,9 +147,9 @@ export class FormGamePackagePayment extends BaseForm<any>
 	onCountryChange() {
 		this.regions = Geo.getRegions(this.formModel.country) || null;
 		if (this.regions) {
-			this.formModel.region = this.regions[0].code; // Default to first.
+			this.setField('region', this.regions[0].code); // Default to first.
 		} else {
-			this.formModel.region = '';
+			this.setField('region', '');
 		}
 		this.getAddressTax();
 	}
@@ -203,7 +203,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 			curAmount += amount;
 			curAmount = parseFloat(curAmount.toFixed(2));
 		}
-		this.formModel.amount = curAmount;
+		this.setField('amount', curAmount);
 	}
 
 	collectAddress(checkoutType: CheckoutType) {

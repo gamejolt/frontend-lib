@@ -29,7 +29,7 @@ export class AppUserAvatar extends Vue {
 
 	href = '';
 
-	private isHoverCardBootstrapped = false;
+	isHoverCardBootstrapped = false;
 
 	get shouldShowHoverCard() {
 		return this.showHoverCard && Screen.isDesktop;

@@ -1,7 +1,7 @@
+import VueRouter from 'vue-router';
 import { Environment } from '../environment/environment.service';
 import { appStore } from '../../vue/services/app/app-store';
 import { EventBus } from '../event-bus/event-bus.service';
-import VueRouter from 'vue-router';
 import { arrayRemove } from '../../utils/array';
 
 const ga: any = (typeof window !== 'undefined' && (window as any).ga) || function() {};

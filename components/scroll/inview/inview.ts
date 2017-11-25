@@ -1,6 +1,5 @@
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component, Watch, Prop } from 'vue-property-decorator';
-import { Subscription } from 'rxjs/Subscription';
 
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
@@ -9,9 +8,8 @@ import { Ruler } from '../../ruler/ruler-service';
 // listeners.
 let items: AppScrollInview[] = [];
 
-let scrolled$: Subscription;
 if (!GJ_IS_SSR) {
-	scrolled$ = Scroll.scrollChanges.subscribe(onScroll);
+	Scroll.scrollChanges.subscribe(onScroll);
 }
 
 let lastScrollHeight: number | undefined = undefined;
@@ -94,7 +92,7 @@ export class AppScrollInview extends Vue {
 		}
 	}
 
-	render(h: Vue.CreateElement) {
+	render(h: CreateElement) {
 		return h('div', this.$slots.default);
 	}
 
