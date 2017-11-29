@@ -40,6 +40,7 @@
 
 			<div class="-follow">
 				<app-user-follow-widget
+					v-if="!app.user || user.id !== app.user.id"
 					class="btn-block"
 					:user="user"
 					:outline="true"

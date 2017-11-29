@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./card.html?style=./card.styl';
+import { State } from 'vuex-class';
 
 import { User } from '../user.model';
 import { AppUserFollowWidget } from '../follow-widget/follow-widget';
@@ -11,6 +12,7 @@ import { Api } from '../../api/api.service';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { AppTooltipContainer } from '../../tooltip/container/container';
 import { AppUserAvatarImg } from '../user-avatar/img/img';
+import { Store } from '../../../../../app/store/index';
 
 @View
 @Component({
@@ -31,6 +33,8 @@ import { AppUserAvatarImg } from '../user-avatar/img/img';
 export class AppUserCard extends Vue {
 	@Prop(User) user: User;
 	@Prop(Boolean) showExtraInfo: boolean;
+
+	@State app: Store['app'];
 
 	isLoaded = false;
 	gamesCount = 0;
