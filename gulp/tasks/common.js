@@ -53,73 +53,14 @@ module.exports = function(config, projectBase) {
 	} else if (config.client) {
 		config.write = true;
 		config.buildDir += '-client';
+		config.clientBuildDir = config.buildDir + '-build';
+		config.clientBuildCacheDir = config.buildDir + '-cache';
 	}
 
-	// require( './styles.js' )( config );
-	// require( './js.js' )( config );
-	// require( './html.js' )( config );
-	// require( './fonts.js' )( config );
-	// require( './markdown.js' )( config );
-	// require( './images.js' )( config );
-	require('./translations.js')(config);
-	require('./webpack.js')(config);
-	// require( './inject.js' )( config );
 	require('./clean.js')(config);
-
-	// gulp.task( 'extra', function()
-	// {
-	// 	return gulp.src( [
-	// 		'!src/bower-lib/**/*',
-	// 		'src/**/*.xml',
-	// 		'src/**/*.mp4',
-	// 		'src/**/*.wav',
-	// 		'src/**/*.ogg',
-	// 		'src/**/*.pdf',
-	// 		'src/**/*.txt',
-	// 		'src/channel.html',
-	// 	], { allowEmpty: true } )
-	// 	.pipe( gulp.dest( config.buildDir ) );
-	// } );
-
-	function noop(cb) {
-		cb();
-	}
-
-	// This will probably break eventually.
-	// unwrap exists in gulp, but not in the forward ref thing
-	// That's why this works, but it could easily not work in future.
-	function checkHooks(cb) {
-		if (!gulp.task('pre').unwrap) {
-			gulp.task('pre', noop);
-		}
-
-		if (!gulp.task('post').unwrap) {
-			gulp.task('post', noop);
-		}
-
-		cb();
-	}
-
-	// gulp.task( 'default', gulp.series(
-	// 	checkHooks,
-	// 	'clean:pre',
-	// 	'pre',
-	// 	gulp.parallel(
-	// 		// 'styles',
-	// 		'js'
-	// 		// 'images',
-	// 		// 'html',
-	// 		// 'fonts',
-	// 		// 'markdown',
-	// 		// 'extra'
-	// 	),
-	// 	'translations:compile',
-	// 	// 'inject',
-	// 	'post',
-	// 	'clean:post'
-	// ) );
-
-	// require( './watch.js' )( config );
+	require('./translations.js')(config);
+	require('./client.js')(config);
+	require('./webpack.js')(config);
 
 	gulp.task(
 		'update-lib',

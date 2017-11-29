@@ -1,18 +1,20 @@
-var gulp = require('gulp');
-var plugins = require('gulp-load-plugins')();
+const gulp = require('gulp');
+const plugins = require('gulp-load-plugins')();
 
-module.exports = function(config) {
-	// Clean out the whole build directory pre-build.
-	gulp.task('clean:pre', function() {
+module.exports = config => {
+	gulp.task('clean:main', () => {
 		return gulp
 			.src(config.buildDir, { read: false, allowEmpty: true })
 			.pipe(plugins.clean({ force: true }));
 	});
 
-	// Clean out the tmp direction post build.
-	gulp.task('clean:post', function() {
-		return gulp
-			.src(config.buildDir + '/tmp', { read: false, allowEmpty: true })
-			.pipe(plugins.clean({ force: true }));
+	gulp.task('clean:client', () => {
+		if (config.clientBuildDir) {
+			return gulp
+				.src(config.clientBuildDir, { read: false, allowEmpty: true })
+				.pipe(plugins.clean({ force: true }));
+		}
 	});
+
+	gulp.task('clean', gulp.parallel('clean:main', 'clean:client'));
 };

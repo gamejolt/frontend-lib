@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const path = require('path');
+const os = require('os');
 
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -23,10 +24,14 @@ module.exports = function(config) {
 	let base = path.resolve(config.projectBase);
 
 	let noop = function() {};
-	let devNoop = config.production ? undefined : noop;
-	let prodNoop = !config.production ? undefined : noop;
-	let browserNoop = config.server ? undefined : noop;
-	let serverNoop = !config.server ? undefined : noop;
+	let devNoop = !config.production ? noop : undefined;
+	let prodNoop = config.production ? noop : undefined;
+
+	let browserNoop = !config.server ? noop : undefined;
+	let serverNoop = config.server ? noop : undefined;
+
+	let clientNoop = config.client ? noop : undefined;
+	let siteNoop = !config.client ? noop : undefined;
 
 	const externalModules = [];
 	if (!config.client) {
@@ -84,6 +89,8 @@ module.exports = function(config) {
 		} else {
 			devTool = 'cheap-module-inline-source-map';
 		}
+	} else if (config.client) {
+		devtool = false;
 	}
 
 	function stylesLoader(loaders, options) {
@@ -125,8 +132,18 @@ module.exports = function(config) {
 			};
 		}
 
+		let publicPath = '/';
+		if (config.production && !config.client) {
+			publicPath = config.staticCdn + publicPath;
+		}
+
 		let webAppManifest = undefined;
-		if (!config.server && config.webAppManifest && config.webAppManifest[section]) {
+		if (
+			!config.server &&
+			!config.client &&
+			config.webAppManifest &&
+			config.webAppManifest[section]
+		) {
 			webAppManifest = config.webAppManifest[section];
 
 			for (const icon of webAppManifest.icons) {
@@ -136,6 +153,7 @@ module.exports = function(config) {
 
 		let hasOfflineSupport =
 			!config.server &&
+			!config.client &&
 			config.production &&
 			config.offlineSupport &&
 			config.offlineSupport.indexOf(section) !== -1;
@@ -152,7 +170,7 @@ module.exports = function(config) {
 				outputPath: path.resolve(base, config.buildDir),
 			},
 			output: {
-				publicPath: (config.production ? config.staticCdn : '') + '/',
+				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
 				filename: config.production ? section + '.[name].[chunkhash:6].js' : section + '.[name].js',
 				chunkFilename: config.production
@@ -263,12 +281,13 @@ module.exports = function(config) {
 						},
 					},
 				}),
-				// !config.client ? noop : new CopyWebpackPlugin([
-				// 	{
-				// 		from: path.resolve( base, 'client-package.json' ),
-				// 		to: 'package.json',
-				// 	},
-				// ]),
+				siteNoop ||
+					new CopyWebpackPlugin([
+						{
+							from: path.resolve(base, 'package.json'),
+							to: 'package.json',
+						},
+					]),
 				devNoop ||
 					new webpack.optimize.UglifyJsPlugin({
 						sourceMap: true,
@@ -283,6 +302,7 @@ module.exports = function(config) {
 				// Since form stuff is so large, we split it into an async chunk
 				// that will get loaded alongside any chunks that need it.
 				devNoop ||
+					clientNoop ||
 					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'app',
@@ -298,6 +318,7 @@ module.exports = function(config) {
 
 				// Pull out vendor code from the main entry point.
 				devNoop ||
+					clientNoop ||
 					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'vendor',
@@ -310,6 +331,7 @@ module.exports = function(config) {
 				// to be cached longer if it doesn't change.
 				// More info: https://webpack.js.org/guides/code-splitting-libraries/#implicit-common-vendor-chunk
 				devNoop ||
+					clientNoop ||
 					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'manifest',
@@ -345,10 +367,12 @@ module.exports = function(config) {
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
 				serverNoop ||
+					clientNoop ||
 					new VueSSRClientPlugin({
 						filename: 'vue-ssr-client-manifest-' + section + '.json',
 					}),
 				browserNoop ||
+					clientNoop ||
 					new VueSSRServerPlugin({
 						filename: 'vue-ssr-server-bundle-' + section + '.json',
 					}),
@@ -416,9 +440,14 @@ module.exports = function(config) {
 	);
 
 	if (!config.noClean) {
-		webpackSectionTasks.unshift('clean:pre');
+		webpackSectionTasks.unshift('clean');
 	}
 
 	webpackSectionTasks.unshift('translations:compile');
+
+	if (config.client && config.production) {
+		webpackSectionTasks.push('client');
+	}
+
 	gulp.task('default', gulp.series(webpackSectionTasks));
 };
