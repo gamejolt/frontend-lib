@@ -18,9 +18,12 @@ export class ForumTopic extends Model {
 	posted_on: number;
 	is_sticky: boolean;
 	is_locked: boolean;
+	is_upvoted: boolean;
+	can_upvote: boolean;
 
 	replies_count: number;
 	followers_count: number;
+	upvotes_count: number;
 
 	notifications: Notification[] = [];
 	latest_post: ForumPost;
@@ -62,6 +65,14 @@ export class ForumTopic extends Model {
 	$unfollow() {
 		// Force POST
 		return Api.sendRequest('/web/forums/topics/unfollow/' + this.id, {});
+	}
+
+	$upvote() {
+		return this.$_save(`/web/forums/topics/upvote/${this.id}`, 'topic');
+	}
+
+	$unupvote() {
+		return this.$_save(`/web/forums/topics/unupvote/${this.id}`, 'topic');
 	}
 }
 
