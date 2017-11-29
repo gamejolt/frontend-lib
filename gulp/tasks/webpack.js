@@ -415,7 +415,7 @@ module.exports = function(config) {
 
 	gulp.task(
 		'watch',
-		gulp.series('clean:pre', function(cb) {
+		gulp.series('clean', function(cb) {
 			let compiler = webpack(webpackSectionConfigs[config.buildSection]);
 
 			let server = new WebpackDevServer(compiler, {
