@@ -1,6 +1,6 @@
 import { AdSlot, AdSlotPos } from './slot';
 import { loadScript } from '../../utils/utils';
-const GetBidsTimeout = 700;
+const GetBidsTimeout = 2000;
 
 interface AdUnitBid {
 	bidder: string;
