@@ -51,8 +51,8 @@ module.exports = config => {
 			},
 			appVersion: packageJson.version,
 			macZip: false, // Use a app.nw folder instead of ZIP file
-			macIcns: path.resolve(__dirname, 'client/mac.icns'),
-			winIco: path.resolve(__dirname, 'client/winico.ico'),
+			macIcns: path.resolve(__dirname, 'client/icons/mac.icns'),
+			winIco: path.resolve(__dirname, 'client/icons/winico.ico'),
 
 			// Tells it not to merge the app zip into the executable. Easier updating this way.
 			mergeApp: false,
@@ -122,8 +122,8 @@ module.exports = config => {
 				basepath: path.resolve(__dirname, '..'),
 				specification: {
 					title: 'Game Jolt Client',
-					icon: path.resolve(__dirname, 'client/mac.icns'),
-					background: path.resolve(__dirname, 'client/dmg-background.png'),
+					icon: path.resolve(__dirname, 'client/icons/mac.icns'),
+					background: path.resolve(__dirname, 'client/icons/dmg-background.png'),
 					'icon-size': 80,
 					contents: [
 						{
@@ -151,8 +151,8 @@ module.exports = config => {
 		} else if (config.platform === 'win') {
 			const InnoSetup = require('./client/inno-setup');
 			const certFile = config.production
-				? path.resolve(__dirname, 'certs', 'cert.pfx')
-				: path.resolve('tasks', 'vendor', 'cert.pfx');
+				? path.resolve(__dirname, 'client/certs/cert.pfx')
+				: path.resolve(__dirname, 'client/vendor/cert.pfx');
 			const certPw = config.production ? process.env['GJ_CERT_PASS'] : 'GJ123456';
 			const builder = new InnoSetup(
 				path.resolve(config.clientBuildDir, config.platformArch),
