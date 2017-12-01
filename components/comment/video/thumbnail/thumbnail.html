@@ -4,7 +4,7 @@
 		v-app-track-event="`comment-video-thumbnail:click`"
 		>
 		<div
-			v-if="hideFollow"
+			v-if="shouldShowFollow"
 			class="-controls"
 			@click.stop
 			>
