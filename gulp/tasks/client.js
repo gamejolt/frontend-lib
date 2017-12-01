@@ -19,7 +19,7 @@ module.exports = config => {
 
 	gulp.task(
 		'client:node-modules',
-		shell.task(['cd ' + config.buildDir + ' && npm install --production --ignore-scripts'])
+		shell.task(['cd ' + config.buildDir + ' && yarn --production --ignore-scripts'])
 	);
 
 	/**
@@ -70,13 +70,11 @@ module.exports = config => {
 	 */
 	gulp.task('client:nw-unpackage', cb => {
 		const base = path.join(config.clientBuildDir, 'build', config.platformArch);
-		const packagePath = path.join(
-			config.clientBuildDir,
-			'build',
-			config.platformArch + '-package.zip'
-		);
+		const packageFilename = config.platformArch + '-package.zip';
 
 		if (config.platform !== 'osx') {
+			const packagePath = path.join(config.clientBuildDir, packageFilename);
+
 			fs.renameSync(path.join(base, 'package.nw'), packagePath);
 
 			const DecompressZip = require('decompress-zip');
@@ -101,9 +99,8 @@ module.exports = config => {
 		} else {
 			const stream = gulp
 				.src(base + '/Game Jolt Client.app/Contents/Resources/app.nw/**/*')
-				.pipe(plugins.tar(config.platformArch + '-package.tar'))
-				.pipe(plugins.gzip())
-				.pipe(gulp.dest(releaseDir));
+				.pipe(plugins.zip(packageFilename))
+				.pipe(gulp.dest(config.clientBuildDir));
 
 			stream.on('end', cb);
 			stream.on('error', cb);
@@ -119,7 +116,7 @@ module.exports = config => {
 
 			const dmg = appdmg({
 				target: config.clientBuildDir + '/osx.dmg',
-				basepath: path.resolve(__dirname, '..'),
+				basepath: config.projectBase,
 				specification: {
 					title: 'Game Jolt Client',
 					icon: path.resolve(__dirname, 'client/icons/mac.icns'),
@@ -130,7 +127,12 @@ module.exports = config => {
 							x: 195,
 							y: 370,
 							type: 'file',
-							path: config.clientBuildDir + '/' + config.platformArch + '/Game Jolt Client.app',
+							path: path.resolve(
+								config.clientBuildDir,
+								'build',
+								config.platformArch,
+								'Game Jolt Client.app'
+							),
 						},
 						{ x: 429, y: 370, type: 'link', path: '/Applications' },
 					],
@@ -155,7 +157,7 @@ module.exports = config => {
 				: path.resolve(__dirname, 'client/vendor/cert.pfx');
 			const certPw = config.production ? process.env['GJ_CERT_PASS'] : 'GJ123456';
 			const builder = new InnoSetup(
-				path.resolve(config.clientBuildDir, config.platformArch),
+				path.resolve(config.clientBuildDir, 'build', config.platformArch),
 				path.resolve(config.clientBuildDir),
 				packageJson.version,
 				certFile,

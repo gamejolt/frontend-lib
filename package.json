@@ -45,6 +45,7 @@
 		"clean-css-loader": "0.1.4",
 		"webpack-pwa-manifest": "3.3.2",
 		"offline-plugin": "4.8.4",
-		"mv": "2.1.1"
+		"mv": "2.1.1",
+		"gulp-zip": "4.0.0"
 	}
 }
