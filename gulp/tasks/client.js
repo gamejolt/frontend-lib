@@ -16,141 +16,11 @@ module.exports = config => {
 	}
 
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
-	config.arch = argv.arch || '64';
-
-	// Get our platform that we are building on.
-	switch (os.type()) {
-		case 'Linux':
-			config.platform = 'linux';
-			break;
-
-		case 'Windows_NT':
-			config.platform = 'win';
-			break;
-
-		case 'Darwin':
-			config.platform = 'osx';
-			break;
-
-		default:
-			throw new Error('Can not build client on your OS type.');
-	}
-
-	config.platformArch = config.platform + config.arch;
-
-	// TODO(client): Do in webpack somehow
-	// // Injections to modify App for client build.
-	// config.injections = {
-	// 	// Attach a class to say that we're in client.
-	// 	// Makes it easy to target client before angular has loaded in completely with CSS.
-	// 	'<body class="" ': '<body class="is-client" ',
-
-	// 	// GA tag is different.
-	// 	"ga('create', 'UA-6742777-1', 'auto');": "ga('create', 'UA-6742777-16', 'auto');",
-	// };
-
-	// /**
-	//  * Modify base tags for main HTML files.
-	//  * This is needed for non-html5 location fallback.
-	//  */
-	// const modifySections = config.sections.map(section => {
-	// 	if (section === 'app') {
-	// 		section = 'index';
-	// 	}
-
-	// 	gulp.task('client:modify-index:' + section, () => {
-	// 		// Base tag for index.html is different.
-	// 		// App uses fallback mode for location since it's not served through a server.
-	// 		let base = '/' + section + '.html';
-
-	// 		// When packaged up, we put it in the sub-folder: "package".
-	// 		if (!config.watching && os.type() !== 'Darwin') {
-	// 			base = '/package' + base;
-	// 		}
-
-	// 		return gulp
-	// 			.src(config.buildDir + '/' + section + '.html')
-	// 			.pipe(plugins.replace('<base href="/">', '<base href="' + base + '">'))
-	// 			.pipe(gulp.dest(config.buildDir));
-	// 	});
-
-	// 	return 'client:modify-index:' + section;
-	// });
-
-	// // Set it up as a post-html build task.
-	// gulp.task('html:post', gulp.parallel(modifySections));
-
-	// TODO(client): Update hook?
-	// gulp.task('client:prepare', cb => {
-	// 	// Load in the client package.
-	// 	const packageJson = require('../package.json');
-	// 	const clientJson = require('../client-package.json');
-
-	// 	// Copy over values from main package.json to keep in sync.
-	// 	clientJson.version = packageJson.version;
-
-	// 	// Gotta pull the node_modules that we need.
-	// 	clientJson.dependencies = packageJson.dependencies;
-
-	// 	// If we're in dev, then add the toolbar for debugging.
-	// 	if (!config.production) {
-	// 		clientJson.window.toolbar = true;
-	// 	}
-
-	// 	if (!config.watching && os.type() !== 'Darwin') {
-	// 		// We set the base directory to use the "package" folder.
-	// 		clientJson.main = 'app://game-jolt-client/package/index.html#!/';
-	// 		clientJson.window.icon = 'package/' + clientJson.window.icon;
-	// 	}
-
-	// 	// Copy the package.json file over into the build directory.
-	// 	fs.writeFileSync(config.buildDir + '/package.json', JSON.stringify(clientJson));
-	// 	fs.writeFileSync(
-	// 		config.buildDir + '/update-hook.js',
-	// 		fs.readFileSync(path.resolve('./src/update-hook.js'))
-	// 	);
-
-	// 	cb();
-	// });
 
 	gulp.task(
 		'client:node-modules',
-		shell.task([
-			'cd ' + config.buildDir + ' && npm install --production --no-optional --ignore-scripts',
-		])
+		shell.task(['cd ' + config.buildDir + ' && npm install --production --ignore-scripts'])
 	);
-
-	// TODO(client): do in webpack base url
-	// /**
-	//  * This should rewrite all file references to have the correct packaged folder prefix.
-	//  */
-	// gulp.task('client:modify-urls', cb => {
-	// 	if (os.type() === 'Darwin') {
-	// 		cb();
-	// 		return;
-	// 	}
-
-	// 	const revAll = new plugins.revAll({
-	// 		prefix: 'app://game-jolt-client/package',
-	// 		dontGlobal: [/^\/node_modules\/.*$/, /^\/tmp\/.*$/],
-	// 		dontRenameFile: [/^.*$/], // Don't rename anything.
-	// 		transformFilename: function(file, hash) {
-	// 			// Don't rename the file reference at all, either.
-	// 			return path.basename(file.path);
-	// 		},
-	// 		debug: true,
-	// 	});
-
-	// 	// Ignore folders from the very beginning speeds up the injection a lot.
-	// 	return gulp
-	// 		.src([
-	// 			config.buildDir + '/**',
-	// 			'!' + config.buildDir + '/node_modules/**',
-	// 			'!' + config.buildDir + '/tmp/**',
-	// 		])
-	// 		.pipe(revAll.revision())
-	// 		.pipe(gulp.dest(config.buildDir));
-	// });
 
 	/**
 	 * Does the actual building into an NW executable.
@@ -181,8 +51,8 @@ module.exports = config => {
 			},
 			appVersion: packageJson.version,
 			macZip: false, // Use a app.nw folder instead of ZIP file
-			macIcns: 'src/app/img/client/mac.icns',
-			winIco: 'src/app/img/client/winico.ico',
+			macIcns: path.resolve(__dirname, 'client/mac.icns'),
+			winIco: path.resolve(__dirname, 'client/winico.ico'),
 
 			// Tells it not to merge the app zip into the executable. Easier updating this way.
 			mergeApp: false,
@@ -252,8 +122,8 @@ module.exports = config => {
 				basepath: path.resolve(__dirname, '..'),
 				specification: {
 					title: 'Game Jolt Client',
-					icon: 'src/app/img/client/mac.icns',
-					background: 'src/app/img/client/dmg-background.png',
+					icon: path.resolve(__dirname, 'client/mac.icns'),
+					background: path.resolve(__dirname, 'client/dmg-background.png'),
 					'icon-size': 80,
 					contents: [
 						{
@@ -279,7 +149,7 @@ module.exports = config => {
 				cb(err);
 			});
 		} else if (config.platform === 'win') {
-			const InnoSetup = require('./inno-setup');
+			const InnoSetup = require('./client/inno-setup');
 			const certFile = config.production
 				? path.resolve(__dirname, 'certs', 'cert.pfx')
 				: path.resolve('tasks', 'vendor', 'cert.pfx');

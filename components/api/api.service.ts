@@ -80,14 +80,14 @@ export class Api {
 		options: RequestOptions = {}
 	): Promise<any> {
 		options = {
-			...<RequestOptions>{
+			...(<RequestOptions>{
 				ignoreLoadingBar: false,
 				processPayload: true,
 				withCredentials: true,
 				sanitizeComplexData: true,
 				allowComplexData: [],
 				detach: false,
-			},
+			}),
 			...options,
 		};
 

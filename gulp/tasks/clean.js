@@ -8,11 +8,13 @@ module.exports = config => {
 			.pipe(plugins.clean({ force: true }));
 	});
 
-	gulp.task('clean:client', () => {
+	gulp.task('clean:client', cb => {
 		if (config.clientBuildDir) {
 			return gulp
 				.src(config.clientBuildDir, { read: false, allowEmpty: true })
 				.pipe(plugins.clean({ force: true }));
+		} else {
+			cb();
 		}
 	});
 

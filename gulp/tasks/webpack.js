@@ -33,29 +33,31 @@ module.exports = function(config) {
 	let clientNoop = config.client ? noop : undefined;
 	let siteNoop = !config.client ? noop : undefined;
 
-	const externalModules = [];
-	if (!config.client) {
-		externalModules.push('nw.gui', 'client-voodoo', 'sanitize-filename');
-	}
-
 	let externals = {};
-	for (let extern of externalModules) {
-		externals[extern] = {
-			commonjs: extern,
-			commonjs2: extern,
-		};
+	if (!config.client) {
+		// When building for site, we don't want any of these imports accidentally being pulled in.
+		// Setting these to empty object strings causes the require to return an empty object.
+		externals['nw.gui'] = '{}';
+		externals['client-voodoo'] = '{}';
+		externals['sanitize-filename'] = '{}';
+	} else {
+		// This format sets the externals to just straight up "require('axios')" so it can pull it
+		// directly and not pull in through webpack's build process. We need this for axios since it
+		// treats it as a "node" project instead of "browser". It didn't work to include axios in
+		// here, but rather just its own dependencies.
+		externals['follow-redirects'] = 'commonjs follow-redirects';
+		externals['is-buffer'] = 'commonjs is-buffer';
 	}
 
 	if (config.server) {
-		Object.assign(
-			externals,
-			nodeExternals({
-				// do not externalize dependencies that need to be processed by webpack.
-				// you can add more file types here e.g. raw *.vue files
-				// you should also whitelist deps that modifies `global` (e.g. polyfills)
-				whitelist: /\.css$/,
-			})
-		);
+		// For server builds, keep the node stuff external so that it can make smaller server
+		// builds.
+		externals = nodeExternals({
+			// do not externalize dependencies that need to be processed by webpack.
+			// you can add more file types here e.g. raw *.vue files
+			// you should also whitelist deps that modifies `global` (e.g. polyfills)
+			whitelist: /\.css$/,
+		});
 	}
 
 	const cleanCssOptions = {
@@ -113,9 +115,11 @@ module.exports = function(config) {
 
 	let webpackSectionConfigs = {};
 	let webpackSectionTasks = [];
-	config.sections.forEach(function(section) {
+	Object.keys(config.sections).forEach(function(section) {
+		const sectionConfig = config.sections[section];
+
+		let appEntries = ['./' + section + '/main.ts'];
 		let indexHtml = section === 'app' ? 'index.html' : section + '.html';
-		let appEntries = [path.resolve(base, 'src/' + section + '/main.ts')];
 
 		if (!config.production) {
 			appEntries.push('webpack-dev-server/client?http://localhost:' + config.port + '/');
@@ -128,23 +132,25 @@ module.exports = function(config) {
 
 		if (config.server) {
 			entry = {
-				server: [path.resolve(base, 'src/' + section + '/server.ts')],
+				server: ['./' + section + '/server.ts'],
 			};
 		}
 
 		let publicPath = '/';
-		if (config.production && !config.client) {
-			publicPath = config.staticCdn + publicPath;
+		if (config.production) {
+			if (!config.client) {
+				publicPath = config.staticCdn + publicPath;
+			} else {
+				// On linux/win we put all the files in a folder called "package".
+				if (config.platform !== 'osx') {
+					publicPath = '/package/';
+				}
+			}
 		}
 
 		let webAppManifest = undefined;
-		if (
-			!config.server &&
-			!config.client &&
-			config.webAppManifest &&
-			config.webAppManifest[section]
-		) {
-			webAppManifest = config.webAppManifest[section];
+		if (!config.server && !config.client && sectionConfig.webAppManifest) {
+			webAppManifest = sectionConfig.webAppManifest;
 
 			for (const icon of webAppManifest.icons) {
 				icon.src = path.resolve(base, 'src/app/img/touch/' + icon.src);
@@ -155,13 +161,13 @@ module.exports = function(config) {
 			!config.server &&
 			!config.client &&
 			config.production &&
-			config.offlineSupport &&
+			sectionConfig.offlineSupport &&
 			config.offlineSupport.indexOf(section) !== -1;
 
 		webpackSectionConfigs[section] = {
 			entry,
 			target: webpackTarget,
-			context: path.resolve(base, config.buildDir),
+			context: path.resolve(base, 'src'),
 			node: {
 				__filename: true,
 				__dirname: true,
@@ -281,11 +287,34 @@ module.exports = function(config) {
 						},
 					},
 				}),
+				new CopyWebpackPlugin([
+					{
+						context: path.resolve(base, 'src/static-assets'),
+						from: '**/*',
+						to: 'static-assets',
+					},
+				]),
+				// Copy over stupid client stuff that's needed.
 				siteNoop ||
 					new CopyWebpackPlugin([
 						{
-							from: path.resolve(base, 'package.json'),
+							from: path.join(base, 'package.json'),
 							to: 'package.json',
+							transform: (content, _path) => {
+								const pkg = JSON.parse(content);
+
+								// We don't want to install dev/optional deps into the client build.
+								// We only need those when building the client, not for runtime.
+								delete pkg.devDependencies;
+								delete pkg.optionalDependencies;
+								delete pkg.scripts;
+
+								return JSON.stringify(pkg);
+							},
+						},
+						{
+							from: 'update-hook.js',
+							to: 'update-hook.js',
 						},
 					]),
 				devNoop ||
@@ -359,10 +388,16 @@ module.exports = function(config) {
 				serverNoop ||
 					new HtmlWebpackPlugin({
 						filename: indexHtml,
-						template: '!!html-loader?interpolate=require!src/' + indexHtml,
-						favicon: path.resolve(base, 'src/app/img/favicon.png'),
+						template: 'index.html',
+						favicon: 'app/img/favicon.png',
 						inject: true,
 						chunksSortMode: 'dependency',
+
+						// Our own vars for injection into template.
+						_section: section,
+						_title: sectionConfig.title,
+						_crawl: sectionConfig.crawl,
+						_isClient: config.client,
 					}),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
