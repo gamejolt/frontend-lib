@@ -47,6 +47,10 @@ module.exports = function(config) {
 		// here, but rather just its own dependencies.
 		externals['follow-redirects'] = 'commonjs follow-redirects';
 		externals['is-buffer'] = 'commonjs is-buffer';
+
+		// We don't want to pull client-voodoo into the build so that it can get proper paths
+		// through variables like __dirname and such.
+		externals['client-voodoo'] = 'commonjs client-voodoo';
 	}
 
 	if (config.server) {
@@ -317,14 +321,14 @@ module.exports = function(config) {
 							to: 'update-hook.js',
 						},
 					]),
-				devNoop ||
-					new webpack.optimize.UglifyJsPlugin({
-						sourceMap: true,
-						compress: {
-							warnings: false,
-							screw_ie8: true,
-						},
-					}),
+				// devNoop ||
+				// 	new webpack.optimize.UglifyJsPlugin({
+				// 		sourceMap: true,
+				// 		compress: {
+				// 			warnings: false,
+				// 			screw_ie8: true,
+				// 		},
+				// 	}),
 				devNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
 
