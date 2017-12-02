@@ -71,8 +71,8 @@ export class ForumTopic extends Model {
 		return this.$_save(`/web/forums/topics/upvote/${this.id}`, 'topic');
 	}
 
-	$unupvote() {
-		return this.$_save(`/web/forums/topics/unupvote/${this.id}`, 'topic');
+	$removeUpvote() {
+		return this.$_save(`/web/forums/topics/remove-upvote/${this.id}`, 'topic');
 	}
 }
 
