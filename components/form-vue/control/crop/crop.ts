@@ -17,7 +17,7 @@ export class AppFormControlCrop extends BaseFormControl {
 	@Prop(Number) minHeight?: number;
 	@Prop(Boolean) disabled?: boolean;
 
-	value: any = undefined;
+	controlVal: any = undefined;
 
 	onChange(value: any) {
 		this.applyValue(value);

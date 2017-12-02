@@ -8,13 +8,13 @@ import { BaseFormControl } from '../base';
 export class AppFormControlToggle extends BaseFormControl {
 	@Prop(Boolean) disabled?: boolean;
 
-	value = false;
+	controlVal = false;
 
 	toggle() {
 		if (this.disabled) {
 			return;
 		}
 
-		this.applyValue(!this.value);
+		this.applyValue(!this.controlVal);
 	}
 }

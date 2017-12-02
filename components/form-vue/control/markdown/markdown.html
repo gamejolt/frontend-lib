@@ -69,7 +69,7 @@
 			:name="group.name"
 			:placeholder="placeholder"
 			:disabled="disabled"
-			:value="value"
+			:value="controlVal"
 			@input="onChange( $event.target.value )"
 			v-validate="{ rules: validationRules }"
 			rows="1"
@@ -80,7 +80,7 @@
 		<div v-else-if="editorMode === 'code-editor'">
 			<app-codemirror
 				:id="id"
-				:value="value"
+				:value="controlVal"
 				@input="onChange"
 				:options="{
 					mode: 'gfm',
