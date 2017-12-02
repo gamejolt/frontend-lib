@@ -56,7 +56,7 @@ export class GameDownloader {
 			// The client prepends urls with hashtag (#) that needs to be trimmed when going to external site.
 			urlPath = urlPath.slice(1);
 
-			gui.Shell.openExternal(`${Environment.secureBaseUrl}${urlPath}`);
+			gui.Shell.openExternal(`${Environment.baseUrl}${urlPath}`);
 		} else if (
 			game.bundle_only ||
 			options.key ||

@@ -25,29 +25,20 @@ import { GameDownloader } from '../../downloader/downloader.service';
 import { AppGamePackageCardButtons } from './buttons';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
 import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
-import { LocalDbPackage } from '../../../../../../app/components/client/local-db/package/package.model';
-import { AppClientPackageCardButtons } from '../../../../../../app/components/client/package-card-buttons/package-card-buttons';
 import { EventBus } from '../../../event-bus/event-bus.service';
 import { LinkedKey } from '../../../linked-key/linked-key.model';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 
-let components: any = {
-	AppCard,
-	AppJolticon,
-	AppTimeAgo,
-	AppFadeCollapse,
-	AppExpand,
-	AppCountdown,
-	AppGamePackageCardButtons,
-};
-
-if (GJ_IS_CLIENT) {
-	components = { ...components, AppClientPackageCardButtons };
-}
-
 @View
 @Component({
-	components,
+	components: {
+		AppCard,
+		AppJolticon,
+		AppTimeAgo,
+		AppFadeCollapse,
+		AppExpand,
+		AppCountdown,
+	},
 	directives: {
 		AppTooltip,
 		AppTrackEvent,
@@ -70,6 +61,11 @@ export class AppGamePackageCard extends Vue {
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
 
+	static hook = {
+		meta: undefined as typeof Vue | undefined,
+		buttons: undefined as typeof Vue | undefined,
+	};
+
 	showFullDescription = false;
 	canToggleDescription = false;
 
@@ -78,11 +74,18 @@ export class AppGamePackageCard extends Vue {
 	sale = false;
 	salePercentageOff = '';
 	saleOldPricing: SellablePricing | null = null;
-	localPackage: LocalDbPackage | null = null;
 
 	providerIcons: { [provider: string]: string } = {
 		steam: 'steam',
 	};
+
+	get metaComponent() {
+		return AppGamePackageCard.hook.meta;
+	}
+
+	get buttonsComponent() {
+		return AppGamePackageCard.hook.buttons || AppGamePackageCardButtons;
+	}
 
 	get card() {
 		return new GamePackageCardModel(this.releases, this.builds, this.linkedKeys);
@@ -124,7 +127,8 @@ export class AppGamePackageCard extends Vue {
 			if (this.pricing.promotional) {
 				this.saleOldPricing = this.sellable.pricings[1];
 				this.sale = true;
-				this.salePercentageOff = ((this.saleOldPricing.amount - this.pricing.amount) /
+				this.salePercentageOff = (
+					(this.saleOldPricing.amount - this.pricing.amount) /
 					this.saleOldPricing.amount *
 					100
 				).toFixed(0);

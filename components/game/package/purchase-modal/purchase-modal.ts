@@ -13,10 +13,10 @@ import { GameDownloader } from '../../downloader/downloader.service';
 import { User } from '../../../user/user.model';
 import { AppLoading } from '../../../../vue/components/loading/loading';
 import { Growls } from '../../../growls/growls.service';
-import {
-	ClientLibraryAction,
-	ClientLibraryStore,
-} from '../../../../../../app/store/client-library';
+// import {
+// 	ClientLibraryAction,
+// 	ClientLibraryStore,
+// } from '../../../../../../app/store/client-library';
 
 @View
 @Component({
@@ -27,7 +27,7 @@ import {
 	},
 })
 export default class AppGamePackagePurchaseModal extends BaseModal {
-	@ClientLibraryAction packageInstall: ClientLibraryStore['packageInstall'];
+	// @ClientLibraryAction packageInstall: ClientLibraryStore['packageInstall'];
 
 	@Prop(Game) game: Game;
 	@Prop(GamePackage) package: GamePackage;
@@ -67,16 +67,16 @@ export default class AppGamePackagePurchaseModal extends BaseModal {
 
 		// When they skip a pwyw payment form, on client we need to start the
 		// install.
+		// TODO(client)
 		if (GJ_IS_CLIENT) {
-			Analytics.trackEvent('game-package-card', 'install');
-
-			this.packageInstall([
-				this.game,
-				this.build._package!,
-				this.build._release!,
-				this.build,
-				this.build._launch_options!,
-			]);
+			// Analytics.trackEvent('game-package-card', 'install');
+			// this.packageInstall([
+			// 	this.game,
+			// 	this.build._package!,
+			// 	this.build._release!,
+			// 	this.build,
+			// 	this.build._launch_options!,
+			// ]);
 		} else {
 			this.download(this.build!);
 		}
