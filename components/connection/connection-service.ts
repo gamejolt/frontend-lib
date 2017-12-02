@@ -7,8 +7,6 @@ export class Connection {
 	private static hasRequestFailure = false;
 	private static reconnectChecker?: ConnectionReconnect;
 
-	private static store: VuexStore;
-
 	static get isOffline() {
 		return this.isDeviceOffline || this.hasRequestFailure;
 	}

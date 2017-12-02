@@ -20,15 +20,10 @@ angular
 				vote: undefined,
 			};
 
-			if (
-				scope.userRatings &&
-				angular.isArray(scope.userRatings) &&
-				scope.userRatings.length
-			) {
+			if (scope.userRatings && angular.isArray(scope.userRatings) && scope.userRatings.length) {
 				if (scope.jam.voting_type == 'categories') {
 					angular.forEach(scope.userRatings, function(userRatings) {
-						scope.formModel.votes[userRatings.jam_voting_category_id] =
-							userRatings.rating;
+						scope.formModel.votes[userRatings.jam_voting_category_id] = userRatings.rating;
 					});
 				} else if (scope.jam.voting_type == 'overall') {
 					scope.formModel.vote = _.first(scope.userRatings).rating;
@@ -44,10 +39,7 @@ angular
 					var total = 0;
 					var count = 0;
 
-					angular.forEach(scope.formModel.votes, function(
-						categoryVote,
-						category
-					) {
+					angular.forEach(scope.formModel.votes, function(categoryVote, category) {
 						if (categoryVote) {
 							total += categoryVote;
 							++count;
