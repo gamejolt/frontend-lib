@@ -13,7 +13,7 @@ import { AppDatetimePicker } from '../../../datetime-picker/datetime-picker';
 export class AppFormControlDate extends BaseFormControl {
 	@Prop(Number) timezoneOffset: number;
 
-	value = Date.now();
+	controlVal = Date.now();
 
 	get minDate() {
 		return this.validationRules.min_date;

@@ -40,7 +40,7 @@ export class AppFormControlMarkdown extends BaseFormControl {
 	@Prop(Boolean) allowCodeEditor?: boolean;
 	@Prop(Boolean) disabled?: boolean;
 
-	value = '';
+	controlVal = '';
 	currentTab = 'edit';
 	editorMode = 'textarea';
 	shouldShowMarkdownHelp = true;
@@ -54,7 +54,7 @@ export class AppFormControlMarkdown extends BaseFormControl {
 	Environment = Environment;
 
 	get hasContent() {
-		return !!this.value;
+		return !!this.controlVal;
 	}
 
 	created() {
@@ -105,12 +105,12 @@ export class AppFormControlMarkdown extends BaseFormControl {
 
 			// Get the control's model from the form.
 			// var content = scope.$parent[ gjForm.formModel ][ formGroup.name ];
-			if (this.value) {
+			if (this.controlVal) {
 				this.previewContent = '';
 
 				const response = await Api.sendRequest(
 					this.previewUrl,
-					{ content: this.value },
+					{ content: this.controlVal },
 					{ ignorePayloadUser: true }
 				);
 

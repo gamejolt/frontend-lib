@@ -3,7 +3,7 @@
 	role="checkbox"
 	class="toggle"
 	:class="{
-		'toggle-checked': !!value,
+		'toggle-checked': !!controlVal,
 	}"
 	:tabindex="disabled ? -1 : 0"
 	@click="toggle"

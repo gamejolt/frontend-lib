@@ -9,7 +9,7 @@ export class AppFormControlSelect extends BaseFormControl {
 	@Prop(Array) validateOn: string[];
 	@Prop(Number) validateDelay: number;
 
-	value = '';
+	controlVal = '';
 
 	get validationRules() {
 		return {

@@ -2,7 +2,7 @@
 	:id="id"
 	:name="group.name"
 	class="form-control"
-	:value="value"
+	:value="controlVal"
 	@input="onChange( $event.target.value )"
 	v-validate="{ rules: validationRules }"
 	:data-vv-validate-on="validateOn"

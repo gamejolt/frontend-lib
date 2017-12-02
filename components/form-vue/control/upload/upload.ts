@@ -30,7 +30,7 @@ export class AppFormControlUpload extends BaseFormControl {
 		input: AppFormControlUploadFile;
 	};
 
-	value: File | File[] | null = [];
+	controlVal: File | File[] | null = [];
 	isDropActive = false;
 
 	get validationRules() {
@@ -53,7 +53,7 @@ export class AppFormControlUpload extends BaseFormControl {
 	 * Will be an array even if not a `multiple` upload type.
 	 */
 	get files() {
-		return Array.isArray(this.value) ? this.value : [this.value];
+		return Array.isArray(this.controlVal) ? this.controlVal : [this.controlVal];
 	}
 
 	get progress(): number | undefined {
@@ -103,7 +103,7 @@ export class AppFormControlUpload extends BaseFormControl {
 	}
 
 	clearFile(file: File) {
-		if (Array.isArray(this.value)) {
+		if (Array.isArray(this.controlVal)) {
 			const files = this.files;
 			const index = files.indexOf(file);
 			if (index !== -1) {
@@ -111,11 +111,11 @@ export class AppFormControlUpload extends BaseFormControl {
 				if (!files.length) {
 					this.applyValue(null);
 				} else {
-					this.applyValue(this.value);
+					this.applyValue(this.controlVal);
 				}
 			}
 		} else {
-			if (this.value === file) {
+			if (this.controlVal === file) {
 				this.applyValue(null);
 			}
 		}

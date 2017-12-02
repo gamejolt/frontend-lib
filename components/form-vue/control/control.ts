@@ -14,7 +14,7 @@ export class AppFormControl extends BaseFormControl {
 	@Prop(Number) validateDelay: number;
 	@Prop(Array) mask: (string | RegExp)[];
 
-	value = '';
+	controlVal = '';
 	maskedInputElem: any = null;
 
 	$el: HTMLInputElement;
@@ -49,7 +49,7 @@ export class AppFormControl extends BaseFormControl {
 				inputElement: this.$el,
 				mask,
 			});
-			this.maskedInputElem.update(this.value);
+			this.maskedInputElem.update(this.controlVal);
 		}
 	}
 

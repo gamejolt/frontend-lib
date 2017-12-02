@@ -11,7 +11,7 @@ import { findRequiredVueParent } from '../../../utils/vue';
 export class BaseFormControl extends Vue {
 	@Prop() rules: any;
 
-	value: any;
+	controlVal: any;
 
 	/**
 	 * Whether or not the form control has multiple controls for the group. This
@@ -48,10 +48,13 @@ export class BaseFormControl extends Vue {
 
 		if (!this.multi) {
 			// Copy over the initial form model value.
-			this.value = this.form.base.formModel[this.group.name];
+			this.controlVal = this.form.base.formModel[this.group.name];
 
 			// Watch the form model for changes and sync to our control.
-			this.$watch(() => this.form.base.formModel[this.group.name], newVal => (this.value = newVal));
+			this.$watch(
+				() => this.form.base.formModel[this.group.name],
+				newVal => (this.controlVal = newVal)
+			);
 		}
 	}
 
@@ -66,7 +69,7 @@ export class BaseFormControl extends Vue {
 		// When the DOM value changes we bind it back to our own value and set
 		// it on the form model as well.
 		if (!this.multi) {
-			this.value = value;
+			this.controlVal = value;
 		}
 
 		this.form.base.setField(this.group.name, value);

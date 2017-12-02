@@ -2,7 +2,7 @@
 
 	<app-datetime-picker
 		:id="id"
-		:value="value"
+		:value="controlVal"
 		@input="onChange"
 		:timezone-offset="timezoneOffset"
 		:min-date="minDate"
@@ -13,7 +13,7 @@
 		class="hidden"
 		type="number"
 		:name="group.name"
-		v-model="value"
+		v-model="controlVal"
 		v-validate="{ rules: validationRules }"
 		>
 
