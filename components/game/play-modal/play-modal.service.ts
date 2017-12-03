@@ -77,6 +77,7 @@ export class GamePlayModal {
 			noBackdrop: true,
 			noBackdropClose: true,
 			noEscClose: true,
+			size: 'full',
 		});
 
 		this.hasModal = false;

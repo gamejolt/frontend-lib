@@ -4,7 +4,7 @@ import { arrayRemove } from '../../utils/array';
 type ModalComponent = typeof Vue | (() => Promise<Vue>);
 
 export interface ModalOptions {
-	size?: 'sm' | 'lg' | undefined;
+	size?: 'sm' | 'lg' | 'full' | undefined;
 	component: ModalComponent;
 	props?: any;
 	noBackdrop?: boolean;
@@ -16,7 +16,7 @@ export class Modal {
 	static modals: Modal[] = [];
 	static incrementer = 0;
 
-	size: 'sm' | 'lg' | undefined;
+	size: 'sm' | 'lg' | 'full' | undefined;
 	component: ModalComponent;
 	props?: any;
 	noBackdrop?: boolean;
