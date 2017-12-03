@@ -13,6 +13,7 @@ import { GameDownloader } from '../../downloader/downloader.service';
 import { User } from '../../../user/user.model';
 import { AppLoading } from '../../../../vue/components/loading/loading';
 import { Growls } from '../../../growls/growls.service';
+import { VuexStore } from '../../../../utils/vuex';
 
 @View
 @Component({
@@ -30,7 +31,9 @@ export default class AppGamePackagePurchaseModal extends BaseModal {
 	@Prop(User) partner?: User;
 
 	static hook = {
-		downloadPackage: undefined as ((store: any, game: Game, build: GameBuild) => void) | undefined,
+		downloadPackage: undefined as
+			| ((store: VuexStore, game: Game, build: GameBuild) => void)
+			| undefined,
 	};
 
 	sellable: Sellable = null as any;
