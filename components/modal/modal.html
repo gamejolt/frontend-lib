@@ -10,7 +10,10 @@
 		@click="dismissBackdrop"
 		>
 
-		<div class="modal-content" @click.stop>
+		<div class="modal-content"
+			@mouseover="isHoveringContent = true"
+			@mouseout="isHoveringContent = false"
+			>
 			<slot />
 		</div>
 
