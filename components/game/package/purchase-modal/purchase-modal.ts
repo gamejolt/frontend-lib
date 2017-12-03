@@ -13,10 +13,6 @@ import { GameDownloader } from '../../downloader/downloader.service';
 import { User } from '../../../user/user.model';
 import { AppLoading } from '../../../../vue/components/loading/loading';
 import { Growls } from '../../../growls/growls.service';
-// import {
-// 	ClientLibraryAction,
-// 	ClientLibraryStore,
-// } from '../../../../../../app/store/client-library';
 
 @View
 @Component({
@@ -27,13 +23,15 @@ import { Growls } from '../../../growls/growls.service';
 	},
 })
 export default class AppGamePackagePurchaseModal extends BaseModal {
-	// @ClientLibraryAction packageInstall: ClientLibraryStore['packageInstall'];
-
 	@Prop(Game) game: Game;
 	@Prop(GamePackage) package: GamePackage;
 	@Prop(GameBuild) build?: GameBuild;
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
+
+	static hook = {
+		downloadPackage: undefined as ((store: any, game: Game, build: GameBuild) => void) | undefined,
+	};
 
 	sellable: Sellable = null as any;
 
@@ -65,20 +63,10 @@ export default class AppGamePackagePurchaseModal extends BaseModal {
 			throw new Error(`Build isn't set`);
 		}
 
-		// When they skip a pwyw payment form, on client we need to start the
-		// install.
-		// TODO(client)
-		if (GJ_IS_CLIENT) {
-			// Analytics.trackEvent('game-package-card', 'install');
-			// this.packageInstall([
-			// 	this.game,
-			// 	this.build._package!,
-			// 	this.build._release!,
-			// 	this.build,
-			// 	this.build._launch_options!,
-			// ]);
+		if (AppGamePackagePurchaseModal.hook.downloadPackage) {
+			AppGamePackagePurchaseModal.hook.downloadPackage(this.$store, this.game, this.build);
 		} else {
-			this.download(this.build!);
+			this.download(this.build);
 		}
 		this.modal.dismiss();
 	}
