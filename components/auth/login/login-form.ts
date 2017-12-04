@@ -2,7 +2,6 @@ import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./login-form.html';
 
 import { Connection } from '../../connection/connection-service';
-import { makeObservableService } from '../../../utils/vue';
 import { BaseForm, FormOnSubmit } from '../../form-vue/form.service';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { Api } from '../../api/api.service';
@@ -21,7 +20,7 @@ export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
 	invalidLogin = false;
 	blockedLogin = false;
 
-	Connection = makeObservableService(Connection);
+	readonly Connection = Connection;
 
 	onChanged() {
 		this.resetErrors();

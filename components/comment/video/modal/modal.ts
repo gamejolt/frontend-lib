@@ -3,7 +3,6 @@ import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 
 import { AppGameThumbnail } from '../../../../../../_common/game/thumbnail/thumbnail';
-import { makeObservableService } from '../../../../utils/vue';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { number } from '../../../../vue/filters/number';
 import { AppStore } from '../../../../vue/services/app/app-store';
@@ -44,7 +43,7 @@ export default class AppCommentVideoModal extends BaseModal {
 
 	@State app: AppStore;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	canToggleDescription = false;
 	showFullDescription = true;

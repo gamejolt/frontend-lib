@@ -4,8 +4,8 @@ import View from '!view!./add.html?style=./add.styl';
 
 import { AppExpand } from '../../../expand/expand';
 import { AppCardList } from '../list';
-import { makeObservableService, findRequiredVueParent } from '../../../../utils/vue';
 import { Screen } from '../../../screen/screen-service';
+import { findRequiredVueParent } from '../../../../utils/vue';
 
 @View
 @Component({
@@ -18,7 +18,7 @@ export class AppCardListAdd extends Vue {
 
 	list: AppCardList = null as any;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	get isActive() {
 		return this.list.isAdding;

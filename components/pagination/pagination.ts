@@ -3,7 +3,6 @@ import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./pagination.html?style=./pagination.styl';
 
 import { Screen } from '../screen/screen-service';
-import { makeObservableService } from '../../utils/vue';
 import { AppNoAutoscroll } from '../scroll/auto-scroll/no-autoscroll.directive.vue';
 
 const MaxPagesShown = 5;
@@ -28,7 +27,7 @@ export class AppPagination extends Vue {
 	@Prop(String) nextText?: string;
 	@Prop(String) previousText?: string;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	get totalPages() {
 		const totalPages = Math.ceil(this.totalItems / this.itemsPerPage);

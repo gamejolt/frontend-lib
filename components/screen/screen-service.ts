@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs/Subject';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
+import { makeObservableService } from '../../utils/vue';
 
 /**
  * Media query breakpoints.
@@ -33,7 +34,7 @@ export class Screen {
 
 	/**
 	 * The breakpoint states.
-	*/
+	 */
 	static isXs = false;
 	static isSm = false;
 	static isMd = false;
@@ -200,6 +201,8 @@ export class Screen {
 	}
 }
 
+makeObservableService(Screen);
+
 if (!GJ_IS_SSR) {
 	// Check the breakpoints on app load.
 	Screen._onResize();
@@ -208,5 +211,7 @@ if (!GJ_IS_SSR) {
 	 * This is used internally to check things every time window resizes.
 	 * We debounce this and afterwards fire the resizeChanges for everyone else.
 	 */
-	fromEvent(window, 'resize').debounceTime(250).subscribe(() => Screen._onResize());
+	fromEvent(window, 'resize')
+		.debounceTime(250)
+		.subscribe(() => Screen._onResize());
 }

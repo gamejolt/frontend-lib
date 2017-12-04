@@ -90,9 +90,6 @@ export class Ads {
 			return;
 		}
 
-		// Make this observable in Vue.
-		makeObservableService(this);
-
 		router.beforeEach((to, from, next) => {
 			// Clear all our route-level settings.
 			this.adUnit = DefaultAdUnit;
@@ -316,3 +313,5 @@ export class Ads {
 		}
 	}
 }
+
+makeObservableService(Ads);

@@ -3,7 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./item.html?style=./item.styl';
 
 import { AppCardList } from '../list';
-import { makeObservableService, findRequiredVueParent } from '../../../../utils/vue';
+import { findRequiredVueParent } from '../../../../utils/vue';
 import { AppExpand } from '../../../expand/expand';
 import { AppCard } from '../../card';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
@@ -25,7 +25,7 @@ export class AppCardListItem extends Vue {
 
 	list: AppCardList = null as any;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	get isActive() {
 		return this.forceActive || this.list.activeItem === this.item;

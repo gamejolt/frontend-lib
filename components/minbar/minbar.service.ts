@@ -1,3 +1,4 @@
+import { makeObservableService } from '../../utils/vue';
 export interface MinbarItem {
 	isActive?: boolean;
 	notificationCount?: number;
@@ -21,3 +22,5 @@ export class Minbar {
 		}
 	}
 }
+
+makeObservableService(Minbar);

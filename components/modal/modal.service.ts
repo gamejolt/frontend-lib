@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { arrayRemove } from '../../utils/array';
+import { makeObservableService } from '../../utils/vue';
 
 type ModalComponent = typeof Vue | (() => Promise<Vue>);
 
@@ -54,3 +55,5 @@ export class Modal {
 		this._resolve(undefined);
 	}
 }
+
+makeObservableService(Modal);

@@ -1,4 +1,5 @@
 import { UAParser } from 'ua-parser-js';
+import { makeObservableService } from '../../utils/vue';
 
 type DeviceOs = 'windows' | 'mac' | 'linux' | 'other';
 type DeviceArch = '32' | '64';
@@ -142,3 +143,5 @@ export class Device {
 		return this._browser;
 	}
 }
+
+makeObservableService(Device);
