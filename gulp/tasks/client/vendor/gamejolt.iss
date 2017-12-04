@@ -3,8 +3,8 @@
 
 #define MyAppName "Game Jolt Client"
 #define MyAppVersion "{{APP_VERSION}}"
-#define MyAppPublisher "Lucen Web Creative, LLC"
-#define MyAppURL "http://gamejolt.com/"
+#define MyAppPublisher "Lucent Web Creative, LLC"
+#define MyAppURL "https://gamejolt.com/"
 #define MyAppExeName "GameJoltClient.exe"
 
 [Setup]
@@ -21,7 +21,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 AppMutex=game-jolt-client
 DefaultDirName={localappdata}\GameJoltClient
-DefaultGroupName=Lucent Web Creative
+DefaultGroupName=Game Jolt
 DisableProgramGroupPage=yes
 DisableFinishedPage=yes
 DisableReadyMemo=yes
@@ -31,14 +31,14 @@ DisableStartupPrompt=yes
 PrivilegesRequired=lowest
 OutputDir={{OUT_DIR}}
 OutputBaseFilename=Setup
-SetupIconFile=package\app\img\client\winico.ico
+SetupIconFile={{ICON_DIR}}\winico.ico
 Compression=lzma
 SolidCompression=yes
-UninstallDisplayIcon=package\app\img\client\winico.ico
+UninstallDisplayIcon={{ICON_DIR}}\winico.ico
 CloseApplications=force
 RestartApplications=no
 CloseApplicationsFilter=GameJoltClient.exe
-WizardSmallImageFile=package\app\img\client\win-installer-clyde.bmp
+WizardSmallImageFile={{ICON_DIR}}\win-installer-clyde.bmp
 SignTool=signtool
 
 [Languages]
