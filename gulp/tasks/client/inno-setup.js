@@ -30,7 +30,7 @@ InnoSetup.prototype.build = function() {
 		encoding: 'utf8',
 	});
 	script = script
-		.replace(/\{\{ICON_DIR\}\}/g, shellEscape(path.resolve('./icons')))
+		.replace(/\{\{ICON_DIR\}\}/g, shellEscape(path.resolve(__dirname, 'icons')))
 		.replace(/\{\{APP_DIR\}\}/g, shellEscape(this.appDir))
 		.replace(/\{\{OUT_DIR\}\}/g, shellEscape(this.outDir))
 		.replace(/\{\{APP_VERSION\}\}/g, this.version);
