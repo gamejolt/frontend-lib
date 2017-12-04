@@ -321,14 +321,14 @@ module.exports = function(config) {
 							to: 'update-hook.js',
 						},
 					]),
-				// devNoop ||
-				// 	new webpack.optimize.UglifyJsPlugin({
-				// 		sourceMap: true,
-				// 		compress: {
-				// 			warnings: false,
-				// 			screw_ie8: true,
-				// 		},
-				// 	}),
+				devNoop ||
+					new webpack.optimize.UglifyJsPlugin({
+						sourceMap: true,
+						compress: {
+							warnings: false,
+							screw_ie8: true,
+						},
+					}),
 				devNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
 
