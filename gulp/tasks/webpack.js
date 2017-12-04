@@ -39,6 +39,7 @@ module.exports = function(config) {
 		// Setting these to empty object strings causes the require to return an empty object.
 		externals['nw.gui'] = '{}';
 		externals['client-voodoo'] = '{}';
+		externals['nwjs-snappy-updater'] = '{}';
 		externals['sanitize-filename'] = '{}';
 	} else {
 		// This format sets the externals to just straight up "require('axios')" so it can pull it
@@ -51,6 +52,9 @@ module.exports = function(config) {
 		// We don't want to pull client-voodoo into the build so that it can get proper paths
 		// through variables like __dirname and such.
 		externals['client-voodoo'] = 'commonjs client-voodoo';
+
+		// Do not bundle the updater in app.js, leavve it to fetch from node_modules.
+		externals['nwjs-snappy-updater'] = 'commonjs nwjs-snappy-updater';
 	}
 
 	if (config.server) {
@@ -274,6 +278,9 @@ module.exports = function(config) {
 					GJ_IS_CLIENT: JSON.stringify(!!config.client),
 					GJ_IS_SSR: JSON.stringify(config.server),
 					GJ_VERSION: JSON.stringify(require(path.resolve(process.cwd(), 'package.json')).version),
+					GJ_MANIFEST_URL: JSON.stringify(
+						require(path.resolve(process.cwd(), 'package.json')).clientManifestUrl
+					),
 
 					// This sets vue in production mode.
 					'process.env.NODE_ENV': JSON.stringify(config.production ? 'production' : 'development'),
