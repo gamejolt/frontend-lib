@@ -399,9 +399,10 @@ module.exports = function(config) {
 
 						// Our own vars for injection into template.
 						_section: section,
+						_isClient: config.client,
 						_title: sectionConfig.title,
 						_crawl: sectionConfig.crawl,
-						_isClient: config.client,
+						_scripts: sectionConfig.scripts,
 					}),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
