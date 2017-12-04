@@ -118,10 +118,6 @@ export class AppGamePackageCard extends Vue {
 	}
 
 	created() {
-		// TODO(rewrite,cros)
-		// // If this game is in their installed games, this will populate.
-		// this.installedBuild = null;
-
 		if (this.sellable && this.sellable.pricings.length > 0) {
 			this.pricing = this.sellable.pricings[0];
 			if (this.pricing.promotional) {
