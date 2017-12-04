@@ -79,6 +79,14 @@ export class User extends Model {
 		if (GJ_IS_SSR) {
 			return Promise.resolve();
 		}
+
+		// We don't want to wait for the touch in Client since we know it gets loaded in
+		// immediately.
+		if (GJ_IS_CLIENT) {
+			Api.sendRequest('/web/touch', null, { detach: true });
+			return Promise.resolve();
+		}
+
 		return Api.sendRequest('/web/touch');
 	}
 
