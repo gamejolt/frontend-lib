@@ -9,6 +9,13 @@ import { Environment } from '../components/environment/environment.service';
 const ClientBaseRegex = new RegExp('app:\\/\\/game\\-jolt\\-client\\/([^.]+)\\.html#');
 
 export function initRouter(appRoutes: RouteConfig[]) {
+	// Angular used #! in the urls but vue by default uses only #,
+	// so after the update is done and we reload, we need to redirect the users from the old url.
+	const newHref = window.location.href.replace(/^(app:\/\/game\-jolt\-client\/\w+\.html#)!/, '$1');
+	if (newHref !== window.location.href) {
+		window.location.href = newHref;
+	}
+
 	Vue.use(VueRouter);
 
 	const routes = [...appRoutes, routeError404];
