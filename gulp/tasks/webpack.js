@@ -53,8 +53,12 @@ module.exports = function(config) {
 		// through variables like __dirname and such.
 		externals['client-voodoo'] = 'commonjs client-voodoo';
 
-		// Do not bundle the updater in app.js, leavve it to fetch from node_modules.
-		externals['nwjs-snappy-updater'] = 'commonjs nwjs-snappy-updater';
+		// we need nwjs-snappy-updater to not be bundled in because it contains a dynamic require
+		// for the update-hook.js that webpack flips tables over, but if we exclude nwjs-snappy-updater
+		// from the bundle, it's dependecies will not be transpiled to es5.
+		// We define a specific function to exclude that returns the node's require so we can use it
+		// to reload the update hook without webpack complaining about a dynamic export. sheesh.
+		externals['download'] = 'commonjs download';
 	}
 
 	if (config.server) {
