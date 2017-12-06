@@ -1,0 +1,31 @@
+<div class="comment-modal-comment">
+	<app-message-thread-item
+		:user="comment.user"
+		:date="comment.posted_on"
+		>
+		<!-- :is-active="isHighlighted" -->
+		<!-- :replied-to="parent ? parent.user : undefined" -->
+		<!-- :is-showing-replies="isShowingReplies" -->
+		<!-- :is-reply="!!parent" -->
+		<!-- :is-last="isLastInThread" -->
+
+		<app-comment-content
+			:comment="comment"
+			:content="comment.comment_compiled"
+			/>
+
+		<template slot="controls">
+			<app-comment-controls
+				:comment="comment"
+				/>
+		</template>
+	</app-message-thread-item>
+
+	<app-message-thread-add v-if="app.user">
+		<form-comment
+			:resource="comment.resource"
+			:resource-id="comment.resourceId"
+			/>
+			<!-- @submit="onCommentAdd" -->
+	</app-message-thread-add>
+</div>

@@ -4,6 +4,7 @@
 // Most of this styling needs to be done globally.
 >>> .timeline-list
 	$border-size = 2px
+	$padding-left = $timeline-list-avatar-margin + ($timeline-list-icon-size / 2)
 
 	// For doing a full-bleed within the content.
 	&-full-bleed
@@ -59,8 +60,15 @@
 				padding-right: @padding-left
 
 			@media $media-sm-up
-				border-left: $border-size solid $gray-lighter
-				padding-left: $timeline-list-avatar-margin + ($timeline-list-icon-size / 2)
+				padding-left: $border-size + $padding-left
+
+				&.is-thread
+					border-left: $border-size solid $gray-lighter
+					padding-left: $padding-left
+
+					&.is-last
+						border-left: 0
+						padding-left: $border-size + $padding-left
 
 		&-meta
 			margin-top: 6px
@@ -162,7 +170,7 @@
 			color: $white
 
 		&-main.active
-			border-left: $border-size solid $gj-blue
+			border-color: $gj-blue
 
 		/**
 		 * New Item
@@ -173,4 +181,4 @@
 			color: $white
 
 		&-main.new
-			border-left: $border-size solid $gj-pink
+			border-color: $gj-pink

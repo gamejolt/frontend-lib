@@ -10,17 +10,14 @@
 	right: 0
 	bottom: 0
 	left: 0
-	z-index: $zindex-modal
 	-webkit-overflow-scrolling: touch
-
 	// Prevent Chrome on Windows from adding a focus outline. For details, see
 	// https://github.com/twbs/bootstrap/pull/10951.
 	outline: 0
 
 	// Animation stuff.
 	// Tells vue that we want to animate for this long, basically.
-	&.v-enter-active
-	&.v-leave-active
+	&.v-enter-active, &.v-leave-active
 		transition-duration: 300ms
 
 		.modal-dialog
@@ -29,13 +26,12 @@
 		.modal-content
 			transition: transform 300ms $strong-ease-out
 
-	&.v-enter
-	&.v-leave-to
+	&.v-enter, &.v-leave-to
 		.modal-dialog
 			opacity: 0
 
 		.modal-content
-			transform: scale3d( 0.8, 0.8, 0.8 )
+			transform: scale3d(0.8, 0.8, 0.8)
 
 	.modal-dialog
 		opacity: 1
@@ -62,17 +58,15 @@
 	background-clip: padding-box
 	outline: none // Remove focus outline from opened modal
 	background-color: $modal-content-bg
-	box-shadow: 0 5px 15px rgba( $black, 0.5 )
+	box-shadow: 0 5px 15px rgba($black, 0.5)
 
 	@media $media-sm-up
 		border-radius: $border-radius-base
 
 @media $media-sm-up
-
 	.modal-sm.modal-dialog
 		width: 600px
 
 @media $media-md-up
-
 	.modal-dialog
 		width: $container-md

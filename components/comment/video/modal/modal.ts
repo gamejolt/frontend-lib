@@ -14,7 +14,6 @@ import { AppUserAvatar } from '../../../user/user-avatar/user-avatar';
 import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppSocialYoutubeSubscribe } from '../../../social/youtube/subscribe/subscribe';
-import { HistoryTick } from '../../../history-tick/history-tick-service';
 import { AppStore } from '../../../../vue/services/app/app-store';
 import { number } from '../../../../vue/filters/number';
 import { AppCommentVideoLikeWidget } from '../like-widget/like-widget';

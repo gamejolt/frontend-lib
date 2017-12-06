@@ -6,7 +6,6 @@ import View from '!view!./widget.html?style=./widget.styl';
 import { AppStore } from '../../../vue/services/app/app-store';
 import { User } from '../../user/user.model';
 import { Comment } from '../comment-model';
-import { Subscription } from '../../subscription/subscription.model';
 import { Environment } from '../../environment/environment.service';
 import { Analytics } from '../../analytics/analytics.service';
 import { Growls } from '../../growls/growls.service';
@@ -19,7 +18,7 @@ import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { AppCommentWidgetComment } from './comment/comment';
 import { AppLoadingFade } from '../../loading/fade/fade';
 import { AppMessageThread } from '../../message-thread/message-thread';
-import { AppCommentWidgetAdd } from '../add/add';
+import { FormComment } from '../add/add';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { AppMessageThreadPagination } from '../../message-thread/pagination/pagination';
 import { AppMessageThreadContent } from '../../message-thread/content/content';
@@ -37,7 +36,7 @@ let incrementer = 0;
 		AppMessageThreadPagination,
 		AppMessageThreadContent,
 		AppCommentWidgetComment,
-		AppCommentWidgetAdd,
+		FormComment,
 	},
 	directives: {
 		AppAuthRequired,
@@ -46,6 +45,7 @@ let incrementer = 0;
 export class AppCommentWidget extends Vue {
 	@Prop(String) resource: string;
 	@Prop(Number) resourceId: number;
+	@Prop(Comment) parentComment?: Comment;
 	@Prop(Boolean) noIntro?: boolean;
 	@Prop(Boolean) onlyAdd?: boolean;
 
@@ -58,7 +58,7 @@ export class AppCommentWidget extends Vue {
 	currentPage = 1;
 	resourceOwner: User | null = null;
 	comments: Comment[] = [];
-	childComments: { [k: string]: Comment } = {};
+	childComments: { [k: string]: Comment[] } = {};
 	commentsCount = 0;
 	parentCount = 0;
 	perPage = 10;
@@ -71,11 +71,17 @@ export class AppCommentWidget extends Vue {
 	translationsLoaded = false;
 	translations: { [k: string]: Translation } = {};
 
-	subscriptions: { [k: string]: Subscription } = {};
 	collaborators: GameCollaborator[] = [];
 
 	get loginUrl() {
 		return Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent(this.$route.fullPath);
+	}
+
+	get commentList() {
+		if (this.parentComment) {
+			return this.childComments[this.parentComment.id];
+		}
+		return this.comments;
 	}
 
 	async created() {
@@ -124,17 +130,6 @@ export class AppCommentWidget extends Vue {
 					grouped[child.parent_id].push(child);
 				}
 				this.childComments = grouped;
-			}
-
-			// User subscriptions to comment threads.
-			this.subscriptions = {};
-			if (payload.subscriptions) {
-				const subscriptions: Subscription[] = Subscription.populate(payload.subscriptions);
-				const indexed: any = {};
-				for (const subscription of subscriptions) {
-					indexed[subscription.resource_id] = subscription;
-				}
-				this.subscriptions = indexed;
 			}
 
 			this.collaborators = payload.collaborators
@@ -270,8 +265,8 @@ export class AppCommentWidget extends Vue {
 
 	gatherTranslatable() {
 		let comments = ([] as Comment[]).concat(this.comments);
-		for (const child of Object.values(this.childComments)) {
-			comments.push(child);
+		for (const children of Object.values(this.childComments)) {
+			comments = [...comments, ...children];
 		}
 
 		const translationCode = this.getTranslationCode(getTranslationLang());

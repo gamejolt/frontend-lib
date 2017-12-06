@@ -4,6 +4,7 @@ import { CommentVote } from './vote/vote-model';
 import { User } from '../user/user.model';
 import { Api } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
+import { Subscription } from '../subscription/subscription.model';
 
 export class Comment extends Model {
 	static readonly STATUS_REMOVED = 0;
@@ -23,8 +24,10 @@ export class Comment extends Model {
 	modified_on?: number;
 	lang: string;
 	videos: CommentVideo[] = [];
+	subscription?: Subscription;
 
 	isVotePending = false;
+	isFollowPending = false;
 
 	get permalink() {
 		return Environment.baseUrl + '/x/permalink/comment/' + this.id;
@@ -43,6 +46,10 @@ export class Comment extends Model {
 
 		if (data.user_vote) {
 			this.user_vote = new CommentVote(data.user_vote);
+		}
+
+		if (data.subscription) {
+			this.subscription = new Subscription(data.subscription);
 		}
 	}
 
@@ -102,7 +109,7 @@ export class Comment extends Model {
 	}
 
 	async $like() {
-		if (this.isVotePending) {
+		if (this.user_vote || this.isVotePending) {
 			return;
 		}
 		this.isVotePending = true;
@@ -127,6 +134,28 @@ export class Comment extends Model {
 		this.user_vote = undefined;
 		--this.votes;
 		this.isVotePending = false;
+	}
+
+	async $follow() {
+		if (this.subscription || this.isFollowPending) {
+			return;
+		}
+		this.isFollowPending = true;
+
+		const subscription = await Subscription.$subscribe(this.id);
+		this.subscription = subscription;
+		this.isFollowPending = false;
+	}
+
+	async $removeFollow() {
+		if (!this.subscription || this.isFollowPending) {
+			return;
+		}
+		this.isFollowPending = true;
+
+		await this.subscription.$remove();
+		this.subscription = undefined;
+		this.isFollowPending = false;
 	}
 }
 

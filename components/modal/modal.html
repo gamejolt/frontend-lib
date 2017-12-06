@@ -1,5 +1,8 @@
 <transition appear>
 	<div tabindex="-1" role="dialog" class="modal"
+		:style="{
+			'z-index': 1050 + modal.index,
+		}"
 		v-shortkey="[ 'esc' ]"
 		@shortkey="dismissEsc"
 		@click="dismissBackdrop"
@@ -12,7 +15,11 @@
 			}"
 			>
 
-			<div class="modal-content" @click.stop>
+			<div
+				class="modal-content"
+				@mouseover="isHoveringContent = true"
+				@mouseout="isHoveringContent = false"
+				>
 				<slot />
 			</div>
 

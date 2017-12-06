@@ -4,21 +4,19 @@
 	>
 	<app-loading v-if="!hasBootstrapped && !hasError" />
 	<div v-else-if="hasError" class="alert alert-warning">
-		<translate>Couldn't fetch comments for game.</translate>
+		<translate>Couldn't fetch comments.</translate>
 	</div>
 	<div v-else-if="hasBootstrapped">
-		<template v-if="!noIntro">
-			<template v-if="!commentsCount">
-				<p>
-					<em><translate>Let us know your thoughts and be the first to comment!</translate></em>
-				</p>
-				<br>
-			</template>
+		<template v-if="!noIntro && !commentsCount">
+			<p>
+				<em><translate>Let us know your thoughts and be the first to comment!</translate></em>
+			</p>
+			<br>
 		</template>
 
 		<!-- Comment Add Form -->
 		<app-message-thread-add v-if="app.user">
-			<app-comment-widget-add
+			<form-comment
 				:resource="resource"
 				:resource-id="resourceId"
 				@submit="onCommentAdd"
@@ -66,7 +64,7 @@
 			<!-- Comments List -->
 			<app-message-thread>
 				<app-comment-widget-comment
-					v-for="comment of comments"
+					v-for="comment of commentList"
 					:key="comment.id"
 					:resource="resource"
 					:resource-id="resourceId"

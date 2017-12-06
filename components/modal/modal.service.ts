@@ -23,6 +23,10 @@ export class Modal {
 	noBackdropClose?: boolean;
 	noEscClose?: boolean;
 
+	get index() {
+		return Modal.modals.findIndex(i => i === this);
+	}
+
 	static show<T>(options: ModalOptions) {
 		return new Promise<T | undefined>(resolve => {
 			++this.incrementer;

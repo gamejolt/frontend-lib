@@ -1,0 +1,35 @@
+<span class="comment-controls">
+	<span class="comment-vote-btn" v-app-auth-required>
+		<button
+			class="btn btn-outline btn-sparse btn-circle"
+			:class="{
+				'active btn-success': comment.user_vote
+			}"
+			@click="onVoteClick"
+			:disabled="!canVote"
+			v-app-tooltip="votingTooltip"
+			v-app-track-event="`comment-widget:vote-click`"
+			>
+			<app-jolticon icon="heart" />
+		</button>
+		<span class="blip light filled" v-if="comment.votes > 0">
+			<span class="blip-caret"></span>
+			<span class="blip-count">{{ comment.votes | number }}</span>
+		</span>
+	</span>
+
+	<!--
+		Only show the reply if isn't a child.
+		We only show it on the parent comments.
+	-->
+	<span v-if="showReply && !comment.parent_id" v-app-auth-required>
+		<button
+			class="btn btn-outline btn-sparse btn-circle"
+			@click="onReplyClick"
+			v-app-tooltip="$gettext( 'Reply' )"
+			v-app-track-event="`comment-widget:reply-click`"
+			>
+			<app-jolticon icon="reply" />
+		</button>
+	</span>
+</span>

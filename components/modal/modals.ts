@@ -17,7 +17,11 @@ import { AppModalWrapper } from './modal-wrapper';
 export class AppModals extends Vue {
 	Modal = makeObservableService(Modal);
 
-	@Watch('Modal.modals.length')
+	get activeModals() {
+		return Modal.modals;
+	}
+
+	@Watch('activeModals.length')
 	watchModalLength() {
 		// We only count modals that have backdrops. If all the modals don't
 		// have backdrops, then we don't add `modal-open`.
