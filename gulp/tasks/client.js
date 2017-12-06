@@ -17,10 +17,7 @@ module.exports = config => {
 
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
 
-	gulp.task(
-		'client:node-modules',
-		shell.task(['cd ' + config.buildDir + ' && yarn --production --ignore-scripts'])
-	);
+	gulp.task('client:node-modules', shell.task(['cd ' + config.buildDir + ' && yarn --production']));
 
 	/**
 	 * Does the actual building into an NW executable.
