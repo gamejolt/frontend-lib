@@ -16,8 +16,15 @@ module.exports = config => {
 	}
 
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
+	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
 
-	gulp.task('client:node-modules', shell.task(['cd ' + config.buildDir + ' && yarn --production']));
+	gulp.task(
+		'client:node-modules',
+		shell.task([
+			'cd ' + config.buildDir + ' && yarn --production --ignore-scripts',
+			'cd ' + clientVoodooDir + ' && yarn run postinstall', // We have to run client-voodoo's post install to get the joltron binaries in.
+		])
+	);
 
 	/**
 	 * Does the actual building into an NW executable.
