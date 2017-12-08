@@ -170,11 +170,7 @@ module.exports = function(config) {
 		}
 
 		let hasOfflineSupport =
-			!config.server &&
-			!config.client &&
-			config.production &&
-			sectionConfig.offlineSupport &&
-			config.offlineSupport.indexOf(section) !== -1;
+			!config.server && !config.client && config.production && sectionConfig.offline;
 
 		webpackSectionConfigs[section] = {
 			entry,
