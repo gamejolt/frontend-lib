@@ -48,7 +48,7 @@ export class Analytics {
 		});
 
 		EventBus.on('routeChangeAfter', () => {
-			this.trackPageview();
+			this.trackPageview(router.currentRoute.fullPath);
 		});
 	}
 
