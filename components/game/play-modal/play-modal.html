@@ -1,37 +1,31 @@
-<app-modal>
-
-	<div class="game-play-modal-backdrop anim-fade-in"></div>
-
-	<div class="game-play-modal fill-darkest">
-		<div class="game-play-modal-header-controls clearfix">
-			<button class="btn btn-outline" @click="minimize" v-if="canMinimize">
-				<app-jolticon icon="minimize" />
-				<translate>Minimize</translate>
-			</button>
-			<button class="btn btn-danger-outline warning" @click="close">
-				<app-jolticon icon="remove" />
-				<translate>Close Game</translate>
-			</button>
-		</div>
-
-		<div class="game-play-modal-body">
-
-			<iframe
-				ref="frame"
-				class="game-play-modal-embed"
-				nwdisable
-				nwfaketop
-				v-if="url"
-				type="text/html"
-				frameborder="0"
-				scrolling="no"
-				webkitallowfullscreen mozallowfullscreen allowfullscreen
-				:src="url"
-				@load="focus"
-				>
-			</iframe>
-
-		</div>
+<app-modal class="fill-darkest">
+	<div class="-header-controls clearfix">
+		<button class="btn btn-outline" @click="minimize" v-if="canMinimize">
+			<app-jolticon icon="minimize" />
+			<translate>Minimize</translate>
+		</button>
+		<button class="btn btn-danger-outline warning" @click="close">
+			<app-jolticon icon="remove" />
+			<translate>Close Game</translate>
+		</button>
 	</div>
 
+	<div class="-body">
+
+		<iframe
+			ref="frame"
+			class="-embed"
+			nwdisable
+			nwfaketop
+			v-if="url"
+			type="text/html"
+			frameborder="0"
+			scrolling="no"
+			webkitallowfullscreen mozallowfullscreen allowfullscreen
+			:src="url"
+			@load="focus"
+			>
+		</iframe>
+
+	</div>
 </app-modal>

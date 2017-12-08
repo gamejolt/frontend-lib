@@ -1,5 +1,5 @@
 <app-form class="auth-form" name="joinForm">
-	<fieldset :disabled="!Connection.isOnline">
+	<fieldset :disabled="Connection.isClientOffline">
 
 		<app-form-group name="email" :label="$gettext( 'Email' )" :hide-label="true">
 			<app-form-control

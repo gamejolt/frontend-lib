@@ -4,7 +4,6 @@ import View from '!view!./minbar.html?style=./minbar.styl';
 
 import { Screen } from '../screen/screen-service';
 import { AppTooltip } from '../tooltip/tooltip';
-import { makeObservableService } from '../../utils/vue';
 import { Minbar, MinbarItem } from './minbar.service';
 
 @View
@@ -14,8 +13,8 @@ import { Minbar, MinbarItem } from './minbar.service';
 	},
 })
 export class AppMinbar extends Vue {
-	Minbar = makeObservableService(Minbar);
-	Screen = makeObservableService(Screen);
+	readonly Minbar = Minbar;
+	readonly Screen = Screen;
 
 	onItemClick(item: MinbarItem) {
 		if (item.onClick) {

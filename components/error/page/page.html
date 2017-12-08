@@ -6,5 +6,7 @@
 		<component :is="page" />
 		<br>
 	</section>
-	<slot v-else />
+	<template v-else>
+		<slot />
+	</template>
 </div>

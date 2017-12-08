@@ -3,7 +3,6 @@ import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./growl.html?style=./growl.styl';
 
 import { Growl } from './growls.service';
-import { makeObservableService } from '../../utils/vue';
 import { Screen } from '../screen/screen-service';
 import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 import { AppGrowlDynamic } from './growl-dynamic';
@@ -21,7 +20,7 @@ export class AppGrowl extends Vue {
 	@Prop(Number) index: number;
 	@Prop(Object) growl: Growl;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	private leaveTimer?: NodeJS.Timer;
 

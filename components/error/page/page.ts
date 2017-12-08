@@ -20,11 +20,11 @@ export class AppErrorPage extends Vue {
 	}
 
 	mounted() {
-		this.watcher = this.$router.beforeEach((_to, _from, next) => {
+		// We want to do it AFTER the route resolves for the next route we are going to.
+		this.watcher = this.$router.afterEach(() => {
 			if (this.error) {
 				this.clearError();
 			}
-			next();
 		});
 	}
 

@@ -3,7 +3,6 @@ import { Component, Watch } from 'vue-property-decorator';
 import View from '!view!./modals.html?style=./modals.styl';
 
 import { Modal } from './modal.service';
-import { makeObservableService } from '../../utils/vue';
 import { AppBackdrop } from '../backdrop/backdrop';
 import { AppModalWrapper } from './modal-wrapper';
 
@@ -15,7 +14,7 @@ import { AppModalWrapper } from './modal-wrapper';
 	},
 })
 export class AppModals extends Vue {
-	Modal = makeObservableService(Modal);
+	readonly Modal = Modal;
 
 	@Watch('Modal.modals.length')
 	watchModalLength() {

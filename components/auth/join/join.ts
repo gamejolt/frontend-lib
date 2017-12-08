@@ -4,7 +4,6 @@ import View from '!view!./join.html';
 import './join.styl';
 
 import { Connection } from '../../connection/connection-service';
-import { makeObservableService } from '../../../utils/vue';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppAuthJoinForm } from './join-form';
 import { Environment } from '../../environment/environment.service';
@@ -21,7 +20,7 @@ export class AppAuthJoin extends Vue {
 	@Prop(Boolean) darkVariant?: boolean;
 	@Prop(Boolean) shouldRedirect?: boolean;
 
-	Connection = makeObservableService(Connection);
+	readonly Connection = Connection;
 
 	/**
 	 * Sign up is just login without an account. It'll direct to the correct

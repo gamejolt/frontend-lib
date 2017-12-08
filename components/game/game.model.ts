@@ -27,6 +27,24 @@ export type Perm =
 	| 'builds'
 	| 'game-api';
 
+function pluckBuilds(packages: GamePackage[], func: (build: GameBuild) => boolean) {
+	let pluckedBuilds: GameBuild[] = [];
+
+	packages.forEach((_package: GamePackage) => {
+		if (!_package._builds) {
+			return;
+		}
+
+		_package._builds.forEach(build => {
+			if (func(build)) {
+				pluckedBuilds.push(build);
+			}
+		});
+	});
+
+	return pluckedBuilds;
+}
+
 export class Game extends Model {
 	static readonly STATUS_HIDDEN = 0;
 	static readonly STATUS_VISIBLE = 1;
@@ -320,40 +338,16 @@ export class Game extends Model {
 		return pluckedBuilds;
 	}
 
+	static pluckDownloadableBuilds(packages: GamePackage[]) {
+		return pluckBuilds(packages, i => i.isDownloadable);
+	}
+
 	static pluckBrowserBuilds(packages: GamePackage[]) {
-		let pluckedBuilds: GameBuild[] = [];
-
-		packages.forEach((_package: GamePackage) => {
-			if (!_package._builds) {
-				return;
-			}
-
-			_package._builds.forEach(build => {
-				if (build.isBrowserBased()) {
-					pluckedBuilds.push(build);
-				}
-			});
-		});
-
-		return pluckedBuilds;
+		return pluckBuilds(packages, i => i.isBrowserBased);
 	}
 
 	static pluckRomBuilds(packages: GamePackage[]) {
-		let pluckedBuilds: GameBuild[] = [];
-
-		packages.forEach(_package => {
-			if (!_package._builds) {
-				return;
-			}
-
-			_package._builds.forEach(build => {
-				if (build.isRom()) {
-					pluckedBuilds.push(build);
-				}
-			});
-		});
-
-		return pluckedBuilds;
+		return pluckBuilds(packages, i => i.isRom);
 	}
 
 	static chooseBestBuild(builds: GameBuild[], os: string, arch?: string) {

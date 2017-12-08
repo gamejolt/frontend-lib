@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import { arrayRemove } from '../../utils/array';
+import { makeObservableService } from '../../utils/vue';
 
 type ModalComponent = typeof Vue | (() => Promise<Vue>);
 
 export interface ModalOptions {
-	size?: 'sm' | 'lg' | undefined;
+	size?: 'sm' | 'lg' | 'full' | undefined;
 	component: ModalComponent;
 	props?: any;
 	noBackdrop?: boolean;
@@ -16,7 +17,7 @@ export class Modal {
 	static modals: Modal[] = [];
 	static incrementer = 0;
 
-	size: 'sm' | 'lg' | undefined;
+	size: 'sm' | 'lg' | 'full' | undefined;
 	component: ModalComponent;
 	props?: any;
 	noBackdrop?: boolean;
@@ -54,3 +55,5 @@ export class Modal {
 		this._resolve(undefined);
 	}
 }
+
+makeObservableService(Modal);

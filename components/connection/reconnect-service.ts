@@ -14,9 +14,8 @@ export class ConnectionReconnect {
 	private timeoutHandle?: NodeJS.Timer;
 
 	constructor(failFn: Function, successFn: Function) {
-		// We just hit the favicon from the CDN.
-		// Should be pretty lightweight.
-		this.checkUrl = require('./check.png');
+		// Just an image, so should be pretty lightweight.
+		this.checkUrl = 'https://s.gamejolt.com/img/offline-connection-check.png';
 
 		this.failFn = failFn;
 		this.successFn = successFn;

@@ -2,7 +2,6 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import View from '!view!./growls.html?style=./growls.styl';
 
-import { makeObservableService } from '../../utils/vue';
 import { Growls } from './growls.service';
 import { AppGrowl } from './growl';
 
@@ -13,5 +12,5 @@ import { AppGrowl } from './growl';
 	},
 })
 export class AppGrowls extends Vue {
-	Growls = makeObservableService(Growls);
+	readonly Growls = Growls;
 }

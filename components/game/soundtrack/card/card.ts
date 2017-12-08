@@ -7,7 +7,6 @@ import View from '!view!./card.html';
 import { Game } from '../../game.model';
 import { GameSong } from '../../song/song.model';
 import { Screen } from '../../../screen/screen-service';
-import { makeObservableService } from '../../../../utils/vue';
 import { Environment } from '../../../environment/environment.service';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
@@ -36,8 +35,8 @@ export class AppGameSoundtrackCard extends Vue {
 	isShowingSoundtrack = false;
 	canToggleSoundtrack = false;
 
-	number = number;
-	Screen = makeObservableService(Screen);
+	readonly number = number;
+	readonly Screen = Screen;
 
 	@Watch('isPlaying')
 	onPlayingChanged() {
@@ -62,7 +61,9 @@ export class AppGameSoundtrackCard extends Vue {
 
 		if (GJ_IS_CLIENT) {
 			const gui = require('nw.gui') as typeof nwGui;
-			gui.Shell.openExternal(Environment.baseUrl + this.$router.resolve(location).href);
+			// Gotta go past the first char since it's # in client.
+			gui.Shell.openExternal(Environment.baseUrl + this.$router.resolve(location).href.substr(1));
+			return;
 		}
 
 		this.$router.push(location);

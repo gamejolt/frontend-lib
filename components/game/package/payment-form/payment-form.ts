@@ -13,7 +13,6 @@ import { GamePackage } from '../package.model';
 import { Sellable } from '../../../sellable/sellable.model';
 import { User } from '../../../user/user.model';
 import { Screen } from '../../../screen/screen-service';
-import { makeObservableService } from '../../../../utils/vue';
 import { Api } from '../../../api/api.service';
 import { arrayIndexBy } from '../../../../utils/array';
 import { Geo, Region } from '../../../geo/geo.service';
@@ -88,7 +87,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 	walletTax = 0;
 	minOrderAmount = 50;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	get pricing() {
 		return this.sellable.pricings[0];

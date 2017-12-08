@@ -10,6 +10,7 @@ export class GamePackagePayloadModel {
 	builds: GameBuild[];
 	launchOptions: GameBuildLaunchOption[];
 	sellables: Sellable[];
+	installableBuilds?: GameBuild[];
 
 	constructor(payload: any) {
 		this.packages = payload.packages ? GamePackage.populate(payload.packages) : [];

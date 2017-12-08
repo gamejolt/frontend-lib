@@ -4,6 +4,7 @@ import { FbMetaContainer } from './fb-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
 import { MicrodataContainer } from './microdata-container';
 import { Environment } from '../environment/environment.service';
+import { makeObservableService } from '../../utils/vue';
 
 export function escapeString(str: string) {
 	return String(str)
@@ -110,3 +111,5 @@ export class Meta extends MetaContainer {
 		);
 	}
 }
+
+makeObservableService(Meta);

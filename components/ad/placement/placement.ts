@@ -3,7 +3,6 @@ import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./placement.html';
 
 import { Screen } from '../../screen/screen-service';
-import { makeObservableService } from '../../../utils/vue';
 import { AppAd } from '../ad';
 import { AdSlotPosValidator, AdSlotPos } from '../slot';
 import { Ads } from '../ads.service';
@@ -29,7 +28,7 @@ export class AppAdPlacement extends Vue {
 	@Prop(Boolean) visibleSm?: boolean;
 	@Prop(Boolean) visibleDesktop?: boolean;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	get isVisible() {
 		if (!Ads.shouldShow) {

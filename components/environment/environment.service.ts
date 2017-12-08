@@ -68,12 +68,12 @@ if (Environment.env === 'development') {
 if (GJ_IS_CLIENT) {
 	// When it gets packaged up for production, the URL changes.
 	if (window.location.href.search(/^app\:\/\/game\-jolt\-client\/package\//) !== -1) {
-		Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#!';
-		Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#!';
-		Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#!';
+		Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#';
+		Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#';
+		Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#';
 	} else {
-		Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#!';
-		Environment.authBaseUrl = 'app://game-jolt-client/auth.html#!';
-		Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#!';
+		Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#';
+		Environment.authBaseUrl = 'app://game-jolt-client/auth.html#';
+		Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#';
 	}
 }

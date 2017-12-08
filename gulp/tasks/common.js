@@ -1,13 +1,25 @@
-var argv = require('minimist')(process.argv);
-var gulp = require('gulp');
-var shell = require('gulp-shell');
-var FwdRef = require('undertaker-forward-reference');
+const argv = require('minimist')(process.argv);
+const os = require('os');
+const gulp = require('gulp');
+const shell = require('gulp-shell');
+const FwdRef = require('undertaker-forward-reference');
 
 // https://github.com/gulpjs/undertaker-forward-reference
 // https://github.com/gulpjs/gulp/issues/802
 gulp.registry(FwdRef());
 
-module.exports = function(config, projectBase) {
+module.exports = (config, projectBase) => {
+	function filterSections(func) {
+		const sections = {};
+		for (const section in config.sections) {
+			const sectionConfig = config.sections[section];
+			if (func(sectionConfig, section)) {
+				sections[section] = sectionConfig;
+			}
+		}
+		return sections;
+	}
+
 	config.production = argv.production || false;
 	config.watching = argv._.indexOf('watch') !== -1 ? 'initial' : false;
 	config.noSourcemaps = config.noSourcemaps || false;
@@ -22,22 +34,22 @@ module.exports = function(config, projectBase) {
 	// This way it's easy for anyone to build without the GJ dev environment.
 	// You can pass this flag in to include the dev environment config for angular instead.
 	config.developmentEnv = argv.development || false;
-
 	config.port = config.port || 8080;
-	config.framework = config.framework || 'angular';
 
-	config.sections = config.sections || [];
 	config.translationSections = config.translationSections || [];
-
-	config.sections.push('app');
 	config.buildSection = argv['section'] || 'app';
 
 	if (config.server) {
-		config.sections = config.serverSections;
+		config.sections = filterSections(i => i.server);
+	} else if (config.client) {
+		config.sections = filterSections(i => i.client);
 	}
 
 	if (argv['section']) {
-		config.sections = [argv['section']];
+		const argSection = argv['section'];
+		config.sections = {
+			[argSection]: config.sections[argSection],
+		};
 	}
 
 	config.projectBase = projectBase;
@@ -50,73 +62,39 @@ module.exports = function(config, projectBase) {
 	if (config.server) {
 		config.write = true;
 		config.buildDir += '-server';
+	} else if (config.client) {
+		config.write = true;
+		config.buildDir += '-client';
+		config.clientBuildDir = config.buildDir + '-build';
+		config.clientBuildCacheDir = config.buildDir + '-cache';
+
+		config.arch = argv.arch || '64';
+
+		// Get our platform that we are building on.
+		switch (os.type()) {
+			case 'Linux':
+				config.platform = 'linux';
+				break;
+
+			case 'Windows_NT':
+				config.platform = 'win';
+				break;
+
+			case 'Darwin':
+				config.platform = 'osx';
+				break;
+
+			default:
+				throw new Error('Can not build client on your OS type.');
+		}
+
+		config.platformArch = config.platform + config.arch;
 	}
 
-	// require( './styles.js' )( config );
-	// require( './js.js' )( config );
-	// require( './html.js' )( config );
-	// require( './fonts.js' )( config );
-	// require( './markdown.js' )( config );
-	// require( './images.js' )( config );
-	require('./translations.js')(config);
-	require('./webpack.js')(config);
-	// require( './inject.js' )( config );
 	require('./clean.js')(config);
-
-	// gulp.task( 'extra', function()
-	// {
-	// 	return gulp.src( [
-	// 		'!src/bower-lib/**/*',
-	// 		'src/**/*.xml',
-	// 		'src/**/*.mp4',
-	// 		'src/**/*.wav',
-	// 		'src/**/*.ogg',
-	// 		'src/**/*.pdf',
-	// 		'src/**/*.txt',
-	// 		'src/channel.html',
-	// 	], { allowEmpty: true } )
-	// 	.pipe( gulp.dest( config.buildDir ) );
-	// } );
-
-	function noop(cb) {
-		cb();
-	}
-
-	// This will probably break eventually.
-	// unwrap exists in gulp, but not in the forward ref thing
-	// That's why this works, but it could easily not work in future.
-	function checkHooks(cb) {
-		if (!gulp.task('pre').unwrap) {
-			gulp.task('pre', noop);
-		}
-
-		if (!gulp.task('post').unwrap) {
-			gulp.task('post', noop);
-		}
-
-		cb();
-	}
-
-	// gulp.task( 'default', gulp.series(
-	// 	checkHooks,
-	// 	'clean:pre',
-	// 	'pre',
-	// 	gulp.parallel(
-	// 		// 'styles',
-	// 		'js'
-	// 		// 'images',
-	// 		// 'html',
-	// 		// 'fonts',
-	// 		// 'markdown',
-	// 		// 'extra'
-	// 	),
-	// 	'translations:compile',
-	// 	// 'inject',
-	// 	'post',
-	// 	'clean:post'
-	// ) );
-
-	// require( './watch.js' )( config );
+	require('./translations.js')(config);
+	require('./client.js')(config);
+	require('./webpack.js')(config);
 
 	gulp.task(
 		'update-lib',
