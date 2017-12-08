@@ -61,16 +61,17 @@ module.exports = function(config) {
 		externals['download'] = 'commonjs download';
 	}
 
-	if (config.server) {
-		// For server builds, keep the node stuff external so that it can make smaller server
-		// builds.
-		externals = nodeExternals({
-			// do not externalize dependencies that need to be processed by webpack.
-			// you can add more file types here e.g. raw *.vue files
-			// you should also whitelist deps that modifies `global` (e.g. polyfills)
-			whitelist: /\.css$/,
-		});
-	}
+	// Didn't seem to work. Not sure if we need it, though.
+	// if (config.server) {
+	// 	// For server builds, keep the node stuff external so that it can make smaller server
+	// 	// builds.
+	// 	externals = nodeExternals({
+	// 		// do not externalize dependencies that need to be processed by webpack.
+	// 		// you can add more file types here e.g. raw *.vue files
+	// 		// you should also whitelist deps that modifies `global` (e.g. polyfills)
+	// 		whitelist: /\.css$/,
+	// 	});
+	// }
 
 	const cleanCssOptions = {
 		level: 2,
