@@ -28,7 +28,10 @@
 	clearfix() // clear it in case folks use .pull-* classes on buttons
 	padding: $modal-padding-xs
 	padding-top: 0
-	text-align: right // right align buttons
+	text-align: center
+
+	@media $media-sm-up
+		text-align: right
 
 @media $media-sm-up
 	.modal-header
