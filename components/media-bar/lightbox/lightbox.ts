@@ -17,8 +17,6 @@ if (!GJ_IS_SSR) {
 }
 
 export const MediaBarLightboxConfig = {
-	opacityStart: 0.5,
-	scaleStart: 0.5,
 	controlsHeight: 80,
 	itemPadding: 40,
 };
@@ -42,9 +40,6 @@ export class AppMediaBarLightbox extends Vue {
 	maxItemWidth = 0;
 	maxItemHeight = 0;
 
-	activeElem: HTMLElement | null = null;
-	nextElem: HTMLElement | null = null;
-	prevElem: HTMLElement | null = null;
 	isDragging = false;
 	waitingForFrame = false;
 
@@ -105,11 +100,6 @@ export class AppMediaBarLightbox extends Vue {
 
 	panStart() {
 		this.isDragging = true;
-
-		this.activeElem = this.$el.getElementsByClassName('active')[0] as HTMLElement;
-		this.nextElem = this.$el.getElementsByClassName('next')[0] as HTMLElement;
-		this.prevElem = this.$el.getElementsByClassName('prev')[0] as HTMLElement;
-
 		this.$el.classList.add('dragging');
 	}
 
@@ -130,55 +120,12 @@ export class AppMediaBarLightbox extends Vue {
 
 		this.sliderElem.style.transform = `translate3d( ${this.currentSliderOffset +
 			event.deltaX}px, 0, 0 )`;
-
-		const slidePercent = Math.abs(event.deltaX) / (Screen.windowWidth * 0.8);
-		const opacity =
-			MediaBarLightboxConfig.opacityStart +
-			slidePercent * (1 - MediaBarLightboxConfig.opacityStart);
-		const scale =
-			MediaBarLightboxConfig.scaleStart + slidePercent * (1 - MediaBarLightboxConfig.scaleStart);
-
-		if (this.nextElem) {
-			this.nextElem.style.opacity = opacity + '';
-			this.nextElem.style.transform = `scale( ${scale}, ${scale} )`;
-		}
-
-		if (this.prevElem) {
-			this.prevElem.style.opacity = opacity + '';
-			this.prevElem.style.transform = `scale( ${scale}, ${scale} )`;
-		}
-
-		// Do the inverse of what we do with the adjacent siblings.
-		if (this.activeElem) {
-			const scaleX = 1 + MediaBarLightboxConfig.scaleStart - scale;
-			const scaleY = 1 + MediaBarLightboxConfig.scaleStart - scale;
-			this.activeElem.style.opacity = 1 + MediaBarLightboxConfig.opacityStart - opacity + '';
-			this.activeElem.style.transform = `scale( ${scaleX}, ${scaleY} )`;
-		}
 	}
 
 	panEnd(event: HammerInput) {
 		this.isDragging = false;
 
 		this.$el.classList.remove('dragging');
-
-		this.activeElem!.style.opacity = '';
-		if (this.prevElem) {
-			this.prevElem.style.opacity = '';
-		}
-
-		if (this.nextElem) {
-			this.nextElem.style.opacity = '';
-		}
-
-		this.activeElem!.style.transform = '';
-		if (this.prevElem) {
-			this.prevElem.style.transform = '';
-		}
-
-		if (this.nextElem) {
-			this.nextElem.style.transform = '';
-		}
 
 		// Make sure we moved at a high enough velocity and distance to register the "swipe".
 		const velocity = event.velocityX;

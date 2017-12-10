@@ -14,14 +14,14 @@
 
 			<a class="media-bar-lightbox-prev"
 				v-if="mediaBar.activeIndex > 0"
-				@click="goPrev"
+				@mousedown="goPrev"
 				>
 				<app-jolticon icon="chevron-left" />
 			</a>
 
 			<a class="media-bar-lightbox-next"
 				v-if="mediaBar.activeIndex < mediaBar.mediaItems.length - 1"
-				@click="goNext"
+				@mousedown="goNext"
 				>
 				<app-jolticon icon="chevron-right" />
 			</a>

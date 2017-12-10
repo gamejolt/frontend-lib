@@ -1,23 +1,9 @@
 @require '~styles/variables'
 
-$media-bar-lightbox-item-start-opacity ?= 0.5
-$media-bar-lightbox-item-start-scale ?= 0.5
-
 .media-bar-lightbox-item
 	display: inline-block
 	width: 80%
 	vertical-align: top
-	transition: transform 300ms $weak-ease-out, opacity 300ms $weak-ease-out
-	will-change: transform, opacity
-
-	&.next
-	&.prev
-		opacity: $media-bar-lightbox-item-start-opacity
-		transform: scale($media-bar-lightbox-item-start-scale, $media-bar-lightbox-item-start-scale)
-
-	// We need manual control of styling when dragging.
-	.dragging &
-		transition: none
 
 	// Browsers will allow you to drag the image somewhere to paste the URL.
 	// Turn that off since we want to enable dragging to switch images.
@@ -27,8 +13,7 @@ $media-bar-lightbox-item-start-scale ?= 0.5
 	&-embed
 		position: relative
 
-		img
-		iframe
+		img, iframe
 			display: block
 			margin: 0 auto
 			border-radius: $border-radius-base
@@ -49,5 +34,6 @@ $media-bar-lightbox-item-start-scale ?= 0.5
 
 		a
 			color: $gj-blue
+
 			&:hover
 				color: $gj-pink
