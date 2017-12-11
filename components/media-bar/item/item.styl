@@ -7,7 +7,6 @@
 	vertical-align: top
 	background-color: $gray-darkest
 	border-radius: $border-radius-base
-
 	// Spacing through margins.
 	margin-right: 15px
 
@@ -24,53 +23,48 @@
 		z-index: 0
 		border-radius: $border-radius-base
 
-	&-play
-		@extend $play-button-overlay, $play-button-overlay.small
+.-play
+	@extend $play-button-overlay, $play-button-overlay.small
 
-	&-wrapper
-		display: block
+.-wrapper
+	display: block
 
-		&:hover
-			.play-button-overlay
-				background-color: rgba($black, 0.85)
+	&:hover
+		.play-button-overlay
+			background-color: rgba($black, 0.85)
 
-				&
-				.jolticon
-					color: $gj-green
-					cursor: zoom-in
-
-
-		// Can't zoom on xs.
-		&,
-		& .jolticon
-			cursor: default
-
-		@media $media-sm-up
-			&,
-			& .jolticon
+			&, .jolticon
+				color: $gj-green
 				cursor: zoom-in
 
-		// For "desktop" set up some hover effects and what not.
-		// Turned off the transitions because they were causing scroll lag when
-		// the mouse went over and away while scrolling.
-		@media $media-md-up
-			&::before
-			&::after
-				overlay-img()
-				opacity: 0
-				z-index: 1
+	// Can't zoom on xs.
+	&, .jolticon
+		cursor: default
 
-			&::before
-				background-image: linear-gradient(to bottom right, rgba($gj-pink, 0.1) 0, rgba($gj-pink, 0) 30%)
+	@media $media-sm-up
+		&, .jolticon
+			cursor: zoom-in
 
-			&::after
-				background-image: linear-gradient(to bottom right, rgba($gj-blue, 0) 70%, rgba($gj-blue, 0.1) 100%)
+	// For "desktop" set up some hover effects and what not.
+	// Turned off the transitions because they were causing scroll lag when
+	// the mouse went over and away while scrolling.
+	@media $media-md-up
+		&::before, &::after
+			overlay-img()
+			opacity: 0
+			z-index: 1
 
-			.media-bar:hover &
-				opacity: 0.8
+		&::before
+			background-image: linear-gradient(to bottom right, rgba($gj-pink, 0.1) 0, rgba($gj-pink, 0) 30%)
 
-				&:hover
+		&::after
+			background-image: linear-gradient(to bottom right, rgba($gj-blue, 0) 70%, rgba($gj-blue, 0.1) 100%)
+
+		.media-bar:hover &
+			opacity: 0.8
+
+			&:hover
+				opacity: 1
+
+				&::before, &::after
 					opacity: 1
-					&::before
-					&::after
-						opacity: 1

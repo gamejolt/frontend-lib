@@ -1,10 +1,13 @@
-<div section class="section fill-darker media-bar scrollable scrollable-x overlay-scrollbar"
-	:class="{ 'is-loading': !mediaItems || !mediaItems.length }"
+<div
+	section class="section fill-darker media-bar scrollable scrollable-x overlay-scrollbar"
+	:class="{
+		'-is-loading': !mediaItems || !mediaItems.length,
+	}"
 	>
-	<div class="media-bar-items">
+	<div class="-items">
 
-		<div class="loading-container" v-if="!mediaItems || !mediaItems.length">
-			<app-loading :centered="true" :no-color="true" :stationary="true" :hide-label="true" />
+		<div class="-loading-container" v-if="!mediaItems || !mediaItems.length">
+			<app-loading centered no-color stationary hide-label />
 		</div>
 
 		<template v-if="mediaItems && mediaItems.length">
@@ -12,8 +15,7 @@
 				v-for="item of mediaItems"
 				:key="item.id"
 				:item="item"
-				>
-			</app-media-bar-item>
+				/>
 		</template>
 
 	</div>

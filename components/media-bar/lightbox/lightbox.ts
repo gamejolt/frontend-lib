@@ -17,8 +17,11 @@ if (!GJ_IS_SSR) {
 }
 
 export const MediaBarLightboxConfig = {
+	// This should match the $-controls-height variable in lightbox.styl
 	controlsHeight: 80,
-	itemPadding: 40,
+
+	// This should match the $-button-size variable in lightbox.styl + some extra padding.
+	buttonSize: 110,
 };
 
 bootstrapShortkey();
@@ -37,8 +40,6 @@ export class AppMediaBarLightbox extends Vue {
 	sliderElem: HTMLElement;
 
 	currentSliderOffset = 0;
-	maxItemWidth = 0;
-	maxItemHeight = 0;
 
 	isDragging = false;
 	waitingForFrame = false;
@@ -46,13 +47,16 @@ export class AppMediaBarLightbox extends Vue {
 	private resize$: Subscription | undefined;
 
 	mounted() {
+		document.body.classList.add('media-bar-lightbox-open');
+
 		this.resize$ = Screen.resizeChanges.subscribe(() => {
-			this.calcMaxDimensions();
 			this.refreshSliderPosition();
 		});
 	}
 
 	destroyed() {
+		document.body.classList.remove('media-bar-lightbox-open');
+
 		if (this.resize$) {
 			this.resize$.unsubscribe();
 			this.resize$ = undefined;
@@ -61,13 +65,7 @@ export class AppMediaBarLightbox extends Vue {
 
 	setSlider(slider: HTMLElement) {
 		this.sliderElem = slider;
-		this.calcMaxDimensions();
 		this.refreshSliderPosition();
-	}
-
-	calcMaxDimensions() {
-		this.maxItemWidth = Screen.windowWidth * 0.8;
-		this.maxItemHeight = Screen.windowHeight - MediaBarLightboxConfig.controlsHeight * 2;
 	}
 
 	goNext() {
@@ -85,15 +83,7 @@ export class AppMediaBarLightbox extends Vue {
 	}
 
 	refreshSliderPosition() {
-		const padding = Screen.windowWidth * 0.1;
-
-		let newOffset: number;
-		if (this.mediaBar.activeIndex === 0) {
-			newOffset = padding;
-		} else {
-			newOffset = -(this.maxItemWidth * this.mediaBar.activeIndex! - padding);
-		}
-
+		const newOffset = -(Screen.width * this.mediaBar.activeIndex!);
 		this.sliderElem.style.transform = `translate3d( ${newOffset}px, 0, 0 )`;
 		this.currentSliderOffset = newOffset;
 	}

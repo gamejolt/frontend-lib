@@ -10,52 +10,53 @@
 		<span v-shortkey="[ 'arrowleft' ]" @shortkey="goPrev"></span>
 		<span v-shortkey="[ 'arrowright' ]" @shortkey="goNext"></span>
 
-		<div class="media-bar-lightbox-inner">
+		<div class="-inner">
 
-			<a class="media-bar-lightbox-prev"
+			<a
+				class="-prev"
 				v-if="mediaBar.activeIndex > 0"
 				@mousedown="goPrev"
 				>
 				<app-jolticon icon="chevron-left" />
 			</a>
 
-			<a class="media-bar-lightbox-next"
+			<a
+				class="-next"
 				v-if="mediaBar.activeIndex < mediaBar.mediaItems.length - 1"
 				@mousedown="goNext"
 				>
 				<app-jolticon icon="chevron-right" />
 			</a>
 
-			<div class="media-bar-lightbox-controls">
-				<a class="btn btn-outline btn-overlay-variant"
+			<div class="-controls">
+				<a
+					class="btn btn-outline btn-overlay-variant"
 					v-if="mediaBar.activeItem.media_type === 'image'"
 					:href="mediaBar.activeItem.media_item.img_url"
 					target="_blank"
 					>
 					<app-jolticon icon="download" />
-					<span>Download</span>
+					<translate>Download</translate>
 				</a>
-				<a class="btn btn-danger-outline btn-overlay-variant"
+				<button
+					class="btn btn-danger-outline btn-overlay-variant"
 					v-shortkey="[ 'esc' ]"
 					@click="close"
 					@shortkey="close"
 					>
 					<app-jolticon icon="remove" />
-					<span>Close</span>
-				</a>
+					<translate>Close</translate>
+				</button>
 			</div>
 
-			<app-media-bar-lightbox-slider>
-
+			<app-media-bar-lightbox-slider class="-slider">
 				<app-media-bar-lightbox-item
 					v-for="( item, index ) of mediaBar.mediaItems"
 					:key="item.id"
 					:item="item"
 					:item-index="index"
 					:active-index="mediaBar.activeIndex"
-					>
-				</app-media-bar-lightbox-item>
-
+					/>
 			</app-media-bar-lightbox-slider>
 
 		</div>
