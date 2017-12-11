@@ -1,6 +1,7 @@
 import Vue, { CreateElement } from 'vue';
 import * as distance from 'date-fns/distance_in_words_to_now';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { date } from '../../../vue/filters/date';
 
 @Component({})
 export class AppTimeAgo extends Vue {
@@ -10,8 +11,10 @@ export class AppTimeAgo extends Vue {
 
 	private timeout?: number;
 	private timeAgo = '';
+	private fixedTime = '';
 
 	created() {
+		this.fixedTime = date(this.date, 'medium');
 		this.refresh();
 	}
 
@@ -60,6 +63,11 @@ export class AppTimeAgo extends Vue {
 	}
 
 	render(h: CreateElement) {
-		return h('span', this.timeAgo);
+		return h('span', {
+			domProps: {
+				innerText: this.timeAgo,
+				title: this.fixedTime,
+			},
+		});
 	}
 }
