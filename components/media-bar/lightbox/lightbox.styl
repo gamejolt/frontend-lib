@@ -20,16 +20,23 @@ $-button-size = 90px
 	bottom: 0
 	left: 0
 	z-index: $zindex-media-bar-lightbox
-	background-color: rgba(0, 0, 0, 0.85)
 	user-select: none
+	background-color: $black
+
+	@media $media-sm-up
+		background-color: rgba(0, 0, 0, 0.85)
 
 .-controls
 	flex: 0 0 auto
 	height: $-controls-height
 	line-height: $-controls-height
-	text-align: right
+	text-align: center
+
+	@media $media-sm-up
+		text-align: right
 
 .-next, .-prev
+	display: none
 	position: absolute
 	top: 50%
 	width: $-button-size
@@ -40,6 +47,9 @@ $-button-size = 90px
 	background-color: rgba($black, 0.5)
 	border-radius: $border-radius-base
 	text-align: center
+
+	@media $media-sm-up
+		display: block
 
 	> .jolticon
 		vertical-align: middle
@@ -65,10 +75,15 @@ $-button-size = 90px
 // http://stackoverflow.com/questions/10269290/how-to-arrange-many-div-elements-side-by-side-with-no-wrap
 .-slider
 	flex: 1 1 auto
-	padding-bottom: $-controls-height
-	white-space: nowrap
+	display: flex
+	flex-flow: row nowrap
 	// Ease out so that with fast flicks it doesn't look like it slows down after letting go.
 	transition: transform 300ms $weak-ease-out
+	// Should take up the same amount of space on the bottom as the controls on top so
+	// everything is centered.
+	padding-bottom: $-controls-height
+
+	// @media $media-sm-up
 
 	// We need manual control of styling when dragging.
 	.dragging &

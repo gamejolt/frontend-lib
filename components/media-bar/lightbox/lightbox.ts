@@ -38,9 +38,7 @@ export class AppMediaBarLightbox extends Vue {
 	@Prop(Object) mediaBar: AppMediaBar;
 
 	sliderElem: HTMLElement;
-
 	currentSliderOffset = 0;
-
 	isDragging = false;
 	waitingForFrame = false;
 

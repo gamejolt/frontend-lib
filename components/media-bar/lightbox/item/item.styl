@@ -1,12 +1,14 @@
 @require '~styles/variables'
 
 .media-bar-lightbox-item
-	display: inline-block
-	width: 100%
-	height: 100%
-	// Gotta allow some room on left/right for the next/prev buttons.
-	padding: 0 110px
-	vertical-align: top
+	display: block
+	flex: 0 0 100%
+
+	@media $media-sm-up
+		height: 100%
+		// Gotta allow some room on left/right for the next/prev buttons.
+		padding-left: 110px
+		padding-right: 110px
 
 // Browsers will allow you to drag the image somewhere to paste the URL.
 // Turn that off since we want to enable dragging to switch images.
@@ -15,12 +17,15 @@ img
 
 .-inner
 	display: flex
-	width: 100%
-	height: 100%
 	flex-flow: column nowrap
 	justify-content: center
 	align-content: center
 	align-items: center
+	width: 100%
+	min-height: 100%
+
+	@media $media-sm-up
+		height: 100%
 
 .-embed
 	flex: 0 0 auto
