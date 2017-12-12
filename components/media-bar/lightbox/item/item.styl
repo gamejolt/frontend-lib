@@ -3,9 +3,14 @@
 .media-bar-lightbox-item
 	display: block
 	flex: 0 0 100%
+	overflow-x: hidden
+	overflow-y: scroll
 
 	@media $media-sm-up
 		height: 100%
+		padding-bottom: 0
+		overflow-x: visible
+		overflow-y: visible
 		// Gotta allow some room on left/right for the next/prev buttons.
 		padding-left: 110px
 		padding-right: 110px
@@ -40,11 +45,14 @@ img
 
 .-caption
 	flex: 0 0 auto
-	padding-top: $font-size-base
+	padding: $font-size-base $font-size-base 0
 	text-align: center
 	color: $white
 	max-width: 900px
 	white-space: normal
+
+	@media $media-sm-up
+		padding: $font-size-base 0 0
 
 	h4
 		margin-top: 0

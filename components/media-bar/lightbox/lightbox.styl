@@ -11,6 +11,11 @@ $-button-size = 90px
 	&.dragging
 		cursor: grabbing
 
+	// Apply control padding to child container on mobile to allow for dynamic heights
+	&-item
+		height: 'calc(100vh - %s)' % $-controls-height
+		padding-bottom: $-controls-height
+
 .-inner
 	display: flex
 	flex-flow: column nowrap
@@ -76,14 +81,15 @@ $-button-size = 90px
 .-slider
 	flex: 1 1 auto
 	display: flex
+	align-items: flex-start
 	flex-flow: row nowrap
 	// Ease out so that with fast flicks it doesn't look like it slows down after letting go.
 	transition: transform 300ms $weak-ease-out
-	// Should take up the same amount of space on the bottom as the controls on top so
-	// everything is centered.
-	padding-bottom: $-controls-height
 
-	// @media $media-sm-up
+	@media $media-sm-up
+		// Should take up the same amount of space on the bottom as the controls on top so
+		// everything is centered.
+		padding-bottom: $-controls-height
 
 	// We need manual control of styling when dragging.
 	.dragging &
