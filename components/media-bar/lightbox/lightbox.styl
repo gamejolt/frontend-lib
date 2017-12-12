@@ -1,6 +1,6 @@
 @require '~styles/variables'
+@require 'variables'
 
-$-controls-height = 80px
 $-button-size = 90px
 
 // Kill scroll on body.
@@ -10,11 +10,6 @@ $-button-size = 90px
 .media-bar-lightbox
 	&.dragging
 		cursor: grabbing
-
-	// Apply control padding to child container on mobile to allow for dynamic heights
-	&-item
-		height: 'calc(100vh - %s)' % $-controls-height
-		padding-bottom: $-controls-height
 
 .-inner
 	display: flex
