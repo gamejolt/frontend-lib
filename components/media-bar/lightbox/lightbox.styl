@@ -1,63 +1,75 @@
 @require '~styles/variables'
 
-$zindex-media-bar-lightbox ?= 500
+$-controls-height = 80px
+$-button-size = 90px
+
+// Kill scroll on body.
+>>> .media-bar-lightbox-open
+	overflow: hidden
 
 .media-bar-lightbox
-	transition: opacity 300ms
-
 	&.dragging
 		cursor: grabbing
 
-	&-inner
-		position: fixed
-		top: 0
-		right: 0
-		bottom: 0
-		left: 0
-		z-index: $zindex-media-bar-lightbox
-		background-color: rgba( 0, 0, 0, 0.85 )
-		user-select: none
+.-inner
+	display: flex
+	flex-flow: column nowrap
+	position: fixed
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	z-index: $zindex-media-bar-lightbox
+	background-color: rgba(0, 0, 0, 0.85)
+	user-select: none
 
-	&-controls
-		padding: 0 20px
-		line-height: 80px
-		text-align: right
+.-controls
+	flex: 0 0 auto
+	height: $-controls-height
+	line-height: $-controls-height
+	text-align: right
 
-	&-next
-	&-prev
-		position: absolute
-		top: 50%
-		padding: 20px
-		margin-top: -(((16px * 3) / 2) + (@padding / 2))
-		z-index: 1
-		background-color: rgba( $black, 0.5 )
-		border-radius: $border-radius-base
+.-next, .-prev
+	position: absolute
+	top: 50%
+	width: $-button-size
+	height: $-button-size
+	line-height: $-button-size
+	margin-top: -(@height / 2)
+	z-index: 1
+	background-color: rgba($black, 0.5)
+	border-radius: $border-radius-base
+	text-align: center
+
+	> .jolticon
+		vertical-align: middle
+		font-size: 16px * 3
+		color: $white
+
+	&:hover
+		background-color: $white
 
 		> .jolticon
-			font-size: 16px * 3
-			color: $white
+			color: $black
 
-		&:hover
-			background-color: $white
+.-next
+	right: 0
+	border-top-right-radius: 0
+	border-bottom-right-radius: 0
 
-			> .jolticon
-				color: $black
+.-prev
+	left: 0
+	border-top-left-radius: 0
+	border-bottom-left-radius: 0
 
-	&-next
-		right: 10px
+// http://stackoverflow.com/questions/10269290/how-to-arrange-many-div-elements-side-by-side-with-no-wrap
+.-slider
+	flex: 1 1 auto
+	padding-bottom: $-controls-height
+	white-space: nowrap
+	// Ease out so that with fast flicks it doesn't look like it slows down after letting go.
+	transition: transform 300ms $weak-ease-out
 
-	&-prev
-		left: 10px
-
-	// http://stackoverflow.com/questions/10269290/how-to-arrange-many-div-elements-side-by-side-with-no-wrap
-	&-slider
-		display: block
-		height: 100%
-		white-space: nowrap
-
-		// Ease out so that with fast flicks it doesn't look like it slows down after letting go.
-		transition: transform 300ms $weak-ease-out
-
-		// We need manual control of styling when dragging.
-		.dragging &
-			transition: none
+	// We need manual control of styling when dragging.
+	.dragging &
+		transition: none

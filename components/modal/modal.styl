@@ -27,20 +27,27 @@
 	&.v-enter, &.v-leave-to
 		.modal-content
 			opacity: 0
-			transform: scale3d(0.8, 0.8, 0.8)
+			// On xs we do plop down animation.
+			// On sm-up we do a expand open animation.
+			transform: scale3d(1.2, 1.2, 1.2)
+
+			@media $media-sm-up
+				transform: scale3d(0.8, 0.8, 0.8)
 
 	.modal-content
 		opacity: 1
 		transform: none
 
 .modal-content
-	margin-top: 40px
-	margin-bottom: 40px
 	position: relative
 	background-clip: padding-box
 	outline: 0 // Remove focus outline from opened modal
 	background-color: $modal-content-bg
 	box-shadow: 0 5px 15px rgba($black, 0.5)
+
+	// Full screen on xs
+	@media $media-xs
+		min-height: 100vh
 
 	@media $media-sm-up
 		margin: 30px auto

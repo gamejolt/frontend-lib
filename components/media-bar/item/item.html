@@ -1,7 +1,8 @@
-<div class="media-bar-item"
+<div
+	class="media-bar-item"
 	:style="{ width, height }"
 	>
-	<a class="media-bar-item-wrapper" @click="onClick">
+	<a class="-wrapper" @click="onClick">
 
 		<app-img-responsive
 			v-if="item.media_type !== 'sketchfab'"
@@ -17,11 +18,11 @@
 			alt=""
 			>
 
-		<span class="media-bar-item-play" v-if="item.media_type === 'video'">
+		<span class="-play" v-if="item.media_type === 'video'">
 			<app-jolticon icon="play" />
 		</span>
 
-		<span class="media-bar-item-play" v-if="item.media_type === 'sketchfab'">
+		<span class="-play" v-if="item.media_type === 'sketchfab'">
 			<app-jolticon icon="sketchfab" />
 		</span>
 

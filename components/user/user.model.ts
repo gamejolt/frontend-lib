@@ -62,6 +62,10 @@ export class User extends Model {
 	revenue_payout_minimum?: number;
 	revenue_wallet_maximum?: number;
 
+	get isMod() {
+		return this.permission_level >= 3;
+	}
+
 	constructor(data: any = {}) {
 		super(data);
 
@@ -95,7 +99,11 @@ export class User extends Model {
 	}
 
 	async $follow() {
-		const response = await Api.sendRequest('/web/profile/follow/' + this.id, {}, { detach: true });
+		const response = await Api.sendRequest(
+			'/web/profile/follow/' + this.id,
+			{},
+			{ detach: true }
+		);
 
 		this.is_following = true;
 		++this.follower_count;
