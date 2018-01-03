@@ -158,10 +158,6 @@ export class User extends Model {
 		return this.$_save('/web/dash/email-preferences/save', 'user');
 	}
 
-	$saveSettings() {
-		return this.$_save('/web/dash/settings/save', 'user');
-	}
-
 	$saveFireside() {
 		return this.$_save('/fireside/dash/profile/save', 'user');
 	}
