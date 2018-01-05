@@ -18,7 +18,8 @@ import { UserLinkedAccounts } from '../../user/linked-accounts/linked-accounts.s
 })
 export class AppAuthJoin extends Vue {
 	@Prop(Boolean) darkVariant?: boolean;
-	@Prop(Boolean) shouldRedirect?: boolean;
+	@Prop({ type: Boolean, default: true })
+	shouldRedirect?: boolean;
 
 	readonly Connection = Connection;
 
