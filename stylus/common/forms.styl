@@ -1,11 +1,7 @@
 /**
  * Be warned! Some super complicated math below to get spacing just right.
  */
-
-// We want labels, controls, and help text to be spaced evenly the same.
-// This is the spacing amount that we would like.
 $form-common-spacing = ($line-height-computed / 2)
-
 // This is a computed value of the amount of spacing that is between the top of the text
 // and the top of the line. Basically the amount of spacing around the font in the line.
 $line-spacing-above-text = (($line-height-computed - $font-size-base) / 2)
@@ -14,6 +10,20 @@ $line-spacing-above-text = (($line-height-computed - $font-size-base) / 2)
 legend
 	font-family: $font-family-heading
 	font-weight: bold
+
+	&.compact
+		position: relative
+		font-size: $font-size-base
+		border: 0
+
+		&::before
+			position: absolute
+			content: ''
+			height: 1px
+			border-bottom: 2px solid $gray-lighter
+			top: 50%
+			right: 0
+			left: 50%
 
 .form-group
 	margin-bottom: ($line-height-computed * 1.5)
@@ -62,13 +72,10 @@ legend
 	margin-bottom: $form-common-spacing
 
 // Make pointers!
-input[type="checkbox"]
-input[type="radio"]
+input[type='checkbox'], input[type='radio']
 	cursor: pointer
 
-.checkbox, .checkbox-inline
-.radio, .radio-inline
-
+.checkbox, .checkbox-inline, .radio, .radio-inline
 	// Want any jolticons to be a pointer as well.
 	label > .jolticon
 		cursor: pointer
@@ -76,9 +83,8 @@ input[type="radio"]
 	// Disabled styling for checkboxes and radios.
 	&.disabled
 		color: $text-muted
-		&
-		& > label
-		& > label > .jolticon
+
+		&, & > label, & > label > .jolticon
 			cursor: not-allowed
 
 // Space the top of the help block away from its control.
@@ -116,7 +122,7 @@ legend + .help-block
 	&:before
 		content: ''
 		display: block
-		caret( color: $gj-pink, direction: 'up', size: 5px )
+		caret(color: $gj-pink, direction: 'up', size: 5px)
 		left: 10px
 
 	// For when the help block is above, swap the spacing.
@@ -130,5 +136,5 @@ legend + .help-block
 		&:after
 			content: ''
 			display: block
-			caret( color: $gj-pink, direction: 'down', size: 5px )
+			caret(color: $gj-pink, direction: 'down', size: 5px)
 			left: 10px
