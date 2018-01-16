@@ -12,7 +12,7 @@ export class Poll extends Model {
 	is_private: boolean;
 	status: string;
 
-	items: PollItem[];
+	items: PollItem[] = [];
 	vote_count: number;
 
 	constructor(data?: any) {
@@ -20,8 +20,6 @@ export class Poll extends Model {
 
 		if (data && data.items) {
 			this.items = PollItem.populate(data.items);
-		} else {
-			this.items = [];
 		}
 	}
 
