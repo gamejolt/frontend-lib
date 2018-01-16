@@ -41,6 +41,7 @@ export class Environment {
 	static activityStreamHost = 'https://activity.gamejolt.com';
 	static chatHost = 'https://chat.gamejolt.com';
 	static widgetHost = 'https://widgets.gamejolt.com';
+	static gridHost = 'ws://grid.gamejolt.com/socket';
 }
 
 if (Environment.env === 'development') {
@@ -63,6 +64,7 @@ if (Environment.env === 'development') {
 	Environment.activityStreamHost = 'http://activity.development.gamejolt.com';
 	Environment.chatHost = 'http://chat.development.gamejolt.com';
 	Environment.widgetHost = 'http://localhost:8086';
+	Environment.gridHost = 'ws://localhost:4000/socket';
 }
 
 if (GJ_IS_CLIENT) {
