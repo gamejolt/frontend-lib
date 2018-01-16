@@ -9,9 +9,11 @@ export class Poll extends Model {
 	created_on: number;
 	end_time: number;
 	duration: number;
+	is_private: boolean;
 	status: string;
 
 	items: PollItem[];
+	vote_count: number;
 
 	constructor(data?: any) {
 		super(data);
@@ -29,30 +31,16 @@ export class Poll extends Model {
 		}
 	}
 
-	$save() {
-		let url = '/web/polls/save';
-		if (this.id) {
-			url += `/${this.id}`;
-		}
-
-		const data: any = {
-			fireside_post_id: this.fireside_post_id,
-			duration: this.duration,
-		};
-
-		for (let i = 0; i < this.items.length; i++) {
-			data['item' + (i + 1)] = this.items[i].text;
-		}
-
-		return this.$_save(url, 'poll', { data });
-	}
-
-	$remove() {
-		return this.$_remove(`/web/polls/remove/${this.id}`);
-	}
-
 	$vote(itemId: number) {
 		return this.$_save(`/web/polls/vote/${this.id}`, 'poll', { data: { item_id: itemId } });
+	}
+
+	$refresh() {
+		if (!this.id) {
+			throw new Error(`Cannot refresh a poll that doesn't exist yet`);
+		}
+
+		return this.$_save(`/web/polls/refresh/${this.id}`, 'poll', { detach: true, data: null });
 	}
 }
 
