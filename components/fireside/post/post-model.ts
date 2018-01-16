@@ -100,7 +100,6 @@ export class FiresidePost extends Model {
 		}
 
 		if (data.poll) {
-			console.log('Initializing fireside post with poll: ' + JSON.stringify(data.poll));
 			this.poll = new Poll(data.poll);
 		}
 
