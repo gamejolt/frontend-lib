@@ -8,6 +8,7 @@ export class AppTimeAgo extends Vue {
 	@Prop([Number, Date])
 	date: number | Date;
 	@Prop(Boolean) withoutSuffix?: boolean;
+	@Prop(Boolean) isFuture?: boolean;
 
 	private timeout?: number;
 	private timeAgo = '';
@@ -40,6 +41,8 @@ export class AppTimeAgo extends Vue {
 
 		if (this.withoutSuffix) {
 			this.timeAgo = time;
+		} else if (this.isFuture) {
+			this.timeAgo = this.$gettextInterpolate('%{ time } left', { time });
 		} else {
 			this.timeAgo = this.$gettextInterpolate('%{ time } ago', { time });
 		}
