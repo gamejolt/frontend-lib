@@ -5,7 +5,7 @@ import './join.styl';
 
 import { Connection } from '../../connection/connection-service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppAuthJoinForm } from './join-form';
+import { FormModel, AppAuthJoinForm } from './join-form';
 import { Environment } from '../../environment/environment.service';
 import { UserLinkedAccounts } from '../../user/linked-accounts/linked-accounts.service';
 
@@ -31,11 +31,15 @@ export class AppAuthJoin extends Vue {
 		UserLinkedAccounts.login(this.$router, provider);
 	}
 
-	onJoined(formModel: any) {
-		this.$emit('joined', formModel);
+	onJoining(formModel: FormModel) {
+		this.$emit('joining', formModel);
 
 		if (this.shouldRedirect) {
-			window.location.href = Environment.authBaseUrl + '/join/almost';
+			let url = Environment.authBaseUrl + '/join/almost';
+			if (formModel.token) {
+				url += '/' + formModel.token;
+			}
+			window.location.href = url;
 		}
 	}
 }
