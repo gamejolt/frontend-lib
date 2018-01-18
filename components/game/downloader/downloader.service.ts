@@ -43,17 +43,20 @@ export class GameDownloader {
 		// Client needs to download externally.
 		if (GJ_IS_CLIENT) {
 			const gui = require('nw.gui') as typeof nwGui;
-			gui.Shell.openExternal(
-				Environment.baseUrl +
-					router.resolve({
-						name: 'discover.games.view.download.build',
-						query: {
-							slug: game.slug,
-							id: game.id + '',
-							buildId: build.id + '',
-						},
-					}).href
-			);
+
+			let urlPath = router.resolve({
+				name: 'discover.games.view.download.build',
+				params: {
+					slug: game.slug,
+					id: game.id + '',
+					buildId: build.id + '',
+				},
+			}).href;
+
+			// The client prepends urls with hashtag (#) that needs to be trimmed when going to external site.
+			urlPath = urlPath.slice(1);
+
+			gui.Shell.openExternal(`${Environment.baseUrl}${urlPath}`);
 		} else if (
 			game.bundle_only ||
 			options.key ||

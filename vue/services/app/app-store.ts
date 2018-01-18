@@ -23,6 +23,20 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 	userBootstrapped = false;
 	error: number | string | null = null;
 
+	get clientSection() {
+		if (GJ_IS_CLIENT) {
+			if (window.location.href.startsWith(Environment.wttfBaseUrl)) {
+				return 'app';
+			} else if (window.location.href.startsWith(Environment.authBaseUrl)) {
+				return 'auth';
+			} else if (window.location.href.startsWith(Environment.checkoutBaseUrl)) {
+				return 'checkout';
+			}
+		}
+
+		return null;
+	}
+
 	@VuexMutation
 	setUser(user: Mutations['app/setUser']) {
 		if (this.user) {

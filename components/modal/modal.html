@@ -3,26 +3,21 @@
 		:style="{
 			'z-index': 1050 + modal.index,
 		}"
+		:class="{
+			'modal-sm': modal.size === 'sm',
+			'modal-lg': modal.size === 'lg',
+			'modal-full': modal.size === 'full',
+		}"
 		v-shortkey="[ 'esc' ]"
 		@shortkey="dismissEsc"
 		@click="dismissBackdrop"
 		>
 
-		<div class="modal-dialog"
-			:class="{
-				'modal-sm': modal.size === 'sm',
-				'modal-lg': modal.size === 'lg',
-			}"
+		<div class="modal-content"
+			@mouseover="isHoveringContent = true"
+			@mouseout="isHoveringContent = false"
 			>
-
-			<div
-				class="modal-content"
-				@mouseover="isHoveringContent = true"
-				@mouseout="isHoveringContent = false"
-				>
-				<slot />
-			</div>
-
+			<slot />
 		</div>
 
 	</div>

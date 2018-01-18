@@ -1,6 +1,0 @@
-<div class="clearfix"
-	ng-repeat="(errorKey, label) in errorLabels"
-	collapse="!(formField.$dirty && formField.$invalid && formField.$error[errorKey])">
-
-	<p class="help-block error" ng-class="{ above: position == 'above' }">{{label}}</p>
-</div>

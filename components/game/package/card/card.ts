@@ -25,6 +25,7 @@ import { GameDownloader } from '../../downloader/downloader.service';
 import { AppGamePackageCardButtons } from './buttons';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
 import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
+import { EventBus } from '../../../event-bus/event-bus.service';
 import { LinkedKey } from '../../../linked-key/linked-key.model';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 
@@ -37,7 +38,6 @@ import { Clipboard } from '../../../clipboard/clipboard-service';
 		AppFadeCollapse,
 		AppExpand,
 		AppCountdown,
-		AppGamePackageCardButtons,
 	},
 	directives: {
 		AppTooltip,
@@ -61,6 +61,11 @@ export class AppGamePackageCard extends Vue {
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
 
+	static hook = {
+		meta: undefined as typeof Vue | undefined,
+		buttons: undefined as typeof Vue | undefined,
+	};
+
 	showFullDescription = false;
 	canToggleDescription = false;
 
@@ -73,6 +78,14 @@ export class AppGamePackageCard extends Vue {
 	providerIcons: { [provider: string]: string } = {
 		steam: 'steam',
 	};
+
+	get metaComponent() {
+		return AppGamePackageCard.hook.meta;
+	}
+
+	get buttonsComponent() {
+		return AppGamePackageCard.hook.buttons || AppGamePackageCardButtons;
+	}
 
 	get card() {
 		return new GamePackageCardModel(this.releases, this.builds, this.linkedKeys);
@@ -105,20 +118,27 @@ export class AppGamePackageCard extends Vue {
 	}
 
 	created() {
-		// TODO(rewrite)
-		// // If this game is in their installed games, this will populate.
-		// this.installedBuild = null;
-
 		if (this.sellable && this.sellable.pricings.length > 0) {
 			this.pricing = this.sellable.pricings[0];
 			if (this.pricing.promotional) {
 				this.saleOldPricing = this.sellable.pricings[1];
 				this.sale = true;
-				this.salePercentageOff = ((this.saleOldPricing.amount - this.pricing.amount) /
+				this.salePercentageOff = (
+					(this.saleOldPricing.amount - this.pricing.amount) /
 					this.saleOldPricing.amount *
-					100).toFixed(0);
+					100
+				).toFixed(0);
 			}
 		}
+
+		// Event to be able to open up the payment form.
+		EventBus.on('GamePackageCard.showPaymentOptions', (package_: GamePackage) => {
+			// Ensure that the payment well opens with the correct build
+			// for "skip paying".
+			if (this.package.id === package_.id) {
+				this.showPayment(this.card.downloadableBuild ? this.card.downloadableBuild : undefined);
+			}
+		});
 	}
 
 	buildClick(build: GameBuild, fromExtraSection = false) {
@@ -138,6 +158,8 @@ export class AppGamePackageCard extends Vue {
 		if (build.type === GameBuild.TYPE_ROM && fromExtraSection) {
 			operation = 'download';
 		}
+
+		console.log(`${operation}ing build`);
 
 		if (operation === 'download') {
 			this.download(build);

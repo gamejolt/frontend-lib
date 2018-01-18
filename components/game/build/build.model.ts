@@ -242,11 +242,15 @@ export class GameBuild extends Model {
 		return false;
 	}
 
-	isBrowserBased() {
+	get isDownloadable() {
+		return !this.isBrowserBased;
+	}
+
+	get isBrowserBased() {
 		return GameBuild.browserTypes.indexOf(this.type) !== -1;
 	}
 
-	isRom() {
+	get isRom() {
 		return this.type === GameBuild.TYPE_ROM;
 	}
 

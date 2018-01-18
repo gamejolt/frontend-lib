@@ -1,23 +1,22 @@
+import View from '!view!./modal.html?style=./modal.styl';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import View from '!view!./modal.html?style=./modal.styl';
 
-import { BaseModal } from '../../../modal/base';
-import { CommentVideo } from '../video-model';
-import { Screen } from '../../../screen/screen-service';
-import { makeObservableService } from '../../../../utils/vue';
-import { AppResponsiveDimensions } from '../../../responsive-dimensions/responsive-dimensions';
-import { AppVideoEmbed } from '../../../video/embed/embed';
-import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
-import { AppGameThumbnail } from '../../../../../../app/components/game/thumbnail/thumbnail';
-import { AppUserAvatar } from '../../../user/user-avatar/user-avatar';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppGameThumbnail } from '../../../../../../_common/game/thumbnail/thumbnail';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { AppSocialYoutubeSubscribe } from '../../../social/youtube/subscribe/subscribe';
-import { AppStore } from '../../../../vue/services/app/app-store';
 import { number } from '../../../../vue/filters/number';
-import { AppCommentVideoLikeWidget } from '../like-widget/like-widget';
+import { AppStore } from '../../../../vue/services/app/app-store';
+import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
+import { BaseModal } from '../../../modal/base';
+import { AppResponsiveDimensions } from '../../../responsive-dimensions/responsive-dimensions';
+import { Screen } from '../../../screen/screen-service';
+import { AppSocialYoutubeSubscribe } from '../../../social/youtube/subscribe/subscribe';
 import { AppUserFollowWidget } from '../../../user/follow-widget/follow-widget';
+import { AppUserAvatar } from '../../../user/user-avatar/user-avatar';
+import { AppVideoEmbed } from '../../../video/embed/embed';
+import { AppCommentVideoLikeWidget } from '../like-widget/like-widget';
+import { CommentVideo } from '../video-model';
 
 @View
 @Component({
@@ -44,7 +43,7 @@ export default class AppCommentVideoModal extends BaseModal {
 
 	@State app: AppStore;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	canToggleDescription = false;
 	showFullDescription = true;

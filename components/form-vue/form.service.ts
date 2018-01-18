@@ -100,7 +100,9 @@ export class BaseForm<T> extends Vue {
 		this.changeDeregister = this.$router.beforeEach((_to, _from, next) => {
 			if (this.changed) {
 				if (
-					!window.confirm(this.$gettext(`Are you sure you want to discard your unsaved changes?`))
+					!window.confirm(
+						this.$gettext(`Are you sure you want to discard your unsaved changes?`)
+					)
 				) {
 					return next(false);
 				}

@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const path = require('path');
+const os = require('os');
 
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -23,34 +24,54 @@ module.exports = function(config) {
 	let base = path.resolve(config.projectBase);
 
 	let noop = function() {};
-	let devNoop = config.production ? undefined : noop;
-	let prodNoop = !config.production ? undefined : noop;
-	let browserNoop = config.server ? undefined : noop;
-	let serverNoop = !config.server ? undefined : noop;
+	let devNoop = !config.production ? noop : undefined;
+	let prodNoop = config.production ? noop : undefined;
 
-	const externalModules = ['client-voodoo'];
-	if (!config.client) {
-		externalModules.push('nw.gui');
-	}
+	let browserNoop = !config.server ? noop : undefined;
+	let serverNoop = config.server ? noop : undefined;
+
+	let clientNoop = config.client ? noop : undefined;
+	let siteNoop = !config.client ? noop : undefined;
 
 	let externals = {};
-	for (let extern of externalModules) {
-		externals[extern] = {
-			commonjs: extern,
-		};
+	if (!config.client) {
+		// When building for site, we don't want any of these imports accidentally being pulled in.
+		// Setting these to empty object strings causes the require to return an empty object.
+		externals['nw.gui'] = '{}';
+		externals['client-voodoo'] = '{}';
+		externals['nwjs-snappy-updater'] = '{}';
+		externals['sanitize-filename'] = '{}';
+	} else {
+		// This format sets the externals to just straight up "require('axios')" so it can pull it
+		// directly and not pull in through webpack's build process. We need this for axios since it
+		// treats it as a "node" project instead of "browser". It didn't work to include axios in
+		// here, but rather just its own dependencies.
+		externals['follow-redirects'] = 'commonjs follow-redirects';
+		externals['is-buffer'] = 'commonjs is-buffer';
+
+		// We don't want to pull client-voodoo into the build so that it can get proper paths
+		// through variables like __dirname and such.
+		externals['client-voodoo'] = 'commonjs client-voodoo';
+
+		// we need nwjs-snappy-updater to not be bundled in because it contains a dynamic require
+		// for the update-hook.js that webpack flips tables over, but if we exclude nwjs-snappy-updater
+		// from the bundle, it's dependecies will not be transpiled to es5.
+		// We define a specific function to exclude that returns the node's require so we can use it
+		// to reload the update hook without webpack complaining about a dynamic export. sheesh.
+		externals['download'] = 'commonjs download';
 	}
 
-	if (config.server) {
-		Object.assign(
-			externals,
-			nodeExternals({
-				// do not externalize dependencies that need to be processed by webpack.
-				// you can add more file types here e.g. raw *.vue files
-				// you should also whitelist deps that modifies `global` (e.g. polyfills)
-				whitelist: /\.css$/,
-			})
-		);
-	}
+	// Didn't seem to work. Not sure if we need it, though.
+	// if (config.server) {
+	// 	// For server builds, keep the node stuff external so that it can make smaller server
+	// 	// builds.
+	// 	externals = nodeExternals({
+	// 		// do not externalize dependencies that need to be processed by webpack.
+	// 		// you can add more file types here e.g. raw *.vue files
+	// 		// you should also whitelist deps that modifies `global` (e.g. polyfills)
+	// 		whitelist: /\.css$/,
+	// 	});
+	// }
 
 	const cleanCssOptions = {
 		level: 2,
@@ -83,6 +104,8 @@ module.exports = function(config) {
 		} else {
 			devTool = 'cheap-module-inline-source-map';
 		}
+	} else if (config.client) {
+		devtool = false;
 	}
 
 	function stylesLoader(loaders, options) {
@@ -105,9 +128,11 @@ module.exports = function(config) {
 
 	let webpackSectionConfigs = {};
 	let webpackSectionTasks = [];
-	config.sections.forEach(function(section) {
+	Object.keys(config.sections).forEach(function(section) {
+		const sectionConfig = config.sections[section];
+
+		let appEntries = ['./' + section + '/main.ts'];
 		let indexHtml = section === 'app' ? 'index.html' : section + '.html';
-		let appEntries = [path.resolve(base, 'src/' + section + '/main.ts')];
 
 		if (!config.production) {
 			appEntries.push('webpack-dev-server/client?http://localhost:' + config.port + '/');
@@ -120,13 +145,25 @@ module.exports = function(config) {
 
 		if (config.server) {
 			entry = {
-				server: [path.resolve(base, 'src/' + section + '/server.ts')],
+				server: ['./' + section + '/server.ts'],
 			};
 		}
 
+		let publicPath = '/';
+		if (config.production) {
+			if (!config.client) {
+				publicPath = config.staticCdn + publicPath;
+			} else {
+				// On linux/win we put all the files in a folder called "package".
+				if (config.platform !== 'osx') {
+					publicPath = '/package/';
+				}
+			}
+		}
+
 		let webAppManifest = undefined;
-		if (!config.server && config.webAppManifest && config.webAppManifest[section]) {
-			webAppManifest = config.webAppManifest[section];
+		if (!config.server && !config.client && sectionConfig.webAppManifest) {
+			webAppManifest = sectionConfig.webAppManifest;
 
 			for (const icon of webAppManifest.icons) {
 				icon.src = path.resolve(base, 'src/app/img/touch/' + icon.src);
@@ -134,19 +171,21 @@ module.exports = function(config) {
 		}
 
 		let hasOfflineSupport =
-			!config.server &&
-			config.production &&
-			config.offlineSupport &&
-			config.offlineSupport.indexOf(section) !== -1;
+			!config.server && !config.client && config.production && sectionConfig.offline;
 
 		webpackSectionConfigs[section] = {
 			entry,
 			target: webpackTarget,
+			context: path.resolve(base, 'src'),
+			node: {
+				__filename: true,
+				__dirname: true,
+			},
 			devServer: {
 				outputPath: path.resolve(base, config.buildDir),
 			},
 			output: {
-				publicPath: (config.production ? config.staticCdn : '') + '/',
+				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
 				filename: config.production ? section + '.[name].[chunkhash:6].js' : section + '.[name].js',
 				chunkFilename: config.production
@@ -237,14 +276,15 @@ module.exports = function(config) {
 				new webpack.DefinePlugin({
 					GJ_ENVIRONMENT: JSON.stringify(!config.developmentEnv ? 'production' : 'development'),
 					GJ_BUILD_TYPE: JSON.stringify(config.production ? 'production' : 'development'),
-					GJ_IS_CLIENT: JSON.stringify(config.client),
+					GJ_IS_CLIENT: JSON.stringify(!!config.client),
 					GJ_IS_SSR: JSON.stringify(config.server),
 					GJ_VERSION: JSON.stringify(require(path.resolve(process.cwd(), 'package.json')).version),
+					GJ_MANIFEST_URL: JSON.stringify(
+						require(path.resolve(process.cwd(), 'package.json')).clientManifestUrl
+					),
 
 					// This sets vue in production mode.
-					'process.env': {
-						NODE_ENV: JSON.stringify(config.production ? 'production' : 'development'),
-					},
+					'process.env.NODE_ENV': JSON.stringify(config.production ? 'production' : 'development'),
 				}),
 				new webpack.LoaderOptionsPlugin({
 					options: {
@@ -259,12 +299,36 @@ module.exports = function(config) {
 						},
 					},
 				}),
-				// !config.client ? noop : new CopyWebpackPlugin([
-				// 	{
-				// 		from: path.resolve( base, 'client-package.json' ),
-				// 		to: 'package.json',
-				// 	},
-				// ]),
+				new CopyWebpackPlugin([
+					{
+						context: path.resolve(base, 'src/static-assets'),
+						from: '**/*',
+						to: 'static-assets',
+					},
+				]),
+				// Copy over stupid client stuff that's needed.
+				siteNoop ||
+					new CopyWebpackPlugin([
+						{
+							from: path.join(base, 'package.json'),
+							to: 'package.json',
+							transform: (content, _path) => {
+								const pkg = JSON.parse(content);
+
+								// We don't want to install dev/optional deps into the client build.
+								// We only need those when building the client, not for runtime.
+								delete pkg.devDependencies;
+								delete pkg.optionalDependencies;
+								delete pkg.scripts;
+
+								return JSON.stringify(pkg);
+							},
+						},
+						{
+							from: 'update-hook.js',
+							to: 'update-hook.js',
+						},
+					]),
 				devNoop ||
 					new webpack.optimize.UglifyJsPlugin({
 						sourceMap: true,
@@ -279,6 +343,7 @@ module.exports = function(config) {
 				// Since form stuff is so large, we split it into an async chunk
 				// that will get loaded alongside any chunks that need it.
 				devNoop ||
+					clientNoop ||
 					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'app',
@@ -294,6 +359,7 @@ module.exports = function(config) {
 
 				// Pull out vendor code from the main entry point.
 				devNoop ||
+					clientNoop ||
 					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'vendor',
@@ -306,6 +372,7 @@ module.exports = function(config) {
 				// to be cached longer if it doesn't change.
 				// More info: https://webpack.js.org/guides/code-splitting-libraries/#implicit-common-vendor-chunk
 				devNoop ||
+					clientNoop ||
 					serverNoop ||
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'manifest',
@@ -333,18 +400,27 @@ module.exports = function(config) {
 				serverNoop ||
 					new HtmlWebpackPlugin({
 						filename: indexHtml,
-						template: '!!html-loader?interpolate=require!src/' + indexHtml,
-						favicon: path.resolve(base, 'src/app/img/favicon.png'),
+						template: 'index.html',
+						favicon: 'app/img/favicon.png',
 						inject: true,
 						chunksSortMode: 'dependency',
+
+						// Our own vars for injection into template.
+						_section: section,
+						_isClient: config.client,
+						_title: sectionConfig.title,
+						_crawl: sectionConfig.crawl,
+						_scripts: sectionConfig.scripts,
 					}),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
 				serverNoop ||
+					clientNoop ||
 					new VueSSRClientPlugin({
 						filename: 'vue-ssr-client-manifest-' + section + '.json',
 					}),
 				browserNoop ||
+					clientNoop ||
 					new VueSSRServerPlugin({
 						filename: 'vue-ssr-server-bundle-' + section + '.json',
 					}),
@@ -387,7 +463,7 @@ module.exports = function(config) {
 
 	gulp.task(
 		'watch',
-		gulp.series('clean:pre', function(cb) {
+		gulp.series('clean', function(cb) {
 			let compiler = webpack(webpackSectionConfigs[config.buildSection]);
 
 			let server = new WebpackDevServer(compiler, {
@@ -412,9 +488,14 @@ module.exports = function(config) {
 	);
 
 	if (!config.noClean) {
-		webpackSectionTasks.unshift('clean:pre');
+		webpackSectionTasks.unshift('clean');
 	}
 
 	webpackSectionTasks.unshift('translations:compile');
+
+	if (config.client && config.production) {
+		webpackSectionTasks.push('client');
+	}
+
 	gulp.task('default', gulp.series(webpackSectionTasks));
 };

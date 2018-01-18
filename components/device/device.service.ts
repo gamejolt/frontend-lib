@@ -1,11 +1,15 @@
 import { UAParser } from 'ua-parser-js';
+import { makeObservableService } from '../../utils/vue';
+
+type DeviceOs = 'windows' | 'mac' | 'linux' | 'other';
+type DeviceArch = '32' | '64';
 
 export class Device {
 	static ua?: string;
 
 	private static _result?: IUAParser.IResult;
-	private static _os?: string;
-	private static _arch?: string;
+	private static _os?: DeviceOs;
+	private static _arch?: DeviceArch;
 	private static _browser?: string;
 
 	// Keep all these lowercase.
@@ -59,7 +63,7 @@ export class Device {
 		return this._result;
 	}
 
-	static os() {
+	static os(): DeviceOs {
 		if (GJ_IS_CLIENT) {
 			const os = require('os');
 			const type = os.type();
@@ -92,7 +96,7 @@ export class Device {
 		return this._os;
 	}
 
-	static arch() {
+	static arch(): DeviceArch {
 		if (GJ_IS_CLIENT) {
 			const arch = require('os').arch();
 
@@ -119,7 +123,7 @@ export class Device {
 			} else if (Device.ARCH_32.indexOf(arch!) !== -1) {
 				this._arch = '32';
 			} else {
-				this._arch = undefined;
+				this._arch = '32';
 			}
 		}
 
@@ -139,3 +143,5 @@ export class Device {
 		return this._browser;
 	}
 }
+
+makeObservableService(Device);

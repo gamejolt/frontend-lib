@@ -35,7 +35,7 @@ export class GamePackageCardModel {
 			let indexedBuilds: { [k: string]: GameBuild } = {};
 			let otherBuilds: GameBuild[] = [];
 			builds.forEach(build => {
-				if (build.isBrowserBased()) {
+				if (build.isBrowserBased) {
 					indexedBuilds[build.type] = build;
 					this.platformSupport.push(build.type);
 				} else if (build.type === GameBuild.TYPE_ROM) {

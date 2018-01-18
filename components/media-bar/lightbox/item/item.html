@@ -1,9 +1,10 @@
 <div class="media-bar-lightbox-item">
-	<div class="media-bar-lightbox-item-inner" v-if="isActive || isNext || isPrev">
+	<div class="-inner" v-if="isActive || isNext || isPrev">
 
 		<!-- Image -->
 		<template v-if="item.media_type === 'image'">
-			<div class="media-bar-lightbox-item-embed"
+			<div
+				class="-embed"
 				v-if="maxWidth && maxHeight"
 				>
 
@@ -17,18 +18,18 @@
 					/>
 			</div>
 
-			<div class="media-bar-lightbox-item-caption" v-if="item.caption">
+			<div class="-caption" v-if="item.caption" ref="caption">
 				<h4>{{ item.caption }}</h4>
 			</div>
 		</template>
 
 		<!-- Video -->
 		<template v-else-if="item.media_type === 'video'">
-			<div class="media-bar-lightbox-item-embed"
+			<div
+				class="-embed"
 				v-if="isActive && maxWidth && maxHeight"
 				>
 				<app-video-embed
-					class="media-bar-lightbox-item-embed"
 					:video-provider="item.type"
 					:video-id="item.url"
 					:max-video-width="maxWidth"
@@ -37,7 +38,7 @@
 					/>
 			</div>
 
-			<div class="media-bar-lightbox-item-caption">
+			<div class="-caption" v-if="item.title || item.description" ref="caption">
 				<h4>{{ item.title }}</h4>
 				<!--TODO: This used to link links-->
 				<p v-if="item.description" v-text="item.description"></p>
@@ -46,11 +47,11 @@
 
 		<!-- Sketchfab -->
 		<template v-else-if="item.media_type === 'sketchfab'">
-			<div class="game-media-bar-lightbox-item-embed"
+			<div
+				class="-embed"
 				v-if="isActive && maxWidth && maxHeight"
 				>
 				<app-sketchfab-embed
-					class="game-media-bar-lightbox-item-embed"
 					:sketchfab-id="item.sketchfab_id"
 					:max-width="maxWidth"
 					:max-height="maxHeight"

@@ -14,6 +14,7 @@ import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
 import { KeyGroup } from '../../key-group/key-group.model';
 import { User } from '../../user/user.model';
+import { Poll } from '../../poll/poll.model';
 
 export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
@@ -52,6 +53,7 @@ export class FiresidePost extends Model {
 	sketchfabs: FiresidePostSketchfab[] = [];
 	user_like: FiresidePostLike | null;
 	key_groups: KeyGroup[] = [];
+	poll: Poll | null;
 
 	url: string;
 
@@ -95,6 +97,10 @@ export class FiresidePost extends Model {
 		if (data.key_groups) {
 			this.key_groups = KeyGroup.populate(data.key_groups);
 			this.key_group_ids = this.key_groups.map(i => i.id);
+		}
+
+		if (data.poll) {
+			this.poll = new Poll(data.poll);
 		}
 
 		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
@@ -193,7 +199,9 @@ export class FiresidePost extends Model {
 
 	$remove() {
 		if (this.game) {
-			return this.$_remove(`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`);
+			return this.$_remove(
+				`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`
+			);
 		} else {
 			return this.$_remove(`/fireside/dash/posts/remove/${this.id}`);
 		}

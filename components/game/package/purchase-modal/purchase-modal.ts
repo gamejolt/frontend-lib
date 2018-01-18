@@ -13,6 +13,7 @@ import { GameDownloader } from '../../downloader/downloader.service';
 import { User } from '../../../user/user.model';
 import { AppLoading } from '../../../../vue/components/loading/loading';
 import { Growls } from '../../../growls/growls.service';
+import { VuexStore } from '../../../../utils/vuex';
 
 @View
 @Component({
@@ -28,6 +29,12 @@ export default class AppGamePackagePurchaseModal extends BaseModal {
 	@Prop(GameBuild) build?: GameBuild;
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
+
+	static hook = {
+		downloadPackage: undefined as
+			| ((store: VuexStore, game: Game, build: GameBuild) => void)
+			| undefined,
+	};
 
 	sellable: Sellable = null as any;
 
@@ -55,12 +62,14 @@ export default class AppGamePackagePurchaseModal extends BaseModal {
 	}
 
 	skipPayment() {
-		// When they skip a pwyw payment form, on client we need to start the
-		// install.
-		if (GJ_IS_CLIENT) {
-			// TODO(rewrite)
+		if (!this.build) {
+			throw new Error(`Build isn't set`);
+		}
+
+		if (AppGamePackagePurchaseModal.hook.downloadPackage) {
+			AppGamePackagePurchaseModal.hook.downloadPackage(this.$store, this.game, this.build);
 		} else {
-			this.download(this.build!);
+			this.download(this.build);
 		}
 		this.modal.dismiss();
 	}
