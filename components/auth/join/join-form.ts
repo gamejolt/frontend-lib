@@ -22,6 +22,7 @@ export type FormModel = {
 export class AppAuthJoinForm extends BaseForm<FormModel>
 	implements FormOnSubmit, FormOnSubmitSuccess {
 	@Prop(Boolean) darkVariant?: boolean;
+	@Prop(Boolean) blocked?: boolean;
 
 	warnOnDiscard = false;
 
