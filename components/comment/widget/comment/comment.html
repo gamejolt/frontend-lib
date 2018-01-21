@@ -11,7 +11,7 @@
 
 	<template slot="tags" v-if="isOwner || isCollaborator">
 
-		<span class="tag tag-active">
+		<span class="tag">
 			<translate v-if="isOwner">Dev</translate>
 			<translate v-else>Collaborator</translate>
 		</span>
@@ -113,12 +113,9 @@
 
 			<app-comment-controls show-reply :comment="comment" />
 
-			&nbsp;
-			&nbsp;
-
 			<a
 				v-if="children && children.length"
-				class="small"
+				class="btn btn-trans"
 				@click="isShowingChildren = !isShowingChildren"
 				>
 				<translate
