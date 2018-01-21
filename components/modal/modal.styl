@@ -1,19 +1,14 @@
 @require '~styles/variables'
 @require '../../stylus/common/mixins'
 
-// Container that the modal scrolls within
-.modal
-	overflow: auto
-	overflow-y: scroll
+.-container
 	position: fixed
+	overflow: hidden
 	top: 0
 	right: 0
 	bottom: 0
 	left: 0
 	-webkit-overflow-scrolling: touch
-	// Prevent Chrome on Windows from adding a focus outline. For details, see
-	// https://github.com/twbs/bootstrap/pull/10951.
-	outline: 0
 
 	// Animation stuff.
 	// Tells vue that we want to animate for this long, basically.
@@ -32,6 +27,20 @@
 
 			@media $media-sm-up
 				transform: scale3d(0.8, 0.8, 0.8)
+
+	>>> .backdrop
+		z-index: 1
+
+// Container that the modal scrolls within
+.modal
+	overflow: auto
+	overflow-y: scroll
+	position: absolute
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	z-index: 2
 
 	.modal-content
 		opacity: 1

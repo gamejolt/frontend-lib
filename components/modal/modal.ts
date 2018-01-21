@@ -23,6 +23,10 @@ export class AppModal extends Vue {
 	private backdrop?: AppBackdrop;
 	private beforeEachDeregister?: Function;
 
+	get zIndex() {
+		return 1050 + this.modal.index;
+	}
+
 	created() {
 		const parent = findRequiredVueParent(this, BaseModal);
 		this.modal = parent.modal;
@@ -31,6 +35,7 @@ export class AppModal extends Vue {
 	mounted() {
 		if (!this.modal.noBackdrop) {
 			this.backdrop = Backdrop.push({
+				context: this.$el,
 				className: 'modal-backdrop',
 			});
 		}

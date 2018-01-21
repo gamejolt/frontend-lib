@@ -3,14 +3,12 @@ import { Component, Watch } from 'vue-property-decorator';
 import View from '!view!./modals.html?style=./modals.styl';
 
 import { Modal } from './modal.service';
-import { AppBackdrop } from '../backdrop/backdrop';
 import { AppModalWrapper } from './modal-wrapper';
 
 @View
 @Component({
 	components: {
 		AppModalWrapper,
-		AppBackdrop,
 	},
 })
 export class AppModals extends Vue {
