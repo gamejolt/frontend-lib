@@ -1,10 +1,12 @@
 <div class="control-errors">
 
-	<app-expand :when="!!error">
-		<p class="help-block error" :class="{ above: position === 'above' }">
-			{{ error }}
-		</p>
-	</app-expand>
+	<p
+		v-if="!!error"
+		class="help-block error anim-fade-in"
+		:class="{ above: position === 'above' }"
+		>
+		{{ error }}
+	</p>
 
 	<slot style="display: none" />
 </div>
