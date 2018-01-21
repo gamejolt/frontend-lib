@@ -20,6 +20,7 @@ export class AppFormGroup extends Vue {
 	form: AppForm;
 	control: BaseFormControl;
 	inputErrors: ErrorBag | null = null;
+	changed = false;
 
 	get humanLabel() {
 		const name = this.name;

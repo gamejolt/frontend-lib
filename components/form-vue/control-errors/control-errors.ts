@@ -63,7 +63,9 @@ export class AppFormControlErrors extends Vue {
 	get error() {
 		const label = this._label;
 
-		if (this.group.inputErrors) {
+		// Only show input errors if the field has been modified from its initial state, or if they
+		// tried submitting the form.
+		if (this.group.inputErrors && (this.group.changed || this.form.base.attemptedSubmit)) {
 			const errors = (this.group.inputErrors as any).errors;
 			if (errors.length) {
 				return this.processMessage(errors[0].rule, label);

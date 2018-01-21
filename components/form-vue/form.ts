@@ -106,6 +106,8 @@ export class AppForm extends Vue {
 	}
 
 	async submit() {
+		this.base.attemptedSubmit = true;
+
 		// Wait until all form controls have settled into their final values.
 		await this.$nextTick();
 
