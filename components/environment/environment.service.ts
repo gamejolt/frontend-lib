@@ -43,7 +43,7 @@ export class Environment {
 	static widgetHost = 'https://widgets.gamejolt.com';
 }
 
-if (Environment.env === 'development') {
+if (GJ_ENVIRONMENT === 'development') {
 	Environment.baseUrl = 'http://localhost:8080';
 	Environment.baseUrlInsecure = 'http://localhost:8080';
 	Environment.wttfBaseUrl = 'http://localhost:8080';
