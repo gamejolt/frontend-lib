@@ -1,7 +1,7 @@
 <app-form name="commentAddForm">
 
 	<app-form-group
-		:class="{ 'sans-margin-bottom': !changed && method !== 'edit' }"
+		:class="{ 'sans-margin-bottom': (!changed || !valid) && method !== 'edit' }"
 		name="comment"
 		:label="$gettext( 'Leave a Comment' )"
 		:hide-label="true"
@@ -19,7 +19,7 @@
 
 	<app-form-button
 		class="btn-block-xs"
-		v-if="changed"
+		show-when-valid
 		:icon="method === 'add' ? 'add-comment' : 'edit'"
 		>
 		<translate v-if="method === 'add'">Add Comment</translate>
