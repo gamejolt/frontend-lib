@@ -15,8 +15,6 @@ nav.platform-list
 				color: $black
 
 		li
-			@extend .anim-fade-in, .stagger
-			@extend .anim-fade-leave
 			margin: 0
 			list-style: none
 
@@ -27,26 +25,23 @@ nav.platform-list
 			display: block
 			padding: 0 15px
 			margin: $line-height-computed 0
-			margin-left: -18px  // Make it so that the list is flush against the left. (subtract padding and border)
-			color: $gray-light  // Keep the inactive ones lighter.
-
+			margin-left: -18px // Make it so that the list is flush against the left. (subtract padding and border)
+			color: $gray-light // Keep the inactive ones lighter.
 			// Set default border styles.
 			// We override individuals below, so keep these long form.
 			border-style: solid
 			border-color: transparent
 			border-width: 0
 			border-left-width: 3px
-
 			// Don't allow to select the text when clicking on a "tab".
 			user-select: none
-
 			// Fade any color changes.
 			transition: color 300ms
 
 			// Show the left border on hover.
 			&:hover
 				border-color: $gray-lighter
-				transition: none  // Don't transition into the hover. Only transition out of it.
+				transition: none // Don't transition into the hover. Only transition out of it.
 
 			&.active
 				color: $black
@@ -73,8 +68,6 @@ nav.platform-list
 		@extend .clearfix
 
 		li
-			@extend .anim-back-in-up
-			@extend .anim-fade-leave
 			float: left
 			margin-right: ($grid-gutter-width / 2)
 
@@ -86,7 +79,6 @@ nav.platform-list
 			border-left: 0
 			border-bottom-width: 3px
 			margin: 0
-
 			// For some reason we need this extra 1px of padding with the font
 			// we use.
 			padding: 0 5px ($line-height-computed / 2) + 1px 0
@@ -96,14 +88,10 @@ nav.platform-list
 
 			&.active
 				border-color: $gray-light
-				font-weight: normal  // Don't bold active inline items.
+				font-weight: normal // Don't bold active inline items.
 
 		.jolticon
 			margin-right: 5px
-
-	&.no-animate
-		ul li
-			@extend .no-animate
 
 	/**
 	 * Section header nav lists
@@ -118,8 +106,7 @@ nav.platform-list
 			&.active
 				color: $white
 
-		a
-		&.inline ul a
+		a, &.inline ul a
 			line-height: 2.5
 			color: $gray-light
 
@@ -137,11 +124,8 @@ nav.platform-list
 				color: $gray-lighter
 
 		// Buttons should be forced to a certain color.
-		&.buttons
-		&.inline.buttons
-
-			a
-			&:hover a
+		&.buttons, &.inline.buttons
+			a, &:hover a
 				color: $gj-green
 				transition: none
 
@@ -157,10 +141,7 @@ nav.platform-list
 /**
  * In dark fills
  */
-.fill-black
-.fill-darkest
-.fill-darker
-.fill-dark
+.fill-black, .fill-darkest, .fill-darker, .fill-dark
 	nav.platform-list ul
 		a.active
 			color: $gray-lightest !important
