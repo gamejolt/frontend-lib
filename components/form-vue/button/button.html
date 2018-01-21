@@ -1,4 +1,4 @@
-<button class="btn" :class="[type]">
+<button class="btn" :class="[type]" v-if="shouldShow">
 	<app-jolticon v-if="icon" :icon="icon" />
 	<slot />
 	<transition>

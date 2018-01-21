@@ -17,8 +17,17 @@ export class AppFormButton extends Vue {
 	type?: string;
 
 	@Prop(String) icon?: string;
+	@Prop(Boolean) showWhenValid: boolean;
 
 	form: AppForm;
+
+	get shouldShow() {
+		if (!this.showWhenValid) {
+			return true;
+		}
+
+		return this.form.base.changed && this.form.base.valid;
+	}
 
 	created() {
 		this.form = findRequiredVueParent(this, require('../form').AppForm);
