@@ -19,8 +19,6 @@ import { Api } from '../../api/api.service';
 })
 export class AppAuthJoin extends Vue {
 	@Prop(Boolean) darkVariant?: boolean;
-	@Prop({ type: Boolean, default: true })
-	shouldRedirect?: boolean;
 
 	blocked = false;
 
@@ -41,15 +39,17 @@ export class AppAuthJoin extends Vue {
 		UserLinkedAccounts.login(this.$router, provider);
 	}
 
-	onJoining(formModel: FormModel) {
-		this.$emit('joining', formModel);
+	onJoin(formModel: FormModel) {
+		sessionStorage.setItem('signup-auth-token', formModel.token);
+		sessionStorage.setItem('signup-username', formModel.username);
+		sessionStorage.setItem('signup-password', formModel.password);
 
-		if (this.shouldRedirect) {
-			let url = Environment.authBaseUrl + '/join/almost';
-			if (formModel.token) {
-				url += '/' + formModel.token;
-			}
-			window.location.href = url;
+		if (GJ_SECTION !== 'auth') {
+			window.location.href = `${Environment.authBaseUrl}/join/captcha`;
+		} else {
+			this.$router.push({
+				name: 'auth.join-captcha',
+			});
 		}
 	}
 }

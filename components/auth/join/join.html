@@ -43,11 +43,11 @@
 	<app-auth-join-form
 		:dark-variant="darkVariant"
 		:blocked="blocked"
-		@submit="onJoining"
+		@submit="onJoin"
 		/>
 
-	<div class="alert alert-warning" style="margin-top:5px" v-if="blocked">
-		<translate>Uh oh, you can't register another account yet.</translate>
+	<div class="alert alert-warning -blocked-message" v-if="blocked">
+		<translate>You must wait 15 minutes before creating another account.</translate>
 	</div>
 
 </div>
