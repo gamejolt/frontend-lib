@@ -187,7 +187,9 @@ module.exports = function(config) {
 			output: {
 				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
-				filename: config.production ? section + '.[name].[chunkhash:6].js' : section + '.[name].js',
+				filename: config.production
+					? section + '.[name].[chunkhash:6].js'
+					: section + '.[name].js',
 				chunkFilename: config.production
 					? section + '.[name].[chunkhash:6].js'
 					: section + '.[name].js',
@@ -274,17 +276,24 @@ module.exports = function(config) {
 				// Hoists modules instead of using a function call when it can.
 				devNoop || new webpack.optimize.ModuleConcatenationPlugin(),
 				new webpack.DefinePlugin({
-					GJ_ENVIRONMENT: JSON.stringify(!config.developmentEnv ? 'production' : 'development'),
+					GJ_SECTION: JSON.stringify(section),
+					GJ_ENVIRONMENT: JSON.stringify(
+						!config.developmentEnv ? 'production' : 'development'
+					),
 					GJ_BUILD_TYPE: JSON.stringify(config.production ? 'production' : 'development'),
 					GJ_IS_CLIENT: JSON.stringify(!!config.client),
 					GJ_IS_SSR: JSON.stringify(config.server),
-					GJ_VERSION: JSON.stringify(require(path.resolve(process.cwd(), 'package.json')).version),
+					GJ_VERSION: JSON.stringify(
+						require(path.resolve(process.cwd(), 'package.json')).version
+					),
 					GJ_MANIFEST_URL: JSON.stringify(
 						require(path.resolve(process.cwd(), 'package.json')).clientManifestUrl
 					),
 
 					// This sets vue in production mode.
-					'process.env.NODE_ENV': JSON.stringify(config.production ? 'production' : 'development'),
+					'process.env.NODE_ENV': JSON.stringify(
+						config.production ? 'production' : 'development'
+					),
 				}),
 				new webpack.LoaderOptionsPlugin({
 					options: {
@@ -472,7 +481,9 @@ module.exports = function(config) {
 						{
 							from: /./,
 							to:
-								config.buildSection === 'app' ? '/index.html' : '/' + config.buildSection + '.html',
+								config.buildSection === 'app'
+									? '/index.html'
+									: '/' + config.buildSection + '.html',
 						},
 					],
 				},
