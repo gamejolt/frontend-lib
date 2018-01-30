@@ -53,7 +53,7 @@ export class GamePlayModal {
 		// the iframe. To fix we have to open a new tab to the gameserver.
 		// We also open the game in a new tab if it's not https enabled so the
 		// site doesn't complain about mixed security elements.
-		if (!build.https_enabled || Device.browser().indexOf('Safari') !== -1) {
+		if (!build.https_enabled || Device.browser()!.indexOf('Safari') !== -1) {
 			// We have to open the window first before getting the URL. The
 			// browser will block the popup unless it's done directly in the
 			// onclick handler. Once we have the download URL we can direct the
@@ -77,6 +77,7 @@ export class GamePlayModal {
 			noBackdrop: true,
 			noBackdropClose: true,
 			noEscClose: true,
+			size: 'full',
 		});
 
 		this.hasModal = false;

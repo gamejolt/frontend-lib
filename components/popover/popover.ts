@@ -5,7 +5,6 @@ import View from '!view!./popover.html';
 import { Popover } from './popover.service';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
-import { makeObservableService } from '../../utils/vue';
 import { Scroll } from '../scroll/scroll.service';
 
 // Importing animations didn't work with scoped.
@@ -50,7 +49,7 @@ export class AppPopover extends Vue {
 	// We use the wrapped to generate an on/off click handler.
 	private hidePopoversWrapped?: any;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	mounted() {
 		// Store a reference to the inner popover since we may append it to the

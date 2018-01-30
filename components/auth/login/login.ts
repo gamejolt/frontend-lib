@@ -4,7 +4,6 @@ import View from '!view!./login.html';
 import './login.styl';
 
 import { Connection } from '../../connection/connection-service';
-import { makeObservableService } from '../../../utils/vue';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppAuthLoginForm } from './login-form';
 import { Auth } from '../auth.service';
@@ -22,7 +21,7 @@ export class AppAuthLogin extends Vue {
 	@Prop(Boolean) darkVariant?: boolean;
 	@Prop(String) redirectTo: string;
 
-	Connection = makeObservableService(Connection);
+	readonly Connection = Connection;
 
 	onLoggedIn() {
 		if (this.redirectTo) {

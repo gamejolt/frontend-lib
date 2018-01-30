@@ -41,6 +41,8 @@ export class Environment {
 	static activityStreamHost = 'https://activity.gamejolt.com';
 	static chatHost = 'https://chat.gamejolt.com';
 	static widgetHost = 'https://widgets.gamejolt.com';
+
+	static recaptchaSiteKey = '6Led_UAUAAAAAB_ptIOOlAF5DFK9YM7Qi_7z8iKk';
 }
 
 if (Environment.env === 'development') {
@@ -63,17 +65,19 @@ if (Environment.env === 'development') {
 	Environment.activityStreamHost = 'http://activity.development.gamejolt.com';
 	Environment.chatHost = 'http://chat.development.gamejolt.com';
 	Environment.widgetHost = 'http://localhost:8086';
+
+	Environment.recaptchaSiteKey = '6LcwTkEUAAAAAHTT67TB8gkM0ft5hUzz_r_tFFaT';
 }
 
 if (GJ_IS_CLIENT) {
 	// When it gets packaged up for production, the URL changes.
 	if (window.location.href.search(/^app\:\/\/game\-jolt\-client\/package\//) !== -1) {
-		Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#!';
-		Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#!';
-		Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#!';
+		Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#';
+		Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#';
+		Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#';
 	} else {
-		Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#!';
-		Environment.authBaseUrl = 'app://game-jolt-client/auth.html#!';
-		Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#!';
+		Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#';
+		Environment.authBaseUrl = 'app://game-jolt-client/auth.html#';
+		Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#';
 	}
 }

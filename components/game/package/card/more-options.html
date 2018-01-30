@@ -2,7 +2,7 @@
 
 	<a class="list-group-item has-icon"
 		v-for="extraBuild of card.extraBuilds"
-		:key="extraBuild.icon + '-' + extraBuild.build.id"
+		:key="`${extraBuild.icon}-${extraBuild.build.id}`"
 		v-app-track-event="`game-package-card:more-options:click-option`"
 		@click="click( extraBuild.build )"
 		>

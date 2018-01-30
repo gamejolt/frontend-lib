@@ -1,2 +1,3 @@
 /debug.log
 /node_modules
+/gulp/tasks/client/vendor/tmp-gamejolt.iss

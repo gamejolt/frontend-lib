@@ -3,24 +3,34 @@
 @keyframes progress-bar-stripes
 	>>> from
 		background-position: 40px 0
+
 	>>> to
 		background-position: 0 0
 
 .progress
-	overflow: hidden
+	text-overflow()
+	position: relative
 	height: $line-height-computed
+	line-height: $line-height-computed
 	margin-bottom: $line-height-computed
 	background-color: $progress-bg
 	border-radius: $border-radius-base
 
-.progress-bar
-	float: left
-	width: 0%
-	height: 100%
+.-text
+	position: relative
+	display: inline-block
+	vertical-align: middle
 	font-size: $font-size-small
-	line-height: $line-height-computed
 	color: $progress-bar-color
-	text-align: center
+	padding: 0 10px
+
+.progress-bar
+	position: absolute
+	top: 0
+	left: 0
+	width: 0
+	min-width: 5px
+	height: 100%
 	background-color: $progress-bar-bg
 	border-radius: $border-radius-base
 	transition: width 600ms ease
@@ -43,8 +53,7 @@
 		color: $progress-bar-danger-color
 		border-color: $progress-danger-bg
 
-.progress-success
-.progress-green  // Deprecated class.
+.progress-success, .progress-green // Deprecated class.
 	background-color: $progress-green-bg
 
 	.progress-bar
@@ -53,15 +62,12 @@
 		border-color: $progress-green-bg
 
 .progress-thin
-	&
-	.progress-bar
+	&, .progress-bar
 		height: 5px
 
-.progress-striped .progress-bar
-.progress-bar.progress-striped
-	background-image: linear-gradient( 45deg, $gray 25%, transparent 25%, transparent 50%, $gray 50%, $gray 75%, transparent 75%, transparent )
+.progress-striped .progress-bar, .progress-bar.progress-striped
+	background-image: linear-gradient(45deg, $gray 25%, transparent 25%, transparent 50%, $gray 50%, $gray 75%, transparent 75%, transparent)
 	background-size: 40px 40px
 
-.progress.active .progress-bar
-.progress-bar.active
+.progress.active .progress-bar, .progress-bar.active
 	animation: progress-bar-stripes 2s linear infinite

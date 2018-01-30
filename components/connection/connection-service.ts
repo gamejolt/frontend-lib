@@ -1,18 +1,19 @@
 import { ConnectionReconnect } from './reconnect-service';
 import { AppStore } from '../../vue/services/app/app-store';
 import { VuexStore } from '../../utils/vuex';
+import { makeObservableService } from '../../utils/vue';
 
 export class Connection {
 	private static isDeviceOffline = false;
 	private static hasRequestFailure = false;
 	private static reconnectChecker?: ConnectionReconnect;
 
-	static get isOnline() {
-		return !this.isDeviceOffline && !this.hasRequestFailure;
+	static get isOffline() {
+		return this.isDeviceOffline || this.hasRequestFailure;
 	}
 
 	static get isClientOffline() {
-		return GJ_IS_CLIENT && !this.isOnline;
+		return GJ_IS_CLIENT && this.isOffline;
 	}
 
 	static init(store: VuexStore) {
@@ -58,21 +59,10 @@ export class Connection {
 	 * error or when a request has went through successfully so we can reset.
 	 */
 	private static setRequestFailure(failed: boolean) {
-		// Do nothing if we're not switching states.
-		if (this.hasRequestFailure === failed) {
-			return;
-		}
-
 		// If we went into request failure mode let's start checking for a
 		// reconnection.
 		if (failed) {
 			this.setupReconnectChecker();
-		}
-
-		// If we got a successful request, go back into a good request state
-		// right away.
-		if (!failed && this.reconnectChecker) {
-			this.reconnectChecker.finish();
 		}
 	}
 
@@ -91,3 +81,5 @@ export class Connection {
 		);
 	}
 }
+
+makeObservableService(Connection);

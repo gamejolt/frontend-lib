@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { makeObservableService } from '../../utils/vue';
 
 export interface GrowlOptions {
 	message?: string;
@@ -113,3 +114,5 @@ export class Growls {
 		Growls.add.apply(Growls, args);
 	}
 }
+
+makeObservableService(Growls);

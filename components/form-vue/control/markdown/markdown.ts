@@ -3,7 +3,6 @@ import View from '!view!./markdown.html?style=./markdown.styl';
 
 import { BaseFormControl } from '../base';
 import { Screen } from '../../../screen/screen-service';
-import { makeObservableService } from '../../../../utils/vue';
 import { Environment } from '../../../environment/environment.service';
 import { Api } from '../../../api/api.service';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
@@ -50,8 +49,8 @@ export class AppFormControlMarkdown extends BaseFormControl {
 	previewContent = '';
 	isLoadingPreview = false;
 
-	Screen = makeObservableService(Screen);
-	Environment = Environment;
+	readonly Screen = Screen;
+	readonly Environment = Environment;
 
 	get hasContent() {
 		return !!this.controlVal;

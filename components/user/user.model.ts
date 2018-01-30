@@ -21,6 +21,7 @@ export class User extends Model {
 	is_verified: boolean;
 	is_partner: boolean;
 	avatar_media_item?: MediaItem;
+	header_media_item?: MediaItem;
 	disable_gravatar: boolean;
 
 	created_on: number;
@@ -61,6 +62,10 @@ export class User extends Model {
 	revenue_payout_minimum?: number;
 	revenue_wallet_maximum?: number;
 
+	get isMod() {
+		return this.permission_level >= 3;
+	}
+
 	constructor(data: any = {}) {
 		super(data);
 
@@ -73,17 +78,32 @@ export class User extends Model {
 		if (data.avatar_media_item) {
 			this.avatar_media_item = new MediaItem(data.avatar_media_item);
 		}
+		if (data.header_media_item) {
+			this.header_media_item = new MediaItem(data.header_media_item);
+		}
 	}
 
 	static touch() {
 		if (GJ_IS_SSR) {
 			return Promise.resolve();
 		}
+
+		// We don't want to wait for the touch in Client since we know it gets loaded in
+		// immediately.
+		if (GJ_IS_CLIENT) {
+			Api.sendRequest('/web/touch', null, { detach: true });
+			return Promise.resolve();
+		}
+
 		return Api.sendRequest('/web/touch');
 	}
 
 	async $follow() {
-		const response = await Api.sendRequest('/web/profile/follow/' + this.id, {}, { detach: true });
+		const response = await Api.sendRequest(
+			'/web/profile/follow/' + this.id,
+			{},
+			{ detach: true }
+		);
 
 		this.is_following = true;
 		++this.follower_count;
@@ -121,13 +141,20 @@ export class User extends Model {
 		return this.$_save('/web/dash/avatar/clear', 'user');
 	}
 
+	$saveHeader() {
+		// You can only save yourself, so we don't pass in an ID to the endpoint.
+		return this.$_save('/web/dash/header/save', 'user', {
+			file: this.file,
+		});
+	}
+
+	$clearHeader() {
+		return this.$_save('/web/dash/header/clear', 'user');
+	}
+
 	$saveEmailPreferences() {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
 		return this.$_save('/web/dash/email-preferences/save', 'user');
-	}
-
-	$saveSettings() {
-		return this.$_save('/web/dash/settings/save', 'user');
 	}
 
 	$saveFireside() {

@@ -13,7 +13,6 @@ import { GamePackage } from '../package.model';
 import { Sellable } from '../../../sellable/sellable.model';
 import { User } from '../../../user/user.model';
 import { Screen } from '../../../screen/screen-service';
-import { makeObservableService } from '../../../../utils/vue';
 import { Api } from '../../../api/api.service';
 import { arrayIndexBy } from '../../../../utils/array';
 import { Geo, Region } from '../../../geo/geo.service';
@@ -34,6 +33,7 @@ import { AppFocusWhen } from '../../../form-vue/focus-when.directive';
 import { AppForm } from '../../../form-vue/form';
 import { AppLoadingFade } from '../../../loading/fade/fade';
 import { FormOnSubmitError } from '../../../form-vue/form.service';
+import { GameBuild } from '../../build/build.model';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
@@ -59,6 +59,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess, FormOnSubmitError {
 	@Prop(Game) game: Game;
 	@Prop(GamePackage) package: GamePackage;
+	@Prop(GameBuild) build?: GameBuild;
 	@Prop(Sellable) sellable: Sellable;
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
@@ -88,14 +89,16 @@ export class FormGamePackagePayment extends BaseForm<any>
 	walletTax = 0;
 	minOrderAmount = 50;
 
-	Screen = makeObservableService(Screen);
+	readonly Screen = Screen;
 
 	get pricing() {
 		return this.sellable.pricings[0];
 	}
 
 	get _minOrderAmount() {
-		return this.sellable.type === 'paid' ? this.pricing.amount / 100 : this.minOrderAmount / 100;
+		return this.sellable.type === 'paid'
+			? this.pricing.amount / 100
+			: this.minOrderAmount / 100;
 	}
 
 	get formattedAmount() {
@@ -313,9 +316,13 @@ export class FormGamePackagePayment extends BaseForm<any>
 				throw response;
 			}
 
-			response = await Api.sendRequest('/web/checkout/charge/' + response.cart.id, chargeData, {
-				detach: true,
-			});
+			response = await Api.sendRequest(
+				'/web/checkout/charge/' + response.cart.id,
+				chargeData,
+				{
+					detach: true,
+				}
+			);
 
 			if (response.success === false) {
 				throw response;
@@ -369,7 +376,8 @@ export class FormGamePackagePayment extends BaseForm<any>
 		if (GJ_IS_CLIENT) {
 			// Our checkout can be done in client.
 			if (this.checkoutType === OrderPayment.METHOD_CC_STRIPE) {
-				window.location.href = Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
+				window.location.href =
+					Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
 			} else {
 				// Otherwise we have to open in browser.
 				require('nw.gui').Shell.openExternal(response.redirectUrl);

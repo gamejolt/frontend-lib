@@ -16,6 +16,7 @@ bootstrapShortkey();
 @Component({})
 export class AppModal extends Vue {
 	modal: Modal = null as any;
+	isHoveringContent = false;
 
 	private backdrop?: AppBackdrop;
 	private beforeEachDeregister?: Function;
@@ -63,7 +64,7 @@ export class AppModal extends Vue {
 	}
 
 	dismissBackdrop() {
-		if (this.modal.noBackdropClose) {
+		if (this.modal.noBackdropClose || this.isHoveringContent) {
 			return;
 		}
 		this.dismiss();

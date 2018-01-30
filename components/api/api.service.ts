@@ -80,14 +80,14 @@ export class Api {
 		options: RequestOptions = {}
 	): Promise<any> {
 		options = {
-			...<RequestOptions>{
+			...(<RequestOptions>{
 				ignoreLoadingBar: false,
 				processPayload: true,
 				withCredentials: true,
 				sanitizeComplexData: true,
 				allowComplexData: [],
 				detach: false,
-			},
+			}),
 			...options,
 		};
 
@@ -144,6 +144,11 @@ export class Api {
 		const headers: any = {};
 		if (GJ_IS_SSR) {
 			headers.cookie = 'frontend=ssr;';
+		}
+
+		if (GJ_IS_CLIENT) {
+			// Modify all HTTP requests to include the client version.
+			headers['x-gj-client-version'] = GJ_VERSION;
 		}
 
 		// An upload request.

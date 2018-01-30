@@ -12,67 +12,67 @@
 	left: 0
 	z-index: $zindex-modal
 	-webkit-overflow-scrolling: touch
-
 	// Prevent Chrome on Windows from adding a focus outline. For details, see
 	// https://github.com/twbs/bootstrap/pull/10951.
 	outline: 0
 
 	// Animation stuff.
 	// Tells vue that we want to animate for this long, basically.
-	&.v-enter-active
-	&.v-leave-active
+	&.v-enter-active, &.v-leave-active
 		transition-duration: 300ms
 
-		.modal-dialog
-			transition: opacity 300ms
-
 		.modal-content
-			transition: transform 300ms $strong-ease-out
+			transition: transform 300ms $strong-ease-out, opacity 300ms
 
-	&.v-enter
-	&.v-leave-to
-		.modal-dialog
+	&.v-enter, &.v-leave-to
+		.modal-content
 			opacity: 0
+			// On xs we do plop down animation.
+			// On sm-up we do a expand open animation.
+			transform: scale3d(1.2, 1.2, 1.2)
 
-		.modal-content
-			transform: scale3d( 0.8, 0.8, 0.8 )
-
-	.modal-dialog
-		opacity: 1
+			@media $media-sm-up
+				transform: scale3d(0.8, 0.8, 0.8)
 
 	.modal-content
+		opacity: 1
 		transform: none
-
-// Shell div to position the modal with bottom padding
-.modal-dialog
-	position: relative
-	width: 100%
-	margin-top: 40px
-
-	@media $media-sm
-		padding-left: $modal-padding
-		padding-right: $modal-padding
-
-	@media $media-sm-up
-		margin: 30px auto
-		margin-top: 100px
 
 .modal-content
 	position: relative
 	background-clip: padding-box
-	outline: none // Remove focus outline from opened modal
+	outline: 0 // Remove focus outline from opened modal
 	background-color: $modal-content-bg
-	box-shadow: 0 5px 15px rgba( $black, 0.5 )
+	box-shadow: 0 5px 15px rgba($black, 0.5)
+
+	// Full screen on xs
+	@media $media-xs
+		min-height: 100vh
 
 	@media $media-sm-up
+		margin: 30px auto
+		margin-top: 100px
 		border-radius: $border-radius-base
 
 @media $media-sm-up
-
-	.modal-sm.modal-dialog
-		width: 600px
+	.modal-sm
+		.modal-content
+			width: 600px
 
 @media $media-md-up
-
-	.modal-dialog
+	.modal-content
 		width: $container-md
+
+.modal-full
+	overflow: hidden
+	background-color: $modal-content-bg
+
+	.modal-content
+		width: 100%
+		height: 100%
+		margin: 0
+		box-shadow: none
+		border-radius: 0
+		overflow: auto
+		overflow-y: scroll
+		background-color: transparent

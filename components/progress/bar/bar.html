@@ -7,7 +7,8 @@
 		active ? 'active' : undefined,
 	]"
 	>
-	<div class="progress-bar" :style="{ width: Math.max( 0, Math.min( 100, percent ) ) + '%' }">
+	<div class="progress-bar" :style="{ width: Math.max( 0, Math.min( 100, percent ) ) + '%' }"></div>
+	<div class="-text">
 		<slot />
 	</div>
 </div>

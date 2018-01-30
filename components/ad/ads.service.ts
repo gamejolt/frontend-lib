@@ -56,6 +56,11 @@ export class Ads {
 	private static routeResolved = false;
 
 	private static get googletag() {
+		// makeObservableService will call this, sadly.
+		if (!this.shouldShow) {
+			return null;
+		}
+
 		const _window = window as any;
 
 		if (!_window.googletag) {
@@ -89,9 +94,6 @@ export class Ads {
 		if (GJ_IS_SSR || GJ_IS_CLIENT) {
 			return;
 		}
-
-		// Make this observable in Vue.
-		makeObservableService(this);
 
 		router.beforeEach((to, from, next) => {
 			// Clear all our route-level settings.
@@ -316,3 +318,5 @@ export class Ads {
 		}
 	}
 }
+
+makeObservableService(Ads);

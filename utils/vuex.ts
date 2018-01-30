@@ -1,36 +1,36 @@
 import Vue from 'vue';
-import Vuex, { ModuleTree, Module as _Module } from 'vuex';
-import { WatchOptions } from 'vue';
-import { Module, Payload } from 'vuex/types';
+import Vuex, {
+	ModuleTree,
+	Module,
+	Payload,
+	Store,
+	StoreOptions,
+	DispatchOptions,
+	CommitOptions,
+} from 'vuex';
 
 Vue.use(Vuex);
 
-export type VuexDispatch<P> = <T extends keyof P>(type: T, value?: P[T]) => Promise<any[]>;
-export type VuexCommit<P> = <T extends keyof P>(type: T, value?: P[T]) => void;
+// Override dispatch and commit so that we can have them typed with the real mutations/actions.
+interface VuexDispatch<P> {
+	<T extends keyof P>(type: T, payload?: P[T], options?: DispatchOptions): Promise<any>;
+	<T extends Payload>(payloadWithType: T, options?: DispatchOptions): Promise<any>;
+}
 
-export type VuexWatch<S> = <T>(
-	getter: (state: S) => T,
-	cb: (value: T, oldValue: T) => void,
-	options?: WatchOptions
-) => void;
+interface VuexCommit<P> {
+	<T extends keyof P>(type: T, payload?: P[T], options?: CommitOptions): void;
+	<T extends Payload>(payloadWithType: T, options?: CommitOptions): void;
+}
 
-export abstract class VuexStore<S = any, A = any, M = any> {
-	readonly state: S;
-	readonly getters: any;
-
-	replaceState: (state: S) => void;
-	getServerState: () => any;
-
+export abstract class VuexStore<S = any, A = any, M = any> extends Store<S> {
 	dispatch: VuexDispatch<A>;
 	commit: VuexCommit<M>;
+	getServerState?: () => any;
 
-	subscribe: <P extends Payload>(fn: (mutation: P, state: S) => any) => () => void;
-	watch: VuexWatch<S>;
-
-	registerModule: <T>(path: string | string[], module: Module<T, S>) => void;
-	unregisterModule: (path: string | string[]) => void;
-
-	hotUpdate: any;
+	// Just so we can make options optional.
+	constructor(options?: StoreOptions<S>) {
+		super(options || {});
+	}
 }
 
 const storeInstance = new Vuex.Store({});
@@ -67,7 +67,7 @@ export function VuexModule(options: VuexModuleOptions = {}) {
 			__vuexMutationScope: { enumerable: false, writable: true },
 		});
 
-		const storeOptions: _Module<any, any> = {
+		const storeOptions: Module<any, any> = {
 			modules: options.modules || {},
 			namespaced: !options.store,
 			state,

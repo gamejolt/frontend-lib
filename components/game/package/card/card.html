@@ -61,35 +61,13 @@
 
 	<div class="card-meta card-meta-sm">
 
-		<!--
-			In client, if the game is installed.
-		-->
-		<template v-if="localPackage">
-
-			<!-- Reduce number of watches -->
-			<template v-if="localPackage.isInstalling()">
-				<template v-if="!localPackage.isPatchPaused()">
-					<translate class="tag tag-blue text-upper" v-if="localPackage.isInstalling()">Installing</translate>
-					<translate class="tag tag-pink text-upper" v-if="localPackage.didInstallFail()">Install Failed</translate>
-				</template>
-				<template v-if="localPackage.isPatchPaused()">
-					<translate class="tag text-upper">Install Paused</translate>
-				</template>
-			</template>
-			<template v-if="localPackage.isUpdating()">
-				<template v-if="!localPackage.isPatchPaused()">
-					<translate class="tag tag-blue text-upper" v-if="localPackage.isUpdating()">Updating</translate>
-					<translate class="tag tag-pink text-upper" v-if="localPackage.didUpdateFail()">Update Failed</translate>
-				</template>
-				<template v-if="localPackage.isPatchPaused()">
-					<translate class="tag text-upper">Update Paused</translate>
-				</template>
-			</template>
-			<translate class="tag tag-active text-upper" v-if="localPackage.isSettled() && !localPackage.isRunning()">Installed</translate>
-			<translate class="tag tag-active text-upper" v-if="localPackage.isRunning()">Running</translate>
-			<translate class="tag text-upper" v-if="localPackage.isRemoving()">Removing</translate>
-			<span class="dot-separator"></span>
-		</template>
+		<component
+			v-if="metaComponent"
+			:is="metaComponent"
+			:game="game"
+			:package="package"
+			:card="card"
+			/>
 
 		<app-jolticon
 			v-for="supportKey of card.platformSupport"
@@ -142,23 +120,17 @@
 		</div>
 	</template>
 
-	<div class="card-controls" v-if="card.showcasedRelease">
+	<div class="card-controls" v-else>
 
 		<template v-if="sellable.type !== 'paid' || isOwned || isPartner">
 
-			<!--
-				The buttons are so different for client that we put them in a child component.
-				They will only be available on WTTF since they're pushed in the client component there.'
-			-->
-			<template v-if="GJ_IS_CLIENT">
-				<!--<gj-client-package-card-buttons></gj-client-package-card-buttons>-->
-			</template>
-
-			<app-game-package-card-buttons
-				v-else
+			<component
+				:is="buttonsComponent"
+				:game="game"
 				:package="package"
 				:card="card"
 				@click="buildClick( $event.build, $event.fromExtraSection )"
+				@show-build-payment="showPayment"
 				/>
 
 			<template v-if="isPartner && sellable.type === 'paid' && !isOwned">
