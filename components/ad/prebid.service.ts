@@ -161,6 +161,10 @@ export class Prebid {
 			sizes: slot.slotSizes,
 			bids: [
 				{
+					bidder: 'onedisplay',
+					params: placement.onedisplay,
+				},
+				{
 					bidder: 'appnexus',
 					params: placement.appNexus,
 				},
