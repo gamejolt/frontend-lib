@@ -4,6 +4,7 @@
 		<app-form-group name="email" :label="$gettext( 'Email' )" :hide-label="true">
 			<app-form-control
 				type="email"
+				:disabled="blocked"
 				:rules="{
 					availability: { url: '/web/auth/check-field-availability/email' },
 				}"
@@ -17,6 +18,7 @@
 		<app-form-group name="username" :label="$gettext( 'Username' )" :hide-label="true">
 			<app-form-control
 				type="text"
+				:disabled="blocked"
 				:rules="{
 					min: 3,
 					max: 30,
@@ -33,6 +35,7 @@
 		<app-form-group name="password" :label="$gettext( 'Password' )" :hide-label="true">
 			<app-form-control
 				type="password"
+				:disabled="blocked"
 				:rules="{
 					min: 4,
 					max: 300,
@@ -47,7 +50,12 @@
 		<br>
 
 		<div class="form-group">
-			<app-form-button icon="friends" class="btn-block" :type="darkVariant ? 'btn-success' : undefined">
+			<app-form-button
+				icon="friends"
+				class="btn-block"
+				:disabled="blocked"
+				:type="darkVariant ? 'btn-success' : undefined"
+				>
 				<translate>Sign Up</translate>
 			</app-form-button>
 		</div>

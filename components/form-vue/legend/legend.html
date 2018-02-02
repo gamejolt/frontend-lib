@@ -1,0 +1,9 @@
+<legend
+	:class="{
+		'-compact': compact,
+		'-expandable': expandable,
+	}"
+	>
+	<span class="-expander" v-if="expandable">{{ expanded ? `[-]` : `[+]` }}</span>
+	<slot />
+</legend>

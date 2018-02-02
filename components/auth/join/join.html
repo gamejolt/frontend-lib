@@ -2,7 +2,7 @@
 
 	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
 		:class="{ 'btn-dark-variant': darkVariant }"
-		:disabled="Connection.isClientOffline"
+		:disabled="Connection.isClientOffline || blocked"
 		@click="linkedAccountLogin( 'facebook' )"
 		>
 		<app-jolticon icon="facebook" />
@@ -11,7 +11,7 @@
 
 	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
 		:class="{ 'btn-dark-variant': darkVariant }"
-		:disabled="Connection.isClientOffline"
+		:disabled="Connection.isClientOffline || blocked"
 		@click="linkedAccountLogin( 'google' )"
 		>
 		<app-jolticon icon="google-plus" />
@@ -20,7 +20,7 @@
 
 	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
 		:class="{ 'btn-dark-variant': darkVariant }"
-		:disabled="Connection.isClientOffline"
+		:disabled="Connection.isClientOffline || blocked"
 		@click="linkedAccountLogin( 'twitter' )"
 		>
 		<app-jolticon icon="twitter" />
@@ -29,7 +29,7 @@
 
 	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
 		:class="{ 'btn-dark-variant': darkVariant }"
-		:disabled="Connection.isClientOffline"
+		:disabled="Connection.isClientOffline || blocked"
 		@click="linkedAccountLogin( 'twitch' )"
 		>
 		<app-jolticon icon="twitch" />
@@ -42,7 +42,12 @@
 
 	<app-auth-join-form
 		:dark-variant="darkVariant"
-		@submit="onJoined"
+		:blocked="blocked"
+		@submit="onJoin"
 		/>
+
+	<div class="alert alert-warning -blocked-message" v-if="blocked">
+		<translate>You must wait 15 minutes before creating another account.</translate>
+	</div>
 
 </div>
