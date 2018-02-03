@@ -47,6 +47,7 @@ export class Notification extends Model {
 	static TYPE_FORUM_POST_ADD = 'forum-post-add';
 	static TYPE_FRIENDSHIP_REQUEST = 'friendship-request';
 	static TYPE_FRIENDSHIP_ACCEPT = 'friendship-accept';
+	static TYPE_FRIENDSHIP_CANCEL = 'friendship-cancel';
 	static TYPE_GAME_RATING_ADD = 'game-rating-add';
 	static TYPE_GAME_FOLLOW = 'game-follow';
 	static TYPE_DEVLOG_POST_ADD = 'devlog-post-add';
