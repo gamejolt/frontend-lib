@@ -7,7 +7,7 @@
 		'ad-rectangle': size === 'rectangle',
 	}"
 	>
-	<div class="ad-inner">
+	<div class="ad-inner" @click.capture="onClick">
 		<div :id="slot.id" class="ad-slot"></div>
 	</div>
 

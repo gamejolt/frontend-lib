@@ -30,6 +30,9 @@ const DfpAdUnitCodes = [
 ];
 
 export class Ads {
+	static readonly EVENT_VIEW = 'view';
+	static readonly EVENT_CLICK = 'click';
+
 	static readonly TYPE_DISPLAY = 'display';
 	static readonly TYPE_VIDEO = 'video';
 
@@ -230,7 +233,7 @@ export class Ads {
 		});
 	}
 
-	static sendBeacon(type: string, resource?: string, resourceId?: number) {
+	static sendBeacon(event: string, type: string, resource?: string, resourceId?: number) {
 		let queryString = '';
 
 		// Cache busting.
@@ -249,10 +252,18 @@ export class Ads {
 			}
 		}
 
+		let path = '/adserver';
+		if (event === Ads.EVENT_CLICK) {
+			path += '/click';
+		}
+		else {
+			path += `/log/${type}`;
+		}
+
 		// This is enough to send the beacon.
 		// No need to add it to the page.
 		let img = window.document.createElement('img');
-		img.src = `${Environment.apiHost}/adserver/log/${type}?${queryString}`;
+		img.src = `${Environment.apiHost}${path}?${queryString}`;
 	}
 
 	static getUnusedAdSlot(size: 'rectangle' | 'leaderboard') {

@@ -97,8 +97,7 @@ export class AppAd extends Vue {
 
 		// We want to send the beacon as soon as possible so that we at least
 		// log that we tried showing for this resoruce.
-		const resourceInfo = this.resourceInfo;
-		Ads.sendBeacon(Ads.TYPE_DISPLAY, resourceInfo.resource, resourceInfo.resourceId);
+		this.sendBeacon(Ads.EVENT_VIEW);
 
 		Ads.setSlotTargeting(this.slot, this.getTargeting());
 
@@ -115,6 +114,14 @@ export class AppAd extends Vue {
 			++this.refreshCount;
 			Ads.refresh(this.slot);
 		}
+	}
+
+	onClick() {
+		this.sendBeacon(Ads.EVENT_CLICK);
+	}
+
+	private sendBeacon(event: string) {
+		Ads.sendBeacon(event, Ads.TYPE_DISPLAY, this.resourceInfo.resource, this.resourceInfo.resourceId);
 	}
 
 	private getTargeting(): AdSlotTargetingMap {

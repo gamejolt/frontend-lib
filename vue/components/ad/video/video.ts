@@ -169,7 +169,7 @@ export class AppAdVideo extends Vue {
 		});
 
 		this.adsManager.addEventListener(ima.AdEvent.Type.IMPRESSION, () => {
-			Ads.sendBeacon(Ads.TYPE_VIDEO, this.resource, this.resourceId);
+			Ads.sendBeacon(Ads.EVENT_VIEW, Ads.TYPE_VIDEO, this.resource, this.resourceId);
 		});
 
 		this.adsManager.addEventListener(ima.AdEvent.Type.CLICK, () => {
