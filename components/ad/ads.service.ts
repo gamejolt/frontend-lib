@@ -6,7 +6,6 @@ import { AdSlot, AdSlotTargetingMap } from './slot';
 import { AppAd } from './ad';
 import { arrayRemove } from '../../utils/array';
 import { Model } from '../model/model.service';
-import { Screen } from '../screen/screen-service';
 import { Game } from '../game/game.model';
 import { makeObservableService } from '../../utils/vue';
 import { Prebid } from './prebid.service';
@@ -338,12 +337,7 @@ export class Ads {
 		}
 
 		for (const bid of apsBids) {
-			this.addSlotBidTargeting(bid.slotID, {
-				amznbid: bid.amznbid,
-				amzniid: bid.amzniid,
-				amznp: bid.amznp,
-				amznsz: bid.amzsz,
-			});
+			this.addSlotBidTargeting(bid.slotID, bid);
 		}
 	}
 
