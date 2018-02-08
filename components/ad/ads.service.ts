@@ -78,7 +78,7 @@ export class Ads {
 	}
 
 	static get shouldShow() {
-		if (GJ_IS_CLIENT || GJ_IS_SSR || Screen.isXs) {
+		if (GJ_IS_CLIENT || GJ_IS_SSR) {
 			return false;
 		}
 
