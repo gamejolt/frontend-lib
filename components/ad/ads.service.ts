@@ -10,9 +10,13 @@ import { Screen } from '../screen/screen-service';
 import { Game } from '../game/game.model';
 import { makeObservableService } from '../../utils/vue';
 import { Prebid } from './prebid.service';
+import { Aps } from './aps.service';
 
 // To show ads on the page for dev, just change this to true.
 const DevDisabled = GJ_BUILD_TYPE === 'development';
+
+// The timeout for any bid requests.
+export const BidsTimeout = 2000;
 
 const DfpTagId = '1437670388518';
 const DfpNetworkId = '27005478';
@@ -53,7 +57,7 @@ export class Ads {
 
 	static isPageDisabled = false;
 	static globalTargeting: AdSlotTargetingMap = {};
-	static bidTargeting: AdSlotTargetingMap = {};
+	static bidTargeting: { [k: string]: AdSlotTargetingMap } = {};
 	static resource: Model | null = null;
 	private static adUnit = DefaultAdUnit;
 	private static routeResolved = false;
@@ -200,9 +204,15 @@ export class Ads {
 		}
 
 		if (!DevDisabled) {
-			const units = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
-			const bids = await Prebid.getBids(units);
-			this.storeBidTargeting(bids);
+			const prebidUnits = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
+			const apsSlots = adsToDisplay.map(ad => Aps.makeSlot(ad.slot!));
+
+			const [prebidBids, apsBids] = await Promise.all([
+				Prebid.getBids(prebidUnits),
+				Aps.getBids(apsSlots),
+			]);
+
+			this.storeBidTargeting(prebidBids, apsBids);
 		}
 
 		this.run(() => {
@@ -255,8 +265,7 @@ export class Ads {
 		let path = '/adserver';
 		if (event === Ads.EVENT_CLICK) {
 			path += '/click';
-		}
-		else {
+		} else {
 			path += `/log/${type}`;
 		}
 
@@ -318,15 +327,29 @@ export class Ads {
 		});
 	}
 
-	private static storeBidTargeting(bids: any) {
-		for (const slotId in bids) {
-			const bid = bids[slotId].bids && bids[slotId].bids[0];
+	private static storeBidTargeting(prebidBids: any, apsBids: any[]) {
+		for (const slotId in prebidBids) {
+			const bid = prebidBids[slotId].bids && prebidBids[slotId].bids[0];
 			if (!bid) {
 				continue;
 			}
 
-			this.bidTargeting[slotId] = bid.adserverTargeting;
+			this.addSlotBidTargeting(slotId, bid.adserverTargeting);
 		}
+
+		for (const bid of apsBids) {
+			this.addSlotBidTargeting(bid.slotID, {
+				amznbid: bid.amznbid,
+				amzniid: bid.amzniid,
+				amznp: bid.amznp,
+				amznsz: bid.amzsz,
+			});
+		}
+	}
+
+	private static addSlotBidTargeting(slotId: string, targeting: any) {
+		this.bidTargeting[slotId] = this.bidTargeting[slotId] || {};
+		Object.assign(this.bidTargeting[slotId], targeting);
 	}
 }
 

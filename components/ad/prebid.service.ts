@@ -1,6 +1,6 @@
 import { AdSlot, AdSlotPos } from './slot';
 import { loadScript } from '../../utils/utils';
-const GetBidsTimeout = 2000;
+import { BidsTimeout } from './ads.service';
 
 interface AdUnitBid {
 	bidder: string;
@@ -232,7 +232,7 @@ export class Prebid {
 
 		this.pbjs.que.push(() => {
 			this.pbjs.setConfig({
-				bidderTimeout: GetBidsTimeout,
+				bidderTimeout: BidsTimeout,
 				publisherDomain: 'https://gamejolt.com',
 			});
 		});

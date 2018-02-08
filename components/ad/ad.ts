@@ -31,7 +31,7 @@ function initClickTracking() {
 	clickTrackerBootstrapped = true;
 
 	// Checking the active element in an interval seems to be the only way of tracking clicks.
-	setInterval(function () {
+	setInterval(function() {
 		if (document.activeElement === focusedElem) {
 			return;
 		}
@@ -160,7 +160,12 @@ export class AppAd extends Vue {
 	}
 
 	private sendBeacon(event: string) {
-		Ads.sendBeacon(event, Ads.TYPE_DISPLAY, this.resourceInfo.resource, this.resourceInfo.resourceId);
+		Ads.sendBeacon(
+			event,
+			Ads.TYPE_DISPLAY,
+			this.resourceInfo.resource,
+			this.resourceInfo.resourceId
+		);
 	}
 
 	private getTargeting(): AdSlotTargetingMap {
@@ -169,7 +174,11 @@ export class AppAd extends Vue {
 		}
 
 		// Pull in any targeting for bids that may be set for this slot.
-		const targeting = Object.assign({}, Ads.globalTargeting, Ads.bidTargeting[this.slot.id] || {});
+		const targeting = Object.assign(
+			{},
+			Ads.globalTargeting,
+			Ads.bidTargeting[this.slot.id] || {}
+		);
 
 		if (this.pos) {
 			targeting.pos = this.pos;
