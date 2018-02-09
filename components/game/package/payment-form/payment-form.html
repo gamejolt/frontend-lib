@@ -41,8 +41,13 @@
 
 		<div v-if="sellable.type === 'pwyw' && build">
 			<a class="small" @click="$emit('skip')">
-				<translate v-if="!GJ_IS_CLIENT">No thanks, take me to the download.</translate>
-				<translate v-else>No thanks, just install it.</translate>
+				<template v-if="operation == 'download'">
+					<translate v-if="!GJ_IS_CLIENT">No thanks, take me to the download.</translate>
+					<translate v-else>No thanks, just install it.</translate>
+				</template>
+				<template v-else>
+					<translate>No thanks, just play the game.</translate>
+				</template>
 			</a>
 		</div>
 
