@@ -204,13 +204,16 @@ export class Ads {
 
 		if (!DevDisabled) {
 			const prebidUnits = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
-			const apsSlots = adsToDisplay.map(ad => Aps.makeSlot(ad.slot!));
+			const promises = [Prebid.getBids(prebidUnits)];
 
-			const [prebidBids, apsBids] = await Promise.all([
-				Prebid.getBids(prebidUnits),
-				Aps.getBids(apsSlots),
-			]);
+			if (window.location.search.indexOf('AMAZON') !== -1) {
+				const apsSlots = adsToDisplay.map(ad => Aps.makeSlot(ad.slot!));
+				promises.push(Aps.getBids(apsSlots));
+			} else {
+				promises.push(Promise.resolve([]));
+			}
 
+			const [prebidBids, apsBids] = await Promise.all<any>(promises);
 			this.storeBidTargeting(prebidBids, apsBids);
 		}
 
