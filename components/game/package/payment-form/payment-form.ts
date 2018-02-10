@@ -63,6 +63,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 	@Prop(Sellable) sellable: Sellable;
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
+	@Prop(String) operation: 'download' | 'play';
 
 	@State app: AppStore;
 
