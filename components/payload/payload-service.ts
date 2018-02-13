@@ -128,6 +128,8 @@ export class Payload {
 	}
 
 	private static checkPayloadUser(response: any, options: RequestOptions) {
+		// TODO: yaREEEEEEEEEEEEEEEEEEEEEEEf, should we refresh?
+
 		if (options.ignorePayloadUser || !response || !response.data || !this.store) {
 			return;
 		}
