@@ -303,22 +303,6 @@ function getSubjectTranslationValue(notification: Notification) {
 }
 
 function getTranslationValues(notification: Notification) {
-	// special notification text for devlog posts
-	if (notification.type === Notification.TYPE_DEVLOG_POST_ADD) {
-		let gameTitle = '';
-		let postTitle = '';
-		if (notification.to_model instanceof Game) {
-			gameTitle = notification.to_model.title;
-		}
-		if (notification.action_model instanceof FiresidePost) {
-			postTitle = notification.action_model.title;
-		}
-		return {
-			gameTitle: gameTitle,
-			postTitle: postTitle,
-		};
-	}
-
 	const subject = getSubjectTranslationValue(notification);
 
 	if (
@@ -340,10 +324,15 @@ function getTranslationValues(notification: Notification) {
 export function getNotificationText(notification: Notification) {
 	switch (notification.type) {
 		case Notification.TYPE_DEVLOG_POST_ADD: {
-			return Translate.$gettextInterpolate(
-				`%{ gameTitle } - %{ postTitle }`,
-				getTranslationValues(notification)
-			);
+			let gameTitle = '';
+			let postTitle = '';
+			if (notification.to_model instanceof Game) {
+				gameTitle = notification.to_model.title;
+			}
+			if (notification.action_model instanceof FiresidePost) {
+				postTitle = notification.action_model.title;
+			}
+			return `${gameTitle} - ${postTitle}`;
 		}
 
 		case Notification.TYPE_COMMENT_ADD_OBJECT_OWNER: {
