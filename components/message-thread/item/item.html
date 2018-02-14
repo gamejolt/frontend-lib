@@ -18,14 +18,13 @@
 
 		<div class="timeline-list-item-details">
 
-			<div class="-meta">
+			<div class="-meta clearfix">
+				<span class="-meta-slot">
+					<slot name="tags" />
+					<slot name="meta" />
+				</span>
 
-				<div class="-byline clearfix">
-					<span class="-meta-slot">
-						<slot name="tags" />
-						<slot name="meta" />
-					</span>
-
+				<div class="-byline">
 					<span class="-author">
 						<router-link
 							:to="{

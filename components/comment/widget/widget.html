@@ -7,14 +7,6 @@
 		<translate>Couldn't fetch comments.</translate>
 	</div>
 	<div v-else-if="hasBootstrapped">
-		<template v-if="!noIntro && !commentsCount">
-			<p>
-				<em><translate>Let us know your thoughts and be the first to comment!</translate></em>
-			</p>
-			<br>
-		</template>
-
-		<!-- Comment Add Form -->
 		<app-message-thread-add v-if="app.user">
 			<form-comment
 				:resource="resource"
