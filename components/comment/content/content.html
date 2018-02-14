@@ -3,6 +3,7 @@
 		:collapse-height="300"
 		:is-open="showFullContent"
 		@require-change="canToggleContent = $event"
+		@expand="showFullContent = true"
 		>
 		<div class="-content" v-html="content"></div>
 
