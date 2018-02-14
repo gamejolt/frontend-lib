@@ -40,15 +40,10 @@
 .fill-blue
 	background-color: $gj-blue
 
-.fill-black
-.fill-darkest
-.fill-darker
-.fill-dark
-.fill-gray
-.fill-light
+.fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray, .fill-light
 	color: $gray-lighter
 
-	h1,.h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
+	h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
 		color: $gray-lightest
 
 	a
@@ -57,12 +52,10 @@
 		&:hover
 			color: $gj-blue
 
-	.link-muted
-	.link-help
+	.link-muted, .link-help
 		color: $text-muted
 
-		&:hover
-		&:focus
+		&:hover, &:focus
 			color: $white
 
 	.link-unstyled
@@ -75,16 +68,13 @@
 		color: $gray-light
 
 .fill-light
-
-	&
-	.control-label
+	&, .control-label
 		color: $gray-lightest
 
 	.help-block
 		color: $gray-lighter
 
 .fill-lighter
-
 	.help-block
 		color: $gray
 
@@ -100,9 +90,7 @@
 		border-color: $gray-dark
 
 .fill-lightest
-
-	blockquote
-	hr
+	blockquote, hr
 		border-color: $gray-lighter
 
 	code
@@ -113,9 +101,7 @@
 		background-color: transparent
 		color: inherit
 
-.fill-lighter
-.fill-lightest
-.fill-white
+.fill-lighter, .fill-lightest, .fill-white
 	color: $gray-darkest
 
 	a
@@ -124,12 +110,10 @@
 		&:hover
 			color: $link-hover-color
 
-	.link-muted
-	.link-help
+	.link-muted, .link-help
 		color: $text-muted
 
-		&:hover
-		&:focus
+		&:hover, &:focus
 			color: $black
 
 	.link-unstyled
@@ -142,9 +126,7 @@
 		color: $gray-light
 
 .fill-pink
-	&
-	a
-	h1,.h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
+	&, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
 		color: $white
 
 	a
@@ -154,7 +136,14 @@
 			text-decoration: underline
 
 .fill-dark-green
-	color: $gj-green
+	&, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
+		color: $gj-green
+
+	a
+		font-weight: bold
+
+		&:hover
+			text-decoration: underline
 
 .fill-green
 	color: $gray-darkest

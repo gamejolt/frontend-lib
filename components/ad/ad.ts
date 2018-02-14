@@ -10,6 +10,41 @@ import { FiresidePost } from '../fireside/post/post-model';
 import { AdSlot, AdSlotPos, AdSlotPosValidator, AdSlotTargetingMap } from './slot';
 import { AppStore } from '../../vue/services/app/app-store';
 
+let clickTrackerBootstrapped = false;
+let focusedElem: Element | null = null;
+const clickTrackers: Map<Element, Function> = new Map();
+
+function addClickTracker(elem: Element, cb: Function) {
+	clickTrackers.set(elem, cb);
+	initClickTracking();
+}
+
+function removeClickTracker(elem: Element) {
+	clickTrackers.delete(elem);
+}
+
+function initClickTracking() {
+	if (clickTrackerBootstrapped || !Ads.shouldShow) {
+		return;
+	}
+
+	clickTrackerBootstrapped = true;
+
+	// Checking the active element in an interval seems to be the only way of tracking clicks.
+	setInterval(function() {
+		if (document.activeElement === focusedElem) {
+			return;
+		}
+
+		focusedElem = document.activeElement;
+		clickTrackers.forEach((cb, adElem) => {
+			if (focusedElem && adElem.contains(focusedElem)) {
+				cb();
+			}
+		});
+	}, 1000);
+}
+
 @View
 @Component({})
 export class AppAd extends Vue {
@@ -69,6 +104,7 @@ export class AppAd extends Vue {
 		this.isDestroyed = true;
 
 		Ads.removeAd(this);
+		removeClickTracker(this.$el);
 	}
 
 	refreshAdSlot() {
@@ -97,8 +133,10 @@ export class AppAd extends Vue {
 
 		// We want to send the beacon as soon as possible so that we at least
 		// log that we tried showing for this resoruce.
-		const resourceInfo = this.resourceInfo;
-		Ads.sendBeacon(Ads.TYPE_DISPLAY, resourceInfo.resource, resourceInfo.resourceId);
+		if (!this.isDestroyed) {
+			this.sendBeacon(Ads.EVENT_VIEW);
+			addClickTracker(this.$el, () => this.sendBeacon(Ads.EVENT_CLICK));
+		}
 
 		Ads.setSlotTargeting(this.slot, this.getTargeting());
 
@@ -106,7 +144,7 @@ export class AppAd extends Vue {
 		// the ad server.
 		this.generateDebugInfo();
 
-		// If the slot has changed we need to display if for the first time,
+		// If the slot has changed we need to display it for the first time,
 		// otherwise just refresh it.
 		if (!this.hasDisplayed) {
 			this.hasDisplayed = true;
@@ -117,13 +155,30 @@ export class AppAd extends Vue {
 		}
 	}
 
+	onClick() {
+		this.sendBeacon(Ads.EVENT_CLICK);
+	}
+
+	private sendBeacon(event: string) {
+		Ads.sendBeacon(
+			event,
+			Ads.TYPE_DISPLAY,
+			this.resourceInfo.resource,
+			this.resourceInfo.resourceId
+		);
+	}
+
 	private getTargeting(): AdSlotTargetingMap {
 		if (!this.slot) {
 			return {};
 		}
 
 		// Pull in any targeting for bids that may be set for this slot.
-		const targeting = Object.assign({}, Ads.globalTargeting, Ads.bidTargeting[this.slot.id] || {});
+		const targeting = Object.assign(
+			{},
+			Ads.globalTargeting,
+			Ads.bidTargeting[this.slot.id] || {}
+		);
 
 		if (this.pos) {
 			targeting.pos = this.pos;

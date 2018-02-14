@@ -6,13 +6,16 @@ import { AdSlot, AdSlotTargetingMap } from './slot';
 import { AppAd } from './ad';
 import { arrayRemove } from '../../utils/array';
 import { Model } from '../model/model.service';
-import { Screen } from '../screen/screen-service';
 import { Game } from '../game/game.model';
 import { makeObservableService } from '../../utils/vue';
 import { Prebid } from './prebid.service';
+import { Aps } from './aps.service';
 
 // To show ads on the page for dev, just change this to true.
 const DevDisabled = GJ_BUILD_TYPE === 'development';
+
+// The timeout for any bid requests.
+export const BidsTimeout = 2000;
 
 const DfpTagId = '1437670388518';
 const DfpNetworkId = '27005478';
@@ -30,6 +33,9 @@ const DfpAdUnitCodes = [
 ];
 
 export class Ads {
+	static readonly EVENT_VIEW = 'view';
+	static readonly EVENT_CLICK = 'click';
+
 	static readonly TYPE_DISPLAY = 'display';
 	static readonly TYPE_VIDEO = 'video';
 
@@ -50,7 +56,7 @@ export class Ads {
 
 	static isPageDisabled = false;
 	static globalTargeting: AdSlotTargetingMap = {};
-	static bidTargeting: AdSlotTargetingMap = {};
+	static bidTargeting: { [k: string]: AdSlotTargetingMap } = {};
 	static resource: Model | null = null;
 	private static adUnit = DefaultAdUnit;
 	private static routeResolved = false;
@@ -75,7 +81,7 @@ export class Ads {
 	}
 
 	static get shouldShow() {
-		if (GJ_IS_CLIENT || GJ_IS_SSR || Screen.isXs) {
+		if (GJ_IS_CLIENT || GJ_IS_SSR) {
 			return false;
 		}
 
@@ -197,9 +203,18 @@ export class Ads {
 		}
 
 		if (!DevDisabled) {
-			const units = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
-			const bids = await Prebid.getBids(units);
-			this.storeBidTargeting(bids);
+			const prebidUnits = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
+			const promises = [Prebid.getBids(prebidUnits)];
+
+			if (window.location.search.indexOf('AMAZON') !== -1) {
+				const apsSlots = adsToDisplay.map(ad => Aps.makeSlot(ad.slot!));
+				promises.push(Aps.getBids(apsSlots));
+			} else {
+				promises.push(Promise.resolve([]));
+			}
+
+			const [prebidBids, apsBids] = await Promise.all<any>(promises);
+			this.storeBidTargeting(prebidBids, apsBids);
 		}
 
 		this.run(() => {
@@ -230,7 +245,7 @@ export class Ads {
 		});
 	}
 
-	static sendBeacon(type: string, resource?: string, resourceId?: number) {
+	static sendBeacon(event: string, type: string, resource?: string, resourceId?: number) {
 		let queryString = '';
 
 		// Cache busting.
@@ -249,10 +264,17 @@ export class Ads {
 			}
 		}
 
+		let path = '/adserver';
+		if (event === Ads.EVENT_CLICK) {
+			path += '/click';
+		} else {
+			path += `/log/${type}`;
+		}
+
 		// This is enough to send the beacon.
 		// No need to add it to the page.
 		let img = window.document.createElement('img');
-		img.src = `${Environment.apiHost}/adserver/log/${type}?${queryString}`;
+		img.src = `${Environment.apiHost}${path}?${queryString}`;
 	}
 
 	static getUnusedAdSlot(size: 'rectangle' | 'leaderboard') {
@@ -307,15 +329,24 @@ export class Ads {
 		});
 	}
 
-	private static storeBidTargeting(bids: any) {
-		for (const slotId in bids) {
-			const bid = bids[slotId].bids && bids[slotId].bids[0];
+	private static storeBidTargeting(prebidBids: any, apsBids: any[]) {
+		for (const slotId in prebidBids) {
+			const bid = prebidBids[slotId].bids && prebidBids[slotId].bids[0];
 			if (!bid) {
 				continue;
 			}
 
-			this.bidTargeting[slotId] = bid.adserverTargeting;
+			this.addSlotBidTargeting(slotId, bid.adserverTargeting);
 		}
+
+		for (const bid of apsBids) {
+			this.addSlotBidTargeting(bid.slotID, bid);
+		}
+	}
+
+	private static addSlotBidTargeting(slotId: string, targeting: any) {
+		this.bidTargeting[slotId] = this.bidTargeting[slotId] || {};
+		Object.assign(this.bidTargeting[slotId], targeting);
 	}
 }
 

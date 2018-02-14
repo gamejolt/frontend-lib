@@ -131,7 +131,7 @@
 				:package="package"
 				:card="card"
 				@click="buildClick( $event.build, $event.fromExtraSection )"
-				@show-build-payment="showPayment"
+				@show-build-payment="showPayment( $event.build, $event.fromExtraSection )"
 				/>
 
 			<template v-if="isPartner && sellable.type === 'paid' && !isOwned">
@@ -146,7 +146,7 @@
 
 		<template v-if="sellable.type === 'paid' && !isOwned">
 			<div class="clearfix">
-				<button class="btn btn-success-outline btn-block-xs" @click="showPayment()">
+				<button class="btn btn-success-outline btn-block-xs" @click="showPayment(null, false)">
 					<app-jolticon icon="heart" />
 					<translate>Buy Now</translate>
 				</button>

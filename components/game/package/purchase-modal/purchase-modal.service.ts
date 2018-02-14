@@ -8,7 +8,8 @@ import { User } from '../../../user/user.model';
 interface GamePackagePurchaseModalOptions {
 	game: Game;
 	package: GamePackage;
-	build?: GameBuild;
+	build: GameBuild | null;
+	fromExtraSection: boolean;
 
 	partnerKey?: string;
 	partner?: User;
