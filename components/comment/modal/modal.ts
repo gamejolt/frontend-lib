@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./modal.html';
+import View from '!view!./modal.html?style=./modal.styl';
 
 import { BaseModal } from '../../modal/base';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';

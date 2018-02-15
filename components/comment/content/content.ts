@@ -29,4 +29,6 @@ export class AppCommentContent extends Vue {
 	canToggleContent = false;
 	showFullContent = false;
 	showAllVideos = false;
+
+	readonly date = date;
 }

@@ -3,11 +3,11 @@
 	:user="comment.user"
 	:date="comment.posted_on"
 	:is-active="isHighlighted"
-	:replied-to="parent ? parent.user : undefined"
 	:is-showing-replies="isShowingReplies"
 	:is-reply="!!parent"
 	:is-last="isLastInThread"
 	>
+	<!-- :replied-to="parent ? parent.user : undefined" -->
 
 	<template slot="tags" v-if="isOwner || isCollaborator">
 
@@ -102,11 +102,7 @@
 
 		<app-comment-content
 			:comment="comment"
-			:content="
-				widget.isShowingTranslations && widget.translations[ comment.id ]
-				? widget.translations[ comment.id ].content
-				: comment.comment_compiled
-			"
+			:content="comment.comment_compiled"
 			/>
 
 		<template slot="controls">
@@ -115,7 +111,11 @@
 
 			<a
 				v-if="children && children.length"
-				class="btn btn-trans"
+				class="btn"
+				:class="{
+					'btn-trans': !isShowingChildren,
+					'active': isShowingChildren,
+				}"
 				@click="isShowingChildren = !isShowingChildren"
 				>
 				<translate
