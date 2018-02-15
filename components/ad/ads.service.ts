@@ -321,9 +321,9 @@ export class Ads {
 
 		node.parentNode!.insertBefore(gads, node);
 
-		// this.googletag.cmd.push(() => {
-		// 	this.googletag.pubads().setForceSafeFrame(true);
-		// });
+		this.googletag.cmd.push(() => {
+			this.googletag.pubads().setForceSafeFrame(true);
+		});
 	}
 
 	private static storeBidTargeting(prebidBids: any, apsBids: any[]) {
