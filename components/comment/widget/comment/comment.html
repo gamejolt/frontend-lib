@@ -1,25 +1,19 @@
 <app-message-thread-item
-	:id="`comment-${comment.id}`"
 	:user="comment.user"
 	:date="comment.posted_on"
-	:is-active="isHighlighted"
 	:is-showing-replies="isShowingReplies"
 	:is-reply="!!parent"
 	:is-last="isLastInThread"
 	>
-	<!-- :replied-to="parent ? parent.user : undefined" -->
 
 	<template slot="tags" v-if="isOwner || isCollaborator">
-
 		<span class="tag">
 			<translate v-if="isOwner">Dev</translate>
 			<translate v-else>Collaborator</translate>
 		</span>
-
 	</template>
 
 	<template slot="meta">
-
 		<a
 			v-if="app.user"
 			class="link-muted"
@@ -33,7 +27,6 @@
 			v-if="app.user"
 			:popover-id="`comment-more-options-${componentId}`"
 			>
-			<!-- :append-to-body="true" -->
 			<div class="list-group list-group-dark">
 				<a class="list-group-item has-icon"
 					@click="copyPermalink"
@@ -95,7 +88,6 @@
 				</a>
 			</div>
 		</app-popover>
-
 	</template>
 
 	<template v-if="!isEditing">
@@ -107,7 +99,11 @@
 
 		<template slot="controls">
 
-			<app-comment-controls show-reply :comment="comment" />
+			<app-comment-controls
+				:comment="comment"
+				show-reply
+				@reply="onReplyAdd"
+				/>
 
 			<a
 				v-if="children && children.length"

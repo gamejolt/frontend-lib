@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Emit } from 'vue-property-decorator';
 import View from '!view!./comment.html?style=./comment.styl';
 
 import { Comment } from '../../comment-model';
@@ -30,4 +30,7 @@ export class AppCommentModalComment extends Vue {
 
 	isLoadingReplies = true;
 	replies: Comment[] = [];
+
+	@Emit('add')
+	onCommentAdd(_comment: Comment) {}
 }

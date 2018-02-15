@@ -3,12 +3,6 @@
 		:user="comment.user"
 		:date="comment.posted_on"
 		>
-		<!-- :is-active="isHighlighted" -->
-		<!-- :replied-to="parent ? parent.user : undefined" -->
-		<!-- :is-showing-replies="isShowingReplies" -->
-		<!-- :is-reply="!!parent" -->
-		<!-- :is-last="isLastInThread" -->
-
 		<app-comment-content
 			:comment="comment"
 			:content="comment.comment_compiled"
@@ -24,8 +18,10 @@
 	<app-message-thread-add v-if="app.user">
 		<form-comment
 			:resource="comment.resource"
-			:resource-id="comment.resourceId"
+			:resource-id="comment.resource_id"
+			:parent-id="comment.parent_id || comment.id"
+			autofocus
+			@submit="onCommentAdd"
 			/>
-			<!-- @submit="onCommentAdd" -->
 	</app-message-thread-add>
 </div>

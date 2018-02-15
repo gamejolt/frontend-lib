@@ -79,8 +79,10 @@ export class AppCommentControls extends Vue {
 		}
 	}
 
-	onReplyClick() {
-		CommentModal.show({ comment: this.comment });
-		this.$emit('reply');
+	async onReplyClick() {
+		const comment = await CommentModal.show({ comment: this.comment });
+		if (comment) {
+			this.$emit('reply', comment);
+		}
 	}
 }

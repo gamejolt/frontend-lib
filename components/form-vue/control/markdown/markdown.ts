@@ -11,6 +11,7 @@ import { AppLoading } from '../../../../vue/components/loading/loading';
 import { AppFormAutosize } from '../../autosize.directive';
 import { AppCodemirror } from '../../../codemirror/codemirror';
 import { AppFormControlMarkdownMediaItems } from './media-items/media-items';
+import { AppFocusWhen } from '../../focus-when.directive';
 
 @View
 @Component({
@@ -23,6 +24,7 @@ import { AppFormControlMarkdownMediaItems } from './media-items/media-items';
 	directives: {
 		AppTooltip,
 		AppFormAutosize,
+		AppFocusWhen,
 	},
 })
 export class AppFormControlMarkdown extends BaseFormControl {
@@ -38,6 +40,7 @@ export class AppFormControlMarkdown extends BaseFormControl {
 	@Prop(String) mediaItemType?: string;
 	@Prop(Boolean) allowCodeEditor?: boolean;
 	@Prop(Boolean) disabled?: boolean;
+	@Prop(Boolean) autofocus?: boolean;
 
 	controlVal = '';
 	currentTab = 'edit';

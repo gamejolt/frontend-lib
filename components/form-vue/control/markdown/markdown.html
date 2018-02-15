@@ -65,6 +65,7 @@
 			v-if="editorMode === 'textarea'"
 			:id="id"
 			class="form-control"
+			rows="1"
 			:class="editorClass"
 			:name="group.name"
 			:placeholder="placeholder"
@@ -72,8 +73,8 @@
 			:value="controlVal"
 			@input="onChange( $event.target.value )"
 			v-validate="{ rules: validationRules }"
-			rows="1"
 			v-app-form-autosize
+			v-app-focus-when="autofocus"
 			>
 		</textarea>
 

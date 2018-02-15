@@ -1,5 +1,4 @@
 <div
-	:id="`comment-pagination-${id}`"
 	class="comment-widget"
 	>
 	<app-loading v-if="!hasBootstrapped && !hasError" />
@@ -11,6 +10,7 @@
 			<form-comment
 				:resource="resource"
 				:resource-id="resourceId"
+				:autofocus="autofocus"
 				@submit="onCommentAdd"
 				/>
 		</app-message-thread-add>
@@ -36,16 +36,6 @@
 		</div>
 
 		<app-loading v-if="isLoading" class="loading-centered" />
-
-		<!-- <app-message-thread-pagination
-			v-if="perPage && parentCount"
-			:pager="true"
-			:items-per-page="perPage"
-			:total-items="parentCount"
-			:current-page="currentPage"
-			:prevent-url-change="true"
-			@pagechange="onPageChange"
-			/> -->
 
 	</div>
 </div>

@@ -6,6 +6,17 @@ import { Api } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
 import { Subscription } from '../subscription/subscription.model';
 
+export async function fetchComment(id: number) {
+	try {
+		const payload = await Api.sendRequest(`/comments/get-comment/${id}`, null, {
+			detach: true,
+		});
+		return new Comment(payload.comment);
+	} catch (e) {
+		// Probably removed.
+	}
+}
+
 export class Comment extends Model {
 	static readonly STATUS_REMOVED = 0;
 	static readonly STATUS_VISIBLE = 1;
@@ -59,7 +70,9 @@ export class Comment extends Model {
 			query = '?page=' + page;
 		}
 
-		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, null, { detach: true });
+		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, null, {
+			detach: true,
+		});
 	}
 
 	static async getCommentPage(commentId: number): Promise<number> {

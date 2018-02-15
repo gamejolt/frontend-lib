@@ -9,6 +9,7 @@ import { Backdrop } from '../backdrop/backdrop.service';
 import { bootstrapShortkey } from '../../vue/shortkey';
 import { findRequiredVueParent } from '../../utils/vue';
 import { BaseModal } from './base';
+import { Screen } from '../screen/screen-service';
 
 bootstrapShortkey();
 
@@ -71,7 +72,7 @@ export class AppModal extends Vue {
 	}
 
 	dismissBackdrop() {
-		if (this.modal.noBackdropClose || this.isHoveringContent) {
+		if (Screen.isMobile || this.modal.noBackdropClose || this.isHoveringContent) {
 			return;
 		}
 		this.dismiss();

@@ -16,6 +16,7 @@ export class FormComment extends BaseForm<Comment> implements FormOnInit {
 	@Prop(String) resource: 'Game' | 'FiresidePost';
 	@Prop(Number) resourceId: number;
 	@Prop(Number) parentId?: number;
+	@Prop(Boolean) autofocus?: boolean;
 
 	modelClass = Comment;
 	resetOnSubmit = true;

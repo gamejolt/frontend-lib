@@ -21,7 +21,6 @@ import { number } from '../../../../vue/filters/number';
 import { AppExpand } from '../../../expand/expand';
 import { FormComment } from '../../add/add';
 import { Clipboard } from '../../../clipboard/clipboard-service';
-import { Scroll } from '../../../scroll/scroll.service';
 import { AppMessageThreadAdd } from '../../../message-thread/add/add';
 import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
 import { AppMessageThread } from '../../../message-thread/message-thread';
@@ -73,7 +72,6 @@ export class AppCommentWidgetComment extends Vue {
 	componentId = ++CommentNum;
 	isFollowPending = false;
 	isShowingChildren = false;
-	isHighlighted = false;
 	isEditing = false;
 
 	widget: AppCommentWidget;
@@ -83,10 +81,6 @@ export class AppCommentWidgetComment extends Vue {
 
 	created() {
 		this.widget = findRequiredVueParent(this, AppCommentWidget);
-	}
-
-	mounted() {
-		this.checkPermalink();
 	}
 
 	get isChild() {
@@ -135,7 +129,8 @@ export class AppCommentWidgetComment extends Vue {
 
 			if (
 				collaborator &&
-				(collaborator.perms.indexOf('comments') !== -1 || collaborator.perms.indexOf('all') !== -1)
+				(collaborator.perms.indexOf('comments') !== -1 ||
+					collaborator.perms.indexOf('all') !== -1)
 			) {
 				return true;
 			}
@@ -164,27 +159,18 @@ export class AppCommentWidgetComment extends Vue {
 		return true;
 	}
 
-	onReplyAdd(formModel: Comment) {
-		// This will make sure the page scrolls to the new comment and highlights it.
-		this.isShowingChildren = true;
-		this.$router.replace({
-			name: this.$route.name,
-			params: this.$route.params,
-			query: this.$route.query,
-			hash: '#comment-' + formModel.id,
-		});
-
-		this.widget.onCommentAdd(formModel, true);
-	}
-
 	startEdit() {
 		this.isEditing = true;
 		Popover.hideAll();
 	}
 
-	onCommentEdited(formModel: Comment) {
+	onCommentEdited(comment: Comment) {
 		this.isEditing = false;
-		this.widget.onCommentEdited(formModel);
+		this.widget.onCommentEdited(comment);
+	}
+
+	onReplyAdd(reply: Comment) {
+		this.widget.onCommentAdd(reply);
 	}
 
 	async removeComment() {
@@ -207,6 +193,7 @@ export class AppCommentWidgetComment extends Vue {
 			console.warn('Failed to remove comment');
 			return;
 		}
+
 		this.widget.onCommentRemoved(this.comment);
 	}
 
@@ -224,23 +211,5 @@ export class AppCommentWidgetComment extends Vue {
 
 	report() {
 		ReportModal.show(this.comment);
-	}
-
-	private checkPermalink() {
-		const hash = this.$route.hash;
-		if (hash === '#comment-' + this.comment.id) {
-			this.isHighlighted = true;
-			Scroll.to('comment-' + this.comment.id);
-		}
-
-		// Check if the permalink is within one of this comment's children.
-		if (this.children) {
-			for (const child of this.children) {
-				if (hash === '#comment-' + child.id) {
-					this.isShowingChildren = true;
-					break;
-				}
-			}
-		}
 	}
 }

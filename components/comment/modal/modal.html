@@ -13,11 +13,13 @@
 			v-if="!comment"
 			:resource="resource"
 			:resource-id="resourceId"
+			autofocus
 			/>
 
 		<app-comment-modal-comment
 			v-else
 			:comment="comment"
+			@add="onReplyAdd"
 			/>
 
 	</div>

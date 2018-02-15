@@ -4,7 +4,7 @@
 		:class="{ 'sans-margin-bottom': (!changed || !valid) && method !== 'edit' }"
 		name="comment"
 		:label="$gettext( 'Leave a Comment' )"
-		:hide-label="true"
+		hide-label
 		>
 
 		<app-form-control-markdown
@@ -12,26 +12,29 @@
 			preview-url="/comments/preview"
 			markdown-mode="comments"
 			:placeholder="$gettext( `Leave a comment...` )"
+			:autofocus="autofocus"
 			/>
 
 		<app-form-control-errors label="comment" />
 	</app-form-group>
 
-	<app-form-button
-		class="btn-block-xs"
-		show-when-valid
-		:icon="method === 'add' ? 'add-comment' : 'edit'"
-		>
-		<translate v-if="method === 'add'">Add Comment</translate>
-		<translate v-else-if="method === 'edit'">Save</translate>
-	</app-form-button>
+	<div class="text-right">
+		<app-form-button
+			class="btn-block-xs"
+			show-when-valid
+			:icon="method === 'add' ? 'add-comment' : 'edit'"
+			>
+			<translate v-if="method === 'add'">Add Comment</translate>
+			<translate v-else-if="method === 'edit'">Save</translate>
+		</app-form-button>
 
-	<button
-		class="btn btn-danger-outline"
-		v-if="method === 'edit'"
-		@click.prevent="onCancel"
-		>
-		<translate>Cancel</translate>
-	</button>
+		<button
+			class="btn btn-danger-outline"
+			v-if="method === 'edit'"
+			@click.prevent="onCancel"
+			>
+			<translate>Cancel</translate>
+		</button>
+	</div>
 
 </app-form>
