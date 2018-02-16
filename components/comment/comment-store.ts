@@ -18,6 +18,7 @@ export type CommentActions = {
 
 export type CommentMutations = {
 	'comment/releaseCommentStore': CommentStoreModel;
+	'comment/setCommentCount': { store: CommentStoreModel; count: number };
 	'comment/onCommentAdd': Comment;
 	'comment/onCommentEdit': Comment;
 	'comment/onCommentRemove': Comment;
@@ -81,7 +82,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 			Comment.populate(response.childComments)
 		);
 
-		this._setCommentCount({ store, count });
+		this.setCommentCount({ store, count });
 		this._setParentCommentCount({ store, count: parentCount });
 		this._addComments({ store, comments });
 
@@ -105,7 +106,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	}
 
 	@VuexMutation
-	private _setCommentCount(payload: { store: CommentStoreModel; count: number }) {
+	setCommentCount(payload: CommentMutations['comment/setCommentCount']) {
 		const { store, count } = payload;
 		store.count = count;
 	}
