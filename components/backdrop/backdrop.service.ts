@@ -1,4 +1,5 @@
 import { AppBackdrop } from './backdrop';
+import { arrayRemove } from '../../utils/array';
 
 export interface BackdropOptions {
 	context?: HTMLElement;
@@ -41,10 +42,7 @@ export class Backdrop {
 	static remove(backdrop: AppBackdrop) {
 		backdrop.$destroy();
 		backdrop.$el.parentNode!.removeChild(backdrop.$el);
-
-		const index = this.backdrops.indexOf(backdrop);
-		if (index !== -1) {
-			this.backdrops.splice(index, 1);
-		}
+		arrayRemove(this.backdrops, i => i === backdrop);
+		this.checkBackdrops();
 	}
 }
