@@ -6,12 +6,12 @@
 		<translate>Couldn't fetch comments.</translate>
 	</div>
 	<div v-else-if="hasBootstrapped">
-		<app-message-thread-add v-if="app.user">
+		<app-message-thread-add v-if="user">
 			<form-comment
 				:resource="resource"
 				:resource-id="resourceId"
 				:autofocus="autofocus"
-				@submit="onCommentAdd"
+				@submit="_onCommentAdd"
 				/>
 		</app-message-thread-add>
 		<div v-else class="alert alert-info">
@@ -20,7 +20,7 @@
 
 		<app-message-thread>
 			<app-comment-widget-comment
-				v-for="comment of commentList"
+				v-for="comment of comments"
 				:key="comment.id"
 				:resource="resource"
 				:resource-id="resourceId"

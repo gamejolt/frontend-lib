@@ -20,8 +20,9 @@ export default class AppCommentModal extends BaseModal {
 	@Prop(Number) resourceId: number;
 	@Prop(Comment) comment?: Comment;
 
-	onReplyAdd(comment: Comment) {
-		this.modal.resolve(comment);
+	onReplyAdd() {
+		// Dismiss the modal when a reply is added.
+		this.modal.dismiss();
 	}
 
 	destroyed() {

@@ -5,7 +5,7 @@
 			:class="{
 				'active btn-success': comment.user_vote
 			}"
-			@click="onVoteClick"
+			@click="onVoteClick()"
 			:disabled="!canVote"
 			v-app-tooltip="votingTooltip"
 			v-app-track-event="`comment-widget:vote-click`"
@@ -25,7 +25,7 @@
 	<span v-if="showReply && !comment.parent_id" v-app-auth-required>
 		<button
 			class="btn btn-outline btn-sparse btn-circle"
-			@click="onReplyClick"
+			@click="onReplyClick()"
 			v-app-tooltip="$gettext( 'Reply' )"
 			v-app-track-event="`comment-widget:reply-click`"
 			>

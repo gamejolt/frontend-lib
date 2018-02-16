@@ -15,7 +15,7 @@ export class CommentModal {
 	static async show(options: CommentModalOptions) {
 		const { resource, resourceId, comment } = options;
 
-		return await Modal.show<Comment>({
+		return await Modal.show<void>({
 			component: () =>
 				asyncComponentLoader(import(/* webpackChunkName: "CommentModal" */ './modal')),
 			props: {
