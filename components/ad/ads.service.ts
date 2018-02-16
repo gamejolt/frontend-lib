@@ -204,16 +204,13 @@ export class Ads {
 
 		if (!DevDisabled) {
 			const prebidUnits = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
-			const promises = [Prebid.getBids(prebidUnits)];
+			const apsSlots = adsToDisplay.map(ad => Aps.makeSlot(ad.slot!));
 
-			if (window.location.search.indexOf('AMAZON') !== -1) {
-				const apsSlots = adsToDisplay.map(ad => Aps.makeSlot(ad.slot!));
-				promises.push(Aps.getBids(apsSlots));
-			} else {
-				promises.push(Promise.resolve([]));
-			}
+			const [prebidBids, apsBids] = await Promise.all([
+				Prebid.getBids(prebidUnits),
+				Aps.getBids(apsSlots),
+			]);
 
-			const [prebidBids, apsBids] = await Promise.all<any>(promises);
 			this.storeBidTargeting(prebidBids, apsBids);
 		}
 
@@ -324,9 +321,9 @@ export class Ads {
 
 		node.parentNode!.insertBefore(gads, node);
 
-		this.googletag.cmd.push(() => {
-			this.googletag.pubads().setForceSafeFrame(true);
-		});
+		// this.googletag.cmd.push(() => {
+		// 	this.googletag.pubads().setForceSafeFrame(true);
+		// });
 	}
 
 	private static storeBidTargeting(prebidBids: any, apsBids: any[]) {
