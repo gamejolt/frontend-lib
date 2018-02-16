@@ -3,7 +3,6 @@ import { namespace, State, Action, Mutation } from 'vuex-class';
 import { VuexModule, VuexStore, VuexMutation, VuexGetter, VuexAction } from '../../utils/vuex';
 import { Comment } from './comment-model';
 import { arrayGroupBy, arrayRemove, numberSort } from '../../utils/array';
-import { Analytics } from '../analytics/analytics.service';
 import { Growls } from '../growls/growls.service';
 import { Translate } from '../translate/translate.service';
 
@@ -121,15 +120,11 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				),
 				Translate.$gettext('Almost there...')
 			);
-
-			Analytics.trackEvent('comment-widget', 'spam');
 		} else if (store && !store.contains(comment)) {
 			++store.count;
+			store.comments.push(comment);
 			if (!comment.parent_id) {
 				++store.parentCount;
-				store.comments.unshift(comment);
-			} else {
-				store.comments.push(comment);
 			}
 		}
 	}
@@ -144,8 +139,6 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				),
 				Translate.$gettext('Almost there...')
 			);
-
-			Analytics.trackEvent('comment-widget', 'spam');
 		}
 	}
 

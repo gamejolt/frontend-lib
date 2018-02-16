@@ -114,9 +114,7 @@ export class AppCommentWidget extends Vue {
 
 		this.hasBootstrapped = false;
 		this.hasError = false;
-		this.currentPage = this.$route.query.comment_page
-			? parseInt(this.$route.query.comment_page, 10)
-			: 1;
+		this.currentPage = 1;
 
 		if (this.store) {
 			this.releaseCommentStore(this.store);
