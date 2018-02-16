@@ -31,6 +31,13 @@ export class Backdrop {
 		return backdrop;
 	}
 
+	static checkBackdrops() {
+		const active = this.backdrops.filter(i => i.active);
+		if (active.length === 0) {
+			document.body.classList.remove('backdrop-active');
+		}
+	}
+
 	static remove(backdrop: AppBackdrop) {
 		backdrop.$destroy();
 		backdrop.$el.parentNode!.removeChild(backdrop.$el);
@@ -38,10 +45,6 @@ export class Backdrop {
 		const index = this.backdrops.indexOf(backdrop);
 		if (index !== -1) {
 			this.backdrops.splice(index, 1);
-		}
-
-		if (this.backdrops.length === 0) {
-			document.body.classList.remove('backdrop-active');
 		}
 	}
 }

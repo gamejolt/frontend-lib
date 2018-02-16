@@ -64,6 +64,7 @@ export class BaseForm<T> extends Vue {
 	saveMethod?: keyof T;
 	method: 'add' | 'edit' = 'add';
 	changed = false;
+	attemptedSubmit = false;
 	hasFormErrors = false;
 
 	// These get overriden as getters in the child classes.
@@ -230,6 +231,7 @@ export class BaseForm<T> extends Vue {
 			// Reset our state.
 			this.state.isProcessing = false;
 			this.changed = false;
+			this.attemptedSubmit = false;
 			this.serverErrors = {};
 
 			// Show successful form submission.

@@ -21,6 +21,7 @@ export class AppBackdrop extends Vue {
 		// This will start a transition.
 		// At the end of the leave transition it will call `_transitionend`.
 		this.active = false;
+		Backdrop.checkBackdrops();
 	}
 
 	_clicked() {

@@ -6,7 +6,6 @@ import { findRequiredVueParent } from '../../../utils/vue';
 import { AppForm } from '../form';
 import { AppFormGroup } from '../group/group';
 import { number } from '../../../vue/filters/number';
-import { AppExpand } from '../../expand/expand';
 
 // These are default messages that don't need any extra validation data.
 // They are also common enough to be applied to all elements.
@@ -28,17 +27,10 @@ const ErrorMessagesBase: { [k: string]: string } = {
 };
 
 @View
-@Component({
-	components: {
-		AppExpand,
-	},
-})
+@Component({})
 export class AppFormControlErrors extends Vue {
 	@Prop(String) label?: string;
 	@Prop(String) position?: string;
-
-	// TODO(rewrite,cros)
-	@Prop(Boolean) ignoreDirty?: boolean;
 
 	form: AppForm;
 	group: AppFormGroup;
@@ -63,7 +55,9 @@ export class AppFormControlErrors extends Vue {
 	get error() {
 		const label = this._label;
 
-		if (this.group.inputErrors) {
+		// Only show input errors if the field has been modified from its initial state, or if they
+		// tried submitting the form.
+		if (this.group.inputErrors && (this.group.changed || this.form.base.attemptedSubmit)) {
 			const errors = (this.group.inputErrors as any).errors;
 			if (errors.length) {
 				return this.processMessage(errors[0].rule, label);
@@ -91,11 +85,13 @@ export class AppFormControlErrors extends Vue {
 		// This way we can message on it better.
 		switch (rule) {
 			case 'max':
-				message = 'Please enter a {} shorter than or equal to ' + number(data) + ' characters.';
+				message =
+					'Please enter a {} shorter than or equal to ' + number(data) + ' characters.';
 				break;
 
 			case 'min':
-				message = 'Please enter a {} longer than or equal to ' + number(data) + ' characters.';
+				message =
+					'Please enter a {} longer than or equal to ' + number(data) + ' characters.';
 				break;
 
 			case 'pattern':
@@ -110,7 +106,9 @@ export class AppFormControlErrors extends Vue {
 
 			case 'filesize':
 				message =
-					'The chosen {} exceeds the maximum file size of ' + number(data / 1024 / 1024) + 'MB.';
+					'The chosen {} exceeds the maximum file size of ' +
+					number(data / 1024 / 1024) +
+					'MB.';
 				break;
 
 			case 'img_dimensions':

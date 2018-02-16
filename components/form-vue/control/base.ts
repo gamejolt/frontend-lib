@@ -12,6 +12,7 @@ export class BaseFormControl extends Vue {
 	@Prop() rules: any;
 
 	controlVal: any;
+	changed = false;
 
 	/**
 	 * Whether or not the form control has multiple controls for the group. This
@@ -73,6 +74,7 @@ export class BaseFormControl extends Vue {
 		}
 
 		this.form.base.setField(this.group.name, value);
+		this.group.changed = true;
 
 		this.$emit('changed', value);
 		this.form.onChange();

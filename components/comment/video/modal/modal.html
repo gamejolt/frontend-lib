@@ -79,6 +79,7 @@
 					:collapse-height="300"
 					:is-open="showFullDescription"
 					@require-change="canToggleDescription = $event"
+					@expand="showFullDescription = true"
 					>
 					<div class="comment-content" v-html="comment.comment_compiled"></div>
 				</app-fade-collapse>

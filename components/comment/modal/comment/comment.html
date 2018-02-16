@@ -1,0 +1,27 @@
+<div class="comment-modal-comment">
+	<app-message-thread-item
+		:user="comment.user"
+		:date="comment.posted_on"
+		>
+		<app-comment-content
+			:comment="comment"
+			:content="comment.comment_compiled"
+			/>
+
+		<template slot="controls">
+			<app-comment-controls
+				:comment="comment"
+				/>
+		</template>
+	</app-message-thread-item>
+
+	<app-message-thread-add v-if="app.user">
+		<form-comment
+			:resource="comment.resource"
+			:resource-id="comment.resource_id"
+			:parent-id="comment.parent_id || comment.id"
+			autofocus
+			@submit="onCommentAdd"
+			/>
+	</app-message-thread-add>
+</div>

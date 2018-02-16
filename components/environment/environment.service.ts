@@ -45,7 +45,7 @@ export class Environment {
 	static recaptchaSiteKey = '6Led_UAUAAAAAB_ptIOOlAF5DFK9YM7Qi_7z8iKk';
 }
 
-if (Environment.env === 'development') {
+if (GJ_ENVIRONMENT === 'development') {
 	Environment.baseUrl = 'http://localhost:8080';
 	Environment.baseUrlInsecure = 'http://localhost:8080';
 	Environment.wttfBaseUrl = 'http://localhost:8080';

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./modal.html?style=./modal.styl';
 import './modal-content.styl';
 
@@ -9,17 +9,24 @@ import { Backdrop } from '../backdrop/backdrop.service';
 import { bootstrapShortkey } from '../../vue/shortkey';
 import { findRequiredVueParent } from '../../utils/vue';
 import { BaseModal } from './base';
+import { Screen } from '../screen/screen-service';
 
 bootstrapShortkey();
 
 @View
 @Component({})
 export class AppModal extends Vue {
+	@Prop(Number) index: number;
+
 	modal: Modal = null as any;
 	isHoveringContent = false;
 
 	private backdrop?: AppBackdrop;
 	private beforeEachDeregister?: Function;
+
+	get zIndex() {
+		return 1050 + this.modal.index;
+	}
 
 	created() {
 		const parent = findRequiredVueParent(this, BaseModal);
@@ -29,6 +36,7 @@ export class AppModal extends Vue {
 	mounted() {
 		if (!this.modal.noBackdrop) {
 			this.backdrop = Backdrop.push({
+				context: this.$el,
 				className: 'modal-backdrop',
 			});
 		}
@@ -64,7 +72,7 @@ export class AppModal extends Vue {
 	}
 
 	dismissBackdrop() {
-		if (this.modal.noBackdropClose || this.isHoveringContent) {
+		if (Screen.isMobile || this.modal.noBackdropClose || this.isHoveringContent) {
 			return;
 		}
 		this.dismiss();

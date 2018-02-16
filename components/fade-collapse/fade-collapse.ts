@@ -20,6 +20,7 @@ export class AppFadeCollapse extends Vue {
 	@Prop(Boolean) isOpen?: boolean;
 	@Prop({ type: Boolean, default: true })
 	animate?: boolean;
+	@Prop(String) size?: 'sm';
 
 	isCollapsed = false;
 	private isPrimed = false;
@@ -60,6 +61,14 @@ export class AppFadeCollapse extends Vue {
 		this.isPrimed = true;
 	}
 
+	/**
+	 * Called when the fade at the bottom is clicked on. We want to open it up in that case so that
+	 * they can actually click on what's below.
+	 */
+	fadeClick() {
+		this.$emit('expand');
+	}
+
 	expand() {
 		this.isCollapsed = false;
 		this.$el.style.maxHeight = this.$el.scrollHeight + 'px';
@@ -73,7 +82,9 @@ export class AppFadeCollapse extends Vue {
 			// We will scroll to the bottom of the element minus some extra padding.
 			// This keeps the element in view a bit.
 			const scrollTo =
-				Scroll.getElementOffsetFromContext(this.$el) + this.collapseHeight - ExtraCollapsePadding;
+				Scroll.getElementOffsetFromContext(this.$el) +
+				this.collapseHeight -
+				ExtraCollapsePadding;
 
 			// Only if we're past where we would scroll.
 			if (Scroll.getScrollTop() > scrollTo) {
@@ -98,7 +109,9 @@ export class AppFadeCollapse extends Vue {
 		// Bottom of element from the scroll context top.
 		// We then subtract some padding so that they still see some of the element while scrolling.
 		const curPos =
-			Scroll.getElementOffsetFromContext(this.$el) + this.$el.offsetHeight - ExtraCollapsePadding;
+			Scroll.getElementOffsetFromContext(this.$el) +
+			this.$el.offsetHeight -
+			ExtraCollapsePadding;
 
 		// Only scroll if we have to.
 		// This will allow the element to collapse freely until our marker would go out of view.

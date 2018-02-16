@@ -1,0 +1,27 @@
+<app-modal>
+
+	<div class="modal-controls">
+		<button class="btn btn-danger-outline" @click="modal.dismiss()">
+			<app-jolticon icon="remove" />
+			<translate>Close</translate>
+		</button>
+	</div>
+
+	<div class="modal-body">
+
+		<app-comment-widget
+			v-if="!comment"
+			:resource="resource"
+			:resource-id="resourceId"
+			autofocus
+			/>
+
+		<app-comment-modal-comment
+			v-else
+			:comment="comment"
+			@add="onReplyAdd"
+			/>
+
+	</div>
+
+</app-modal>

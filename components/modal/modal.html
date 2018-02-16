@@ -1,21 +1,29 @@
 <transition appear>
-	<div tabindex="-1" role="dialog" class="modal"
-		:class="{
-			'modal-sm': modal.size === 'sm',
-			'modal-lg': modal.size === 'lg',
-			'modal-full': modal.size === 'full',
+	<div
+		class="-container"
+		role="dialog"
+		tabindex="-1"
+		:style="{
+			'z-index': zIndex,
 		}"
 		v-shortkey="[ 'esc' ]"
 		@shortkey="dismissEsc"
 		@click="dismissBackdrop"
 		>
-
-		<div class="modal-content"
-			@mouseover="isHoveringContent = true"
-			@mouseout="isHoveringContent = false"
+		<div
+			class="modal"
+			:class="{
+				'modal-sm': modal.size === 'sm',
+				'modal-lg': modal.size === 'lg',
+				'modal-full': modal.size === 'full',
+			}"
 			>
-			<slot />
+			<div class="modal-content"
+				@mouseover="isHoveringContent = true"
+				@mouseout="isHoveringContent = false"
+				>
+				<slot />
+			</div>
 		</div>
-
 	</div>
 </transition>
