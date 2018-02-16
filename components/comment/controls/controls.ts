@@ -8,8 +8,7 @@ import { AppTooltip } from '../../tooltip/tooltip';
 import { number } from '../../../vue/filters/number';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
-import { State } from 'vuex-class';
-import { AppStore } from '../../../vue/services/app/app-store';
+import { AppStore, AppState } from '../../../vue/services/app/app-store';
 import { CommentModal } from '../modal/modal.service';
 
 @View
@@ -30,12 +29,12 @@ export class AppCommentControls extends Vue {
 	@Prop(Comment) comment: Comment;
 	@Prop(Boolean) showReply?: boolean;
 
-	@State app: AppStore;
+	@AppState user: AppStore['user'];
 
 	get canVote() {
 		// Can't vote on this comment if they wrote the comment. We allow them to try voting if
 		// guest since we show the auth required popup.
-		return !this.app.user || this.comment.user.id !== this.app.user.id;
+		return !this.user || this.comment.user.id !== this.user.id;
 	}
 
 	get votingTooltip() {
@@ -79,10 +78,7 @@ export class AppCommentControls extends Vue {
 		}
 	}
 
-	async onReplyClick() {
-		const comment = await CommentModal.show({ comment: this.comment });
-		if (comment) {
-			this.$emit('reply', comment);
-		}
+	onReplyClick() {
+		CommentModal.show({ comment: this.comment });
 	}
 }

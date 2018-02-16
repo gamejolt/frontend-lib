@@ -15,13 +15,13 @@
 		</template>
 	</app-message-thread-item>
 
-	<app-message-thread-add v-if="app.user">
+	<app-message-thread-add v-if="user">
 		<form-comment
 			:resource="comment.resource"
 			:resource-id="comment.resource_id"
 			:parent-id="comment.parent_id || comment.id"
 			autofocus
-			@submit="onCommentAdd"
+			@submit="_onCommentAdd"
 			/>
 	</app-message-thread-add>
 </div>

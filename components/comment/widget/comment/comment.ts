@@ -1,13 +1,12 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { State } from 'vuex-class';
 import View from '!view!./comment.html';
 
 import { Environment } from '../../../environment/environment.service';
 import { AppCommentWidget } from '../widget';
 import { findRequiredVueParent } from '../../../../utils/vue';
 import { Comment } from '../../comment-model';
-import { AppStore } from '../../../../vue/services/app/app-store';
+import { AppStore, AppState } from '../../../../vue/services/app/app-store';
 import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
 import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
@@ -67,7 +66,7 @@ export class AppCommentWidgetComment extends Vue {
 	@Prop(Number) resourceId: number;
 	@Prop(Boolean) isLastInThread?: boolean;
 
-	@State app: AppStore;
+	@AppState user: AppStore['user'];
 
 	componentId = ++CommentNum;
 	isFollowPending = false;
@@ -106,17 +105,17 @@ export class AppCommentWidgetComment extends Vue {
 	}
 
 	get canRemove() {
-		if (!this.app.user) {
+		if (!this.user) {
 			return false;
 		}
 
 		// The comment author can remove.
-		if (this.app.user.id === this.comment.user.id) {
+		if (this.user.id === this.comment.user.id) {
 			return true;
 		}
 
 		// The owner of the resource the comment is attached to can remove.
-		if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id) {
+		if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.user.id) {
 			return true;
 		}
 
@@ -124,7 +123,7 @@ export class AppCommentWidgetComment extends Vue {
 		// if they have the comments permission.
 		if (this.widget.collaborators) {
 			const collaborator = this.widget.collaborators.find(
-				item => item.user_id === this.app.user!.id
+				item => item.user_id === this.user!.id
 			);
 
 			if (
@@ -148,11 +147,11 @@ export class AppCommentWidgetComment extends Vue {
 		// they aren't logged in
 		// this is a child comment
 		// the resource belongs to them
-		if (!this.app.user) {
+		if (!this.user) {
 			return false;
 		} else if (this.isChild) {
 			return false;
-		} else if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.app.user.id) {
+		} else if (this.widget.resourceOwner && this.widget.resourceOwner.id === this.user.id) {
 			return false;
 		}
 
@@ -164,13 +163,9 @@ export class AppCommentWidgetComment extends Vue {
 		Popover.hideAll();
 	}
 
-	onCommentEdited(comment: Comment) {
+	onCommentEdit(comment: Comment) {
 		this.isEditing = false;
-		this.widget.onCommentEdited(comment);
-	}
-
-	onReplyAdd(reply: Comment) {
-		this.widget.onCommentAdd(reply);
+		this.widget._onCommentEdit(comment);
 	}
 
 	async removeComment() {
@@ -194,7 +189,7 @@ export class AppCommentWidgetComment extends Vue {
 			return;
 		}
 
-		this.widget.onCommentRemoved(this.comment);
+		this.widget._onCommentRemove(this.comment);
 	}
 
 	onFollowClick() {

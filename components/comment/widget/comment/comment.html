@@ -15,7 +15,7 @@
 
 	<template slot="meta">
 		<a
-			v-if="app.user"
+			v-if="user"
 			class="link-muted"
 			v-app-tooltip="$gettext( 'More Options' )"
 			v-app-popover-trigger="`comment-more-options-${componentId}`"
@@ -24,7 +24,7 @@
 		</a>
 
 		<app-popover
-			v-if="app.user"
+			v-if="user"
 			:popover-id="`comment-more-options-${componentId}`"
 			>
 			<div class="list-group list-group-dark">
@@ -35,7 +35,7 @@
 					<translate>Copy Link</translate>
 				</a>
 				<a class="list-group-item has-icon"
-					v-if="app.user.id === comment.user.id"
+					v-if="user.id === comment.user.id"
 					@click="startEdit"
 					>
 					<app-jolticon icon="edit" />
@@ -67,19 +67,19 @@
 					<translate>Remove Comment</translate>
 				</a>
 				<a class="list-group-item has-icon"
-					v-if="app.user.id !== comment.user.id"
+					v-if="user.id !== comment.user.id"
 					@click="report"
 					>
 					<app-jolticon icon="flag warning" />
 					<translate>Report Comment</translate>
 				</a>
 				<a class="list-group-item has-icon"
-					v-if="app.user.permission_level >= 3"
+					v-if="user.permission_level >= 3"
 					:href="`${Environment.baseUrl}/moderate/comments/remove/${ comment.id}`"
 					target="_blank"
 					>
 					<app-jolticon icon="remove warning" />
-					<template v-if="app.user.id === comment.user.id || (widget.resourceOwner && widget.resourceOwner.id === app.user.id)">
+					<template v-if="user.id === comment.user.id || (widget.resourceOwner && widget.resourceOwner.id === user.id)">
 						<translate>Remove Comment (Moderate)</translate>
 					</template>
 					<template v-else>
@@ -102,7 +102,6 @@
 			<app-comment-controls
 				:comment="comment"
 				show-reply
-				@reply="onReplyAdd"
 				/>
 
 			<a
@@ -128,7 +127,7 @@
 	<template v-else>
 		<form-comment
 			:model="comment"
-			@submit="onCommentEdited"
+			@submit="onCommentEdit"
 			@cancel="isEditing = false"
 			/>
 	</template>
