@@ -25,7 +25,7 @@ export type CommentMutations = {
 	'comment/onCommentRemove': Comment;
 };
 
-class CommentBag {
+class CommentStore_ {
 	count = 0;
 	parentCount = 0;
 	comments: Comment[] = [];
@@ -52,23 +52,23 @@ class CommentBag {
 	}
 }
 
-function ensureBag(bags: { [k: string]: CommentBag }, resource: string, resourceId: number) {
-	const bagId = resource + '/' + resourceId;
-	if (!bags[bagId]) {
-		Vue.set(bags, bagId, new CommentBag(resource, resourceId));
+function ensureStore(stores: { [k: string]: CommentStore_ }, resource: string, resourceId: number) {
+	const storeId = resource + '/' + resourceId;
+	if (!stores[storeId]) {
+		Vue.set(stores, storeId, new CommentStore_(resource, resourceId));
 	}
 
-	return bags[bagId];
+	return stores[storeId];
 }
 
 @VuexModule()
 export class CommentStore extends VuexStore<CommentStore, CommentActions, CommentMutations> {
-	bags: { [k: string]: CommentBag } = {};
+	stores: { [k: string]: CommentStore_ } = {};
 
 	@VuexGetter
-	getCommentBag(resource: string, resourceId: number): CommentBag | undefined {
-		const bagId = resource + '/' + resourceId;
-		return this.bags[bagId];
+	getCommentStore(resource: string, resourceId: number): CommentStore_ | undefined {
+		const storeId = resource + '/' + resourceId;
+		return this.stores[storeId];
 	}
 
 	@VuexAction
@@ -94,9 +94,9 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	private addComments(payload: CommentMutations['comment/addComment']) {
 		const { resource, resourceId, comments } = payload;
 		for (const comment of comments) {
-			const bag = ensureBag(this.bags, resource, resourceId);
-			if (!bag.contains(comment)) {
-				bag.comments.push(comment);
+			const store = ensureStore(this.stores, resource, resourceId);
+			if (!store.contains(comment)) {
+				store.comments.push(comment);
 			}
 		}
 	}
@@ -104,20 +104,20 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	@VuexMutation
 	private setParentCommentCount(payload: CommentMutations['comment/setParentCommentCount']) {
 		const { resource, resourceId, count } = payload;
-		const bag = ensureBag(this.bags, resource, resourceId);
-		bag.parentCount = count;
+		const store = ensureStore(this.stores, resource, resourceId);
+		store.parentCount = count;
 	}
 
 	@VuexMutation
 	private setCommentCount(payload: CommentMutations['comment/setCommentCount']) {
 		const { resource, resourceId, count } = payload;
-		const bag = ensureBag(this.bags, resource, resourceId);
-		bag.count = count;
+		const store = ensureStore(this.stores, resource, resourceId);
+		store.count = count;
 	}
 
 	@VuexMutation
 	onCommentAdd(comment: CommentMutations['comment/onCommentAdd']) {
-		const bag = this.getCommentBag(comment.resource, comment.resource_id);
+		const store = this.getCommentStore(comment.resource, comment.resource_id);
 		if (comment.status === Comment.STATUS_SPAM) {
 			Growls.success(
 				Translate.$gettext(
@@ -127,13 +127,13 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 			);
 
 			Analytics.trackEvent('comment-widget', 'spam');
-		} else if (bag && !bag.contains(comment)) {
-			++bag.count;
+		} else if (store && !store.contains(comment)) {
+			++store.count;
 			if (!comment.parent_id) {
-				++bag.parentCount;
-				bag.comments.unshift(comment);
+				++store.parentCount;
+				store.comments.unshift(comment);
 			} else {
-				bag.comments.push(comment);
+				store.comments.push(comment);
 			}
 		}
 	}
@@ -155,13 +155,13 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 
 	@VuexMutation
 	onCommentRemove(comment: CommentMutations['comment/onCommentRemove']) {
-		const bag = this.getCommentBag(comment.resource, comment.resource_id);
-		if (bag) {
+		const store = this.getCommentStore(comment.resource, comment.resource_id);
+		if (store) {
 			if (comment.parent_id) {
-				--bag.parentCount;
+				--store.parentCount;
 			}
-			--bag.count;
-			arrayRemove(bag.comments, i => i.id === comment.id);
+			--store.count;
+			arrayRemove(store.comments, i => i.id === comment.id);
 		}
 	}
 }

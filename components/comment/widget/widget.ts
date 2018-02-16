@@ -43,7 +43,7 @@ export class AppCommentWidget extends Vue {
 
 	@AppState user: AppStore['user'];
 
-	@CommentState getCommentBag: CommentStore['getCommentBag'];
+	@CommentState getCommentStore: CommentStore['getCommentStore'];
 	@CommentAction fetchComments: CommentStore['fetchComments'];
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
@@ -69,24 +69,24 @@ export class AppCommentWidget extends Vue {
 		return !this.isLoading && this.parentCount > this.perPage * this.currentPage;
 	}
 
-	get bag() {
-		return this.getCommentBag(this.resource, this.resourceId);
+	get store() {
+		return this.getCommentStore(this.resource, this.resourceId);
 	}
 
 	get comments() {
-		return this.bag ? this.bag.parentComments : [];
+		return this.store ? this.store.parentComments : [];
 	}
 
 	get childComments() {
-		return this.bag ? this.bag.childComments : [];
+		return this.store ? this.store.childComments : [];
 	}
 
 	get commentsCount() {
-		return this.bag ? this.bag.count : 0;
+		return this.store ? this.store.count : 0;
 	}
 
 	get parentCount() {
-		return this.bag ? this.bag.parentCount : 0;
+		return this.store ? this.store.parentCount : 0;
 	}
 
 	async created() {
