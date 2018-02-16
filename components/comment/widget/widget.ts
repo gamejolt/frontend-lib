@@ -16,7 +16,13 @@ import { AppMessageThreadContent } from '../../message-thread/content/content';
 import { FormComment } from '../add/add';
 import { GameCollaborator } from '../../game/collaborator/collaborator.model';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
-import { CommentState, CommentStore, CommentMutation, CommentAction } from '../comment-store';
+import {
+	CommentState,
+	CommentStore,
+	CommentMutation,
+	CommentAction,
+	CommentStoreModel,
+} from '../comment-store';
 
 let incrementer = 0;
 
@@ -45,10 +51,13 @@ export class AppCommentWidget extends Vue {
 
 	@CommentState getCommentStore: CommentStore['getCommentStore'];
 	@CommentAction fetchComments: CommentStore['fetchComments'];
+	@CommentAction lockCommentStore: CommentStore['lockCommentStore'];
+	@CommentMutation releaseCommentStore: CommentStore['releaseCommentStore'];
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
 	@CommentMutation onCommentRemove: CommentStore['onCommentRemove'];
 
+	store: CommentStoreModel | null = null;
 	id = ++incrementer;
 	hasBootstrapped = false;
 	hasError = false;
@@ -67,10 +76,6 @@ export class AppCommentWidget extends Vue {
 
 	get shouldShowLoadMore() {
 		return !this.isLoading && this.parentCount > this.perPage * this.currentPage;
-	}
-
-	get store() {
-		return this.getCommentStore(this.resource, this.resourceId);
 	}
 
 	get comments() {
@@ -93,6 +98,13 @@ export class AppCommentWidget extends Vue {
 		await this.init();
 	}
 
+	destroyed() {
+		if (this.store) {
+			this.releaseCommentStore(this.store);
+			this.store = null;
+		}
+	}
+
 	@Watch('resourceId')
 	@Watch('resourceName')
 	async init() {
@@ -106,6 +118,11 @@ export class AppCommentWidget extends Vue {
 			? parseInt(this.$route.query.comment_page, 10)
 			: 1;
 
+		if (this.store) {
+			this.releaseCommentStore(this.store);
+			this.store = null;
+		}
+
 		await this._fetchComments();
 	}
 
@@ -116,7 +133,12 @@ export class AppCommentWidget extends Vue {
 			const resource = this.resource;
 			const resourceId = this.resourceId;
 			const page = this.currentPage;
-			const payload = await this.fetchComments({ resource, resourceId, page });
+
+			if (!this.store) {
+				this.store = await this.lockCommentStore({ resource, resourceId });
+			}
+
+			const payload = await this.fetchComments({ store: this.store, page });
 
 			this.isLoading = false;
 			this.hasBootstrapped = true;

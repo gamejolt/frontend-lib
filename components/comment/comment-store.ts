@@ -13,22 +13,22 @@ export const CommentAction = namespace(CommentStoreNamespace, Action);
 export const CommentMutation = namespace(CommentStoreNamespace, Mutation);
 
 export type CommentActions = {
-	'comment/fetchComments': { resource: string; resourceId: number; page?: number };
+	'comment/fetchComments': { store: CommentStoreModel; page?: number };
+	'comment/lockCommentStore': { resource: string; resourceId: number };
 };
 
 export type CommentMutations = {
-	'comment/addComment': { resource: string; resourceId: number; comments: Comment[] };
-	'comment/setCommentCount': { resource: string; resourceId: number; count: number };
-	'comment/setParentCommentCount': { resource: string; resourceId: number; count: number };
+	'comment/releaseCommentStore': CommentStoreModel;
 	'comment/onCommentAdd': Comment;
 	'comment/onCommentEdit': Comment;
 	'comment/onCommentRemove': Comment;
 };
 
-class CommentStore_ {
+export class CommentStoreModel {
 	count = 0;
 	parentCount = 0;
 	comments: Comment[] = [];
+	locks = 0;
 
 	constructor(public resource: string, public resourceId: number) {}
 
@@ -52,30 +52,29 @@ class CommentStore_ {
 	}
 }
 
-function ensureStore(stores: { [k: string]: CommentStore_ }, resource: string, resourceId: number) {
-	const storeId = resource + '/' + resourceId;
-	if (!stores[storeId]) {
-		Vue.set(stores, storeId, new CommentStore_(resource, resourceId));
-	}
-
-	return stores[storeId];
-}
-
 @VuexModule()
 export class CommentStore extends VuexStore<CommentStore, CommentActions, CommentMutations> {
-	stores: { [k: string]: CommentStore_ } = {};
+	stores: { [k: string]: CommentStoreModel } = {};
 
 	@VuexGetter
-	getCommentStore(resource: string, resourceId: number): CommentStore_ | undefined {
+	getCommentStore(resource: string, resourceId: number): CommentStoreModel | undefined {
 		const storeId = resource + '/' + resourceId;
 		return this.stores[storeId];
 	}
 
 	@VuexAction
-	async fetchComments(payload: CommentActions['comment/fetchComments']) {
-		const { resource, resourceId, page } = payload;
+	async lockCommentStore(payload: CommentActions['comment/lockCommentStore']) {
+		const { resource, resourceId } = payload;
+		const storeId = resource + '/' + resourceId;
+		this._ensureCommentStore(payload);
+		return this.stores[storeId];
+	}
 
-		const response = await Comment.fetch(resource, resourceId, page || 1);
+	@VuexAction
+	async fetchComments(payload: CommentActions['comment/fetchComments']) {
+		const { store, page } = payload;
+
+		const response = await Comment.fetch(store.resource, store.resourceId, page || 1);
 
 		const count = response.count || 0;
 		const parentCount = response.parentCount || 0;
@@ -83,18 +82,17 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 			Comment.populate(response.childComments)
 		);
 
-		this.setCommentCount({ resource, resourceId, count });
-		this.setParentCommentCount({ resource, resourceId, count: parentCount });
-		this.addComments({ resource, resourceId, comments });
+		this._setCommentCount({ store, count });
+		this._setParentCommentCount({ store, count: parentCount });
+		this._addComments({ store, comments });
 
 		return response;
 	}
 
 	@VuexMutation
-	private addComments(payload: CommentMutations['comment/addComment']) {
-		const { resource, resourceId, comments } = payload;
+	private _addComments(payload: { store: CommentStoreModel; comments: Comment[] }) {
+		const { store, comments } = payload;
 		for (const comment of comments) {
-			const store = ensureStore(this.stores, resource, resourceId);
 			if (!store.contains(comment)) {
 				store.comments.push(comment);
 			}
@@ -102,16 +100,14 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	}
 
 	@VuexMutation
-	private setParentCommentCount(payload: CommentMutations['comment/setParentCommentCount']) {
-		const { resource, resourceId, count } = payload;
-		const store = ensureStore(this.stores, resource, resourceId);
+	private _setParentCommentCount(payload: { store: CommentStoreModel; count: number }) {
+		const { store, count } = payload;
 		store.parentCount = count;
 	}
 
 	@VuexMutation
-	private setCommentCount(payload: CommentMutations['comment/setCommentCount']) {
-		const { resource, resourceId, count } = payload;
-		const store = ensureStore(this.stores, resource, resourceId);
+	private _setCommentCount(payload: { store: CommentStoreModel; count: number }) {
+		const { store, count } = payload;
 		store.count = count;
 	}
 
@@ -162,6 +158,27 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 			}
 			--store.count;
 			arrayRemove(store.comments, i => i.id === comment.id);
+		}
+	}
+
+	@VuexMutation
+	private _ensureCommentStore(payload: { resource: string; resourceId: number }) {
+		const { resource, resourceId } = payload;
+		const storeId = resource + '/' + resourceId;
+
+		if (!this.stores[storeId]) {
+			Vue.set(this.stores, storeId, new CommentStoreModel(resource, resourceId));
+		}
+
+		++this.stores[storeId].locks;
+	}
+
+	@VuexMutation
+	releaseCommentStore(store: CommentMutations['comment/releaseCommentStore']) {
+		const storeId = store.resource + '/' + store.resourceId;
+		--this.stores[storeId].locks;
+		if (this.stores[storeId].locks <= 0) {
+			Vue.delete(this.stores, storeId);
 		}
 	}
 }
