@@ -2,26 +2,22 @@
  * Creates an animation.
  * Generates the correct selectors/markup for both non-angular and angular animations.
  */
-create-animation( anim, to, direction = false )
-
+create-animation($anim, $to, $direction = false)
 	// Find the angular state that we're going to.
-	_ng-to = to == 'in' ? 'enter' : 'leave'
-
+	$_vue-to = $to == 'in' ? 'enter' : 'leave'
 	// Get the selectors.
-	_selector = anim + '-' + to
-	_ng-selector = anim + '-' + _ng-to
+	$_selector = $anim + '-' + $to
+	$_vue-selector = $anim + '-' + $_vue-to
 
 	// If we have a direction, add it in.
-	if direction
-		_selector += '-' + direction
-		_ng-selector += '-' + direction
+	if ($direction)
+		$_selector += '-' + $direction
+		$_vue-selector += '-' + $direction
 
 	// For class based animation.
-	.anim-{ _selector }
-		{ block }
+	.anim-{$_selector}
+		{block}
 
-	// For angular/vue based animations.
-	.anim-{ _ng-selector }
-		&.ng-{ _ng-to }
-		&.v-{ _ng-to }-active
-			{ block }
+	// For vue based animations.
+	.anim-{$_vue-selector}.v-{$_vue-to}-active
+		{block}
