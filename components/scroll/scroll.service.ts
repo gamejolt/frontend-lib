@@ -26,12 +26,13 @@ export class Scroll {
 	// called that would use the context.
 	static context: HTMLElement | HTMLDocument = typeof document !== 'undefined'
 		? document
-		: undefined as any;
+		: (undefined as any);
 	static contextOffsetTop = 0;
 	static offsetTop = 0;
 
 	private static scrollListener: any;
-	static scrollChanges = new Subject<ScrollChange>();
+	private static cachedScrollChange: ScrollChange | null = null;
+	static scrollChanges = new Subject<void>();
 
 	/**
 	 * Sets the extra offset for scrolling. This can be used if there is a fixed
@@ -47,15 +48,10 @@ export class Scroll {
 	static setContext(element: HTMLElement | undefined) {
 		// We just bootstrap the scroll listener once.
 		if (!this.scrollListener) {
-			this.scrollListener = () =>
-				this.scrollChanges.next({
-					top: this.getScrollTop(),
-					left: this.getScrollLeft(),
-					height: this.getScrollWindowHeight(),
-					width: this.getScrollWindowWidth(),
-					scrollHeight: Scroll.getScrollHeight(),
-					scrollWidth: Scroll.getScrollWidth(),
-				});
+			this.scrollListener = () => {
+				this.cachedScrollChange = null;
+				this.scrollChanges.next();
+			};
 		}
 
 		// If we already have a context set, we gotta remove the scroll handler
@@ -76,8 +72,23 @@ export class Scroll {
 			'scroll',
 			this.scrollListener,
 			// TODO: Fix once TS has this type def.
-			supportsPassiveEvents ? { passive: true } as any : false
+			supportsPassiveEvents ? ({ passive: true } as any) : false
 		);
+	}
+
+	static getScrollChange() {
+		if (!this.cachedScrollChange) {
+			this.cachedScrollChange = {
+				top: this.getScrollTop(),
+				left: this.getScrollLeft(),
+				height: this.getScrollWindowHeight(),
+				width: this.getScrollWindowWidth(),
+				scrollHeight: Scroll.getScrollHeight(),
+				scrollWidth: Scroll.getScrollWidth(),
+			};
+		}
+
+		return this.cachedScrollChange;
 	}
 
 	static getScrollTop(element?: HTMLElement | HTMLDocument): number {
@@ -98,7 +109,9 @@ export class Scroll {
 		}
 
 		if (element instanceof HTMLDocument) {
-			return window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
+			return (
+				window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft
+			);
 		}
 
 		return element.scrollLeft;

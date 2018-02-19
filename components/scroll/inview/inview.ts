@@ -1,24 +1,23 @@
 import Vue, { CreateElement } from 'vue';
 import { Component, Watch, Prop } from 'vue-property-decorator';
+import 'rxjs/add/operator/sampleTime';
 
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
+
+const ScrollDebounceTime = 200;
 
 // We set up a global listener instead of having each element setting up
 // listeners.
 let items: AppScrollInview[] = [];
 
 if (!GJ_IS_SSR) {
-	Scroll.scrollChanges.subscribe(onScroll);
+	Scroll.scrollChanges.debounceTime(ScrollDebounceTime).subscribe(onScroll);
 }
 
 let lastScrollHeight: number | undefined = undefined;
-function onScroll(scroll?: { scrollHeight: number; top: number; height: number }) {
-	// These values might come from the scrollChanges subscription, or manually
-	// when a check is queued.
-	const scrollTop = scroll ? scroll.top : Scroll.getScrollTop();
-	const windowHeight = scroll ? scroll.height : Scroll.getScrollWindowHeight();
-	const scrollHeight = scroll ? scroll.scrollHeight : Scroll.getScrollHeight();
+function onScroll() {
+	const { top, height, scrollHeight } = Scroll.getScrollChange();
 
 	for (const item of items) {
 		// We only calculate the bounding box when scroll height changes. This
@@ -28,9 +27,9 @@ function onScroll(scroll?: { scrollHeight: number; top: number; height: number }
 		}
 
 		let inView = true;
-		if (item.top > scrollTop + windowHeight) {
+		if (item.top > top + height) {
 			inView = false;
-		} else if (item.bottom < scrollTop) {
+		} else if (item.bottom < top) {
 			inView = false;
 		}
 
@@ -39,7 +38,7 @@ function onScroll(scroll?: { scrollHeight: number; top: number; height: number }
 		}
 	}
 
-	lastScrollHeight = windowHeight;
+	lastScrollHeight = height;
 }
 
 let checkTimeout: number | undefined;

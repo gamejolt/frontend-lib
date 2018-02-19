@@ -1,11 +1,17 @@
 import Vue from 'vue';
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/sampleTime';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./affix.html?style=./affix.styl';
 
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
+
+/**
+ * Wait this long between scroll checks.
+ */
+const ScrollSampleTime = 500;
 
 @View
 @Component({})
@@ -58,7 +64,10 @@ export class AppScrollAffix extends Vue {
 			this.refreshOffsetLoop();
 		});
 
-		this.scroll$ = Scroll.scrollChanges.subscribe(change => this.checkScroll(change.top));
+		this.scroll$ = Scroll.scrollChanges.sampleTime(ScrollSampleTime).subscribe(() => {
+			const { top } = Scroll.getScrollChange();
+			this.checkScroll(top);
+		});
 		this.refreshOffsetLoop();
 	}
 

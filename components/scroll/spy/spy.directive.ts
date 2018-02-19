@@ -1,8 +1,14 @@
 import 'core-js/es6/map';
+import 'rxjs/add/operator/sampleTime';
 import { DirectiveOptions } from 'vue';
 
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
+
+/**
+ * Wait this long between scroll checks.
+ */
+const ScrollSampleTime = 500;
 
 interface Spy {
 	id: string;
@@ -47,9 +53,11 @@ function activateSpy(spy: Spy) {
 
 if (!GJ_IS_SSR) {
 	let lastScrollHeight: number | undefined = undefined;
-	Scroll.scrollChanges.subscribe(changes => {
-		const scrollTop = Math.ceil(changes.top);
-		const scrollHeight = changes.height;
+	Scroll.scrollChanges.sampleTime(ScrollSampleTime).subscribe(() => {
+		const { top, height } = Scroll.getScrollChange();
+
+		const scrollTop = Math.ceil(top);
+		const scrollHeight = height;
 		const maxScroll =
 			scrollHeight -
 			(Scroll.context === document
