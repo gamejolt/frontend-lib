@@ -5,14 +5,19 @@ import 'rxjs/add/operator/sampleTime';
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
 
-const ScrollDebounceTime = 200;
+const ScrollDebounceTime = 300;
+const ScrollSampleTime = 1000;
 
 // We set up a global listener instead of having each element setting up
 // listeners.
 let items: AppScrollInview[] = [];
 
 if (!GJ_IS_SSR) {
+	// We debounce to check at the end of all the scroll events, but also sample every now and then
+	// to check periodically while scrolling. This is so that smooth scrolling will still check at
+	// the end of the scroll when the velocity is slowing down.
 	Scroll.scrollChanges.debounceTime(ScrollDebounceTime).subscribe(onScroll);
+	Scroll.scrollChanges.sampleTime(ScrollSampleTime).subscribe(onScroll);
 }
 
 let lastScrollHeight: number | undefined = undefined;
