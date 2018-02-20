@@ -22,6 +22,8 @@ import { GameCollaborator } from '../game/collaborator/collaborator.model';
 import { Mention } from '../mention/mention.model';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
+import { CommentVideo } from '../comment/video/video-model';
+import { CommentVideoModal } from '../comment/video/modal/modal.service';
 
 function getRouteLocationForModel(model: Game | User | FiresidePost) {
 	if (model instanceof User) {
@@ -55,6 +57,7 @@ export class Notification extends Model {
 	static TYPE_USER_FOLLOW = 'user-follow';
 	static TYPE_COLLABORATOR_INVITE = 'collaborator-invite';
 	static TYPE_MENTION = 'mention';
+	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 
 	user_id: number;
 	type: string;
@@ -77,7 +80,8 @@ export class Notification extends Model {
 		| OrderItem
 		| Subscription
 		| GameCollaborator
-		| Mention;
+		| Mention
+		| CommentVideo;
 
 	to_resource: string;
 	to_resource_id: number;
@@ -158,6 +162,10 @@ export class Notification extends Model {
 			this.action_model = new Mention(data.action_resource_model);
 			this.jolticon = 'jolticon-comment';
 			this.is_user_based = true;
+		} else if (this.type === Notification.TYPE_COMMENT_VIDEO_ADD) {
+			this.action_model = new CommentVideo(data.action_resource_model);
+			this.jolticon = 'jolticon-comment';
+			this.is_user_based = true;
 		}
 
 		// Keep memory clean after bootstrapping the models.
@@ -227,6 +235,10 @@ export class Notification extends Model {
 	async go(router: VueRouter) {
 		if (this.routeLocation) {
 			router.push(this.routeLocation);
+		} else if (this.type === Notification.TYPE_COMMENT_VIDEO_ADD) {
+			if (this.action_model instanceof CommentVideo) {
+				CommentVideoModal.show(this.action_model);
+			}
 		} else if (
 			this.type === Notification.TYPE_COMMENT_ADD ||
 			this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ||
@@ -333,6 +345,15 @@ export function getNotificationText(notification: Notification) {
 				postTitle = notification.action_model.title;
 			}
 			return `${gameTitle} - ${postTitle}`;
+		}
+
+		case Notification.TYPE_COMMENT_VIDEO_ADD: {
+			let videoTitle = '';
+			if (notification.action_model instanceof CommentVideo) {
+				videoTitle = notification.action_model.title;
+			}
+
+			return videoTitle;
 		}
 
 		case Notification.TYPE_COMMENT_ADD_OBJECT_OWNER: {
