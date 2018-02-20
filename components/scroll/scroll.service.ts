@@ -9,6 +9,11 @@ if (!GJ_IS_SSR) {
 	require('smoothscroll-polyfill').polyfill();
 }
 
+/**
+ * How long to wait after scrolling before we emit the scroll stop observable.
+ */
+const ScrollStopDebounceTime = 500;
+
 export interface ScrollChange {
 	top: number;
 	left: number;
@@ -32,7 +37,10 @@ export class Scroll {
 
 	private static scrollListener: any;
 	private static cachedScrollChange: ScrollChange | null = null;
+	private static scrollStopTimeout: NodeJS.Timer | null = null;
 	static scrollChanges = new Subject<void>();
+	static scrollStart = new Subject<void>();
+	static scrollStop = new Subject<void>();
 
 	/**
 	 * Sets the extra offset for scrolling. This can be used if there is a fixed
@@ -51,6 +59,23 @@ export class Scroll {
 			this.scrollListener = () => {
 				this.cachedScrollChange = null;
 				this.scrollChanges.next();
+
+				// As soon as we start scrolling, emit the scrollStart.
+				if (!Screen.isScrolling) {
+					Screen.isScrolling = true;
+					this.scrollStart.next();
+				}
+
+				// Wait a bit of time of not scrolling before we emit scrollStop.
+				if (this.scrollStopTimeout) {
+					clearTimeout(this.scrollStopTimeout);
+				}
+
+				this.scrollStopTimeout = setTimeout(() => {
+					this.scrollStop.next();
+					this.scrollStopTimeout = null;
+					Screen.isScrolling = false;
+				}, ScrollStopDebounceTime);
 			};
 		}
 

@@ -85,6 +85,11 @@ export class Screen {
 					'dpi)'
 			).matches;
 
+	/**
+	 * Whether or now the window is being scrolled. Gets updated by the Scroll service.
+	 */
+	static isScrolling = false;
+
 	static resizeChanges = new Subject<void>();
 
 	/**
@@ -105,7 +110,11 @@ export class Screen {
 			this.windowBreakpoint = 'xs';
 		} else if (
 			window.matchMedia(
-				'only screen and (min-width: ' + SM_WIDTH + 'px) and (max-width: ' + (MD_WIDTH - 1) + 'px)'
+				'only screen and (min-width: ' +
+					SM_WIDTH +
+					'px) and (max-width: ' +
+					(MD_WIDTH - 1) +
+					'px)'
 			).matches
 		) {
 			this.isWindowXs = false;
@@ -115,7 +124,11 @@ export class Screen {
 			this.windowBreakpoint = 'sm';
 		} else if (
 			window.matchMedia(
-				'only screen and (min-width: ' + MD_WIDTH + 'px) and (max-width: ' + (LG_WIDTH - 1) + 'px)'
+				'only screen and (min-width: ' +
+					MD_WIDTH +
+					'px) and (max-width: ' +
+					(LG_WIDTH - 1) +
+					'px)'
 			).matches
 		) {
 			this.isWindowXs = false;

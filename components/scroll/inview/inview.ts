@@ -1,27 +1,46 @@
 import Vue, { CreateElement } from 'vue';
 import { Component, Watch, Prop } from 'vue-property-decorator';
-import 'rxjs/add/operator/sampleTime';
+import 'rxjs/add/operator/throttleTime';
 
 import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
 
-const ScrollDebounceTime = 300;
-const ScrollSampleTime = 1000;
+/**
+ * When the scroll velocity is below this minimum distance in px, we will check inview items every
+ * ScrollThrottleTime. This ensures that if they're scrolling constantly, but really slowly, we'll be
+ * able to do the checks still even though debounce won't fire.
+ */
+const ScrollVelocityMinimum = 3000;
+const ScrollThrottleTime = 1000;
 
 // We set up a global listener instead of having each element setting up
 // listeners.
 let items: AppScrollInview[] = [];
 
 if (!GJ_IS_SSR) {
-	// We debounce to check at the end of all the scroll events, but also sample every now and then
-	// to check periodically while scrolling. This is so that smooth scrolling will still check at
-	// the end of the scroll when the velocity is slowing down.
-	Scroll.scrollChanges.debounceTime(ScrollDebounceTime).subscribe(onScroll);
-	Scroll.scrollChanges.sampleTime(ScrollSampleTime).subscribe(onScroll);
+	Scroll.scrollStop.subscribe(check);
+	Scroll.scrollChanges.throttleTime(ScrollThrottleTime).subscribe(onScrollThrottle);
+}
+
+let lastScrollTop = 0;
+let lastThrottleTime = Date.now();
+function onScrollThrottle() {
+	const now = Date.now();
+	const scrollTop = Scroll.getScrollTop();
+	const deltaDistance = scrollTop - lastScrollTop;
+	const deltaTime = (now - lastThrottleTime) / 1000;
+	const velocity = deltaDistance / deltaTime;
+
+	if (Math.abs(velocity) < ScrollVelocityMinimum) {
+		check();
+	}
+
+	lastThrottleTime = now;
+	lastScrollTop = scrollTop;
 }
 
 let lastScrollHeight: number | undefined = undefined;
-function onScroll() {
+function check() {
 	const { top, height, scrollHeight } = Scroll.getScrollChange();
 
 	for (const item of items) {
@@ -55,7 +74,7 @@ let checkTimeout: number | undefined;
 function queueCheck() {
 	if (!checkTimeout) {
 		checkTimeout = setTimeout(() => {
-			onScroll();
+			check();
 			checkTimeout = undefined;
 		});
 	}
