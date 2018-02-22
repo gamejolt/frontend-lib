@@ -8,7 +8,6 @@
 			'btn-sparse': isSparse,
 			'btn-circle': circle,
 		}"
-		:disabled="app.user && app.user.id === post.user.id"
 		v-app-tooltip="tooltip"
 		>
 		<span class="btn-badge" v-if="!isSparse && post.like_count">
