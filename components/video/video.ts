@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./video.html?style=./video.styl';
 
 import { AppLoading } from '../../vue/components/loading/loading';
@@ -20,10 +20,23 @@ export class AppVideo extends Vue {
 	@Prop(String) mp4: string;
 	@Prop({ type: Boolean, default: false })
 	showLoading: boolean;
+	@Prop({ type: Boolean, default: true })
+	shouldPlay: boolean;
 
 	isLoaded = false;
 
 	private video: HTMLVideoElement;
+
+	@Watch('shouldPlay')
+	onShouldPlayChange() {
+		if (this.isLoaded) {
+			if (this.shouldPlay) {
+				this.video.play();
+			} else {
+				this.video.pause();
+			}
+		}
+	}
 
 	mounted() {
 		const webm = document.createElement('source');
@@ -47,8 +60,10 @@ export class AppVideo extends Vue {
 		// Gotta remove once it fires the first time.
 		let canplaythrough = () => {
 			this.isLoaded = true;
-			this.video.play();
 			this.video.removeEventListener('canplaythrough', canplaythrough);
+			if (this.shouldPlay) {
+				this.video.play();
+			}
 		};
 
 		this.video.addEventListener('canplaythrough', canplaythrough);
