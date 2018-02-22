@@ -18,28 +18,29 @@ $toggle-width = $input-height-base * 2 // + $toggle-padding * 2
 	user-select: none
 	outline: none
 
-	&-checked
-		background-color: $gj-dark-green
-
-	&-knob
-		display: block
-		margin: $toggle-padding
-		background-color: $white
-		width: ($input-height-base - $toggle-padding * 2)
-		height: @width
-		border-radius: @width
-		transition: transform $strong-ease-out 300ms
-
-		.toggle-checked &
-			transform: translateX( $input-height-base )
-
 	// This does a sort of outline style.
 	&:focus
-		box-shadow: 0px 0px 0px 2px $white, 0px 0px 0px 4px rgba( $input-border-focus, 0.5 );
+		box-shadow: 0 0 0 2px $white, 0 0 0 4px rgba($input-border-focus, 0.5)
 
-	&[disabled]
+	&[disabled], &.-disabled
 		opacity: 0.5
 		cursor: not-allowed !important
+		box-shadow: none
 
 	.form-horizontal &
 		margin-top: ($padding-base-vertical + 1px)
+
+.-checked
+	background-color: $gj-dark-green
+
+.-knob
+	display: block
+	margin: $toggle-padding
+	background-color: $white
+	width: ($input-height-base - $toggle-padding * 2)
+	height: @width
+	border-radius: @width
+	transition: transform $strong-ease-out 300ms
+
+	.-checked &
+		transform: translateX($input-height-base)
