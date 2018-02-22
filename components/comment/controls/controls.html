@@ -6,7 +6,6 @@
 				'active btn-success': comment.user_vote
 			}"
 			@click="onVoteClick()"
-			:disabled="!canVote"
 			v-app-tooltip="votingTooltip"
 			v-app-track-event="`comment-widget:vote-click`"
 			>
