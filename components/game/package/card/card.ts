@@ -162,8 +162,6 @@ export class AppGamePackageCard extends Vue {
 			operation = 'download';
 		}
 
-		console.log(`${operation}ing build`);
-
 		if (operation === 'download') {
 			this.download(build);
 		} else if (operation === 'play') {
@@ -198,22 +196,6 @@ export class AppGamePackageCard extends Vue {
 			// isOwned: this.isOwned || this.isPartner,
 			key: this.accessKey,
 		});
-	}
-
-	integer(pricing: SellablePricing) {
-		return pricing.amount;
-	}
-
-	decimal(pricing: SellablePricing) {
-		let amount = pricing.amount;
-		amount %= 100;
-
-		let amountStr = amount + '';
-		if (amount < 10) {
-			amountStr = amount + '0';
-		}
-
-		return amountStr;
 	}
 
 	copyProviderKey(key: LinkedKey) {

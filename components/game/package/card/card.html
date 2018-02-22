@@ -26,12 +26,12 @@
 					-{{ salePercentageOff }}%
 				</span>
 				<strong class="game-package-card-pricing-amount">
-					{{ integer( pricing ) | currency( undefined, 0 ) }}<span class="game-package-card-pricing-decimal">.{{ decimal( pricing ) }}</span>
+					{{ pricing.amount | currency }}
 				</strong>
 				<span class="game-package-card-pricing-amount game-package-card-pricing-amount-old"
 					v-if="sale"
 					>
-					{{ integer( saleOldPricing ) | currency( undefined, 0 ) }}<span class="game-package-card-pricing-decimal">.{{ decimal( saleOldPricing ) }}</span>
+					{{ saleOldPricing.amount | currency }}
 				</span>
 				<br><span class="game-package-card-pricing-tag muted">or more</span>
 			</div>
