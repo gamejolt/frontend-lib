@@ -17,11 +17,7 @@
 		</span>
 	</span>
 
-	<!--
-		Only show the reply if isn't a child.
-		We only show it on the parent comments.
-	-->
-	<span v-if="showReply && !comment.parent_id" v-app-auth-required>
+	<span v-if="showReply" v-app-auth-required>
 		<button
 			class="btn btn-outline btn-sparse btn-circle"
 			@click="onReplyClick()"
