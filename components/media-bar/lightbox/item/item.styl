@@ -10,6 +10,9 @@
 	height: 'calc(100vh - %s)' % $-controls-height
 	padding-bottom: $-controls-height
 
+	@media only screen and (orientation: landscape)
+		height: 100vh
+
 	@media $media-sm-up
 		height: 100%
 		padding-bottom: 0
@@ -32,6 +35,9 @@ img
 	align-items: center
 	width: 100%
 	min-height: 100%
+
+	@media only screen and (orientation: landscape)
+		padding-bottom: $-controls-height
 
 	@media $media-sm-up
 		height: 100%
