@@ -6,12 +6,10 @@ import './modal-content.styl';
 import { Modal } from './modal.service';
 import { AppBackdrop } from '../backdrop/backdrop';
 import { Backdrop } from '../backdrop/backdrop.service';
-import { bootstrapShortkey } from '../../vue/shortkey';
 import { findRequiredVueParent } from '../../utils/vue';
 import { BaseModal } from './base';
 import { Screen } from '../screen/screen-service';
-
-bootstrapShortkey();
+import { EscapeStack } from '../escape-stack/escape-stack.service';
 
 @View
 @Component({})
@@ -23,6 +21,7 @@ export class AppModal extends Vue {
 
 	private backdrop?: AppBackdrop;
 	private beforeEachDeregister?: Function;
+	private escapeCallback?: Function;
 
 	get zIndex() {
 		return 1050 + this.modal.index;
@@ -45,6 +44,9 @@ export class AppModal extends Vue {
 			this.dismissRouteChange();
 			next();
 		});
+
+		this.escapeCallback = () => this.dismissEsc();
+		EscapeStack.register(this.escapeCallback);
 	}
 
 	destroyed() {
@@ -57,6 +59,11 @@ export class AppModal extends Vue {
 		if (this.beforeEachDeregister) {
 			this.beforeEachDeregister();
 			this.beforeEachDeregister = undefined;
+		}
+
+		if (this.escapeCallback) {
+			EscapeStack.deregister(this.escapeCallback);
+			this.escapeCallback = undefined;
 		}
 	}
 
