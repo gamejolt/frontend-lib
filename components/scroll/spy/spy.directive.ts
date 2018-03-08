@@ -53,16 +53,12 @@ function activateSpy(spy: Spy) {
 
 if (!GJ_IS_SSR) {
 	let lastScrollHeight: number | undefined = undefined;
-	Scroll.scrollChanges.sampleTime(ScrollSampleTime).subscribe(() => {
-		const { top, height } = Scroll.getScrollChange();
+	Scroll.watcher.changes.sampleTime(ScrollSampleTime).subscribe(() => {
+		const { top, height } = Scroll.watcher.getScrollChange();
 
 		const scrollTop = Math.ceil(top);
 		const scrollHeight = height;
-		const maxScroll =
-			scrollHeight -
-			(Scroll.context === document
-				? window.innerHeight
-				: (Scroll.context as HTMLElement).offsetHeight);
+		const maxScroll = scrollHeight - window.innerHeight;
 		let found = false;
 
 		// Only refresh the spy data if the scroll offset has changed.
