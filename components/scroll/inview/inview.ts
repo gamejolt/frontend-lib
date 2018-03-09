@@ -59,15 +59,18 @@ export class AppScrollInview extends Vue {
 	}
 
 	recalcBox() {
-		const offset = Ruler.offset(this.$el);
-		this.top = offset.top - this.extraPadding;
+		const rect = this.$el.getBoundingClientRect();
+		let top = rect.top;
 
-		// Offset gets returned relative to the window. We need to make this relative to our parent.
-		if (!(this.container.context instanceof HTMLDocument)) {
-			const parentOffset = Ruler.offset(this.container.context);
-			this.top -= parentOffset.top;
+		if (this.container.context instanceof HTMLDocument) {
+			top += window.pageYOffset || document.documentElement.scrollTop;
+		} else if (!(this.container.context instanceof HTMLDocument)) {
+			const parentRect = this.container.context.getBoundingClientRect();
+			top -= parentRect.top;
+			top += this.container.context.scrollTop;
 		}
 
-		this.bottom = offset.top + offset.height + this.extraPadding;
+		this.top = top - this.extraPadding;
+		this.bottom = top + rect.height + this.extraPadding;
 	}
 }

@@ -72,17 +72,18 @@ export class ScrollInviewContainer {
 		}
 
 		this.queueTimeout = setTimeout(() => {
-			this.check();
+			// We force a recalc of all the items.
+			this.check(true);
 			this.queueTimeout = undefined;
 		});
 	}
 
-	check() {
+	private check(forceRecalc?: boolean) {
 		const { top, height, scrollHeight } = this.scrollWatcher.getScrollChange();
 
 		// We only calculate the bounding box when scroll height changes. This reduces the amount of
 		// reflows and what not.
-		const shouldRecalc = this.lastScrollHeight !== scrollHeight;
+		const shouldRecalc = forceRecalc || this.lastScrollHeight !== scrollHeight;
 
 		for (const item of this.items) {
 			if (shouldRecalc) {
