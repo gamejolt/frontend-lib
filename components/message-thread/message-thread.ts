@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./message-thread.html';
+import View from '!view!./message-thread.html?style=./message-thread.styl';
 
 import { AppTimelineList } from '../timeline-list/timeline-list';
 

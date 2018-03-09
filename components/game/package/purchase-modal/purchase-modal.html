@@ -16,19 +16,13 @@
 		<form-game-package-payment
 			:game="game"
 			:package="package"
+			:build="build"
 			:sellable="sellable"
 			:partner-key="partnerKey"
 			:partner="partner"
+			:operation="operation"
 			@bought="bought"
+			@skip="skipPayment"
 			/>
-
-		<div v-if="sellable.type === 'pwyw' && build">
-			<hr>
-			<app-jolticon icon="download-box" />
-			<a class="link-unstyled small" @click="skipPayment">
-				<translate v-if="!GJ_IS_CLIENT">No thanks, take me to the download.</translate>
-				<translate v-else>No thanks, just install it.</translate>
-			</a>
-		</div>
 	</div>
 </app-modal>

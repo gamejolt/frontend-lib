@@ -24,20 +24,32 @@
 						developer: game.developer.display_name,
 					}"
 					>
-					Show %{ developer } some love by supporting them.
+					Show %{ developer } some love by supporting them!
 				</translate>
 			</template>
 			<template v-else>
 				<span v-translate="{ amount: formattedAmount }">
-					This developer suggests paying <b>%{ amount }</b>, but you're able to pay what you want.
+					This developer suggests paying <b>%{ amount }</b>, but you're able to pay what you want!
 				</span>
 			</template>
 		</p>
 		<p v-else-if="sellable.type === 'paid'">
 			<span v-translate="{ amount: formattedAmount }">
-				The developer has set the price of this game to <b>%{ amount }</b>, but you're able to support them by giving more.
+				The developer has set the price of this game to <b>%{ amount }</b>, but you're able to support them by giving more!
 			</span>
 		</p>
+
+		<div v-if="sellable.type === 'pwyw' && build">
+			<a class="small" @click="$emit('skip')">
+				<template v-if="operation == 'download'">
+					<translate v-if="!GJ_IS_CLIENT">No thanks, take me to the download.</translate>
+					<translate v-else>No thanks, just install it.</translate>
+				</template>
+				<template v-else>
+					<translate>No thanks, just play the game.</translate>
+				</template>
+			</a>
+		</div>
 
 		<hr>
 	</template>

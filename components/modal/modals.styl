@@ -1,8 +1,9 @@
 @require '~styles/variables'
 
+.modals
+	position: relative
+	z-index: $zindex-modal
+
 // Kill scroll on body.
 >>> .modal-open
 	overflow: hidden
-
->>> .modal-backdrop
-	z-index: $zindex-modal-background !important

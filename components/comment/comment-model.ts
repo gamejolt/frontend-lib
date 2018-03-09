@@ -4,6 +4,18 @@ import { CommentVote } from './vote/vote-model';
 import { User } from '../user/user.model';
 import { Api } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
+import { Subscription } from '../subscription/subscription.model';
+
+export async function fetchComment(id: number) {
+	try {
+		const payload = await Api.sendRequest(`/comments/get-comment/${id}`, null, {
+			detach: true,
+		});
+		return new Comment(payload.comment);
+	} catch (e) {
+		// Probably removed.
+	}
+}
 
 export class Comment extends Model {
 	static readonly STATUS_REMOVED = 0;
@@ -23,8 +35,10 @@ export class Comment extends Model {
 	modified_on?: number;
 	lang: string;
 	videos: CommentVideo[] = [];
+	subscription?: Subscription;
 
 	isVotePending = false;
+	isFollowPending = false;
 
 	get permalink() {
 		return Environment.baseUrl + '/x/permalink/comment/' + this.id;
@@ -44,6 +58,10 @@ export class Comment extends Model {
 		if (data.user_vote) {
 			this.user_vote = new CommentVote(data.user_vote);
 		}
+
+		if (data.subscription) {
+			this.subscription = new Subscription(data.subscription);
+		}
 	}
 
 	static fetch(resource: string, resourceId: number, page: number) {
@@ -52,7 +70,9 @@ export class Comment extends Model {
 			query = '?page=' + page;
 		}
 
-		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, null, { detach: true });
+		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, null, {
+			detach: true,
+		});
 	}
 
 	static async getCommentPage(commentId: number): Promise<number> {
@@ -102,7 +122,7 @@ export class Comment extends Model {
 	}
 
 	async $like() {
-		if (this.isVotePending) {
+		if (this.user_vote || this.isVotePending) {
 			return;
 		}
 		this.isVotePending = true;
@@ -127,6 +147,28 @@ export class Comment extends Model {
 		this.user_vote = undefined;
 		--this.votes;
 		this.isVotePending = false;
+	}
+
+	async $follow() {
+		if (this.subscription || this.isFollowPending) {
+			return;
+		}
+		this.isFollowPending = true;
+
+		const subscription = await Subscription.$subscribe(this.id);
+		this.subscription = subscription;
+		this.isFollowPending = false;
+	}
+
+	async $removeFollow() {
+		if (!this.subscription || this.isFollowPending) {
+			return;
+		}
+		this.isFollowPending = true;
+
+		await this.subscription.$remove();
+		this.subscription = undefined;
+		this.isFollowPending = false;
 	}
 }
 

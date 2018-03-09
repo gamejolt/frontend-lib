@@ -32,6 +32,7 @@
 					:collapse-height="250"
 					:is-open="isShowingSoundtrack"
 					@require-change="canToggleSoundtrack = $event"
+					@expand="isShowingSoundtrack = true"
 					>
 
 					<app-audio-playlist

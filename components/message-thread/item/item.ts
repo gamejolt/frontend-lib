@@ -25,6 +25,8 @@ export class AppMessageThreadItem extends Vue {
 	@Prop(String) id?: string;
 	@Prop(Boolean) isActive?: boolean;
 	@Prop(Boolean) isNew?: boolean;
+	@Prop(Boolean) isReply?: boolean;
+	@Prop(Boolean) isLast?: boolean;
 
 	@Prop(Boolean) isShowingReplies?: boolean;
 

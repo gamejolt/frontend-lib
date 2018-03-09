@@ -1,11 +1,9 @@
 import Vue from 'vue';
-import { State } from 'vuex-class';
 import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./widget.html?style=./widget.styl';
 
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
-import { AppStore } from '../../../../../vue/services/app/app-store';
 import { AppJolticon } from '../../../../../vue/components/jolticon/jolticon';
 import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
 import { AppTooltip } from '../../../../tooltip/tooltip';
@@ -28,8 +26,6 @@ export class AppFiresidePostLikeWidget extends Vue {
 	@Prop(FiresidePost) post: FiresidePost;
 	@Prop(Boolean) sparse?: boolean;
 	@Prop(Boolean) circle?: boolean;
-
-	@State app: AppStore;
 
 	get tooltip() {
 		// No tooltip if showing label.

@@ -7,6 +7,7 @@ export class CommentVideo extends Model {
 	video_id: string;
 	channel_id: string;
 	img_thumbnail: string;
+	title: string;
 
 	comment: Comment;
 	game: Game;

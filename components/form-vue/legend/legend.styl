@@ -1,0 +1,23 @@
+@require '~styles/variables'
+
+.-compact
+	position: relative
+	font-size: $font-size-base
+	border: 0
+
+	&::before
+		position: absolute
+		content: ''
+		height: 1px
+		border-bottom: 2px solid $gray-lighter
+		top: 50%
+		right: 0
+		left: 50%
+
+.-expandable
+	cursor: pointer
+	user-select: none
+
+// This makes it so that the expander takes up the same amount of space.
+.-expander
+	font-family: monospace

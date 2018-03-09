@@ -33,6 +33,7 @@ import { AppFocusWhen } from '../../../form-vue/focus-when.directive';
 import { AppForm } from '../../../form-vue/form';
 import { AppLoadingFade } from '../../../loading/fade/fade';
 import { FormOnSubmitError } from '../../../form-vue/form.service';
+import { GameBuild } from '../../build/build.model';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
@@ -58,9 +59,11 @@ export class FormGamePackagePayment extends BaseForm<any>
 	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess, FormOnSubmitError {
 	@Prop(Game) game: Game;
 	@Prop(GamePackage) package: GamePackage;
+	@Prop(GameBuild) build?: GameBuild;
 	@Prop(Sellable) sellable: Sellable;
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
+	@Prop(String) operation: 'download' | 'play';
 
 	@State app: AppStore;
 
@@ -94,7 +97,9 @@ export class FormGamePackagePayment extends BaseForm<any>
 	}
 
 	get _minOrderAmount() {
-		return this.sellable.type === 'paid' ? this.pricing.amount / 100 : this.minOrderAmount / 100;
+		return this.sellable.type === 'paid'
+			? this.pricing.amount / 100
+			: this.minOrderAmount / 100;
 	}
 
 	get formattedAmount() {
@@ -312,9 +317,13 @@ export class FormGamePackagePayment extends BaseForm<any>
 				throw response;
 			}
 
-			response = await Api.sendRequest('/web/checkout/charge/' + response.cart.id, chargeData, {
-				detach: true,
-			});
+			response = await Api.sendRequest(
+				'/web/checkout/charge/' + response.cart.id,
+				chargeData,
+				{
+					detach: true,
+				}
+			);
 
 			if (response.success === false) {
 				throw response;
@@ -368,7 +377,8 @@ export class FormGamePackagePayment extends BaseForm<any>
 		if (GJ_IS_CLIENT) {
 			// Our checkout can be done in client.
 			if (this.checkoutType === OrderPayment.METHOD_CC_STRIPE) {
-				window.location.href = Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
+				window.location.href =
+					Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
 			} else {
 				// Otherwise we have to open in browser.
 				require('nw.gui').Shell.openExternal(response.redirectUrl);

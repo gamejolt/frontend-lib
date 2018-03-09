@@ -3,12 +3,13 @@
 	role="checkbox"
 	class="toggle"
 	:class="{
-		'toggle-checked': !!controlVal,
+		'-checked': !!controlVal,
+		'-disabled': disabled,
 	}"
 	:tabindex="disabled ? -1 : 0"
 	@click="toggle"
 	@keypress.space.prevent="toggle"
 	@keypress.enter.prevent="toggle"
 	>
-	<span class="toggle-knob"></span>
+	<span class="-knob"></span>
 </span>

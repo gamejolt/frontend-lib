@@ -5,41 +5,24 @@
 >>> .timeline-list
 	$border-size = 2px
 
-	// For doing a full-bleed within the content.
-	&-full-bleed
-		@media $media-xs
-			margin-left: -($grid-gutter-width-xs / 2)
-			margin-right: @margin-left
-
-		@media $media-sm-up
-			margin-left: -(($timeline-list-icon-size / 2) + $timeline-list-avatar-margin)
-
 	&-item
 		position: relative
 		display: block
 		color: $gray-dark
-
-		@media $media-xs
-			margin-bottom: $line-height-computed
 
 		&-bubble
 			background-color: $gray-lightest
 			text-align: center
 			border-radius: 50%
 			color: $gray-light
-
-			@media $media-xs
-				display: none
-
-			@media $media-sm-up
-				position: absolute
-				left: -($timeline-list-icon-size / 2)
-				top: 0
-				width: $timeline-list-icon-size
-				height: $timeline-list-icon-size
-				line-height: $timeline-list-icon-size
-				border: 5px solid $white
-				z-index: 1
+			position: absolute
+			left: 0
+			top: 0
+			width: $timeline-list-icon-size
+			height: $timeline-list-icon-size
+			line-height: $timeline-list-icon-size
+			border: 3px solid $white
+			z-index: 1
 
 			> .jolticon
 				position: relative
@@ -54,65 +37,41 @@
 			clearfix()
 			padding-bottom: $line-height-computed
 
+			// On desktop it goes full-width. On mobile we have to add the normal padding to the
+			// right so it doesn't hit up against the edge.
 			@media $media-xs
-				padding-left: ($grid-gutter-width-xs / 2)
-				padding-right: @padding-left
+				padding-right: ($grid-gutter-width-xs / 2)
 
-			@media $media-sm-up
+			$-padding-left = $timeline-list-avatar-margin + $timeline-list-icon-size
+			padding-left: $border-size + $-padding-left
+
+			&.is-thread
 				border-left: $border-size solid $gray-lighter
-				padding-left: $timeline-list-avatar-margin + ($timeline-list-icon-size / 2)
+				margin-left: ($timeline-list-icon-size / 2)
+				padding-left: ($timeline-list-icon-size / 2) + $timeline-list-avatar-margin
+
+				&.is-last
+					border-left: 0
+					margin-left: 0
+					padding-left: $border-size + $-padding-left
 
 		&-meta
-			margin-top: 6px
+			margin-bottom: 10px
 			color: $text-muted
 			font-size: $font-size-tiny
 
 		&-title
+			display: block
+			margin-top: 5px
 			font-weight: bold
+			font-size: $font-size-h4
 			color: $gray
 
 			strong, b
 				color: $black
 
-		&-header
-			display: block
-			background-color: $black
-			margin-bottom: $line-height-computed
-
-			@media $media-xs
-				margin-left: -($grid-gutter-width-xs / 2)
-				margin-right: @margin-left
-				border-radius: 0
-
-			@media $media-sm-up
-				margin-left: -(($timeline-list-icon-size / 2) + $timeline-list-avatar-margin)
-				border-top-right-radius: $border-radius-base
-				border-bottom-right-radius: $border-radius-base
-
-			&-content
-				clearfix()
-				padding: ($grid-gutter-width-xs / 2)
-
-				@media $media-sm-up
-					padding-top: ($grid-gutter-width / 2)
-					padding-bottom: @padding-top
-					padding-left: $timeline-list-avatar-margin + ($timeline-list-icon-size / 2)
-					padding-right: @padding-top
-
-				.timeline-list-item-meta
-					color: $white
-
-				.timeline-list-item-title
-					font-family: $font-family-heading
-					font-size: $font-size-h4
-					word-wrap: break-word
-					hyphens: auto
-
-					@media $media-sm-up
-						font-size: $font-size-h3
-
-					&, strong, b
-						color: $white
+		&-title-small
+			font-size: $font-size-base
 
 		&-details
 			margin-top: 5px
@@ -136,13 +95,20 @@
 			background-position: center center
 			background-size: cover
 
-		&-mark
-			float: right
-			margin-left: $timeline-list-avatar-margin
-
 		&-ad
-			@media $media-sm-up
-				margin-left: ($timeline-list-icon-size / 2)
+			margin-left: ($timeline-list-icon-size / 2)
+			padding-bottom: $line-height-computed
+			border-left: $border-size solid $gray-lighter
+
+			section
+				border-top-right-radius: $border-radius-base
+				border-bottom-right-radius: $border-radius-base
+
+			&-container
+				margin: 0 auto
+				width: 300px
+				height: 250px
+				margin-bottom: 10px
 
 		&-controls
 			.btn-circle
@@ -157,20 +123,10 @@
 		 * Active Item
 		 */
 		&-bubble.active
-			background-color: $gj-blue
 			border-color: $gj-blue
-			color: $white
-
-		&-main.active
-			border-left: $border-size solid $gj-blue
 
 		/**
 		 * New Item
 		 */
 		&-bubble.new
-			background-color: $gj-pink
 			border-color: $gj-pink
-			color: $white
-
-		&-main.new
-			border-left: $border-size solid $gj-pink

@@ -13,7 +13,9 @@ import { Meta } from '../meta/meta-service';
 // This is component state that the server may have returned to the browser. It
 // can be used to bootstrap components with initial data.
 const serverComponentState =
-	typeof window !== 'undefined' && window.__INITIAL_STATE__ && window.__INITIAL_STATE__.components;
+	typeof window !== 'undefined' &&
+	window.__INITIAL_STATE__ &&
+	window.__INITIAL_STATE__.components;
 
 export interface RouteOptions {
 	lazy?: boolean;
@@ -95,13 +97,19 @@ export function RouteResolve(options: RouteOptions = {}) {
 				}
 
 				let promise: Promise<{ fromCache: boolean; payload: any }> | undefined;
-				let hasCache = !!routeOptions.cache ? HistoryCache.has(to, routeOptions.cacheTag) : false;
+				let hasCache = !!routeOptions.cache
+					? HistoryCache.has(to, routeOptions.cacheTag)
+					: false;
 				const resolver = RouteResolver.startResolve(componentOptions, to);
 
 				if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
 					promise = getPayload(componentOptions, to, false);
 				} else {
-					const { payload } = await getPayload(componentOptions, to, !!routeOptions.cache);
+					const { payload } = await getPayload(
+						componentOptions,
+						to,
+						!!routeOptions.cache
+					);
 					resolver.payload = payload;
 
 					// For server next() doesn't call, so we have to pull
@@ -159,7 +167,7 @@ export class BaseRouteComponent extends Vue {
 	/**
 	 * Called after routeResolve resolves with data.
 	 */
-	routed(_payload: any) {}
+	routed(_payload: any, _fromCache: boolean) {}
 
 	/**
 	 * Called when the route component is completely destroyed.
@@ -264,12 +272,12 @@ export class BaseRouteComponent extends Vue {
 	// Make sure this function isn't an async func. We want to make sure it can
 	// do most of its work in the same tick so we can call it in the created()
 	// hook after SSR returns data to client.
-	resolveRoute(route: Route, resolver: RouteResolver, shouldRefreshCache?: boolean) {
+	resolveRoute(route: Route, resolver: RouteResolver, fromCache?: boolean) {
 		const routeOptions = this.$options.routeOptions || {};
 
 		// We do a cache refresh if the cache was used for this route.
-		if (shouldRefreshCache === undefined) {
-			shouldRefreshCache = HistoryCache.has(route, routeOptions.cacheTag);
+		if (fromCache === undefined) {
+			fromCache = HistoryCache.has(route, routeOptions.cacheTag);
 		}
 
 		// If we are no longer resolving this resolver, let's early out.
@@ -316,7 +324,7 @@ export class BaseRouteComponent extends Vue {
 			}
 		}
 
-		this.routed(payload);
+		this.routed(payload, fromCache);
 		this.routeLoading = false;
 		this.routeBootstrapped = true;
 
@@ -332,14 +340,14 @@ export class BaseRouteComponent extends Vue {
 		// and only if we aren't going to be refreshing cache after this. If we
 		// need to refresh cache, it means we'll go through the resolve again
 		// after fresh data, so we can just do the emit after that.
-		if (isLeafRoute(this.$options.name) && !shouldRefreshCache) {
+		if (isLeafRoute(this.$options.name) && !fromCache) {
 			EventBus.emit('routeChangeAfter');
 		}
 
 		// If we used cache, then we want to refresh the route again async. This
 		// allows cache to show really fast but still pull correct and new data
 		// from the server.
-		if (shouldRefreshCache) {
+		if (fromCache) {
 			return this.refreshCache(route);
 		}
 	}

@@ -25,6 +25,18 @@
 		</span>
 	</div>
 
+	<h3>Transparent</h3>
+
+	<div>
+		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
+			<a class="btn" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
+				Save Game
+			</a>
+			&nbsp;
+		</span>
+	</div>
+
 	<h3>Without Icons</h3>
 
 	<div>
@@ -39,6 +51,16 @@
 
 	<div>
 		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn" :class="btnClass">
+				Save Game
+			</a>
+			&nbsp;
+		</span>
+	</div>
+	<br>
+
+	<div>
+		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
 			<a class="btn" :class="btnClass">
 				Save Game
 			</a>
@@ -63,10 +85,21 @@
 	</div>
 
 	<h3>Dark Variant</h3>
-	<p>You can also force the dark variant for use on dark backgrounds. This only affects outline buttons.</p>
+	<p>You can also force the dark variant for use on dark backgrounds. This only affects outline and transparent buttons.</p>
 
 	<div>
 		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn btn-dark-variant" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
+				Save Game
+			</a>
+			&nbsp;
+		</span>
+	</div>
+	<br>
+
+	<div>
+		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
 			<a class="btn btn-dark-variant" :class="btnClass">
 				<app-jolticon icon="chevron-right" />
 				Save Game
@@ -92,36 +125,51 @@
 	<p>Darker fills will automatically get the dark variant styling.</p>
 
 	<div class="well fill-dark">
+		<div>
+			<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+				<a class="btn" :class="btnClass">
+					<app-jolticon icon="chevron-right" />
+					Save Game
+				</a>
+				&nbsp;
+			</span>
+		</div>
+		<br>
 
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
+		<div>
+			<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
+				<a class="btn" :class="btnClass">
+					<app-jolticon icon="chevron-right" />
+					Save Game
+				</a>
+				&nbsp;
+			</span>
+		</div>
 	</div>
 
 	<p>Lighter fills will keep the default styling.</p>
 
 	<div class="well fill-lighter">
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
+		<div>
+			<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+				<a class="btn" :class="btnClass">
+					<app-jolticon icon="chevron-right" />
+					Save Game
+				</a>
+				&nbsp;
+			</span>
+		</div>
+		<br>
 
-	<div class="well fill-lighter">
-		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
+		<div>
+			<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
+				<a class="btn" :class="btnClass">
+					<app-jolticon icon="chevron-right" />
+					Save Game
+				</a>
+				&nbsp;
+			</span>
+		</div>
 	</div>
 
 	<h3>Active State</h3>
@@ -183,6 +231,16 @@
 			&nbsp;
 		</span>
 	</div>
+	<br>
+
+	<div>
+		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
+			<a class="btn btn-sparse" :class="btnClass">
+				<app-jolticon icon="ellipsis-h" />
+			</a>
+			&nbsp;
+		</span>
+	</div>
 
 	<h3>Inner Styling</h3>
 
@@ -212,8 +270,8 @@
 	</div>
 	<br>
 
-	<div class="well fill-dark">
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+	<div>
+		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
 			<a class="btn" :class="btnClass">
 				<app-jolticon icon="download" />
 				Download
@@ -222,6 +280,34 @@
 			</a>
 			&nbsp;
 		</span>
+	</div>
+	<br>
+
+	<div class="well fill-dark">
+		<div>
+			<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+				<a class="btn" :class="btnClass">
+					<app-jolticon icon="download" />
+					Download
+					<small>12MB</small>
+					<app-jolticon icon="linux jolticon-addon" />
+				</a>
+				&nbsp;
+			</span>
+		</div>
+		<br>
+
+		<div>
+			<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
+				<a class="btn" :class="btnClass">
+					<app-jolticon icon="download" />
+					Download
+					<small>12MB</small>
+					<app-jolticon icon="linux jolticon-addon" />
+				</a>
+				&nbsp;
+			</span>
+		</div>
 	</div>
 
 	<h3>Button Badges</h3>
@@ -285,8 +371,8 @@
 
 	<div>
 		<a class="btn btn-sm">
-			<app-jolticon icon="chevron-right" />
 			<span class="btn-badge">4</span>
+			<app-jolticon icon="chevron-right" />
 			.btn-sm
 		</a>
 		<a class="btn btn-sm btn-success btn-sparse">
@@ -294,8 +380,8 @@
 			<app-jolticon icon="subscribe" />
 		</a>
 		<a class="btn btn-sm btn-outline">
-			<app-jolticon icon="chevron-right" />
 			<span class="btn-badge">4</span>
+			<app-jolticon icon="chevron-right" />
 			.btn-sm
 		</a>
 		<a class="btn btn-sm btn-success-outline btn-sparse">
@@ -307,8 +393,8 @@
 
 	<div>
 		<a class="btn btn-lg">
-			<app-jolticon icon="chevron-right" />
 			<span class="btn-badge">4</span>
+			<app-jolticon icon="chevron-right" />
 			.btn-lg
 		</a>
 		<a class="btn btn-lg btn-success btn-sparse">
@@ -316,8 +402,8 @@
 			<app-jolticon icon="subscribe" />
 		</a>
 		<a class="btn btn-lg btn-outline">
-			<app-jolticon icon="chevron-right" />
 			<span class="btn-badge">4</span>
+			<app-jolticon icon="chevron-right" />
 			.btn-lg
 		</a>
 		<a class="btn btn-lg btn-success-outline btn-sparse">
@@ -336,6 +422,10 @@
 		<a class="btn btn-block btn-outline">
 			<app-jolticon icon="chevron-right" />
 			Block Outline Button
+		</a>
+		<a class="btn btn-block btn-trans">
+			<app-jolticon icon="chevron-right" />
+			Block Transparent Button
 		</a>
 	</div>
 
@@ -361,6 +451,13 @@
 		<a class="btn btn-sm btn-outline btn-sparse">
 			<app-jolticon icon="chevron-right" />
 		</a>
+		<a class="btn btn-sm btn-trans">
+			<app-jolticon icon="chevron-right" />
+			.btn-sm
+		</a>
+		<a class="btn btn-sm btn-trans btn-sparse">
+			<app-jolticon icon="chevron-right" />
+		</a>
 	</div>
 	<br>
 
@@ -384,6 +481,13 @@
 		<a class="btn btn-lg btn-outline btn-sparse">
 			<app-jolticon icon="chevron-right" />
 		</a>
+		<a class="btn btn-lg btn-trans">
+			<app-jolticon icon="chevron-right" />
+			.btn-lg
+		</a>
+		<a class="btn btn-lg btn-trans btn-sparse">
+			<app-jolticon icon="chevron-right" />
+		</a>
 	</div>
 
 	<h3>Disabled State</h3>
@@ -401,6 +505,17 @@
 
 	<div>
 		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
+			<a class="btn disabled" :class="btnClass">
+				<app-jolticon icon="chevron-right" />
+				Save Game
+			</a>
+			&nbsp;
+		</span>
+	</div>
+	<br>
+
+	<div>
+		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
 			<a class="btn disabled" :class="btnClass">
 				<app-jolticon icon="chevron-right" />
 				Save Game

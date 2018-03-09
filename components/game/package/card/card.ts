@@ -136,7 +136,10 @@ export class AppGamePackageCard extends Vue {
 			// Ensure that the payment well opens with the correct build
 			// for "skip paying".
 			if (this.package.id === package_.id) {
-				this.showPayment(this.card.downloadableBuild ? this.card.downloadableBuild : undefined);
+				this.showPayment(
+					this.card.downloadableBuild ? this.card.downloadableBuild : null,
+					false
+				);
 			}
 		});
 	}
@@ -147,7 +150,7 @@ export class AppGamePackageCard extends Vue {
 		if (GJ_IS_CLIENT && fromExtraSection) {
 			this.doBuildClick(build, fromExtraSection);
 		} else if (this.sellable.type === 'pwyw' && this.canBuy) {
-			this.showPayment(build);
+			this.showPayment(build, fromExtraSection);
 		} else {
 			this.doBuildClick(build, fromExtraSection);
 		}
@@ -159,8 +162,6 @@ export class AppGamePackageCard extends Vue {
 			operation = 'download';
 		}
 
-		console.log(`${operation}ing build`);
-
 		if (operation === 'download') {
 			this.download(build);
 		} else if (operation === 'play') {
@@ -168,11 +169,12 @@ export class AppGamePackageCard extends Vue {
 		}
 	}
 
-	showPayment(build?: GameBuild) {
+	showPayment(build: GameBuild | null, fromExtraSection: boolean) {
 		GamePackagePurchaseModal.show({
 			game: this.game,
 			package: this.package,
-			build,
+			build: build,
+			fromExtraSection,
 			partner: this.partner,
 			partnerKey: this.partnerKey,
 		});
@@ -194,22 +196,6 @@ export class AppGamePackageCard extends Vue {
 			// isOwned: this.isOwned || this.isPartner,
 			key: this.accessKey,
 		});
-	}
-
-	integer(pricing: SellablePricing) {
-		return pricing.amount;
-	}
-
-	decimal(pricing: SellablePricing) {
-		let amount = pricing.amount;
-		amount %= 100;
-
-		let amountStr = amount + '';
-		if (amount < 10) {
-			amountStr = amount + '0';
-		}
-
-		return amountStr;
 	}
 
 	copyProviderKey(key: LinkedKey) {

@@ -21,6 +21,9 @@ import { Subscription } from '../subscription/subscription.model';
 import { GameCollaborator } from '../game/collaborator/collaborator.model';
 import { Mention } from '../mention/mention.model';
 import { assertNever } from '../../utils/utils';
+import { currency } from '../../vue/filters/currency';
+import { CommentVideo } from '../comment/video/video-model';
+import { CommentVideoModal } from '../comment/video/modal/modal.service';
 
 function getRouteLocationForModel(model: Game | User | FiresidePost) {
 	if (model instanceof User) {
@@ -46,6 +49,7 @@ export class Notification extends Model {
 	static TYPE_FORUM_POST_ADD = 'forum-post-add';
 	static TYPE_FRIENDSHIP_REQUEST = 'friendship-request';
 	static TYPE_FRIENDSHIP_ACCEPT = 'friendship-accept';
+	static TYPE_FRIENDSHIP_CANCEL = 'friendship-cancel';
 	static TYPE_GAME_RATING_ADD = 'game-rating-add';
 	static TYPE_GAME_FOLLOW = 'game-follow';
 	static TYPE_DEVLOG_POST_ADD = 'devlog-post-add';
@@ -53,6 +57,7 @@ export class Notification extends Model {
 	static TYPE_USER_FOLLOW = 'user-follow';
 	static TYPE_COLLABORATOR_INVITE = 'collaborator-invite';
 	static TYPE_MENTION = 'mention';
+	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 
 	user_id: number;
 	type: string;
@@ -75,7 +80,8 @@ export class Notification extends Model {
 		| OrderItem
 		| Subscription
 		| GameCollaborator
-		| Mention;
+		| Mention
+		| CommentVideo;
 
 	to_resource: string;
 	to_resource_id: number;
@@ -156,6 +162,10 @@ export class Notification extends Model {
 			this.action_model = new Mention(data.action_resource_model);
 			this.jolticon = 'jolticon-comment';
 			this.is_user_based = true;
+		} else if (this.type === Notification.TYPE_COMMENT_VIDEO_ADD) {
+			this.action_model = new CommentVideo(data.action_resource_model);
+			this.jolticon = 'jolticon-comment';
+			this.is_user_based = true;
 		}
 
 		// Keep memory clean after bootstrapping the models.
@@ -225,6 +235,10 @@ export class Notification extends Model {
 	async go(router: VueRouter) {
 		if (this.routeLocation) {
 			router.push(this.routeLocation);
+		} else if (this.type === Notification.TYPE_COMMENT_VIDEO_ADD) {
+			if (this.action_model instanceof CommentVideo) {
+				CommentVideoModal.show(this.action_model);
+			}
 		} else if (
 			this.type === Notification.TYPE_COMMENT_ADD ||
 			this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER ||
@@ -274,8 +288,218 @@ export class Notification extends Model {
 	}
 
 	$read() {
-		return this.$_save('/web/dash/activity/mark-read/' + this.id, 'notification', { detach: true });
+		return this.$_save('/web/dash/activity/mark-read/' + this.id, 'notification', {
+			detach: true,
+		});
 	}
 }
 
 Model.create(Notification);
+
+function getSubjectTranslationValue(notification: Notification) {
+	if (notification.is_user_based) {
+		if (notification.from_model) {
+			return (
+				notification.from_model.display_name +
+				' (@' +
+				notification.from_model.username +
+				')'
+			);
+		} else {
+			return 'Someone';
+		}
+	} else if (notification.is_game_based && notification.to_model instanceof Game) {
+		return notification.to_model.title;
+	}
+	return '';
+}
+
+function getTranslationValues(notification: Notification) {
+	const subject = getSubjectTranslationValue(notification);
+
+	if (
+		notification.to_model instanceof Game ||
+		notification.to_model instanceof ForumTopic ||
+		notification.to_model instanceof FiresidePost
+	) {
+		return {
+			subject: subject,
+			object: notification.to_model.title,
+		};
+	}
+
+	return {
+		subject: subject,
+	};
+}
+
+export function getNotificationText(notification: Notification) {
+	switch (notification.type) {
+		case Notification.TYPE_DEVLOG_POST_ADD: {
+			let gameTitle = '';
+			let postTitle = '';
+			if (notification.to_model instanceof Game) {
+				gameTitle = notification.to_model.title;
+			}
+			if (notification.action_model instanceof FiresidePost) {
+				postTitle = notification.action_model.title;
+			}
+			return `${gameTitle} - ${postTitle}`;
+		}
+
+		case Notification.TYPE_COMMENT_VIDEO_ADD: {
+			let videoTitle = '';
+			if (notification.action_model instanceof CommentVideo) {
+				videoTitle = notification.action_model.title;
+			}
+
+			return videoTitle;
+		}
+
+		case Notification.TYPE_COMMENT_ADD_OBJECT_OWNER: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } commented on %{ object }.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_COMMENT_ADD: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } replied to your comment on %{ object }.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_FORUM_POST_ADD: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } posted a new forum post to %{ object }.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_FRIENDSHIP_REQUEST: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } sent you a friend request.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_FRIENDSHIP_ACCEPT: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } accepted your friend request.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_GAME_RATING_ADD: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } received a new rating.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_GAME_FOLLOW: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } followed %{ object }.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_SELLABLE_SELL: {
+			const sellable = notification.to_model as Sellable;
+			const orderItem = notification.action_model as OrderItem;
+			const translationValues = {
+				object: sellable.title,
+				amount: currency(orderItem.amount),
+				subject: getSubjectTranslationValue(notification),
+			};
+
+			return Translate.$gettextInterpolate(
+				`%{ subject } bought a package in %{ object } for %{ amount }.`,
+				translationValues
+			);
+		}
+
+		case Notification.TYPE_USER_FOLLOW: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } followed you.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_COLLABORATOR_INVITE: {
+			return Translate.$gettextInterpolate(
+				`%{ subject } invited you to collaborate on %{ object }.`,
+				getTranslationValues(notification)
+			);
+		}
+
+		case Notification.TYPE_MENTION: {
+			const mention = notification.action_model as Mention;
+
+			switch (mention.resource) {
+				case 'Comment': {
+					if (notification.to_model instanceof Game) {
+						return Translate.$gettextInterpolate(
+							`%{ subject } mentioned you in a comment on the game %{ object }.`,
+							{
+								object: notification.to_model.title,
+								subject: getSubjectTranslationValue(notification),
+							}
+						);
+					} else if (notification.to_model instanceof FiresidePost) {
+						return Translate.$gettextInterpolate(
+							`%{ subject } mentioned you in a comment on the post %{ object }.`,
+							{
+								object: notification.to_model.title,
+								subject: getSubjectTranslationValue(notification),
+							}
+						);
+					}
+					break;
+				}
+
+				case 'Game': {
+					return Translate.$gettextInterpolate(
+						`%{ subject } mentioned you in the game %{ object }.`,
+						{
+							object: (notification.to_model as Game).title,
+							subject: getSubjectTranslationValue(notification),
+						}
+					);
+				}
+
+				case 'User': {
+					return Translate.$gettextInterpolate(
+						`%{ subject } mentioned you in their user bio.`,
+						getTranslationValues(notification)
+					);
+				}
+
+				case 'Fireside_Post': {
+					return Translate.$gettextInterpolate(
+						`%{ subject } mentioned you in the post %{ object }.`,
+						{
+							object: (notification.to_model as FiresidePost).title,
+							subject: getSubjectTranslationValue(notification),
+						}
+					);
+				}
+
+				case 'Forum_Post': {
+					return Translate.$gettextInterpolate(
+						`%{ subject } mentioned you in a forum post to %{ object }.`,
+						{
+							object: (notification.to_model as ForumTopic).title,
+							subject: getSubjectTranslationValue(notification),
+						}
+					);
+				}
+
+				default: {
+					return assertNever(mention.resource);
+				}
+			}
+		}
+	}
+}

@@ -1,86 +1,91 @@
-<app-timeline-list-item
+<div
 	class="message-thread-item"
 	:id="id"
-	:is-active="isActive"
-	:is-new="isNew"
 	>
+	<app-timeline-list-item
+		:is-active="isActive"
+		:is-new="isNew"
+		:is-thread="isShowingReplies || isReply"
+		:is-last="isLast"
+		>
 
-	<app-user-avatar
-		slot="bubble"
-		class="avatar-circle"
-		:user="user"
-		:show-hover-card="true"
-		/>
+		<app-user-avatar
+			slot="bubble"
+			class="avatar-circle"
+			:user="user"
+			:show-hover-card="true"
+			/>
 
-	<div class="timeline-list-item-details">
+		<div class="timeline-list-item-details">
 
-		<div class="message-thread-item-meta">
-
-			<div class="message-thread-item-byline">
-				<span class="message-thread-item-author">
-					<router-link
-						:to="{
-							name: 'profile.overview',
-							params: { username: user.username },
-						}"
-						class="link-unstyled"
-						>
-						{{ user.display_name }}
-					</router-link>
-
-					<small class="text-muted">
-						@{{ user.username }}
-					</small>
+			<div class="-meta clearfix">
+				<span class="-meta-slot">
+					<slot name="tags" />
+					<slot name="meta" />
 				</span>
 
-				<template v-if="repliedTo">
-					<app-jolticon icon="share" />
-
-					<span class="message-thread-item-author tiny">
+				<div class="-byline">
+					<span class="-author">
 						<router-link
 							:to="{
 								name: 'profile.overview',
-								params: { username: repliedTo.username },
+								params: { username: user.username },
 							}"
 							class="link-unstyled"
 							>
-							{{ repliedTo.display_name }}
+							{{ user.display_name }}
 						</router-link>
 
-						<span class="text-muted">
-							@{{ repliedTo.username }}
-						</span>
+						<small class="text-muted">
+							@{{ user.username }}
+						</small>
 					</span>
-				</template>
 
-				<slot name="authors" />
+					<template v-if="repliedTo">
+						<app-jolticon icon="share" />
+
+						<span class="-author tiny">
+							<router-link
+								:to="{
+									name: 'profile.overview',
+									params: { username: repliedTo.username },
+								}"
+								class="link-unstyled"
+								>
+								{{ repliedTo.display_name }}
+							</router-link>
+
+							<span class="text-muted">
+								@{{ repliedTo.username }}
+							</span>
+						</span>
+					</template>
+
+					<slot name="authors" />
+				</div>
+
+				<div class="-meta-sub">
+					<small class="text-muted"
+						:title="dateFilter( date, 'medium' )"
+						>
+						<app-time-ago :date="date" />
+					</small>
+				</div>
 			</div>
 
-			<div class="message-thread-item-meta-sub">
-				<slot name="tags" />
+			<slot />
 
-				<small class="text-muted"
-					:title="dateFilter( date, 'medium' )"
-					>
-					<app-time-ago :date="date" />
-				</small>
-
-				<slot name="meta" />
+			<div class="timeline-list-item-controls">
+				<slot name="controls" />
 			</div>
+
 		</div>
 
-		<slot />
+	</app-timeline-list-item>
 
-		<div class="timeline-list-item-controls">
-			<slot name="controls" />
-		</div>
-
-		<div class="message-thread-item-replies" v-if="isShowingReplies">
-			<hr class="message-thread-item-replies-split">
-			<slot name="replies" />
-			<hr class="message-thread-item-replies-split">
-		</div>
-
+	<div class="-replies" v-if="isShowingReplies">
+		<slot name="replies" />
 	</div>
 
-</app-timeline-list-item>
+	<hr class="message-thread-split" v-if="!isReply">
+</div>

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { makeObservableService } from '../../utils/vue';
+import { Translate } from '../translate/translate.service';
 
 export interface GrowlOptions {
 	message?: string;
@@ -9,6 +10,7 @@ export interface GrowlOptions {
 	icon?: string;
 	component?: typeof Vue;
 	props?: any;
+	system?: boolean;
 }
 
 export class Growl {
@@ -19,6 +21,7 @@ export class Growl {
 	sticky: boolean;
 	icon?: string;
 	onclick?: Function;
+	system: boolean;
 
 	constructor(public id: number, public type: string, options: GrowlOptions) {
 		this.title = options.title;
@@ -28,6 +31,7 @@ export class Growl {
 		this.sticky = !!options.sticky;
 		this.icon = options.icon;
 		this.onclick = options.onclick;
+		this.system = options.system || false;
 	}
 
 	close() {
@@ -54,15 +58,15 @@ export class Growls {
 
 		if (!options.title) {
 			if (type === 'error') {
-				options.title = 'Oh no!';
+				options.title = Translate.$gettext('Oh no!');
 			} else if (type === 'success') {
-				options.title = 'Huzzah!';
+				options.title = Translate.$gettext('Huzzah!');
 			}
 		}
 
-		// If we're a client, we want to instead show this as a system notification.
-		// We don't do this if the growl is a component-type.
-		if (GJ_IS_CLIENT && !options.component) {
+		// If we're a client or have notifications permissions in browser, we want to instead show
+		// this as a system notification.
+		if (options.system && (GJ_IS_CLIENT || (Notification as any).permission === 'granted')) {
 			return this.createSystemNotification(options);
 		}
 
@@ -76,8 +80,20 @@ export class Growls {
 	}
 
 	private static createSystemNotification(options: GrowlOptions) {
-		const notification = new (window as any).Notification(options.title, {
-			body: options.message,
+		let title = options.title;
+		let message = options.message;
+
+		// If no title passed in, make the body the title.
+		if (!title) {
+			if (!message) {
+				return;
+			}
+			title = message;
+			message = undefined;
+		}
+
+		const notification = new Notification(title, {
+			body: message,
 			icon: options.icon,
 		});
 

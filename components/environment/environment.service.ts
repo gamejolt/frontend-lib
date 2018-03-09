@@ -41,9 +41,11 @@ export class Environment {
 	static activityStreamHost = 'https://activity.gamejolt.com';
 	static chatHost = 'https://chat.gamejolt.com';
 	static widgetHost = 'https://widgets.gamejolt.com';
+	static gridHost = 'https://grid.gamejolt.com/grid/host';
+	static recaptchaSiteKey = '6Led_UAUAAAAAB_ptIOOlAF5DFK9YM7Qi_7z8iKk';
 }
 
-if (Environment.env === 'development') {
+if (GJ_ENVIRONMENT === 'development') {
 	Environment.baseUrl = 'http://localhost:8080';
 	Environment.baseUrlInsecure = 'http://localhost:8080';
 	Environment.wttfBaseUrl = 'http://localhost:8080';
@@ -63,6 +65,8 @@ if (Environment.env === 'development') {
 	Environment.activityStreamHost = 'http://activity.development.gamejolt.com';
 	Environment.chatHost = 'http://chat.development.gamejolt.com';
 	Environment.widgetHost = 'http://localhost:8086';
+	Environment.gridHost = 'http://localhost:4000/grid/host';
+	Environment.recaptchaSiteKey = '6LcwTkEUAAAAAHTT67TB8gkM0ft5hUzz_r_tFFaT';
 }
 
 if (GJ_IS_CLIENT) {

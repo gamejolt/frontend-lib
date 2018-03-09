@@ -1,25 +1,31 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./modal.html?style=./modal.styl';
 import './modal-content.styl';
 
 import { Modal } from './modal.service';
 import { AppBackdrop } from '../backdrop/backdrop';
 import { Backdrop } from '../backdrop/backdrop.service';
-import { bootstrapShortkey } from '../../vue/shortkey';
 import { findRequiredVueParent } from '../../utils/vue';
 import { BaseModal } from './base';
-
-bootstrapShortkey();
+import { Screen } from '../screen/screen-service';
+import { EscapeStack } from '../escape-stack/escape-stack.service';
 
 @View
 @Component({})
 export class AppModal extends Vue {
+	@Prop(Number) index: number;
+
 	modal: Modal = null as any;
 	isHoveringContent = false;
 
 	private backdrop?: AppBackdrop;
 	private beforeEachDeregister?: Function;
+	private escapeCallback?: Function;
+
+	get zIndex() {
+		return 1050 + this.modal.index;
+	}
 
 	created() {
 		const parent = findRequiredVueParent(this, BaseModal);
@@ -29,6 +35,7 @@ export class AppModal extends Vue {
 	mounted() {
 		if (!this.modal.noBackdrop) {
 			this.backdrop = Backdrop.push({
+				context: this.$el,
 				className: 'modal-backdrop',
 			});
 		}
@@ -37,6 +44,9 @@ export class AppModal extends Vue {
 			this.dismissRouteChange();
 			next();
 		});
+
+		this.escapeCallback = () => this.dismissEsc();
+		EscapeStack.register(this.escapeCallback);
 	}
 
 	destroyed() {
@@ -49,6 +59,11 @@ export class AppModal extends Vue {
 		if (this.beforeEachDeregister) {
 			this.beforeEachDeregister();
 			this.beforeEachDeregister = undefined;
+		}
+
+		if (this.escapeCallback) {
+			EscapeStack.deregister(this.escapeCallback);
+			this.escapeCallback = undefined;
 		}
 	}
 
@@ -64,7 +79,7 @@ export class AppModal extends Vue {
 	}
 
 	dismissBackdrop() {
-		if (this.modal.noBackdropClose || this.isHoveringContent) {
+		if (Screen.isMobile || this.modal.noBackdropClose || this.isHoveringContent) {
 			return;
 		}
 		this.dismiss();

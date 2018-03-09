@@ -1,91 +1,41 @@
 <div
 	class="comment-widget"
-	:id="`comment-pagination-${id}`"
 	>
 	<app-loading v-if="!hasBootstrapped && !hasError" />
 	<div v-else-if="hasError" class="alert alert-warning">
-		<translate>Couldn't fetch comments for game.</translate>
+		<translate>Couldn't fetch comments.</translate>
 	</div>
 	<div v-else-if="hasBootstrapped">
-		<template v-if="!noIntro">
-			<template v-if="!commentsCount">
-				<p>
-					<em><translate>Let us know your thoughts and be the first to comment!</translate></em>
-				</p>
-				<br>
-			</template>
-		</template>
-
-		<!-- Comment Add Form -->
-		<app-message-thread-add v-if="app.user">
-			<app-comment-widget-add
+		<app-message-thread-add v-if="user">
+			<form-comment
 				:resource="resource"
 				:resource-id="resourceId"
-				@submit="onCommentAdd"
+				:autofocus="autofocus"
+				@submit="_onCommentAdd"
 				/>
 		</app-message-thread-add>
 		<div v-else class="alert alert-info">
 			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
-		<app-message-thread-content v-if="allowTranslate">
-			<div class="comment-widget-translate-btn">
-				<button class="btn btn-block btn-outline"
-					v-if="!isShowingTranslations"
-					@click="toggleTranslate"
-					>
-					<translate
-						:translate-params="{ lang }"
-						translate-comment="%{ lang } is passed in with the current language"
-						>
-						Translate comments to %{ lang }
-					</translate>
-				</button>
+		<app-message-thread>
+			<app-comment-widget-comment
+				v-for="comment of comments"
+				:key="comment.id"
+				:resource="resource"
+				:resource-id="resourceId"
+				:comment="comment"
+				:children="childComments[ comment.id ]"
+				/>
+		</app-message-thread>
 
-				<template v-if="isShowingTranslations">
-					<button class="btn btn-block btn-outline"
-						@click="toggleTranslate"
-						>
-						<translate>Show original comments</translate>
-						<span class="translate-button-branding">
-							<translate>translated by</translate>
-							<img src="./google-logo.png" alt="Google">
-						</span>
-					</button>
+		<div v-if="shouldShowLoadMore" class="page-cut">
+			<button class="btn btn-outline" @click="loadMore" v-app-track-event="`comment-widget:more`">
+				<translate>Load More</translate>
+			</button>
+		</div>
 
-					<br>
-					<div class="small text-muted text-center">
-						<translate>Automatic translations use Google Translate and may not be completely accurate.</translate>
-					</div>
-				</template>
-			</div>
-		</app-message-thread-content>
-
-		<app-loading-fade :is-loading="isLoading || isTranslating">
-
-			<!-- Comments List -->
-			<app-message-thread>
-				<app-comment-widget-comment
-					v-for="comment of comments"
-					:key="comment.id"
-					:resource="resource"
-					:resource-id="resourceId"
-					:comment="comment"
-					:children="childComments[ comment.id ]"
-					/>
-			</app-message-thread>
-
-		</app-loading-fade>
-
-		<app-message-thread-pagination
-			v-if="perPage && parentCount"
-			:pager="true"
-			:items-per-page="perPage"
-			:total-items="parentCount"
-			:current-page="currentPage"
-			:prevent-url-change="true"
-			@pagechange="onPageChange"
-			/>
+		<app-loading v-if="isLoading" class="loading-centered" />
 
 	</div>
 </div>

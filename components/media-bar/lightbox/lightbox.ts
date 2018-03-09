@@ -10,6 +10,7 @@ import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppMediaBarLightboxSlider } from './slider';
 import { AppMediaBarLightboxItem } from './item/item';
 import { bootstrapShortkey } from '../../../vue/shortkey';
+import { EscapeStack } from '../../escape-stack/escape-stack.service';
 
 if (!GJ_IS_SSR) {
 	const VueTouch = require('vue-touch');
@@ -42,7 +43,8 @@ export class AppMediaBarLightbox extends Vue {
 	isDragging = false;
 	waitingForFrame = false;
 
-	private resize$: Subscription | undefined;
+	private resize$?: Subscription;
+	private escapeCallback?: Function;
 
 	mounted() {
 		document.body.classList.add('media-bar-lightbox-open');
@@ -50,6 +52,9 @@ export class AppMediaBarLightbox extends Vue {
 		this.resize$ = Screen.resizeChanges.subscribe(() => {
 			this.refreshSliderPosition();
 		});
+
+		this.escapeCallback = () => this.close();
+		EscapeStack.register(this.escapeCallback);
 	}
 
 	destroyed() {
@@ -58,6 +63,11 @@ export class AppMediaBarLightbox extends Vue {
 		if (this.resize$) {
 			this.resize$.unsubscribe();
 			this.resize$ = undefined;
+		}
+
+		if (this.escapeCallback) {
+			EscapeStack.deregister(this.escapeCallback);
+			this.escapeCallback = undefined;
 		}
 	}
 

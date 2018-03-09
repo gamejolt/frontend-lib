@@ -21,6 +21,7 @@ export class User extends Model {
 	is_verified: boolean;
 	is_partner: boolean;
 	avatar_media_item?: MediaItem;
+	header_media_item?: MediaItem;
 	disable_gravatar: boolean;
 
 	created_on: number;
@@ -76,6 +77,9 @@ export class User extends Model {
 
 		if (data.avatar_media_item) {
 			this.avatar_media_item = new MediaItem(data.avatar_media_item);
+		}
+		if (data.header_media_item) {
+			this.header_media_item = new MediaItem(data.header_media_item);
 		}
 	}
 
@@ -137,13 +141,20 @@ export class User extends Model {
 		return this.$_save('/web/dash/avatar/clear', 'user');
 	}
 
+	$saveHeader() {
+		// You can only save yourself, so we don't pass in an ID to the endpoint.
+		return this.$_save('/web/dash/header/save', 'user', {
+			file: this.file,
+		});
+	}
+
+	$clearHeader() {
+		return this.$_save('/web/dash/header/clear', 'user');
+	}
+
 	$saveEmailPreferences() {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
 		return this.$_save('/web/dash/email-preferences/save', 'user');
-	}
-
-	$saveSettings() {
-		return this.$_save('/web/dash/settings/save', 'user');
 	}
 
 	$saveFireside() {
