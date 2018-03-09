@@ -2,6 +2,7 @@
 @require 'variables'
 
 $-button-size = 90px
+$-controls-padding = 10px
 
 // Kill scroll on body.
 >>> .media-bar-lightbox-open
@@ -34,14 +35,14 @@ $-button-size = 90px
 
 	@media only screen and (orientation: landscape)
 		position: absolute
-		right: 10px
+		right: $-controls-padding
 		bottom: 0
 		z-index: 10
 
 	@media $media-sm-up
 		text-align: right
-		position: initial
-		padding-right: 10px
+		position: static
+		padding-right: $-controls-padding
 
 .-next, .-prev
 	display: none
