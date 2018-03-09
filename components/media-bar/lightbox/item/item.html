@@ -3,10 +3,7 @@
 
 		<!-- Image -->
 		<template v-if="item.media_type === 'image'">
-			<div
-				class="-embed"
-				v-if="maxWidth && maxHeight"
-				>
+			<div class="-embed">
 
 				<!--
 					The min/max will be the actual dimensions for the image thumbnail.
@@ -14,7 +11,10 @@
 				<app-img-responsive
 					:src="item.img_thumbnail"
 					:alt="item.caption"
-					:style="{ width: maxWidth + 'px', height: maxHeight + 'px' }"
+					:style="{
+						width: maxWidth ? maxWidth + 'px' : undefined,
+						height: maxHeight ? maxHeight + 'px' : undefined,
+					}"
 					/>
 			</div>
 
@@ -27,7 +27,7 @@
 		<template v-else-if="item.media_type === 'video'">
 			<div
 				class="-embed"
-				v-if="isActive && maxWidth && maxHeight"
+				v-if="isActive"
 				>
 				<app-video-embed
 					:video-provider="item.type"
@@ -49,7 +49,7 @@
 		<template v-else-if="item.media_type === 'sketchfab'">
 			<div
 				class="-embed"
-				v-if="isActive && maxWidth && maxHeight"
+				v-if="isActive"
 				>
 				<app-sketchfab-embed
 					:sketchfab-id="item.sketchfab_id"
