@@ -2,7 +2,6 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./media-bar.html?style=./media-bar.styl';
 
-import { Screen } from '../../../../lib/gj-lib-client/components/screen/screen-service';
 import { Analytics } from '../analytics/analytics.service';
 import { AppLoading } from '../../vue/components/loading/loading';
 import { AppMediaBarItem } from './item/item';
@@ -25,8 +24,6 @@ export class AppMediaBar extends Vue {
 
 	activeItem: any | null = null;
 	activeIndex: number | null = null;
-
-	Screen = Screen;
 
 	@Watch('activeItem')
 	activeItemChange() {

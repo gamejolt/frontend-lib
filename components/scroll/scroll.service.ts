@@ -1,27 +1,14 @@
-import { Subject } from 'rxjs/Subject';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
-import { supportsPassiveEvents } from '../../utils/detection';
 import { AppAutoscrollAnchor } from './auto-scroll/anchor';
+import { ScrollWatcher } from './watcher.service';
 
 // Polyfill smooth scrolling.
 if (!GJ_IS_SSR) {
 	require('smoothscroll-polyfill').polyfill();
 }
 
-/**
- * How long to wait after scrolling before we emit the scroll stop observable.
- */
-const ScrollStopDebounceTime = 500;
-
-export interface ScrollChange {
-	top: number;
-	left: number;
-	height: number;
-	width: number;
-	scrollHeight: number;
-	scrollWidth: number;
-}
+export type ScrollContext = HTMLElement | HTMLDocument;
 
 export class Scroll {
 	static shouldAutoScroll = true;
@@ -29,18 +16,8 @@ export class Scroll {
 
 	// For SSR context we have to set this to undefined. No methods should be
 	// called that would use the context.
-	static context: HTMLElement | HTMLDocument = typeof document !== 'undefined'
-		? document
-		: (undefined as any);
-	static contextOffsetTop = 0;
+	static watcher: ScrollWatcher;
 	static offsetTop = 0;
-
-	private static scrollListener: any;
-	private static cachedScrollChange: ScrollChange | null = null;
-	private static scrollStopTimeout: NodeJS.Timer | null = null;
-	static scrollChanges = new Subject<void>();
-	static scrollStart = new Subject<void>();
-	static scrollStop = new Subject<void>();
 
 	/**
 	 * Sets the extra offset for scrolling. This can be used if there is a fixed
@@ -53,72 +30,17 @@ export class Scroll {
 	/**
 	 * Sets the element that we will scroll when any scroll commands are issued.
 	 */
-	static setContext(element: HTMLElement | undefined) {
-		// We just bootstrap the scroll listener once.
-		if (!this.scrollListener) {
-			this.scrollListener = () => {
-				this.cachedScrollChange = null;
-				this.scrollChanges.next();
+	static init() {
+		this.watcher = new ScrollWatcher(document);
 
-				// As soon as we start scrolling, emit the scrollStart.
-				if (!Screen.isScrolling) {
-					Screen.isScrolling = true;
-					this.scrollStart.next();
-				}
-
-				// Wait a bit of time of not scrolling before we emit scrollStop.
-				if (this.scrollStopTimeout) {
-					clearTimeout(this.scrollStopTimeout);
-				}
-
-				this.scrollStopTimeout = setTimeout(() => {
-					this.scrollStop.next();
-					this.scrollStopTimeout = null;
-					Screen.isScrolling = false;
-				}, ScrollStopDebounceTime);
-			};
-		}
-
-		// If we already have a context set, we gotta remove the scroll handler
-		// on it.
-		if (this.context) {
-			this.context.removeEventListener('scroll', this.scrollListener);
-		}
-
-		if (!element) {
-			this.context = document;
-			this.contextOffsetTop = 0;
-		} else {
-			this.context = element;
-			this.contextOffsetTop = Ruler.offset(element).top;
-		}
-
-		this.context.addEventListener(
-			'scroll',
-			this.scrollListener,
-			// TODO: Fix once TS has this type def.
-			supportsPassiveEvents ? ({ passive: true } as any) : false
-		);
+		// Set up events to let the Screen service know if we're scrolling or not.
+		this.watcher.start.subscribe(() => (Screen.isScrolling = true));
+		this.watcher.stop.subscribe(() => (Screen.isScrolling = false));
 	}
 
-	static getScrollChange() {
-		if (!this.cachedScrollChange) {
-			this.cachedScrollChange = {
-				top: this.getScrollTop(),
-				left: this.getScrollLeft(),
-				height: this.getScrollWindowHeight(),
-				width: this.getScrollWindowWidth(),
-				scrollHeight: Scroll.getScrollHeight(),
-				scrollWidth: Scroll.getScrollWidth(),
-			};
-		}
-
-		return this.cachedScrollChange;
-	}
-
-	static getScrollTop(element?: HTMLElement | HTMLDocument): number {
+	static getScrollTop(element?: ScrollContext): number {
 		if (!element) {
-			element = this.context;
+			element = document;
 		}
 
 		if (element instanceof HTMLDocument) {
@@ -128,9 +50,9 @@ export class Scroll {
 		return element.scrollTop;
 	}
 
-	static getScrollLeft(element?: HTMLElement | HTMLDocument): number {
+	static getScrollLeft(element?: ScrollContext): number {
 		if (!element) {
-			element = this.context;
+			element = document;
 		}
 
 		if (element instanceof HTMLDocument) {
@@ -142,9 +64,9 @@ export class Scroll {
 		return element.scrollLeft;
 	}
 
-	static getScrollHeight(element?: HTMLElement | HTMLDocument): number {
+	static getScrollHeight(element?: ScrollContext): number {
 		if (!element) {
-			element = this.context;
+			element = document;
 		}
 
 		if (element instanceof HTMLDocument) {
@@ -154,9 +76,9 @@ export class Scroll {
 		return element.scrollHeight;
 	}
 
-	static getScrollWidth(element?: HTMLElement | HTMLDocument): number {
+	static getScrollWidth(element?: ScrollContext): number {
 		if (!element) {
-			element = this.context;
+			element = document;
 		}
 
 		if (element instanceof HTMLDocument) {
@@ -166,17 +88,17 @@ export class Scroll {
 		return element.scrollWidth;
 	}
 
-	static getScrollWindowHeight(element?: HTMLElement | HTMLDocument): number {
+	static getScrollWindowHeight(element?: ScrollContext): number {
 		if (!element) {
-			element = this.context;
+			element = document;
 		}
 
 		return element === document ? window.innerHeight : (element as HTMLElement).clientHeight;
 	}
 
-	static getScrollWindowWidth(element?: HTMLElement | HTMLDocument): number {
+	static getScrollWindowWidth(element?: ScrollContext): number {
 		if (!element) {
-			element = this.context;
+			element = document;
 		}
 
 		return element === document ? window.innerWidth : (element as HTMLElement).clientWidth;
@@ -186,23 +108,6 @@ export class Scroll {
 	 * Returns the element's offset from the top of the scroll context.
 	 */
 	static getElementOffsetFromContext(element: HTMLElement) {
-		// When there is a specific scroll context element, the offset() values
-		// will be the offsets from the "document" element. We have to subtract
-		// the scroll context offset from the element offset to get the correct
-		// offset within the scolling viewport. We then have to negate the
-		// scrolling of the viewport since the offset value is also taking that
-		// into account.
-		if (this.context !== document) {
-			return (
-				Ruler.offset(element).top -
-				this.contextOffsetTop -
-				this.offsetTop +
-				this.getScrollTop(this.context)
-			);
-		}
-
-		// Otherwise it's the "document" element. In this case it's safe to just
-		// use the element's top offset value.
 		return Ruler.offset(element).top - this.offsetTop;
 	}
 
@@ -251,31 +156,16 @@ export class Scroll {
 		offset: number,
 		options: { animate?: boolean } = {}
 	) {
-		let top = this.getScrollTop(this.context) + element.getBoundingClientRect().top - offset;
-		if (this.context instanceof HTMLElement) {
-			top -= this.context.getBoundingClientRect().top;
-		}
-
+		let top = this.getScrollTop(document) + element.getBoundingClientRect().top - offset;
 		this.scrollTo(top, options);
 	}
 
 	private static scrollTo(to: number, options: { animate?: boolean } = {}) {
-		let el = this.context instanceof HTMLDocument ? window : this.context;
-
-		el.scrollTo({ top: to, behavior: options.animate ? 'smooth' : 'auto' });
+		window.scrollTo({ top: to, behavior: options.animate ? 'smooth' : 'auto' });
 	}
 }
 
 if (!GJ_IS_SSR) {
 	// Sets the document as the scroll context.
-	Scroll.setContext(undefined);
-
-	// Update the scroll context's offset top when we resize.
-	Screen.resizeChanges.subscribe(() => {
-		if (Scroll.context === document) {
-			Scroll.contextOffsetTop = 0;
-		} else {
-			Scroll.contextOffsetTop = Ruler.offset(Scroll.context as HTMLElement).top;
-		}
-	});
+	Scroll.init();
 }

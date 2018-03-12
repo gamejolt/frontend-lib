@@ -44,11 +44,6 @@ export class AppMediaBarItem extends Vue {
 	}
 
 	onClick() {
-		// Lightbox is turned off on mobile.
-		if (!Screen.isXs) {
-			this.mediaBar.setActiveItem(this.item);
-		} else {
-			Analytics.trackEvent('media-bar', 'item-click-mobile');
-		}
+		this.mediaBar.setActiveItem(this.item);
 	}
 }

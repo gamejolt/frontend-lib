@@ -1,7 +1,8 @@
 @require '~styles/variables'
+@require 'variables'
 
-$-controls-height = 80px
 $-button-size = 90px
+$-controls-padding = 10px
 
 // Kill scroll on body.
 >>> .media-bar-lightbox-open
@@ -20,16 +21,31 @@ $-button-size = 90px
 	bottom: 0
 	left: 0
 	z-index: $zindex-media-bar-lightbox
-	background-color: rgba(0, 0, 0, 0.85)
 	user-select: none
+	background-color: $black
+
+	@media $media-sm-up
+		background-color: rgba(0, 0, 0, 0.85)
 
 .-controls
 	flex: 0 0 auto
 	height: $-controls-height
 	line-height: $-controls-height
-	text-align: right
+	text-align: center
+
+	@media only screen and (orientation: landscape)
+		position: absolute
+		right: $-controls-padding
+		bottom: 0
+		z-index: 10
+
+	@media $media-sm-up
+		text-align: right
+		position: static
+		padding-right: $-controls-padding
 
 .-next, .-prev
+	display: none
 	position: absolute
 	top: 50%
 	width: $-button-size
@@ -40,6 +56,9 @@ $-button-size = 90px
 	background-color: rgba($black, 0.5)
 	border-radius: $border-radius-base
 	text-align: center
+
+	@media $media-sm-up
+		display: block
 
 	> .jolticon
 		vertical-align: middle
@@ -65,10 +84,16 @@ $-button-size = 90px
 // http://stackoverflow.com/questions/10269290/how-to-arrange-many-div-elements-side-by-side-with-no-wrap
 .-slider
 	flex: 1 1 auto
-	padding-bottom: $-controls-height
-	white-space: nowrap
+	display: flex
+	align-items: flex-start
+	flex-flow: row nowrap
 	// Ease out so that with fast flicks it doesn't look like it slows down after letting go.
 	transition: transform 300ms $weak-ease-out
+
+	@media $media-sm-up
+		// Should take up the same amount of space on the bottom as the controls on top so
+		// everything is centered.
+		padding-bottom: $-controls-height
 
 	// We need manual control of styling when dragging.
 	.dragging &

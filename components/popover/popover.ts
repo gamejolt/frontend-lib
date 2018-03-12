@@ -1,11 +1,12 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Emit } from 'vue-property-decorator';
 import View from '!view!./popover.html';
 
 import { Popover } from './popover.service';
 import { Ruler } from '../ruler/ruler-service';
 import { Screen } from '../screen/screen-service';
 import { Scroll } from '../scroll/scroll.service';
+import { AppScrollInviewParent } from '../scroll/inview/parent';
 
 // Importing animations didn't work with scoped.
 require('./popover.styl');
@@ -20,7 +21,11 @@ interface PopoverTiggerEvent extends Event {
 }
 
 @View
-@Component({})
+@Component({
+	components: {
+		AppScrollInviewParent,
+	},
+})
 export class AppPopover extends Vue {
 	@Prop(String) popoverId: string;
 	@Prop(Boolean) appendToBody: boolean;
@@ -51,10 +56,21 @@ export class AppPopover extends Vue {
 
 	readonly Screen = Screen;
 
+	$refs: {
+		popover: HTMLElement;
+		inviewParent: AppScrollInviewParent;
+	};
+
+	@Emit('inview-parent')
+	emitInviewParent(_parent: AppScrollInviewParent) {}
+
 	mounted() {
+		// Emit out the scroll-inview-parent in case the parent component requires it.
+		this.emitInviewParent(this.$refs.inviewParent);
+
 		// Store a reference to the inner popover since we may append it to the
 		// body later and lose reference to it.
-		this.popoverElem = this.$refs.popover as HTMLElement;
+		this.popoverElem = this.$refs.popover;
 		this.context = document.getElementById('popover-context');
 
 		// Track this popover.

@@ -131,7 +131,7 @@
 				:package="package"
 				:card="card"
 				@click="buildClick( $event.build, $event.fromExtraSection )"
-				@show-build-payment="showPayment( $event.build, $event.fromExtraSection )"
+				@show-build-payment="showPayment( $event, false )"
 				/>
 
 			<template v-if="isPartner && sellable.type === 'paid' && !isOwned">

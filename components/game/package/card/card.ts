@@ -173,7 +173,7 @@ export class AppGamePackageCard extends Vue {
 		GamePackagePurchaseModal.show({
 			game: this.game,
 			package: this.package,
-			build,
+			build: build,
 			fromExtraSection,
 			partner: this.partner,
 			partnerKey: this.partnerKey,
