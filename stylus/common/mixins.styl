@@ -1,13 +1,13 @@
 @require '~bootstrap-stylus/stylus/mixins'
 
 content-prop($prop, $val)
-	if ($val == 'base')
+	if ($val == 'bg')
 		{$prop}: $white
-	else if ($val == 'offset')
+	else if ($val == 'bg-offset')
 		{$prop}: $gray-lightest
-	else if ($val == 'text')
+	else if ($val == 'fg')
 		{$prop}: $text-color
-	else if ($val == 'muted')
+	else if ($val == 'fg-muted')
 		{$prop}: $text-muted
 	else if ($val == 'link')
 		{$prop}: $gj-dark-green
@@ -16,15 +16,18 @@ content-prop($prop, $val)
 
 	{$prop}: unquote('var(--content-' + $val + ')')
 
-user-prop($prop, $val)
+theme-prop($prop, $val)
 	if ($val == 'highlight')
 		{$prop}: $gj-green
-	else if ($val == 'offlight')
+	else if ($val == 'downlight')
 		{$prop}: $gj-dark-green
 	else if ($val == 'notice')
 		{$prop}: $gj-pink
 
-	{$prop}: unquote('var(--user-' + $val + ')')
+	{$prop}: unquote('var(--theme-' + $val + ')')
+
+rounded-corners()
+	border-radius: $border-radius-base
 
 /**
  * Make a caret! Not for rabbits.
@@ -187,17 +190,17 @@ link-unstyled()
  * Placeholders
  */
 lazy-placeholder-inline()
+	content-prop('background-color', 'bg-offset')
 	display: inline-block
 	vertical-align: middle
 	width: 100%
 	height: $font-size-base
-	background-color: $gray-lightest
 	border-radius: $border-radius-base
 
 lazy-placeholder-block()
+	content-prop('background-color', 'bg-offset')
 	display: block
 	height: $font-size-base
-	background-color: $gray-lightest
 	border-radius: $border-radius-base
 
 /**

@@ -1,0 +1,49 @@
+
+:root
+	// The main theme color -- should be bright (show well on dark, not on light)
+	--theme-highlight: $gj-green
+	// The darker theme color (highlight should be able to overlay on top of this)
+	--theme-downlight: $gj-dark-green
+	// Used for notices like notifications or errors
+	--theme-notice: $gj-pink
+	// TODO(themes): remove these
+	--theme-green: var(--theme-highlight)
+	--theme-dark-green: var(--theme-downlight)
+	--theme-blue: var(--theme-highlight)
+	--theme-pink: var(--theme-notice)
+
+/**
+ * Light Mode (default)
+ */
+:root
+	// Base background color
+	--content-bg: $white
+	// Slightly darker background (used for info boxes and such)
+	--content-bg-offset: $gray-lightest
+	// A bit darker than the offset color (used for separator lines)
+	--content-bg-subtle: $gray-lighter
+	// Text color
+	--content-fg: $gray-dark
+	// Muted text color (used for less important content)
+	--content-fg-muted: $gray-light
+	// The default link color
+	--content-link: var(--theme-downlight)
+	// The link color on hover
+	--content-link-hover: $black
+	// Helper vars
+	--content-bg-trans: rgba($white, 0)
+
+/**
+ * Dark Mode
+ */
+.theme-dark, .fill-gray, .fill-dark, .fill-darker, .fill-darkest, .fill-black
+	--content-bg: $gray-dark
+	--content-bg-offset: $gray
+	// TODO(themes): random color
+	--content-bg-subtle: #444
+	--content-fg: $gray-lightest
+	--content-fg-muted: $gray-light
+	--content-link: var(--theme-highlight)
+	--content-link-hover: $white
+	// Helper vars
+	--content-bg-trans: rgba($gray-dark, 0)

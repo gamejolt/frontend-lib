@@ -51,20 +51,17 @@ datepicker-button-variant(color, background, hover-background)
 		cursor: pointer
 
 	.text-info
-		color: var(--user-dark-green)
 		font-weight: bold
+		color: inherit
 
 	/**
 	 * Button variants
 	 */
 	&.datepicker-btn-default
-		datepicker-button-variant($gray-dark, $gray-lightest, $gray-lighter)
+		datepicker-button-variant(inherit, var(--content-bg-offset), var(--content-bg-subtle))
 
 	&.datepicker-btn-info
-		datepicker-button-variant(var(--user-green), var(--user-dark-green), var(--user-dark-green))
-
-		.text-info
-			color: var(--user-green)
+		datepicker-button-variant(var(--theme-highlight), var(--theme-downlight), var(--theme-downlight))
 
 	/**
 	 * Block buttons.

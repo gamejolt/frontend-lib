@@ -114,7 +114,7 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 		margin-left: ($button-padding-horizontal / 2) * 1.5
 		margin-right: -($button-padding-horizontal)
 		background-color: $black
-		color: var(--user-green)
+		color: var(--theme-green)
 		font-size: $font-size-small
 		border-top-right-radius: $border-radius-base
 		border-bottom-right-radius: $border-radius-base
@@ -179,10 +179,10 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
  * Default
  */
 .button
-	button-variant(background: $black, color: $white, icon-color: var(--user-green), outline-color: $black, active-background: $black, active-color: var(--user-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
+	button-variant(background: $black, color: $white, icon-color: var(--theme-green), outline-color: $black, active-background: $black, active-color: var(--theme-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
 
 .-primary
-	button-variant(background: var(--user-dark-green), color: $white, icon-color: var(--user-green), outline-color: var(--user-dark-green), active-background: var(--user-dark-green), active-color: var(--user-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
+	button-variant(background: var(--theme-dark-green), color: $white, icon-color: var(--theme-green), outline-color: var(--theme-dark-green), active-background: var(--theme-dark-green), active-color: var(--theme-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
 
 /**
  * Dark variant
@@ -193,7 +193,7 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 		color: $gray-lighter !important
 
 		.jolticon
-			color: var(--user-green)
+			color: var(--theme-green)
 
 		// We don't fill them when they're on dark background.
 		// We simply highlight the current outlined version.
@@ -203,8 +203,8 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 			color: $white !important
 
 	&.-primary.-outline, &.-primary-trans
-		border-color: var(--user-green)
-		color: var(--user-green) !important
+		border-color: var(--theme-green)
+		color: var(--theme-green) !important
 
 /* // Orverride button styling in fills.
    .fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray, .fill-light, .fill-pink

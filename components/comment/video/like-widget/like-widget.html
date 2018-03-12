@@ -22,7 +22,7 @@
 			<translate v-else>Liked!</translate>
 		</span>
 	</button>
-	<span class="blip light filled" v-if="sparse && comment.votes > 0">
+	<span class="blip filled" v-if="sparse && comment.votes > 0">
 		<span class="blip-caret"></span>
 		<span class="blip-count">{{ comment.votes | number }}</span>
 	</span>

@@ -5,24 +5,25 @@ $list-group-addon-width = 40px
 $list-group-drag-handle-width = 20px
 
 .list-group
+	content-prop('border-color', 'bg-subtle')
 	margin-bottom: $font-size-base
-	border: 1px solid $gray-lightest
+	border-width: 1px
+	border-style: solid
 	border-radius: $border-radius-base
 
 	&.nowrap
 		white-space: nowrap
 
-.fill-lightest .list-group
-	border-color: $gray-lighter
-
 .list-group-item
+	content-prop('background-color', 'bg')
+	content-prop('border-bottom-color', 'bg-subtle')
+	color: inherit
 	position: relative
 	display: block
 	padding: $list-group-item-padding
 	text-decoration: none
-	border-bottom: 1px solid $gray-lightest
-	background-color: $white
-	color: $text-color !important
+	border-bottom-width: 1px
+	border-bottom-style: solid
 
 	&:last-child
 		border-bottom: 0
@@ -31,18 +32,18 @@ $list-group-drag-handle-width = 20px
 		user-select: none
 
 	a&:hover, &.active
-		background-color: $gray-lightest
+		content-prop('background-color', 'bg-offset')
 
 	// Disabled styling.
 	&.disabled
+		content-prop('color', 'fg-muted')
 		cursor: default
-		color: $gray-lighter !important
 
 		a&
 			cursor: not-allowed
 
 		&:hover
-			background-color: $white
+			content-prop('background-color', 'bg')
 
 	// Badges should float right and be correctly aligned vertically.
 	.badge
@@ -96,21 +97,21 @@ $list-group-drag-handle-width = 20px
 		margin-bottom: 0
 
 .list-group-item-text
+	content-prop('color', 'fg-muted')
 	font-size: $font-size-small
-	color: $text-muted !important
 	margin-bottom: $list-group-item-padding
 
 	&:last-child
 		margin-bottom: 0
 
 .list-group-item-addon
+	content-prop('background-color', 'bg-offset')
 	position: absolute
 	top: 0
 	left: 0
 	bottom: 0
 	width: 40px
 	text-align: center
-	background-color: $gray-lightest
 	padding: $list-group-item-padding 0
 
 .list-group.thin
@@ -128,14 +129,12 @@ $list-group-drag-handle-width = 20px
 // When a list-group is inside a popover.
 // Darken the borders.
 .popover .list-group
-	border-color: $gray-lighter
 	margin-bottom: $list-group-item-padding
 
 	&:last-child
 		margin-bottom: 0
 
 	> .list-group-item
-		border-color: $gray-lighter
 		border-left: 0
 		border-right: 0
 		border-radius: 0 !important
@@ -147,9 +146,8 @@ $list-group-drag-handle-width = 20px
 	border: 0
 
 	.list-group-item
+		@extend .fill-darkest
 		border: 0
-		background-color: $gray-darkest
-		color: $gray-lightest !important
 
 		&.disabled
 			color: $gray !important
@@ -160,12 +158,6 @@ $list-group-drag-handle-width = 20px
 
 		> .jolticon, > .list-group-item-heading > .jolticon
 			color: $gray-light
-
-		a
-			color: $white !important
-
-			&:hover
-				color: var(--user-blue) !important
 
 		&:first-child
 			border-top-left-radius: $border-radius-base

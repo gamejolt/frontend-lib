@@ -1,12 +1,14 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
 .blip
+	content-prop('background-color', 'bg-offset')
 	position: relative
 	top: 1px // Needed to play nicely with buttons for some reason
 	display: inline-block
 	margin: 0 0 0 3px
 	padding: 0 5px
-	background-color: $gray-dark
 	border-radius: $border-radius-small
-	color: $gray-light
 	font-family: $font-family-tiny
 	font-weight: bold
 	font-size: $font-size-tiny
@@ -15,42 +17,17 @@
 	text-align: center
 	vertical-align: baseline
 
-	&.filled
-		color: var(--user-green)
-		background-color: var(--user-dark-green)
-
 	/**
 	 * Carets
 	 */
 	.blip-caret
-		caret(direction: left, color: $gray-dark, size: 3px)
+		// Set to white since we'll have to override with content prop anyway.
+		caret(direction: left, color: $white, size: 3px)
+		content-prop('border-right-color', 'bg-offset')
 
-	&.no-caret
-		margin-left: 0
-
-		.blip-caret
-			display: none
-
-	/**
-	 * Big blips
-	 */
-	&.big
-		margin-top: 10px
-		vertical-align: baseline
-
-	/**
-	 * Light blips
-	 */
-	&.light
-		background-color: $gray-lighter
-		color: $gray-light
+	&.filled
+		theme-prop('background-color', 'downlight')
+		theme-prop('color', 'highlight')
 
 		.blip-caret
-			border-right-color: $gray-lighter
-
-		&.filled
-			background-color: var(--user-dark-green)
-			color: var(--user-green)
-
-			.blip-caret
-				border-right-color: var(--user-dark-green)
+			theme-prop('border-right-color', 'downlight')

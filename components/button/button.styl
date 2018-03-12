@@ -107,7 +107,7 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 		margin-left: ($button-padding-horizontal / 2) * 1.5
 		margin-right: -($button-padding-horizontal)
 		background-color: $black
-		color: var(--user-green)
+		color: var(--theme-green)
 		font-size: $font-size-small
 		border-top-right-radius: $border-radius-base
 		border-bottom-right-radius: $border-radius-base
@@ -169,16 +169,16 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
  * Default
  */
 .btn
-	button-variant(background: $black, color: $white, icon-color: var(--user-green), outline-color: $black, active-background: $black, active-color: var(--user-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
+	button-variant(background: $black, color: $white, icon-color: var(--theme-green), outline-color: $black, active-background: $black, active-color: var(--theme-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
 
 .btn-success
-	button-variant(background: var(--user-dark-green), color: $white, icon-color: var(--user-green), outline-color: var(--user-dark-green), active-background: var(--user-dark-green), active-color: var(--user-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
+	button-variant(background: var(--theme-dark-green), color: $white, icon-color: var(--theme-green), outline-color: var(--theme-dark-green), active-background: var(--theme-dark-green), active-color: var(--theme-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
 
 .btn-primary
-	button-variant(background: var(--user-blue), color: $black, icon-color: $black, outline-color: var(--user-blue), active-background: var(--user-blue), active-color: $white, addon-color: $white, outline-addon-color: $gray-light)
+	button-variant(background: var(--theme-blue), color: $black, icon-color: $black, outline-color: var(--theme-blue), active-background: var(--theme-blue), active-color: $white, addon-color: $white, outline-addon-color: $gray-light)
 
 .btn-danger
-	button-variant(background: var(--user-pink), color: $black, icon-color: $black, outline-color: var(--user-pink), active-background: var(--user-pink), active-color: $white, addon-color: $white, outline-addon-color: $gray-light)
+	button-variant(background: var(--theme-pink), color: $black, icon-color: $black, outline-color: var(--theme-pink), active-background: var(--theme-pink), active-color: $white, addon-color: $white, outline-addon-color: $gray-light)
 
 /**
  * Dark variant
@@ -189,7 +189,7 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 		color: $gray-lighter !important
 
 		.jolticon
-			color: var(--user-green)
+			color: var(--theme-green)
 
 		// We don't fill them when they're on dark background.
 		// We simply highlight the current outlined version.
@@ -199,22 +199,22 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 			color: $white !important
 
 	&.btn-success-outline, &.btn-success-trans
-		border-color: var(--user-green)
-		color: var(--user-green) !important
+		border-color: var(--theme-green)
+		color: var(--theme-green) !important
 
 	&.btn-primary-outline, &.btn-primary-trans
-		border-color: var(--user-blue)
-		color: var(--user-blue) !important
+		border-color: var(--theme-blue)
+		color: var(--theme-blue) !important
 
 		.jolticon
-			color: var(--user-blue)
+			color: var(--theme-blue)
 
 	&.btn-danger-outline, &.btn-danger-trans
-		border-color: var(--user-pink)
-		color: var(--user-pink) !important
+		border-color: var(--theme-pink)
+		color: var(--theme-pink) !important
 
 		.jolticon
-			color: var(--user-pink)
+			color: var(--theme-pink)
 
 // Orverride button styling in fills.
 .theme-dark, .fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray, .fill-light, .fill-pink

@@ -16,17 +16,10 @@ a
 	&:hover, &:focus
 		text-decoration: none
 
-	// TODO(themes)
-	user-prop('color', 'offlight')
+	content-prop('color', 'link')
 
 	&:hover
-		color: $black
-
-	.theme-dark &
-		user-prop('color', 'highlight')
-
-		&:hover
-			color: $white
+		content-prop('color', 'link-hover')
 
 .link-muted
 	color: $text-muted
@@ -49,7 +42,7 @@ a
 	position: relative
 
 hr
-	content-prop('border-top-color', 'offset')
+	content-prop('border-top-color', 'bg-subtle')
 
 /**
  * Scrollable

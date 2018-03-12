@@ -1,7 +1,6 @@
 @require '~styles/variables'
 
 .growl-inner
-
 	h4
 		margin: 0
 		font-weight: 300
@@ -14,28 +13,20 @@
 		color: $white
 		text-decoration: underline
 
-	.btn
-		text-decoration: none
-
-		&
-		&:hover
-			background-color: $gray-dark !important
-
 	.progress
 		margin-bottom: 9px
 
-	p:last-child
-	.progress:last-child
+	p:last-child, .progress:last-child
 		margin-bottom: 0
 
 .growl-type-success .growl-inner
 	h4
-		color: var(--user-green)
+		color: var(--theme-green)
 
 .growl-type-error .growl-inner
 	h4
-		color: var(--user-green)
+		color: var(--theme-green)
 
 .growl-type-info .growl-inner
 	h4
-		color: var(--user-green)
+		color: var(--theme-green)

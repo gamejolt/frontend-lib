@@ -17,10 +17,9 @@ $meter-blip-count = 10
 
 .meter-blip-filled
 	.meter-low &
-		background-color: var(--user-pink)
+		background-color: var(--theme-pink)
 
-	.meter-mid &
-	.meter-high &
+	.meter-mid &, .meter-high &
 		background-color: $gray
 
 .meter-dark
@@ -29,16 +28,16 @@ $meter-blip-count = 10
 
 .meter-blip-filled
 	.meter-dark.meter-low &
-		background-color: var(--user-pink)
+		background-color: var(--theme-pink)
 
 	.meter-dark.meter-mid &
 		background-color: $gray-lightest
 
 	.meter-dark.meter-high &
-		background-color: var(--user-green)
+		background-color: var(--theme-green)
 
-for i in 1..$meter-blip-count
-	.meter-blip:nth-child( {i} )
+for i in 1 .. $meter-blip-count
+	.meter-blip:nth-child({i} )
 		height: 10px
 
 		&:nth-child(odd)

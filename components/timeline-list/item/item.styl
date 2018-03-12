@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require '../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 // Most of this styling needs to be done globally.
 >>> .timeline-list
@@ -11,8 +11,9 @@
 		color: inherit
 
 		&-bubble
-			content-prop('background-color', 'offset')
-			content-prop('color', 'muted')
+			content-prop('background-color', 'bg-offset')
+			content-prop('color', 'fg-muted')
+			content-prop('border-color', 'bg')
 			// color: $gray-light
 			text-align: center
 			border-radius: 50%
@@ -24,7 +25,6 @@
 			line-height: $timeline-list-icon-size
 			border-width: 3px
 			border-style: solid
-			content-prop('border-color', 'base')
 			z-index: 1
 
 			> .jolticon
@@ -49,9 +49,9 @@
 			padding-left: $border-size + $-padding-left
 
 			&.is-thread
+				content-prop('border-left-color', 'bg-subtle')
 				border-left-width: $border-size
 				border-left-style: solid
-				content-prop('border-left-color', 'offset')
 				margin-left: ($timeline-list-icon-size / 2)
 				padding-left: ($timeline-list-icon-size / 2) + $timeline-list-avatar-margin
 
@@ -66,11 +66,11 @@
 			font-size: $font-size-tiny
 
 		&-title
+			content-prop('color', 'fg')
 			display: block
 			margin-top: 5px
 			font-weight: bold
 			font-size: $font-size-h4
-			content-prop('color', 'text')
 
 		&-title-small
 			font-size: $font-size-base
@@ -98,13 +98,12 @@
 			background-size: cover
 
 		&-ad
+			content-prop('border-left-color', 'bg-subtle')
 			margin-left: ($timeline-list-icon-size / 2)
 			padding-bottom: $line-height-computed
 			border-left-width: $border-size
 			border-left-style: solid
-			content-prop('border-left-color', 'muted')
 
-			// border-left-color: $gray-lighter
 			section
 				border-top-right-radius: $border-radius-base
 				border-bottom-right-radius: $border-radius-base
@@ -128,4 +127,4 @@
 		 * Active Item
 		 */
 		&-bubble.active, &-bubble.new
-			user-prop('border-color', 'notice')
+			theme-prop('border-color', 'notice')

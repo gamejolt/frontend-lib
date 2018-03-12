@@ -1,21 +1,22 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .timepicker
-
 	td
 		padding-right: 5px
 
 	.timepicker-link
-		color: $gray-lighter
+		content-prop('color', 'bg-subtle')
 		user-select: none
 
 		&:hover
-			color: $gray-darker
+			content-prop('color', 'link-hover')
 
 	/**
 	 * The timepicker button -- for AM/PM.
 	 */
 	.timepicker-btn
+		content-prop('background-color', 'bg-offset')
 		display: inline-block
 		margin: 0
 		text-align: center
@@ -25,40 +26,21 @@
 		border: 0
 		white-space: nowrap
 		user-select: none
-
 		// Add some extra vertical padding because of the border that
 		// goes into input elements.
 		padding: ($padding-base-vertical + 1px) $padding-base-horizontal
 		font-size: $font-size-base
 		line-height: $line-height-base
 
-		color: $gray-dark
-		background-color: $gray-lighter
-
-		&:hover
-		&:focus
-		&:active
+		&:hover, &:focus, &:active
 			text-decoration: none
 			outline: none
 
-		&.disabled
-		&[disabled]
-		fieldset[disabled] &
+		&.disabled, &[disabled], fieldset[disabled] &
 			cursor: not-allowed
 			pointer-events: none // Future-proof disabling of clicks
 			opacity: 0.65
 			box-shadow: none
 
 		&:hover
-			color: $gray-lighter
-			background-color: $gray-darker
-
-		&.disabled
-		&[disabled]
-		fieldset[disabled] &
-			&
-			&:hover
-			&:focus
-			&:active
-			&.active
-				background-color: $gray-lighter
+			content-prop('background-color', 'bg-subtle')

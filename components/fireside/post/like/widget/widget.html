@@ -23,7 +23,7 @@
 			<translate v-else>Liked!</translate>
 		</span>
 	</button>
-	<span class="blip light filled" v-if="isSparse && post.like_count">
+	<span class="blip filled" v-if="isSparse && post.like_count">
 		<span class="blip-caret"></span>
 		<span class="blip-count">{{ post.like_count | number }}</span>
 	</span>

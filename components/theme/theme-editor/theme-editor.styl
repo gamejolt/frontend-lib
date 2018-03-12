@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require '../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .theme-editor >>> .CodeMirror
 	border-color: $gray-dark
@@ -24,8 +24,7 @@
 		&:last-child
 			border-bottom: 0
 
-			&
-			>>> .fill-white
+			&, >>> .fill-white
 				border-bottom-left-radius: $border-radius-base
 				border-bottom-right-radius: $border-radius-base
 
@@ -43,6 +42,7 @@
 .clear-link
 	padding: 0 8px
 	color: $gray-light !important
+
 	&:hover
 		color: $black !important
 

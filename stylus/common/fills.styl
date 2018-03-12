@@ -2,26 +2,26 @@
  * Fills
  */
 .fill-offset
-	content-prop('background-color', 'offset')
+	content-prop('background-color', 'bg-offset')
 
 	.help-block
-		content-prop('background-color', 'muted')
+		content-prop('background-color', 'fg-muted')
 
 	/*
 	   .input-group-addon
 	   background-color: $gray-light
 	   color: $gray-lightest
 	   border-color: $gray-light
-
+	   
 	   .form-control
 	   border-color: $gray-light
-
+	   
 	   .form-control:focus
 	   border-color: $gray-dark
 	*/
 
 .fill-notice
-	user-prop('background-color', 'notice')
+	theme-prop('background-color', 'notice')
 	color: $black
 
 .fill-white
@@ -52,16 +52,16 @@
 	background-color: $black
 
 .fill-green
-	background-color: var(--user-green)
+	background-color: var(--theme-green)
 
 .fill-dark-green
-	background-color: var(--user-dark-green)
+	background-color: var(--theme-dark-green)
 
 .fill-pink
-	background-color: var(--user-pink)
+	background-color: var(--theme-pink)
 
 .fill-blue
-	background-color: var(--user-blue)
+	background-color: var(--theme-blue)
 
 .fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray, .fill-light
 	color: $gray-lighter
@@ -70,10 +70,10 @@
 		color: $gray-lightest
 
 	a
-		color: var(--user-green)
+		color: var(--theme-green)
 
 		&:hover
-			color: var(--user-blue)
+			color: var(--theme-blue)
 
 	.link-muted, .link-help
 		color: $text-muted
@@ -160,7 +160,7 @@
 
 .fill-dark-green
 	&, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
-		color: var(--user-green)
+		color: var(--theme-green)
 
 	a
 		font-weight: bold
@@ -174,27 +174,27 @@
 /* hr
    .fill-black &
    border-top-color: $gray-darker
-
+   
    .fill-darkest &
    border-top-color: $gray-darker
-
+   
    .fill-darker &
    border-top-color: $gray-dark
-
+   
    .fill-dark &
    border-top-color: $gray
-
+   
    .fill-gray &
    border-top-color: $gray-light
-
+   
    .fill-light &
    border-top-color: $gray-lighter
-
+   
    .fill-lighter &
    border-top-color: $gray-light
-
+   
    .fill-lighest &
    border-top-color: $gray-lighter
-
+   
    .fill-white &
    border-top-color: $gray-lightest */
