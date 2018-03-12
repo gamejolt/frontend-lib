@@ -63,6 +63,10 @@ export class AppMediaBarLightboxItem extends Vue {
 	async calcDimensions() {
 		await this.$nextTick();
 
+		if (Screen.isXs) {
+			return;
+		}
+
 		// Very fragile. Kinda lame.
 		this.maxWidth = Screen.width - MediaBarLightboxConfig.buttonSize * 2;
 		this.maxHeight = Screen.height - MediaBarLightboxConfig.controlsHeight * 2;

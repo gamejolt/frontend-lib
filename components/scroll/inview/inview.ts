@@ -1,109 +1,52 @@
 import Vue, { CreateElement } from 'vue';
 import { Component, Watch, Prop } from 'vue-property-decorator';
-import 'rxjs/add/operator/throttleTime';
 
-import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
+import { ScrollInviewContainer } from './container';
+import { findVueParent } from '../../../utils/vue';
+import { AppScrollInviewParent } from './parent';
+import { arrayRemove } from '../../../utils/array';
 
-/**
- * When the scroll velocity is below this minimum distance in px, we will check inview items every
- * ScrollThrottleTime. This ensures that if they're scrolling constantly, but really slowly, we'll be
- * able to do the checks still even though debounce won't fire.
- */
-const ScrollVelocityMinimum = 3000;
-const ScrollThrottleTime = 1000;
-
-// We set up a global listener instead of having each element setting up
-// listeners.
-let items: AppScrollInview[] = [];
-
+// This is the root container we use if there's no inview parent.
+let BaseContainer: ScrollInviewContainer;
 if (!GJ_IS_SSR) {
-	Scroll.scrollStop.subscribe(check);
-	Scroll.scrollChanges.throttleTime(ScrollThrottleTime).subscribe(onScrollThrottle);
-}
-
-let lastScrollTop = 0;
-let lastThrottleTime = Date.now();
-function onScrollThrottle() {
-	const now = Date.now();
-	const scrollTop = Scroll.getScrollTop();
-	const deltaDistance = scrollTop - lastScrollTop;
-	const deltaTime = (now - lastThrottleTime) / 1000;
-	const velocity = deltaDistance / deltaTime;
-
-	if (Math.abs(velocity) < ScrollVelocityMinimum) {
-		check();
-	}
-
-	lastThrottleTime = now;
-	lastScrollTop = scrollTop;
-}
-
-let lastScrollHeight: number | undefined = undefined;
-function check() {
-	const { top, height, scrollHeight } = Scroll.getScrollChange();
-
-	for (const item of items) {
-		// We only calculate the bounding box when scroll height changes. This
-		// reduces the amount of reflows and what not.
-		if (lastScrollHeight !== scrollHeight) {
-			item.recalcBox();
-		}
-
-		let inView = true;
-		if (item.top > top + height) {
-			inView = false;
-		} else if (item.bottom < top) {
-			inView = false;
-		}
-
-		if (inView !== item.inView) {
-			item.inView = inView;
-		}
-	}
-
-	lastScrollHeight = height;
-}
-
-let checkTimeout: number | undefined;
-
-/**
- * Sets a timeout that will run a check some time in the future for all current
- * inview elements on screen.
- */
-function queueCheck() {
-	if (!checkTimeout) {
-		checkTimeout = setTimeout(() => {
-			check();
-			checkTimeout = undefined;
-		});
-	}
+	BaseContainer = new ScrollInviewContainer(document);
 }
 
 @Component({})
 export class AppScrollInview extends Vue {
+	@Prop({ type: String, default: 'div' })
+	tag: string;
 	@Prop({ type: Number, default: 0 })
 	extraPadding: number;
 
 	inView = false;
 
+	// Don't have Vue watch these by not setting their default values.
 	top: number;
 	bottom: number;
 
-	mounted() {
-		items.push(this);
+	get container() {
+		const parent = findVueParent(this, AppScrollInviewParent);
+		return parent ? parent.container : BaseContainer;
+	}
 
-		// We queue up a check to see if it's in view at mount or not. We do it
-		// in a timeout so that if many elements are shown at once on screen, we
-		// still only do one check.
-		queueCheck();
+	async mounted() {
+		// Wait for the parent container to bootstrap in.
+		await this.$nextTick();
+		this.container.items.push(this);
+
+		// Queue a check so that we can group together all the other components that may mount in
+		// and do one single check.
+		this.container.queueCheck();
 	}
 
 	destroyed() {
-		const index = items.indexOf(this);
-		if (index !== -1) {
-			items.splice(index, 1);
-		}
+		arrayRemove(this.container.items, i => i === this);
+	}
+
+	render(h: CreateElement) {
+		return h(this.tag, this.$slots.default);
 	}
 
 	@Watch('inView')
@@ -115,13 +58,19 @@ export class AppScrollInview extends Vue {
 		}
 	}
 
-	render(h: CreateElement) {
-		return h('div', this.$slots.default);
-	}
-
 	recalcBox() {
-		const offset = Ruler.offset(this.$el);
-		this.top = offset.top - this.extraPadding;
-		this.bottom = offset.top + offset.height + this.extraPadding;
+		const rect = this.$el.getBoundingClientRect();
+		let top = rect.top;
+
+		if (this.container.context instanceof HTMLDocument) {
+			top += window.pageYOffset || document.documentElement.scrollTop;
+		} else if (!(this.container.context instanceof HTMLDocument)) {
+			const parentRect = this.container.context.getBoundingClientRect();
+			top -= parentRect.top;
+			top += this.container.context.scrollTop;
+		}
+
+		this.top = top - this.extraPadding;
+		this.bottom = top + rect.height + this.extraPadding;
 	}
 }

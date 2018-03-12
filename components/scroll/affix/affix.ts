@@ -64,8 +64,8 @@ export class AppScrollAffix extends Vue {
 			this.refreshOffsetLoop();
 		});
 
-		this.scroll$ = Scroll.scrollChanges.sampleTime(ScrollSampleTime).subscribe(() => {
-			const { top } = Scroll.getScrollChange();
+		this.scroll$ = Scroll.watcher.changes.sampleTime(ScrollSampleTime).subscribe(() => {
+			const { top } = Scroll.watcher.getScrollChange();
 			this.checkScroll(top);
 		});
 		this.refreshOffsetLoop();

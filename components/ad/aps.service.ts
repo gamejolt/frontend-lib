@@ -1,4 +1,4 @@
-import { AdSlot, AdSlotPos } from './slot';
+import { AdSlot } from './slot';
 import { BidsTimeout } from './ads.service';
 
 interface ApsSlot {

@@ -18,17 +18,20 @@
 				>
 			</div>
 
-			<div class="popover-content scrollable"
+			<app-scroll-inview-parent
+				ref="inviewParent"
+				class="popover-content scrollable"
 				:style="{ 'max-height': appendToBody && !noMaxHeight ? (Screen.windowHeight - 100) + 'px' : undefined }"
 				:class="{
 					'popover-no-max-height': noMaxHeight,
 				}"
-				@mouseenter="onMouseEnter"
-				@mouseleave="onMouseLeave"
-				@click="onClick"
+				:throttle="0"
+				@mouseenter.native="onMouseEnter"
+				@mouseleave.native="onMouseLeave"
+				@click.native="onClick"
 				>
 				<slot></slot>
-			</div>
+			</app-scroll-inview-parent>
 		</div>
 	</transition>
 </div>

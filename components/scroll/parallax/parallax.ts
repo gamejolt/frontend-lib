@@ -42,8 +42,8 @@ export class AppScrollParallax extends Vue {
 	private lastCalculated: number;
 
 	async mounted() {
-		this.scroll$ = Scroll.scrollChanges.subscribe(() => {
-			const { top } = Scroll.getScrollChange();
+		this.scroll$ = Scroll.watcher.changes.subscribe(() => {
+			const { top } = Scroll.watcher.getScrollChange();
 			this.onScroll(top);
 		});
 
@@ -78,7 +78,7 @@ export class AppScrollParallax extends Vue {
 		this.lastCalculated = Date.now();
 
 		// The height of the scroller viewport.
-		const scrollerHeight = Ruler.outerHeight(Scroll.context);
+		const scrollerHeight = Ruler.outerHeight(document);
 
 		// The height of the element.
 		this.elementHeight = Ruler.outerHeight(this.$el);
