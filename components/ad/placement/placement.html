@@ -2,7 +2,7 @@
 	<section class="section section-thin" v-if="Screen.isDesktop">
 		<app-ad size="leaderboard" :pos="pos" />
 	</section>
-	<section class="section section-thin fill-lightest" v-else-if="Screen.isMobile">
+	<section class="section section-thin fill-offset" v-else-if="Screen.isMobile">
 		<app-ad size="rectangle" :pos="pos" />
 	</section>
 </div>

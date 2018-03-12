@@ -12,8 +12,10 @@
 	dot-separator()
 
 hr.underbar
+	content-prop('border-top-color', 'muted')
 	margin-top: 0
-	border-top: 3px solid $gray-light
+	border-top-width: 3px
+	border-top-style: solid
 	width: 50px
 	margin-left: 0
 	margin-right: 0
@@ -27,16 +29,14 @@ hr.underbar
 		margin-left: auto
 		margin-right: auto
 
-	.fill-black &
-		border-top-color: $white
+	/* .fill-black &
+	   border-top-color: $white
 
-	.fill-darkest &
-	.fill-darker &
-	.fill-dark &
-		border-top-color: $gray-light
+	   .fill-darkest &, .fill-darker &, .fill-dark &
+	   border-top-color: $gray-light
 
-	.fill-pink &
-		border-top-color: $black
+	   .fill-pink &
+	   border-top-color: $black */
 
 // Mobile screens are so small that it doesn't make sense to have a fixed table styling on them.
 // Let's by default only apply this to sm and up.

@@ -15,8 +15,7 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 		margin-top: 0
 		color: inherit
 
-	p
-	ul
+	p, ul
 		margin-bottom: 0
 
 	p + p
@@ -48,7 +47,10 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 	margin-right: 30px
 
 .alert-info
-	@extend .fill-lightest
+	@extend .fill-offset
+
+.alert-notice
+	@extend .fill-notice
 
 .fill-lightest .alert-info
 	@extend .fill-lighter

@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '../../stylus/common/mixins'
 
 .ad-leaderboard, .ad-rectangle
 	text-align: center
@@ -10,7 +11,7 @@
 		text-align: left
 
 .ad-inner
-	background-color: $gray-lightest
+	content-prop('background-color', 'offset')
 	border-radius: $border-radius-base
 
 .ad-leaderboard

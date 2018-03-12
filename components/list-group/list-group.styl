@@ -30,8 +30,7 @@ $list-group-drag-handle-width = 20px
 	a&
 		user-select: none
 
-	a&:hover
-	&.active
+	a&:hover, &.active
 		background-color: $gray-lightest
 
 	// Disabled styling.
@@ -50,18 +49,18 @@ $list-group-drag-handle-width = 20px
 		position: relative
 		float: right
 		vertical-align: text-top
-		top: 3px  // Arbitrary
+		top: 3px // Arbitrary
 		margin-left: $list-group-item-padding
 
 	// Tags should be correctly aligned vertically.
 	.tag
 		position: relative
 		vertical-align: text-top
-		top: 1px  // Arbitrary
+		top: 1px // Arbitrary
 		margin-right: $list-group-item-padding
 
-	// Pink tags are notifications and should be floated right.
-	.tag-pink
+	// Notice tags are notifications and should be floated right.
+	.tag-notice
 		margin-right: 0
 		margin-left: $list-group-item-padding
 		float: right
@@ -72,14 +71,12 @@ $list-group-drag-handle-width = 20px
 
 		// There is some extra spacing on the right from the browser adding spacing in between inline items.
 		// That's why we have to subtract 1px and 2px. It ends up being around 3px of extra spacing we have to subtract.
-		> .jolticon
-		> .list-group-item-heading > .jolticon
-		.list-group-item-icon
+		> .jolticon, > .list-group-item-heading > .jolticon, .list-group-item-icon
 			position: relative
-			top: 2px  // Arbitrary
+			top: 2px // Arbitrary
 			margin-right: -2px
 			margin-left: -($list-group-icon-width + 1px)
-			width: ($list-group-icon-width)
+			width: $list-group-icon-width
 			text-align: center
 
 	&.has-addon
@@ -137,7 +134,7 @@ $list-group-drag-handle-width = 20px
 	&:last-child
 		margin-bottom: 0
 
-	 > .list-group-item
+	> .list-group-item
 		border-color: $gray-lighter
 		border-left: 0
 		border-right: 0
@@ -161,14 +158,14 @@ $list-group-drag-handle-width = 20px
 				background-color: $gray-darkest
 				color: $gray !important
 
-		> .jolticon
-		> .list-group-item-heading > .jolticon
+		> .jolticon, > .list-group-item-heading > .jolticon
 			color: $gray-light
 
 		a
 			color: $white !important
+
 			&:hover
-				color: $gj-blue !important
+				color: var(--user-blue) !important
 
 		&:first-child
 			border-top-left-radius: $border-radius-base
@@ -182,10 +179,9 @@ $list-group-drag-handle-width = 20px
 		color: $gray-lighter
 
 	.list-group-item-addon
-		poaition: relative
 		background-color: transparent
 
-		&::before
+		&:before
 			content: ''
 			position: absolute
 			right: 0
@@ -197,12 +193,9 @@ $list-group-drag-handle-width = 20px
 			overflow: hidden
 			background-color: $gray-dark
 
-
-	a.list-group-item:hover
-	.list-group-item.active
+	a.list-group-item:hover, .list-group-item.active
 		color: $white !important
 		background-color: $gray-darker
 
-		> .jolticon
-		> .list-group-item-heading > .jolticon
+		> .jolticon, > .list-group-item-heading > .jolticon
 			color: $gray-lightest

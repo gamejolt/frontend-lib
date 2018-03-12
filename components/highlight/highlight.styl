@@ -3,55 +3,32 @@
 		background-color: $gray-darker !important
 
 // .hljs
-// 	display: block
-// 	overflow-x: auto
-// 	background: $gray-darkest
-
+// display: block
+// overflow-x: auto
+// background: $gray-darkest
 .hljs-emphasis
 	font-style: italic
 
 .hljs-strong
 	font-weight: bold
 
-.hljs-comment
-.hljs-quote
+.hljs-comment, .hljs-quote
 	color: $text-muted
 
-.hljs-variable
-.hljs-template-variable
-.hljs-meta
-.hljs-built_in
-.hljs-builtin-name
-.hljs-literal
-// .hljs-params
-.hljs-symbol
-.hljs-bullet
-.hljs-link
-.hljs-keyword
-.hljs-selector-tag
-.hljs-addition
-.hljs-section
-// .hljs-title
-.hljs-name
-.hljs-selector-id
-.hljs-selector-class
-.hljs-type
-// .hljs-number
-	color: $gj-green
+.hljs-variable, .hljs-template-variable, .hljs-meta, .hljs-built_in, .hljs-builtin-name, .hljs-literal, .hljs-symbol, .hljs-bullet, .hljs-link, .hljs-keyword, .hljs-selector-tag, .hljs-addition, .hljs-section, .hljs-name, .hljs-selector-id, .hljs-selector-class, .hljs-type
+	color: var(--user-green)
 
-.hljs-tag
-.hljs-tag .hljs-name
-	color: $gj-blue
+.hljs-tag, .hljs-tag .hljs-name
+	color: var(--user-blue)
 
 .hljs-attr
 	color: $gray-lightest
 
-.hljs-string
-.hljs-regexp
+.hljs-string, .hljs-regexp
 	color: $gray-lighter
 
 .hljs-attribute
 	font-weight: bold
 
 .hljs-deletion
-	color: $gj-pink
+	color: var(--user-pink)

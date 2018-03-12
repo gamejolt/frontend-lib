@@ -6,8 +6,11 @@
 	font-weight: normal
 	vertical-align: text-bottom
 	white-space: nowrap
-	color: $gray
-	background-color: $gray-lighter
+	content-prop('background-color', 'offset')
+	content-prop('color', 'text')
+	// content-prop('color', 'muted')
+	// color: $gray
+	// background-color: $gray-lighter
 	border-radius: $border-radius-small
 	line-height: 16px // Same size as a jolticon.
 
@@ -28,17 +31,31 @@
 			vertical-align: baseline
 
 .tag-active
-	background-color: $gj-dark-green
-	color: $gj-green
+	background-color: var(--user-dark-green)
+	color: var(--user-green)
 
 .tag-green
-	background-color: $gj-green
+	background-color: var(--user-green)
 	color: $black
 
 .tag-pink
-	background-color: $gj-pink
+	background-color: var(--user-pink)
 	color: $white
 
 .tag-blue
-	background-color: $gj-blue
+	background-color: var(--user-blue)
 	color: $gray-darker
+
+.tag-highlight
+	user-prop('background-color', 'offlight')
+	user-prop('color', 'highlight')
+
+	a&:hover
+		color: $white
+
+.tag-notice
+	user-prop('background-color', 'notice')
+	color: $black
+
+	a&:hover
+		color: $gray-darker

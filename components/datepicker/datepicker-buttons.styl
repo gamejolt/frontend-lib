@@ -1,18 +1,14 @@
 @require '~styles/variables'
 
-datepicker-button-variant( color, background, hover-background )
+datepicker-button-variant(color, background, hover-background)
 	color: color
 	background-color: background
 
-	&:hover
-	&:focus
-	&:active
-	&.active
+	&:hover, &:focus, &:active, &.active
 		color: color
 		background-color: hover-background
 
-	&:active
-	&.active
+	&:active, &.active
 		background-image: none
 
 	.badge
@@ -41,15 +37,11 @@ datepicker-button-variant( color, background, hover-background )
 		padding-left: 10px
 		padding-right: 10px
 
-	&:hover
-	&:focus
-	&:active
+	&:hover, &:focus, &:active
 		text-decoration: none
 		outline: none
 
-	&.disabled
-	&[disabled]
-	fieldset[disabled] &
+	&.disabled, &[disabled], fieldset[disabled] &
 		cursor: not-allowed
 		pointer-events: none // Future-proof disabling of clicks
 		opacity: 0.4
@@ -59,20 +51,20 @@ datepicker-button-variant( color, background, hover-background )
 		cursor: pointer
 
 	.text-info
-		color: $gj-dark-green
+		color: var(--user-dark-green)
 		font-weight: bold
 
 	/**
 	 * Button variants
 	 */
 	&.datepicker-btn-default
-		datepicker-button-variant( $gray-dark, $gray-lightest, $gray-lighter )
+		datepicker-button-variant($gray-dark, $gray-lightest, $gray-lighter)
 
 	&.datepicker-btn-info
-		datepicker-button-variant( $gj-green, $gj-dark-green, $gj-dark-green )
+		datepicker-button-variant(var(--user-green), var(--user-dark-green), var(--user-dark-green))
 
 		.text-info
-			color: $gj-green
+			color: var(--user-green)
 
 	/**
 	 * Block buttons.
@@ -86,8 +78,6 @@ datepicker-button-variant( color, background, hover-background )
 	.datepicker-btn-block + .datepicker-btn-block
 		margin-top: 5px
 
-	input[type="submit"]
-	input[type="reset"]
-	input[type="button"]
+	input[type='submit'], input[type='reset'], input[type='button']
 		&.datepicker-btn-block
 			width: 100%

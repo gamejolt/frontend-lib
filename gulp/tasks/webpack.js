@@ -203,6 +203,7 @@ module.exports = function(config) {
 					// Always "app" base img.
 					img: path.resolve(base, 'src/app/img'),
 					styles: path.resolve(base, 'src/' + section + '/styles'),
+					'styles-lib': path.resolve(config.gjLibDir, 'stylus/common'),
 				},
 			},
 			externals: externals,

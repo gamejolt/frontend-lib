@@ -1,0 +1,20 @@
+<component
+	:is="tag"
+	class="button"
+	:class="{
+		'-primary': this.primary === true,
+		'-trans': this.trans === true,
+		'-outline': !this.filled,
+		'-dark': this.dark === true,
+		'-overlay': this.overlay === true,
+		'-active': this.active === true,
+		'-sparse': this.sparse === true,
+		'-circle': this.circle === true,
+		'-lg': this.lg === true,
+		'-sm': this.sm === true,
+		'-block': this.block === true,
+	}"
+	>
+	<app-jolticon v-if="icon" :icon="icon" />
+	<slot />
+</component>

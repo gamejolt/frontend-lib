@@ -1,6 +1,6 @@
 .blip
 	position: relative
-	top: 1px  // Needed to play nicely with buttons for some reason
+	top: 1px // Needed to play nicely with buttons for some reason
 	display: inline-block
 	margin: 0 0 0 3px
 	padding: 0 5px
@@ -16,14 +16,14 @@
 	vertical-align: baseline
 
 	&.filled
-		color: $gj-green
-		background-color: $gj-dark-green
+		color: var(--user-green)
+		background-color: var(--user-dark-green)
 
 	/**
 	 * Carets
 	 */
 	.blip-caret
-		caret( direction: left, color: $gray-dark, size: 3px )
+		caret(direction: left, color: $gray-dark, size: 3px)
 
 	&.no-caret
 		margin-left: 0
@@ -49,8 +49,8 @@
 			border-right-color: $gray-lighter
 
 		&.filled
-			background-color: $gj-dark-green
-			color: $gj-green
+			background-color: var(--user-dark-green)
+			color: var(--user-green)
 
 			.blip-caret
-				border-right-color: $gj-dark-green
+				border-right-color: var(--user-dark-green)

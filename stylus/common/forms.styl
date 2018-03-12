@@ -101,14 +101,14 @@ legend + .help-block
 	margin-top: 7px
 	margin-bottom: $form-common-spacing
 	font-size: $font-size-base
-	background-color: $gj-pink
+	background-color: var(--user-pink)
 	border-radius: $border-radius-base
 	color: $white !important
 
 	&:before
 		content: ''
 		display: block
-		caret(color: $gj-pink, direction: 'up', size: 5px)
+		caret(color: var(--user-pink), direction: 'up', size: 5px)
 		left: 10px
 
 	// For when the help block is above, swap the spacing.
@@ -122,5 +122,5 @@ legend + .help-block
 		&:after
 			content: ''
 			display: block
-			caret(color: $gj-pink, direction: 'down', size: 5px)
+			caret(color: var(--user-pink), direction: 'down', size: 5px)
 			left: 10px

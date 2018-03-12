@@ -17,7 +17,7 @@ $meter-blip-count = 10
 
 .meter-blip-filled
 	.meter-low &
-		background-color: $gj-pink
+		background-color: var(--user-pink)
 
 	.meter-mid &
 	.meter-high &
@@ -29,13 +29,13 @@ $meter-blip-count = 10
 
 .meter-blip-filled
 	.meter-dark.meter-low &
-		background-color: $gj-pink
+		background-color: var(--user-pink)
 
 	.meter-dark.meter-mid &
 		background-color: $gray-lightest
 
 	.meter-dark.meter-high &
-		background-color: $gj-green
+		background-color: var(--user-green)
 
 for i in 1..$meter-blip-count
 	.meter-blip:nth-child( {i} )

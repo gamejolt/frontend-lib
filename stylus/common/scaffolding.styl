@@ -5,10 +5,7 @@
 
 // https://github.com/ftlabs/fastclick#when-it-isnt-needed
 // http://msdn.microsoft.com/en-us/library/ie/hh772044(v=vs.85).aspx
-a
-input
-button
-[ng-click]
+a, input, button
 	touch-action: manipulation
 
 a
@@ -16,9 +13,20 @@ a
 	// With angular a lot of times we don't have hrefs.
 	cursor: pointer
 
-	&:hover
-	&:focus
+	&:hover, &:focus
 		text-decoration: none
+
+	// TODO(themes)
+	user-prop('color', 'offlight')
+
+	&:hover
+		color: $black
+
+	.theme-dark &
+		user-prop('color', 'highlight')
+
+		&:hover
+			color: $white
 
 .link-muted
 	color: $text-muted
@@ -30,8 +38,7 @@ a
 	color: $text-muted
 	border-bottom: 1px dotted $gray
 
-	&:hover
-	&:focus
+	&:hover, &:focus
 		border-bottom: 0
 		text-decoration: underline
 
@@ -41,9 +48,8 @@ a
 .position-root
 	position: relative
 
-// Force ui-views to be block-level elements.
-ui-view
-	display: block
+hr
+	content-prop('border-top-color', 'offset')
 
 /**
  * Scrollable

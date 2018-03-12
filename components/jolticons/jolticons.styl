@@ -2,8 +2,8 @@ $jolticon-size = 16px
 
 @font-face
 	font-family: 'jolticons'
-	src: url( './jolticons.eot' )
-	src: url( './jolticons.eot?#iefix' ) format('embedded-opentype'), url( './jolticons.woff' ) format('woff'), url( './jolticons.ttf' ) format('truetype'), url( './jolticons.svg#jolticon' ) format('svg')
+	src: url('./jolticons.eot')
+	src: url('./jolticons.eot?#iefix') format('embedded-opentype'), url('./jolticons.woff') format('woff'), url('./jolticons.ttf') format('truetype'), url('./jolticons.svg#jolticon') format('svg')
 	font-weight: normal
 	font-style: normal
 
@@ -17,11 +17,9 @@ $jolticon-size = 16px
 	font-variant: normal
 	text-transform: none
 	line-height: 1
-	
 	-webkit-font-smoothing: none
 	// -moz-osx-font-smoothing: none
 	// text-rendering: geometricPrecision
-
 	font-size: $jolticon-size
 	cursor: default
 
@@ -31,8 +29,7 @@ $jolticon-size = 16px
 a .jolticon
 	cursor: pointer
 
-.jolticon.big
-.jolticon-2x
+.jolticon.big, .jolticon-2x
 	margin: 0 4px
 	font-size: $jolticon-size * 2
 
@@ -48,9 +45,9 @@ a .jolticon
 	color: #999
 
 .jolticon.active
-	color: $gj-blue
+	color: var(--user-blue)
 
 .jolticon.warning
-	color: $gj-pink !important
+	color: var(--user-pink) !important
 
 @require './jolticon-icon-definitions'

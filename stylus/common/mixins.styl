@@ -1,9 +1,35 @@
 @require '~bootstrap-stylus/stylus/mixins'
 
+content-prop($prop, $val)
+	if ($val == 'base')
+		{$prop}: $white
+	else if ($val == 'offset')
+		{$prop}: $gray-lightest
+	else if ($val == 'text')
+		{$prop}: $text-color
+	else if ($val == 'muted')
+		{$prop}: $text-muted
+	else if ($val == 'link')
+		{$prop}: $gj-dark-green
+	else if ($val == 'link-hover')
+		{$prop}: $black
+
+	{$prop}: unquote('var(--content-' + $val + ')')
+
+user-prop($prop, $val)
+	if ($val == 'highlight')
+		{$prop}: $gj-green
+	else if ($val == 'offlight')
+		{$prop}: $gj-dark-green
+	else if ($val == 'notice')
+		{$prop}: $gj-pink
+
+	{$prop}: unquote('var(--user-' + $val + ')')
+
 /**
  * Make a caret! Not for rabbits.
  */
-caret( color, direction = 'left', size = 3px )
+caret(color, direction = 'left', size = 3px)
 	position: absolute
 	width: 0
 	height: 0
@@ -11,7 +37,6 @@ caret( color, direction = 'left', size = 3px )
 	border-right: size solid transparent
 	border-bottom: size solid transparent
 	border-left: size solid transparent
-
 	// Reset in case we stacked this mixin.
 	top: auto
 	left: auto
@@ -20,30 +45,26 @@ caret( color, direction = 'left', size = 3px )
 	margin-top: 0
 	margin-left: 0
 
-	if direction == 'left' or direction == 'right'
+	if (direction == 'left' || (direction == 'right'))
 		top: 50%
 		margin-top: -(size)
-
-	else if direction == 'up' or direction == 'down'
+	else if (direction == 'up' || (direction == 'down'))
 		left: 50%
 		margin-left: -(size)
 
-	if direction == 'left'
+	if (direction == 'left')
 		left: -(size)
 		border-right: size solid color
 		border-left: none
-
-	else if direction == 'up'
+	else if (direction == 'up')
 		top: -(size)
 		border-bottom: size solid color
 		border-top: none
-
-	else if direction == 'right'
+	else if (direction == 'right')
 		right: -(size)
 		border-left: size solid color
 		border-right: none
-
-	else if direction == 'down'
+	else if (direction == 'down')
 		bottom: -(size)
 		border-top: size solid color
 		border-bottom: none
@@ -64,33 +85,33 @@ overlay-img()
 	height: 100%
 
 floating-img()
-	border: 1px solid rgba( 255, 255, 255, 0.10 )
-	box-shadow: 0 0 20px rgba( 0, 0, 0, 0.8 )
+	border: 1px solid rgba(255, 255, 255, 0.1)
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.8)
 
 /**
  * Links
  */
 $selection-color ?= #b4d5fe
-link-underlines( color, bg-color, bg-color-hover )
 
+link-underlines(color, bg-color, bg-color-hover)
 	// Local mixin
-	_text-shadow-to-crop-underline( color )
-		text-shadow: .03em 0 color, -.03em 0 color, 0 .03em color, 0 -.03em color, .06em 0 color, -.06em 0 color, .09em 0 color, -.09em 0 color, .12em 0 color, -.12em 0 color, .15em 0 color, -.15em 0 color
+	_text-shadow-to-crop-underline(color)
+		text-shadow: 0.03em 0 color, -0.03em 0 color, 0 0.03em color, 0 -0.03em color, 0.06em 0 color, -0.06em 0 color, 0.09em 0 color, -0.09em 0 color, 0.12em 0 color, -0.12em 0 color, 0.15em 0 color, -0.15em 0 color
 
-	_text-shadow-to-crop-underline( bg-color )
+	_text-shadow-to-crop-underline(bg-color)
 	color: color
 	text-decoration: none
 	background-image: linear-gradient(bg-color, bg-color), linear-gradient(bg-color, bg-color), linear-gradient(color, color)
-	background-size: .05em 1px, .05em 1px, 1px 1px
+	background-size: 0.05em 1px, 0.05em 1px, 1px 1px
 	background-repeat: no-repeat, no-repeat, repeat-x
-	background-position: 0% 90%, 100% 90%, 0% 90%
+	background-position: 0 90%, 100% 90%, 0 90%
 
 	&::selection
-		_text-shadow-to-crop-underline( $selection-color )
+		_text-shadow-to-crop-underline($selection-color)
 		background: $selection-color
 
 	&::-moz-selection
-		_text-shadow-to-crop-underline( $selection-color )
+		_text-shadow-to-crop-underline($selection-color)
 		background: $selection-color
 
 	&:before, &:after, *, *:before, *:after
@@ -106,9 +127,8 @@ link-underlines( color, bg-color, bg-color-hover )
  * Clearfix
  */
 clearfix()
-	&:before,
-	&:after
-		content: " "
+	&:before, &:after
+		content: ' '
 		display: table
 
 	&:after
@@ -160,8 +180,7 @@ scrollable-x()
 link-unstyled()
 	color: inherit
 
-	&:hover
-	&:focus
+	&:hover, &:focus
 		text-decoration: underline
 
 /**

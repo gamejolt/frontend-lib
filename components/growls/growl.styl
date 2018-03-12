@@ -16,7 +16,7 @@
 	z-index: 2
 
 	&:hover
-		color: $gj-pink
+		color: var(--user-pink)
 		background-color: $gray-darkest
 
 		@media $media-sm-up
@@ -69,8 +69,7 @@
 /**
  * Sticky growl.
  */
-.growl-sticky
-.growl-pinned
+.growl-sticky, .growl-pinned
 	border-right: 5px solid $gray-darker
 	border-left: 5px solid $gray-darker
 
@@ -82,20 +81,20 @@
  */
 .growl-type-success
 	.growl-inner
-		background-color: $gj-dark-green
+		background-color: var(--user-dark-green)
 
 		&:hover
-			background-color: rgba( $gj-dark-green, 0.85 )
+			background-color: rgba($gj-dark-green, 0.85)
 
 /**
  * Error growl.
  */
 .growl-type-error
 	.growl-inner
-		background-color: $gj-pink
+		background-color: var(--user-pink)
 
 		&:hover
-			background-color: rgba( $gj-pink, 0.85 )
+			background-color: rgba($gj-pink, 0.85)
 
 /**
  * Info growl.
@@ -105,4 +104,4 @@
 		background-color: $gray-darker
 
 		&:hover
-			background-color: rgba( $gray-darker, 0.85 )
+			background-color: rgba($gray-darker, 0.85)

@@ -2,7 +2,7 @@
 	class="comment-widget"
 	>
 	<app-loading v-if="!hasBootstrapped && !hasError" />
-	<div v-else-if="hasError" class="alert alert-warning">
+	<div v-else-if="hasError" class="alert alert-notice">
 		<translate>Couldn't fetch comments.</translate>
 	</div>
 	<div v-else-if="hasBootstrapped">
