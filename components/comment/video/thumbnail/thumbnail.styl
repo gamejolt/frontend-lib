@@ -8,13 +8,13 @@
 		margin-bottom: $grid-gutter-width
 
 .-thumb
+	rounded-corners()
 	position: relative
 	display: block
 	height: 0
 	padding-top: 56.25% // HD 16:9
 	overflow: hidden
 	background-color: $gray-lightest
-	border-radius: $border-radius-base
 
 	> .inner
 		position: absolute
@@ -33,8 +33,8 @@
 			color: $gray-lighter
 
 	img
+		rounded-corners()
 		position: relative
-		border-radius: $border-radius-base
 		opacity: 0
 		transition: opacity 500ms
 

@@ -2,13 +2,13 @@
 @require '~styles-lib/mixins'
 
 .blip
+	rounded-corners()
 	content-prop('background-color', 'bg-offset')
 	position: relative
 	top: 1px // Needed to play nicely with buttons for some reason
 	display: inline-block
 	margin: 0 0 0 3px
 	padding: 0 5px
-	border-radius: $border-radius-small
 	font-family: $font-family-tiny
 	font-weight: bold
 	font-size: $font-size-tiny

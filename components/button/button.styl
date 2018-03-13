@@ -65,6 +65,7 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
  * This is because certain .fill classes override link colors and it screws things up.
  */
 .btn
+	rounded-corners()
 	display: inline-block
 	text-transform: uppercase
 	font-family: $font-family-base
@@ -75,7 +76,6 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 	vertical-align: middle
 	cursor: pointer
 	border: 0
-	border-radius: $border-radius-base
 	outline: 0
 	white-space: nowrap
 	text-decoration: none !important

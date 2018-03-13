@@ -1,9 +1,10 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .form-control-upload
+	rounded-corners()
 	border: 2px dashed $gray-light
 	padding: ($grid-gutter-width / 2)
-	border-radius: $border-radius-base
 
 	&.drop-active
 		border-color: var(--theme-green)

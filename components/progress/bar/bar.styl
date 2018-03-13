@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 @keyframes progress-bar-stripes
 	>>> from
@@ -9,12 +10,12 @@
 
 .progress
 	text-overflow()
+	rounded-corners()
 	position: relative
 	height: $line-height-computed
 	line-height: $line-height-computed
 	margin-bottom: $line-height-computed
 	background-color: $progress-bg
-	border-radius: $border-radius-base
 
 .-text
 	position: relative
@@ -25,6 +26,7 @@
 	padding: 0 10px
 
 .progress-bar
+	rounded-corners()
 	position: absolute
 	top: 0
 	left: 0
@@ -32,7 +34,6 @@
 	min-width: 5px
 	height: 100%
 	background-color: $progress-bar-bg
-	border-radius: $border-radius-base
 	transition: width 600ms ease
 	will-change: width
 

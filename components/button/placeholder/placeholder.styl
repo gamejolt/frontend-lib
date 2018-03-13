@@ -1,10 +1,11 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .button-placeholder
+	rounded-corners()
 	content-prop('background-color', 'bg-offset')
 	display: inline-block
 	height: $button-line-height
-	border-radius: $border-radius-base
 	vertical-align: middle
 	width: 75px
 

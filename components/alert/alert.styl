@@ -2,11 +2,11 @@ $alert-padding = ($grid-gutter-width / 2)
 $alert-padding-xs = ($grid-gutter-width-xs / 2)
 
 .alert
+	rounded-corners()
 	position: relative
 	padding: $alert-padding-xs
 	margin-bottom: $line-height-computed
 	font-size: $font-size-small
-	border-radius: $border-radius-base
 
 	@media $media-sm-up
 		padding: $alert-padding
