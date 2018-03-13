@@ -1,8 +1,5 @@
 @require 'fonts.styl'
 
-[ng\\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
-	display: none !important
-
 // https://github.com/ftlabs/fastclick#when-it-isnt-needed
 // http://msdn.microsoft.com/en-us/library/ie/hh772044(v=vs.85).aspx
 a, input, button
@@ -77,3 +74,105 @@ hr
 
 .sans-margin-top.sans-margin-top
 	margin-top: 0
+
+.text-block img
+	display: block
+	max-width: 100%
+	height: auto
+
+text-block-breakpoint(max-width)
+	.text-block
+		> h1, > h2, > h3, > h4, > h5, > h6, > p, > ul, > ol, > blockquote, > table, > pre, > hr
+			margin-left: auto
+			margin-right: auto
+			max-width: max-width
+
+@media $media-sm-up
+	text-block-breakpoint(max-width: $percentage-10)
+
+@media $media-md-up
+	text-block-breakpoint(max-width: $percentage-8)
+
+@media $media-lg-up
+	text-block-breakpoint(max-width: $percentage-6)
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4
+	margin-top: ($line-height-computed * 2.5)
+	margin-bottom: $font-size-base
+	word-wrap: break-word
+	font-weight: bold
+	content-prop('color', 'fg')
+
+	small, code
+		font-weight: normal
+
+h5, .h5, h6, .h6
+	margin-top: ($line-height-computed * 2)
+	margin-bottom: $font-size-base
+	word-wrap: break-word
+	font-weight: bold
+
+.text-size-h1
+	font-size: $font-size-h1
+
+.text-size-h2
+	font-size: $font-size-h2
+
+.text-size-h3
+	font-size: $font-size-h3
+
+.text-size-h4
+	font-size: $font-size-h4
+
+.text-size-h5
+	font-size: $font-size-h5
+
+.text-size-h6
+	font-size: $font-size-h6
+
+@media $media-xs
+	h1, .h1, .text-size-h1
+		font-size: $font-size-h1-xs
+
+	h2, .h2, .text-size-h2
+		font-size: $font-size-h2-xs
+
+	h3, .h3, .text-size-h3
+		font-size: $font-size-h3-xs
+
+	h4, .h4, .text-size-h4
+		font-size: $font-size-h4-xs
+
+	h5, .h5, .text-size-h5
+		font-size: $font-size-h5-xs
+
+	h6, .h6, .text-size-h6
+		font-size: $font-size-h6-xs
+
+.text-help
+	cursor: help
+	border-bottom: 1px dotted $gray
+
+small, .small
+	font-size: $font-size-small
+
+.tiny
+	font-size: $font-size-tiny
+
+p
+	margin-top: 0
+	margin-bottom: $font-size-base
+	word-wrap: break-word
+
+.lead
+	font-weight: normal
+
+li
+	margin-top: 0
+	margin-bottom: $font-size-base
+
+.text-upper
+	text-transform: uppercase
+
+.text-lower
+	text-transform: lowercase
