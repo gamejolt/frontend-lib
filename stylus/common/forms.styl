@@ -33,13 +33,13 @@ legend
 // The elements that wrap around get the spacing.
 .form-control
 	theme-prop('color', 'fg')
-	theme-prop('background-color', 'bg-offset')
-	theme-prop('border-color', 'bg-offset')
+	theme-prop('background-color', 'bg')
+	theme-prop('border-color', 'bg-subtle')
 	border-width: 2px
 	box-shadow: none
 
 	&:focus
-		theme-prop('border-color', 'bg-subtle')
+		theme-prop('border-color', 'fg-muted')
 		box-shadow: none
 
 	// We overwrite bootstrap's placeholder styling so we can do italics.

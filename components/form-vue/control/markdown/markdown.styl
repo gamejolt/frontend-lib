@@ -37,10 +37,11 @@
 			margin-left: 15px
 
 	&-preview
-		border: 1px solid $input-border
+		theme-prop('border-color', 'bg-subtle')
+		border-width: 2px
+		border-style: solid
 
 	&.has-controls textarea
-		theme-prop('border-bottom-color', bg-subtle)
 		border-bottom-style: dashed
 		border-bottom-left-radius: 0
 		border-bottom-right-radius: 0

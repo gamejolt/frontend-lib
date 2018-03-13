@@ -11,7 +11,7 @@
 			margin-top: 5px
 
 		&:before
-			caret(color: $gray-lightest, direction: 'up', size: 10px)
+			caret(color: var(--theme-bg-offset), direction: 'up', size: 10px)
 			content: ''
 			opacity: 0
 			pointer-events: none
@@ -22,7 +22,7 @@
 
 	>>> form
 		@extend .well
-		background-color: $white
+		theme-prop('background-color', 'bg')
 
 		&:last-child
 			margin-bottom: 0
