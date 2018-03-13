@@ -14,6 +14,9 @@
 	border-radius: $border-radius-small
 	line-height: 16px // Same size as a jolticon.
 
+	a&:hover
+		transform: scale(1.1)
+
 	&:empty
 		display: none
 
@@ -30,20 +33,10 @@
 		.jolticon
 			vertical-align: baseline
 
-.tag-active
-	theme-prop('color', 'highlight')
-	theme-prop('background-color', 'downlight')
-
 .tag-highlight
 	theme-prop('background-color', 'highlight')
-	color: $black
-
-	a&:hover
-		color: $white
+	theme-prop('color', 'highlight-fg')
 
 .tag-notice
 	theme-prop('background-color', 'notice')
-	color: $black
-
-	a&:hover
-		color: $gray-darker
+	theme-prop('color', 'notice-fg')

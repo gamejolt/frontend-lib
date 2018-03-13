@@ -1,11 +1,9 @@
 compiled-content($font-size, $computed-line-height)
 	img
 		@extend .img-responsive
-
 		// Center it if too small.
 		margin-left: auto
 		margin-right: auto
-
 		// Since images end with a hard line and no extra line spacing padding...
 		// We basically find the line-height padding in bettwen a line and cut it by half and add
 		// that much extra spacing.
@@ -42,5 +40,3 @@ compiled-content($font-size, $computed-line-height)
 	// Style hashtags as normal tags.
 	.hashtag
 		@extend .tag
-		&:hover
-			@extend .tag-active
