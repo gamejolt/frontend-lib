@@ -2,7 +2,7 @@
 
 	<template v-if="checkoutStep === 'primary'">
 
-		<div class="alert alert-info full-bleed"
+		<div class="alert full-bleed"
 			v-if="partner"
 			>
 			<span v-translate="{ user: partner.display_name }">
@@ -282,7 +282,7 @@
 			</div>
 			<template v-else-if="checkoutStep === 'address'">
 
-				<div class="alert alert-info full-bleed">
+				<div class="alert full-bleed">
 					<app-jolticon icon="info-circle" />
 					<translate>Because of international tax laws, we are required to collect this information.</translate>
 				</div>
@@ -393,7 +393,7 @@
 							</span>
 						</p>
 
-						<div v-if="!hasSufficientWalletFunds" class="alert alert-info">
+						<div v-if="!hasSufficientWalletFunds" class="alert">
 							<translate>You do not have enough funds in your Wallet for this order.</translate>
 						</div>
 

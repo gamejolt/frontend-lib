@@ -27,6 +27,7 @@ $theme-downlight = $gj-dark-green
 $theme-notice = $gj-pink
 // Base background color
 $theme-bg = $white
+$theme-bg-trans = rgba($theme-bg, 0)
 // Slightly darker background (used for info boxes and such)
 $theme-bg-offset = $gray-lightest
 // A bit darker than the offset color (used for separator lines)
@@ -37,20 +38,21 @@ $theme-fg = $gray-dark
 $theme-fg-muted = $gray-light
 // The default link color
 $theme-link = $theme-downlight
-// Computed vars
-$theme-bg-trans = rgba($theme-bg, 0)
+$theme-link-hover = $black
 //
 // Dark theme vars
 $dark-theme-bg = $gray-dark
+$dark-theme-bg-trans = rgba($theme-bg, 0)
 $dark-theme-bg-offset = $gray
 $dark-theme-bg-subtle = #444 // TODO(themes): random color
 $dark-theme-fg = $gray-lightest
 $dark-theme-fg-muted = $gray-light
 $dark-theme-link = $theme-highlight
+$dark-theme-link-hover = $white
 //
 // Computed theme vars
-$theme-highlight-fg = light($theme-highlight) ? darken($theme-highlight, 90%) : lighten($theme-highlight, 90%)
-$theme-notice-fg = light($theme-notice) ? darken($theme-notice, 90%) : lighten($theme-notice, 90%)
+$theme-highlight-fg = light($theme-highlight) ? $black : $white
+$theme-notice-fg = light($theme-notice) ? $black : $white
 $theme-link-hover = light($theme-bg) ? $black : $white
 //
 // Base
