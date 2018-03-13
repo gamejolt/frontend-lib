@@ -9,13 +9,13 @@
 	padding-right: $line-height-computed
 
 	&::after
+		theme-prop('background-color', 'fg')
 		content: ''
 		position: absolute
 		left: 0
 		right: 0
 		bottom: 0
 		height: 2px
-		background-color: $black
 		z-index: 1
 
 	@media $media-xs
@@ -42,25 +42,27 @@
 			margin: 0
 
 			& > a
+				theme-prop('color', 'fg')
+				theme-prop('border-color', 'fg')
 				display: inline-block
 				padding: $tab-list-padding-v $tab-list-padding-h
 				margin: 0 3px
 				cursor: pointer
-				border: 2px solid $black
+				border-width: 2px
+				border-style: solid
 				border-top-left-radius: $border-radius-base
 				border-top-right-radius: $border-radius-base
 				border-bottom: 0
 				font-weight: bold
-				color: $black
 				// Don't allow to select the text when clicking on a tab.
 				user-select: none
 
 				&:hover
-					background-color: $gray-lightest
+					theme-prop('background-color', 'bg-offset')
 
 				&.active
+					theme-prop('background-color', 'bg')
 					position: relative
-					background-color: $white
 					z-index: 2
 
 	&-centered
@@ -71,7 +73,7 @@
 		float: right
 
 	&-meta
-		color: $text-muted
+		theme-prop('color', 'fg-muted')
 		font-size: $font-size-small
 		margin-bottom: $line-height-computed
 

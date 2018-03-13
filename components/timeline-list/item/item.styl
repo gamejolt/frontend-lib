@@ -14,7 +14,6 @@
 			theme-prop('background-color', 'bg-offset')
 			theme-prop('color', 'fg-muted')
 			theme-prop('border-color', 'bg')
-			// color: $gray-light
 			text-align: center
 			border-radius: 50%
 			position: absolute
@@ -61,8 +60,8 @@
 					padding-left: $border-size + $-padding-left
 
 		&-meta
+			theme-prop('color', 'fg-muted')
 			margin-bottom: 10px
-			color: $text-muted
 			font-size: $font-size-tiny
 
 		&-title
@@ -79,7 +78,7 @@
 			margin-top: 5px
 
 		&-content
-			color: $text-color
+			theme-prop('color', 'fg')
 
 			p:last-child
 				margin-bottom: 0
@@ -92,7 +91,7 @@
 			margin-right: $timeline-list-avatar-margin
 
 		&-thumb
-			background-color: $gray-lightest
+			theme-prop('background-color', 'bg-offset')
 			background-repeat: no-repeat
 			background-position: center center
 			background-size: cover

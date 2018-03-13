@@ -1,4 +1,8 @@
-@require 'fonts.styl'
+@require 'fonts'
+
+body
+	theme-prop('background-color', 'bg')
+	theme-prop('color', 'fg')
 
 // https://github.com/ftlabs/fastclick#when-it-isnt-needed
 // http://msdn.microsoft.com/en-us/library/ie/hh772044(v=vs.85).aspx
@@ -176,3 +180,7 @@ li
 
 .text-lower
 	text-transform: lowercase
+
+code, kbd
+	theme-prop('background-color', 'bg-offset')
+	theme-prop('color', 'fg')

@@ -1,8 +1,9 @@
 @require '../bootstrap/mixins'
 
-theme-prop($prop, $val)
-	{$prop}: lookup('$theme-' + $val)
-	{$prop}: unquote('var(--theme-' + $val + ')')
+theme-prop($prop, $val, $important = false)
+	$important = $important ? '!important' : ''
+	{$prop}: lookup('$theme-' + $val) unquote($important)
+	{$prop}: unquote('var(--theme-' + $val + ')') unquote($important)
 
 rounded-corners()
 	border-radius: $border-radius-base

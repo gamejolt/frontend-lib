@@ -1,7 +1,6 @@
 @require '~styles/variables'
 
 .font-selector
-
 	&-font-list
 		margin: 0
 		padding: 0
@@ -9,15 +8,14 @@
 		overflow-y: auto
 		overflow-x: hidden
 
-	&-font-list-item
-	&-selected
+	&-font-list-item, &-selected
 		margin: 0
 		padding: 8px 15px
 		list-style: none
 		cursor: pointer
 
 		&:hover
-			background-color: $gray-lightest
+			background-color: $
 
 			.font-selector-cancel
 				color: $black
@@ -36,4 +34,3 @@
 	&-filter
 		padding: 10px 15px
 		background-color: $gray-lighter
-

@@ -1,9 +1,11 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 $toggle-padding = 3px
 $toggle-width = $input-height-base * 2 // + $toggle-padding * 2
 
 .toggle
+	theme-prop('background-color', 'bg-subtle')
 	display: block
 	overflow: hidden
 	width: $toggle-width
@@ -11,7 +13,6 @@ $toggle-width = $input-height-base * 2 // + $toggle-padding * 2
 	line-height: $input-height-base
 	border-radius: $input-height-base
 	vertical-align: top
-	background-color: $gray-light
 	transition: all ease-in-out 300ms
 	text-align: left
 	cursor: pointer
@@ -31,12 +32,12 @@ $toggle-width = $input-height-base * 2 // + $toggle-padding * 2
 		margin-top: ($padding-base-vertical + 1px)
 
 .-checked
-	background-color: var(--theme-dark-green)
+	theme-prop('background-color', 'link')
 
 .-knob
+	background-color: $gray-dark
 	display: block
 	margin: $toggle-padding
-	background-color: $white
 	width: ($input-height-base - $toggle-padding * 2)
 	height: @width
 	border-radius: @width

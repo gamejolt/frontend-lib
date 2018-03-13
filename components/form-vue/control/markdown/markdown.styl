@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .form-control-markdown
 	& > nav
@@ -39,6 +40,7 @@
 		border: 1px solid $input-border
 
 	&.has-controls textarea
+		theme-prop('border-bottom-color', bg-subtle)
 		border-bottom-style: dashed
 		border-bottom-left-radius: 0
 		border-bottom-right-radius: 0

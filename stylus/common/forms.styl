@@ -8,6 +8,8 @@ $line-spacing-above-text = (($line-height-computed - $font-size-base) / 2)
 
 // Try to match heading style.
 legend
+	theme-prop('color', 'fg')
+	theme-prop('border-bottom-color', 'bg-subtle')
 	font-family: $font-family-heading
 	font-weight: bold
 
@@ -30,9 +32,14 @@ legend
 // Form controls have no spacing around them.
 // The elements that wrap around get the spacing.
 .form-control
+	theme-prop('color', 'fg')
+	theme-prop('background-color', 'bg-offset')
+	theme-prop('border-color', 'bg-offset')
+	border-width: 2px
 	box-shadow: none
 
 	&:focus
+		theme-prop('border-color', 'bg-subtle')
 		box-shadow: none
 
 	// We overwrite bootstrap's placeholder styling so we can do italics.

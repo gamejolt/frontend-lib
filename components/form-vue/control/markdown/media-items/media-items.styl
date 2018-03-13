@@ -1,11 +1,13 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .form-markdown-editor-media-items
-	border: 1px solid $input-border
-	border-top: 0
-	background-color: $input-bg
-	border-top-left-radius: 0
-	border-top-right-radius: 0
+	theme-prop('background-color', 'bg-offset')
+	// border-width: 1px
+	// border-style: solid
+	// border-top: 0
+	// border-top-left-radius: 0
+	// border-top-right-radius: 0
 	margin-bottom: 0 // Get rid of the bottom margin from 'well' styling.
 
 	>>> .form-group
