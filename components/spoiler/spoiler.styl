@@ -3,8 +3,8 @@
 	$fade-in-delay = 0.3s
 	$fade-out-time = 0.3s
 	$easing = ease-in
-	content-prop('color', 'bg-offset')
-	content-prop('background-color', 'bg-offset')
+	theme-prop('color', 'bg-offset')
+	theme-prop('background-color', 'bg-offset')
 	rounded-corners()
 	position: relative
 	transition: color $fade-out-time $easing
@@ -13,7 +13,7 @@
 	border-left: 0
 
 	&::before
-		content-prop('color', 'fg-muted')
+		theme-prop('color', 'fg-muted')
 		content: 'Spoiler'
 		position: absolute
 		top: 2px
@@ -26,7 +26,7 @@
 		transition: opacity $fade-out-time $easing
 
 	&:hover
-		content-prop('color', 'fg')
+		theme-prop('color', 'fg')
 		transition-duration: $fade-in-time
 		transition-delay: $fade-in-delay
 

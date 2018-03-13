@@ -3,7 +3,7 @@
 
 .blip
 	rounded-corners()
-	content-prop('background-color', 'bg-offset')
+	theme-prop('background-color', 'bg-offset')
 	position: relative
 	top: 1px // Needed to play nicely with buttons for some reason
 	display: inline-block
@@ -23,7 +23,7 @@
 	.blip-caret
 		// Set to white since we'll have to override with content prop anyway.
 		caret(direction: left, color: $white, size: 3px)
-		content-prop('border-right-color', 'bg-offset')
+		theme-prop('border-right-color', 'bg-offset')
 
 	&.filled
 		theme-prop('background-color', 'downlight')

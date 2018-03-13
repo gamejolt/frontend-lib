@@ -2,8 +2,8 @@
 @require '~styles-lib/mixins'
 
 .tag
-	content-prop('background-color', 'bg-offset')
-	content-prop('color', 'fg')
+	theme-prop('background-color', 'bg-offset')
+	theme-prop('color', 'fg')
 	display: inline-block
 	padding: 1px 4px 2px
 	font-family: $font-family-tiny
@@ -31,24 +31,12 @@
 			vertical-align: baseline
 
 .tag-active
-	background-color: var(--theme-dark-green)
-	color: var(--theme-green)
-
-.tag-green
-	background-color: var(--theme-green)
-	color: $black
-
-.tag-pink
-	background-color: var(--theme-pink)
-	color: $white
-
-.tag-blue
-	background-color: var(--theme-blue)
-	color: $gray-darker
+	theme-prop('color', 'highlight')
+	theme-prop('background-color', 'downlight')
 
 .tag-highlight
-	theme-prop('background-color', 'downlight')
-	theme-prop('color', 'highlight')
+	theme-prop('background-color', 'highlight')
+	color: $black
 
 	a&:hover
 		color: $white

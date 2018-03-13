@@ -11,9 +11,9 @@
 		color: inherit
 
 		&-bubble
-			content-prop('background-color', 'bg-offset')
-			content-prop('color', 'fg-muted')
-			content-prop('border-color', 'bg')
+			theme-prop('background-color', 'bg-offset')
+			theme-prop('color', 'fg-muted')
+			theme-prop('border-color', 'bg')
 			// color: $gray-light
 			text-align: center
 			border-radius: 50%
@@ -49,7 +49,7 @@
 			padding-left: $border-size + $-padding-left
 
 			&.is-thread
-				content-prop('border-left-color', 'bg-subtle')
+				theme-prop('border-left-color', 'bg-subtle')
 				border-left-width: $border-size
 				border-left-style: solid
 				margin-left: ($timeline-list-icon-size / 2)
@@ -66,7 +66,7 @@
 			font-size: $font-size-tiny
 
 		&-title
-			content-prop('color', 'fg')
+			theme-prop('color', 'fg')
 			display: block
 			margin-top: 5px
 			font-weight: bold
@@ -98,7 +98,7 @@
 			background-size: cover
 
 		&-ad
-			content-prop('border-left-color', 'bg-subtle')
+			theme-prop('border-left-color', 'bg-subtle')
 			margin-left: ($timeline-list-icon-size / 2)
 			padding-bottom: $line-height-computed
 			border-left-width: $border-size

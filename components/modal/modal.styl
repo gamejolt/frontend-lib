@@ -47,8 +47,8 @@
 		transform: none
 
 .modal-content
-	content-prop('background-color', 'bg')
-	content-prop('color', 'fg')
+	theme-prop('background-color', 'bg')
+	theme-prop('color', 'fg')
 	position: relative
 	background-clip: padding-box
 	outline: 0 // Remove focus outline from opened modal
@@ -73,7 +73,7 @@
 		width: $container-md
 
 .modal-full
-	content-prop('background-color', 'bg')
+	theme-prop('background-color', 'bg')
 	overflow: hidden
 
 	.modal-content

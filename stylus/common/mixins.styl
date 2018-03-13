@@ -1,6 +1,6 @@
 @require '../bootstrap/mixins'
 
-content-prop($prop, $val)
+theme-prop($prop, $val)
 	if ($val == 'bg')
 		{$prop}: $white
 	else if ($val == 'bg-offset')
@@ -13,11 +13,7 @@ content-prop($prop, $val)
 		{$prop}: $gj-dark-green
 	else if ($val == 'link-hover')
 		{$prop}: $black
-
-	{$prop}: unquote('var(--content-' + $val + ')')
-
-theme-prop($prop, $val)
-	if ($val == 'highlight')
+	else if ($val == 'highlight')
 		{$prop}: $gj-green
 	else if ($val == 'downlight')
 		{$prop}: $gj-dark-green
@@ -191,7 +187,7 @@ link-unstyled()
  */
 lazy-placeholder-inline()
 	rounded-corners()
-	content-prop('background-color', 'bg-offset')
+	theme-prop('background-color', 'bg-offset')
 	display: inline-block
 	vertical-align: middle
 	width: 100%
@@ -199,7 +195,7 @@ lazy-placeholder-inline()
 
 lazy-placeholder-block()
 	rounded-corners()
-	content-prop('background-color', 'bg-offset')
+	theme-prop('background-color', 'bg-offset')
 	display: block
 	height: $font-size-base
 

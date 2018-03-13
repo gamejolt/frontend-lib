@@ -6,7 +6,7 @@ $list-group-drag-handle-width = 20px
 
 .list-group
 	rounded-corners()
-	content-prop('border-color', 'bg-subtle')
+	theme-prop('border-color', 'bg-subtle')
 	margin-bottom: $font-size-base
 	border-width: 1px
 	border-style: solid
@@ -15,8 +15,8 @@ $list-group-drag-handle-width = 20px
 		white-space: nowrap
 
 .list-group-item
-	content-prop('background-color', 'bg')
-	content-prop('border-bottom-color', 'bg-subtle')
+	theme-prop('background-color', 'bg')
+	theme-prop('border-bottom-color', 'bg-subtle')
 	color: inherit
 	position: relative
 	display: block
@@ -32,18 +32,18 @@ $list-group-drag-handle-width = 20px
 		user-select: none
 
 	a&:hover, &.active
-		content-prop('background-color', 'bg-offset')
+		theme-prop('background-color', 'bg-offset')
 
 	// Disabled styling.
 	&.disabled
-		content-prop('color', 'fg-muted')
+		theme-prop('color', 'fg-muted')
 		cursor: default
 
 		a&
 			cursor: not-allowed
 
 		&:hover
-			content-prop('background-color', 'bg')
+			theme-prop('background-color', 'bg')
 
 	// Badges should float right and be correctly aligned vertically.
 	.badge
@@ -97,7 +97,7 @@ $list-group-drag-handle-width = 20px
 		margin-bottom: 0
 
 .list-group-item-text
-	content-prop('color', 'fg-muted')
+	theme-prop('color', 'fg-muted')
 	font-size: $font-size-small
 	margin-bottom: $list-group-item-padding
 
@@ -105,7 +105,7 @@ $list-group-drag-handle-width = 20px
 		margin-bottom: 0
 
 .list-group-item-addon
-	content-prop('background-color', 'bg-offset')
+	theme-prop('background-color', 'bg-offset')
 	position: absolute
 	top: 0
 	left: 0
