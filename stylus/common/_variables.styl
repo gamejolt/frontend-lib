@@ -1,15 +1,13 @@
 @require './functions'
 
-/**
- * GJ Color Palette
- */
+//
+// GJ Color Palette
 $gj-green = #cf0
 $gj-dark-green = #2f7f6f
 $gj-pink = #ff3fac
 $gj-blue = #31d6ff
-/**
- * Shades of Gray
- */
+//
+// Shades of gray
 $black = #000
 $gray-darkest = #111
 $gray-darker = #212121
@@ -19,17 +17,50 @@ $gray-light = #7e7e7e
 $gray-lighter = #d1d1d1
 $gray-lightest = #f3f3f3
 $white = #fff
-/**
- * Base
- */
+//
+// Theme vars
+// The main theme color -- should be bright (show well on dark, not on light)
+$theme-highlight = $gj-green
+// The darker theme color (highlight should be able to overlay on top of this)
+$theme-downlight = $gj-dark-green
+// Used for notices like notifications or errors
+$theme-notice = $gj-pink
+// Base background color
+$theme-bg = $white
+// Slightly darker background (used for info boxes and such)
+$theme-bg-offset = $gray-lightest
+// A bit darker than the offset color (used for separator lines)
+$theme-bg-subtle = $gray-lighter
+// Text color
+$theme-fg = $gray-dark
+// Muted text color (used for less important content)
+$theme-fg-muted = $gray-light
+// The default link color
+$theme-link = $theme-downlight
+// Computed vars
+$theme-bg-trans = rgba($theme-bg, 0)
+//
+// Dark theme vars
+$dark-theme-bg = $gray-dark
+$dark-theme-bg-offset = $gray
+$dark-theme-bg-subtle = #444 // TODO(themes): random color
+$dark-theme-fg = $gray-lightest
+$dark-theme-fg-muted = $gray-light
+$dark-theme-link = $theme-highlight
+//
+// Computed theme vars
+$theme-highlight-fg = light($theme-highlight) ? darken($theme-highlight, 90%) : lighten($theme-highlight, 90%)
+$theme-notice-fg = light($theme-notice) ? darken($theme-notice, 90%) : lighten($theme-notice, 90%)
+$theme-link-hover = light($theme-bg) ? $black : $white
+//
+// Base
 $border-radius-base = 4px
 $border-radius-small = 2px
 $border-radius-large = 4px
 $text-muted = $gray-light
 $hr-border = $gray-lighter
-/**
- * Scaffolding
- */
+//
+// Scaffolding
 $font-family-sans-serif = 'Nunito', 'Helvetica Neue', Helvetica, Arial, sans-serif
 $font-family-heading = 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif
 $font-family-serif = Georgia, 'Times New Roman', Times, serif
@@ -58,18 +89,16 @@ $line-height-computed = floor($font-size-base * $line-height-base)
 $headings-font-family = $font-family-heading
 $headings-font-weight = 400
 $headings-line-height = 1.3
-/**
- * Forms
- */
+//
+// Forms
 $input-border = $gray-lighter
 $input-border-focus = $gray
 $input-border-radius = $border-radius-base
 $input-color-placeholder = $gray-lighter
 $input-group-addon-bg = $gray-lighter
 $input-group-addon-border-color = $gray-lighter
-/**
- * Code
- */
+//
+// Code
 $code-color = $gray
 $code-bg = $gray-lightest
 $kbd-color = $white
@@ -77,9 +106,8 @@ $kbd-bg = $gray-dark
 $pre-bg = $gray-dark
 $pre-color = $gray-lightest
 $pre-border-color = $pre-bg
-/**
- * Pagination
- */
+//
+// Pagination
 $pagination-color = $gj-dark-green
 $pagination-bg = $white
 $pagination-border = $gray-lighter
@@ -93,9 +121,8 @@ $pagination-disabled-color = $gray-lighter
 $pagination-disabled-bg = $white
 $pagination-disabled-border = #ddd
 $pager-border-radius = 0
-/**
- * Col Percentages
- */
+//
+// Col Percentages
 $percentage-1 = (1 / 12) * 100%
 $percentage-2 = (2 / 12) * 100%
 $percentage-3 = (3 / 12) * 100%
@@ -108,15 +135,13 @@ $percentage-9 = (9 / 12) * 100%
 $percentage-10 = (10 / 12) * 100%
 $percentage-11 = (11 / 12) * 100%
 $percentage-12 = 100%
-/**
- * Grid System
- */
+//
+// Grid System
 $grid-columns = 12
 $grid-gutter-width = 60px
 $grid-gutter-width-xs = 30px
-/**
- * Media Query Breakpoint Helpers
- */
+//
+// Media Query Breakpoint Helpers
 $media-xs = media(max: $screen-xs-max)
 $media-sm = media(min: $screen-sm-min, max: $screen-sm-max)
 $media-sm-up = media(min: $screen-sm-min)
@@ -127,9 +152,8 @@ $media-sm-md = media(min: $screen-sm-min, max: $screen-md-max)
 $media-lg = media(min: $screen-lg-min)
 $media-lg-up = media(min: $screen-lg-min)
 $media-mobile = media(max: $screen-sm-max)
-/**
- * Buttons
- */
+//
+// Buttons
 $button-padding-vertical = 8px
 $button-padding-horizontal = 16px
 $button-line-height = 20px + ($button-padding-vertical * 2)
@@ -152,14 +176,12 @@ $button-lg-outline-border-size = 2px
 $button-lg-font-weight = bold
 $button-lg-font-size = $font-size-base
 $button-lg-border-radius = $border-radius-large
-/**
- * Tab List
- */
+//
+// Tab List
 $tab-list-padding-v = 7px
 $tab-list-padding-h = 10px
-/**
- * Animations
- */
+//
+// Animations
 $weak-ease-in = cubic-bezier(0.55, 0.085, 0.68, 0.53)
 $weak-ease-out = cubic-bezier(0.25, 0.46, 0.45, 0.94)
 $weak-ease-in-out = cubic-bezier(0.455, 0.03, 0.515, 0.955)
@@ -175,9 +197,8 @@ $strong-ease-in-out = cubic-bezier(1, 0, 0, 1)
 $ease-in-back = cubic-bezier(0.6, -0.28, 0.735, 0.045)
 $ease-out-back = cubic-bezier(0.175, 0.885, 0.32, 1.275)
 $ease-in-out-back = cubic-bezier(0.68, -0.55, 0.265, 1.55)
-/**
- * Popovers
- */
+//
+// Popovers
 $popover-border-color = $gray-light
 $popover-bg-color = $gray-lightest
 $popover-bg-color-dark = $gray-darkest
@@ -186,9 +207,8 @@ $popover-size = 400px
 $popover-spacing = 5px
 // This will be used to push the popover away from the trigger by this amount.
 $popover-extra-margin = 2px
-/**
- * Tooltips
- */
+//
+// Tooltips
 $zindex-tooltip = 1300
 $tooltip-arrow-width = 5px
 $tooltip-arrow-color = $black
@@ -197,15 +217,13 @@ $tooltip-bg = $black
 $tooltip-opacity = 1
 $tooltip-font-size = $font-size-small
 $tooltip-max-width = 250px
-/**
- * Growls
- */
+//
+// Growls
 $zindex-growls = 1200
 $growl-spacing = 10px
 $growl-width = 375px
-/**
- * Progress Bar
- */
+//
+// Progress Bar
 $progress-bg = $gray-lightest
 $progress-bar-bg = $gj-blue
 $progress-bar-color = $gray-dark
@@ -216,34 +234,28 @@ $progress-bar-danger-color = $white
 $progress-green-bg = $gray-darker
 $progress-bar-green-bg = $gj-green
 $progress-bar-green-color = $gray
-/**
- * Modal
- */
+//
+// Modal
 $modal-padding = ($grid-gutter-width / 2)
 $modal-padding-xs = ($grid-gutter-width-xs / 2)
-/**
- * Backdrop
- */
+//
+// Backdrop
 $zindex-backdrop = 20
 $backdrop-opacity = 0.5
-/**
- * Loading Bar
- */
+//
+// Loading Bar
 $zindex-loading-bar = 2000
-/**
- * Timeline List
- */
+//
+// Timeline List
 $timeline-list-icon-size = 50px
 $timeline-list-avatar-size = 30px
 $timeline-list-avatar-margin = 10px
-/**
- * Minbar
- */
+//
+// Minbar
 $minbar-offset-right = 0
 $minbar-padding = 3px
 $minbar-spacing = 10px
 $minbar-border-width = 0
-/**
- * Play Button Overlay
- */
+//
+// Play Button Overlay
 $zindex-play-button-overlay = 11

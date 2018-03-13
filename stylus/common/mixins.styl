@@ -1,25 +1,7 @@
 @require '../bootstrap/mixins'
 
 theme-prop($prop, $val)
-	if ($val == 'bg')
-		{$prop}: $white
-	else if ($val == 'bg-offset')
-		{$prop}: $gray-lightest
-	else if ($val == 'fg')
-		{$prop}: $text-color
-	else if ($val == 'fg-muted')
-		{$prop}: $text-muted
-	else if ($val == 'link')
-		{$prop}: $gj-dark-green
-	else if ($val == 'link-hover')
-		{$prop}: $black
-	else if ($val == 'highlight')
-		{$prop}: $gj-green
-	else if ($val == 'downlight')
-		{$prop}: $gj-dark-green
-	else if ($val == 'notice')
-		{$prop}: $gj-pink
-
+	{$prop}: lookup('$theme-' + $val)
 	{$prop}: unquote('var(--theme-' + $val + ')')
 
 rounded-corners()

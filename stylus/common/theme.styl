@@ -1,60 +1,33 @@
 
 :root
-	// The main theme color -- should be bright (show well on dark, not on light)
-	--theme-highlight: $gj-green
-	// The darker theme color (highlight should be able to overlay on top of this)
-	--theme-downlight: $gj-dark-green
-	// Used for notices like notifications or errors
-	--theme-notice: $gj-pink
+	--theme-highlight: $theme-highlight
+	--theme-downlight: $theme-downlight
+	--theme-notice: $theme-notice
+	--theme-highlight-fg: $theme-highlight-fg
+	--theme-notice-fg: $theme-notice-fg
+	--theme-bg: $theme-bg
+	--theme-bg-offset: $theme-bg-offset
+	--theme-bg-subtle: $theme-bg-subtle
+	--theme-fg: $theme-fg
+	--theme-fg-muted: $theme-fg-muted
+	--theme-link: $theme-link
+	--theme-link-hover: $theme-link-hover
+	--theme-bg-trans: $theme-bg-trans
 	// TODO(themes): remove these
 	--theme-green: var(--theme-highlight)
 	--theme-dark-green: var(--theme-downlight)
 	--theme-blue: var(--theme-highlight)
 	--theme-pink: var(--theme-notice)
 
-	// Helper vars
-	if (dark($gj-green))
-		--theme-highlight-fg: $white
-	else
-		--theme-highlight-fg: $black
-
-	if (dark($gj-pink))
-		--theme-notice-fg: $white
-	else
-		--theme-notice-fg: $black
-
-/**
- * Light Mode (default)
- */
-:root
-	// Base background color
-	--theme-bg: $white
-	// Slightly darker background (used for info boxes and such)
-	--theme-bg-offset: $gray-lightest
-	// A bit darker than the offset color (used for separator lines)
-	--theme-bg-subtle: $gray-lighter
-	// Text color
-	--theme-fg: $gray-dark
-	// Muted text color (used for less important content)
-	--theme-fg-muted: $gray-light
-	// The default link color
-	--theme-link: var(--theme-downlight)
-	// The link color on hover
-	--theme-link-hover: $black
-	// Helper vars
-	--theme-bg-trans: rgba($white, 0)
-
 /**
  * Dark Mode
  */
 .theme-dark, .fill-gray, .fill-dark, .fill-darker, .fill-darkest, .fill-black
-	--theme-bg: $gray-dark
-	--theme-bg-offset: $gray
-	// TODO(themes): random color
-	--theme-bg-subtle: #444
-	--theme-fg: $gray-lightest
-	--theme-fg-muted: $gray-light
-	--theme-link: var(--theme-highlight)
-	--theme-link-hover: $white
-	// Helper vars
-	--theme-bg-trans: rgba($gray-dark, 0)
+	--theme-bg: $dark-theme-bg
+	--theme-bg-offset: $dark-theme-bg-offset
+	--theme-bg-subtle: $dark-theme-bg-subtle
+	--theme-fg: $dark-theme-fg
+	--theme-fg-muted: $dark-theme-fg-muted
+	--theme-link: $dark-theme-link
+	--theme-link-hover: $dark-theme-link-hover
+	--theme-bg-trans: $dark-theme-bg-trans
