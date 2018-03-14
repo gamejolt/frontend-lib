@@ -41,13 +41,10 @@ a .jolticon
 	margin: 0 8px
 	font-size: $jolticon-size * 4
 
-.jolticon.inactive
-	color: #999
+.jolticon.highlight
+	theme-prop('color', 'highlight', true)
 
-.jolticon.active
-	color: var(--theme-blue)
-
-.jolticon.warning
-	color: var(--theme-pink) !important
+.jolticon.notice
+	theme-prop('color', 'notice', true)
 
 @require './jolticon-icon-definitions'

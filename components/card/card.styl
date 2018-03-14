@@ -30,8 +30,8 @@ gj-card
 			margin-right: 0
 
 	&-remove
+		theme-prop('color', 'fg-muted', true)
 		float: right
-		color: $text-muted !important
 		margin-left: 10px
 
 		&, .jolticon
@@ -62,7 +62,7 @@ gj-card
 				font-weight: bold
 
 	&-meta
-		color: $text-muted
+		theme-prop('color', 'fg-muted')
 		margin-top: 5px
 		font-size: $font-size-small
 

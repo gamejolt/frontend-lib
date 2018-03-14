@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .growl-inner
 	h4
@@ -10,8 +11,11 @@
 		font-size: $font-size-small
 
 	a
-		color: $white
+		color: $dark-theme-link
 		text-decoration: underline
+
+		&:hover
+			color: $dark-theme-link-hover
 
 	.progress
 		margin-bottom: 9px
@@ -19,14 +23,14 @@
 	p:last-child, .progress:last-child
 		margin-bottom: 0
 
-.growl-type-success .growl-inner
-	h4
-		color: var(--theme-green)
+.growl-type-success
+	.growl-title
+		theme-prop('color', 'highlight')
 
-.growl-type-error .growl-inner
-	h4
-		color: var(--theme-green)
+.growl-type-error
+	.growl-title
+		theme-prop('color', 'notice')
 
-.growl-type-info .growl-inner
-	h4
-		color: var(--theme-green)
+.growl-type-info
+	.growl-title
+		color: $white

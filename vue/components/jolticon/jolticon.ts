@@ -7,5 +7,6 @@ import View from '!view!./jolticon.html';
 export class AppJolticon extends Vue {
 	@Prop(String) icon: string;
 	@Prop(Boolean) big?: boolean;
-	@Prop(Boolean) warning?: boolean;
+	@Prop(Boolean) highlight?: boolean;
+	@Prop(Boolean) notice?: boolean;
 }

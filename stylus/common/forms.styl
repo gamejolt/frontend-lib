@@ -17,16 +17,14 @@ legend
 	margin-bottom: ($line-height-computed * 1.5)
 
 .input-group-addon
-	color: $gray
-
 	// Not sure why, but bootstrap styling wasn't doing input group addons well with sm forms.
 	.input-group-sm > &
 		line-height: 1
 
 .form-group.optional
 	.control-label:after
+		theme-prop('color', 'fg-muted')
 		content: ' (optional)'
-		color: $text-muted
 		font-size: 85%
 
 // Form controls have no spacing around them.
@@ -75,7 +73,7 @@ input[type='checkbox'], input[type='radio']
 
 	// Disabled styling for checkboxes and radios.
 	&.disabled
-		color: $text-muted
+		theme-prop('color', 'fg-muted')
 
 		&, & > label, & > label > .jolticon
 			cursor: not-allowed
@@ -84,16 +82,16 @@ input[type='checkbox'], input[type='radio']
 // We assume that a form control/error message will usually follow the help block.
 // So we put our common spacing below, plus the extra spacing since there won't be any normal text line following.
 .help-block
+	theme-prop('color', 'fg-muted')
 	margin-top: $form-common-spacing
 	margin-bottom: $form-common-spacing + $line-spacing-above-text
-	color: $gray-light
 	font-size: 14px
 
 legend + .help-block
 	margin-top: 0
 
 .help-inline
-	color: $gray-light
+	theme-prop('color', 'fg-muted')
 	font-size: 14px
 
 // If a help block immediately follows a control label, then the control label
@@ -104,18 +102,18 @@ legend + .help-block
 // Notice that our errors have the normal margin bottom spacing.
 .help-block.error
 	rounded-corners()
+	theme-prop('background-color', 'notice')
+	theme-prop('color', 'notice-fg', true)
 	position: relative
 	padding: 10px
 	margin-top: 7px
 	margin-bottom: $form-common-spacing
 	font-size: $font-size-base
-	background-color: var(--theme-pink)
-	color: $white !important
 
 	&:before
+		caret(color: var(--theme-notice), direction: 'up', size: 5px)
 		content: ''
 		display: block
-		caret(color: var(--theme-pink), direction: 'up', size: 5px)
 		left: 10px
 
 	// For when the help block is above, swap the spacing.
@@ -127,7 +125,7 @@ legend + .help-block
 			display: none
 
 		&:after
+			caret(color: var(--theme-notice), direction: 'down', size: 5px)
 			content: ''
 			display: block
-			caret(color: var(--theme-pink), direction: 'down', size: 5px)
 			left: 10px

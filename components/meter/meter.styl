@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 $meter-blip-count = 10
 
@@ -16,28 +17,25 @@ $meter-blip-count = 10
 		margin-right: 2px
 
 .meter-blip-filled
-	.meter-low &
-		background-color: var(--theme-pink)
-
-	.meter-mid &, .meter-high &
+	.meter-low &, .meter-mid &
 		background-color: $gray
+
+	.meter-high &
+		theme-prop('background-color', 'link')
 
 .meter-dark
 	.meter-blip
 		background-color: $gray-light
 
 .meter-blip-filled
-	.meter-dark.meter-low &
-		background-color: var(--theme-pink)
-
-	.meter-dark.meter-mid &
+	.meter-dark.meter-low &, .meter-dark.meter-mid &
 		background-color: $gray-lightest
 
 	.meter-dark.meter-high &
-		background-color: var(--theme-green)
+		theme-prop('background-color', 'highlight')
 
 for i in 1 .. $meter-blip-count
-	.meter-blip:nth-child({i} )
+	.meter-blip:nth-child({i})
 		height: 10px
 
 		&:nth-child(odd)

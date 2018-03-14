@@ -39,15 +39,6 @@
 	theme-prop('background-color', 'notice')
 	theme-prop('color', 'notice-fg')
 
-.fill-white
-	background-color: $white
-
-.fill-lighter
-	background-color: $gray-lighter
-
-.fill-light
-	background-color: $gray-light
-
 .fill-gray
 	background-color: $gray
 
@@ -63,35 +54,20 @@
 .fill-black
 	background-color: $black
 
-.fill-green
-	background-color: var(--theme-green)
+.fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray
+	theme-prop('color', 'fg')
 
-.fill-dark-green
-	background-color: var(--theme-dark-green)
-
-.fill-pink
-	background-color: var(--theme-pink)
-
-.fill-blue
-	background-color: var(--theme-blue)
-
-.fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray, .fill-light
-	color: $gray-lighter
-
-	h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
-		color: $gray-lightest
-
-	a
+/*	a
 		color: var(--theme-green)
 
-		&:hover
-			color: var(--theme-blue)
+	&:hover
+		color: var(--theme-blue)
 
 	.link-muted, .link-help
-		color: $text-muted
+		theme-prop('color', 'fg-muted')
 
-		&:hover, &:focus
-			color: $white
+	&:hover, &:focus
+		theme-prop('color', 'link-hover')
 
 	.link-unstyled
 		color: inherit
@@ -100,77 +76,71 @@
 		color: $gray-lighter
 
 	.help-block
-		color: $gray-light
+		color: $gray-light */
 
-.fill-light
-	&, .control-label
-		color: $gray-lightest
+/* .fill-light
+   &, .control-label
+   color: $gray-lightest
 
-	.help-block
-		color: $gray-lighter
+   .help-block
+   color: $gray-lighter */
+/* .fill-lighter
+   .help-block
+   color: $gray
 
-.fill-lighter
-	.help-block
-		color: $gray
+   .input-group-addon
+   background-color: $gray-light
+   color: $gray-lightest
+   border-color: $gray-light
 
-	.input-group-addon
-		background-color: $gray-light
-		color: $gray-lightest
-		border-color: $gray-light
+   .form-control
+   border-color: $gray-light
 
-	.form-control
-		border-color: $gray-light
+   .form-control:focus
+   border-color: $gray-dark */
+/* .fill-lighter, .fill-white
+   color: $gray-darkest
 
-	.form-control:focus
-		border-color: $gray-dark
+   a
+   color: $link-color
 
-.fill-lighter, .fill-white
-	color: $gray-darkest
+   &:hover
+   color: $link-hover-color
 
-	a
-		color: $link-color
+   .link-muted, .link-help
+   color: $text-muted
 
-		&:hover
-			color: $link-hover-color
+   &:hover, &:focus
+   color: $black
 
-	.link-muted, .link-help
-		color: $text-muted
+   .link-unstyled
+   color: inherit
 
-		&:hover, &:focus
-			color: $black
+   .control-label
+   color: $text-color
 
-	.link-unstyled
-		color: inherit
+   .help-block
+   color: $gray-light */
+/* .fill-pink
+   &, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
+   color: $white
 
-	.control-label
-		color: $text-color
+   a
+   font-weight: bold
 
-	.help-block
-		color: $gray-light
+   &:hover
+   text-decoration: underline */
+/* .fill-dark-green
+   &, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
+   color: var(--theme-green)
 
-.fill-pink
-	&, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
-		color: $white
+   a
+   font-weight: bold
 
-	a
-		font-weight: bold
-
-		&:hover
-			text-decoration: underline
-
-.fill-dark-green
-	&, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
-		color: var(--theme-green)
-
-	a
-		font-weight: bold
-
-		&:hover
-			text-decoration: underline
-
-.fill-green
-	color: $gray-darkest
-
+   &:hover
+   text-decoration: underline */
+/* .fill-green
+	color: $gray-darkest */
 /* hr
    .fill-black &
    border-top-color: $gray-darker

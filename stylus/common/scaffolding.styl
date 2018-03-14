@@ -23,13 +23,13 @@ a
 		theme-prop('color', 'link-hover')
 
 .link-muted
-	color: $text-muted
+	theme-prop('color', 'fg-muted')
 
 .link-unstyled
 	link-unstyled()
 
 .link-help
-	color: $text-muted
+	theme-prop('color', 'fg-muted')
 	border-bottom: 1px dotted $gray
 
 	&:hover, &:focus
@@ -44,6 +44,9 @@ a
 
 hr
 	theme-prop('border-top-color', 'bg-subtle')
+
+.text-muted
+	theme-prop('color', 'fg-muted')
 
 /**
  * Scrollable

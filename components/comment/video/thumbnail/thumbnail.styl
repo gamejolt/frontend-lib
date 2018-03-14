@@ -24,13 +24,13 @@
 		height: 100%
 
 		.jolticon
+			theme-prop('color', 'fg-muted')
 			position: absolute
 			font-size: 16px * 4
 			left: 50%
 			margin-left: -(@font-size / 2)
 			top: @left
 			margin-top: @margin-left
-			color: $gray-lighter
 
 	img
 		rounded-corners()
@@ -64,14 +64,15 @@
 
 .-user
 	text-overflow()
+	theme-prop('color', 'fg-muted')
 	display: block
 	margin-left: $comment-video-thumbnail-avatar-size + $comment-video-thumbnail-meta-spacing
-	color: $text-muted
 	font-weight: bold
 	font-size: $font-size-h6
 
 .-title
 	text-overflow()
+	theme-prop('color', 'fg')
 	display: block
 	margin: 0
 	margin-left: $comment-video-thumbnail-avatar-size + $comment-video-thumbnail-meta-spacing
@@ -80,4 +81,4 @@
 
 .-user, .-title
 	&:hover
-		text-decoration: underline
+		theme-prop('color', 'link')

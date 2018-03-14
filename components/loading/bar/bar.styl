@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .loading-bar
 	position: fixed
@@ -10,7 +11,7 @@
 	z-index: $zindex-loading-bar
 
 	&-bar
+		theme-prop('background-color', 'highlight')
 		height: 3px
-		background: var(--theme-blue)
 		transition: width 300ms $strong-ease-out
 		will-change: width

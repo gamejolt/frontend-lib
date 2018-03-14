@@ -110,7 +110,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6
 	font-family: $headings-font-family
 	font-weight: $headings-font-weight
 	line-height: $headings-line-height
-	color: $headings-color
 
 	small, .small
 		font-weight: normal
@@ -188,9 +187,6 @@ cite
 	text-align: justify
 
 // Contextual colors
-.text-muted
-	color: $text-muted
-
 .text-primary
 	text-emphasis-variant($brand-primary)
 
@@ -291,7 +287,7 @@ dd
 
 		dd
 			margin-left: $component-offset-horizontal
-			@extend .clearfix // Clear the floated `dt` if an empty `dd` is present
+			@extend .clearfix
 
 // MISC
 // ----

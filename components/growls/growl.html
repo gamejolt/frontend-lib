@@ -22,7 +22,7 @@
 					<img class="img-responsive" :src="growl.icon" alt="">
 				</div>
 				<div class="growl-content">
-					<h4 v-if="!!growl.title">
+					<h4 class="growl-title" v-if="!!growl.title">
 						{{ growl.title }}
 					</h4>
 					<p>{{ growl.message }}</p>
