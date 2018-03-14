@@ -109,5 +109,5 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	&.active
 		&, &:hover
 			&::before
+				theme-prop('background-color', 'highlight')
 				transform: translate(0, 0)
-				background-color: var(--theme-green)

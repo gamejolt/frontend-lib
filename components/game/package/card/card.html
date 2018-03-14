@@ -4,8 +4,11 @@
 	>
 
 	<div
-		class="game-package-card-pricing fill-gray"
-		:class="{ 'game-package-card-pricing-owned fill-highlight': isOwned }"
+		class="game-package-card-pricing"
+		:class="{
+			'fill-gray': !isOwned,
+			'game-package-card-pricing-owned fill-highlight': isOwned
+		}"
 		>
 
 		<!-- If they own the package -->

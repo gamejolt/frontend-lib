@@ -29,6 +29,10 @@
 				color: $gray-lighter
 
 		&-sale-percentage
+			theme-prop('background-color', 'highlight')
+			theme-prop('color', 'highlight-fg')
+			border-top-left-radius: $border-radius-base
+			border-top-right-radius: $border-radius-base
 			display: block
 			margin-left: -10px
 			margin-right: -10px
@@ -37,14 +41,12 @@
 			padding-top: 3px
 			padding-bottom: 3px
 			font-weight: bold
-			background-color: var(--theme-green)
-			color: $black
 
 	.card
 		padding-bottom: 0
 
 	.card-sale-info
-		color: var(--theme-green)
+		theme-prop('color', 'highlight')
 
 	.card-controls
 		margin-bottom: 15px

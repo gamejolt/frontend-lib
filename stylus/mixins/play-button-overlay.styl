@@ -4,16 +4,15 @@ $play-button-overlay
 	left: 50%
 	top: 50%
 	z-index: $zindex-play-button-overlay
-	background-color: rgba( $black, 0.65 )
+	background-color: rgba($black, 0.65)
 	border-radius: 50%
 	cursor: pointer
 
-	&:hover
-	&.active
-		background-color: rgba( $black, 0.85 )
+	&:hover, &.active
+		background-color: rgba($black, 0.85)
 
 		.jolticon
-			color: var(--theme-green)
+			theme-prop('color', 'highlight')
 
 	.jolticon
 		position: relative
@@ -24,7 +23,7 @@ $play-button-overlay
 		color: $white
 		cursor: pointer
 
-	play-button-overlay-sizing( multiplier )
+	play-button-overlay-sizing(multiplier)
 		padding: multiplier * 10px
 		border-width: multiplier * 2px
 		line-height: multiplier * 20px
@@ -37,10 +36,10 @@ $play-button-overlay
 			left: multiplier * 1px
 			top: -(@left)
 
-	play-button-overlay-sizing( 2 )
+	play-button-overlay-sizing(2)
 
 	&.small
-		play-button-overlay-sizing( 1 )
+		play-button-overlay-sizing(1)
 
 	&.big
-		play-button-overlay-sizing( 3 )
+		play-button-overlay-sizing(3)
