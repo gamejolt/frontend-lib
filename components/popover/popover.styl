@@ -38,7 +38,7 @@
 
 	&.top
 		& > .arrow
-			caret($popover-border-color, 'down', $popover-arrow-size)
+			caret(var(--theme-bg-subtle), 'down', $popover-arrow-size)
 			bottom: -($popover-arrow-size - $popover-extra-margin)
 
 		&.popover-anim-enter-active
@@ -46,7 +46,7 @@
 
 	&.right
 		& > .arrow
-			caret($popover-border-color, 'left', $popover-arrow-size)
+			caret(var(--theme-bg-subtle), 'left', $popover-arrow-size)
 			left: -($popover-arrow-size - $popover-extra-margin)
 
 		&.popover-anim-enter-active
@@ -54,7 +54,7 @@
 
 	&.bottom
 		& > .arrow
-			caret($popover-border-color, 'up', $popover-arrow-size)
+			caret(var(--theme-bg-subtle), 'up', $popover-arrow-size)
 			top: -($popover-arrow-size - $popover-extra-margin)
 
 		&.popover-anim-enter-active
@@ -62,7 +62,7 @@
 
 	&.left
 		& > .arrow
-			caret($popover-border-color, 'right', $popover-arrow-size)
+			caret(var(--theme-bg-subtle), 'right', $popover-arrow-size)
 			right: -($popover-arrow-size - $popover-extra-margin)
 
 		&.popover-anim-enter-active
@@ -70,11 +70,13 @@
 
 .popover-content
 	rounded-corners()
+	theme-prop('background-color', 'bg-offset')
+	theme-prop('border-color', 'bg-subtle')
 	max-height: 360px
 	min-width: 200px
-	background-color: $popover-bg-color
 	background-clip: padding-box
-	border: 2px solid $popover-border-color
+	border-width: 2px
+	border-style: solid
 	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
 
 	&.popover-no-max-height

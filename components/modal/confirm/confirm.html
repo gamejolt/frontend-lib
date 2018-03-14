@@ -16,8 +16,7 @@
 			<translate v-if="buttonType === 'ok'">OK</translate>
 			<translate v-else-if="buttonType === 'yes'">Yes</translate>
 		</button>
-		<button class="btn btn-danger-outline" @click="cancel">
-			<app-jolticon icon="remove" />
+		<button class="btn btn-danger-trans" @click="cancel">
 			<translate v-if="buttonType === 'ok'">Cancel</translate>
 			<translate v-else-if="buttonType === 'yes'">No</translate>
 		</button>
