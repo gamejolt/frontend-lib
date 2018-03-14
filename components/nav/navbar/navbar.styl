@@ -21,14 +21,12 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 .navbar-items
 	@extend .list-unstyled
 
-.navbar-items
-.navbar-items > li
+.navbar-items, .navbar-items > li
 	display: inline-block
 	margin-bottom: 0
 	vertical-align: top
 
-.navbar-items > li > a
-.navbar-item
+.navbar-items > li > a, .navbar-item
 	display: inline-block
 	overflow: hidden
 	height: $navbar-height
@@ -57,7 +55,6 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	background-color: $gray-dark
 
 .navbar-avatar
-
 	// Gotta overide specificity
 	.navbar-items > li > &
 		padding: 10px
@@ -79,7 +76,6 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	overflow: hidden
 
 	.form-control
-		placeholder( $gray-lighter )
 		border: 0
 		background-color: transparent
 		color: $white
@@ -92,9 +88,7 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 /**
  * Hover/active state underline.
  */
-.navbar-items > li > a
-.navbar-item
-.navbar-form-control
+.navbar-items > li > a, .navbar-item, .navbar-form-control
 	position: relative
 
 	&::before
@@ -105,16 +99,15 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 		bottom: 0
 		height: 3px
 		background-color: $gray
-		transform: translate( 0, 4px )
+		transform: translate(0, 4px)
 		transition: transform 300ms $strong-ease-out, background-color 200ms linear
 
 	&:hover
 		&::before
-			transform: translate( 0, 0 )
+			transform: translate(0, 0)
 
 	&.active
-		&
-		&:hover
+		&, &:hover
 			&::before
-				transform: translate( 0, 0 )
+				transform: translate(0, 0)
 				background-color: var(--theme-green)

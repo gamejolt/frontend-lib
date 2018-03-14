@@ -1,4 +1,4 @@
-@require '../bootstrap/mixins'
+@require './bootstrap-mixins'
 
 theme-prop($prop, $val, $important = false)
 	$important = $important ? '!important' : ''
@@ -194,6 +194,15 @@ dot-separator()
 	line-height: 20px
 	vertical-align: middle
 	background-color: $gray-lighter
+
+/**
+ * Pulls
+ */
+pull-right()
+	float: right !important
+
+pull-left()
+	float: left !important
 
 @require '../mixins/animations'
 @require '../mixins/play-button-overlay'

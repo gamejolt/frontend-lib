@@ -9,7 +9,7 @@
 	padding-right: $line-height-computed
 
 	&::after
-		theme-prop('background-color', 'fg')
+		theme-prop('background-color', 'bg-subtle')
 		content: ''
 		position: absolute
 		left: 0
@@ -43,7 +43,7 @@
 
 			& > a
 				theme-prop('color', 'fg')
-				theme-prop('border-color', 'fg')
+				theme-prop('border-color', 'bg-subtle')
 				display: inline-block
 				padding: $tab-list-padding-v $tab-list-padding-h
 				margin: 0 3px
@@ -62,6 +62,7 @@
 
 				&.active
 					theme-prop('background-color', 'bg')
+					theme-prop('color', 'link')
 					position: relative
 					z-index: 2
 
