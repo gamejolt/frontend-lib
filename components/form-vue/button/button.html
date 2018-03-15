@@ -1,5 +1,9 @@
-<button class="btn" :class="[type]" v-if="shouldShow">
-	<app-jolticon v-if="icon" :icon="icon" />
+<app-button
+	v-if="shouldShow"
+	primary
+	solid
+	:block="block"
+	>
 	<slot />
 	<transition>
 		<app-jolticon
@@ -8,4 +12,4 @@
 			icon="check"
 			/>
 	</transition>
-</button>
+</app-button>
