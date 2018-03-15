@@ -11,7 +11,7 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 	},
 })
 export class AppButton extends Vue {
-	@Prop({ type: String, default: 'a' })
+	@Prop({ type: String, default: 'button' })
 	tag: string;
 	@Prop(Boolean) primary?: boolean;
 	@Prop(Boolean) trans?: boolean;
