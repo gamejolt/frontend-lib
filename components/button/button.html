@@ -2,19 +2,21 @@
 	:is="tag"
 	class="button"
 	:class="{
-		'-primary': this.primary === true,
-		'-trans': this.trans === true,
+		'-primary': this.primary,
+		'-trans': this.trans,
 		'-outline': !this.filled,
-		'-dark': this.dark === true,
-		'-overlay': this.overlay === true,
-		'-active': this.active === true,
-		'-sparse': this.sparse === true,
-		'-circle': this.circle === true,
-		'-lg': this.lg === true,
-		'-sm': this.sm === true,
-		'-block': this.block === true,
+		'-overlay': this.overlay,
+		'-circle': this.circle,
+		'-sparse': this.sparse || this.circle,
+		'-lg': this.lg,
+		'-sm': this.sm,
+		'-block': this.block,
+		'-block-xs': this.blockXs,
+		'-disabled': this.disabled,
 	}"
+	:disabled="this.disabled"
 	>
-	<app-jolticon v-if="icon" :icon="icon" />
+	<span v-if="badge" class="-badge">{{ badge }}</span>
+	<app-jolticon class="-icon" v-if="icon" :icon="icon" />
 	<slot />
 </component>

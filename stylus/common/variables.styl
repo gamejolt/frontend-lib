@@ -23,9 +23,12 @@ $white = #fff
 // The main theme color -- should be bright (show well on dark, not on light)
 $theme-highlight = #f44283
 // The darker theme color (highlight should be able to overlay on top of this)
-$theme-downlight = darken(#f44283, 15%)
+$theme-backlight = darken(#f44283, 15%)
 // Used for notices like notifications or errors
 $theme-notice = #f44283
+// Bi-color themes
+$theme-bi-bg = $theme-backlight
+$theme-bi-fg = light($theme-bi-bg) ? $black : $white
 // Base background color
 $theme-bg = $white
 $theme-bg-trans = rgba($theme-bg, 0)
@@ -39,7 +42,7 @@ $theme-fg = $gray-dark
 // Muted text color (used for less important content)
 $theme-fg-muted = $gray-light
 // The default link color
-$theme-link = $theme-downlight
+$theme-link = $theme-backlight
 $theme-link-hover = $black
 //
 // Dark theme vars
@@ -52,6 +55,8 @@ $dark-theme-fg = $gray-lightest
 $dark-theme-fg-muted = $gray-light
 $dark-theme-link = $theme-highlight
 $dark-theme-link-hover = $white
+$dark-theme-bi-bg = $theme-highlight
+$dark-theme-bi-fg = light($dark-theme-bi-bg) ? $black : $white
 //
 // Computed theme vars
 $theme-highlight-fg = light($theme-highlight) ? $black : $white

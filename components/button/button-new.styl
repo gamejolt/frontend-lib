@@ -1,71 +1,6 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
-button-variant(background, color, icon-color, addon-color, outline-color, outline-addon-color, active-background, active-color)
-	$variant-default-rules =
-		background-color: background
-		color: color
-
-		.jolticon
-			color: icon-color
-
-		// Since sparse buttons only show a single icon, we have to change the color
-		// so that when we hover it changes.
-		&.-sparse .jolticon
-			color: color
-
-		.jolticon-addon, small
-			color: addon-color !important
-	$variant-outline-rules =
-		background-color: transparent
-		border-color: outline-color
-		color: $gray-dark !important
-
-		.jolticon, &.-sparse .jolticon
-			color: outline-color
-
-		.jolticon-addon, small
-			color: outline-addon-color !important
-	$variant-trans-rules =
-		{$variant-outline-rules}
-		border-color: transparent
-	$variant-active-rules =
-		background-color: active-background
-		border-color: active-background
-		color: active-color !important
-
-		.jolticon, &.-sparse .jolticon
-			color: active-color
-
-		.jolticon-addon, small
-			color: addon-color !important
-	{$variant-default-rules}
-
-	// Disabled buttons should have the same coloring when active as when not active.
-	&.-disabled, &[disabled], fieldset[disabled] &
-		&:hover
-			{$variant-default-rules}
-
-	&.-outline
-		{$variant-outline-rules}
-
-		&.-disabled, &[disabled], fieldset[disabled] &
-			&:hover
-				{$variant-outline-rules}
-
-	&.-trans
-		{$variant-trans-rules}
-
-		&.-disabled, &[disabled], fieldset[disabled] &
-			&:hover
-				{$variant-trans-rules}
-
-	&:hover, &.-active, &.-outline:hover, &.-outline.-active, &.-trans:hover, &.-trans.-active
-		{$variant-active-rules}
-
-/**
- * We have to set !important for any main text-color in buttons.
- * This is because certain .fill classes override link colors and it screws things up.
- */
 .button
 	rounded-corners()
 	display: inline-block
@@ -83,87 +18,53 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 	text-decoration: none !important
 	user-select: none
 
+	// Hover state always matches "primary filled".
 	&:hover
+		theme-prop('background-color', 'bi-bg', true)
+		theme-prop('border-color', 'bi-bg', true)
+		theme-prop('color', 'bi-fg', true)
 		text-decoration: none
 		cursor: pointer
 
-	// Does a "press down" animation.
-	// Was screwing up visually in package cards in client...
-	&:active
-		transform: translateY(2px)
-
-	.jolticon
-		position: relative
-		top: -1px
-		cursor: pointer
-		vertical-align: middle
-		margin: 0 $button-icon-spacing-right 0 0
-
-	.jolticon-addon
-		margin-left: 5px
-
-	small
-		font-weight: normal
-		font-size: $font-size-tiny
-		vertical-align: baseline
-
-	&-badge
-		float: right
-		display: inline-block
-		padding: 0 ($button-padding-horizontal / 2)
-		margin-left: ($button-padding-horizontal / 2) * 1.5
-		margin-right: -($button-padding-horizontal)
-		background-color: $black
-		color: var(--theme-green)
-		font-size: $font-size-small
-		border-top-right-radius: $border-radius-base
-		border-bottom-right-radius: $border-radius-base
-
-/**
- * Disabled State
- */
-.button
+	// Disabled state.
 	&.-disabled, &[disabled], fieldset[disabled] &
 		cursor: not-allowed
 		opacity: 0.5
 
-	// Make sure pressing it doesn't do the press animation.
-	&:active
-		transform: none
+		.jolticon
+			cursor: not-allowed
 
-	.jolticon
-		cursor: not-allowed
+	/* .jolticon-addon
+	   margin-left: 5px
 
-/**
- * Circle Buttons
- */
-.-circle
-	border-radius: 50%
+	   small
+	   font-weight: normal
+	   font-size: $font-size-tiny
+	   vertical-align: baseline */
 
-/**
- * Block buttons
- */
-.-block
-	display: block
-	width: 100%
-	text-align: center
+.-icon
+	position: relative
+	top: -1px
+	cursor: pointer
+	vertical-align: middle
+	margin: 0 $button-icon-spacing-right 0 0
 
-// Put a bit of spacing between two block buttons.
-// .-block + .-block
-// margin-top: 5px
-@media $media-xs
-	.-block-xs
-		display: block
-		width: 100%
-		text-align: center
-
-	.-block-xs + .-block-xs, .-block-xs + .-block, .-block + .-block-xs
-		margin-top: 5px
+.-badge
+	theme-prop('background-color', 'fg')
+	theme-prop('color', 'bg')
+	float: right
+	display: inline-block
+	padding: 0 ($button-padding-horizontal / 2)
+	margin-left: ($button-padding-horizontal / 2) * 1.5
+	margin-right: -($button-padding-horizontal)
+	font-size: $font-size-small
+	border-top-right-radius: $border-radius-base
+	border-bottom-right-radius: $border-radius-base
 
 /**
  * Outline buttons
  */
-.-outline, .-primary.-outline
+.-outline
 	border-width: $button-outline-border-size
 	border-style: solid
 	line-height: ($button-line-height - (@border-width * 2))
@@ -176,54 +77,47 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 		border-bottom-right-radius: ($border-radius-base / 2)
 
 /**
- * Default
+ * Button types
  */
 .button
-	button-variant(background: $black, color: $white, icon-color: var(--theme-green), outline-color: $black, active-background: $black, active-color: var(--theme-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
+	theme-prop('background-color', 'fg')
+	theme-prop('color', 'bg')
 
 .-primary
-	button-variant(background: var(--theme-dark-green), color: $white, icon-color: var(--theme-green), outline-color: var(--theme-dark-green), active-background: var(--theme-dark-green), active-color: var(--theme-green), addon-color: $gray-lighter, outline-addon-color: $gray-light)
+	theme-prop('background-color', 'bi-bg')
+	theme-prop('color', 'bi-fg')
+
+.-outline
+	theme-prop('border-color', 'fg')
+	theme-prop('color', 'fg')
+	background-color: transparent
+
+	&.-primary
+		theme-prop('border-color', 'bi-bg')
+		theme-prop('color', 'fg')
 
 /**
- * Dark variant
+ * Trans buttons
  */
-.-dark
-	&.-outline, &.-primary.-outline, &.-trans, &.-primary.-trans
-		border-color: $gray-light
-		color: $gray-lighter !important
+.-trans
+	border-color: transparent
 
-		.jolticon
-			color: var(--theme-green)
-
-		// We don't fill them when they're on dark background.
-		// We simply highlight the current outlined version.
-		&:hover, &.active
-			background-color: transparent
-			border-color: $white
-			color: $white !important
-
-	&.-primary.-outline, &.-primary-trans
-		border-color: var(--theme-green)
-		color: var(--theme-green) !important
-
-/* // Orverride button styling in fills.
-   .fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray
-   .btn
-   @extend .btn-dark-variant */
 /**
- * Overlay variant
- * Basically the same as dark variant.
+ * Overlay buttons
  */
-/* .-overlay
-   @extend .btn-dark-variant
-   background-color: rgba($black, 0.65) !important
+.-overlay
+	&.-outline, &.-trans
+		color: $dark-theme-fg
+		background-color: rgba($black, 0.65)
 
-   // All overlays have white text so it shows up better.
-   &.btn
-   color: $white !important */
+	&.-outline
+		border-color: $dark-theme-fg
+
+	&.-trans
+		border-color: transparent
+
 /**
  * Sparse buttons
- * Keep it down here so the padding styles overwrite previous definitions.
  */
 .-sparse
 	$$btn-horizontal-padding = (($button-line-height - $button-icon-size) / 2)
@@ -235,10 +129,10 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 		margin-right: -($$btn-horizontal-padding)
 		margin-left: $$btn-horizontal-padding
 
-	.jolticon
+	.-icon
 		margin: 0 !important
 
-	&.-outline, &.-primary.-outline
+	&.-outline
 		$$btn-horizontal-padding = (($button-line-height - $button-icon-size) / 2) - $button-outline-border-size
 		padding-left: $$btn-horizontal-padding
 		padding-right: $$btn-horizontal-padding
@@ -248,55 +142,30 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 			margin-left: $$btn-horizontal-padding
 
 /**
- * Button sizings
- * It's a bit nuts since we have to override so many things...
+ * Circle buttons
+ * Only works for sparse buttons.
  */
-create-btn-size(size)
-	font-size: lookup('$button-' + size + '-font-size')
-	font-weight: lookup('$button-' + size + '-font-weight')
-	line-height: lookup('$button-' + size + '-line-height')
-	padding: 0 lookup('$button-' + size + '-padding-horizontal')
-	border-radius: lookup('$button-' + size + '-border-radius')
+.-circle.-sparse
+	border-radius: 50%
 
-	.jolticon
-		margin-right: lookup('$button-' + size + '-icon-spacing-right')
+/**
+ * Block buttons
+ */
+.-block
+	display: block
+	width: 100%
+	text-align: center
 
-	.-badge
-		padding: 0 (lookup('$button-' + size + '-padding-horizontal') / 2)
-		margin-right: -(lookup('$button-' + size + '-padding-horizontal'))
-		margin-left: (lookup('$button-' + size + '-padding-horizontal') / 2) * 1.5
-		font-size: lookup('$button-' + size + '-font-size')
+// Put a bit of spacing between two block buttons on top of each other.
+.-block + .-block
+	margin-top: 5px
 
-	&.-outline, &.-primary.-outline
-		border-width: lookup('$button-' + size + '-outline-border-size')
-		line-height: lookup('$button-' + size + '-line-height') - (@border-width * 2)
-		padding-left: lookup('$button-' + size + '-padding-horizontal') - @border-width
-		padding-right: @padding-left
+// Block only on xs.
+@media $media-xs
+	.-block-xs
+		display: block
+		width: 100%
+		text-align: center
 
-		.-badge
-			margin-right: -(lookup('$button-' + size + '-padding-horizontal') - lookup('$button-' + size + '-outline-border-size'))
-
-	&.-sparse
-		$$btn-horizontal-padding = ((lookup('$button-' + size + '-line-height') - $button-icon-size) / 2)
-		padding-left: $$btn-horizontal-padding
-		padding-right: $$btn-horizontal-padding
-
-		.-badge
-			margin-right: -($$btn-horizontal-padding)
-			margin-left: $$btn-horizontal-padding
-
-		&.-outline, &.-primary.-outline
-			$$btn-horizontal-padding = lookup('$button-' + size + '-padding-vertical') - lookup('$button-' + size + '-outline-border-size')
-			padding-left: $$btn-horizontal-padding
-			padding-right: $$btn-horizontal-padding
-
-			.-badge
-				margin-right: -($$btn-horizontal-padding)
-				margin-left: $$btn-horizontal-padding
-
-// The actual styles now.
-.-sm
-	create-btn-size('sm')
-
-.-lg
-	create-btn-size('lg')
+	.-block-xs + .-block-xs, .-block-xs + .btn-block, .btn-block + .-block-xs
+		margin-top: 5px

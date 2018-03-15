@@ -1,10 +1,12 @@
 
 :root
 	--theme-highlight: $theme-highlight
-	--theme-downlight: $theme-downlight
+	--theme-backlight: $theme-backlight
 	--theme-notice: $theme-notice
 	--theme-highlight-fg: $theme-highlight-fg
 	--theme-notice-fg: $theme-notice-fg
+	--theme-bi-bg: $theme-bi-bg
+	--theme-bi-fg: $theme-bi-fg
 	--theme-bg: $theme-bg
 	--theme-bg-trans: $theme-bg-trans
 	--theme-bg-offset: $theme-bg-offset
@@ -13,16 +15,13 @@
 	--theme-fg-muted: $theme-fg-muted
 	--theme-link: $theme-link
 	--theme-link-hover: $theme-link-hover
-	// TODO(themes): remove these
-	--theme-green: var(--theme-highlight)
-	--theme-dark-green: var(--theme-downlight)
-	--theme-blue: var(--theme-highlight)
-	--theme-pink: var(--theme-notice)
 
 /**
  * Dark Mode
  */
 .theme-dark, .fill-gray, .fill-dark, .fill-darker, .fill-darkest, .fill-black
+	--theme-bi-bg: $dark-theme-bi-bg
+	--theme-bi-fg: $dark-theme-bi-fg
 	--theme-bg: $dark-theme-bg
 	--theme-bg-trans: $dark-theme-bg-trans
 	--theme-bg-offset: $dark-theme-bg-offset

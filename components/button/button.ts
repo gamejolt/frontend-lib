@@ -16,14 +16,14 @@ export class AppButton extends Vue {
 	@Prop(Boolean) primary?: boolean;
 	@Prop(Boolean) trans?: boolean;
 	@Prop(Boolean) filled?: boolean;
-	@Prop(Boolean) dark?: boolean;
 	@Prop(Boolean) overlay?: boolean;
-	@Prop(Boolean) active?: boolean;
 	@Prop(Boolean) sparse?: boolean;
 	@Prop(Boolean) circle?: boolean;
+	@Prop(Boolean) disabled?: boolean;
 	@Prop(Boolean) lg?: boolean;
 	@Prop(Boolean) sm?: boolean;
 	@Prop(Boolean) block?: boolean;
+	@Prop(Boolean) blockXs?: boolean;
 	@Prop(String) icon?: string;
 	@Prop(String) badge?: string;
 }
