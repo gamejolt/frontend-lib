@@ -15,7 +15,7 @@ export class AppButton extends Vue {
 	tag: string;
 	@Prop(Boolean) primary?: boolean;
 	@Prop(Boolean) trans?: boolean;
-	@Prop(Boolean) filled?: boolean;
+	@Prop(Boolean) solid?: boolean;
 	@Prop(Boolean) overlay?: boolean;
 	@Prop(Boolean) sparse?: boolean;
 	@Prop(Boolean) circle?: boolean;
