@@ -21,14 +21,14 @@ $white = #fff
 //
 // Theme vars
 // The main theme color -- should be bright (show well on dark, not on light)
-$theme-highlight = #f44283
+$theme-highlight = $gj-green
 // The darker theme color (highlight should be able to overlay on top of this)
-$theme-backlight = darken(#f44283, 15%)
+$theme-backlight = $gj-dark-green
 // Used for notices like notifications or errors
-$theme-notice = #f44283
+$theme-notice = $gj-pink
 // Bi-color themes
 $theme-bi-bg = $theme-backlight
-$theme-bi-fg = light($theme-bi-bg) ? $black : $white
+$theme-bi-fg = $gj-green
 // Base background color
 $theme-bg = $white
 $theme-bg-trans = rgba($theme-bg, 0)

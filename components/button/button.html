@@ -15,6 +15,7 @@
 		'-disabled': this.disabled,
 	}"
 	:disabled="this.disabled"
+	@click="onClick"
 	>
 	<span v-if="badge" class="-badge">{{ badge }}</span>
 	<app-jolticon class="-icon" v-if="icon" :icon="icon" />

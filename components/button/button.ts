@@ -26,4 +26,8 @@ export class AppButton extends Vue {
 	@Prop(Boolean) blockXs?: boolean;
 	@Prop(String) icon?: string;
 	@Prop(String) badge?: string;
+
+	onClick(e: Event) {
+		this.$emit('click', e);
+	}
 }
