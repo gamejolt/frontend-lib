@@ -71,8 +71,8 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 	font-family: $font-family-base
 	font-size: $font-size-small
 	font-weight: bold
-	line-height: $button-line-height
-	padding: 0 $button-padding-horizontal
+	line-height: $button-md-line-height
+	padding: 0 $button-md-padding-horizontal
 	vertical-align: middle
 	cursor: pointer
 	border: 0
@@ -90,7 +90,7 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 		top: -1px
 		cursor: pointer
 		vertical-align: middle
-		margin: 0 $button-icon-spacing-right 0 0
+		margin: 0 $button-md-icon-spacing-right 0 0
 
 	.jolticon-addon
 		margin-left: 5px
@@ -103,9 +103,9 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 	&-badge
 		float: right
 		display: inline-block
-		padding: 0 ($button-padding-horizontal / 2)
-		margin-left: ($button-padding-horizontal / 2) * 1.5
-		margin-right: -($button-padding-horizontal)
+		padding: 0 ($button-md-padding-horizontal / 2)
+		margin-left: ($button-md-padding-horizontal / 2) * 1.5
+		margin-right: -($button-md-padding-horizontal)
 		background-color: $black
 		color: var(--theme-green)
 		font-size: $font-size-small
@@ -154,14 +154,14 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
  * Outline buttons
  */
 .btn-outline, .btn-success-outline, .btn-primary-outline, .btn-danger-outline
-	border-width: $button-outline-border-size
+	border-width: $button-md-outline-border-size
 	border-style: solid
-	line-height: ($button-line-height - (@border-width * 2))
-	padding-left: $button-padding-horizontal - @border-width
+	line-height: ($button-md-line-height - (@border-width * 2))
+	padding-left: $button-md-padding-horizontal - @border-width
 	padding-right: @padding-left
 
 	.btn-badge
-		margin-right: -($button-padding-horizontal - $button-outline-border-size)
+		margin-right: -($button-md-padding-horizontal - $button-md-outline-border-size)
 		border-top-right-radius: ($border-radius-base / 2)
 		border-bottom-right-radius: ($border-radius-base / 2)
 
@@ -238,7 +238,7 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
  * Keep it down here so the padding styles overwrite previous definitions.
  */
 .btn-sparse
-	$$btn-horizontal-padding = (($button-line-height - $button-icon-size) / 2)
+	$$btn-horizontal-padding = (($button-md-line-height - $button-icon-size) / 2)
 	// We basically override the left/right padding to match the top and bottom.
 	padding-left: $$btn-horizontal-padding
 	padding-right: $$btn-horizontal-padding
@@ -251,7 +251,7 @@ button-variant(background, color, icon-color, addon-color, outline-color, outlin
 		margin: 0 !important
 
 	&.btn-outline, &.btn-success-outline, &.btn-primary-outline, &.btn-danger-outline
-		$$btn-horizontal-padding = (($button-line-height - $button-icon-size) / 2) - $button-outline-border-size
+		$$btn-horizontal-padding = (($button-md-line-height - $button-icon-size) / 2) - $button-md-outline-border-size
 		padding-left: $$btn-horizontal-padding
 		padding-right: $$btn-horizontal-padding
 

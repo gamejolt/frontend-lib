@@ -29,6 +29,7 @@ $theme-notice = $gj-pink
 // Bi-color themes
 $theme-bi-bg = $theme-backlight
 $theme-bi-fg = $gj-green
+$theme-bi-bg-darkened = darken($theme-bi-bg, 10%)
 // Base background color
 $theme-bg = $white
 $theme-bg-trans = rgba($theme-bg, 0)
@@ -57,6 +58,7 @@ $dark-theme-link = $theme-highlight
 $dark-theme-link-hover = $white
 $dark-theme-bi-bg = $theme-highlight
 $dark-theme-bi-fg = light($dark-theme-bi-bg) ? $black : $white
+$dark-theme-bi-bg-darkened = darken($dark-theme-bi-bg, 10%)
 //
 // Computed theme vars
 $theme-highlight-fg = light($theme-highlight) ? $black : $white
@@ -164,12 +166,15 @@ $media-lg-up = media(min: $screen-lg-min)
 $media-mobile = media(max: $screen-sm-max)
 //
 // Buttons
-$button-padding-vertical = 8px
-$button-padding-horizontal = 16px
-$button-line-height = 20px + ($button-padding-vertical * 2)
 $button-icon-size = 16px
-$button-icon-spacing-right = 5px
-$button-outline-border-size = 2px
+$button-md-padding-vertical = 8px
+$button-md-padding-horizontal = 16px
+$button-md-line-height = 20px + ($button-md-padding-vertical * 2)
+$button-md-icon-spacing-right = 5px
+$button-md-outline-border-size = 2px
+$button-md-font-weight = bold
+$button-md-font-size = $font-size-small
+$button-md-border-radius = $border-radius-base
 $button-sm-padding-vertical = 3px
 $button-sm-padding-horizontal = 10px
 $button-sm-line-height = $button-icon-size + ($button-sm-padding-vertical * 2)
