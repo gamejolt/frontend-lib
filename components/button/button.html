@@ -1,5 +1,5 @@
 <component
-	:is="tag"
+	:is="ourTag"
 	class="button"
 	:class="{
 		'-primary': this.primary,
@@ -14,6 +14,7 @@
 		'-block-xs': this.blockXs,
 		'-disabled': this.disabled,
 	}"
+	:to="to"
 	:disabled="this.disabled"
 	@click="onClick"
 	>

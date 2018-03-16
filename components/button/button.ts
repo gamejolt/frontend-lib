@@ -26,6 +26,11 @@ export class AppButton extends Vue {
 	@Prop(Boolean) blockXs?: boolean;
 	@Prop(String) icon?: string;
 	@Prop(String) badge?: string;
+	@Prop() to?: any;
+
+	get ourTag() {
+		return this.to ? 'router-link' : this.tag;
+	}
 
 	onClick(e: Event) {
 		this.$emit('click', e);
