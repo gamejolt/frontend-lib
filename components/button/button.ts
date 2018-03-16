@@ -29,7 +29,12 @@ export class AppButton extends Vue {
 	@Prop() to?: any;
 
 	get ourTag() {
-		return this.to ? 'router-link' : this.tag;
+		if (this.$attrs.href) {
+			return 'a';
+		} else if (this.to) {
+			return 'router-link';
+		}
+		return this.tag;
 	}
 
 	onClick(e: Event) {
