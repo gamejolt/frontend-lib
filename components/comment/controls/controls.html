@@ -1,16 +1,15 @@
 <span class="comment-controls">
 	<span class="comment-vote-btn" v-app-auth-required>
-		<button
-			class="btn btn-outline btn-sparse btn-circle"
-			:class="{
-				'active btn-success': comment.user_vote
-			}"
+		<app-button
+			icon="heart"
+			circle
+			:primary="!!comment.user_vote"
+			:solid="!!comment.user_vote"
 			@click="onVoteClick()"
 			v-app-tooltip="votingTooltip"
 			v-app-track-event="`comment-widget:vote-click`"
-			>
-			<app-jolticon icon="heart" />
-		</button>
+			/>
+
 		<span class="blip light filled" v-if="comment.votes > 0">
 			<span class="blip-caret"></span>
 			<span class="blip-count">{{ comment.votes | number }}</span>
@@ -18,13 +17,12 @@
 	</span>
 
 	<span v-if="showReply" v-app-auth-required>
-		<button
-			class="btn btn-outline btn-sparse btn-circle"
+		<app-button
+			icon="reply"
+			circle
 			@click="onReplyClick()"
 			v-app-tooltip="$gettext( 'Reply' )"
 			v-app-track-event="`comment-widget:reply-click`"
-			>
-			<app-jolticon icon="reply" />
-		</button>
+			/>
 	</span>
 </span>

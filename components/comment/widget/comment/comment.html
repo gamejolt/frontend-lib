@@ -104,23 +104,28 @@
 				show-reply
 				/>
 
-			<a
+			<app-button
 				v-if="children && children.length"
-				class="btn"
-				:class="{
-					'btn-trans': !isShowingChildren,
-					'active': isShowingChildren,
-				}"
+				trans
 				@click="isShowingChildren = !isShowingChildren"
 				>
 				<translate
+					v-if="!isShowingChildren"
 					:translate-n="children.length"
 					:translate-params="{ count: children.length }"
 					translate-plural="+%{ count } replies"
 					>
 					+%{ count } reply
 				</translate>
-			</a>
+				<translate
+					v-else
+					:translate-n="children.length"
+					:translate-params="{ count: children.length }"
+					translate-plural="+%{ count } replies"
+					>
+					-%{ count } reply
+				</translate>
+			</app-button>
 
 		</template>
 	</template>
