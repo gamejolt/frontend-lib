@@ -30,9 +30,13 @@
 		</app-message-thread>
 
 		<div v-if="shouldShowLoadMore" class="page-cut">
-			<button class="btn btn-outline" @click="loadMore" v-app-track-event="`comment-widget:more`">
+			<app-button
+				trans
+				@click="loadMore"
+				v-app-track-event="`comment-widget:more`"
+				>
 				<translate>Load More</translate>
-			</button>
+			</app-button>
 		</div>
 
 		<app-loading v-if="isLoading" class="loading-centered" />

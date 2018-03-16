@@ -3,19 +3,6 @@
 		@click="showModal()"
 		v-app-track-event="`comment-video-thumbnail:click`"
 		>
-		<div
-			v-if="shouldShowFollow"
-			class="-controls theme-dark"
-			@click.stop
-			>
-			<app-user-follow-widget
-				:user="user"
-				circle
-				overlay
-				event-label="video-thumb"
-				/>
-		</div>
-
 		<div class="play-button-overlay play-button-overlay-small">
 			<app-jolticon icon="play" />
 		</div>
