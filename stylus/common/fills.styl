@@ -21,6 +21,9 @@
 		&:hover
 			text-decoration: none
 
+	.button
+		@extend .theme-dark
+
 .fill-notice
 	theme-prop('background-color', 'notice')
 	theme-prop('color', 'notice-fg')
@@ -31,6 +34,9 @@
 
 		&:hover
 			text-decoration: none
+
+	.button
+		@extend .theme-dark
 
 .fill-gray
 	background-color: $gray
