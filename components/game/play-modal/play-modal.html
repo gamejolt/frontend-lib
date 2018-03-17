@@ -1,13 +1,11 @@
 <app-modal class="fill-darkest">
 	<div class="modal-controls -header-controls clearfix">
-		<button class="btn btn-outline" @click="minimize" v-if="canMinimize">
-			<app-jolticon icon="minimize" />
+		<app-button @click="minimize" v-if="canMinimize">
 			<translate>Minimize</translate>
-		</button>
-		<button class="btn btn-danger-outline warning" @click="close">
-			<app-jolticon icon="remove" />
-			<translate>Close Game</translate>
-		</button>
+		</app-button>
+		<app-button @click="close">
+			<translate>Close</translate>
+		</app-button>
 	</div>
 
 	<div class="-body">

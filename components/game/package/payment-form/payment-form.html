@@ -108,18 +108,18 @@
 						</p>
 
 						<p>
-							<button class="btn btn-success-outline" @click.prevent="addMoney( 1 )">
+							<app-button primary sparse @click.prevent="addMoney( 1 )">
 								+$1
-							</button>
-							<button class="btn btn-success-outline" @click.prevent="addMoney( 2 )">
+							</app-button>
+							<app-button primary sparse @click.prevent="addMoney( 2 )">
 								+$2
-							</button>
-							<button class="btn btn-success-outline" @click.prevent="addMoney( 5 )">
+							</app-button>
+							<app-button primary sparse @click.prevent="addMoney( 5 )">
 								+$5
-							</button>
-							<button class="btn btn-success-outline" @click.prevent="addMoney( 10 )">
+							</app-button>
+							<app-button primary sparse @click.prevent="addMoney( 10 )">
 								+$10
-							</button>
+							</app-button>
 						</p>
 
 						<hr>
@@ -255,27 +255,25 @@
 							</template>
 						</app-expand>
 
-						<button
-							class="btn btn-outline"
+						<app-button
+							icon="credit-card"
 							:disabled="!valid"
 							@click.prevent="checkoutCard()"
 							>
-							<app-jolticon icon="credit-card" />
 							<template v-if="cards.length">
 								<translate>New Card</translate>
 							</template>
 							<template v-else>
 								<translate>Card</translate>
 							</template>
-						</button>
+						</app-button>
 
-						<button
-							class="btn btn-outline"
+						<app-button
 							:disabled="!valid"
 							@click.prevent="collectAddress( 'paypal' )"
 							>
 							<translate>PayPal</translate>
-						</button>
+						</app-button>
 
 					</div>
 				</div>
@@ -367,13 +365,13 @@
 					</div>
 
 					<div v-if="checkoutType === 'paypal'">
-						<button
-							class="btn btn-success-outline"
+						<app-button
+							primary
 							:disabled="!valid"
 							@click.prevent="checkoutPaypal"
 							>
 							<translate>Proceed to PayPal</translate>
-						</button>
+						</app-button>
 					</div>
 					<div v-else-if="checkoutType === 'wallet'">
 						<app-loading
@@ -397,17 +395,16 @@
 							<translate>You do not have enough funds in your Wallet for this order.</translate>
 						</div>
 
-						<button
-							class="btn btn-success-outline"
+						<app-button
+							primary
 							:disabled="!valid || !calculatedAddressTax || !hasSufficientWalletFunds"
 							@click.prevent="checkoutWallet"
 							>
-							<app-jolticon icon="chevron-right" />
 							<translate>Buy Using Wallet</translate>
-							<small class="text-muted" v-if="calculatedAddressTax">
+							<small v-if="calculatedAddressTax">
 								{{ formModel.amount + addressTaxAmount | currency }}
 							</small>
-						</button>
+						</app-button>
 					</div>
 				</div>
 

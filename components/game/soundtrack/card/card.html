@@ -9,7 +9,7 @@
 					<app-jolticon
 						icon="musical-note-double"
 						big
-						class="big pull-right text-muted"
+						class="pull-right text-muted"
 						/>
 				</h4>
 			</div>
@@ -75,14 +75,15 @@
 	</div>
 
 	<div class="card-controls">
-		<a class="btn btn-success-outline btn-block-xs"
+		<app-button
+			primary
+			block-xs
 			@click="download"
 			v-app-track-event="`game-soundtrack-card:download`"
 			>
-			<app-jolticon icon="download" />
 			<translate>Download</translate>
 			<app-jolticon icon="musical-note-double" class="jolticon-addon" />
-		</a>
+		</app-button>
 	</div>
 
 </app-card>

@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .font-selector
 	&-font-list
@@ -15,22 +16,24 @@
 		cursor: pointer
 
 		&:hover
-			background-color: $
+			theme-prop('background-color', 'bg-subtle')
+			border-bottom-left-radius: $border-radius-base
+			border-bottom-right-radius: $border-radius-base
 
 			.font-selector-cancel
-				color: $black
+				theme-prop('color', 'link-hover')
 
 	&-cancel
+		theme-prop('color', 'fg-muted')
 		float: right
-		color: $gray-light
 
 	&-clear
+		theme-prop('color', 'fg-muted', true)
 		float: right
-		color: $gray-light !important
 
 		&:hover
-			color: $black !important
+			theme-prop('color', 'link-hover', true)
 
 	&-filter
+		theme-prop('background-color', 'bg-subtle')
 		padding: 10px 15px
-		background-color: $gray-lighter

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./button.html?style=./button-new.styl';
+import View from '!view!./button.html?style=./button.styl';
 
 import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 

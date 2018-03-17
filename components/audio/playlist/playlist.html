@@ -10,13 +10,14 @@
 			@end="onSongEnded"
 			/>
 
-		<button
-			class="audio-playlist-player-play btn btn-sparse"
+		<app-button
+			class="audio-playlist-player-play"
+			sparse
+			trans
+			:icon="currentSong ? 'stop' : 'play'"
 			@click="mainSongButton"
 			v-app-track-event="`audio-playlist:click:button`"
-			>
-			<app-jolticon :icon="currentSong ? 'stop' : 'play'" />
-		</button>
+			/>
 
 		<div class="audio-playlist-player-track-info">
 			<span class="audio-playlist-player-title">
@@ -47,15 +48,15 @@
 			:key="song.id"
 			:class="{ active: currentSong && song.id === currentSong.id }"
 			>
-			<span
-				class="audio-playlist-play"
-				@click="toggleSong( song )"
-				>
-				<a class="btn btn-sparse btn-sm" v-app-track-event="`audio-playlist:click:icon`">
-					<app-jolticon
-						:icon="currentSong && song.id === currentSong.id ? 'stop' : 'play-small'"
-						/>
-				</a>
+			<span class="audio-playlist-play">
+				<app-button
+					sparse
+					trans
+					sm
+					:icon="currentSong && song.id === currentSong.id ? 'stop' : 'play-small'"
+					@click="toggleSong( song )"
+					v-app-track-event="`audio-playlist:click:icon`"
+					/>
 			</span>
 			<span class="audio-playlist-number text-muted">
 				{{ (i + 1) }}.

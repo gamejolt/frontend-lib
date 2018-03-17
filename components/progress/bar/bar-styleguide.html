@@ -18,9 +18,9 @@
 
 	<app-progress-bar :percent="progress">{{ progress }}%</app-progress-bar>
 
-	<button class="btn btn-outline" @click="progress = progress + 10 > 100 ? 0 : progress + 10">
+	<app-button @click="progress = progress + 10 > 100 ? 0 : progress + 10">
 		Increase Progress
-	</button>
+	</app-button>
 
 	<h3>Striped</h3>
 

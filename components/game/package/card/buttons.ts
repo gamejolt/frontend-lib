@@ -5,7 +5,6 @@ import View from '!view!./buttons.html';
 import { GamePackageCardModel } from './card.model';
 import { GamePackage } from '../package.model';
 import { GameBuild } from '../../build/build.model';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppPopover } from '../../../popover/popover';
 import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vue';
@@ -16,7 +15,6 @@ import { Screen } from '../../../screen/screen-service';
 @View
 @Component({
 	components: {
-		AppJolticon,
 		AppPopover,
 		AppGamePackageCardMoreOptions,
 	},

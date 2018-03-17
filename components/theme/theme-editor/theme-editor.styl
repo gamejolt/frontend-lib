@@ -2,20 +2,22 @@
 @require '~styles-lib/mixins'
 
 .theme-editor >>> .CodeMirror
-	border-color: $gray-dark
+	theme-prop('border-color', 'bg-offset')
 	height: 400px
 
 	&-focused
-		border-color: $gray
+		theme-prop('border-color', 'bg-subtle')
 
 .theme-editor-definitions
 	rounded-corners()
 
 	.form-group
 		clearfix()
+		theme-prop('border-bottom-color', 'bg-subtle')
 		animation-duration: 0
 		margin-bottom: 0
-		border-bottom: 1px solid $gray-lightest
+		border-bottom-width: 1px
+		border-bottom-style: solid
 
 		&:first-child
 			border-top-left-radius: $border-radius-base
@@ -24,7 +26,7 @@
 		&:last-child
 			border-bottom: 0
 
-			&, >>> .fill-white
+			&, >>> .fill-offset
 				border-bottom-left-radius: $border-radius-base
 				border-bottom-right-radius: $border-radius-base
 
@@ -40,11 +42,11 @@
 	padding-right: 15px
 
 .clear-link
+	theme-prop('color', 'fg-muted', true)
 	padding: 0 8px
-	color: $gray-light !important
 
 	&:hover
-		color: $black !important
+		theme-prop('color', 'link-hover', true)
 
 .theme-editor-dropdown
 	clear: both

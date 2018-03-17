@@ -421,6 +421,7 @@ module.exports = function(config) {
 						_title: sectionConfig.title,
 						_crawl: sectionConfig.crawl,
 						_scripts: sectionConfig.scripts,
+						_bodyClass: sectionConfig.bodyClass || '',
 					}),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
