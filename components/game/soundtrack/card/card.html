@@ -46,7 +46,8 @@
 
 			</div>
 
-			<a class="hidden-text-expander"
+			<a
+				class="hidden-text-expander"
 				v-if="canToggleSoundtrack"
 				@click="isShowingSoundtrack = !isShowingSoundtrack"
 				v-app-track-event="`game-soundtrack-card:show-all-songs`"
@@ -56,11 +57,13 @@
 		</div>
 		<div class="col-sm-3 hidden-xs">
 
-			<div class="card-thumb"
+			<div
+				class="card-thumb"
 				:style="{ 'background-image': `url('${ game.img_thumbnail }')` }"
 				>
 
-				<a class="play-button-overlay play-button-overlay-small hidden-xs"
+				<a
+					class="play-button-overlay play-button-overlay-small hidden-xs"
 					:class="{ active: isPlaying }"
 					@click="play"
 					v-app-track-event="`game-soundtrack-card:play:cover-art`"
