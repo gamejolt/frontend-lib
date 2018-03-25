@@ -18,13 +18,32 @@ module.exports = config => {
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
 
-	gulp.task(
-		'client:node-modules',
-		shell.task([
-			'cd ' + config.buildDir + ' && yarn --production --ignore-scripts',
-			'cd ' + clientVoodooDir + ' && yarn run postinstall', // We have to run client-voodoo's post install to get the joltron binaries in.
-		])
-	);
+	let nodeModulesTask = [
+		'cd ' + config.buildDir + ' && yarn --production --ignore-scripts',
+		'cd ' + clientVoodooDir + ' && yarn run postinstall', // We have to run client-voodoo's post install to get the joltron binaries in.
+	];
+
+	if (!config.production) {
+		// When creating a development build sometimes we need some dependencies to be built in as is.
+		// this allows us to make builds without having to publish a billion versions every time we want to test something.
+		const devDependenciesToAddAsIs = ['client-voodoo'];
+		for (let depName of devDependenciesToAddAsIs) {
+			const devDep = path.resolve(config.projectBase, 'node_modules', depName);
+			const buildDep = path.resolve(config.buildDir, 'node_modules', depName);
+
+			if (config.platform === 'win') {
+				nodeModulesTask.push('xcopy /E /I ' + devDep + ' ' + buildDep);
+			} else {
+				nodeModulesTask.push(
+					'rm -rf ' + buildDep,
+					'mkdir -p ' + buildDep,
+					'cp -r ' + devDep + ' ' + path.dirname(buildDep)
+				);
+			}
+		}
+	}
+
+	gulp.task('client:node-modules', shell.task(nodeModulesTask));
 
 	/**
 	 * Does the actual building into an NW executable.
@@ -87,17 +106,25 @@ module.exports = config => {
 			unzipper.on('error', cb);
 			unzipper.on('extract', () => {
 				// We pull some stuff out of the package folder into the main folder.
-				mv(path.join(base, 'package', 'node_modules'), path.join(base, 'node_modules'), err => {
-					if (err) {
-						throw err;
-					}
-					mv(path.join(base, 'package', 'package.json'), path.join(base, 'package.json'), err => {
+				mv(
+					path.join(base, 'package', 'node_modules'),
+					path.join(base, 'node_modules'),
+					err => {
 						if (err) {
 							throw err;
 						}
-						cb();
-					});
-				});
+						mv(
+							path.join(base, 'package', 'package.json'),
+							path.join(base, 'package.json'),
+							err => {
+								if (err) {
+									throw err;
+								}
+								cb();
+							}
+						);
+					}
+				);
 			});
 			unzipper.extract({ path: path.join(base, 'package') });
 		} else {
@@ -169,11 +196,6 @@ module.exports = config => {
 			);
 			return builder.build();
 		} else {
-			if (!config.production) {
-				cb();
-				return;
-			}
-
 			return gulp
 				.src(config.clientBuildDir + '/build/' + config.platformArch + '/**/*')
 				.pipe(plugins.tar(config.platformArch + '.tar'))
@@ -182,8 +204,71 @@ module.exports = config => {
 		}
 	});
 
+	gulp.task('client:joltron', cb => {
+		const buildDir = path.resolve(config.clientBuildDir, 'build', config.platformArch);
+		const clientVoodooDir = path.resolve(buildDir, 'node_modules', 'client-voodoo');
+
+		const joltronSrc = path.resolve(
+			clientVoodooDir,
+			'bin',
+			config.platform === 'win' ? 'GameJoltRunner.exe' : 'GameJoltRunner'
+		);
+		const joltronDest = path.resolve(
+			clientVoodooDir,
+			'..',
+			'..',
+			'..',
+			config.platform === 'win' ? 'joltron.exe' : 'joltron'
+		);
+
+		const gjHost = config.developmentEnv
+			? 'http://development.gamejolt.com'
+			: 'https://gamejolt.com';
+
+		let executable = '';
+		if (config.platform === 'win') {
+			executable = 'GameJoltClient.exe';
+		} else if (config.platform === 'osx') {
+			executable = 'Content/MacOS/nwjs';
+		} else {
+			executable = 'game-jolt-client';
+		}
+
+		fs
+			.createReadStream(joltronSrc)
+			.pipe(fs.createWriteStream(joltronDest))
+			.on('error', cb)
+			.on('close', () => {
+				fs.chmodSync(joltronDest, 0755);
+				fs.writeFileSync(
+					path.resolve(buildDir, '..', '.manifest'),
+					JSON.stringify({
+						version: 2,
+						gameInfo: {
+							dir: config.platformArch,
+							uid: '119886-282275',
+							archiveFiles: ['./path/to/contents'],
+							platformUrl: gjHost + '/x/updater/check-for-updates',
+						},
+						launchOptions: { executable: executable },
+						os: config.platform,
+						arch: config.arch + '',
+						isFirstInstall: false,
+					}),
+					'utf8'
+				);
+				cb();
+			});
+	});
+
 	gulp.task(
 		'client',
-		gulp.series('client:node-modules', 'client:nw', 'client:nw-unpackage', 'client:package')
+		gulp.series(
+			'client:node-modules',
+			'client:nw',
+			'client:nw-unpackage',
+			'client:package',
+			'client:joltron'
+		)
 	);
 };

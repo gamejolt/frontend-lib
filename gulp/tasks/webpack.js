@@ -150,14 +150,12 @@ module.exports = function(config) {
 		}
 
 		let publicPath = '/';
-		if (config.production) {
-			if (!config.client) {
-				publicPath = config.staticCdn + publicPath;
-			} else {
-				// On linux/win we put all the files in a folder called "package".
-				if (config.platform !== 'osx') {
-					publicPath = '/package/';
-				}
+		if (!config.client && config.production) {
+			publicPath = config.staticCdn + publicPath;
+		} else if (config.client && !config.watching) {
+			// On linux/win we put all the files in a folder called "package".
+			if (config.platform !== 'osx') {
+				publicPath = '/package/';
 			}
 		}
 
@@ -288,6 +286,9 @@ module.exports = function(config) {
 					),
 					GJ_MANIFEST_URL: JSON.stringify(
 						require(path.resolve(process.cwd(), 'package.json')).clientManifestUrl
+					),
+					GJ_WITH_UPDATER: JSON.stringify(
+						(!config.developmentEnv || config.withUpdater) && !config.watching
 					),
 
 					// This sets vue in production mode.
@@ -504,7 +505,7 @@ module.exports = function(config) {
 
 	webpackSectionTasks.unshift('translations:compile');
 
-	if (config.client && config.production) {
+	if (config.client && !config.watching) {
 		webpackSectionTasks.push('client');
 	}
 

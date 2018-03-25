@@ -34,6 +34,7 @@ module.exports = (config, projectBase) => {
 	// This way it's easy for anyone to build without the GJ dev environment.
 	// You can pass this flag in to include the dev environment config for angular instead.
 	config.developmentEnv = argv.development || false;
+	config.withUpdater = argv.withUpdater || false;
 	config.port = config.port || argv.port || 8080;
 
 	config.translationSections = config.translationSections || [];
