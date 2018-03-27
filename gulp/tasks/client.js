@@ -8,6 +8,7 @@ const _ = require('lodash');
 const shell = require('gulp-shell');
 const path = require('path');
 const mv = require('mv');
+const readdir = require('fs-readdir-recursive');
 
 module.exports = config => {
 	// We can skip all this stuff if not doing a client build.
@@ -234,6 +235,10 @@ module.exports = config => {
 			executable = 'game-jolt-client';
 		}
 
+		const archiveFiles = readdir(buildDir)
+			.map(file => './' + file.replace('\\', '/'))
+			.sort();
+
 		fs
 			.createReadStream(joltronSrc)
 			.pipe(fs.createWriteStream(joltronDest))
@@ -246,8 +251,8 @@ module.exports = config => {
 						version: 2,
 						gameInfo: {
 							dir: config.platformArch,
-							uid: '119886-282275',
-							archiveFiles: ['./path/to/contents'],
+							uid: '331094-533345',
+							archiveFiles: archiveFiles,
 							platformUrl: gjHost + '/x/updater/check-for-updates',
 						},
 						launchOptions: { executable: executable },
