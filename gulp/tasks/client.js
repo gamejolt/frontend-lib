@@ -33,7 +33,10 @@ module.exports = config => {
 			const buildDep = path.resolve(config.buildDir, 'node_modules', depName);
 
 			if (config.platform === 'win') {
-				nodeModulesTask.push('xcopy /E /I ' + devDep + ' ' + buildDep);
+				nodeModulesTask.push(
+					'rmdir /S /Q ' + buildDep,
+					'xcopy /E /I /Y ' + devDep + ' ' + buildDep
+				);
 			} else {
 				nodeModulesTask.push(
 					'rm -rf ' + buildDep,
@@ -106,26 +109,33 @@ module.exports = config => {
 
 			unzipper.on('error', cb);
 			unzipper.on('extract', () => {
-				// We pull some stuff out of the package folder into the main folder.
-				mv(
-					path.join(base, 'package', 'node_modules'),
-					path.join(base, 'node_modules'),
-					err => {
-						if (err) {
-							throw err;
-						}
-						mv(
-							path.join(base, 'package', 'package.json'),
-							path.join(base, 'package.json'),
-							err => {
-								if (err) {
-									throw err;
-								}
-								cb();
+				const afterExtract = () => {
+					// We pull some stuff out of the package folder into the main folder.
+					mv(
+						path.join(base, 'package', 'node_modules'),
+						path.join(base, 'node_modules'),
+						err => {
+							if (err) {
+								cb(err);
+								return;
 							}
-						);
-					}
-				);
+
+							mv(
+								path.join(base, 'package', 'package.json'),
+								path.join(base, 'package.json'),
+								err => {
+									if (err) {
+										cb(err);
+										return;
+									}
+									cb();
+								}
+							);
+						}
+					);
+				};
+
+				setTimeout(afterExtract, 1000);
 			});
 			unzipper.extract({ path: path.join(base, 'package') });
 		} else {
@@ -226,12 +236,16 @@ module.exports = config => {
 			? 'http://development.gamejolt.com'
 			: 'https://gamejolt.com';
 
+		let platform = '';
 		let executable = '';
 		if (config.platform === 'win') {
+			platform = 'windows';
 			executable = 'GameJoltClient.exe';
 		} else if (config.platform === 'osx') {
+			platform = 'mac';
 			executable = 'Content/MacOS/nwjs';
 		} else {
+			platform = 'linux';
 			executable = 'game-jolt-client';
 		}
 
@@ -256,7 +270,7 @@ module.exports = config => {
 							platformUrl: gjHost + '/x/updater/check-for-updates',
 						},
 						launchOptions: { executable: executable },
-						os: config.platform,
+						os: platform,
 						arch: config.arch + '',
 						isFirstInstall: false,
 					}),
@@ -266,14 +280,13 @@ module.exports = config => {
 			});
 	});
 
-	gulp.task(
-		'client',
-		gulp.series(
-			'client:node-modules',
-			'client:nw',
-			'client:nw-unpackage',
-			'client:package',
-			'client:joltron'
-		)
-	);
+	let clientBuildTasks = ['client:node-modules', 'client:nw', 'client:nw-unpackage'];
+
+	if (config.production) {
+		clientBuildTasks.push('client:package');
+	} else {
+		clientBuildTasks.push('client:joltron');
+	}
+
+	gulp.task('client', gulp.series(...clientBuildTasks));
 };
