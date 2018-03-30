@@ -31,11 +31,11 @@ export class AppCommentVideoLikeWidget extends Vue {
 	}
 
 	get blip() {
-		return this.isCircle && this.comment.votes ? number(this.comment.votes) : false;
+		return this.isCircle && this.comment.votes ? number(this.comment.votes) : '';
 	}
 
 	get badge() {
-		return !this.isCircle && this.comment.votes ? number(this.comment.votes) : false;
+		return !this.isCircle && this.comment.votes ? number(this.comment.votes) : '';
 	}
 
 	async toggle() {

@@ -29,7 +29,6 @@ $theme-notice = $gj-pink
 // Bi-color themes
 $theme-bi-bg = $theme-backlight
 $theme-bi-fg = $theme-highlight
-$theme-bi-bg-darkened = darken($theme-bi-bg, 10%)
 // Base background color
 $theme-bg = $white
 $theme-bg-trans = rgba($theme-bg, 0)
@@ -58,12 +57,10 @@ $dark-theme-link = $theme-highlight
 $dark-theme-link-hover = $white
 $dark-theme-bi-bg = $theme-highlight
 $dark-theme-bi-fg = light($dark-theme-bi-bg) ? $black : $white
-$dark-theme-bi-bg-darkened = darken($dark-theme-bi-bg, 10%)
 //
 // Computed theme vars
 $theme-highlight-fg = light($theme-highlight) ? $black : $white
 $theme-notice-fg = light($theme-notice) ? $black : $white
-$theme-link-hover = light($theme-bg) ? $black : $white
 //
 // Base
 $border-radius-base = 4px

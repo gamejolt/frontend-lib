@@ -30,11 +30,11 @@ export class AppFiresidePostLikeWidget extends Vue {
 	}
 
 	get blip() {
-		return this.isCircle && this.post.like_count ? number(this.post.like_count) : false;
+		return this.isCircle && this.post.like_count ? number(this.post.like_count) : '';
 	}
 
 	get badge() {
-		return !this.isCircle && this.post.like_count ? number(this.post.like_count) : false;
+		return !this.isCircle && this.post.like_count ? number(this.post.like_count) : '';
 	}
 
 	get tooltip() {

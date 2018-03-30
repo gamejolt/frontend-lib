@@ -33,7 +33,7 @@ export class AppUserFollowWidget extends Vue {
 	isProcessing = false;
 
 	get badge() {
-		return !this.circle && this.user.follower_count ? number(this.user.follower_count) : false;
+		return !this.circle && this.user.follower_count ? number(this.user.follower_count) : '';
 	}
 
 	get tooltipContainer() {
@@ -48,7 +48,7 @@ export class AppUserFollowWidget extends Vue {
 
 	get icon() {
 		if (!this.circle) {
-			return false;
+			return '';
 		}
 
 		return !this.user.is_following ? 'subscribe' : 'subscribed';

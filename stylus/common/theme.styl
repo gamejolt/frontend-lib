@@ -1,5 +1,5 @@
-
 :root
+	// Defaults
 	--theme-highlight: $theme-highlight
 	--theme-backlight: $theme-backlight
 	--theme-notice: $theme-notice
@@ -7,7 +7,6 @@
 	--theme-notice-fg: $theme-notice-fg
 	--theme-bi-bg: $theme-bi-bg
 	--theme-bi-fg: $theme-bi-fg
-	--theme-bi-bg-darkened: $theme-bi-bg-darkened
 	--theme-bg: $theme-bg
 	--theme-bg-trans: $theme-bg-trans
 	--theme-bg-offset: $theme-bg-offset
@@ -16,20 +15,21 @@
 	--theme-fg-muted: $theme-fg-muted
 	--theme-link: $theme-link
 	--theme-link-hover: $theme-link-hover
+	// Dark
+	--dark-theme-bi-bg: $dark-theme-bi-bg
+	--dark-theme-bi-fg: $dark-theme-bi-fg
+	--dark-theme-bg: $dark-theme-bg
+	--dark-theme-bg-trans: $dark-theme-bg-trans
+	--dark-theme-bg-offset: $dark-theme-bg-offset
+	--dark-theme-bg-offset-trans: $dark-theme-bg-offset-trans
+	--dark-theme-bg-subtle: $dark-theme-bg-subtle
+	--dark-theme-fg: $dark-theme-fg
+	--dark-theme-fg-muted: $dark-theme-fg-muted
+	--dark-theme-link: $dark-theme-link
+	--dark-theme-link-hover: $dark-theme-link-hover
 
 /**
  * Dark Mode
  */
 .theme-dark, .fill-gray, .fill-dark, .fill-darker, .fill-darkest, .fill-black
-	--theme-bi-bg: $dark-theme-bi-bg
-	--theme-bi-fg: $dark-theme-bi-fg
-	--theme-bi-bg-darkened: $dark-theme-bi-bg-darkened
-	--theme-bg: $dark-theme-bg
-	--theme-bg-trans: $dark-theme-bg-trans
-	--theme-bg-offset: $dark-theme-bg-offset
-	--theme-bg-offset-trans: $dark-theme-bg-offset-trans
-	--theme-bg-subtle: $dark-theme-bg-subtle
-	--theme-fg: $dark-theme-fg
-	--theme-fg-muted: $dark-theme-fg-muted
-	--theme-link: $dark-theme-link
-	--theme-link-hover: $dark-theme-link-hover
+	theme-dark()
