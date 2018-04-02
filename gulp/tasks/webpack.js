@@ -74,7 +74,7 @@ module.exports = function(config) {
 	// }
 
 	const cleanCssOptions = {
-		level: 2,
+		level: 1,
 	};
 
 	let cleanCss = new CleanCss(cleanCssOptions);
