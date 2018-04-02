@@ -41,20 +41,20 @@
 			<span v-if="shouldShowMarkdownHelp" class="form-control-markdown-helplink">
 				<a :href="Environment.helpBaseUrl + '/' + markdownHelpUrl" target="_blank">
 					<app-jolticon icon="markdown" class="hidden-xs" />
-					<app-jolticon icon="markdown" class="hidden-sm hidden-md hidden-lg big" />
+					<app-jolticon icon="markdown" big class="hidden-sm hidden-md hidden-lg" />
 					<translate class="hidden-xs">Use Markdown to Edit</translate>
 				</a>
 			</span>
 			<span v-if="shouldShowWidgetHelp" class="form-control-markdown-helplink">
 				<a :href="Environment.helpBaseUrl + '/widgets-' + markdownMode" target="_blank">
 					<app-jolticon icon="plug" class="hidden-xs" />
-					<app-jolticon icon="plug" class="hidden-sm hidden-md hidden-lg big" />
+					<app-jolticon icon="plug" big class="hidden-sm hidden-md hidden-lg" />
 					<translate class="hidden-xs">Available Widgets</translate>
 				</a>
 			</span>
 			<span v-if="htmlSupport" class="form-control-markdown-helplink">
 				<app-jolticon icon="html5" class="hidden-xs" />
-				<app-jolticon icon="html5" class="hidden-sm hidden-md hidden-lg big" />
+				<app-jolticon icon="html5" big class="hidden-sm hidden-md hidden-lg" />
 				<translate class="hidden-xs">HTML Supported</translate>
 			</span>
 		</div>

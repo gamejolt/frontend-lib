@@ -13,7 +13,7 @@
 			<app-jolticon
 				v-if="user.is_verified"
 				icon="verified"
-				:big="true"
+				big
 				class="-verified"
 				v-app-tooltip="$gettext( 'profile.verified_tooltip' )"
 				/>
@@ -41,9 +41,8 @@
 			<div class="-follow">
 				<app-user-follow-widget
 					v-if="!app.user || user.id !== app.user.id"
-					class="btn-block"
 					:user="user"
-					:outline="true"
+					block
 					event-label="user-card"
 					/>
 			</div>

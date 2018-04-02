@@ -9,32 +9,30 @@
 			>
 
 			<div class="pagination-item" v-if="hasPrevious && currentPage !== 2" @click.capture="onPageClick( $event, 1 )">
-				<router-link
-					class="btn btn-outline"
+				<app-button
 					:to="getPageLocation( 1 )"
 					v-app-no-autoscroll
 					>
 					<translate>First</translate>
-				</router-link>
+				</app-button>
 			</div>
 			<div class="pagination-item" v-if="hasPrevious" @click.capture="onPageClick( $event, prevPage )">
-				<router-link
-					class="btn btn-outline"
+				<app-button
 					:to="getPageLocation( prevPage )"
 					v-app-no-autoscroll
 					>
 					<translate>Previous</translate>
-				</router-link>
+				</app-button>
 			</div>
 
 			<div class="pagination-item" v-if="prevChunkPage" @click.capture="onPageClick( $event, prevChunkPage )">
-				<router-link
-					class="btn btn-outline btn-sparse"
+				<app-button
+					sparse
 					:to="getPageLocation( prevChunkPage )"
 					v-app-no-autoscroll
 					>
 					...
-				</router-link>
+				</app-button>
 			</div>
 
 			<div class="pagination-item"
@@ -43,46 +41,48 @@
 				:class="{ active: page === currentPage }"
 				@click.capture="onPageClick( $event, page )"
 				>
-				<router-link
-					class="btn btn-outline btn-sparse"
+				<app-button
 					v-if="page !== currentPage"
+					sparse
 					:to="getPageLocation( (page > 1 ? page : undefined) )"
 					v-app-no-autoscroll
 					>
 					{{ page }}
-				</router-link>
-				<span class="btn btn-outline btn-sparse active" v-if="page === currentPage">
+				</app-button>
+				<app-button
+					solid
+					sparse
+					v-else
+					>
 					{{ page }}
-				</span>
+				</app-button>
 			</div>
 
 			<div class="pagination-item" v-if="nextChunkPage" @click.capture="onPageClick( $event, nextChunkPage )">
-				<router-link
-					class="btn btn-outline btn-sparse"
+				<app-button
+					sparse
 					:to="getPageLocation( nextChunkPage )"
 					v-app-no-autoscroll
 					>
 					...
-				</router-link>
+				</app-button>
 			</div>
 
 			<div class="pagination-item" v-if="hasNext" @click.capture="onPageClick( $event, nextPage )">
-				<router-link
-					class="btn btn-outline"
+				<app-button
 					:to="getPageLocation( nextPage )"
 					v-app-no-autoscroll
 					>
 					<translate>Next</translate>
-				</router-link>
+				</app-button>
 			</div>
 			<div class="pagination-item" v-if="hasNext && currentPage !== totalPages - 1" @click.capture="onPageClick( $event, totalPages )">
-				<router-link
-					class="btn btn-outline"
+				<app-button
 					:to="getPageLocation( totalPages )"
 					v-app-no-autoscroll
 					>
 					<translate>Last</translate>
-				</router-link>
+				</app-button>
 			</div>
 		</div>
 	</template>
@@ -93,28 +93,29 @@
 	<template v-else-if="pager || Screen.isXs">
 		<div class="pager" :class="{ reverse: reverseButtons }">
 			<div class="pagination-item previous" v-if="hasPrevious" @click.capture="onPageClick( $event, prevPage )">
-				<router-link
-					class="btn btn-outline"
+				<app-button
 					:to="getPageLocation( prevPage )"
 					v-app-no-autoscroll
 					>
 					{{ (previousText || '&laquo; Previous') }}
-				</router-link>
+				</app-button>
 				<span v-if="!hasPrevious">{{ (previousText || '&laquo; Previous') }}</span>
 			</div>
 			<div class="pagination-item" v-if="currentPage > 1">
-				<span class="btn btn-outline btn-sparse active">
+				<app-button
+					solid
+					sparse
+					>
 					{{ currentPage }}
-				</span>
+				</app-button>
 			</div>
 			<div class="pagination-item next" v-if="hasNext" @click.capture="onPageClick( $event, nextPage )">
-				<router-link
-					class="btn btn-outline"
+				<app-button
 					:to="getPageLocation( nextPage )"
 					v-app-no-autoscroll
 					>
 					{{ (nextText || 'Next &raquo;') }}
-				</router-link>
+				</app-button>
 				<span v-if="!hasNext">{{ (nextText || 'Next &raquo;') }}</span>
 			</div>
 		</div>

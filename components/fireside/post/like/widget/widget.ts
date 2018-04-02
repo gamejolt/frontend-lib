@@ -1,35 +1,45 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./widget.html?style=./widget.styl';
+import View from '!view!./widget.html';
 
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
-import { AppJolticon } from '../../../../../vue/components/jolticon/jolticon';
 import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
 import { AppTooltip } from '../../../../tooltip/tooltip';
 import { number } from '../../../../../vue/filters/number';
+import { Screen } from '../../../../screen/screen-service';
 
 @View
 @Component({
-	components: {
-		AppJolticon,
-	},
 	directives: {
 		AppAuthRequired,
 		AppTooltip,
 	},
-	filters: {
-		number,
-	},
 })
 export class AppFiresidePostLikeWidget extends Vue {
 	@Prop(FiresidePost) post: FiresidePost;
-	@Prop(Boolean) sparse?: boolean;
+	@Prop(Boolean) overlay?: boolean;
 	@Prop(Boolean) circle?: boolean;
+	@Prop(Boolean) block?: boolean;
+
+	isProcessing = false;
+
+	// We also show circle in xs size.
+	get isCircle() {
+		return this.circle || Screen.isXs;
+	}
+
+	get blip() {
+		return this.isCircle && this.post.like_count ? number(this.post.like_count) : '';
+	}
+
+	get badge() {
+		return !this.isCircle && this.post.like_count ? number(this.post.like_count) : '';
+	}
 
 	get tooltip() {
 		// No tooltip if showing label.
-		if (!this.isSparse) {
+		if (!this.isCircle) {
 			return undefined;
 		}
 
@@ -40,14 +50,13 @@ export class AppFiresidePostLikeWidget extends Vue {
 		}
 	}
 
-	/**
-	 * Combined sparse or circle option.
-	 */
-	get isSparse() {
-		return this.sparse || this.circle;
-	}
-
 	async toggleLike() {
+		if (this.isProcessing) {
+			return;
+		}
+
+		this.isProcessing = true;
+
 		if (!this.post.user_like) {
 			const newLike = new FiresidePostLike({
 				fireside_post_id: this.post.id,
@@ -61,5 +70,7 @@ export class AppFiresidePostLikeWidget extends Vue {
 			this.post.user_like = null;
 			--this.post.like_count;
 		}
+
+		this.isProcessing = false;
 	}
 }

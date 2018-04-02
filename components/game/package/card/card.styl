@@ -1,13 +1,14 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .game-package-card
 	&-pricing
+		rounded-corners()
 		float: right
 		margin-top: -(15px + 4px)
 		margin-left: 15px
 		padding: 10px
 		text-align: center
-		border-radius: $border-radius-base
 
 		&-amount
 			color: $white
@@ -28,6 +29,10 @@
 				color: $gray-lighter
 
 		&-sale-percentage
+			theme-prop('background-color', 'highlight')
+			theme-prop('color', 'highlight-fg')
+			border-top-left-radius: $border-radius-base
+			border-top-right-radius: $border-radius-base
 			display: block
 			margin-left: -10px
 			margin-right: -10px
@@ -36,14 +41,12 @@
 			padding-top: 3px
 			padding-bottom: 3px
 			font-weight: bold
-			background-color: $gj-green
-			color: $black
 
 	.card
 		padding-bottom: 0
 
 	.card-sale-info
-		color: $gj-green
+		theme-prop('color', 'highlight')
 
 	.card-controls
 		margin-bottom: 15px
@@ -54,7 +57,7 @@
 		margin-right: -15px
 
 	.package-card-well
-		color: $gray-lightest
+		theme-prop('background-color', 'bg-offset')
 		padding: 15px
 		border-top: 1px dashed $gray-light
 

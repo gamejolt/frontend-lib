@@ -1,9 +1,8 @@
 @require '~styles/variables'
-@require '../../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 @require './../../../well/well.styl'
 
 .card-list-item
-
 	&-body
 		position: relative
 		margin-top: -17px
@@ -12,7 +11,7 @@
 			margin-top: 5px
 
 		&:before
-			caret( color: $gray-lightest, direction: 'up', size: 10px )
+			caret(color: var(--theme-bg-offset), direction: 'up', size: 10px)
 			content: ''
 			opacity: 0
 			pointer-events: none
@@ -23,70 +22,7 @@
 
 	>>> form
 		@extend .well
-		background-color: $white
+		theme-prop('background-color', 'bg')
 
 		&:last-child
 			margin-bottom: 0
-
-// .editable-accordion-item-edit
-// .editable-accordion-button
-// .editable-accordion-item-add
-// 	clearfix()
-// 	margin-bottom: $line-height-computed
-
-// /**
-//  * Add/Edit Stuff
-//  */
-// .editable-accordion-item-edit
-// .editable-accordion-item-add
-// 	position: relative
-// 	margin-top: -17px
-
-// 	form:last-child
-// 	ng-form:last-child
-// 		margin-bottom: 0
-
-// 	// Full bleed the container on mobile.
-// 	@media $media-xs
-// 		margin-left: -($grid-gutter-width-xs /2)
-// 		margin-right: -($grid-gutter-width-xs /2)
-
-// .editable-accordion-item-edit-well
-// .editable-accordion-item-add-well
-// 	margin-bottom: 0
-
-// .editable-accordion-item-add
-// .editable-accordion-item-edit
-
-// 	&:before
-// 		caret( color: $gray-lightest, direction: 'up', size: 10px )
-// 		opacity: 0
-// 		pointer-events: none
-// 		transition: opacity 400ms
-
-// 	&.active:before
-// 		opacity: 1
-
-// /**
-//  * Forms
-//  */
-// .editable-accordion-item-edit
-// .editable-accordion-item-add
-// 	form
-// 	ng-form
-// 		@extend .fill-white
-// 		@extend .well
-
-// /**
-//  * Editing
-//  */
-// .editable-accordion-item-edit
-
-// 	form
-// 	ng-form
-// 		margin-top: $line-height-computed
-
-// 		&.visibility
-
-// 			.help-block
-// 				margin-bottom: 0

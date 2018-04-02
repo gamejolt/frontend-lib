@@ -5,7 +5,6 @@ import View from '!view!./playlist.html?style=./playlist.styl';
 import { GameSong } from '../../game/song/song.model';
 import { AppAudioPlayer } from '../player/player';
 import { AppAudioScrubber } from '../scrubber/scrubber';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
 import { time } from '../../../vue/filters/time';
 
@@ -14,7 +13,6 @@ import { time } from '../../../vue/filters/time';
 	components: {
 		AppAudioPlayer,
 		AppAudioScrubber,
-		AppJolticon,
 	},
 	directives: {
 		AppTrackEvent,

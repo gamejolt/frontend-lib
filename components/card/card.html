@@ -1,14 +1,15 @@
 <div class="card fill-darkest"
 	:class="{
+		'card-disabled': isDisabled,
 		'card-expandable': isExpandable,
 		'card-draggable': isDraggable,
-		'card-inactive': isInactive,
-		'card-disabled': isDisabled,
 	}"
 	>
 
 	<div class="card-chevron" v-if="isExpandable">
-		<span class="jolticon" :class="'jolticon-chevron-' + (isExpanded ? 'down' : 'right')"></span>
+		<app-jolticon
+			:icon="isExpanded ? 'chevron-down' : 'chevron-right'"
+			/>
 	</div>
 
 	<slot></slot>

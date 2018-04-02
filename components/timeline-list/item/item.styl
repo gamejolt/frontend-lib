@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require '../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 // Most of this styling needs to be done globally.
 >>> .timeline-list
@@ -8,20 +8,22 @@
 	&-item
 		position: relative
 		display: block
-		color: $gray-dark
+		color: inherit
 
 		&-bubble
-			background-color: $gray-lightest
+			theme-prop('background-color', 'bg-offset')
+			theme-prop('color', 'fg-muted')
+			theme-prop('border-color', 'bg')
 			text-align: center
 			border-radius: 50%
-			color: $gray-light
 			position: absolute
 			left: 0
 			top: 0
 			width: $timeline-list-icon-size
 			height: $timeline-list-icon-size
 			line-height: $timeline-list-icon-size
-			border: 3px solid $white
+			border-width: 3px
+			border-style: solid
 			z-index: 1
 
 			> .jolticon
@@ -46,7 +48,9 @@
 			padding-left: $border-size + $-padding-left
 
 			&.is-thread
-				border-left: $border-size solid $gray-lighter
+				theme-prop('border-left-color', 'bg-subtle')
+				border-left-width: $border-size
+				border-left-style: solid
 				margin-left: ($timeline-list-icon-size / 2)
 				padding-left: ($timeline-list-icon-size / 2) + $timeline-list-avatar-margin
 
@@ -56,19 +60,16 @@
 					padding-left: $border-size + $-padding-left
 
 		&-meta
+			theme-prop('color', 'fg-muted')
 			margin-bottom: 10px
-			color: $text-muted
 			font-size: $font-size-tiny
 
 		&-title
+			theme-prop('color', 'fg')
 			display: block
 			margin-top: 5px
 			font-weight: bold
 			font-size: $font-size-h4
-			color: $gray
-
-			strong, b
-				color: $black
 
 		&-title-small
 			font-size: $font-size-base
@@ -77,28 +78,30 @@
 			margin-top: 5px
 
 		&-content
-			color: $gray-dark
+			theme-prop('color', 'fg')
 
 			p:last-child
 				margin-bottom: 0
 
 		&-thumb, &-avatar
+			rounded-corners()
 			float: left
 			width: $timeline-list-avatar-size
 			height: $timeline-list-avatar-size
 			margin-right: $timeline-list-avatar-margin
-			border-radius: $border-radius-base
 
 		&-thumb
-			background-color: $gray-lightest
+			theme-prop('background-color', 'bg-offset')
 			background-repeat: no-repeat
 			background-position: center center
 			background-size: cover
 
 		&-ad
+			theme-prop('border-left-color', 'bg-subtle')
 			margin-left: ($timeline-list-icon-size / 2)
 			padding-bottom: $line-height-computed
-			border-left: $border-size solid $gray-lighter
+			border-left-width: $border-size
+			border-left-style: solid
 
 			section
 				border-top-right-radius: $border-radius-base
@@ -111,8 +114,8 @@
 				margin-bottom: 10px
 
 		&-controls
-			.btn-circle
-				margin-right: 5px
+			.button
+				margin-right: 5px !important
 
 			// Silly, but we gotta move these back into place.
 			.blip
@@ -122,11 +125,5 @@
 		/**
 		 * Active Item
 		 */
-		&-bubble.active
-			border-color: $gj-blue
-
-		/**
-		 * New Item
-		 */
-		&-bubble.new
-			border-color: $gj-pink
+		&-bubble.active, &-bubble.new
+			theme-prop('border-color', 'notice')

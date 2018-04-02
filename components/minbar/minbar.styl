@@ -1,5 +1,5 @@
-@require '~styles/variables';
-@require '../../stylus/common/mixins'
+@require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .minbar
 	clearfix()
@@ -15,15 +15,14 @@
 		border: $minbar-border-width solid $white
 		margin-right: ($minbar-spacing - ($minbar-border-width * 2))
 		margin-bottom: @margin-right
-		background-color: $gray-dark
-
+		background-color: $gray-darker
 		// Many times minbar items will come into view by clicking minimize on something.
 		// We want to give the view time to change and let the element animate out before
 		// sliding the minbar item up.
 		animation-delay: 300ms
 
 		&.active
-			background-color: $gj-pink
+			theme-prop('background-color', 'highlight')
 
 		> .notification-tag
 			position: absolute

@@ -1,20 +1,51 @@
 /**
  * Fills
  */
-.fill-white
-	background-color: $white
+.fill-offset
+	theme-prop('background-color', 'bg-offset')
 
-.fill-lightest
-	background-color: $gray-lightest
+	// Select all children
+	*
+		// Since a bunch of elements use the "bg-offset" color, we want to set
+		// the var so they all use the "bg" color instead.
+		--theme-bg-offset: var(--theme-bg)
 
-.fill-lighter
-	background-color: $gray-lighter
+.fill-highlight
+	theme-prop('background-color', 'bi-bg')
+	theme-prop('color', 'bi-fg')
 
-.fill-light
-	background-color: $gray-light
+	a
+		theme-prop('color', 'bi-fg')
+		text-decoration: underline
+
+		&:hover
+			text-decoration: none
+
+	.button
+		@extend .theme-dark
+
+.fill-notice
+	theme-prop('background-color', 'notice')
+	theme-prop('color', 'notice-fg')
+
+	a
+		theme-prop('color', 'notice-fg')
+		text-decoration: underline
+
+		&:hover
+			text-decoration: none
+
+	.button
+		@extend .theme-dark
 
 .fill-gray
 	background-color: $gray
+
+	// Select all children
+	*
+		// The gray color is what we use for offset in dark background, so we
+		// gotta change the offset color to be different.
+		--theme-bg-offset: var(--theme-bg)
 
 .fill-dark
 	background-color: $gray-dark
@@ -28,150 +59,5 @@
 .fill-black
 	background-color: $black
 
-.fill-green
-	background-color: $gj-green
-
-.fill-dark-green
-	background-color: $gj-dark-green
-
-.fill-pink
-	background-color: $gj-pink
-
-.fill-blue
-	background-color: $gj-blue
-
-.fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray, .fill-light
-	color: $gray-lighter
-
-	h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
-		color: $gray-lightest
-
-	a
-		color: $gj-green
-
-		&:hover
-			color: $gj-blue
-
-	.link-muted, .link-help
-		color: $text-muted
-
-		&:hover, &:focus
-			color: $white
-
-	.link-unstyled
-		color: inherit
-
-	.control-label
-		color: $gray-lighter
-
-	.help-block
-		color: $gray-light
-
-.fill-light
-	&, .control-label
-		color: $gray-lightest
-
-	.help-block
-		color: $gray-lighter
-
-.fill-lighter
-	.help-block
-		color: $gray
-
-	.input-group-addon
-		background-color: $gray-light
-		color: $gray-lightest
-		border-color: $gray-light
-
-	.form-control
-		border-color: $gray-light
-
-	.form-control:focus
-		border-color: $gray-dark
-
-.fill-lightest
-	blockquote, hr
-		border-color: $gray-lighter
-
-	code
-		background-color: $gray-lighter
-		color: $gray-dark
-
-	pre code
-		background-color: transparent
-		color: inherit
-
-.fill-lighter, .fill-lightest, .fill-white
-	color: $gray-darkest
-
-	a
-		color: $link-color
-
-		&:hover
-			color: $link-hover-color
-
-	.link-muted, .link-help
-		color: $text-muted
-
-		&:hover, &:focus
-			color: $black
-
-	.link-unstyled
-		color: inherit
-
-	.control-label
-		color: $text-color
-
-	.help-block
-		color: $gray-light
-
-.fill-pink
-	&, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
-		color: $white
-
-	a
-		font-weight: bold
-
-		&:hover
-			text-decoration: underline
-
-.fill-dark-green
-	&, a, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6
-		color: $gj-green
-
-	a
-		font-weight: bold
-
-		&:hover
-			text-decoration: underline
-
-.fill-green
-	color: $gray-darkest
-
-hr
-	.fill-black &
-		border-top-color: $gray-darker
-
-	.fill-darkest &
-		border-top-color: $gray-darker
-
-	.fill-darker &
-		border-top-color: $gray-dark
-
-	.fill-dark &
-		border-top-color: $gray
-
-	.fill-gray &
-		border-top-color: $gray-light
-
-	.fill-light &
-		border-top-color: $gray-lighter
-
-	.fill-lighter &
-		border-top-color: $gray-light
-
-	.fill-lighest &
-		border-top-color: $gray-lighter
-
-	.fill-white &
-		border-top-color: $gray-lightest
+.fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray
+	theme-prop('color', 'fg')

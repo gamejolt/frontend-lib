@@ -13,14 +13,14 @@
 				>
 				<div class="media-item-list-item">
 					<div class="media-item-list-item-inner">
-						<div class="media-item-list-item-controls">
-							<a
-								class="btn btn-sparse"
+						<div class="media-item-list-item-controls theme-dark">
+							<app-button
+								icon="link"
+								overlay
+								sparse
 								v-app-tooltip="$gettext( `Copy Markdown Embed` )"
 								@click="copyLink( item )"
-								>
-								<app-jolticon icon="link" />
-							</a>
+								/>
 						</div>
 
 						<span

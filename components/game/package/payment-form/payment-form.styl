@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require './../../../../stylus/common/mixins.styl'
+@require '~styles-lib/mixins'
 
 .form-group
 	margin-bottom: $font-size-base
@@ -25,16 +25,17 @@
 		color: $gray-light
 		z-index: 2
 
-.saved-card
-.saved-card-more
+.saved-card, .saved-card-more
 	clearfix()
+	rounded-corners()
+	theme-prop('border-color', 'fg')
 	display: inline-block
 	padding-left: 20px
 	padding-right: 20px
 	padding-top: 8px
 	padding-bottom: 8px
-	border: 2px solid $black
-	border-radius: $border-radius-base
+	border-width: 2px
+	border-style: solid
 	width: 100%
 	height: 40px + (@padding-top * 2) + (2px * 2)
 	margin-bottom: $line-height-computed
@@ -42,8 +43,9 @@
 	cursor: pointer
 
 	&:hover
+		theme-prop('color', 'highlight')
 		background-color: $black
-		color: $gj-green
+		border-color: $black
 
 	&.disabled
 		pointer-events: none

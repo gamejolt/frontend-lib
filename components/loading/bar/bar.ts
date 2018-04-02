@@ -99,7 +99,7 @@ export class AppLoadingBar extends Vue {
 	private show() {
 		this.showTimeout = setTimeout(() => {
 			this.shouldShow = true;
-		}, 300);
+		}, 2000);
 	}
 
 	private clear() {

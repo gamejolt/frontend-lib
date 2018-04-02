@@ -1,10 +1,10 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .lazy-placeholder
-	background-color: $gray-lightest
+	theme-prop('background-color', 'bg-offset')
 
-	span&
-	small&
+	span&, small&
 		width: 100%
 		display: inline-block
 		vertical-align: middle

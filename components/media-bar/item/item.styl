@@ -1,12 +1,12 @@
 @require '~styles/variables'
-@require '../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .media-bar-item
+	rounded-corners()
 	position: relative
 	display: inline-block
 	vertical-align: top
 	background-color: $gray-darkest
-	border-radius: $border-radius-base
 	// Spacing through margins.
 	margin-right: 15px
 
@@ -20,8 +20,8 @@
 			margin-left: 20px
 
 	img
+		rounded-corners()
 		z-index: 0
-		border-radius: $border-radius-base
 
 .-play
 	@extend $play-button-overlay, $play-button-overlay.small
@@ -34,7 +34,7 @@
 			background-color: rgba($black, 0.85)
 
 			&, .jolticon
-				color: $gj-green
+				theme-prop('color', 'highlight')
 				cursor: zoom-in
 
 	// Can't zoom on xs.

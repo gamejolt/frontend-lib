@@ -203,6 +203,7 @@ module.exports = function(config) {
 					// Always "app" base img.
 					img: path.resolve(base, 'src/app/img'),
 					styles: path.resolve(base, 'src/' + section + '/styles'),
+					'styles-lib': path.resolve(config.gjLibDir, 'stylus/common'),
 				},
 			},
 			externals: externals,
@@ -420,6 +421,7 @@ module.exports = function(config) {
 						_title: sectionConfig.title,
 						_crawl: sectionConfig.crawl,
 						_scripts: sectionConfig.scripts,
+						_bodyClass: sectionConfig.bodyClass || '',
 					}),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),

@@ -1,9 +1,9 @@
 @require '~styles/variables'
-@require '../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .user-card
-	background-color: $gray-lightest
-	border-radius: $border-radius-base
+	rounded-corners()
+	theme-prop('background-color', 'bg-offset')
 
 >>> .popover .user-card
 	min-width: 300px
@@ -24,9 +24,9 @@ hr
 		margin-left: 50px + ($grid-gutter-width / 2)
 
 .-verified
+	theme-prop('color', 'highlight')
 	float: right
 	margin-left: ($grid-gutter-width / 2)
-	color: $gj-green
 
 .-avatar
 	width: 50px
@@ -38,9 +38,9 @@ hr
 	font-size: $font-size-large
 
 .-username
+	theme-prop('color', 'fg-muted')
 	text-overflow()
 	font-size: $font-size-small
-	color: $text-muted
 
 .-follow
 	clear: both

@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 @require '../variables'
 
 .media-bar-lightbox-item
@@ -49,9 +50,9 @@ img
 
 	>>>
 		img, iframe
+			rounded-corners()
 			display: block
 			margin: 0 auto
-			border-radius: $border-radius-base
 
 .-caption
 	flex: 0 0 auto
