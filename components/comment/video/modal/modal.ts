@@ -11,7 +11,6 @@ import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
 import { BaseModal } from '../../../modal/base';
 import { AppResponsiveDimensions } from '../../../responsive-dimensions/responsive-dimensions';
 import { Screen } from '../../../screen/screen-service';
-import { AppSocialYoutubeSubscribe } from '../../../social/youtube/subscribe/subscribe';
 import { AppUserFollowWidget } from '../../../user/follow-widget/follow-widget';
 import { AppUserAvatar } from '../../../user/user-avatar/user-avatar';
 import { AppVideoEmbed } from '../../../video/embed/embed';
@@ -28,7 +27,6 @@ import { CommentVideo } from '../video-model';
 		AppGameThumbnail,
 		AppUserAvatar,
 		AppUserFollowWidget,
-		AppSocialYoutubeSubscribe,
 		AppCommentVideoLikeWidget,
 	},
 	directives: {
