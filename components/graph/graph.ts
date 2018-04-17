@@ -131,15 +131,16 @@ export class AppGraph extends Vue {
 
 			this.ourColors[0] = {
 				borderWidth: 1,
-				pointRadius: 2,
-				pointBorderWidth: 1,
-				backgroundColor: 'rgba( 0, 0, 0, 0.05 )',
-				borderColor: '#eee',
-				pointBackgroundColor: '#eee',
-				pointBorderColor: '#fff',
-				pointHoverBackgroundColor: '#eee',
-				pointHoverBorderColor: '#eee',
+				pointRadius: 0,
+				pointHoverRadius: 0,
+				pointBorderWidth: 0,
+				backgroundColor: 'rgba( 127, 127, 127, 0.10 )',
+				borderColor: '#7e7e7e',
+				pointBackgroundColor: '#7e7e7e',
+				pointHoverBackgroundColor: '#7e7e7e',
+				pointHoverBorderColor: '#7e7e7e',
 			};
+			this.ourColors[1] = this.ourColors[0];
 		}
 	}
 
