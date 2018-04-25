@@ -1,24 +1,24 @@
-<app-scroll-scroller
-	overlay
-	horizontal
-	class="section fill-darker media-bar"
-	:class="{
-		'-is-loading': !mediaItems || !mediaItems.length,
-	}"
-	>
-	<div class="-items">
+<app-scroll-scroller overlay horizontal>
+	<div
+		class="section fill-darker media-bar"
+		:class="{
+			'-is-loading': !mediaItems || !mediaItems.length,
+		}"
+		>
+		<div class="-items">
 
-		<div class="-loading-container" v-if="!mediaItems || !mediaItems.length">
-			<app-loading centered no-color stationary hide-label />
+			<div class="-loading-container" v-if="!mediaItems || !mediaItems.length">
+				<app-loading centered no-color stationary hide-label />
+			</div>
+
+			<template v-if="mediaItems && mediaItems.length">
+				<app-media-bar-item
+					v-for="item of mediaItems"
+					:key="item.id"
+					:item="item"
+					/>
+			</template>
+
 		</div>
-
-		<template v-if="mediaItems && mediaItems.length">
-			<app-media-bar-item
-				v-for="item of mediaItems"
-				:key="item.id"
-				:item="item"
-				/>
-		</template>
-
 	</div>
 </app-scroll-scroller>
