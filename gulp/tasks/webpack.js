@@ -374,7 +374,12 @@ module.exports = function(config) {
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'vendor',
 						minChunks: function(module) {
-							return module.context && module.context.indexOf('node_modules') !== -1;
+							return (
+								module.context &&
+								module.context.indexOf('node_modules') !== -1 &&
+								// Don't pull styles into a vendor stylesheet (not worth it).
+								module.resource.indexOf('.css') === -1
+							);
 						},
 					}),
 
