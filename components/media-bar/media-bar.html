@@ -1,6 +1,10 @@
-<app-scroll-scroller overlay horizontal>
+<app-scroll-scroller
+	overlay
+	horizontal
+	class="fill-darker"
+	>
 	<div
-		class="section fill-darker media-bar"
+		class="section media-bar"
 		:class="{
 			'-is-loading': !mediaItems || !mediaItems.length,
 		}"
