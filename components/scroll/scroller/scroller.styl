@@ -1,0 +1,17 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
+$-track-padding = 3px
+$-thumb-width = 9px
+$-track-width = $-thumb-width + ($-track-padding * 2)
+$-thumb-border-radius = $-track-width
+
+.scroll-scroller
+	scrollable()
+
+	&.-horizontal
+		scrollable-x()
+
+	>>>
+		.simplebar-scrollbar:before
+			background-color: $gray-light

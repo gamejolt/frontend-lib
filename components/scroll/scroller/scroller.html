@@ -1,0 +1,17 @@
+<div
+	class="scroll-scroller"
+	:class="{
+		'-horizontal': horizontal,
+	}"
+	>
+	<template v-if="overlay">
+		<div class="simplebar-scroll-content">
+			<div class="simplebar-content">
+				<slot />
+			</div>
+		</div>
+	</template>
+	<template v-else>
+		<slot />
+	</template>
+</div>
