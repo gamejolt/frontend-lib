@@ -9,6 +9,7 @@ import 'simplebar/dist/simplebar.css';
 export class AppScrollScroller extends Vue {
 	@Prop(Boolean) overlay?: boolean;
 	@Prop(Boolean) horizontal?: boolean;
+	@Prop(Boolean) hideScrollbar?: boolean;
 
 	mounted() {
 		if (this.overlay) {
