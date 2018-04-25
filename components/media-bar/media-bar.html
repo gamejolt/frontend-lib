@@ -1,5 +1,7 @@
-<div
-	section class="section fill-darker media-bar scrollable scrollable-x overlay-scrollbar"
+<app-scroll-scroller
+	overlay
+	horizontal
+	class="section fill-darker media-bar"
 	:class="{
 		'-is-loading': !mediaItems || !mediaItems.length,
 	}"
@@ -19,4 +21,4 @@
 		</template>
 
 	</div>
-</div>
+</app-scroll-scroller>
