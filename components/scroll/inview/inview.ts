@@ -1,7 +1,6 @@
 import Vue, { CreateElement } from 'vue';
 import { Component, Watch, Prop } from 'vue-property-decorator';
 
-import { Ruler } from '../../ruler/ruler-service';
 import { ScrollInviewContainer } from './container';
 import { findVueParent } from '../../../utils/vue';
 import { AppScrollInviewParent } from './parent';

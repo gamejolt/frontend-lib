@@ -1,5 +1,5 @@
 import Vue, { CreateElement } from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
 import { ScrollInviewContainer } from './container';
 
@@ -10,10 +10,6 @@ export class AppScrollInviewParent extends Vue {
 
 	// Don't have Vue watch these by not setting their default values.
 	container: ScrollInviewContainer;
-
-	$refs: {
-		resizeContainer: HTMLElement;
-	};
 
 	mounted() {
 		this.container = new ScrollInviewContainer(this.$el, this.throttle, this.velocity);
