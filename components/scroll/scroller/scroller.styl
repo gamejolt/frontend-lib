@@ -6,6 +6,8 @@ $-thumb-width = 9px
 $-track-width = $-thumb-width + ($-track-padding * 2)
 $-thumb-border-radius = $-track-width
 
+// If we set the scroller to overlay, simplebar will set the overflow to hidden. By default we want
+// it scrollable.
 .scroll-scroller
 	scrollable()
 
@@ -16,5 +18,21 @@ $-thumb-border-radius = $-track-width
 		.simplebar-scrollbar:before
 			background-color: $gray-light
 
+		// SUPER HACK!
+		// This is because simplebar sets the track to "visibility: hidden" in the
+		// style attribute if it shouldn't show the track at all, but it sets the scrollbar thumb to
+		// visible. According to CSS if you have a "visible" inside a "hidden" it will still show the
+		// inner one as visible.
+		// I believe when this is done (https://github.com/Grsmto/simplebar/issues/121) we can remove.
+		.simplebar-track[style*='hidden']
+			.simplebar-scrollbar
+				visibility: hidden !important
+
 .-hide-scrollbar >>> .simplebar-track
 	display: none
+
+// While simplebar is bootstrapping (before it has attached to DOM) we want to hide scrollbars so
+// that it doesn't flicker in the browser ones.
+.-simplebar-bootstrapping
+	&, >>> .simplebar-scroll-content, >>> .simplebar-content
+		overflow: hidden !important

@@ -3,9 +3,11 @@
 	:class="{
 		'-horizontal': horizontal,
 		'-hide-scrollbar': hideScrollbar,
+		'-overlay': shouldOverlay,
+		'-simplebar-bootstrapping': isSimplebarBootstrapping,
 	}"
 	>
-	<template v-if="overlay">
+	<template v-if="shouldOverlay">
 		<div class="simplebar-scroll-content">
 			<div class="simplebar-content">
 				<slot />
