@@ -26,6 +26,7 @@ export class AppUserFollowWidget extends Vue {
 	@Prop(Boolean) circle?: boolean;
 	@Prop(Boolean) block?: boolean;
 	@Prop(Boolean) sm?: boolean;
+	@Prop(Boolean) hideCount?: boolean;
 	@Prop(String) eventLabel?: string;
 
 	@State app: AppStore;
@@ -33,7 +34,9 @@ export class AppUserFollowWidget extends Vue {
 	isProcessing = false;
 
 	get badge() {
-		return !this.circle && this.user.follower_count ? number(this.user.follower_count) : '';
+		return !this.circle && !this.hideCount && this.user.follower_count
+			? number(this.user.follower_count)
+			: '';
 	}
 
 	get tooltipContainer() {
