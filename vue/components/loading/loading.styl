@@ -1,7 +1,8 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .loading
-	color: $gray-light
+	theme-prop('color', 'light')
 	font-size: $font-size-small
 	text-transform: uppercase
 	line-height: 20px

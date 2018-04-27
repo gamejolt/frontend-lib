@@ -4,13 +4,13 @@
 $meter-blip-count = 10
 
 .meter-blip
+	theme-prop('background-color', 'lighter')
 	float: left
 	display: inline-block
 	vertical-align: bottom
 	margin-right: 1px
 	width: 2px
 	overflow: hidden
-	background-color: $gray-lighter
 
 	.meter-big &
 		width: 4px
@@ -18,18 +18,18 @@ $meter-blip-count = 10
 
 .meter-blip-filled
 	.meter-low &, .meter-mid &
-		background-color: $gray
+		theme-prop('background-color', 'gray')
 
 	.meter-high &
 		theme-prop('background-color', 'link')
 
 .meter-dark
 	.meter-blip
-		background-color: $gray-light
+		theme-prop('background-color', 'light')
 
 .meter-blip-filled
 	.meter-dark.meter-low &, .meter-dark.meter-mid &
-		background-color: $gray-lightest
+		theme-prop('background-color', 'lightest')
 
 	.meter-dark.meter-high &
 		theme-prop('background-color', 'highlight')

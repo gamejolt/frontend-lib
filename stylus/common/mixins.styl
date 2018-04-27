@@ -8,6 +8,7 @@ theme-prop($prop, $val, $important = false)
 rounded-corners()
 	border-radius: $border-radius-base
 
+// Sync with the Theme component.
 theme-dark()
 	--theme-bi-bg: var(--dark-theme-bi-bg)
 	--theme-bi-fg: var(--dark-theme-bi-fg)
@@ -199,6 +200,7 @@ lazy-placeholder-block()
  * Dot Separator
  */
 dot-separator()
+	theme-prop('background-color', 'lighter')
 	display: inline-block
 	margin: 0 10px
 	height: 4px
@@ -206,7 +208,6 @@ dot-separator()
 	border-radius: 100%
 	line-height: 20px
 	vertical-align: middle
-	background-color: $gray-lighter
 
 /**
  * Pulls

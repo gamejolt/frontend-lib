@@ -60,17 +60,17 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 	margin-right: 30px
 
 .alert-actions
+	theme-prop('background-color', 'darkest')
 	position: relative
 	margin: -($alert-padding)
 	margin-top: $alert-padding
 	padding: $alert-padding
-	background-color: $gray-darkest
 	border-bottom-left-radius: $border-radius-base
 	border-bottom-right-radius: $border-radius-base
 
 	&::before
 		content: ''
-		caret(color: $gray-darkest, direction: 'up', size: 5px)
+		caret(color: var(--theme-darkest), direction: 'up', size: 5px)
 
 	> .button
 		margin-top: 0

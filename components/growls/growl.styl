@@ -24,9 +24,9 @@
 			border-top-right-radius: $border-radius-base
 
 .growl-inner
+	theme-prop('background-color', 'gray')
 	padding: 25px 35px
 	margin-top: $growl-spacing
-	background-color: $gray
 	color: $white
 	user-select: none
 	will-change: opacity
@@ -76,7 +76,7 @@
  */
 .growl-type-info
 	.growl-inner
-		border-left-color: $gray-light
+		theme-prop('border-left-color', 'light')
 
 /**
  * Success growl.

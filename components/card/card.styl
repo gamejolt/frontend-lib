@@ -69,8 +69,8 @@ gj-card
 			font-size: $font-size-tiny
 
 	&-content
+		theme-prop('color', 'lighter')
 		margin-top: 8px
-		color: $gray-lighter
 		font-size: $font-size-small
 
 	&-stats
@@ -107,13 +107,13 @@ gj-card
 			cursor: inherit
 
 	&-drag-handle
+		theme-prop('background-color', 'gray')
 		position: absolute
 		right: 0
 		top: 0
 		bottom: 0
 		width: 20px
 		cursor: move
-		background-color: $gray
 		user-select: none
 
 		> .jolticon

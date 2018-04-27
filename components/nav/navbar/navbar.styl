@@ -1,13 +1,13 @@
 $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 
 .navbar
+	theme-prop('background-color', 'darkest')
 	@extend .clearfix
 	height: $navbar-height
-	background-color: $gray-darkest
 	display: flex
 
 	a
-		color: $gray-lighter
+		theme-prop('color', 'lighter')
 
 .navbar-left
 	flex: 0 1 auto
@@ -45,6 +45,7 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 		text-align: center
 
 .navbar-separator
+	theme-prop('background-color', 'dark')
 	position: relative
 	display: inline-block
 	height: 24px
@@ -52,7 +53,6 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	margin: 0 10px
 	vertical-align: top
 	top: ($navbar-height - @height) * 0.5
-	background-color: $gray-dark
 
 .navbar-avatar
 	// Gotta overide specificity
@@ -93,13 +93,13 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	position: relative
 
 	&::before
+		theme-prop('background-color', 'gray')
 		position: absolute
 		content: ''
 		right: 0
 		left: 0
 		bottom: 0
 		height: 3px
-		background-color: $gray
 		transform: translate(0, 4px)
 		transition: transform 300ms $strong-ease-out, background-color 200ms linear
 

@@ -62,6 +62,9 @@ export class User extends Model {
 	revenue_payout_minimum?: number;
 	revenue_wallet_maximum?: number;
 
+	// Theme. We keep it any so that the app can decide how to use it.
+	theme: any | undefined;
+
 	get isMod() {
 		return this.permission_level >= 3;
 	}

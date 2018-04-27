@@ -1,0 +1,27 @@
+<app-modal>
+
+	<div class="modal-controls">
+		<app-button @click="modal.dismiss()">
+			<translate>Close</translate>
+		</app-button>
+	</div>
+
+	<div class="modal-header">
+		<h2 class="modal-title">
+			Choose Theme
+		</h2>
+	</div>
+
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-xs-1" v-for="preset of presets">
+				<app-theme-bubble
+					v-app-tooltip="preset.name"
+					:theme="preset"
+					@click.native="selectPreset(preset)"
+					/>
+			</div>
+		</div>
+	</div>
+
+</app-modal>
