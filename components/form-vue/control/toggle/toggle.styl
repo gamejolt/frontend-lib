@@ -39,8 +39,9 @@ $-knob-border-width = 2px
 	border-style: solid
 	// This will allow the border to overflow outside the toggle.
 	box-sizing: content-box
-	margin-top: -(@border-width)
-	margin-left: -(@border-width)
+	position: relative
+	top: -($-knob-border-width)
+	left: -($-knob-border-width)
 	transition: transform $strong-ease-out 300ms
 
 	.-checked &
