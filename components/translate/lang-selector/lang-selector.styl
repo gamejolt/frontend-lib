@@ -1,14 +1,14 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .translate-lang-selector
+	theme-prop('color', 'light')
+	theme-prop('border-color', 'light')
 	margin: $line-height-computed auto
 	width: auto
 	background-color: transparent
-	color: $gray-light
-	border-color: $gray-light
 
-	&:focus
-	&:active
+	&:focus, &:active
 		border-color: $white
 
 	@media $media-sm-up

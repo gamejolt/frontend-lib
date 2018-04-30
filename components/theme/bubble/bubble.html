@@ -1,0 +1,16 @@
+<div
+	class="theme-bubble"
+	:class="{
+		'-active': active
+	}"
+	>
+	<span
+		class="-highlight"
+		:style="{ backgroundColor: '#' + highlight }"
+		/>
+	<span
+		class="-backlight"
+		v-if="backlight"
+		:style="{ backgroundColor: '#' + backlight }"
+		/>
+</div>

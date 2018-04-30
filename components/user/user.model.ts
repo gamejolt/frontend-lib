@@ -1,6 +1,7 @@
 import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
 import { MediaItem } from '../media-item/media-item-model';
+import { Theme } from '../theme/theme.model';
 
 export class User extends Model {
 	static readonly TYPE_GAMER = 'User';
@@ -62,6 +63,8 @@ export class User extends Model {
 	revenue_payout_minimum?: number;
 	revenue_wallet_maximum?: number;
 
+	theme?: Theme;
+
 	get isMod() {
 		return this.permission_level >= 3;
 	}
@@ -78,8 +81,13 @@ export class User extends Model {
 		if (data.avatar_media_item) {
 			this.avatar_media_item = new MediaItem(data.avatar_media_item);
 		}
+
 		if (data.header_media_item) {
 			this.header_media_item = new MediaItem(data.header_media_item);
+		}
+
+		if (data.theme) {
+			this.theme = new Theme(data.theme);
 		}
 	}
 
@@ -126,7 +134,9 @@ export class User extends Model {
 
 	$save() {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
-		return this.$_save('/web/dash/profile/save', 'user');
+		return this.$_save('/web/dash/profile/save', 'user', {
+			allowComplexData: ['theme'],
+		});
 	}
 
 	$saveAvatar() {

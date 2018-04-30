@@ -1,0 +1,16 @@
+<div class="editable-overlay">
+	<div
+		v-if="!disabled"
+		class="-overlay-container"
+		@click.capture.stop="click"
+		>
+		<div class="-overlay"></div>
+		<div class="-overlay-content">
+			<app-jolticon icon="edit" />
+			<strong>
+				<slot name="overlay" />
+			</strong>
+		</div>
+	</div>
+	<slot />
+</div>

@@ -4,24 +4,10 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./graph.html?style=./graph.styl';
 
 import { date } from '../../vue/filters/date';
-
-const globalColors = ['#ffffff', '#ccff00', '#31d6ff', '#ff3fac', '#2f7f6f'].map(color => {
-	return {
-		backgroundColor: 'rgba( 255, 255, 255, 0.05 )',
-		borderColor: color,
-		borderWidth: 1,
-
-		pointRadius: 4,
-		pointBorderWidth: 2,
-		pointBackgroundColor: color,
-		pointBorderColor: '#191919',
-		pointHoverBackgroundColor: '#fff',
-		pointHoverBorderColor: '#fff',
-	};
-});
+import { ThemeState, ThemeStore } from '../theme/theme.store';
 
 // Try to match site styling.
-const fontFamily = `Lato, 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif`;
+const fontFamily = `Nunito, 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif`;
 
 const chartOptions: any = {
 	responsive: true,
@@ -110,15 +96,55 @@ export class AppGraph extends Vue {
 	type: string;
 	@Prop(Boolean) backgroundVariant?: boolean;
 
+	@ThemeState theme?: ThemeStore['theme'];
+
 	chart: Chart = null as any;
 	data: any = {};
 	chartOptions: any = {};
 	ourColors: any = {};
 
+	get globalColors() {
+		let colors = ['#ffffff', '#ccff00', '#31d6ff', '#ff3fac', '#2f7f6f'];
+		if (this.theme) {
+			if (this.theme.custom) {
+				colors = [
+					'#ffffff',
+					'#' + this.theme.darkHighlight_,
+					'#31d6ff',
+					'#ff3fac',
+					'#2f7f6f',
+				];
+			} else {
+				colors = [
+					'#ffffff',
+					'#' + this.theme.darkHighlight_,
+					'#' + this.theme.darkNotice_,
+					'#' + this.theme.darkBacklight_,
+					'#31d6ff',
+				];
+			}
+		}
+
+		return colors.map(color => {
+			return {
+				backgroundColor: 'rgba( 255, 255, 255, 0.05 )',
+				borderColor: color,
+				borderWidth: 1,
+
+				pointRadius: 4,
+				pointBorderWidth: 2,
+				pointBackgroundColor: color,
+				pointBorderColor: '#191919',
+				pointHoverBackgroundColor: '#fff',
+				pointHoverBorderColor: '#fff',
+			};
+		});
+	}
+
 	created() {
 		// We gotta deep copy.
 		Object.assign(this.chartOptions, JSON.parse(JSON.stringify(chartOptions)));
-		Object.assign(this.ourColors, JSON.parse(JSON.stringify(globalColors)));
+		Object.assign(this.ourColors, JSON.parse(JSON.stringify(this.globalColors)));
 
 		if (this.type === 'line') {
 			Object.assign(this.chartOptions, lineChartOptions);

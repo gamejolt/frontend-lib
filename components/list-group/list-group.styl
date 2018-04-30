@@ -150,14 +150,14 @@ $list-group-drag-handle-width = 20px
 		border: 0
 
 		&.disabled
-			color: $gray !important
+			theme-prop('color', 'gray', true)
 
 			&:hover
-				background-color: $gray-darkest
-				color: $gray !important
+				theme-prop('background-color', 'darkest')
+				theme-prop('color', 'gray', true)
 
 		> .jolticon, > .list-group-item-heading > .jolticon
-			color: $gray-light
+			theme-prop('color', 'light')
 
 		&:first-child
 			border-top-left-radius: $border-radius-base
@@ -168,12 +168,13 @@ $list-group-drag-handle-width = 20px
 			border-bottom-right-radius: $border-radius-base
 
 	.list-group-item-heading
-		color: $gray-lighter
+		theme-prop('color', 'lighter')
 
 	.list-group-item-addon
 		background-color: transparent
 
 		&:before
+			theme-prop('background-color', 'dark')
 			content: ''
 			position: absolute
 			right: 0
@@ -183,11 +184,10 @@ $list-group-drag-handle-width = 20px
 			line-height: @height
 			margin-top: -(@height / 2)
 			overflow: hidden
-			background-color: $gray-dark
 
 	a.list-group-item:hover, .list-group-item.active
+		theme-prop('background-color', 'darker')
 		color: $white !important
-		background-color: $gray-darker
 
 		> .jolticon, > .list-group-item-heading > .jolticon
-			color: $gray-lightest
+			theme-prop('color', 'lightest')

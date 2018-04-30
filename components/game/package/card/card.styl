@@ -14,7 +14,7 @@
 			color: $white
 
 		&-amount-old
-			color: $gray-lighter
+			theme-prop('color', 'lighter')
 			margin-left: 5px
 			text-decoration: line-through
 			font-size: $font-size-tiny
@@ -26,7 +26,7 @@
 			text-transform: uppercase
 
 			&.muted
-				color: $gray-lighter
+				theme-prop('color', 'lighter')
 
 		&-sale-percentage
 			theme-prop('background-color', 'highlight')
@@ -58,8 +58,10 @@
 
 	.package-card-well
 		theme-prop('background-color', 'bg-offset')
+		theme-prop('border-top-color', 'light')
 		padding: 15px
-		border-top: 1px dashed $gray-light
+		border-top-width: 1px
+		border-top-style: dashed
 
 		p:last-child
 			margin-bottom: 0

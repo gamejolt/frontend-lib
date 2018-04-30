@@ -10,11 +10,17 @@ import { findRequiredVueParent } from '../../utils/vue';
 import { BaseModal } from './base';
 import { Screen } from '../screen/screen-service';
 import { EscapeStack } from '../escape-stack/escape-stack.service';
+import { AppTheme } from '../theme/theme';
 
 @View
-@Component({})
+@Component({
+	components: {
+		AppTheme,
+	},
+})
 export class AppModal extends Vue {
 	@Prop(Number) index: number;
+	@Prop(Object) theme?: any;
 
 	modal: Modal = null as any;
 	isHoveringContent = false;

@@ -22,7 +22,7 @@
 			text-decoration: none
 
 	.button
-		@extend .theme-dark
+		theme-dark()
 
 .fill-notice
 	theme-prop('background-color', 'notice')
@@ -36,10 +36,10 @@
 			text-decoration: none
 
 	.button
-		@extend .theme-dark
+		theme-dark()
 
 .fill-gray
-	background-color: $gray
+	theme-prop('background-color', 'gray')
 
 	// Select all children
 	*
@@ -48,13 +48,13 @@
 		--theme-bg-offset: var(--theme-bg)
 
 .fill-dark
-	background-color: $gray-dark
+	theme-prop('background-color', 'dark')
 
 .fill-darker
-	background-color: $gray-darker
+	theme-prop('background-color', 'darker')
 
 .fill-darkest
-	background-color: $gray-darkest
+	theme-prop('background-color', 'darkest')
 
 .fill-black
 	background-color: $black

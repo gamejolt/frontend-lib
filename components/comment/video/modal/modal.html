@@ -1,5 +1,4 @@
-<app-modal>
-
+<app-modal :theme="user.theme">
 	<div class="modal-controls">
 		<app-button @click="modal.dismiss()">
 			<translate>Close</translate>
@@ -96,5 +95,4 @@
 		</div>
 
 	</div>
-
 </app-modal>
