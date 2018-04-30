@@ -1,6 +1,6 @@
 import { namespace, State, Action, Mutation } from 'vuex-class';
 import { VuexModule, VuexMutation, VuexStore } from '../../utils/vuex';
-import { ThemeModel } from './theme.model';
+import { Theme } from './theme.model';
 import { appStore } from '../../vue/services/app/app-store';
 
 export const ThemeStoreNamespace = 'theme';
@@ -13,23 +13,23 @@ export type ThemeActions = {};
 export type ThemeMutations = {
 	'theme/sync': void;
 	'theme/setDark': boolean;
-	'theme/setUserTheme': any | null;
-	'theme/setPageTheme': any | null;
+	'theme/setUserTheme': Theme | null;
+	'theme/setPageTheme': Theme | null;
+	'theme/setFormTheme': Theme | null;
 };
 
 @VuexModule()
 export class ThemeStore extends VuexStore<ThemeStore, ThemeActions, ThemeMutations> {
 	isDark = false;
-	pageTheme: ThemeModel | null = null;
+	pageTheme: Theme | null = null;
+	formTheme: Theme | null = null;
 
 	get userTheme() {
-		return appStore.state.user && appStore.state.user.theme
-			? ThemeModel.fromPayload(appStore.state.user.theme)
-			: null;
+		return (appStore.state.user && appStore.state.user.theme) || null;
 	}
 
 	get theme() {
-		return this.pageTheme || this.userTheme;
+		return this.formTheme || this.pageTheme || this.userTheme;
 	}
 
 	@VuexMutation
@@ -40,16 +40,17 @@ export class ThemeStore extends VuexStore<ThemeStore, ThemeActions, ThemeMutatio
 	@VuexMutation
 	setUserTheme(theme: ThemeMutations['theme/setUserTheme']) {
 		if (appStore.state.user) {
-			appStore.state.user.theme = theme;
+			appStore.state.user.theme = theme || undefined;
 		}
 	}
 
 	@VuexMutation
 	setPageTheme(theme: ThemeMutations['theme/setPageTheme']) {
-		if (theme) {
-			this.pageTheme = ThemeModel.fromPayload(theme);
-		} else {
-			this.pageTheme = null;
-		}
+		this.pageTheme = theme;
+	}
+
+	@VuexMutation
+	setFormTheme(theme: ThemeMutations['theme/setFormTheme']) {
+		this.formTheme = theme;
 	}
 }

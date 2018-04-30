@@ -1,0 +1,64 @@
+<div class="form-control-theme">
+	<a class="-current">
+		<app-theme-bubble
+			:highlight="currentTheme.custom || currentTheme.highlight"
+			:backlight="currentTheme.custom ? null : currentTheme.backlight"
+			active
+			v-app-popover-trigger="`form-control-theme`"
+			/>
+	</a>
+
+	<app-popover
+		class="-popover"
+		popover-id="form-control-theme"
+		no-max-height
+		@focused="onPopover()"
+		>
+		<div class="well">
+			<nav class="platform-list inline nav-justified">
+				<ul>
+					<li>
+						<a
+							:class="{ active: activeTab === 'preset' }"
+							@click="activeTab = 'preset'"
+							>
+							<translate>Theme Preset</translate>
+						</a>
+					</li>
+					<li>
+						<a
+							:class="{ active: activeTab === 'custom' }"
+							@click="activeTab = 'custom'"
+							>
+							<translate>Custom Color</translate>
+						</a>
+					</li>
+				</ul>
+			</nav>
+
+			<div class="-presets" v-if="activeTab === 'preset'">
+				<a
+					class="-preset"
+					v-for="preset of presets"
+					:key="preset.id"
+					v-app-tooltip="preset.name"
+					@click="selectPreset(preset)"
+					>
+					<app-theme-bubble
+						:highlight="preset.highlight"
+						:backlight="preset.backlight"
+						:active="isPresetActive(preset)"
+						/>
+				</a>
+			</div>
+			<div v-else-if="activeTab === 'custom'">
+				<picker
+					disable-alpha
+					:preset-colors="[]"
+					:value="customSelection"
+					@input="onCustomChange"
+					/>
+			</div>
+		</div>
+	</app-popover>
+</div>
