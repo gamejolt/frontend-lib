@@ -4,7 +4,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 
 import { ThemeState, ThemeStore } from '../theme.store';
 import { CreateElement } from 'vue/types/vue';
-import { parseToHsl, toColorString, readableColor, lighten, darken } from 'polished';
+import { parseToHsl, lighten, darken } from 'polished';
 
 @Component({})
 export class AppThemeSvg extends Vue {
