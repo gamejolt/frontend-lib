@@ -13,6 +13,7 @@ export type ThemeActions = {};
 export type ThemeMutations = {
 	'theme/sync': void;
 	'theme/setDark': boolean;
+	'theme/setAlwaysOurs': boolean;
 	'theme/setUserTheme': Theme | null;
 	'theme/setPageTheme': Theme | null;
 	'theme/setFormTheme': Theme | null;
@@ -21,6 +22,7 @@ export type ThemeMutations = {
 @VuexModule()
 export class ThemeStore extends VuexStore<ThemeStore, ThemeActions, ThemeMutations> {
 	isDark = false;
+	alwaysOurs = false;
 	pageTheme: Theme | null = null;
 	formTheme: Theme | null = null;
 
@@ -29,12 +31,19 @@ export class ThemeStore extends VuexStore<ThemeStore, ThemeActions, ThemeMutatio
 	}
 
 	get theme() {
-		return this.formTheme || this.pageTheme || this.userTheme;
+		return this.alwaysOurs
+			? this.formTheme || this.userTheme
+			: this.formTheme || this.pageTheme || this.userTheme;
 	}
 
 	@VuexMutation
 	setDark(state: ThemeMutations['theme/setDark']) {
 		this.isDark = state;
+	}
+
+	@VuexMutation
+	setAlwaysOurs(state: ThemeMutations['theme/setAlwaysOurs']) {
+		this.alwaysOurs = state;
 	}
 
 	@VuexMutation
