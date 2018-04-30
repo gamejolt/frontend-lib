@@ -107,13 +107,19 @@ export class AppGraph extends Vue {
 		let colors = ['#ffffff', '#ccff00', '#31d6ff', '#ff3fac', '#2f7f6f'];
 		if (this.theme) {
 			if (this.theme.custom) {
-				colors = ['#ffffff', '#' + this.theme.highlight_, '#31d6ff', '#ff3fac', '#2f7f6f'];
+				colors = [
+					'#ffffff',
+					'#' + this.theme.darkHighlight_,
+					'#31d6ff',
+					'#ff3fac',
+					'#2f7f6f',
+				];
 			} else {
 				colors = [
 					'#ffffff',
-					'#' + this.theme.highlight_,
-					'#' + this.theme.notice_,
-					'#' + this.theme.backlight_,
+					'#' + this.theme.darkHighlight_,
+					'#' + this.theme.darkNotice_,
+					'#' + this.theme.darkBacklight_,
 					'#31d6ff',
 				];
 			}
