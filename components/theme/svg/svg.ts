@@ -4,6 +4,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 
 import { ThemeState, ThemeStore } from '../theme.store';
 import { CreateElement } from 'vue/types/vue';
+import { parseToHsl, toColorString, readableColor, lighten, darken } from 'polished';
 
 @Component({})
 export class AppThemeSvg extends Vue {
@@ -18,18 +19,25 @@ export class AppThemeSvg extends Vue {
 		let svgData = this.rawSvg;
 
 		if (this.theme) {
-			let fg = '#' + this.theme.biFg_;
-			let bg = '#' + this.theme.biBg_;
+			let highlight = '#' + this.theme.biFg_;
+			let backlight = '#' + this.theme.biBg_;
 			let notice = '#' + this.theme.notice_;
 
 			if (this.theme.custom) {
-				fg = '#' + this.theme.highlight_;
-				bg = '#' + this.theme.highlightFg_;
+				const highlight_ = '#' + this.theme.highlight_;
+				const hsl = parseToHsl(highlight_);
+				if (hsl.lightness < 0.4) {
+					highlight = lighten(0.3, highlight_);
+					backlight = highlight_;
+				} else {
+					highlight = highlight_;
+					backlight = darken(0.3, highlight_);
+				}
 			}
 
 			svgData = svgData
-				.replace('#ccff00', fg)
-				.replace('#2f7f6f', bg)
+				.replace('#ccff00', highlight)
+				.replace('#2f7f6f', backlight)
 				.replace('#ff3fac', notice);
 		}
 
