@@ -146,7 +146,6 @@ export class Theme extends Model {
 			return undefined;
 		}
 
-		// const custom = '#' + this.custom;
 		const customRGB = parseToRgb('#' + this.custom);
 		const customLAB = rgb2lab([customRGB.red, customRGB.green, customRGB.blue]);
 

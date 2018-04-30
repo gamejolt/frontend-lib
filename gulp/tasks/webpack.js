@@ -215,6 +215,7 @@ module.exports = function(config) {
 							scoped: true,
 							transformToRequire: {
 								img: 'src',
+								'app-theme-svg': 'src',
 							},
 						}),
 				},
