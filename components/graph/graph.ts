@@ -110,9 +110,9 @@ export class AppGraph extends Vue {
 				colors = [
 					'#ffffff',
 					'#' + this.theme.darkHighlight_,
-					'#31d6ff',
-					'#ff3fac',
-					'#2f7f6f',
+					'#d1d1d1',
+					'#7e7e7e',
+					'#666666',
 				];
 			} else {
 				colors = [
@@ -120,7 +120,7 @@ export class AppGraph extends Vue {
 					'#' + this.theme.darkHighlight_,
 					'#' + this.theme.darkNotice_,
 					'#' + this.theme.darkBacklight_,
-					'#31d6ff',
+					'#666666',
 				];
 			}
 		}
