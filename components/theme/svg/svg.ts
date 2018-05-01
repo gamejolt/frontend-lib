@@ -19,9 +19,9 @@ export class AppThemeSvg extends Vue {
 		let svgData = this.rawSvg;
 
 		if (this.theme) {
-			let highlight = '#' + this.theme.biFg_;
-			let backlight = '#' + this.theme.biBg_;
-			let notice = '#' + this.theme.notice_;
+			let highlight = '#' + this.theme.highlight;
+			let backlight = '#' + this.theme.backlight;
+			let notice = '#' + this.theme.notice;
 
 			if (this.theme.custom) {
 				const highlight_ = '#' + this.theme.highlight_;
