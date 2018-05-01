@@ -1,8 +1,9 @@
 $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 
 .navbar
-	theme-prop('background-color', 'darkest')
 	@extend .clearfix
+	theme-prop('background-color', 'darkest')
+	theme-dark()
 	height: $navbar-height
 	display: flex
 
