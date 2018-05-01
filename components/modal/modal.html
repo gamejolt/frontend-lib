@@ -16,15 +16,15 @@
 				'modal-full': modal.size === 'full',
 			}"
 			>
-			<app-theme :theme="theme">
-				<div
-					class="modal-content"
-					@mouseover="isHoveringContent = true"
-					@mouseout="isHoveringContent = false"
-					>
+			<div
+				class="modal-content"
+				@mouseover="isHoveringContent = true"
+				@mouseout="isHoveringContent = false"
+				>
+				<app-theme :theme="theme">
 					<slot />
-				</div>
-			</app-theme>
+				</app-theme>
+			</div>
 		</div>
 	</div>
 </transition>
