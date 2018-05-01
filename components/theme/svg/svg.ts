@@ -37,6 +37,7 @@ export class AppThemeSvg extends Vue {
 
 			svgData = svgData
 				.replace('#ccff00', highlight)
+				.replace('#cf0', highlight)
 				.replace('#2f7f6f', backlight)
 				.replace('#ff3fac', notice);
 		}
