@@ -10,6 +10,7 @@ import { AppPopover } from '../../../popover/popover';
 import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vue';
 import { makeThemeFromPreset, Theme, makeThemeFromColor } from '../../../theme/theme.model';
 import { Sketch } from 'vue-color';
+import { AppLoading } from '../../../../vue/components/loading/loading';
 
 interface VueColor {
 	hex: string | null;
@@ -18,6 +19,7 @@ interface VueColor {
 @View
 @Component({
 	components: {
+		AppLoading,
 		AppThemeBubble,
 		AppPopover,
 		picker: Sketch,

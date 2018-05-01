@@ -37,19 +37,22 @@
 			</nav>
 
 			<div class="-presets" v-if="activeTab === 'preset'">
-				<a
-					class="-preset"
-					v-for="preset of presets"
-					:key="preset.id"
-					v-app-tooltip="preset.name"
-					@click="selectPreset(preset)"
-					>
-					<app-theme-bubble
-						:highlight="preset.highlight"
-						:backlight="preset.backlight"
-						:active="isPresetActive(preset)"
-						/>
-				</a>
+				<app-loading v-if="presets.length === 0" />
+				<template v-else>
+					<a
+						class="-preset"
+						v-for="preset of presets"
+						:key="preset.id"
+						v-app-tooltip="preset.name"
+						@click="selectPreset(preset)"
+						>
+						<app-theme-bubble
+							:highlight="preset.highlight"
+							:backlight="preset.backlight"
+							:active="isPresetActive(preset)"
+							/>
+					</a>
+				</template>
 			</div>
 			<div v-else-if="activeTab === 'custom'">
 				<picker
