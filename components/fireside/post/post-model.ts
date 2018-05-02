@@ -25,6 +25,7 @@ export class FiresidePost extends Model {
 	static STATUS_DRAFT = 'draft';
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
+	static STATUS_SCHEDULED = 'scheduled';
 
 	type: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
 	hash: string;
@@ -35,6 +36,7 @@ export class FiresidePost extends Model {
 	added_on: number;
 	updated_on: number;
 	published_on: number;
+	scheduled_for: number | null;
 	like_count: number;
 	comment_count: number;
 	user: User;
