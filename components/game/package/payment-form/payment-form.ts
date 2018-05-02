@@ -381,7 +381,7 @@ export class FormGamePackagePayment extends BaseForm<any>
 					Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
 			} else {
 				// Otherwise we have to open in browser.
-				require('nw.gui').Shell.openExternal(response.redirectUrl);
+				nw.Shell.openExternal(response.redirectUrl);
 			}
 		} else {
 			// For site we have to replace the URL completely since we are switching to https.

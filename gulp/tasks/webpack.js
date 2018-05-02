@@ -37,7 +37,6 @@ module.exports = function(config) {
 	if (!config.client) {
 		// When building for site, we don't want any of these imports accidentally being pulled in.
 		// Setting these to empty object strings causes the require to return an empty object.
-		externals['nw.gui'] = '{}';
 		externals['client-voodoo'] = '{}';
 		externals['nwjs-snappy-updater'] = '{}';
 		externals['sanitize-filename'] = '{}';
