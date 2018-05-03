@@ -114,6 +114,10 @@ export class FiresidePost extends Model {
 		Registry.store('FiresidePost', this);
 	}
 
+	get isScheduled() {
+		return !!this.scheduled_for;
+	}
+
 	static pullHashFromUrl(url: string) {
 		return url.substring(url.lastIndexOf('-') + 1);
 	}
