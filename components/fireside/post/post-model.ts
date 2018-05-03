@@ -25,7 +25,6 @@ export class FiresidePost extends Model {
 	static STATUS_DRAFT = 'draft';
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
-	static STATUS_SCHEDULED = 'scheduled';
 
 	type: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
 	hash: string;
