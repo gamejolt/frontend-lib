@@ -82,6 +82,9 @@ module.exports = config => {
 			appVersion: packageJson.version,
 			macZip: false, // Use a app.nw folder instead of ZIP file
 			macIcns: path.resolve(__dirname, 'client/icons/mac.icns'),
+			macPlist: {
+				CFBundleIdentifier: 'com.gamejolt.client',
+			},
 			winIco: path.resolve(__dirname, 'client/icons/winico.ico'),
 
 			// Tells it not to merge the app zip into the executable. Easier updating this way.
