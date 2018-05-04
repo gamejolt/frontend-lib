@@ -56,6 +56,7 @@ export class AppCommentWidget extends Vue {
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
 	@CommentMutation onCommentRemove: CommentStore['onCommentRemove'];
+	@CommentMutation clearComments: CommentStore['clearComments'];
 
 	store: CommentStoreModel | null = null;
 	id = ++incrementer;
@@ -174,5 +175,10 @@ export class AppCommentWidget extends Vue {
 	loadMore() {
 		this.currentPage += 1;
 		this._fetchComments();
+	}
+
+	async refetchComments() {
+		this.clearComments(this.store!);
+		await this._fetchComments();
 	}
 }

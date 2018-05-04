@@ -173,9 +173,7 @@ export class Comment extends Model {
 	}
 
 	async $pin() {
-		await this.$_save(`/comments/pin/${this.id}`, 'comment', {
-			detach: true,
-		});
+		await this.$_save(`/comments/pin/${this.id}`, 'comment');
 	}
 }
 
