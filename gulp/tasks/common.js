@@ -54,7 +54,7 @@ module.exports = (config, projectBase) => {
 	}
 
 	config.projectBase = projectBase;
-	config.buildBaseDir = process.env.BUILD_DIR || './';
+	config.buildBaseDir = process.env.BUILD_DIR || '.';
 	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
 	config.libDir = 'src/lib/';
 	config.gjLibDir = 'src/lib/gj-lib-client/';
