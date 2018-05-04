@@ -40,8 +40,6 @@ export class AppDatetimePicker extends Vue {
 		if (!this.value) {
 			throw new Error('Value must be initialized');
 		}
-
-		this.$emit('input', this.value - this.tzOffset);
 	}
 
 	@Watch('timezoneOffset')
