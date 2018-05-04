@@ -35,6 +35,8 @@ export class FiresidePost extends Model {
 	added_on: number;
 	updated_on: number;
 	published_on: number;
+	scheduled_for_timezone: string | null;
+	scheduled_for: number | null;
 	like_count: number;
 	comment_count: number;
 	user: User;
@@ -110,6 +112,10 @@ export class FiresidePost extends Model {
 		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
 
 		Registry.store('FiresidePost', this);
+	}
+
+	get isScheduled() {
+		return !!this.scheduled_for;
 	}
 
 	static pullHashFromUrl(url: string) {
