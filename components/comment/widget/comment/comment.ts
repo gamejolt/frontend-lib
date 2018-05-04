@@ -138,6 +138,10 @@ export class AppCommentWidgetComment extends Vue {
 		return false;
 	}
 
+	get canPin() {
+		return this.canRemove;
+	}
+
 	get isShowingReplies() {
 		return this.children && this.children.length && this.isShowingChildren;
 	}
@@ -190,6 +194,10 @@ export class AppCommentWidgetComment extends Vue {
 		}
 
 		this.widget._onCommentRemove(this.comment);
+	}
+
+	async pinComment() {
+		this.comment.$pin();
 	}
 
 	onFollowClick() {

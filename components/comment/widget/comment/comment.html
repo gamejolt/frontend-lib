@@ -60,6 +60,13 @@
 					</translate>
 				</a>
 				<a class="list-group-item has-icon"
+					v-if="canPin"
+					@click="pinComment"
+					>
+					<app-jolticon icon="tag" notice />
+					<translate>Pin Comment</translate>
+				</a>
+				<a class="list-group-item has-icon"
 					v-if="canRemove"
 					@click="removeComment"
 					>

@@ -30,7 +30,7 @@ export class CommentStoreModel {
 	comments: Comment[] = [];
 	locks = 0;
 
-	constructor(public resource: string, public resourceId: number) {}
+	constructor(public resource: string, public resourceId: number) { }
 
 	get parentComments() {
 		// We sort reverse since we show newest first when showing parents.

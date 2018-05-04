@@ -36,6 +36,7 @@ export class Comment extends Model {
 	lang: string;
 	videos: CommentVideo[] = [];
 	subscription?: Subscription;
+	is_pinned: boolean;
 
 	isVotePending = false;
 	isFollowPending = false;
@@ -169,6 +170,12 @@ export class Comment extends Model {
 		await this.subscription.$remove();
 		this.subscription = undefined;
 		this.isFollowPending = false;
+	}
+
+	async $pin() {
+		await this.$_save(`/comments/pin/${this.id}`, 'comment', {
+			detach: true,
+		});
 	}
 }
 
