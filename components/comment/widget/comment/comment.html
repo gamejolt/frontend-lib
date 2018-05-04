@@ -4,6 +4,7 @@
 	:is-showing-replies="isShowingReplies"
 	:is-reply="!!parent"
 	:is-last="isLastInThread"
+	:is-pinned="comment.is_pinned"
 	>
 
 	<template slot="tags" v-if="isOwner || isCollaborator">
@@ -35,6 +36,14 @@
 					<translate>Copy Link</translate>
 				</a>
 				<a class="list-group-item has-icon"
+					v-if="canPin"
+					@click="pinComment"
+					>
+					<app-jolticon icon="tag" />
+					<translate v-if="comment.is_pinned">Unpin Comment</translate>
+					<translate v-else>Pin Comment</translate>
+				</a>
+				<a class="list-group-item has-icon"
 					v-if="user.id === comment.user.id"
 					@click="startEdit"
 					>
@@ -58,13 +67,6 @@
 					<translate v-else>
 						Follow Thread
 					</translate>
-				</a>
-				<a class="list-group-item has-icon"
-					v-if="canPin"
-					@click="pinComment"
-					>
-					<app-jolticon icon="tag" notice />
-					<translate>Pin Comment</translate>
 				</a>
 				<a class="list-group-item has-icon"
 					v-if="canRemove"

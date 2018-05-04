@@ -25,6 +25,9 @@
 				</span>
 
 				<div class="-byline">
+					<span v-if="isPinned">
+						THIS IS PINNED
+					</span>
 					<span class="-author">
 						<router-link
 							:to="{

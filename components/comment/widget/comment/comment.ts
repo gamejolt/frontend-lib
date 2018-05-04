@@ -139,7 +139,7 @@ export class AppCommentWidgetComment extends Vue {
 	}
 
 	get canPin() {
-		return this.canRemove;
+		return !this.comment.parent_id && this.canRemove;
 	}
 
 	get isShowingReplies() {
