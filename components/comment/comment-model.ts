@@ -172,8 +172,11 @@ export class Comment extends Model {
 		this.isFollowPending = false;
 	}
 
-	async $pin() {
-		await this.$_save(`/comments/pin/${this.id}`, 'comment');
+	// applies pin operation to current comment and returns the comment that
+	// got unpinned (or null if that didn't happen)
+	async $pin(): Promise<Comment | null> {
+		const result = await this.$_save(`/comments/pin/${this.id}`, 'comment');
+		return result['otherComment'];
 	}
 }
 

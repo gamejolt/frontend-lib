@@ -197,8 +197,7 @@ export class AppCommentWidgetComment extends Vue {
 	}
 
 	async pinComment() {
-		await this.comment.$pin();
-		await this.widget.refetchComments();
+		await this.widget.pinComment(this.comment);
 	}
 
 	onFollowClick() {

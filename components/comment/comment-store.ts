@@ -22,7 +22,6 @@ export type CommentMutations = {
 	'comment/onCommentAdd': Comment;
 	'comment/onCommentEdit': Comment;
 	'comment/onCommentRemove': Comment;
-	'comment/clearComments': CommentStoreModel;
 };
 
 export class CommentStoreModel {
@@ -57,11 +56,6 @@ export class CommentStoreModel {
 
 	contains(comment: Comment) {
 		return this.comments.findIndex(i => i.id === comment.id) !== -1;
-	}
-
-	clear() {
-		this.comments = [];
-		this.count = 0;
 	}
 }
 
@@ -116,11 +110,6 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	private _setParentCommentCount(payload: { store: CommentStoreModel; count: number }) {
 		const { store, count } = payload;
 		store.parentCount = count;
-	}
-
-	@VuexMutation
-	clearComments(store: CommentMutations['comment/clearComments']) {
-		store.clear();
 	}
 
 	@VuexMutation

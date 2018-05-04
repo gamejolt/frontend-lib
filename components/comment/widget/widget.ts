@@ -56,7 +56,6 @@ export class AppCommentWidget extends Vue {
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
 	@CommentMutation onCommentRemove: CommentStore['onCommentRemove'];
-	@CommentMutation clearComments: CommentStore['clearComments'];
 
 	store: CommentStoreModel | null = null;
 	id = ++incrementer;
@@ -177,8 +176,15 @@ export class AppCommentWidget extends Vue {
 		this._fetchComments();
 	}
 
-	async refetchComments() {
-		this.clearComments(this.store!);
-		await this._fetchComments();
+	async pinComment(comment: Comment) {
+		const otherCommentData = await comment.$pin();
+		// due to this comment being pinned, another comment is possibly being unpinned
+		// apply the change to its data
+		if (otherCommentData !== null) {
+			const otherComment = this.store!.comments.find(c => c.id == otherCommentData.id);
+			if (otherComment !== undefined) {
+				otherComment.assign(otherCommentData);
+			}
+		}
 	}
 }
