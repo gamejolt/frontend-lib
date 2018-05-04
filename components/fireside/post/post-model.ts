@@ -35,6 +35,7 @@ export class FiresidePost extends Model {
 	added_on: number;
 	updated_on: number;
 	published_on: number;
+	scheduled_for_timezone: string | null;
 	scheduled_for: number | null;
 	like_count: number;
 	comment_count: number;
