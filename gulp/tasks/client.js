@@ -41,7 +41,6 @@ module.exports = config => {
 			} else {
 				nodeModulesTask.push(
 					'rm -rf ' + buildDep,
-					// 'ln -s ' + devDep + ' ' + buildDep
 					'mkdir -p ' + buildDep,
 					'cp -r ' + devDep + ' ' + path.dirname(buildDep)
 				);
@@ -212,9 +211,52 @@ module.exports = config => {
 	gulp.task('client:gjpush-package', () => {
 		let p = Promise.resolve();
 
-		// On mac we have to zip the app so we can upload it.
-		if (config.platform === 'osx') {
+		// On windows and linux we want to extract the app.nw file back into the build folder
+		if (config.platform !== 'osx') {
 			p = new Promise((resolve, reject) => {
+				const base = path.join(config.clientBuildDir, 'build', config.platformArch);
+				const unzipper = new DecompressZip(path.join(base, 'package.nw'));
+
+				unzipper.on('error', reject);
+				unzipper.on('extract', () => {
+					// We pull some stuff out of the package folder into the main folder.
+					mv(
+						path.join(base, 'package', 'node_modules'),
+						path.join(base, 'node_modules'),
+						err => {
+							if (err) {
+								reject(err);
+								return;
+							}
+
+							mv(
+								path.join(base, 'package', 'package.json'),
+								path.join(base, 'package.json'),
+								err => {
+									if (err) {
+										reject(err);
+										return;
+									}
+
+									fs.unlink(path.join(base, 'package.nw'), err => {
+										if (err) {
+											reject(err);
+											return;
+										}
+										resolve();
+									});
+								}
+							);
+						}
+					);
+				});
+				unzipper.extract({ path: path.join(base, 'package') });
+			});
+		}
+
+		// On mac we have to zip the app so we can upload it.
+		p = p.then(() => {
+			return new Promise((resolve, reject) => {
 				const stream = gulp
 					.src(config.clientBuildDir + '/build/' + config.platformArch + '/**/*')
 					.pipe(plugins.zip(config.platformArch + '-package.zip'))
@@ -223,7 +265,7 @@ module.exports = config => {
 				stream.on('end', resolve);
 				stream.on('error', reject);
 			});
-		}
+		});
 
 		// GJPUSH!
 		// We trust the exit codes to tell us if something went wrong because a non 0 exit code will make this throw.
@@ -441,6 +483,7 @@ module.exports = config => {
 			const buildDir = path.join(config.clientBuildDir, 'build');
 			const appDir = path.join(clientApp, 'Contents', 'Resources', 'app');
 
+			// The . after the build dir makes it also copy hidden dot files
 			cp.execSync('cp -r "' + path.join(buildDir, '.') + '" "' + appDir + '"');
 
 			// The info plist in our template has placeholder we need to replace with this build's version
@@ -503,9 +546,11 @@ module.exports = config => {
 			);
 			return builder.build();
 		} else {
-			// TODO most likely broken
 			return gulp
-				.src(config.clientBuildDir + '/build/' + config.platformArch + '/**/*')
+				.src([
+					config.clientBuildDir + '/build/**/*',
+					config.clientBuildDir + '/build/**/.*',
+				])
 				.pipe(plugins.tar(config.platformArch + '.tar'))
 				.pipe(plugins.gzip())
 				.pipe(gulp.dest(config.clientBuildDir));
