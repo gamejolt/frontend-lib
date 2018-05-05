@@ -12,13 +12,15 @@ export const CommentAction = namespace(CommentStoreNamespace, Action);
 export const CommentMutation = namespace(CommentStoreNamespace, Mutation);
 
 export type CommentActions = {
-	'comment/fetchComments': { store: CommentStoreModel; page?: number };
 	'comment/lockCommentStore': { resource: string; resourceId: number };
+	'comment/fetchComments': { store: CommentStoreModel; page?: number };
+	'comment/pinComment': { store: CommentStoreModel; comment: Comment };
 };
 
 export type CommentMutations = {
 	'comment/releaseCommentStore': CommentStoreModel;
 	'comment/setCommentCount': { store: CommentStoreModel; count: number };
+	'comment/updateComment': { store: CommentStoreModel; commentId: number; data: any };
 	'comment/onCommentAdd': Comment;
 	'comment/onCommentEdit': Comment;
 	'comment/onCommentRemove': Comment;
@@ -30,7 +32,7 @@ export class CommentStoreModel {
 	comments: Comment[] = [];
 	locks = 0;
 
-	constructor(public resource: string, public resourceId: number) { }
+	constructor(public resource: string, public resourceId: number) {}
 
 	get parentComments() {
 		const comments = this.comments.filter(i => !i.parent_id);
@@ -39,7 +41,7 @@ export class CommentStoreModel {
 		// We sort reverse since we show newest first when showing parents.
 		comments.sort((a, b) => numberSort(b.posted_on, a.posted_on));
 		// insert pinned comments at the beginning
-		if (pinned !== undefined) {
+		if (pinned) {
 			comments.unshift(...pinned);
 		}
 
@@ -96,6 +98,18 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 		return response;
 	}
 
+	@VuexAction
+	async pinComment(payload: CommentActions['comment/pinComment']) {
+		const { store, comment } = payload;
+
+		// due to this comment being pinned, another comment is possibly being unpinned
+		// apply the change to its data
+		const otherCommentData = await comment.$pin();
+		if (otherCommentData) {
+			this.updateComment({ store, commentId: otherCommentData.id, data: otherCommentData });
+		}
+	}
+
 	@VuexMutation
 	private _addComments(payload: { store: CommentStoreModel; comments: Comment[] }) {
 		const { store, comments } = payload;
@@ -116,6 +130,16 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	setCommentCount(payload: CommentMutations['comment/setCommentCount']) {
 		const { store, count } = payload;
 		store.count = count;
+	}
+
+	@VuexMutation
+	updateComment(payload: CommentMutations['comment/updateComment']) {
+		const { store, commentId, data } = payload;
+
+		const comment = store.comments.find(i => i.id === commentId);
+		if (comment) {
+			comment.assign(data);
+		}
 	}
 
 	@VuexMutation
@@ -159,8 +183,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				// reduce comment count by amount of child comments on this parent + 1 for the parent
 				const childAmount = store.comments.filter(c => c.parent_id === comment.id).length;
 				store.count -= childAmount + 1;
-			}
-			else {
+			} else {
 				--store.count;
 			}
 			arrayRemove(store.comments, i => i.id === comment.id);

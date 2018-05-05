@@ -52,6 +52,7 @@ export class AppCommentWidget extends Vue {
 	@CommentState getCommentStore: CommentStore['getCommentStore'];
 	@CommentAction fetchComments: CommentStore['fetchComments'];
 	@CommentAction lockCommentStore: CommentStore['lockCommentStore'];
+	@CommentAction pinComment: CommentStore['pinComment'];
 	@CommentMutation releaseCommentStore: CommentStore['releaseCommentStore'];
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
@@ -171,20 +172,14 @@ export class AppCommentWidget extends Vue {
 		this.$emit('remove', comment);
 	}
 
+	_pinComment(comment: Comment) {
+		if (this.store) {
+			this.pinComment({ store: this.store, comment });
+		}
+	}
+
 	loadMore() {
 		this.currentPage += 1;
 		this._fetchComments();
-	}
-
-	async pinComment(comment: Comment) {
-		const otherCommentData = await comment.$pin();
-		// due to this comment being pinned, another comment is possibly being unpinned
-		// apply the change to its data
-		if (otherCommentData !== null) {
-			const otherComment = this.store!.comments.find(c => c.id == otherCommentData.id);
-			if (otherComment !== undefined) {
-				otherComment.assign(otherCommentData);
-			}
-		}
 	}
 }

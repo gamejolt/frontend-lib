@@ -4,13 +4,19 @@
 	:is-showing-replies="isShowingReplies"
 	:is-reply="!!parent"
 	:is-last="isLastInThread"
-	:is-pinned="comment.is_pinned"
 	>
 
-	<template slot="tags" v-if="isOwner || isCollaborator">
-		<span class="tag">
-			<translate v-if="isOwner">Dev</translate>
-			<translate v-else>Collaborator</translate>
+	<template slot="tags" v-if="comment.is_pinned || isOwner || isCollaborator">
+		<span v-if="comment.is_pinned" class="tag">
+			<app-jolticon icon="thumbtack" />
+			<translate>Pinned</translate>
+		</span>
+
+		<span class="tag" v-if="isOwner">
+			<translate>Dev</translate>
+		</span>
+		<span class="tag" v-else-if="isCollaborator">
+			<translate>Collaborator</translate>
 		</span>
 	</template>
 
