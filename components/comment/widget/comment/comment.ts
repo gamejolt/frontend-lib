@@ -104,7 +104,7 @@ export class AppCommentWidgetComment extends Vue {
 		);
 	}
 
-	get canRemove() {
+	get canModify() {
 		if (!this.user) {
 			return false;
 		}
@@ -136,6 +136,14 @@ export class AppCommentWidgetComment extends Vue {
 		}
 
 		return false;
+	}
+
+	get canRemove() {
+		return this.canModify;
+	}
+
+	get canPin() {
+		return !this.comment.parent_id && this.canModify;
 	}
 
 	get isShowingReplies() {
@@ -190,6 +198,10 @@ export class AppCommentWidgetComment extends Vue {
 		}
 
 		this.widget._onCommentRemove(this.comment);
+	}
+
+	async pinComment() {
+		await this.widget._pinComment(this.comment);
 	}
 
 	onFollowClick() {

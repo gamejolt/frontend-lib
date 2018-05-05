@@ -52,6 +52,7 @@ export class AppCommentWidget extends Vue {
 	@CommentState getCommentStore: CommentStore['getCommentStore'];
 	@CommentAction fetchComments: CommentStore['fetchComments'];
 	@CommentAction lockCommentStore: CommentStore['lockCommentStore'];
+	@CommentAction pinComment: CommentStore['pinComment'];
 	@CommentMutation releaseCommentStore: CommentStore['releaseCommentStore'];
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
@@ -169,6 +170,12 @@ export class AppCommentWidget extends Vue {
 		Analytics.trackEvent('comment-widget', 'remove');
 		this.onCommentRemove(comment);
 		this.$emit('remove', comment);
+	}
+
+	_pinComment(comment: Comment) {
+		if (this.store) {
+			this.pinComment({ store: this.store, comment });
+		}
 	}
 
 	loadMore() {
