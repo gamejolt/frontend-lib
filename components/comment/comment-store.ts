@@ -33,11 +33,11 @@ export class CommentStoreModel {
 	constructor(public resource: string, public resourceId: number) { }
 
 	get parentComments() {
-		let comments = this.comments.filter(i => !i.parent_id);
+		const comments = this.comments.filter(i => !i.parent_id);
 		// remove pinned comments before sorting
 		const pinned = arrayRemove(comments, c => c.is_pinned);
 		// We sort reverse since we show newest first when showing parents.
-		comments = comments.sort((a, b) => numberSort(b.posted_on, a.posted_on));
+		comments.sort((a, b) => numberSort(b.posted_on, a.posted_on));
 		// insert pinned comments at the beginning
 		if (pinned !== undefined) {
 			comments.unshift(...pinned);
