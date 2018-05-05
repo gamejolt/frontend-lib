@@ -154,10 +154,15 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	onCommentRemove(comment: CommentMutations['comment/onCommentRemove']) {
 		const store = this.getCommentStore(comment.resource, comment.resource_id);
 		if (store) {
-			if (comment.parent_id) {
+			if (!comment.parent_id) {
 				--store.parentCount;
+				// reduce comment count by amount of child comments on this parent + 1 for the parent
+				const childAmount = store.comments.filter(c => c.parent_id == comment.id).length;
+				store.count -= childAmount + 1;
 			}
-			--store.count;
+			else {
+				--store.count;
+			}
 			arrayRemove(store.comments, i => i.id === comment.id);
 		}
 	}
