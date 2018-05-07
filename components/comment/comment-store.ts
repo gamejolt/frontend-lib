@@ -13,7 +13,7 @@ export const CommentMutation = namespace(CommentStoreNamespace, Mutation);
 
 export type CommentActions = {
 	'comment/lockCommentStore': { resource: string; resourceId: number };
-	'comment/fetchComments': { store: CommentStoreModel; page?: number };
+	'comment/fetchComments': CommentStoreModel;
 	'comment/pinComment': { store: CommentStoreModel; comment: Comment };
 };
 
@@ -80,10 +80,13 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	}
 
 	@VuexAction
-	async fetchComments(payload: CommentActions['comment/fetchComments']) {
-		const { store, page } = payload;
-
-		const response = await Comment.fetch(store.resource, store.resourceId, page || 1);
+	async fetchComments(store: CommentActions['comment/fetchComments']) {
+		// load comments after the last timestamp
+		const lastTimestamp =
+			store.parentComments.length === 0
+				? null // no comments loaded
+				: store.parentComments[store.parentComments.length - 1].posted_on;
+		const response = await Comment.fetch(store.resource, store.resourceId, lastTimestamp);
 
 		const count = response.count || 0;
 		const parentCount = response.parentCount || 0;
