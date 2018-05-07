@@ -59,6 +59,14 @@ export class CommentStoreModel {
 	contains(comment: Comment) {
 		return this.comments.findIndex(i => i.id === comment.id) !== -1;
 	}
+
+	// removes a comment from the store, does not delete the comment itself
+	remove(id: number) {
+		const removedComments = arrayRemove(this.comments, c => c.id === id);
+		if (removedComments) {
+			this.count -= removedComments.length;
+		}
+	}
 }
 
 @VuexModule()
@@ -110,6 +118,15 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 		const otherCommentData = await comment.$pin();
 		if (otherCommentData) {
 			this.updateComment({ store, commentId: otherCommentData.id, data: otherCommentData });
+
+			// if the unpinned comment is sorted to the very end of the comment chain, remove it from the store
+			// this is done because the comment might not belong on that page
+			if (
+				store.parentComments.length > 0 &&
+				store.parentComments[store.parentComments.length - 1].id === otherCommentData.id
+			) {
+				store.remove(otherCommentData.id);
+			}
 		}
 	}
 
