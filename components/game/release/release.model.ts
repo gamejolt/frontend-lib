@@ -16,6 +16,8 @@ export class GameRelease extends Model {
 	updated_on: number;
 	status: string;
 	sort: number;
+	scheduled_for_timezone: string | null;
+	scheduled_for: number | null;
 
 	/**
 	 * Not active build count. All non-removed builds (even if not available yet).
@@ -26,10 +28,17 @@ export class GameRelease extends Model {
 	_package?: GamePackage;
 	_builds?: GameBuild[];
 
+	get isScheduled() {
+		return !!this.scheduled_for;
+	}
+
 	$save() {
 		if (!this.id) {
 			return this.$_save(
-				'/web/dash/developer/games/releases/save/' + this.game_id + '/' + this.game_package_id,
+				'/web/dash/developer/games/releases/save/' +
+					this.game_id +
+					'/' +
+					this.game_package_id,
 				'gameRelease'
 			);
 		} else {
