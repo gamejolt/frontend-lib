@@ -114,6 +114,14 @@ export class FiresidePost extends Model {
 		Registry.store('FiresidePost', this);
 	}
 
+	get isActive() {
+		return this.status === FiresidePost.STATUS_ACTIVE;
+	}
+
+	get isDraft() {
+		return this.status === FiresidePost.STATUS_DRAFT;
+	}
+
 	get isScheduled() {
 		return !!this.scheduled_for;
 	}
