@@ -65,13 +65,14 @@ export class Comment extends Model {
 		}
 	}
 
-	static fetch(resource: string, resourceId: number, page: number) {
+	// scroll id is a timestamp that controls where fetching starts (posted_on)
+	static fetch(resource: string, resourceId: number, scrollId: number | null) {
 		let query = '';
-		if (page) {
-			query = '?page=' + page;
+		if (scrollId) {
+			query = '?scrollId=' + scrollId;
 		}
 
-		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, null, {
+		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, {
 			detach: true,
 		});
 	}
