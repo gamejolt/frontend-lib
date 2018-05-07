@@ -11,16 +11,21 @@
 	</div>
 
 	<div class="modal-footer">
-		<button class="btn btn-success-outline" @click="ok">
-			<app-jolticon icon="check" />
+		<app-button
+			primary
+			solid
+			@click="ok"
+			>
 			<translate v-if="buttonType === 'ok'">OK</translate>
 			<translate v-else-if="buttonType === 'yes'">Yes</translate>
-		</button>
-		<button class="btn btn-danger-outline" @click="cancel">
-			<app-jolticon icon="remove" />
+		</app-button>
+		<app-button
+			trans
+			@click="cancel"
+			>
 			<translate v-if="buttonType === 'ok'">Cancel</translate>
 			<translate v-else-if="buttonType === 'yes'">No</translate>
-		</button>
+		</app-button>
 	</div>
 
 </app-modal>

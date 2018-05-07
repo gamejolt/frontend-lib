@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require '../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .modal-header
 	padding: $modal-padding-xs
@@ -11,10 +11,10 @@
 	padding-right: ($grid-gutter-width-xs / 2)
 	text-align: right
 
-	.btn
-		border-top: 0
-		border-top-left-radius: 0
-		border-top-right-radius: 0
+	.button
+		border-top: 0 !important
+		border-top-left-radius: 0 !important
+		border-top-right-radius: 0 !important
 
 // Title text within header
 .modal-title

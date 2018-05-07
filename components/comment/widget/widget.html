@@ -2,7 +2,7 @@
 	class="comment-widget"
 	>
 	<app-loading v-if="!hasBootstrapped && !hasError" />
-	<div v-else-if="hasError" class="alert alert-warning">
+	<div v-else-if="hasError" class="alert alert-notice">
 		<translate>Couldn't fetch comments.</translate>
 	</div>
 	<div v-else-if="hasBootstrapped">
@@ -14,7 +14,7 @@
 				@submit="_onCommentAdd"
 				/>
 		</app-message-thread-add>
-		<div v-else class="alert alert-info">
+		<div v-else class="alert">
 			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
@@ -30,9 +30,13 @@
 		</app-message-thread>
 
 		<div v-if="shouldShowLoadMore" class="page-cut">
-			<button class="btn btn-outline" @click="loadMore" v-app-track-event="`comment-widget:more`">
+			<app-button
+				trans
+				@click="loadMore"
+				v-app-track-event="`comment-widget:more`"
+				>
 				<translate>Load More</translate>
-			</button>
+			</app-button>
 		</div>
 
 		<app-loading v-if="isLoading" class="loading-centered" />

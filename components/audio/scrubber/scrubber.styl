@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .audio-scrubber
 	user-select: none
@@ -7,20 +8,20 @@
 		position: relative
 
 	&-timebar-unfilled
+		theme-prop('background-color', 'bg-subtle')
 		position: absolute
 		width: 100%
 		top: 50%
 		margin-top: -2px
 		height: 5px
-		background-color: $gray-dark
 
 	&-timebar-filled
+		theme-prop('background-color', 'highlight')
 		position: absolute
 		top: 0
 		left: 0
 		bottom: 0
 		right: 0
-		background-color: $gj-blue
 
 	&-timebar-handle
 		position: absolute
@@ -29,15 +30,15 @@
 		top: 50%
 		margin-top: -(@width / 2)
 		margin-right: -(@width / 2)
-		background-color: $gray-lighter
+		background-color: $white
 		border-radius: 50%
 		cursor: pointer
 		transition: width 200ms, height 200ms, margin-top 200ms, margin-right 200ms
 		z-index: 11
 
 		.audio-scrubber.dragging &
+			theme-prop('background-color', 'highlight')
 			width: 17px
 			height: @width
 			margin-top: -(@width / 2)
 			margin-right: -(@width / 2)
-			background-color: $white

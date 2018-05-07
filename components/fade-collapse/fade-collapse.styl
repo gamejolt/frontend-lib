@@ -15,20 +15,30 @@
 	left: 0
 	right: 0
 	height: 100px
-	background-image: linear-gradient(to bottom, rgba($white, 0) 0, rgba($white, 1) 100%)
 	z-index: 1
+	background-image: linear-gradient(to bottom, rgba($white, 0) 0, rgba($white, 1) 100%)
+	background-image: linear-gradient(to bottom, var(--theme-bg-trans) 0, var(--theme-bg) 100%)
 
 	.-sm &
 		height: 30px
 
-	.fill-lightest &
-		background-image: linear-gradient(to bottom, rgba($gray-lightest, 0) 0, rgba($gray-lightest, 1) 100%)
+	.fill-offset &
+		background-image: linear-gradient(to bottom, var(--theme-bg-offset-trans) 0, var(--theme-bg-offset) 100%)
+
+	.fill-gray &
+		background-image: linear-gradient(to bottom, var(--theme-gray-trans) 0, var(--theme-gray) 100%)
+
+	.fill-dark &
+		background-image: linear-gradient(to bottom, var(--theme-dark-trans) 0, var(--theme-dark) 100%)
 
 	.fill-darker &
-		background-image: linear-gradient(to bottom, rgba($gray-darker, 0) 0, rgba($gray-darker, 1) 100%)
+		background-image: linear-gradient(to bottom, var(--theme-darker-trans) 0, var(--theme-darker) 100%)
 
 	.fill-darkest &
-		background-image: linear-gradient(to bottom, rgba($gray-darkest, 0) 0, rgba($gray-darkest, 1) 100%)
+		background-image: linear-gradient(to bottom, var(--theme-darkest-trans) 0, var(--theme-darkest) 100%)
+
+	.fill-black &
+		background-image: linear-gradient(to bottom, rgba($black, 0) 0, rgba($black, 1) 100%)
 
 	// We need this full name since it's targeted in other components to change the styling.
 	.fade-collapse-collapsed &

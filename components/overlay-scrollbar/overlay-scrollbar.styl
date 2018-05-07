@@ -1,4 +1,5 @@
-@require '~styles/variables';
+@require '~styles/variables'
+@require '~styles-lib/mixins'
 
 $overlay-scrollbar-width ?= 7px
 $overlay-scrollbar-padding ?= 2px
@@ -7,18 +8,16 @@ $overlay-scrollbar-border-radius ?= 0
 
 @media $media-sm-up
 	.overlay-scrollbar
-
 		&::-webkit-scrollbar
 			width: $overlay-scrollbar-width + ($overlay-scrollbar-padding * 2)
 			height: $overlay-scrollbar-width + ($overlay-scrollbar-padding-horizontal * 2)
-			background-color: rgba( 0, 0, 0, 0 )
+			background-color: rgba(0, 0, 0, 0)
 
-		&::-webkit-scrollbar-thumb:vertical
-		&::-webkit-scrollbar-thumb:horizontal
+		&::-webkit-scrollbar-thumb:vertical, &::-webkit-scrollbar-thumb:horizontal
+			theme-prop('background-color', 'gray')
 			border-radius: $overlay-scrollbar-border-radius
 			background-clip: padding-box
-			border: $overlay-scrollbar-padding solid rgba( 0, 0, 0, 0 )
-			background-color: $gray-dark
+			border: $overlay-scrollbar-padding solid rgba(0, 0, 0, 0)
 			border-radius: $overlay-scrollbar-width + ($overlay-scrollbar-padding * 2)
 
 		&::-webkit-scrollbar-thumb:vertical
@@ -28,28 +27,11 @@ $overlay-scrollbar-border-radius ?= 0
 			border-width: $overlay-scrollbar-padding-horizontal
 			min-width: 30px
 
-		&
-		&:hover
-			&::-webkit-scrollbar-thumb:vertical
-			&::-webkit-scrollbar-thumb:horizontal
+		&, &:hover
+			&::-webkit-scrollbar-thumb:vertical, &::-webkit-scrollbar-thumb:horizontal
 				&:hover
-					background-color: $gray-light
+					theme-prop('background-color', 'lighter')
 
 		&:hover
-			&::-webkit-scrollbar-thumb:vertical
-			&::-webkit-scrollbar-thumb:horizontal
-				background-color: $gray
-
-	&.overlay-scrollbar-light
-
-		&::-webkit-scrollbar
-			background-color: $gray-lightest
-
-		&
-		&:hover
-			&::-webkit-scrollbar-thumb:vertical
-			&::-webkit-scrollbar-thumb:horizontal
-				background-color: $gray-lighter
-
-				&:hover
-					background-color: $gray-light
+			&::-webkit-scrollbar-thumb:vertical, &::-webkit-scrollbar-thumb:horizontal
+				theme-prop('background-color', 'light')

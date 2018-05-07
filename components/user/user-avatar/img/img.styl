@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require '../../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .user-avatar-img
 	display: block
@@ -7,7 +7,7 @@
 
 	img
 		img-responsive()
-		border-radius: $border-radius-base
+		rounded-corners()
 
 		.avatar-circle &
 			img-circle()

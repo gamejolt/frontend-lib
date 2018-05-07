@@ -1,0 +1,20 @@
+<div
+	class="scroll-scroller"
+	:class="{
+		'-horizontal': horizontal,
+		'-hide-scrollbar': hideScrollbar,
+		'-overlay': shouldOverlay,
+		'-simplebar-bootstrapping': isSimplebarBootstrapping,
+	}"
+	>
+	<template v-if="shouldOverlay">
+		<div class="simplebar-scroll-content">
+			<div class="simplebar-content">
+				<slot />
+			</div>
+		</div>
+	</template>
+	<template v-else>
+		<slot />
+	</template>
+</div>

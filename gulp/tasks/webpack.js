@@ -37,7 +37,6 @@ module.exports = function(config) {
 	if (!config.client) {
 		// When building for site, we don't want any of these imports accidentally being pulled in.
 		// Setting these to empty object strings causes the require to return an empty object.
-		externals['nw.gui'] = '{}';
 		externals['client-voodoo'] = '{}';
 		externals['nwjs-snappy-updater'] = '{}';
 		externals['sanitize-filename'] = '{}';
@@ -74,7 +73,7 @@ module.exports = function(config) {
 	// }
 
 	const cleanCssOptions = {
-		level: 2,
+		level: 1,
 	};
 
 	let cleanCss = new CleanCss(cleanCssOptions);
@@ -201,6 +200,7 @@ module.exports = function(config) {
 					// Always "app" base img.
 					img: path.resolve(base, 'src/app/img'),
 					styles: path.resolve(base, 'src/' + section + '/styles'),
+					'styles-lib': path.resolve(config.gjLibDir, 'stylus/common'),
 				},
 			},
 			externals: externals,
@@ -212,6 +212,7 @@ module.exports = function(config) {
 							scoped: true,
 							transformToRequire: {
 								img: 'src',
+								'app-theme-svg': 'src',
 							},
 						}),
 				},
@@ -374,7 +375,12 @@ module.exports = function(config) {
 					new webpack.optimize.CommonsChunkPlugin({
 						name: 'vendor',
 						minChunks: function(module) {
-							return module.context && module.context.indexOf('node_modules') !== -1;
+							return (
+								module.context &&
+								module.context.indexOf('node_modules') !== -1 &&
+								// Don't pull styles into a vendor stylesheet (not worth it).
+								module.resource.indexOf('.css') === -1
+							);
 						},
 					}),
 
@@ -421,6 +427,7 @@ module.exports = function(config) {
 						_title: sectionConfig.title,
 						_crawl: sectionConfig.crawl,
 						_scripts: sectionConfig.scripts,
+						_bodyClass: sectionConfig.bodyClass || '',
 					}),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),

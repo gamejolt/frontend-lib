@@ -6,15 +6,11 @@ import { Comment } from '../comment-model';
 import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { AppTooltip } from '../../tooltip/tooltip';
 import { number } from '../../../vue/filters/number';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
 import { CommentModal } from '../modal/modal.service';
 
 @View
 @Component({
-	components: {
-		AppJolticon,
-	},
 	directives: {
 		AppAuthRequired,
 		AppTooltip,

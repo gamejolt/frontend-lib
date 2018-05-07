@@ -24,14 +24,14 @@
 
 			<div class="colorpicker-well">
 				<div class="col">
-					<a class="btn btn-block" @click="accept">
+					<app-button primary solid block @click.prevent="accept">
 						<translate>Accept</translate>
-					</a>
+					</app-button>
 				</div>
 				<div class="col">
-					<a class="btn btn-block" @click="cancel">
+					<app-button trans block @click.prevent="cancel">
 						<translate>Cancel</translate>
-					</a>
+					</app-button>
 				</div>
 			</div>
 		</div>

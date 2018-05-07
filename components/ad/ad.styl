@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .ad-leaderboard, .ad-rectangle
 	text-align: center
@@ -10,8 +11,8 @@
 		text-align: left
 
 .ad-inner
-	background-color: $gray-lightest
-	border-radius: $border-radius-base
+	rounded-corners()
+	theme-prop('background-color', 'bg-offset')
 
 .ad-leaderboard
 	.ad-inner, >>> .ad-slot > div
@@ -29,6 +30,6 @@
 		height: 600px !important
 
 >>> .ad-label
-	color: $text-muted
+	theme-prop('color', 'fg-muted')
 	font-size: $font-size-small
 	text-transform: uppercase

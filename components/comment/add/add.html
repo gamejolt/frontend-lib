@@ -19,22 +19,18 @@
 	</app-form-group>
 
 	<div class="text-right">
-		<app-form-button
-			class="btn-block-xs"
-			show-when-valid
-			:icon="method === 'add' ? 'add-comment' : 'edit'"
-			>
+		<app-form-button show-when-valid>
 			<translate v-if="method === 'add'">Add Comment</translate>
 			<translate v-else-if="method === 'edit'">Save</translate>
 		</app-form-button>
 
-		<button
-			class="btn btn-danger-outline"
+		<app-button
 			v-if="method === 'edit'"
+			trans
 			@click.prevent="onCancel"
 			>
 			<translate>Cancel</translate>
-		</button>
+		</app-button>
 	</div>
 
 </app-form>

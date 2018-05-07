@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 @require '../overlay-scrollbar/overlay-scrollbar'
 @require '~codemirror/lib/codemirror.css'
 
@@ -8,7 +9,6 @@ $codemirror-color = #F5F1F2
 $codemirror-gutter-color = #5D5D5D
 $codemirror-selection = #404040
 $codemirror-caret-color = #FFFFFF
-
 $codemirror-comment = #5D5D5D
 $codemirror-green = #B6DB51
 $codemirror-blay = #B4C2D6
@@ -17,21 +17,20 @@ $codemirror-gray = #a4a9b0
 
 // Style it out like a form control.
 .CodeMirror
-	height: auto  // Will make it auto-expand
+	rounded-corners()
+	height: auto // Will make it auto-expand
 	padding: $padding-base-vertical $padding-base-horizontal
 	border: 1px solid $input-border
-	border-radius: $border-radius-base
 	transition: border-color ease-in-out 0.15s
 
 	pre.CodeMirror-placeholder
-		color: $text-muted
+		theme-prop('color', 'light')
 
 	&-focused
 		border-color: $input-border-focus
 		outline: 0
 
-	&-vscrollbar
-	&-hscrollbar
+	&-vscrollbar, &-hscrollbar
 		@extend .overlay-scrollbar
 
 /**
@@ -40,7 +39,6 @@ $codemirror-gray = #a4a9b0
 .CodeMirror
 	background: $codemirror-bg
 	color: $codemirror-color
-
 	// Make it have the same styling as normal text on the page.
 	font-family: $font-family-monospace
 	font-size: $font-size-base
@@ -63,26 +61,19 @@ $codemirror-gray = #a4a9b0
 	span.cm-comment
 		color: $codemirror-comment
 
-	span.cm-atom
-	span.cm-quote
+	span.cm-atom, span.cm-quote
 		color: $codemirror-color
 
 	span.cm-number
 		color: $codemirror-color
 
-	span.cm-attribute
-	span.cm-keyword
-	span.cm-builtin
-	span.cm-qualifier
-	span.cm-tag
+	span.cm-attribute, span.cm-keyword, span.cm-builtin, span.cm-qualifier, span.cm-tag
 		color: $codemirror-green
 
-	span.cm-string
-	span.cm-header
+	span.cm-string, span.cm-header
 		color: $codemirror-blay
 
-	span.cm-property
-	span.cm-link
+	span.cm-property, span.cm-link
 		color: $codemirror-gray
 
 	// Gotta figure these ones out.
@@ -91,7 +82,6 @@ $codemirror-gray = #a4a9b0
 	// span.cm-variable-3 { color: #66d9ef; }
 	// span.cm-def { color: #fd971f; }
 	// span.cm-bracket { color: #f8f8f2; }
-
 	span.cm-error
 		background: $codemirror-pink
 		color: $codemirror-bg

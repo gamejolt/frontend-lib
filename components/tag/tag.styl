@@ -1,15 +1,21 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
 .tag
+	theme-prop('background-color', 'bg-offset')
+	theme-prop('color', 'fg')
 	display: inline-block
 	padding: 1px 4px 2px
 	font-family: $font-family-tiny
 	font-size: $font-size-tiny
-	font-weight: normal
+	font-weight: bold
 	vertical-align: text-bottom
 	white-space: nowrap
-	color: $gray
-	background-color: $gray-lighter
 	border-radius: $border-radius-small
 	line-height: 16px // Same size as a jolticon.
+
+	a&:hover
+		transform: scale(1.1)
 
 	&:empty
 		display: none
@@ -27,18 +33,10 @@
 		.jolticon
 			vertical-align: baseline
 
-.tag-active
-	background-color: $gj-dark-green
-	color: $gj-green
+.tag-highlight
+	theme-prop('background-color', 'highlight')
+	theme-prop('color', 'highlight-fg')
 
-.tag-green
-	background-color: $gj-green
-	color: $black
-
-.tag-pink
-	background-color: $gj-pink
-	color: $white
-
-.tag-blue
-	background-color: $gj-blue
-	color: $gray-darker
+.tag-notice
+	theme-prop('background-color', 'notice')
+	theme-prop('color', 'notice-fg')

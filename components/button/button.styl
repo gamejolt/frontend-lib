@@ -1,314 +1,198 @@
-button-variant(background, color, icon-color, addon-color, outline-color, outline-addon-color, active-background, active-color)
-	$variant-default-rules =
-		background-color: background
-		color: color !important
+@require '~styles/variables'
+@require '~styles-lib/mixins'
 
-		.jolticon
-			color: icon-color
-
-		// Since sparse buttons only show a single icon, we have to change the color
-		// so that when we hover it changes.
-		&.btn-sparse .jolticon
-			color: color
-
-		.jolticon-addon, small
-			color: addon-color !important
-	$variant-outline-rules =
-		background-color: transparent
-		border-color: outline-color
-		color: $gray-dark !important
-
-		.jolticon, &.btn-sparse .jolticon
-			color: outline-color
-
-		.jolticon-addon, small
-			color: outline-addon-color !important
-	$variant-trans-rules =
-		{$variant-outline-rules}
-		border-color: transparent
-	$variant-active-rules =
-		background-color: active-background
-		border-color: active-background
-		color: active-color !important
-
-		.jolticon, &.btn-sparse .jolticon
-			color: active-color
-
-		.jolticon-addon, small
-			color: addon-color !important
-	{$variant-default-rules}
-
-	// Disabled buttons should have the same coloring when active as when not active.
-	&.disabled, &[disabled], fieldset[disabled] &
-		&:hover
-			{$variant-default-rules}
-
-	&-outline
-		{$variant-outline-rules}
-
-		&.disabled, &[disabled], fieldset[disabled] &
-			&:hover
-				{$variant-outline-rules}
-
-	&-trans
-		{$variant-trans-rules}
-
-		&.disabled, &[disabled], fieldset[disabled] &
-			&:hover
-				{$variant-trans-rules}
-
-	&:hover, &.active, &-outline:hover, &-outline.active, &-trans:hover, &-trans.active
-		{$variant-active-rules}
-
-/**
- * We have to set !important for any main text-color in buttons.
- * This is because certain .fill classes override link colors and it screws things up.
- */
-.btn
-	display: inline-block
-	text-transform: uppercase
-	font-family: $font-family-base
-	font-size: $font-size-small
-	font-weight: bold
-	line-height: $button-line-height
-	padding: 0 $button-padding-horizontal
-	vertical-align: middle
-	cursor: pointer
-	border: 0
-	border-radius: $border-radius-base
-	outline: 0
-	white-space: nowrap
-	text-decoration: none !important
-	user-select: none
-
-	&:hover
-		text-decoration: none
-		cursor: pointer
-
-	.jolticon
-		position: relative
-		top: -1px
-		cursor: pointer
-		vertical-align: middle
-		margin: 0 $button-icon-spacing-right 0 0
-
-	.jolticon-addon
-		margin-left: 5px
-
-	small
-		font-weight: normal
-		font-size: $font-size-tiny
-		vertical-align: baseline
-
-	&-badge
-		float: right
-		display: inline-block
-		padding: 0 ($button-padding-horizontal / 2)
-		margin-left: ($button-padding-horizontal / 2) * 1.5
-		margin-right: -($button-padding-horizontal)
-		background-color: $black
-		color: $gj-green
-		font-size: $font-size-small
-		border-top-right-radius: $border-radius-base
-		border-bottom-right-radius: $border-radius-base
-
-/**
- * Disabled State
- */
-.btn
-	&.disabled, &[disabled], fieldset[disabled] &
-		cursor: not-allowed
-		opacity: 0.5
-
-		.jolticon
-			cursor: not-allowed
-
-/**
- * Circle Buttons
- */
-.btn-circle.btn-sparse
-	border-radius: 50%
-
-/**
- * Block buttons
- */
-.btn-block
-	display: block
-	width: 100%
-	text-align: center
-
-// Put a bit of spacing between two block buttons.
-.btn-block + .btn-block
-	margin-top: 5px
-
-@media $media-xs
-	.btn-block-xs
-		display: block
-		width: 100%
-		text-align: center
-
-	.btn-block-xs + .btn-block-xs, .btn-block-xs + .btn-block, .btn-block + .btn-block-xs
-		margin-top: 5px
-
-/**
- * Outline buttons
- */
-.btn-outline, .btn-success-outline, .btn-primary-outline, .btn-danger-outline
-	border-width: $button-outline-border-size
-	border-style: solid
-	line-height: ($button-line-height - (@border-width * 2))
-	padding-left: $button-padding-horizontal - @border-width
-	padding-right: @padding-left
-
-	.btn-badge
-		margin-right: -($button-padding-horizontal - $button-outline-border-size)
-		border-top-right-radius: ($border-radius-base / 2)
-		border-bottom-right-radius: ($border-radius-base / 2)
-
-/**
- * Default
- */
-.btn
-	button-variant(background: $black, color: $white, icon-color: $gj-green, outline-color: $black, active-background: $black, active-color: $gj-green, addon-color: $gray-lighter, outline-addon-color: $gray-light)
-
-.btn-success
-	button-variant(background: $gj-dark-green, color: $white, icon-color: $gj-green, outline-color: $gj-dark-green, active-background: $gj-dark-green, active-color: $gj-green, addon-color: $gray-lighter, outline-addon-color: $gray-light)
-
-.btn-primary
-	button-variant(background: $gj-blue, color: $black, icon-color: $black, outline-color: $gj-blue, active-background: $gj-blue, active-color: $white, addon-color: $white, outline-addon-color: $gray-light)
-
-.btn-danger
-	button-variant(background: $gj-pink, color: $black, icon-color: $black, outline-color: $gj-pink, active-background: $gj-pink, active-color: $white, addon-color: $white, outline-addon-color: $gray-light)
-
-/**
- * Dark variant
- */
-.btn-dark-variant
-	&.btn-outline, &.btn-success-outline, &.btn-primary-outline, &.btn-danger-outline, &.btn-trans, &.btn-success-trans, &.btn-primary-trans, &.btn-danger-trans
-		border-color: $gray-light
-		color: $gray-lighter !important
-
-		.jolticon
-			color: $gj-green
-
-		// We don't fill them when they're on dark background.
-		// We simply highlight the current outlined version.
-		&:hover, &.active
-			background-color: transparent
-			border-color: $white
-			color: $white !important
-
-	&.btn-success-outline, &.btn-success-trans
-		border-color: $gj-green
-		color: $gj-green !important
-
-	&.btn-primary-outline, &.btn-primary-trans
-		border-color: $gj-blue
-		color: $gj-blue !important
-
-		.jolticon
-			color: $gj-blue
-
-	&.btn-danger-outline, &.btn-danger-trans
-		border-color: $gj-pink
-		color: $gj-pink !important
-
-		.jolticon
-			color: $gj-pink
-
-// Orverride button styling in fills.
-.fill-black, .fill-darkest, .fill-darker, .fill-dark, .fill-gray, .fill-light, .fill-pink
-	.btn
-		@extend .btn-dark-variant
-
-/**
- * Overlay variant
- * Basically the same as dark variant.
- */
-.btn-overlay-variant
-	@extend .btn-dark-variant
-	background-color: rgba($black, 0.65) !important
-
-	// All overlays have white text so it shows up better.
-	&.btn
-		color: $white !important
-
-/**
- * Sparse buttons
- * Keep it down here so the padding styles overwrite previous definitions.
- */
-.btn-sparse
-	$$btn-horizontal-padding = (($button-line-height - $button-icon-size) / 2)
-	// We basically override the left/right padding to match the top and bottom.
-	padding-left: $$btn-horizontal-padding
-	padding-right: $$btn-horizontal-padding
-
-	.btn-badge
-		margin-right: -($$btn-horizontal-padding)
-		margin-left: $$btn-horizontal-padding
-
-	.jolticon
-		margin: 0 !important
-
-	&.btn-outline, &.btn-success-outline, &.btn-primary-outline, &.btn-danger-outline
-		$$btn-horizontal-padding = (($button-line-height - $button-icon-size) / 2) - $button-outline-border-size
-		padding-left: $$btn-horizontal-padding
-		padding-right: $$btn-horizontal-padding
-
-		.btn-badge
-			margin-right: -($$btn-horizontal-padding)
-			margin-left: $$btn-horizontal-padding
-
-/**
- * Button sizings
- * It's a bit nuts since we have to override so many things...
- */
-create-btn-size(size)
+// Have to put all the sizing information here.
+make-button-size(size)
 	font-size: lookup('$button-' + size + '-font-size')
 	font-weight: lookup('$button-' + size + '-font-weight')
 	line-height: lookup('$button-' + size + '-line-height')
 	padding: 0 lookup('$button-' + size + '-padding-horizontal')
 	border-radius: lookup('$button-' + size + '-border-radius')
 
-	.jolticon
+	.-icon
 		margin-right: lookup('$button-' + size + '-icon-spacing-right')
 
-	.btn-badge
+	.-badge
 		padding: 0 (lookup('$button-' + size + '-padding-horizontal') / 2)
 		margin-right: -(lookup('$button-' + size + '-padding-horizontal'))
 		margin-left: (lookup('$button-' + size + '-padding-horizontal') / 2) * 1.5
 		font-size: lookup('$button-' + size + '-font-size')
+		border-top-right-radius: lookup('$button-' + size + '-border-radius')
+		border-bottom-right-radius: lookup('$button-' + size + '-border-radius')
 
-	&.btn-outline, &.btn-success-outline, &.btn-primary-outline, &.btn-danger-outline
+	&.-outline
 		border-width: lookup('$button-' + size + '-outline-border-size')
 		line-height: lookup('$button-' + size + '-line-height') - (@border-width * 2)
 		padding-left: lookup('$button-' + size + '-padding-horizontal') - @border-width
 		padding-right: @padding-left
 
-		.btn-badge
+		.-badge
 			margin-right: -(lookup('$button-' + size + '-padding-horizontal') - lookup('$button-' + size + '-outline-border-size'))
+			border-top-right-radius: (lookup('$button-' + size + '-border-radius') / 2)
+			border-bottom-right-radius: (lookup('$button-' + size + '-border-radius') / 2)
 
-	&.btn-sparse
-		$$btn-horizontal-padding = ((lookup('$button-' + size + '-line-height') - $button-icon-size) / 2)
-		padding-left: $$btn-horizontal-padding
-		padding-right: $$btn-horizontal-padding
+	&.-trans
+		.-badge
+			border-radius: lookup('$button-' + size + '-border-radius') !important
 
-		.btn-badge
-			margin-right: -($$btn-horizontal-padding)
-			margin-left: $$btn-horizontal-padding
+	&.-sparse
+		$$button-horizontal-padding = ((lookup('$button-' + size + '-line-height') - $button-icon-size) / 2)
+		padding-left: $$button-horizontal-padding
+		padding-right: $$button-horizontal-padding
 
-		&.btn-outline, &.btn-success-outline, &.btn-primary-outline, &.btn-danger-outline
-			$$btn-horizontal-padding = lookup('$button-' + size + '-padding-vertical') - lookup('$button-' + size + '-outline-border-size')
-			padding-left: $$btn-horizontal-padding
-			padding-right: $$btn-horizontal-padding
+		.-icon
+			margin: 0 !important
 
-			.btn-badge
-				margin-right: -($$btn-horizontal-padding)
-				margin-left: $$btn-horizontal-padding
+		.-badge
+			margin-right: -($$button-horizontal-padding)
+			margin-left: $$button-horizontal-padding
 
-// The actual styles now.
-.btn-sm
-	create-btn-size('sm')
+		&.-outline
+			$$button-horizontal-padding = ((lookup('$button-' + size + '-line-height') - $button-icon-size) / 2) - lookup('$button-' + size + '-outline-border-size')
+			padding-left: $$button-horizontal-padding
+			padding-right: $$button-horizontal-padding
 
-.btn-lg
-	create-btn-size('lg')
+.button
+	display: inline-block
+	text-transform: uppercase
+	font-family: $font-family-base
+	vertical-align: middle
+	cursor: pointer
+	border: 0
+	outline: 0
+	white-space: nowrap
+	text-decoration: none !important
+	user-select: none
+
+	// Hover state is always the same.
+	&:hover
+		theme-prop('background-color', 'bi-bg', true)
+		theme-prop('border-color', 'bi-bg', true)
+		theme-prop('color', 'bi-fg', true)
+		text-decoration: none
+		cursor: pointer
+
+		>>> .jolticon-addon, >>> small
+			theme-prop('color', 'bi-fg', true)
+
+	// Disabled state.
+	&.-disabled, &[disabled], fieldset[disabled] &
+		cursor: not-allowed
+		opacity: 0.5
+
+		.jolticon
+			cursor: not-allowed
+
+	// Content
+	>>> .jolticon-addon
+		theme-prop('color', 'fg-muted')
+		position: relative
+		top: -1px
+		vertical-align: middle
+		margin-left: 5px
+
+	>>> small
+		theme-prop('color', 'fg-muted')
+		font-weight: normal
+		font-size: $font-size-tiny
+		vertical-align: baseline
+
+.-icon
+	position: relative
+	top: -1px
+	margin: 0
+	cursor: pointer
+	vertical-align: middle
+
+.-badge
+	theme-prop('color', 'highlight')
+	background-color: $black
+	float: right
+	display: inline-block
+
+/**
+ * Outline buttons
+ */
+.-outline
+	border-style: solid
+
+/**
+ * Button types
+ */
+.button
+	theme-prop('background-color', 'fg')
+	theme-prop('color', 'bg')
+
+.-primary
+	theme-prop('background-color', 'bi-bg')
+	theme-prop('color', 'bi-fg')
+
+.-outline
+	theme-prop('border-color', 'fg')
+	theme-prop('color', 'fg')
+	background-color: transparent
+
+	&.-primary
+		theme-prop('border-color', 'bi-bg')
+		theme-prop('color', 'fg')
+
+/**
+ * Trans buttons
+ */
+.-trans
+	border-color: transparent
+
+/**
+ * Overlay buttons
+ */
+.-overlay
+	&.-outline, &.-trans
+		color: $dark-theme-fg
+		background-color: rgba($black, 0.65)
+
+	&.-outline
+		border-color: $dark-theme-fg
+
+	&.-trans
+		border-color: transparent
+
+/**
+ * Circle buttons
+ * Only works for sparse buttons.
+ */
+.-circle.-sparse
+	border-radius: 50%
+
+/**
+ * Block buttons
+ */
+.-block
+	display: block
+	width: 100%
+	text-align: center
+
+// Put a bit of spacing between two block buttons on top of each other.
+.-block + .-block
+	margin-top: 5px
+
+// Block only on xs.
+@media $media-xs
+	.-block-xs
+		display: block
+		width: 100%
+		text-align: center
+
+	.-block-xs + .-block-xs, .-block-xs + .button-block, .button-block + .-block-xs
+		margin-top: 5px
+
+/**
+ * Button sizings
+ */
+.button
+	make-button-size('md')
+
+.-sm
+	make-button-size('sm')
+
+.-lg
+	make-button-size('lg')

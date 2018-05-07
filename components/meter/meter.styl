@@ -1,44 +1,33 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 $meter-blip-count = 10
 
 .meter-blip
+	theme-prop('background-color', 'lighter')
 	float: left
 	display: inline-block
 	vertical-align: bottom
 	margin-right: 1px
 	width: 2px
 	overflow: hidden
-	background-color: $gray-lighter
 
 	.meter-big &
 		width: 4px
 		margin-right: 2px
 
 .meter-blip-filled
-	.meter-low &
-		background-color: $gj-pink
-
-	.meter-mid &
-	.meter-high &
-		background-color: $gray
+	theme-prop('background-color', 'gray')
 
 .meter-dark
 	.meter-blip
-		background-color: $gray-light
+		theme-prop('background-color', 'light')
 
-.meter-blip-filled
-	.meter-dark.meter-low &
-		background-color: $gj-pink
+	.meter-blip-filled
+		theme-prop('background-color', 'lightest')
 
-	.meter-dark.meter-mid &
-		background-color: $gray-lightest
-
-	.meter-dark.meter-high &
-		background-color: $gj-green
-
-for i in 1..$meter-blip-count
-	.meter-blip:nth-child( {i} )
+for i in 1 .. $meter-blip-count
+	.meter-blip:nth-child({i})
 		height: 10px
 
 		&:nth-child(odd)

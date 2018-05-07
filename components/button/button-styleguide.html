@@ -1,527 +1,76 @@
 <section class="section" id="styleguide-button">
 	<h1 class="section-header">Buttons</h1>
 
-	<h3>Regular</h3>
-
+	<h3>Button Types</h3>
 	<div>
-		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
+		<app-button>Default</app-button>
+		<app-button solid>Solid</app-button>
+		<app-button primary>Primary</app-button>
+		<app-button primary solid>Primary Solid</app-button>
+		<app-button trans>Transparent</app-button>
 	</div>
 
-	<h3>Outline</h3>
-
+	<h3>Icons</h3>
 	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
+		<app-button icon="heart">Default</app-button>
+		<app-button icon="heart" solid>Solid</app-button>
+		<app-button icon="heart" primary>Primary</app-button>
+		<app-button icon="heart" primary solid>Primary Solid</app-button>
+		<app-button icon="heart" trans>Transparent</app-button>
 	</div>
 
-	<h3>Transparent</h3>
-
+	<h3>Sparse (icon-only)</h3>
 	<div>
-		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
+		<app-button sparse icon="heart" />
+		<app-button sparse icon="heart" solid />
+		<app-button sparse icon="heart" primary />
+		<app-button sparse icon="heart" primary solid />
+		<app-button sparse icon="heart" trans />
 	</div>
 
-	<h3>Without Icons</h3>
-
+	<h3>Circle (icon-only)</h3>
 	<div>
-		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" :class="btnClass">
-				Save Game
-			</a>
-			&nbsp;
-		</span>
+		<app-button circle icon="heart" />
+		<app-button circle icon="heart" solid />
+		<app-button circle icon="heart" primary />
+		<app-button circle icon="heart" primary solid />
+		<app-button circle icon="heart" trans />
 	</div>
-	<br>
 
+	<h3>Badges</h3>
 	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" :class="btnClass">
-				Save Game
-			</a>
-			&nbsp;
-		</span>
+		<app-button badge="42">Default</app-button>
+		<app-button badge="42" solid>Solid</app-button>
+		<app-button badge="42" primary>Primary</app-button>
+		<app-button badge="42" primary solid>Primary Solid</app-button>
+		<app-button badge="42" trans>Transparent</app-button>
 	</div>
-	<br>
 
+	<h3>Overlay (over images)</h3>
 	<div>
-		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
-			<a class="btn" :class="btnClass">
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-
-	<h3>Button Classes</h3>
-	<p>You can use these on various tags that you may want to style as buttons.</p>
-
-	<div>
-		<a class="btn btn-outline">
-			<app-jolticon icon="chevron-right" />
-			A Tag
-		</a>
-		<button class="btn btn-success-outline">
-			<app-jolticon icon="chevron-right" />
-			Button Tag
-		</button>
-		<input type="submit" class="btn btn-primary-outline" value="Input Tag as Submit">
-		<input type="button" class="btn btn-danger-outline" value="Input Tag as Button">
-	</div>
-
-	<h3>Dark Variant</h3>
-	<p>You can also force the dark variant for use on dark backgrounds. This only affects outline and transparent buttons.</p>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn btn-dark-variant" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
-			<a class="btn btn-dark-variant" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-
-	<h3>Overlay Variant</h3>
-	<p>Similar to dark variant, but shades in the background color a bit. Useful for overlaying images.</p>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn btn-overlay-variant" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-
-	<h3>In Fills</h3>
-	<p>Darker fills will automatically get the dark variant styling.</p>
-
-	<div class="well fill-dark">
-		<div>
-			<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-				<a class="btn" :class="btnClass">
-					<app-jolticon icon="chevron-right" />
-					Save Game
-				</a>
-				&nbsp;
-			</span>
-		</div>
-		<br>
-
-		<div>
-			<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
-				<a class="btn" :class="btnClass">
-					<app-jolticon icon="chevron-right" />
-					Save Game
-				</a>
-				&nbsp;
-			</span>
-		</div>
-	</div>
-
-	<p>Lighter fills will keep the default styling.</p>
-
-	<div class="well fill-lighter">
-		<div>
-			<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-				<a class="btn" :class="btnClass">
-					<app-jolticon icon="chevron-right" />
-					Save Game
-				</a>
-				&nbsp;
-			</span>
-		</div>
-		<br>
-
-		<div>
-			<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-				<a class="btn" :class="btnClass">
-					<app-jolticon icon="chevron-right" />
-					Save Game
-				</a>
-				&nbsp;
-			</span>
-		</div>
-	</div>
-
-	<h3>Active State</h3>
-
-	<div>
-		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn active" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<p>Active states for outline buttons look the same as normal buttons.</p>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn active" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<p>In daker fills they will look different, though...</p>
-
-	<div class="well fill-dark">
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn active" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-
-	<h3>Sparse</h3>
-	<p>Can be used for icon-only buttons.</p>
-
-	<div>
-		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn btn-sparse" :class="btnClass">
-				<app-jolticon icon="ellipsis-h" />
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn btn-sparse" :class="btnClass">
-				<app-jolticon icon="ellipsis-h" />
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
-			<a class="btn btn-sparse" :class="btnClass">
-				<app-jolticon icon="ellipsis-h" />
-			</a>
-			&nbsp;
-		</span>
-	</div>
-
-	<h3>Inner Styling</h3>
-
-	<div>
-		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="download" />
-				Download
-				<small>12MB</small>
-				<app-jolticon icon="linux jolticon-addon" />
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="download" />
-				Download
-				<small>12MB</small>
-				<app-jolticon icon="linux jolticon-addon" />
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
-			<a class="btn" :class="btnClass">
-				<app-jolticon icon="download" />
-				Download
-				<small>12MB</small>
-				<app-jolticon icon="linux jolticon-addon" />
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div class="well fill-dark">
-		<div>
-			<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-				<a class="btn" :class="btnClass">
-					<app-jolticon icon="download" />
-					Download
-					<small>12MB</small>
-					<app-jolticon icon="linux jolticon-addon" />
-				</a>
-				&nbsp;
-			</span>
-		</div>
-		<br>
-
-		<div>
-			<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
-				<a class="btn" :class="btnClass">
-					<app-jolticon icon="download" />
-					Download
-					<small>12MB</small>
-					<app-jolticon icon="linux jolticon-addon" />
-				</a>
-				&nbsp;
-			</span>
-		</div>
-	</div>
-
-	<h3>Button Badges</h3>
-
-	<div>
-		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn" :class="btnClass">
-				<span class="btn-badge">4</span>
-				<app-jolticon icon="subscribe" />
-				Follow
-			</a>
-			&nbsp;
-		</span>
-
-		<a class="btn btn-success btn-sparse">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="subscribe" />
-		</a>
-	</div>
-	<br>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" :class="btnClass">
-				<span class="btn-badge">4</span>
-				<app-jolticon icon="subscribe" />
-				Follow
-			</a>
-			&nbsp;
-		</span>
-
-		<a class="btn btn-success-outline btn-sparse">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="subscribe" />
-		</a>
-	</div>
-	<br>
-
-	<div class="well fill-dark">
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn" :class="btnClass">
-				<span class="btn-badge">4</span>
-				<app-jolticon icon="subscribe" />
-				Follow
-			</a>
-			&nbsp;
-		</span>
-	</div>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn btn-overlay-variant" :class="btnClass">
-				<span class="btn-badge">4</span>
-				<app-jolticon icon="subscribe" />
-				Follow
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div>
-		<a class="btn btn-sm">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="chevron-right" />
-			.btn-sm
-		</a>
-		<a class="btn btn-sm btn-success btn-sparse">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="subscribe" />
-		</a>
-		<a class="btn btn-sm btn-outline">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="chevron-right" />
-			.btn-sm
-		</a>
-		<a class="btn btn-sm btn-success-outline btn-sparse">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="subscribe" />
-		</a>
-	</div>
-	<br>
-
-	<div>
-		<a class="btn btn-lg">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="chevron-right" />
-			.btn-lg
-		</a>
-		<a class="btn btn-lg btn-success btn-sparse">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="subscribe" />
-		</a>
-		<a class="btn btn-lg btn-outline">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="chevron-right" />
-			.btn-lg
-		</a>
-		<a class="btn btn-lg btn-success-outline btn-sparse">
-			<span class="btn-badge">4</span>
-			<app-jolticon icon="subscribe" />
-		</a>
+		<app-button overlay icon="heart">Default</app-button>
+		<app-button overlay icon="heart" solid>Solid</app-button>
+		<app-button overlay icon="heart" primary>Primary</app-button>
+		<app-button overlay icon="heart" primary solid>Primary Solid</app-button>
+		<app-button overlay icon="heart" trans>Transparent</app-button>
 	</div>
 
 	<h3>Block Buttons</h3>
-
 	<div>
-		<a class="btn btn-block">
-			<app-jolticon icon="chevron-right" />
-			Block Button
-		</a>
-		<a class="btn btn-block btn-outline">
-			<app-jolticon icon="chevron-right" />
-			Block Outline Button
-		</a>
-		<a class="btn btn-block btn-trans">
-			<app-jolticon icon="chevron-right" />
-			Block Transparent Button
-		</a>
+		<app-button block>Default</app-button>
+		<app-button block solid>Solid</app-button>
+		<app-button block primary>Primary</app-button>
+		<app-button block primary solid>Primary Solid</app-button>
+		<app-button block trans>Transparent</app-button>
 	</div>
 
-	<h3>Button Sizing</h3>
-
+	<h3>Disabled</h3>
 	<div>
-		<a class="btn btn-sm btn-block">
-			<app-jolticon icon="chevron-right" />
-			.btn-sm
-		</a>
-		<br>
-		<a class="btn btn-sm">
-			<app-jolticon icon="chevron-right" />
-			.btn-sm
-		</a>
-		<a class="btn btn-sm btn-sparse">
-			<app-jolticon icon="chevron-right" />
-		</a>
-		<a class="btn btn-sm btn-outline">
-			<app-jolticon icon="chevron-right" />
-			.btn-sm
-		</a>
-		<a class="btn btn-sm btn-outline btn-sparse">
-			<app-jolticon icon="chevron-right" />
-		</a>
-		<a class="btn btn-sm btn-trans">
-			<app-jolticon icon="chevron-right" />
-			.btn-sm
-		</a>
-		<a class="btn btn-sm btn-trans btn-sparse">
-			<app-jolticon icon="chevron-right" />
-		</a>
-	</div>
-	<br>
-
-	<div>
-		<a class="btn btn-lg btn-block">
-			<app-jolticon icon="chevron-right" />
-			.btn-lg
-		</a>
-		<br>
-		<a class="btn btn-lg">
-			<app-jolticon icon="chevron-right" />
-			.btn-lg
-		</a>
-		<a class="btn btn-lg btn-sparse">
-			<app-jolticon icon="chevron-right" />
-		</a>
-		<a class="btn btn-lg btn-outline">
-			<app-jolticon icon="chevron-right" />
-			.btn-lg
-		</a>
-		<a class="btn btn-lg btn-outline btn-sparse">
-			<app-jolticon icon="chevron-right" />
-		</a>
-		<a class="btn btn-lg btn-trans">
-			<app-jolticon icon="chevron-right" />
-			.btn-lg
-		</a>
-		<a class="btn btn-lg btn-trans btn-sparse">
-			<app-jolticon icon="chevron-right" />
-		</a>
-	</div>
-
-	<h3>Disabled State</h3>
-
-	<div>
-		<span v-for="btnClass of [ '', 'btn-success', 'btn-primary', 'btn-danger' ]">
-			<a class="btn disabled" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-outline', 'btn-success-outline', 'btn-primary-outline', 'btn-danger-outline' ]">
-			<a class="btn disabled" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
-	</div>
-	<br>
-
-	<div>
-		<span v-for="btnClass of [ 'btn-trans', 'btn-success-trans', 'btn-primary-trans', 'btn-danger-trans' ]">
-			<a class="btn disabled" :class="btnClass">
-				<app-jolticon icon="chevron-right" />
-				Save Game
-			</a>
-			&nbsp;
-		</span>
+		<app-button disabled>Default</app-button>
+		<app-button disabled solid>Solid</app-button>
+		<app-button disabled primary>Primary</app-button>
+		<app-button disabled primary solid>Primary Solid</app-button>
+		<app-button disabled trans>Transparent</app-button>
 	</div>
 
 </section>

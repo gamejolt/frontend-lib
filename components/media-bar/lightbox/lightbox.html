@@ -1,6 +1,6 @@
 <div>
 	<v-touch
-		class="media-bar-lightbox"
+		class="media-bar-lightbox theme-dark"
 		@panstart="panStart"
 		@panmove="pan"
 		@panend="panEnd"
@@ -29,22 +29,20 @@
 			</a>
 
 			<div class="-controls">
-				<a
-					class="btn btn-outline btn-overlay-variant"
+				<app-button
+					icon="download"
+					trans
 					v-if="mediaBar.activeItem.media_type === 'image'"
 					:href="mediaBar.activeItem.media_item.img_url"
 					target="_blank"
 					>
-					<app-jolticon icon="download" />
 					<translate>Download</translate>
-				</a>
-				<button
-					class="btn btn-danger-outline btn-overlay-variant"
+				</app-button>
+				<app-button
 					@click="close"
 					>
-					<app-jolticon icon="remove" />
 					<translate>Close</translate>
-				</button>
+				</app-button>
 			</div>
 
 			<app-media-bar-lightbox-slider class="-slider">

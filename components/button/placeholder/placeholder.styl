@@ -1,15 +1,16 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .button-placeholder
+	rounded-corners()
+	theme-prop('background-color', 'bg-offset')
 	display: inline-block
-	height: $button-line-height
-	background-color: $gray-lightest
-	border-radius: $border-radius-base
+	height: $button-md-line-height
 	vertical-align: middle
 	width: 75px
 
 	&.sparse
-		width: $button-line-height
+		width: $button-md-line-height
 
 	&.circle
 		border-radius: 50%

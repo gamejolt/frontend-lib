@@ -2,9 +2,6 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./item.html?style=./item.styl';
 
-import { Screen } from '../../screen/screen-service';
-import { Analytics } from '../../analytics/analytics.service';
-
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppImgResponsive } from '../../img/responsive/responsive';
 import { AppMediaBar } from '../media-bar';

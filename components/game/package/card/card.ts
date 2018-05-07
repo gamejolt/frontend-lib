@@ -13,7 +13,6 @@ import { Analytics } from '../../../analytics/analytics.service';
 import { User } from '../../../user/user.model';
 import { AppCard } from '../../../card/card';
 import { currency } from '../../../../vue/filters/currency';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppTooltip } from '../../../tooltip/tooltip';
 import { AppTimeAgo } from '../../../time/ago/ago';
 import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
@@ -33,7 +32,6 @@ import { Clipboard } from '../../../clipboard/clipboard-service';
 @Component({
 	components: {
 		AppCard,
-		AppJolticon,
 		AppTimeAgo,
 		AppFadeCollapse,
 		AppExpand,

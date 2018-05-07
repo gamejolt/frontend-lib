@@ -4,8 +4,11 @@
 	>
 
 	<div
-		class="game-package-card-pricing fill-gray"
-		:class="{ 'game-package-card-pricing-owned fill-green': isOwned }"
+		class="game-package-card-pricing"
+		:class="{
+			'fill-gray': !isOwned,
+			'game-package-card-pricing-owned fill-highlight': isOwned
+		}"
 		>
 
 		<!-- If they own the package -->
@@ -116,7 +119,7 @@
 
 	<template v-if="!card.showcasedRelease">
 		<br>
-		<div class="alert alert-warning">
+		<div class="alert alert-notice">
 			<translate>No published releases yet.</translate>
 		</div>
 	</template>
@@ -136,7 +139,7 @@
 
 			<template v-if="isPartner && sellable.type === 'paid' && !isOwned">
 				<br>
-				<div class="alert alert-info">
+				<div class="alert">
 					<translate>You get access to this package because you're a partner.</translate>
 				</div>
 				<hr>
@@ -146,10 +149,13 @@
 
 		<template v-if="sellable.type === 'paid' && !isOwned">
 			<div class="clearfix">
-				<button class="btn btn-success-outline btn-block-xs" @click="showPayment(null, false)">
-					<app-jolticon icon="heart" />
+				<app-button
+					primary
+					block-xs
+					@click="showPayment(null, false)"
+					>
 					<translate>Buy Now</translate>
-				</button>
+				</app-button>
 
 				<span class="game-package-card-payment-what-link">
 					(<a class="link-help" @click="isWhatOpen = !isWhatOpen"><translate>What do you get?</translate></a>)
@@ -160,7 +166,7 @@
 		<template v-if="linkedKeys.length">
 			<hr>
 
-			<div class="alert alert-info">
+			<div class="alert">
 				<translate>You also get access to keys for these other platforms.</translate>
 			</div>
 
@@ -171,12 +177,9 @@
 				>
 				<div class="pull-right">
 					&nbsp;
-					<button
-						class="btn btn-outline"
-						@click="copyProviderKey(linkedKey)"
-						>
+					<app-button @click="copyProviderKey(linkedKey)">
 						<translate>Copy</translate>
-					</button>
+					</app-button>
 				</div>
 
 				<div class="input-group">

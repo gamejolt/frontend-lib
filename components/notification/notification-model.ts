@@ -1,5 +1,3 @@
-import * as nwGui from 'nw.gui';
-
 import VueRouter from 'vue-router';
 import { Model } from '../model/model.service';
 import { Environment } from '../environment/environment.service';
@@ -275,8 +273,7 @@ export class Notification extends Model {
 					url = url.replace(search, '');
 					router.push(url);
 				} else if (GJ_IS_CLIENT) {
-					const gui = require('nw.gui') as typeof nwGui;
-					gui.Shell.openExternal(url);
+					nw.Shell.openExternal(url);
 				} else {
 					window.location.href = url;
 				}

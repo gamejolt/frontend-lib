@@ -8,11 +8,11 @@ nav.platform-list
 
 		// When you hover over the full nav list make the inactive links darker.
 		&:hover a
-			color: $gray-dark
+			theme-prop('color', 'fg')
 
 			// Don't override the active color on hover, though.
 			&.active
-				color: $black
+				theme-prop('color', 'link')
 
 		li
 			margin: 0
@@ -22,11 +22,11 @@ nav.platform-list
 				margin-top: 0
 
 		a
+			theme-prop('color', 'fg-muted')
 			display: block
 			padding: 0 15px
 			margin: $line-height-computed 0
 			margin-left: -18px // Make it so that the list is flush against the left. (subtract padding and border)
-			color: $gray-light // Keep the inactive ones lighter.
 			// Set default border styles.
 			// We override individuals below, so keep these long form.
 			border-style: solid
@@ -40,15 +40,15 @@ nav.platform-list
 
 			// Show the left border on hover.
 			&:hover
-				border-color: $gray-lighter
+				theme-prop('border-color', 'bg-subtle')
 				transition: none // Don't transition into the hover. Only transition out of it.
 
 			&.active
-				color: $black
+				theme-prop('color', 'link')
 				font-weight: bold
 
 				.jolticon
-					color: $black
+					theme-prop('color', 'link')
 
 			.tag
 				margin-right: 5px
@@ -58,7 +58,7 @@ nav.platform-list
 				margin-left: 5px
 
 		.jolticon
-			color: $gray-light
+			theme-prop('color', 'fg-muted')
 			margin-right: 10px
 
 	/**
@@ -83,11 +83,7 @@ nav.platform-list
 			// we use.
 			padding: 0 5px ($line-height-computed / 2) + 1px 0
 
-			&:hover
-				border-color: $gray-lighter
-
 			&.active
-				border-color: $gray-light
 				font-weight: normal // Don't bold active inline items.
 
 		.jolticon
@@ -100,60 +96,11 @@ nav.platform-list
 		margin-top: ($line-height-computed * 1.5)
 		margin-bottom: 0
 
-		ul:hover a
-			color: $gray-lighter
-
-			&.active
-				color: $white
-
 		a, &.inline ul a
 			line-height: 2.5
-			color: $gray-light
-
-			&:hover
-				color: $gray-lightest
 
 			&.active
-				color: $white
-				border-color: $gj-green
-
-				.jolticon
-					color: $white
-
-			.jolticon
-				color: $gray-lighter
-
-		// Buttons should be forced to a certain color.
-		&.buttons, &.inline.buttons
-			a, &:hover a
-				color: $gj-green
-				transition: none
-
-			a:hover
-				color: $gj-pink
-
-			a .jolticon
-				color: $white
-
-			li:last-child a
-				margin-right: 0
-
-/**
- * In dark fills
- */
-.fill-black, .fill-darkest, .fill-darker, .fill-dark
-	nav.platform-list ul
-		a.active
-			color: $gray-lightest !important
-
-			.jolticon
-				color: $gray-lightest !important
-
-		&:hover a
-			color: $gray-lighter !important
-
-			&.active
-				color: $gray-lightest !important
+				theme-prop('border-color', 'highlight')
 
 section.nav-only
 	nav.platform-list.inline

@@ -1,15 +1,15 @@
 @require '~styles/variables'
-@require '../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .theme-editor-image
 	padding: 8px 15px
 
 	&-clear
+		theme-prop('color', 'fg-muted', true)
 		float: right
-		color: $gray-light !important
 
 		&:hover
-			color: $black !important
+			theme-prop('color', 'link-hover', true)
 
 	&-content
 		clear: both

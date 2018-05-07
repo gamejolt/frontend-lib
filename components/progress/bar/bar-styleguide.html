@@ -4,51 +4,28 @@
 
 	<app-progress-bar :percent="30" />
 
-	<p><code>darker</code></p>
-	<app-progress-bar :percent="30" variant="darker" />
-
-	<p><code>danger</code></p>
-	<app-progress-bar :percent="30" variant="danger" />
-
-	<p><code>success</code></p>
-	<app-progress-bar :percent="30" variant="success" />
-
 	<h3>Thin</h3>
 
 	<app-progress-bar :percent="30" :thin="true" />
-	<app-progress-bar :percent="30" :thin="true" variant="darker" />
-	<app-progress-bar :percent="30" :thin="true" variant="danger" />
-	<app-progress-bar :percent="30" :thin="true" variant="success" />
 
 	<h3>Content Inside</h3>
 	<p>You can put content inside progress bars.</p>
 
 	<app-progress-bar :percent="30">30%</app-progress-bar>
-	<app-progress-bar :percent="30" variant="darker">30%</app-progress-bar>
-	<app-progress-bar :percent="30" variant="danger">30%</app-progress-bar>
-	<app-progress-bar :percent="30" variant="success">30%</app-progress-bar>
 
 	<h3>Animated Progress</h3>
 	<p>Progress bars will automatically animate as they fill up.</p>
 
 	<app-progress-bar :percent="progress">{{ progress }}%</app-progress-bar>
 
-	<button class="btn btn-outline" @click="progress = progress + 10 > 100 ? 0 : progress + 10">
+	<app-button @click="progress = progress + 10 > 100 ? 0 : progress + 10">
 		Increase Progress
-	</button>
+	</app-button>
 
 	<h3>Striped</h3>
-	<p>Currently doesn't look so great on Firefox. Should use thin versions in most places.</p>
 
 	<app-progress-bar :percent="30" :indeterminate="true" />
-	<app-progress-bar :percent="30" :indeterminate="true" variant="darker" />
-	<app-progress-bar :percent="30" :indeterminate="true" variant="danger" />
-	<app-progress-bar :percent="30" :indeterminate="true" variant="success" />
-
 	<app-progress-bar :percent="30" :indeterminate="true" :thin="true" />
-	<app-progress-bar :percent="30" :indeterminate="true" :thin="true" variant="darker" />
-	<app-progress-bar :percent="30" :indeterminate="true" :thin="true" variant="danger" />
-	<app-progress-bar :percent="30" :indeterminate="true" :thin="true" variant="success" />
 
 	<h3>Animated Stripes</h3>
 	<p>You can use the <code>active</code> prop to animate stripes and indicate an indeterminate state.</p>
