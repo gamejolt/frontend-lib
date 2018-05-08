@@ -7,6 +7,7 @@ import { AppLoading } from '../../vue/components/loading/loading';
 import { AppMediaBarItem } from './item/item';
 import { AppMediaBarLightbox } from './lightbox/lightbox';
 import { Growls } from '../growls/growls.service';
+import { AppScrollScroller } from '../scroll/scroller/scroller';
 
 @View
 @Component({
@@ -14,6 +15,7 @@ import { Growls } from '../growls/growls.service';
 		AppLoading,
 		AppMediaBarItem,
 		AppMediaBarLightbox,
+		AppScrollScroller,
 	},
 })
 export class AppMediaBar extends Vue {

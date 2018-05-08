@@ -1,0 +1,39 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
+.editable-overlay
+	position: relative
+	z-index: 1
+
+.-overlay-container, .-overlay
+	position: absolute
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+
+.-overlay-container
+	display: flex
+	align-items: center
+	justify-content: center
+	z-index: 1000
+
+	&, .jolticon
+		cursor: pointer
+
+.-overlay
+	theme-prop('background-color', 'darkest')
+	opacity: 0.5
+	z-index: 1
+
+	.-overlay-container:hover &
+		opacity: 0.8
+
+.-overlay-content
+	position: relative
+	color: $white
+	text-align: center
+	z-index: 2
+
+	strong
+		display: block

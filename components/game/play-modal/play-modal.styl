@@ -1,11 +1,8 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 >>> .game-play-modal-open
 	overflow: hidden !important
-
-// We sadly have to do this since the modal styling for modal-full has more specificity than our fill-darkest.
-.fill-darkest >>> .modal
-	background-color: $gray-darkest !important
 
 .-header-controls
 	margin-top: -2px // Remove the top border from buttons.

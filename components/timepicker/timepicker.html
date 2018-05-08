@@ -2,11 +2,11 @@
 	<tbody>
 		<tr class="text-center">
 			<td><a @click="addHours(1)" class="timepicker-link">
-				<app-jolticon icon="chevron-up" :big="true" />
+				<app-jolticon icon="chevron-up" big />
 			</a></td>
 			<td>&nbsp;</td>
 			<td><a @click="addMinutes(1)" class="timepicker-link">
-				<app-jolticon icon="chevron-up" :big="true" />
+				<app-jolticon icon="chevron-up" big />
 			</a></td>
 			<td v-show="showMeridian"></td>
 		</tr>
@@ -37,7 +37,7 @@
 			<td v-show="showMeridian">
 				<button
 					type="button"
-					class="timepicker-btn text-center"
+					class="timepicker-button text-center"
 					@click.prevent="toggleMeridian()"
 					>
 					{{meridian}}
@@ -46,11 +46,11 @@
 		</tr>
 		<tr class="text-center">
 			<td><a @click="addHours(-1)" class="timepicker-link">
-				<app-jolticon icon="chevron-down" :big="true" />
+				<app-jolticon icon="chevron-down" big />
 			</a></td>
 			<td>&nbsp;</td>
 			<td><a @click="addMinutes(-1)" class="timepicker-link">
-				<app-jolticon icon="chevron-down" :big="true" />
+				<app-jolticon icon="chevron-down" big />
 			</a></td>
 			<td v-show="showMeridian"></td>
 		</tr>

@@ -3,7 +3,6 @@ import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import View from '!view!./follow-widget.html';
 
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
 import { AppTooltip } from '../../tooltip/tooltip';
@@ -15,31 +14,47 @@ import { findTooltipContainer } from '../../tooltip/container/container';
 
 @View
 @Component({
-	components: {
-		AppJolticon,
-	},
 	directives: {
 		AppAuthRequired,
 		AppTrackEvent,
 		AppTooltip,
 	},
-	filters: {
-		number,
-	},
 })
 export class AppUserFollowWidget extends Vue {
 	@Prop(User) user: User;
-	@Prop(String) size?: string;
-	@Prop(Boolean) sparse?: boolean;
-	@Prop(Boolean) outline?: boolean;
+	@Prop(Boolean) overlay?: boolean;
+	@Prop(Boolean) circle?: boolean;
+	@Prop(Boolean) block?: boolean;
+	@Prop(Boolean) sm?: boolean;
+	@Prop(Boolean) hideCount?: boolean;
 	@Prop(String) eventLabel?: string;
 
 	@State app: AppStore;
 
 	isProcessing = false;
 
+	get badge() {
+		return !this.circle && !this.hideCount && this.user.follower_count
+			? number(this.user.follower_count)
+			: '';
+	}
+
 	get tooltipContainer() {
 		return findTooltipContainer(this);
+	}
+
+	get tooltip() {
+		return !this.user.is_following
+			? this.$gettext(`Follow this user to get their games, videos, and posts in your feed!`)
+			: undefined;
+	}
+
+	get icon() {
+		if (!this.circle) {
+			return '';
+		}
+
+		return !this.user.is_following ? 'subscribe' : 'subscribed';
 	}
 
 	async onClick() {
@@ -53,7 +68,9 @@ export class AppUserFollowWidget extends Vue {
 			try {
 				await this.user.$follow();
 			} catch (e) {
-				Growls.error(this.$gettext(`Something has prevented you from following this user.`));
+				Growls.error(
+					this.$gettext(`Something has prevented you from following this user.`)
+				);
 			}
 		} else {
 			try {

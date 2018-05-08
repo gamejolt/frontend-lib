@@ -1,11 +1,11 @@
 .badge
+	theme-prop('background-color', 'bg-offset')
+	theme-prop('color', 'fg')
 	display: inline-block
 	mind-width: 10px
 	padding: 3px 7px
 	font-size: $font-size-tiny
 	font-weight: bold
-	color: $gray
-	background-color: $gray-lighter
 	line-height: 1
 	vertical-align: baseline
 	white-space: nowrap
@@ -15,23 +15,20 @@
 	&:empty
 		display: none
 
-.badge-active
-	background-color: $gj-green
-	color: $gj-dark-green
+.badge-highlight
+	theme-prop('background-color', 'highlight')
+	theme-prop('color', 'highlight-fg')
 
-.badge-pink
-	background-color: $gj-pink
-	color: $white
+.badge-notice
+	theme-prop('background-color', 'notice')
+	theme-prop('color', 'notice-fg')
 
 .badge
-	&.warning
-	nav.pills > ul > li > .active > &.warning
-		@extend .badge-pink
+	&.warning, nav.pills > ul > li > .active > &.warning
+		@extend .badge-notice
 
 	nav.pills > ul > li > .active > &
-		@extend .badge-active
+		@extend .badge-highlight
 
 	nav.pills > ul > li > a > &
 		margin-left: 3px
-
-

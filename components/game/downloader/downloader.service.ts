@@ -1,4 +1,3 @@
-import * as nwGui from 'nw.gui';
 import VueRouter from 'vue-router';
 import { Game } from '../game.model';
 import { GameBuild } from '../build/build.model';
@@ -42,8 +41,6 @@ export class GameDownloader {
 
 		// Client needs to download externally.
 		if (GJ_IS_CLIENT) {
-			const gui = require('nw.gui') as typeof nwGui;
-
 			let urlPath = router.resolve({
 				name: 'discover.games.view.download.build',
 				params: {
@@ -56,7 +53,7 @@ export class GameDownloader {
 			// The client prepends urls with hashtag (#) that needs to be trimmed when going to external site.
 			urlPath = urlPath.slice(1);
 
-			gui.Shell.openExternal(`${Environment.baseUrl}${urlPath}`);
+			nw.Shell.openExternal(`${Environment.baseUrl}${urlPath}`);
 		} else if (
 			game.bundle_only ||
 			options.key ||

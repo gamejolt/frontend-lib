@@ -1,12 +1,11 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig, Route, Location } from 'vue-router';
-import * as nwGui from 'nw.gui';
 
 import { routeError404, RouteError404 } from '../components/error/page/page.route';
 import { initScrollBehavior } from '../components/scroll/auto-scroll/autoscroll.service';
 import { Environment } from '../components/environment/environment.service';
 
-const ClientBaseRegex = new RegExp('app:\\/\\/game\\-jolt\\-client\\/([^.]+)\\.html#');
+const ClientBaseRegex = new RegExp('chrome-extension:\\/\\/game\\-jolt\\-client\\/([^.]+)\\.html#');
 
 export function initRouter(appRoutes: RouteConfig[]) {
 	if (GJ_IS_CLIENT) {
@@ -158,8 +157,7 @@ function guardHijackEvent(e: any): 'passthrough' | 'window' | 'handle' {
 
 function newWindow(e: Event, url: string) {
 	if (GJ_IS_CLIENT) {
-		const gui = require('nw.gui') as typeof nwGui;
-		gui.Shell.openExternal(url);
+		nw.Shell.openExternal(url);
 		e.preventDefault();
 	} else {
 		window.open(url, '_blank');

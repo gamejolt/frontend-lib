@@ -1,31 +1,31 @@
-<app-modal class="fill-darkest">
-	<div class="modal-controls -header-controls clearfix">
-		<button class="btn btn-outline" @click="minimize" v-if="canMinimize">
-			<app-jolticon icon="minimize" />
-			<translate>Minimize</translate>
-		</button>
-		<button class="btn btn-danger-outline warning" @click="close">
-			<app-jolticon icon="remove" />
-			<translate>Close Game</translate>
-		</button>
-	</div>
+<app-modal>
+	<div class="fill-darkest">
+		<div class="modal-controls -header-controls clearfix">
+			<app-button @click="minimize" v-if="canMinimize">
+				<translate>Minimize</translate>
+			</app-button>
+			<app-button @click="close">
+				<translate>Close</translate>
+			</app-button>
+		</div>
 
-	<div class="-body">
+		<div class="-body">
 
-		<iframe
-			ref="frame"
-			class="-embed"
-			nwdisable
-			nwfaketop
-			v-if="url"
-			type="text/html"
-			frameborder="0"
-			scrolling="no"
-			webkitallowfullscreen mozallowfullscreen allowfullscreen
-			:src="url"
-			@load="focus"
-			>
-		</iframe>
+			<iframe
+				ref="frame"
+				class="-embed"
+				nwdisable
+				nwfaketop
+				v-if="url"
+				type="text/html"
+				frameborder="0"
+				scrolling="no"
+				webkitallowfullscreen mozallowfullscreen allowfullscreen
+				:src="url"
+				@load="focus"
+				>
+			</iframe>
 
+		</div>
 	</div>
 </app-modal>

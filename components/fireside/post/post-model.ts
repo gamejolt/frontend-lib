@@ -70,6 +70,10 @@ export class FiresidePost extends Model {
 			this.header = new MediaItem(data.header);
 		}
 
+		if (data.user) {
+			this.user = new User(data.user);
+		}
+
 		if (data.game) {
 			this.game = new Game(data.game);
 		}

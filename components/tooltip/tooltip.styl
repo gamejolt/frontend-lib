@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .tooltip
 	display: block !important
@@ -8,12 +9,12 @@
 	z-index: $zindex-tooltip
 
 	.tooltip-inner
+		rounded-corners()
 		max-width: $tooltip-max-width
 		padding: 5px 8px
 		text-align: center
 		color: $tooltip-color
 		background-color: $tooltip-bg
-		border-radius: $border-radius-base
 
 	.tooltip-arrow
 		display: none

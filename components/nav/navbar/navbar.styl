@@ -2,12 +2,13 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 
 .navbar
 	@extend .clearfix
+	theme-prop('background-color', 'darkest')
+	theme-dark()
 	height: $navbar-height
-	background-color: $gray-darkest
 	display: flex
 
 	a
-		color: $gray-lighter
+		theme-prop('color', 'lighter')
 
 .navbar-left
 	flex: 0 1 auto
@@ -21,14 +22,12 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 .navbar-items
 	@extend .list-unstyled
 
-.navbar-items
-.navbar-items > li
+.navbar-items, .navbar-items > li
 	display: inline-block
 	margin-bottom: 0
 	vertical-align: top
 
-.navbar-items > li > a
-.navbar-item
+.navbar-items > li > a, .navbar-item
 	display: inline-block
 	overflow: hidden
 	height: $navbar-height
@@ -47,6 +46,7 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 		text-align: center
 
 .navbar-separator
+	theme-prop('background-color', 'dark')
 	position: relative
 	display: inline-block
 	height: 24px
@@ -54,10 +54,8 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	margin: 0 10px
 	vertical-align: top
 	top: ($navbar-height - @height) * 0.5
-	background-color: $gray-dark
 
 .navbar-avatar
-
 	// Gotta overide specificity
 	.navbar-items > li > &
 		padding: 10px
@@ -79,7 +77,6 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	overflow: hidden
 
 	.form-control
-		placeholder( $gray-lighter )
 		border: 0
 		background-color: transparent
 		color: $white
@@ -87,34 +84,32 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 		height: $navbar-height
 
 .navbar-controls
-	margin-top: ($navbar-height - $button-line-height) * 0.5
+	margin-top: ($navbar-height - $button-md-line-height) * 0.5
+	padding-right: @margin-top
 
 /**
  * Hover/active state underline.
  */
-.navbar-items > li > a
-.navbar-item
-.navbar-form-control
+.navbar-items > li > a, .navbar-item, .navbar-form-control
 	position: relative
 
 	&::before
+		theme-prop('background-color', 'gray')
 		position: absolute
 		content: ''
 		right: 0
 		left: 0
 		bottom: 0
 		height: 3px
-		background-color: $gray
-		transform: translate( 0, 4px )
+		transform: translate(0, 4px)
 		transition: transform 300ms $strong-ease-out, background-color 200ms linear
 
 	&:hover
 		&::before
-			transform: translate( 0, 0 )
+			transform: translate(0, 0)
 
 	&.active
-		&
-		&:hover
+		&, &:hover
 			&::before
-				transform: translate( 0, 0 )
-				background-color: $gj-green
+				theme-prop('background-color', 'highlight')
+				transform: translate(0, 0)

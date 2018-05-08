@@ -14,61 +14,52 @@
 				</p>
 
 				<template v-if="!site.game_id">
-					<button
-						class="btn"
+					<app-button
 						v-app-tooltip="$gettext( 'Will show your profile bio.' )"
 						@click="insertAtCaret( '{% user-bio %}' )"
 						>
 						<translate>User Bio</translate>
-					</button>
-					<button
-						class="btn"
+					</app-button>
+					<app-button
 						v-app-tooltip="$gettext( 'Will show a grid of all your games.' )"
 						@click="insertAtCaret( '{% game-list %}' )"
 						>
 						<translate>Game List</translate>
-					</button>
-					&nbsp;
-					&nbsp;
-					<a
-						class="link-muted"
+					</app-button>
+					<app-button
+						trans
 						:href="Environment.helpBaseUrl + '/widgets-user-site'"
 						target="_blank"
 						>
-						<translate>View all...</translate>
-					</a>
+						<translate>View all</translate>
+					</app-button>
 				</template>
 				<template v-else>
-					<button
-						class="btn"
+					<app-button
 						v-app-tooltip="$gettext( 'Will show your game\'s media (screenshots, videos, etc).' )"
 						@click="insertAtCaret( '{% game-media num=6 %}' )"
 						>
 						<translate>Game Media</translate>
-					</button>
-					<button
-						class="btn"
+					</app-button>
+					<app-button
 						v-app-tooltip="$gettext( 'Will show your game\'s description.' )"
 						@click="insertAtCaret( '{% game-description %}' )"
 						>
 						<translate>Game Description</translate>
-					</button>
-					<button
-						class="btn"
+					</app-button>
+					<app-button
 						v-app-tooltip="$gettext( 'Will show your game\'s packages.' )"
 						@click="insertAtCaret( '{% game-packages %}' )"
 						>
 						<translate>Game Packages</translate>
-					</button>
-					&nbsp;
-					&nbsp;
-					<a
-						class="link-muted"
+					</app-button>
+					<app-button
+						trans
 						:href="Environment.helpBaseUrl + '/widgets-game-site'"
 						target="_blank"
 						>
-						<translate>View all...</translate>
-					</a>
+						<translate>View all</translate>
+					</app-button>
 				</template>
 
 			</div>

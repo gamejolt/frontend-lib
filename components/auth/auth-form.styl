@@ -1,20 +1,19 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .auth-form
-
 	// Much less vertical spacing.
 	.form-group
 		margin-top: 0
 		margin-bottom: 5px
 
 	.form-control
-
 		// Bigger form controls.
 		height: 40px
 
 		// Don't change the color of the border on focus.
 		&:focus
-			border-color: $gray-lighter
+			theme-prop('border-color', 'lighter')
 
 .auth-line-thru
 	position: relative
@@ -24,15 +23,14 @@
 	width: 100%
 	text-align: center
 
-	&::before
-	&::after
+	&::before, &::after
 		content: ''
 		position: absolute
 		top: 50%
 		margin-top: 1px
 		height: 1px
 		line-height: 1px
-		border-bottom: 1px solid rgba( $black, 0.2 )
+		border-bottom: 1px solid rgba($black, 0.2)
 
 	&::before
 		left: 0

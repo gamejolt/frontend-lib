@@ -1,50 +1,48 @@
-<div class="game-package-card-buttons">
+<div class="game-package-card-app-buttons">
 
-	<button class="btn btn-primary-outline btn-block-xs"
+	<app-button
+		primary
+		block-xs
 		v-if="card.browserBuild"
 		@click="click( card.browserBuild )"
 		>
-		<app-jolticon icon="play" />
 		<translate>Play</translate>
 		<app-jolticon class="jolticon-addon" :icon="card.showcasedBrowserIcon" />
-	</button>
+	</app-button>
 
-	<button class="btn btn-success-outline btn-block-xs"
+	<app-button
+		:primary="!card.browserBuild"
+		block-xs
 		v-if="card.downloadableBuild"
 		@click="click( card.downloadableBuild )"
 		>
-		<app-jolticon icon="download" />
 		<translate>Download</translate>
 		<small v-if="card.platformSupportInfo[ card.showcasedOs ].arch == '64'">
 			<translate>64-bit</translate>
 		</small>
 		<small>({{ card.downloadableBuild.primary_file.filesize | filesize }})</small>
 		<app-jolticon class="jolticon-addon" :icon="card.showcasedOsIcon" />
-	</button>
+	</app-button>
 
 	<!--
-		If this package only has "Other" builds, then we make it look like a download
-		button with a [...] after.
-		If the package has normal builds too, then we just show it as a more options sparse button.
+		If this package only has "Other" builds, then we make it look like a download button with a
+		[...] after. If the package has normal builds too, then we just show it as a more options
+		sparse button.
 	-->
-	<button class="btn btn-block-xs"
+	<app-button
+		icon="ellipsis-v"
+		:primary="card.otherOnly"
+		:circle="!card.otherOnly && !Screen.isXs"
+		block-xs
 		v-if="card.extraBuilds.length"
-		:class="{
-			'btn-success-outline': card.otherOnly,
-			'btn-outline': !card.otherOnly && Screen.isXs,
-			'btn-outline btn-sparse': !card.otherOnly && !Screen.isXs,
-		}"
 		v-app-popover-trigger="`game-package-card-more-options-${ package.id }`"
 		v-app-track-event="`game-package-card:more-options`"
 		>
-		<app-jolticon icon="ellipsis-h" />
 		<template v-if="card.otherOnly">
-			<app-jolticon icon="download" />
 			<translate>Download</translate>
 			<app-jolticon class="jolticon-addon" icon="other-os" />
 		</template>
-		<!--<translate v-if="!card.otherOnly">more</translate>-->
-	</button>
+	</app-button>
 
 	<app-popover :popover-id="`game-package-card-more-options-${ package.id }`">
 		<app-game-package-card-more-options

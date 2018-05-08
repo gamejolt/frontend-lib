@@ -1,7 +1,8 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .graph-line
-	background-color: $gray-darkest
+	theme-prop('background-color', 'darkest')
 
 	.chart
 		display: block

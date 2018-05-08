@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require '../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .user-avatar
 	display: block
@@ -7,13 +7,12 @@
 
 	.avatar-name
 		text-overflow()
+		theme-prop('color', 'lightest')
 		position: absolute
 		bottom: 0
 		left: 0
 		right: 0
-		background: #000
-		background-color: rgba( 0, 0, 0, 0.5 )
-		color: $gray-lightest
+		background-color: rgba(0, 0, 0, 0.5)
 		font-weight: bold
 		font-size: $font-size-tiny
 		padding: 3px 5px

@@ -8,8 +8,8 @@
 					<translate>Game Soundtrack</translate>
 					<app-jolticon
 						icon="musical-note-double"
-						:big="true"
-						class="big pull-right text-muted"
+						big
+						class="pull-right text-muted"
 						/>
 				</h4>
 			</div>
@@ -46,7 +46,8 @@
 
 			</div>
 
-			<a class="hidden-text-expander"
+			<a
+				class="hidden-text-expander"
 				v-if="canToggleSoundtrack"
 				@click="isShowingSoundtrack = !isShowingSoundtrack"
 				v-app-track-event="`game-soundtrack-card:show-all-songs`"
@@ -56,11 +57,13 @@
 		</div>
 		<div class="col-sm-3 hidden-xs">
 
-			<div class="card-thumb"
+			<div
+				class="card-thumb"
 				:style="{ 'background-image': `url('${ game.img_thumbnail }')` }"
 				>
 
-				<a class="play-button-overlay play-button-overlay-small hidden-xs"
+				<a
+					class="play-button-overlay play-button-overlay-small hidden-xs"
 					:class="{ active: isPlaying }"
 					@click="play"
 					v-app-track-event="`game-soundtrack-card:play:cover-art`"
@@ -75,14 +78,15 @@
 	</div>
 
 	<div class="card-controls">
-		<a class="btn btn-success-outline btn-block-xs"
+		<app-button
+			primary
+			block-xs
 			@click="download"
 			v-app-track-event="`game-soundtrack-card:download`"
 			>
-			<app-jolticon icon="download" />
 			<translate>Download</translate>
 			<app-jolticon icon="musical-note-double" class="jolticon-addon" />
-		</a>
+		</app-button>
 	</div>
 
 </app-card>

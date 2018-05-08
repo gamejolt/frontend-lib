@@ -13,6 +13,7 @@ import { AppLoading } from '../../../vue/components/loading/loading';
 import { AppTooltipContainer } from '../../tooltip/container/container';
 import { AppUserAvatarImg } from '../user-avatar/img/img';
 import { Store } from '../../../../../app/store/index';
+import { AppTheme } from '../../theme/theme';
 
 @View
 @Component({
@@ -21,6 +22,7 @@ import { Store } from '../../../../../app/store/index';
 		AppUserAvatarImg,
 		AppUserFollowWidget,
 		AppLoading,
+		AppTheme,
 		AppTooltipContainer,
 	},
 	directives: {

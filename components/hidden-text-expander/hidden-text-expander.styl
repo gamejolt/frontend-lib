@@ -1,4 +1,9 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
 .hidden-text-expander
+	theme-prop('background-color', 'bg-subtle')
+	color: inherit
 	display: block
 	vertical-align: middle
 	height: 20px
@@ -6,8 +11,6 @@
 	line-height: 13px
 	font-size: 12px
 	font-weight: bold
-	color: $gray !important
-	background-color: $gray-lighter
 	border-radius: $border-radius-small
 	text-decoration: none
 	user-select: none
@@ -20,5 +23,4 @@
 		content: '...'
 
 	&:hover
-		color: $white !important
-		background-color: $gray-light
+		transform: scale(1.1)

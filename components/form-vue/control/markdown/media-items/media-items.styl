@@ -1,9 +1,12 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .form-markdown-editor-media-items
-	border: 1px solid $input-border
+	theme-prop('background-color', 'bg')
+	theme-prop('border-color', 'bg-subtle')
+	border-width: 2px
+	border-style: solid
 	border-top: 0
-	background-color: $input-bg
 	border-top-left-radius: 0
 	border-top-right-radius: 0
 	margin-bottom: 0 // Get rid of the bottom margin from 'well' styling.
@@ -22,29 +25,31 @@
 			padding: 0 10px
 
 		&-item
+			rounded-corners()
+			theme-prop('background-color', 'fg')
 			display: block
 			position: relative
 			padding-top: 80%
 			height: 0
-			background-color: $gray-darkest
 
 			@media $media-xs
 				margin-bottom: $grid-gutter-width-xs
 
 		&-item-inner
 			position: absolute
-			top: 5px
-			right: 5px
-			bottom: 5px
-			left: 5px
+			top: 3px
+			right: 3px
+			bottom: 3px
+			left: 3px
 
 		&-item-controls
 			position: absolute
-			top: -5px
-			right: 5px
+			top: 3px
+			right: 3px
 			z-index: 1
 
 		&-item-img
+			rounded-corners()
 			position: absolute
 			top: 0
 			right: 0

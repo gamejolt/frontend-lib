@@ -16,12 +16,14 @@
 				'modal-full': modal.size === 'full',
 			}"
 			>
-			<div class="modal-content"
-				@mouseover="isHoveringContent = true"
-				@mouseout="isHoveringContent = false"
+			<app-theme
+				class="modal-content"
+				:theme="theme"
+				@mouseover.native="isHoveringContent = true"
+				@mouseout.native="isHoveringContent = false"
 				>
 				<slot />
-			</div>
+			</app-theme>
 		</div>
 	</div>
 </transition>

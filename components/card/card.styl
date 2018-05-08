@@ -1,6 +1,5 @@
 @require '~styles/variables'
-@require '../../stylus/common/mixins'
-@require '../../stylus/common/fills'
+@require '~styles-lib/mixins'
 
 gj-card
 	display: block
@@ -8,10 +7,10 @@ gj-card
 .card
 	clearfix()
 	full-bleed-xs()
+	rounded-corners()
 	position: relative
 	padding: 15px
 	margin-bottom: $line-height-computed
-	border-radius: $border-radius-base
 
 	a &:hover
 		background-color: $black
@@ -30,16 +29,15 @@ gj-card
 			margin-right: 0
 
 	&-remove
+		theme-prop('color', 'fg-muted', true)
 		float: right
-		color: $gray-light !important
 		margin-left: 10px
 
-		&
-		.jolticon
+		&, .jolticon
 			cursor: pointer
 
 		&:hover
-			color: $gj-pink !important
+			color: $white !important
 
 	&-thumb
 		position: relative
@@ -62,14 +60,8 @@ gj-card
 				font-size: $font-size-base
 				font-weight: bold
 
-			a
-				&
-				.card-inactive &
-				.card-disabled &
-					link-unstyled()
-
 	&-meta
-		color: $text-muted
+		theme-prop('color', 'fg-muted')
 		margin-top: 5px
 		font-size: $font-size-small
 
@@ -77,8 +69,8 @@ gj-card
 			font-size: $font-size-tiny
 
 	&-content
+		theme-prop('color', 'lighter')
 		margin-top: 8px
-		color: $gray-lighter
 		font-size: $font-size-small
 
 	&-stats
@@ -87,12 +79,11 @@ gj-card
 		text-align: right
 
 	&-controls
+		theme-prop('border-top-color', 'bg-subtle')
 		margin-top: $line-height-computed
 		padding-top: $line-height-computed
-		border-top: 1px solid $gray-dark
-
-	hr
-		border-color: $gray-dark
+		border-top-width: 1px
+		border-top-style: solid
 
 	.hidden-text-expander
 		margin-bottom: $line-height-computed
@@ -105,9 +96,6 @@ gj-card
 		.jolticon
 			vertical-align: text-bottom
 
-	.alert-info
-		@extend .fill-darker
-
 	&-chevron
 		position: absolute
 		left: 0
@@ -115,17 +103,17 @@ gj-card
 		width: 40px
 		text-align: center
 
-		 > .jolticon
+		> .jolticon
 			cursor: inherit
 
 	&-drag-handle
+		theme-prop('background-color', 'gray')
 		position: absolute
 		right: 0
 		top: 0
 		bottom: 0
 		width: 20px
 		cursor: move
-		background-color: $gray-dark
 		user-select: none
 
 		> .jolticon
@@ -135,22 +123,6 @@ gj-card
 			margin-top: -8px
 			cursor: inherit
 			color: $white
-
-	&-inactive.card
-	&-disabled.card
-	a &-disabled.card:hover
-		@extend .fill-dark
-
-		.card
-
-			&-controls
-				border-color: $gray
-
-			&-drag-handle
-				background-color: $gray-darkest
-
-		hr
-			border-color: $gray
 
 	&-disabled.card
 		cursor: not-allowed

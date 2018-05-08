@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./selector.html';
 
 import { SiteTemplate } from '../../site/template/template-model';
@@ -24,14 +24,18 @@ export class AppThemeSelector extends Vue {
 
 	current: SiteTemplate | null = null;
 
+	@Watch('currentTemplate')
+	onTemplateChange() {
+		this.current = this.templates.find(t => t.id === this.currentTemplate) || null;
+	}
+
 	created() {
 		if (this.currentTemplate) {
-			this.current = this.templates.find(t => t.id === this.currentTemplate) || null;
+			this.onTemplateChange();
 		}
 	}
 
 	select(id: number) {
-		this.current = this.templates.find(t => t.id === this.currentTemplate) || null;
 		this.$emit('change', id);
 		Popover.hideAll();
 	}

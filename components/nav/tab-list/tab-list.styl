@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require '../../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .tab-list
 	full-bleed-xs()
@@ -9,19 +9,18 @@
 	padding-right: $line-height-computed
 
 	&::after
+		theme-prop('background-color', 'bg-subtle')
 		content: ''
 		position: absolute
 		left: 0
 		right: 0
 		bottom: 0
 		height: 2px
-		background-color: $black
 		z-index: 1
 
 	@media $media-xs
 		padding-left: 0
 		padding-right: 0
-
 		// XS size will default to centered.
 		text-align: center
 
@@ -43,26 +42,28 @@
 			margin: 0
 
 			& > a
+				theme-prop('color', 'fg')
+				theme-prop('border-color', 'bg-subtle')
 				display: inline-block
 				padding: $tab-list-padding-v $tab-list-padding-h
 				margin: 0 3px
 				cursor: pointer
-				border: 2px solid $black
+				border-width: 2px
+				border-style: solid
 				border-top-left-radius: $border-radius-base
 				border-top-right-radius: $border-radius-base
 				border-bottom: 0
 				font-weight: bold
-				color: $black
-
 				// Don't allow to select the text when clicking on a tab.
 				user-select: none
 
 				&:hover
-					background-color: $gray-lightest
+					theme-prop('background-color', 'bg-offset')
 
 				&.active
+					theme-prop('background-color', 'bg')
+					theme-prop('color', 'link')
 					position: relative
-					background-color: $white
 					z-index: 2
 
 	&-centered
@@ -73,7 +74,7 @@
 		float: right
 
 	&-meta
-		color: $text-muted
+		theme-prop('color', 'fg-muted')
 		font-size: $font-size-small
 		margin-bottom: $line-height-computed
 
@@ -85,9 +86,9 @@
 	&-controls
 		float: right
 
-		.btn
-			border-bottom-left-radius: 0
-			border-bottom-right-radius: 0
+		.button
+			border-bottom-left-radius: 0 !important
+			border-bottom-right-radius: 0 !important
 
 	&-input
 		margin-bottom: $line-height-computed

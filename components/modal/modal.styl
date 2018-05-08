@@ -1,5 +1,5 @@
 @require '~styles/variables'
-@require '../../stylus/common/mixins'
+@require '~styles-lib/mixins'
 
 .-container
 	position: fixed
@@ -47,10 +47,11 @@
 		transform: none
 
 .modal-content
+	theme-prop('background-color', 'bg')
+	theme-prop('color', 'fg')
 	position: relative
 	background-clip: padding-box
 	outline: 0 // Remove focus outline from opened modal
-	background-color: $modal-content-bg
 	box-shadow: 0 5px 15px rgba($black, 0.5)
 
 	// Full screen on xs
@@ -58,9 +59,9 @@
 		min-height: 100vh
 
 	@media $media-sm-up
+		rounded-corners()
 		margin: 30px auto
 		margin-top: 100px
-		border-radius: $border-radius-base
 
 @media $media-sm-up
 	.modal-sm
@@ -72,8 +73,8 @@
 		width: $container-md
 
 .modal-full
+	theme-prop('background-color', 'bg')
 	overflow: hidden
-	background-color: $modal-content-bg
 
 	.modal-content
 		width: 100%

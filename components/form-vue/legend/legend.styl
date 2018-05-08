@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .-compact
 	position: relative
@@ -6,10 +7,12 @@
 	border: 0
 
 	&::before
+		theme-prop('border-bottom-color', 'bg-subtle')
 		position: absolute
 		content: ''
 		height: 1px
-		border-bottom: 2px solid $gray-lighter
+		border-bottom-width: 2px
+		border-bottom-style: solid
 		top: 50%
 		right: 0
 		left: 50%

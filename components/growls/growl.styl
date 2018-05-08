@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .growl
 	position: relative
@@ -16,30 +17,34 @@
 	z-index: 2
 
 	&:hover
-		color: $gj-pink
-		background-color: $gray-darkest
+		theme-prop('background-color', 'notice')
+		theme-prop('color', 'notice-fg')
 
 		@media $media-sm-up
 			border-top-right-radius: $border-radius-base
 
 .growl-inner
+	theme-prop('background-color', 'gray')
 	padding: 25px 35px
 	margin-top: $growl-spacing
 	color: $white
 	user-select: none
-	will-change: background-color, opacity, transform
+	will-change: opacity
+	// We set the border color in the different growl types.
+	border-left-width: 7px
+	border-left-style: solid
 
 	@media $media-sm-up
 		border-top-right-radius: $border-radius-base
 		border-bottom-right-radius: $border-radius-base
 
 	// Transition on mouse out, fade it back in to full opacity.
-	transition: background-color 750ms
+	transition: opacity 750ms
 
 	&:hover
 		// Immediately switch to slightly transparent on hover.
-		// We set the background color alpha in the different message types below.
 		transition: none
+		opacity: 0.85
 
 .growl-content
 	max-height: 200px
@@ -67,42 +72,22 @@
 	margin-left: 60px
 
 /**
- * Sticky growl.
+ * Info growl.
  */
-.growl-sticky
-.growl-pinned
-	border-right: 5px solid $gray-darker
-	border-left: 5px solid $gray-darker
-
-	@media $media-sm-up
-		border-left: none
+.growl-type-info
+	.growl-inner
+		theme-prop('border-left-color', 'light')
 
 /**
  * Success growl.
  */
 .growl-type-success
 	.growl-inner
-		background-color: $gj-dark-green
-
-		&:hover
-			background-color: rgba( $gj-dark-green, 0.85 )
+		theme-prop('border-left-color', 'highlight')
 
 /**
  * Error growl.
  */
 .growl-type-error
 	.growl-inner
-		background-color: $gj-pink
-
-		&:hover
-			background-color: rgba( $gj-pink, 0.85 )
-
-/**
- * Info growl.
- */
-.growl-type-info
-	.growl-inner
-		background-color: $gray-darker
-
-		&:hover
-			background-color: rgba( $gray-darker, 0.85 )
+		theme-prop('border-left-color', 'notice')

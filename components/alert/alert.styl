@@ -2,21 +2,20 @@ $alert-padding = ($grid-gutter-width / 2)
 $alert-padding-xs = ($grid-gutter-width-xs / 2)
 
 .alert
+	rounded-corners()
+	theme-prop('background-color', 'bg-offset')
 	position: relative
 	padding: $alert-padding-xs
 	margin-bottom: $line-height-computed
 	font-size: $font-size-small
-	border-radius: $border-radius-base
 
 	@media $media-sm-up
 		padding: $alert-padding
 
 	h4
 		margin-top: 0
-		color: inherit
 
-	p
-	ul
+	p, ul
 		margin-bottom: 0
 
 	p + p
@@ -24,7 +23,7 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 
 	// We add spacing to the top proportionate to the amount of spacing that would
 	// usually be above the top of text.
-	.btn
+	.button
 		margin-top: 5px + ($line-height-computed - $font-size-base)
 
 	.jolticon
@@ -33,6 +32,19 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 	// alert-well is for styling it as a full-width row
 	&-well
 		border-radius: 0
+
+// Invert when it's in a fill of the same background color.
+.fill-offset .alert
+	theme-prop('background-color', 'bg')
+
+.alert.alert-highlight
+	@extend .fill-highlight
+
+.alert.alert-notice
+	@extend .fill-notice
+
+.alert.alert-dark
+	@extend .fill-darkest
 
 .alert-dismiss
 	position: absolute
@@ -47,33 +59,18 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 .alert-content
 	margin-right: 30px
 
-.alert-info
-	@extend .fill-lightest
-
-.fill-lightest .alert-info
-	@extend .fill-lighter
-
-.alert-warning
-	@extend .fill-pink
-
-.alert-success
-	@extend .fill-dark-green
-
-.alert-dark
-	@extend .fill-darker
-
 .alert-actions
+	theme-prop('background-color', 'darkest')
 	position: relative
 	margin: -($alert-padding)
 	margin-top: $alert-padding
 	padding: $alert-padding
-	background-color: $gray-dark
 	border-bottom-left-radius: $border-radius-base
 	border-bottom-right-radius: $border-radius-base
 
 	&::before
 		content: ''
-		caret(color: $gray-dark, direction: 'up', size: 5px)
+		caret(color: var(--theme-darkest), direction: 'up', size: 5px)
 
-	> .btn
+	> .button
 		margin-top: 0

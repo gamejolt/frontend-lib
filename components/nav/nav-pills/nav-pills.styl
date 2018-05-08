@@ -1,12 +1,12 @@
 nav.pills
 	font-family: $font-family-heading
 
-	> ul
+	& > ul
 		@extend .clearfix
 		padding-left: 0
 		margin-bottom: $line-height-computed
 
-		> li
+		& > li
 			margin: 0
 			list-style: none
 			float: left
@@ -14,20 +14,19 @@ nav.pills
 			&:last-child a
 				margin-right: 0
 
-			> a
+			& > a
+				theme-prop('color', 'light')
 				display: inline-block
 				padding: 7px 10px
 				margin-right: 3px
 				margin-bottom: 3px
 				cursor: pointer
-				color: $gray-light
-
 				// Don't allow to select the text when clicking on a "tab".
 				user-select: none
 
 				&:hover
-					background-color: $gray-lightest
+					theme-prop('background-color', 'bg-offset')
 
 				&.active
-					background-color: $gj-dark-green
-					color: $gj-green
+					theme-prop('background-color', 'highlight')
+					theme-prop('color', 'highlight-fg')

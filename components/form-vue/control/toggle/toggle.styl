@@ -1,46 +1,49 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
-$toggle-padding = 3px
-$toggle-width = $input-height-base * 2 // + $toggle-padding * 2
+$-toggle-width = $input-height-base * 2 // + $toggle-padding * 2
+$-knob-border-width = 2px
 
 .toggle
+	theme-prop('background-color', 'bg-subtle')
 	display: block
-	overflow: hidden
-	width: $toggle-width
+	width: $-toggle-width
 	height: $input-height-base
 	line-height: $input-height-base
 	border-radius: $input-height-base
 	vertical-align: top
-	background-color: $gray-light
 	transition: all ease-in-out 300ms
 	text-align: left
 	cursor: pointer
 	user-select: none
-	outline: none
-
-	// This does a sort of outline style.
-	&:focus
-		box-shadow: 0 0 0 2px $white, 0 0 0 4px rgba($input-border-focus, 0.5)
+	outline: 0
 
 	&[disabled], &.-disabled
 		opacity: 0.5
 		cursor: not-allowed !important
-		box-shadow: none
 
 	.form-horizontal &
 		margin-top: ($padding-base-vertical + 1px)
 
 .-checked
-	background-color: $gj-dark-green
+	theme-prop('background-color', 'link')
 
 .-knob
+	theme-prop('background-color', 'bg')
+	theme-prop('border-color', 'bg-subtle')
 	display: block
-	margin: $toggle-padding
-	background-color: $white
-	width: ($input-height-base - $toggle-padding * 2)
+	width: $input-height-base
 	height: @width
 	border-radius: @width
+	border-width: $-knob-border-width
+	border-style: solid
+	// This will allow the border to overflow outside the toggle.
+	box-sizing: content-box
+	position: relative
+	top: -($-knob-border-width)
+	left: -($-knob-border-width)
 	transition: transform $strong-ease-out 300ms
 
 	.-checked &
+		theme-prop('border-color', 'link')
 		transform: translateX($input-height-base)

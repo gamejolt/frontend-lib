@@ -1,40 +1,44 @@
 <div class="auth-join">
 
-	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
-		:class="{ 'btn-dark-variant': darkVariant }"
+	<app-button
+		icon="facebook"
+		block
+		class="anim-fade-in-enlarge stagger"
 		:disabled="Connection.isClientOffline || blocked"
 		@click="linkedAccountLogin( 'facebook' )"
 		>
-		<app-jolticon icon="facebook" />
 		<translate>Sign Up With Facebook</translate>
-	</button>
+	</app-button>
 
-	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
-		:class="{ 'btn-dark-variant': darkVariant }"
+	<app-button
+		icon="google-plus"
+		block
+		class="anim-fade-in-enlarge stagger"
 		:disabled="Connection.isClientOffline || blocked"
 		@click="linkedAccountLogin( 'google' )"
 		>
-		<app-jolticon icon="google-plus" />
 		<translate>Sign Up With Google+</translate>
-	</button>
+	</app-button>
 
-	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
-		:class="{ 'btn-dark-variant': darkVariant }"
+	<app-button
+		icon="twitter"
+		block
+		class="anim-fade-in-enlarge stagger"
 		:disabled="Connection.isClientOffline || blocked"
 		@click="linkedAccountLogin( 'twitter' )"
 		>
-		<app-jolticon icon="twitter" />
 		<translate>Sign Up With Twitter</translate>
-	</button>
+	</app-button>
 
-	<button class="btn btn-outline btn-block anim-fade-in-enlarge stagger"
-		:class="{ 'btn-dark-variant': darkVariant }"
+	<app-button
+		icon="twitch"
+		block
+		class="anim-fade-in-enlarge stagger"
 		:disabled="Connection.isClientOffline || blocked"
 		@click="linkedAccountLogin( 'twitch' )"
 		>
-		<app-jolticon icon="twitch" />
 		<translate>Sign Up With Twitch</translate>
-	</button>
+	</app-button>
 
 	<div class="auth-line-thru">
 		<translate>or</translate>
@@ -46,7 +50,7 @@
 		@submit="onJoin"
 		/>
 
-	<div class="alert alert-warning -blocked-message" v-if="blocked">
+	<div class="alert alert-notice -blocked-message" v-if="blocked">
 		<translate>You must wait 15 minutes before creating another account.</translate>
 	</div>
 

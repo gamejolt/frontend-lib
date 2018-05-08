@@ -9,7 +9,7 @@ const ga: any = (typeof window !== 'undefined' && (window as any).ga) || functio
 // Force HTTPS tracking beacons.
 ga('set', 'forceSSL', true);
 
-// Allow file:// and app:// protocols for Client or App.
+// Allow file:// and chrome-extension:// protocols for Client or App.
 // https://discuss.atom.io/t/google-analytics-in-atom-shell/14109/7
 ga('set', 'checkProtocolTask', null);
 

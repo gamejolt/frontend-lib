@@ -1,31 +1,28 @@
-<button
-	class="user-follow-widget btn"
-	:class="{
-		'btn-success-outline': !user.is_following && outline,
-		'btn-success active': user.is_following,
-		'btn-sparse': sparse,
-		'btn-sm': size === 'sm',
-	}"
-	v-app-auth-required
+<app-button
+	class="user-follow-widget"
+	primary
+	:icon="icon"
+	:circle="circle"
+	:overlay="overlay"
+	:block="block"
+	:sm="sm"
+	:solid="user.is_following"
+	:badge="badge"
 	:disabled="isProcessing"
-	@click="onClick"
+	v-app-auth-required
 	v-app-tooltip.bottom="{
-		content: !user.is_following
-			? $gettext( 'Follow this user to get their games, videos, and posts in your feed!' )
-			: undefined,
+		content: tooltip,
 		container: tooltipContainer,
 	}"
 	v-app-track-event="`user-follow:${eventLabel || 'any'}:${!user.is_following ? 'follow' : 'unfollow'}`"
+	@click="onClick"
 	>
-	<span class="btn-badge" v-if="!sparse && user.follower_count">
-		{{ user.follower_count | number }}
-	</span>
-	<template v-if="!user.is_following">
-		<app-jolticon icon="subscribe" />
-		<translate v-if="!sparse">Follow</translate>
+	<template v-if="!circle">
+		<template v-if="!user.is_following">
+			<translate>Follow</translate>
+		</template>
+		<template v-else>
+			<translate>Following</translate>
+		</template>
 	</template>
-	<template v-else>
-		<app-jolticon icon="subscribed" />
-		<translate v-if="!sparse">Following</translate>
-	</template>
-</button>
+</app-button>
