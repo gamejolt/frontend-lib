@@ -1,10 +1,12 @@
+import { RgbColor, HslColor } from 'polished/lib/types/color';
+import { toColorString, parseToHsl, rgb, hsl, parseToRgb } from 'polished';
+
 // the following functions are based off of the pseudocode
 // found on www.easyrgb.com
 
 type ColorLAB = [number, number, number];
-type ColorRGB = [number, number, number];
 
-export function lab2rgb(lab: ColorLAB): ColorRGB {
+export function lab2rgb(lab: ColorLAB): RgbColor {
 	let y = (lab[0] + 16) / 116,
 		x = lab[1] / 500 + y,
 		z = y - lab[2] / 200,
@@ -24,17 +26,17 @@ export function lab2rgb(lab: ColorLAB): ColorRGB {
 	g = g > 0.0031308 ? 1.055 * Math.pow(g, 1 / 2.4) - 0.055 : 12.92 * g;
 	b = b > 0.0031308 ? 1.055 * Math.pow(b, 1 / 2.4) - 0.055 : 12.92 * b;
 
-	return [
-		Math.floor(Math.max(0, Math.min(1, r)) * 255),
-		Math.floor(Math.max(0, Math.min(1, g)) * 255),
-		Math.floor(Math.max(0, Math.min(1, b)) * 255),
-	];
+	return {
+		red: Math.floor(Math.max(0, Math.min(1, r)) * 255),
+		green: Math.floor(Math.max(0, Math.min(1, g)) * 255),
+		blue: Math.floor(Math.max(0, Math.min(1, b)) * 255),
+	};
 }
 
-export function rgb2lab(rgb: ColorRGB): ColorLAB {
-	let r = rgb[0] / 255,
-		g = rgb[1] / 255,
-		b = rgb[2] / 255,
+export function rgb2lab(rgb: RgbColor): ColorLAB {
+	let r = rgb.red / 255,
+		g = rgb.green / 255,
+		b = rgb.blue / 255,
 		x,
 		y,
 		z;
@@ -52,4 +54,14 @@ export function rgb2lab(rgb: ColorRGB): ColorLAB {
 	z = z > 0.008856 ? Math.pow(z, 1 / 3) : 7.787 * z + 16 / 116;
 
 	return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
+}
+
+export function rgb2hsl(color: RgbColor) {
+	const str = toColorString(color);
+	return parseToHsl(str);
+}
+
+export function hsl2rgb(color: HslColor) {
+	const str = toColorString(color);
+	return parseToRgb(str);
 }
