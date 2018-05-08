@@ -514,11 +514,12 @@ module.exports = config => {
 
 				// Joltron should be placed next to the client build's data folder.
 				// On windows joltron will be linked to and executed directly, so call it GameJoltClient.exe to avoid confusion.
-				// On linux we have desktop files and on mac its not even visible, so keep them as is.
+				// On linux we call the executable game-jolt-client, so we can rename joltron to that.
+				// On mac we can also rename it to game-jolt-client for consistency. the executable is contained in the app directory anyways.
 				const joltronDest = path.resolve(
 					buildDir,
 					'..',
-					config.platform === 'win' ? 'GameJoltClient.exe' : 'joltron'
+					config.platform === 'win' ? 'GameJoltClient.exe' : 'game-jolt-client'
 				);
 
 				// Some more info is required for joltron's manifest.
