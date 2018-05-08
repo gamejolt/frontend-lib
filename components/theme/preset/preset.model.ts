@@ -9,11 +9,3 @@ export class ThemePreset extends Model {
 }
 
 Model.create(ThemePreset);
-
-export const DefaultThemePreset = new ThemePreset({
-	id: 0,
-	name: 'Game Jolt',
-	highlight: 'ccff00',
-	backlight: '2f7f6f',
-	notice: 'ff3fac',
-});
