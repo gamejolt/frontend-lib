@@ -48,7 +48,6 @@ export class AppDatetimePicker extends Vue {
 	}
 
 	select(date: Date) {
-		console.log('eyy');
 		// Get the selected date from the date/time pickers.
 		// This date would be local to the timezone that was selected,
 		// so it must first be offsetted back to UTC.

@@ -52,6 +52,7 @@ export class AppCommentWidget extends Vue {
 	@CommentState getCommentStore: CommentStore['getCommentStore'];
 	@CommentAction fetchComments: CommentStore['fetchComments'];
 	@CommentAction lockCommentStore: CommentStore['lockCommentStore'];
+	@CommentAction pinComment: CommentStore['pinComment'];
 	@CommentMutation releaseCommentStore: CommentStore['releaseCommentStore'];
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
@@ -62,7 +63,6 @@ export class AppCommentWidget extends Vue {
 	hasBootstrapped = false;
 	hasError = false;
 	isLoading = false;
-	currentPage = 1;
 	resourceOwner: User | null = null;
 	perPage = 10;
 
@@ -75,7 +75,7 @@ export class AppCommentWidget extends Vue {
 	}
 
 	get shouldShowLoadMore() {
-		return !this.isLoading && this.parentCount > this.perPage * this.currentPage;
+		return !this.isLoading && this.totalParentCount > this.currentParentCount;
 	}
 
 	get comments() {
@@ -90,8 +90,12 @@ export class AppCommentWidget extends Vue {
 		return this.store ? this.store.count : 0;
 	}
 
-	get parentCount() {
+	get totalParentCount() {
 		return this.store ? this.store.parentCount : 0;
+	}
+
+	get currentParentCount() {
+		return this.store ? this.store.parentComments.length : 0;
 	}
 
 	async created() {
@@ -114,7 +118,6 @@ export class AppCommentWidget extends Vue {
 
 		this.hasBootstrapped = false;
 		this.hasError = false;
-		this.currentPage = 1;
 
 		if (this.store) {
 			this.releaseCommentStore(this.store);
@@ -130,13 +133,12 @@ export class AppCommentWidget extends Vue {
 
 			const resource = this.resource;
 			const resourceId = this.resourceId;
-			const page = this.currentPage;
 
 			if (!this.store) {
 				this.store = await this.lockCommentStore({ resource, resourceId });
 			}
 
-			const payload = await this.fetchComments({ store: this.store, page });
+			const payload = await this.fetchComments(this.store);
 
 			this.isLoading = false;
 			this.hasBootstrapped = true;
@@ -171,8 +173,13 @@ export class AppCommentWidget extends Vue {
 		this.$emit('remove', comment);
 	}
 
+	_pinComment(comment: Comment) {
+		if (this.store) {
+			this.pinComment({ store: this.store, comment });
+		}
+	}
+
 	loadMore() {
-		this.currentPage += 1;
 		this._fetchComments();
 	}
 }

@@ -36,6 +36,7 @@ export class Comment extends Model {
 	lang: string;
 	videos: CommentVideo[] = [];
 	subscription?: Subscription;
+	is_pinned: boolean;
 
 	isVotePending = false;
 	isFollowPending = false;
@@ -64,13 +65,14 @@ export class Comment extends Model {
 		}
 	}
 
-	static fetch(resource: string, resourceId: number, page: number) {
+	// scroll id is a timestamp that controls where fetching starts (posted_on)
+	static fetch(resource: string, resourceId: number, scrollId: number | null) {
 		let query = '';
-		if (page) {
-			query = '?page=' + page;
+		if (scrollId) {
+			query = '?scrollId=' + scrollId;
 		}
 
-		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, null, {
+		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, {
 			detach: true,
 		});
 	}
@@ -169,6 +171,13 @@ export class Comment extends Model {
 		await this.subscription.$remove();
 		this.subscription = undefined;
 		this.isFollowPending = false;
+	}
+
+	// applies pin operation to current comment and returns the comment that
+	// got unpinned (or null if that didn't happen)
+	async $pin(): Promise<Comment | null> {
+		const result = await this.$_save(`/comments/pin/${this.id}`, 'comment');
+		return result['otherComment'];
 	}
 }
 
