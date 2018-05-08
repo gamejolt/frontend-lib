@@ -20,6 +20,14 @@ module.exports = config => {
 		return;
 	}
 
+	const joltronGitVersion = 'v1.2.0-beta';
+	const joltronVersionArray = [1, 2, 0];
+	const gjpushVersion = 'v0.1.0';
+	const gjServiceApiToken = '78378_token';
+	const gjGameId = 119176;
+	const gjGamePackageId = 331094;
+	const gjGameInstallerPackageId = 331095;
+
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
 
@@ -37,7 +45,7 @@ module.exports = config => {
 			const buildDep = path.resolve(config.buildDir, 'node_modules', depName);
 
 			if (config.platform === 'win') {
-				nodeModulesTask.push('xcopy /E /I ' + devDep + ' ' + buildDep);
+				nodeModulesTask.push('xcopy /E /Y /I ' + devDep + ' ' + buildDep);
 			} else {
 				nodeModulesTask.push(
 					'rm -rf ' + buildDep,
@@ -94,8 +102,6 @@ module.exports = config => {
 
 		return nw.build();
 	});
-
-	const gjpushVersion = 'v0.1.0';
 
 	let gjpushExecutable = '';
 	let remoteExecutable = '';
@@ -197,11 +203,6 @@ module.exports = config => {
 			});
 	});
 
-	const gjServiceApiToken = '78378_token';
-	const gjGameId = 119176;
-	const gjGamePackageId = 331094;
-	const gjGameInstallerPackageId = 331095;
-
 	/**
 	 * Pushes the single package to GJ.
 	 * The package is one complete standalone version of the client.
@@ -213,45 +214,52 @@ module.exports = config => {
 
 		// On windows and linux we want to extract the app.nw file back into the build folder
 		if (config.platform !== 'osx') {
-			p = new Promise((resolve, reject) => {
-				const base = path.join(config.clientBuildDir, 'build', config.platformArch);
-				const unzipper = new DecompressZip(path.join(base, 'package.nw'));
+			const base = path.join(config.clientBuildDir, 'build', config.platformArch);
+			const packageNw = path.join(base, 'package.nw');
 
-				unzipper.on('error', reject);
-				unzipper.on('extract', () => {
-					// We pull some stuff out of the package folder into the main folder.
-					mv(
-						path.join(base, 'package', 'node_modules'),
-						path.join(base, 'node_modules'),
-						err => {
-							if (err) {
-								reject(err);
-								return;
-							}
+			if (fs.existsSync(packageNw)) {
+				p = new Promise((resolve, reject) => {
+					const unzipper = new DecompressZip(packageNw);
 
+					unzipper.on('error', reject);
+					unzipper.on('extract', () => {
+						// This solves an issue on windows where for some reason we get permission errors when moving the node_modules folder.
+						setTimeout(() => {
+							// We pull some stuff out of the package folder into the main folder.
 							mv(
-								path.join(base, 'package', 'package.json'),
-								path.join(base, 'package.json'),
+								path.join(base, 'package', 'node_modules'),
+								path.join(base, 'node_modules'),
 								err => {
 									if (err) {
 										reject(err);
 										return;
 									}
 
-									fs.unlink(path.join(base, 'package.nw'), err => {
-										if (err) {
-											reject(err);
-											return;
+									mv(
+										path.join(base, 'package', 'package.json'),
+										path.join(base, 'package.json'),
+										err => {
+											if (err) {
+												reject(err);
+												return;
+											}
+
+											fs.unlink(packageNw, err => {
+												if (err) {
+													reject(err);
+													return;
+												}
+												resolve();
+											});
 										}
-										resolve();
-									});
+									);
 								}
 							);
-						}
-					);
+						}, 1000);
+					});
+					unzipper.extract({ path: path.join(base, 'package') });
 				});
-				unzipper.extract({ path: path.join(base, 'package') });
-			});
+			}
 		}
 
 		// On mac we have to zip the app so we can upload it.
@@ -283,6 +291,109 @@ module.exports = config => {
 			]);
 		});
 	});
+
+	const joltronRepoDir = path.join(
+		process.env.GOPATH,
+		'src',
+		'github.com',
+		'gamejolt',
+		'joltron'
+	);
+
+	let joltronSrc = '';
+
+	if (config.platform === 'win') {
+		joltronSrc = path.join(joltronRepoDir, 'joltron.exe');
+
+		gulp.task('client:get-joltron', cb => {
+			return new Promise((resolve, reject) => {
+				const func = shell.task([
+					'git -C ' +
+						joltronRepoDir +
+						' status' +
+						' || git clone --branch ' +
+						joltronGitVersion +
+						' https://github.com/gamejolt/joltron ' +
+						joltronRepoDir,
+				]);
+
+				func(err => {
+					if (err) {
+						reject(err);
+						return;
+					}
+					resolve();
+				});
+			})
+				.then(() => {
+					fs.writeFileSync(
+						path.join(joltronRepoDir, 'versioninfo.json'),
+						JSON.stringify({
+							FixedFileInfo: {
+								FileVersion: {
+									Major: joltronVersionArray[0],
+									Minor: joltronVersionArray[1],
+									Patch: joltronVersionArray[2],
+									Build: 0,
+								},
+								ProductVersion: {
+									Major: joltronVersionArray[0],
+									Minor: joltronVersionArray[1],
+									Patch: joltronVersionArray[2],
+									Build: 0,
+								},
+								FileFlagsMask: '3f',
+								FileFlags: '00',
+								FileOS: '040004',
+								FileType: '01',
+								FileSubType: '00',
+							},
+							StringFileInfo: {
+								Comments: '',
+								CompanyName: 'Lucent Web Creative, LLC',
+								FileDescription: 'Game Jolt Client',
+								FileVersion: joltronVersionArray.join('.'),
+								InternalName: 'GameJoltClient',
+								LegalCopyright: '',
+								LegalTrademarks: '',
+								OriginalFilename: 'GameJoltClient',
+								PrivateBuild: '',
+								ProductName: 'Game Jolt Client',
+								ProductVersion: 'v' + joltronVersionArray.join('.') + '.0',
+								SpecialBuild: '',
+							},
+							VarFileInfo: {
+								Translation: {
+									LangID: '0409',
+									CharsetID: '04B0',
+								},
+							},
+							IconPath: path.resolve(__dirname, 'client/icons/winico.ico'),
+							ManifestPath: '',
+						}),
+						{ encoding: 'utf8' }
+					);
+				})
+				.then(() => {
+					return new Promise((resolve, reject) => {
+						const func = shell.task(
+							[path.join('build', 'deps.bat'), path.join('build', 'build.bat')],
+							{ cwd: joltronRepoDir }
+						);
+
+						func(err => {
+							if (err) {
+								reject(err);
+								return;
+							}
+							resolve();
+						});
+					});
+				});
+		});
+	} else {
+		gulp.task('client:get-joltron', cb => cb());
+	}
 
 	/**
 	 * Structured the build folder with joltron, as if it was installed by it.
@@ -369,34 +480,45 @@ module.exports = config => {
 				// even if there is a newer version of joltron released.
 				// This ensures the client and joltron can communicate without issues.
 
-				// Figure out the correct client voodoo dir based on the platform.
-				let clientVoodooDir = '';
-				if (config.platform === 'osx') {
-					clientVoodooDir = path.resolve(
-						buildDir,
-						'Game Jolt Client.app',
-						'Contents',
-						'Resources',
-						'app.nw',
-						'node_modules',
-						'client-voodoo'
+				// TODO: this is error prone
+				// If we fetched joltron from the previous step we want to use that version over
+				// the one in client-voodoo because this one would be compiled with the platform
+				// specific stuff for game jolt - at the time of writing - the microsoft version info,
+				// and desktop icon.
+				// This might be an issue if the version specified in the joltronGitVersion and the version in client-voodoo
+				// differ. We need a better way to do this.
+				if (!joltronSrc) {
+					// Figure out the correct client voodoo dir based on the platform.
+					let clientVoodooDir = '';
+					if (config.platform === 'osx') {
+						clientVoodooDir = path.resolve(
+							buildDir,
+							'Game Jolt Client.app',
+							'Contents',
+							'Resources',
+							'app.nw',
+							'node_modules',
+							'client-voodoo'
+						);
+					} else {
+						clientVoodooDir = path.resolve(buildDir, 'node_modules', 'client-voodoo');
+					}
+
+					// Joltron is located inside client-voodoo/bin folder.
+					joltronSrc = path.resolve(
+						clientVoodooDir,
+						'bin',
+						config.platform === 'win' ? 'GameJoltRunner.exe' : 'GameJoltRunner'
 					);
-				} else {
-					clientVoodooDir = path.resolve(buildDir, 'node_modules', 'client-voodoo');
 				}
 
-				// Joltron is located inside client-voodoo/bin folder.
-				const joltronSrc = path.resolve(
-					clientVoodooDir,
-					'bin',
-					config.platform === 'win' ? 'GameJoltRunner.exe' : 'GameJoltRunner'
-				);
-
 				// Joltron should be placed next to the client build's data folder.
+				// On windows joltron will be linked to and executed directly, so call it GameJoltClient.exe to avoid confusion.
+				// On linux we have desktop files and on mac its not even visible, so keep them as is.
 				const joltronDest = path.resolve(
 					buildDir,
 					'..',
-					config.platform === 'win' ? 'joltron.exe' : 'joltron'
+					config.platform === 'win' ? 'GameJoltClient.exe' : 'joltron'
 				);
 
 				// Some more info is required for joltron's manifest.
@@ -427,7 +549,7 @@ module.exports = config => {
 
 				// Figure out the archive file list.
 				const archiveFiles = readdir(buildDir)
-					.map(file => './' + file.replace('\\', '/'))
+					.map(file => './' + file.replace(/\\/g, '/'))
 					.sort();
 
 				return new Promise((resolve, reject) => {
@@ -445,6 +567,7 @@ module.exports = config => {
 								path.resolve(buildDir, '..', '.manifest'),
 								JSON.stringify({
 									version: 2,
+									autoRun: true,
 									gameInfo: {
 										dir: path.basename(buildDir),
 										uid: gjGamePackageId + '-' + build.id,
@@ -531,16 +654,22 @@ module.exports = config => {
 				cb(err);
 			});
 		} else if (config.platform === 'win') {
-			// TODO most likely broken
+			const manifest = JSON.parse(
+				fs.readFileSync(path.join(config.clientBuildDir, 'build', '.manifest'), {
+					encoding: 'utf8',
+				})
+			);
+
 			const InnoSetup = require('./client/inno-setup');
 			const certFile = config.production
 				? path.resolve(__dirname, 'client/certs/cert.pfx')
 				: path.resolve(__dirname, 'client/vendor/cert.pfx');
 			const certPw = config.production ? process.env['GJ_CERT_PASS'] : 'GJ123456';
 			const builder = new InnoSetup(
-				path.resolve(config.clientBuildDir, 'build', config.platformArch),
+				path.resolve(config.clientBuildDir, 'build'),
 				path.resolve(config.clientBuildDir),
 				packageJson.version,
+				manifest.gameInfo.uid,
 				certFile,
 				certPw.trim()
 			);
@@ -597,6 +726,7 @@ module.exports = config => {
 			'client:nw',
 			'client:get-gjpush',
 			'client:gjpush-package',
+			'client:get-joltron',
 			'client:joltron',
 			'client:installer',
 			'client:gjpush-installer'
