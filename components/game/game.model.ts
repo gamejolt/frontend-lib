@@ -8,6 +8,7 @@ import { Sellable } from '../sellable/sellable.model';
 import { Registry } from '../registry/registry.service';
 import { Site } from '../site/site-model';
 import { GameCollaborator } from './collaborator/collaborator.model';
+import { Theme } from '../theme/theme.model';
 
 export interface CustomMessage {
 	type: 'info' | 'alert';
@@ -124,6 +125,8 @@ export class Game extends Model {
 	// collaborator perms
 	perms?: Perm[];
 
+	theme?: Theme;
+
 	constructor(data: any = {}) {
 		super(data);
 
@@ -146,6 +149,10 @@ export class Game extends Model {
 		// Should show as owned for the dev and collaborators of the game.
 		if (this.sellable && this.sellable.type !== 'free' && this.hasPerms()) {
 			this.sellable.is_owned = true;
+		}
+
+		if (data.theme) {
+			this.theme = new Theme(data.theme);
 		}
 
 		Registry.store('Game', this);
@@ -430,12 +437,24 @@ export class Game extends Model {
 		return this.$_save('/web/dash/developer/games/settings/save/' + this.id, 'game');
 	}
 
+	$saveDesign() {
+		return this.$_save('/web/dash/developer/games/design/save/' + this.id, 'game', {
+			allowComplexData: ['theme'],
+		});
+	}
+
 	$setStatus(status: number) {
-		return this.$_save('/web/dash/developer/games/set-status/' + this.id + '/' + status, 'game');
+		return this.$_save(
+			'/web/dash/developer/games/set-status/' + this.id + '/' + status,
+			'game'
+		);
 	}
 
 	$setDevStage(stage: number) {
-		return this.$_save('/web/dash/developer/games/set-dev-stage/' + this.id + '/' + stage, 'game');
+		return this.$_save(
+			'/web/dash/developer/games/set-dev-stage/' + this.id + '/' + stage,
+			'game'
+		);
 	}
 
 	$setCanceled(isCanceled: boolean) {
