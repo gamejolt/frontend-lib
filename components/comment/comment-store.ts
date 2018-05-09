@@ -90,10 +90,13 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	@VuexAction
 	async fetchComments(store: CommentActions['comment/fetchComments']) {
 		// load comments after the last timestamp
-		const lastTimestamp =
+		const lastComment =
 			store.parentComments.length === 0
 				? null // no comments loaded
-				: store.parentComments[store.parentComments.length - 1].posted_on;
+				: store.parentComments[store.parentComments.length - 1];
+		// only use the last comment's timestamp if it's not pinned (pinned comment's dates are sorted differently)
+		const lastTimestamp =
+			lastComment !== null && !lastComment.is_pinned ? lastComment.posted_on : null;
 		const response = await Comment.fetch(store.resource, store.resourceId, lastTimestamp);
 
 		const count = response.count || 0;
