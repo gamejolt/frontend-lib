@@ -130,6 +130,16 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 			) {
 				store.remove(otherCommentData.id);
 			}
+		} else {
+			// comment got unpinned, remove from store when at the end of page
+			if (!comment.is_pinned) {
+				if (
+					store.parentComments.length > 0 &&
+					store.parentComments[store.parentComments.length - 1].id === comment.id
+				) {
+					store.remove(comment.id);
+				}
+			}
 		}
 	}
 
