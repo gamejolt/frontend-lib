@@ -1,12 +1,16 @@
 <div class="widget-compiler-widget-game-list" :class="contentClass">
-	<div class="_game-list">
-		<a class="_game"
+	<div class="-game-list">
+		<a
+			class="-game"
 			v-for="game of games"
 			:key="game.id"
 			:href="url( game )"
 			>
-			<app-game-thumbnail-img :game="game"></app-game-thumbnail-img>
-			<div class="_title">{{ game.title }}</div>
+			<app-game-thumbnail-img
+				animate
+				:game="game"
+				/>
+			<div class="-title">{{ game.title }}</div>
 		</a>
 	</div>
 </div>

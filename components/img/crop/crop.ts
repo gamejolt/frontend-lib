@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./crop.html?style=./crop.styl';
 
-import * as Cropper from 'cropperjs';
+import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 
 interface CropData {
@@ -44,8 +44,12 @@ export class AppImgCrop extends Vue {
 					if (e.detail.width < this.minWidth || e.detail.height < this.minHeight) {
 						this.cropper.setData(
 							Object.assign({}, e.detail, {
-								width: e.detail.width < this.minWidth ? this.minWidth : e.detail.width,
-								height: e.detail.height < this.minHeight ? this.minHeight : e.detail.height,
+								width:
+									e.detail.width < this.minWidth ? this.minWidth : e.detail.width,
+								height:
+									e.detail.height < this.minHeight
+										? this.minHeight
+										: e.detail.height,
 							})
 						);
 						return;
@@ -73,6 +77,11 @@ export class AppImgCrop extends Vue {
 
 	beforeDestroy() {
 		this.cropper.destroy();
+	}
+
+	@Watch('aspectRatio')
+	onAspectRatioChange() {
+		this.cropper.setAspectRatio(this.aspectRatio || 0);
 	}
 
 	@Watch('src')

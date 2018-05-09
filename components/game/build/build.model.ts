@@ -287,13 +287,20 @@ export class GameBuild extends Model {
 	$save() {
 		let params = [this.game_id, this.game_package_id, this.game_release_id];
 		if (!this.id) {
-			return this.$_save('/web/dash/developer/games/builds/save/' + params.join('/'), 'gameBuild', {
-				file: this.file,
-			});
+			return this.$_save(
+				'/web/dash/developer/games/builds/save/' + params.join('/'),
+				'gameBuild',
+				{
+					file: this.file,
+				}
+			);
 		} else {
 			// May or may not have an upload file on an edit.
 			params.push(this.id);
-			return this.$_save('/web/dash/developer/games/builds/save/' + params.join('/'), 'gameBuild');
+			return this.$_save(
+				'/web/dash/developer/games/builds/save/' + params.join('/'),
+				'gameBuild'
+			);
 		}
 	}
 

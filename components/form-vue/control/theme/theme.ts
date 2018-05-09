@@ -5,12 +5,13 @@ import { BaseFormControl } from '../base';
 import { AppThemeBubble } from '../../../theme/bubble/bubble';
 import { AppTooltip } from '../../../tooltip/tooltip';
 import { Api } from '../../../api/api.service';
-import { ThemePreset, DefaultThemePreset } from '../../../theme/preset/preset.model';
+import { ThemePreset } from '../../../theme/preset/preset.model';
 import { AppPopover } from '../../../popover/popover';
 import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vue';
 import { makeThemeFromPreset, Theme, makeThemeFromColor } from '../../../theme/theme.model';
 import { Sketch } from 'vue-color';
 import { AppLoading } from '../../../../vue/components/loading/loading';
+import { AppButton } from '../../../button/button';
 
 interface VueColor {
 	hex: string | null;
@@ -22,6 +23,7 @@ interface VueColor {
 		AppLoading,
 		AppThemeBubble,
 		AppPopover,
+		AppButton,
 		picker: Sketch,
 	},
 	directives: {
@@ -39,6 +41,18 @@ export class AppFormControlTheme extends BaseFormControl {
 		return this.controlVal || new Theme();
 	}
 
+	get highlight() {
+		return this.controlVal && (this.controlVal.custom || this.controlVal.highlight);
+	}
+
+	get backlight() {
+		if (this.controlVal) {
+			// Don't show backlight when a custom color is chosen.
+			return this.controlVal.custom ? null : this.controlVal.backlight;
+		}
+		return null;
+	}
+
 	async onPopover() {
 		this.activeTab = this.currentTheme.custom ? 'custom' : 'preset';
 		this.customSelection.hex = this.currentTheme.custom || null;
@@ -49,7 +63,6 @@ export class AppFormControlTheme extends BaseFormControl {
 
 		const response = await Api.sendRequest('/web/theme-presets');
 		this.presets = ThemePreset.populate(response.presets);
-		this.presets.unshift(DefaultThemePreset);
 	}
 
 	selectPreset(preset: ThemePreset) {
@@ -61,14 +74,14 @@ export class AppFormControlTheme extends BaseFormControl {
 			return false;
 		}
 
-		if (this.controlVal === null && preset.id === 0) {
-			return true;
-		}
-
 		return this.currentTheme.theme_preset_id === preset.id;
 	}
 
 	onCustomChange(colors: VueColor) {
 		this.applyValue(makeThemeFromColor((colors.hex || '').substr(1)));
+	}
+
+	clear() {
+		this.applyValue(null);
 	}
 }
