@@ -121,24 +121,19 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 		const otherCommentData = await comment.$pin();
 		if (otherCommentData) {
 			this.updateComment({ store, commentId: otherCommentData.id, data: otherCommentData });
+		}
 
-			// if the unpinned comment is sorted to the very end of the comment chain, remove it from the store
-			// this is done because the comment might not belong on that page
+		// Either old comment was unpinned by pinning a new comment, or the old comment was just
+		// unpinned.
+		const unpinnedComment = otherCommentData || (!comment.is_pinned ? comment : null);
+		if (unpinnedComment) {
+			// If the unpinned comment is sorted to the very end of the comment chain, remove it
+			// from the store. This is done because the comment might not belong on that page.
 			if (
 				store.parentComments.length > 0 &&
-				store.parentComments[store.parentComments.length - 1].id === otherCommentData.id
+				store.parentComments[store.parentComments.length - 1].id === unpinnedComment.id
 			) {
-				store.remove(otherCommentData.id);
-			}
-		} else {
-			// comment got unpinned, remove from store when at the end of page
-			if (!comment.is_pinned) {
-				if (
-					store.parentComments.length > 0 &&
-					store.parentComments[store.parentComments.length - 1].id === comment.id
-				) {
-					store.remove(comment.id);
-				}
+				store.remove(unpinnedComment.id);
 			}
 		}
 	}
