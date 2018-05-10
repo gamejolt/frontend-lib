@@ -1,4 +1,5 @@
 import { Model } from '../../model/model.service';
+import { Game } from '../game.model';
 
 export class GameSketchfab extends Model {
 	media_type: 'sketchfab';
@@ -10,7 +11,7 @@ export class GameSketchfab extends Model {
 	img_thumbnail_med: string;
 	img_thumbnail_large: string;
 
-	getUrl(game: any) {
+	getUrl(game: Game) {
 		return game.getUrl() + '#sketchfab-' + this.id;
 	}
 
