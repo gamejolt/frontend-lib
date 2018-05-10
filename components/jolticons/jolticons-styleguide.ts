@@ -187,9 +187,9 @@ export class AppJolticonsStyleguide extends Vue {
 			'jams',
 			'radio',
 			'client',
+			'share-airplane',
 		]
 			.sort()
 			.filter(i => i.indexOf(this.filter) !== -1);
-		//  | orderBy:jolticon | filter:filter
 	}
 }

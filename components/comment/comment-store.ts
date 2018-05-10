@@ -90,10 +90,13 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	@VuexAction
 	async fetchComments(store: CommentActions['comment/fetchComments']) {
 		// load comments after the last timestamp
-		const lastTimestamp =
+		const lastComment =
 			store.parentComments.length === 0
 				? null // no comments loaded
-				: store.parentComments[store.parentComments.length - 1].posted_on;
+				: store.parentComments[store.parentComments.length - 1];
+		// only use the last comment's timestamp if it's not pinned (pinned comment's dates are sorted differently)
+		const lastTimestamp =
+			lastComment !== null && !lastComment.is_pinned ? lastComment.posted_on : null;
 		const response = await Comment.fetch(store.resource, store.resourceId, lastTimestamp);
 
 		const count = response.count || 0;
@@ -118,14 +121,19 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 		const otherCommentData = await comment.$pin();
 		if (otherCommentData) {
 			this.updateComment({ store, commentId: otherCommentData.id, data: otherCommentData });
+		}
 
-			// if the unpinned comment is sorted to the very end of the comment chain, remove it from the store
-			// this is done because the comment might not belong on that page
+		// Either old comment was unpinned by pinning a new comment, or the old comment was just
+		// unpinned.
+		const unpinnedComment = otherCommentData || (!comment.is_pinned ? comment : null);
+		if (unpinnedComment) {
+			// If the unpinned comment is sorted to the very end of the comment chain, remove it
+			// from the store. This is done because the comment might not belong on that page.
 			if (
 				store.parentComments.length > 0 &&
-				store.parentComments[store.parentComments.length - 1].id === otherCommentData.id
+				store.parentComments[store.parentComments.length - 1].id === unpinnedComment.id
 			) {
-				store.remove(otherCommentData.id);
+				store.remove(unpinnedComment.id);
 			}
 		}
 	}

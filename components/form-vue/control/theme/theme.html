@@ -1,8 +1,8 @@
 <div class="form-control-theme">
 	<a class="-current">
 		<app-theme-bubble
-			:highlight="currentTheme.custom || currentTheme.highlight"
-			:backlight="currentTheme.custom ? null : currentTheme.backlight"
+			:highlight="highlight"
+			:backlight="backlight"
 			active
 			v-app-popover-trigger="`form-control-theme`"
 			/>
@@ -61,7 +61,17 @@
 					:value="customSelection"
 					@input="onCustomChange"
 					/>
+				<br>
 			</div>
+
+			<app-button
+				v-if="!!controlVal"
+				block
+				trans
+				@click.stop.prevent="clear()"
+				>
+				<translate>Clear Theme</translate>
+			</app-button>
 		</div>
 	</app-popover>
 </div>

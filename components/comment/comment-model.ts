@@ -177,7 +177,7 @@ export class Comment extends Model {
 	// got unpinned (or null if that didn't happen)
 	async $pin(): Promise<Comment | null> {
 		const result = await this.$_save(`/comments/pin/${this.id}`, 'comment');
-		return result['otherComment'];
+		return result['otherComment'] ? new Comment(result['otherComment']) : null;
 	}
 }
 
