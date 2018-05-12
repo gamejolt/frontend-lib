@@ -33,13 +33,15 @@ export class AppThemeSvg extends Vue {
 					highlight = highlight_;
 					backlight = darken(0.3, highlight_);
 				}
+				notice = highlight;
 			}
 
 			svgData = svgData
-				.replace('#ccff00', highlight)
-				.replace('#cf0', highlight)
-				.replace('#2f7f6f', backlight)
-				.replace('#ff3fac', notice);
+				.replace(/\#ccff00/gi, highlight)
+				.replace(/\#cf0/gi, highlight)
+				.replace(/\#2f7f6f/gi, backlight)
+				.replace(/\#ff3fac/gi, notice)
+				.replace(/\#31d6ff/gi, backlight);
 		}
 
 		return 'data:image/svg+xml;utf8,' + encodeURIComponent(svgData);
