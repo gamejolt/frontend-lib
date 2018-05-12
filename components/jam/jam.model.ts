@@ -1,6 +1,7 @@
 import { Model } from '../model/model.service';
 import { Environment } from '../environment/environment.service';
 import { Api } from '../api/api.service';
+import { JamOrganizer } from './organizer/organizer.model';
 
 const moment = require('moment');
 
@@ -34,6 +35,8 @@ export class Jam extends Model {
 	updated_on: number;
 	published_on: number;
 
+	organizers: JamOrganizer[];
+
 	static readonly STATUS_HIDDEN = 'hidden';
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_UNLISTED = 'unlisted';
@@ -53,6 +56,12 @@ export class Jam extends Model {
 
 	constructor(data: any = {}) {
 		super(data);
+
+		this.organizers = JamOrganizer.populate(data.organizers);
+	}
+
+	get superOrganizer() {
+		return this.organizers.find(i => i.is_super);
 	}
 
 	get manageUrl() {
