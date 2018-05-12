@@ -4,13 +4,23 @@ import { Comment } from '../comment/comment-model';
 import { CommentVideo } from '../comment/video/video-model';
 import { Game } from '../game/game.model';
 import { FiresidePost } from '../fireside/post/post-model';
+import { Jam } from '../jam/jam.model';
 
 export class EventItem extends Model {
 	static readonly TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 	static readonly TYPE_GAME_PUBLISH = 'game-publish';
 	static readonly TYPE_DEVLOG_POST_ADD = 'devlog-post-add';
+	static readonly TYPE_JAM_START = 'jam-start';
+	static readonly TYPE_JAM_END = 'jam-end';
+	static readonly TYPE_JAM_VOTING_START = 'jam-voting-start';
 
-	type: 'comment-video-add' | 'game-publish' | 'devlog-post-add';
+	type:
+		| 'comment-video-add'
+		| 'game-publish'
+		| 'devlog-post-add'
+		| 'jam-start'
+		| 'jam-end'
+		| 'jam-voting-start';
 	added_on: number;
 	from: User;
 	action: any;
@@ -38,6 +48,9 @@ export class EventItem extends Model {
 			this.action = new FiresidePost(data.action_resource_model);
 			this.from = new User(data.from_resource_model);
 			this.to = new Game(data.to_resource_model);
+		} else if (this.isJamType) {
+			this.action = new Jam(data.action_resource_model);
+			this.from = new User(data.from_resource_model);
 		}
 	}
 
@@ -61,6 +74,14 @@ export class EventItem extends Model {
 		} else if (this.type === EventItem.TYPE_COMMENT_VIDEO_ADD) {
 			return (this.action as CommentVideo).game;
 		}
+	}
+
+	get isJamType() {
+		return (
+			this.type === EventItem.TYPE_JAM_START ||
+			this.type === EventItem.TYPE_JAM_END ||
+			this.type === EventItem.TYPE_JAM_VOTING_START
+		);
 	}
 }
 
