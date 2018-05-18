@@ -11,8 +11,8 @@ import { makeObservableService } from '../../utils/vue';
 import { Prebid } from './prebid.service';
 import { Aps } from './aps.service';
 
-// To show ads on the page for dev, just change this to true.
-const DevDisabled = GJ_BUILD_TYPE === 'development';
+// To show ads on the page for dev, just change this to false.
+const DevDisabled = false;
 
 // The timeout for any bid requests.
 export const BidsTimeout = 2000;

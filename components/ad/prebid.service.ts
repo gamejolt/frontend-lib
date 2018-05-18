@@ -19,17 +19,12 @@ interface AdPlacementVendorParam {
 	appNexus: object;
 	indexExchange: object;
 	rubicon: object;
-	onedisplay: object;
 }
 
 const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'top',
 		size: 'rectangle',
-		onedisplay: {
-			placement: '4762650',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095780',
 		},
@@ -47,10 +42,6 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'top',
 		size: 'leaderboard',
-		onedisplay: {
-			placement: '4762652',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095779',
 		},
@@ -68,10 +59,6 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'bottom',
 		size: 'rectangle',
-		onedisplay: {
-			placement: '4762651',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095790',
 		},
@@ -89,10 +76,6 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'bottom',
 		size: 'leaderboard',
-		onedisplay: {
-			placement: '4762653',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095782',
 		},
@@ -110,10 +93,6 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'footer',
 		size: 'rectangle',
-		onedisplay: {
-			placement: '4762654',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095977',
 		},
@@ -160,10 +139,6 @@ export class Prebid {
 			code: slot.id,
 			sizes: slot.slotSizes,
 			bids: [
-				{
-					bidder: 'onedisplay',
-					params: placement.onedisplay,
-				},
 				{
 					bidder: 'appnexus',
 					params: placement.appNexus,
@@ -233,7 +208,7 @@ export class Prebid {
 		this.pbjs.que.push(() => {
 			this.pbjs.setConfig({
 				bidderTimeout: BidsTimeout,
-				publisherDomain: 'https://gamejolt.com',
+				publisherDomain: 'gamejolt.com',
 			});
 		});
 	}
