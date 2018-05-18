@@ -20,6 +20,7 @@ import { AppScrollScroller } from '../scroll/scroller/scroller';
 })
 export class AppMediaBar extends Vue {
 	@Prop(Array) mediaItems: any[];
+	@Prop(Boolean) noOverlayScrollbars?: boolean;
 
 	private urlChecked = false;
 	private lightbox?: AppMediaBarLightbox;
@@ -48,7 +49,9 @@ export class AppMediaBar extends Vue {
 			hash += this.activeItem.id;
 		}
 
-		this.$router.replace({ hash });
+		if (this.$router) {
+			this.$router.replace({ hash });
+		}
 	}
 
 	async updated() {
