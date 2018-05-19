@@ -1,5 +1,9 @@
-<div class="widget-compiler-widget-game-media"
+<div
 	v-if="_items.length"
+	class="widget-compiler-widget-game-media"
 	>
-	<app-media-bar :media-items="_items"></app-media-bar>
+	<app-media-bar
+		no-overlay-scrollbars
+		:media-items="_items"
+		/>
 </div>
