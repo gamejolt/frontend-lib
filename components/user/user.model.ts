@@ -48,6 +48,8 @@ export class User extends Model {
 	follower_count: number;
 	is_following: boolean;
 
+	newsletter: boolean;
+
 	// Fireside.
 	can_manage: boolean;
 	fireside_ga_tracking_id: string;
@@ -165,6 +167,12 @@ export class User extends Model {
 	$saveEmailPreferences() {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
 		return this.$_save('/web/dash/email-preferences/save', 'user');
+	}
+
+	$toggleEmails(state: boolean) {
+		return this.$_save('/web/dash/email-preferences/toggle-emails', 'user', {
+			data: { state },
+		});
 	}
 
 	$saveFireside() {
