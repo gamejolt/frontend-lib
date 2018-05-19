@@ -1,0 +1,56 @@
+<div class="col-md-6 linked-account">
+    <div class="well fill-offset">
+        <div class="linked-account-icon">
+            <app-jolticon
+                big
+                :icon="providerIcon"
+                />
+        </div>
+
+        <div class="linked-account-body">
+            <h5>
+                <template>
+                    <translate>{{ providerName }}</translate>
+                </template>
+            </h5>
+
+            <template v-if="!isAccountSet">
+                <p>
+                    <small class="text-muted"><translate>Not linked.</translate></small>
+                </p>
+
+                <app-button
+                    primary
+                    icon="link"
+                    @click="onLink"
+                    >
+                    <translate>Link Now</translate>
+                </app-button>
+            </template>
+            <template v-else>
+                <p>
+                    <strong>
+                        <a :href="platformLink" target="_blank">
+                            {{ account.name }}
+                        </a>
+                    </strong>
+                </p>
+
+                <div>
+                    <app-button
+                        @click="onSync"
+                        >
+                        <translate>Sync</translate>
+                    </app-button>
+                    <app-button
+                        trans
+                        @click="onUnlink"
+                        >
+                        <translate>Unlink</translate>
+                    </app-button>
+                </div>
+            </template>
+        </div>
+
+    </div>
+</div>
