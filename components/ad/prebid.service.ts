@@ -9,7 +9,11 @@ interface AdUnitBid {
 
 interface AdUnit {
 	code: string;
-	sizes: [number, number][];
+	mediaTypes: {
+		banner: {
+			sizes: [number, number][];
+		};
+	};
 	bids: AdUnitBid[];
 }
 
@@ -29,7 +33,8 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095780',
 		},
 		ix: {
-			siteID: '220482',
+			siteId: '220482',
+			size: [300, 250],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -45,7 +50,8 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095779',
 		},
 		ix: {
-			siteID: '220483',
+			siteId: '220483',
+			size: [728, 90],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -61,7 +67,8 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095790',
 		},
 		ix: {
-			siteID: '220484',
+			siteId: '220484',
+			size: [300, 250],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -77,7 +84,8 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095782',
 		},
 		ix: {
-			siteID: '220485',
+			siteId: '220485',
+			size: [728, 90],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -93,7 +101,8 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 			placementId: '12095977',
 		},
 		ix: {
-			siteID: '220486',
+			siteId: '220486',
+			size: [300, 250],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -132,7 +141,11 @@ export class Prebid {
 
 		const unit = {
 			code: slot.id,
-			sizes: slot.slotSizes,
+			mediaTypes: {
+				banner: {
+					sizes: slot.slotSizes,
+				},
+			},
 			bids: [
 				{
 					bidder: 'appnexus',
