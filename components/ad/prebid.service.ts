@@ -17,7 +17,7 @@ interface AdPlacementVendorParam {
 	pos: AdSlotPos;
 	size: string;
 	appNexus: object;
-	indexExchange: object;
+	ix: object;
 	rubicon: object;
 }
 
@@ -28,8 +28,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 		appNexus: {
 			placementId: '12095780',
 		},
-		indexExchange: {
-			id: '01',
+		ix: {
 			siteID: '220482',
 		},
 		rubicon: {
@@ -45,8 +44,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 		appNexus: {
 			placementId: '12095779',
 		},
-		indexExchange: {
-			id: '02',
+		ix: {
 			siteID: '220483',
 		},
 		rubicon: {
@@ -62,8 +60,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 		appNexus: {
 			placementId: '12095790',
 		},
-		indexExchange: {
-			id: '03',
+		ix: {
 			siteID: '220484',
 		},
 		rubicon: {
@@ -79,8 +76,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 		appNexus: {
 			placementId: '12095782',
 		},
-		indexExchange: {
-			id: '04',
+		ix: {
 			siteID: '220485',
 		},
 		rubicon: {
@@ -96,8 +92,7 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 		appNexus: {
 			placementId: '12095977',
 		},
-		indexExchange: {
-			id: '05',
+		ix: {
 			siteID: '220486',
 		},
 		rubicon: {
@@ -144,8 +139,8 @@ export class Prebid {
 					params: placement.appNexus,
 				},
 				{
-					bidder: 'indexExchange',
-					params: placement.indexExchange,
+					bidder: 'ix',
+					params: placement.ix,
 				},
 				{
 					bidder: 'rubicon',
