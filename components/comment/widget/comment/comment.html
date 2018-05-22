@@ -125,20 +125,11 @@
 				@click="isShowingChildren = !isShowingChildren"
 				>
 				<translate
-					v-if="!isShowingChildren"
 					:translate-n="children.length"
 					:translate-params="{ count: children.length }"
-					translate-plural="+%{ count } replies"
+					translate-plural="%{ count } replies"
 					>
-					+%{ count } reply
-				</translate>
-				<translate
-					v-else
-					:translate-n="children.length"
-					:translate-params="{ count: children.length }"
-					translate-plural="+%{ count } replies"
-					>
-					-%{ count } reply
+					%{ count } reply
 				</translate>
 			</app-button>
 
