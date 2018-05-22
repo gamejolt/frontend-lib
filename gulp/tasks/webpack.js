@@ -379,6 +379,7 @@ module.exports = function(config) {
 								module.context &&
 								module.context.indexOf('node_modules') !== -1 &&
 								// Don't pull styles into a vendor stylesheet (not worth it).
+								module.resource &&
 								module.resource.indexOf('.css') === -1
 							);
 						},
