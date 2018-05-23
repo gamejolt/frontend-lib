@@ -1,0 +1,36 @@
+<div :class="mainDivClass">
+    <div class="well fill-offset">
+        <div class="credit-card-icon">
+            <app-jolticon
+                big
+                icon="credit-card" />
+        </div>
+
+        <div class="credit-card-body">
+            <h5>
+                <template>
+                    <translate>Credit Card</translate>
+                </template>
+            </h5>
+
+            <template>
+                <p>
+                    {{ brandName }}
+                </p>
+
+                <p>
+                    Last 4 digits: {{ last4 }} <br />
+                    Expires on: {{ expires }}
+                </p>
+
+                <app-button
+                    v-if="!preview"
+                    primary
+                    icon="remove"
+                    @click="onRemove">
+                    <translate>Remove Card</translate>
+                </app-button>
+            </template>
+        </div>
+    </div>
+</div>
