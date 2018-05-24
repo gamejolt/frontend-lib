@@ -1,4 +1,66 @@
 <app-form class="auth-form" name="joinForm">
+	<div class="text-center">
+		<p>
+			<b>
+				<translate>Sign up with:</translate>
+			</b>
+		</p>
+		<p>
+			<app-button
+				icon="facebook"
+				circle
+				primary
+				class="anim-fade-in-enlarge stagger"
+				:disabled="Connection.isClientOffline || blocked"
+				@click.prevent="linkedChoose('facebook')"
+				v-app-tooltip="`Facebook`"
+				/>
+
+			<app-button
+				icon="twitter-bird"
+				circle
+				primary
+				class="anim-fade-in-enlarge stagger"
+				:disabled="Connection.isClientOffline || blocked"
+				@click.prevent="linkedChoose('twitter')"
+				v-app-tooltip="`Twitter`"
+				/>
+
+			<app-button
+				icon="google-plus"
+				circle
+				primary
+				class="anim-fade-in-enlarge stagger"
+				:disabled="Connection.isClientOffline || blocked"
+				@click.prevent="linkedChoose('google')"
+				v-app-tooltip="`Google+`"
+				/>
+
+			<app-button
+				icon="twitch"
+				circle
+				primary
+				class="anim-fade-in-enlarge stagger"
+				:disabled="Connection.isClientOffline || blocked"
+				@click.prevent="linkedChoose('twitch')"
+				v-app-tooltip="`Twitch`"
+				/>
+		</p>
+	</div>
+
+	<p class="page-help">
+		By signing up, you agree to the
+		<a :href="Environment.baseUrl + '/terms'" class="link-muted">Terms of Use</a>
+		and
+		<a :href="Environment.baseUrl + '/privacy'" class="link-muted">Privacy Policy</a>,
+		including
+		<a :href="Environment.baseUrl + '/cookies'" class="link-muted">Cookie Policy</a>.
+	</p>
+
+	<div class="auth-line-thru">
+		<translate>or</translate>
+	</div>
+
 	<fieldset :disabled="Connection.isClientOffline">
 
 		<app-form-group name="email" :label="$gettext( 'Email' )" :hide-label="true">
@@ -59,4 +121,8 @@
 		</div>
 
 	</fieldset>
+
+	<div class="alert alert-notice -blocked-message" v-if="blocked">
+		<translate>You must wait 15 minutes before creating another account.</translate>
+	</div>
 </app-form>
