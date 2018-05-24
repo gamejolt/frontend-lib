@@ -1,15 +1,23 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./login-form.html';
+import View from '!view!./login-form.html?style=./login-form.styl';
 
 import { Connection } from '../../connection/connection-service';
 import { BaseForm, FormOnSubmit } from '../../form-vue/form.service';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { Api } from '../../api/api.service';
+import { Provider, UserLinkedAccounts } from '../../user/linked-accounts/linked-accounts.service';
+import { AppTooltip } from '../../tooltip/tooltip';
+import { Environment } from '../../environment/environment.service';
+import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 
 @View
 @Component({
 	components: {
 		AppLoading,
+		AppJolticon,
+	},
+	directives: {
+		AppTooltip,
 	},
 })
 export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
@@ -21,6 +29,7 @@ export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
 	blockedLogin = false;
 
 	readonly Connection = Connection;
+	readonly Environment = Environment;
 
 	onChanged() {
 		this.resetErrors();
@@ -47,5 +56,9 @@ export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
 		}
 
 		return response;
+	}
+
+	linkedChoose(provider: Provider) {
+		UserLinkedAccounts.login(this.$router, provider);
 	}
 }
