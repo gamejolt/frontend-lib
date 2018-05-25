@@ -3,57 +3,47 @@
 	:id="`game-package-card-${package.id}`"
 	>
 
-	<div
-		class="game-package-card-pricing"
-		:class="{
-			'fill-gray': !isOwned,
-			'game-package-card-pricing-owned fill-highlight': isOwned
-		}"
-		>
-
-		<!-- If they own the package -->
-		<div v-if="isOwned">
-			<strong class="text-upper">
-				<translate>Owned</translate>
+	<div class="game-package-card-pricing fill-gray">
+		<!-- Fixed Pricing -->
+		<div v-if="sellable.type === 'paid'">
+			<span class="game-package-card-pricing-sale-percentage"
+				v-if="sale"
+				>
+				-{{ salePercentageOff }}%
+			</span>
+			<strong class="game-package-card-pricing-amount">
+				{{ pricing.amount | currency }}
 			</strong>
+			<span class="game-package-card-pricing-amount game-package-card-pricing-amount-old"
+				v-if="sale"
+				>
+				{{ saleOldPricing.amount | currency }}
+			</span>
 		</div>
 
-		<!-- If they don't own the package yet. -->
-		<template v-else>
+		<!-- Pay What You Want -->
+		<div v-else-if="sellable.type === 'pwyw'">
+			<translate class="game-package-card-pricing-tag text-lower">
+				Name Your Price
+			</translate>
+		</div>
 
-			<!-- Fixed Pricing -->
-			<div v-if="sellable.type === 'paid'">
-				<span class="game-package-card-pricing-sale-percentage"
-					v-if="sale"
-					>
-					-{{ salePercentageOff }}%
-				</span>
-				<strong class="game-package-card-pricing-amount">
-					{{ pricing.amount | currency }}
-				</strong>
-				<span class="game-package-card-pricing-amount game-package-card-pricing-amount-old"
-					v-if="sale"
-					>
-					{{ saleOldPricing.amount | currency }}
-				</span>
-				<br><span class="game-package-card-pricing-tag muted">or more</span>
-			</div>
+		<!-- Free/Default -->
+		<div v-else-if="sellable.type === 'free'">
+			<strong class="game-package-card-pricing-amount text-upper">
+				<translate>Free</translate>
+			</strong>
+		</div>
+	</div>
 
-			<!-- Pay What You Want -->
-			<div v-else-if="sellable.type === 'pwyw'">
-				<translate class="game-package-card-pricing-tag text-lower">
-					Name Your Price
-				</translate>
-			</div>
-
-			<!-- Free/Default -->
-			<div v-else-if="sellable.type === 'free'">
-				<strong class="game-package-card-pricing-amount text-upper">
-					<translate>Free</translate>
-				</strong>
-			</div>
-		</template>
-
+	<!-- If they own the package -->
+	<div
+		v-if="isOwned"
+		class="game-package-card-pricing game-package-card-pricing-owned fill-highlight"
+		>
+		<strong class="text-upper">
+			<translate>Owned</translate>
+		</strong>
 	</div>
 
 	<div class="card-title">
