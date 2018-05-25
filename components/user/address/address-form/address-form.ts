@@ -1,13 +1,15 @@
 import { Watch, Component } from 'vue-property-decorator';
 import View from '!view!./address-form.html';
 
-import { BaseForm } from '../../../form-vue/form.service';
+import { BaseForm, FormOnSubmitSuccess, FormOnSubmitError } from '../../../form-vue/form.service';
 import { Address } from '../address.model';
 import { Geo, Region } from '../../../geo/geo.service';
+import { Growls } from '../../../growls/growls.service';
 
 @View
 @Component({})
-export class FormUserAddress extends BaseForm<Address> {
+export class FormUserAddress extends BaseForm<Address>
+	implements FormOnSubmitSuccess, FormOnSubmitError {
 	modelClass = Address;
 
 	countries = Geo.getCountries();
@@ -26,7 +28,11 @@ export class FormUserAddress extends BaseForm<Address> {
 		this.initialLoad = false;
 	}
 
-	async onSave() {
-		console.log('maybe this');
+	onSubmitSuccess(response: any) {
+		Growls.success('Successfully updated your Billing Address.', 'Edit Billing Address');
+	}
+
+	onSubmitError(response: any) {
+		Growls.error('Failed to update your Billing Address.', 'Edit Billing Address');
 	}
 }

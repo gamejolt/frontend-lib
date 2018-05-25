@@ -26,7 +26,7 @@ export class Address extends Model {
 	}
 
 	async $save() {
-		console.log('this');
+		return await this.$_save('/web/dash/billing-address/save/' + this.id, 'address');
 	}
 }
 

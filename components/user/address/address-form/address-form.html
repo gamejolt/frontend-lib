@@ -67,11 +67,11 @@
         </div>
     </div>
 
-    <div>
-        <app-button
-            @click="onSave">
+    <div class="pull-right">
+        <app-form-button
+            :disabled="!valid">
             <translate>Save</translate>
-        </app-button>
+        </app-form-button>
     </div>
 
 </app-form>

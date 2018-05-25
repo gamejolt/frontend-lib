@@ -13,4 +13,8 @@ import { FormUserAddress } from '../address-form/address-form';
 })
 export default class AppUserAddressEditModal extends BaseModal {
 	@Prop(Address) address: Address;
+
+	onSaved() {
+		console.log('saved');
+	}
 }
