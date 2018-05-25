@@ -1,4 +1,4 @@
-import { Modal } from '../modal.service';
+import { Modal } from '../../modal/modal.service';
 import { asyncComponentLoader } from '../../../utils/utils';
 import { PaymentSource } from '../../payment-source/payment-source.model';
 
@@ -13,7 +13,7 @@ export class ModalCreditCardRemove {
 			size: 'sm',
 			component: () =>
 				asyncComponentLoader(
-					import(/* webpackChunkName: "ModalCreditCardRemove" */ './credit-card-remove')
+					import(/* webpackChunkName: "ModalCreditCardRemove" */ './credit-card-remove-modal')
 				),
 			props: { message, paymentSource, title, buttonType },
 		});

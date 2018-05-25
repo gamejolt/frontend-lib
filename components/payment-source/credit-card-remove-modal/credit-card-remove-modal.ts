@@ -1,9 +1,9 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./credit-card-remove.html';
+import View from '!view!./credit-card-remove-modal.html';
 
-import { BaseModal } from '../base';
-import { PaymentSource } from '../../payment-source/payment-source.model';
-import { AppCreditCard } from '../../payment-source/credit-card';
+import { BaseModal } from '../../modal/base';
+import { PaymentSource } from '../payment-source.model';
+import { AppCreditCard } from '../credit-card';
 
 @View
 @Component({
