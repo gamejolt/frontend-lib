@@ -81,6 +81,7 @@ export class Payload {
 			const data = response.data;
 
 			this.checkPayloadUser(response, options);
+			this.checkPayloadConsents(response);
 			this.checkPayloadVersion(data, options);
 			this.checkAnalyticsExperiments(response, options);
 
@@ -128,8 +129,6 @@ export class Payload {
 	}
 
 	private static checkPayloadUser(response: any, options: RequestOptions) {
-		// TODO: yaREEEEEEEEEEEEEEEEEEEEEEEf, should we refresh?
-
 		if (options.ignorePayloadUser || !response || !response.data || !this.store) {
 			return;
 		}
@@ -146,6 +145,20 @@ export class Payload {
 				this.store.commit('app/setUser', new User(data.user));
 			}
 		}
+	}
+
+	private static checkPayloadConsents(response: any) {
+		if (!response || !response.data || !this.store) {
+			return;
+		}
+
+		const data = response.data;
+		if (typeof data.c === 'object') {
+			this.store.commit('app/setConsents', data.c);
+			return;
+		}
+
+		this.store.commit('app/setConsents', {});
 	}
 
 	private static checkAnalyticsExperiments(response: any, _options: RequestOptions) {
