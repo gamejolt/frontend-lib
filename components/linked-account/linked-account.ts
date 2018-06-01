@@ -60,7 +60,7 @@ export class AppLinkedAccount extends Vue {
 	}
 
 	onSync(e: Event) {
-		this.$emit('sync', e);
+		this.$emit('sync', e, this.getProvider());
 	}
 
 	onUnlink(e: Event) {
