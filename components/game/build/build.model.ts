@@ -160,6 +160,7 @@ export class GameBuild extends Model {
 	emulator_type: string;
 	embed_width: number;
 	embed_height: number;
+	embed_fit_to_screen: boolean;
 	java_class_name: string;
 	browser_disable_right_click: boolean;
 	https_enabled: boolean;
