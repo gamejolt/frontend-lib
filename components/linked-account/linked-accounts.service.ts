@@ -9,4 +9,9 @@ export class LinkedAccounts {
 		const response = await Api.sendRequest(routeUrl + provider, {});
 		window.location.href = response.redirectLocation;
 	}
+
+	static async unlink(provider: Provider, routeUrl: string) {
+		const response = await Api.sendRequest(routeUrl + provider);
+		return response;
+	}
 }
