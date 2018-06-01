@@ -9,6 +9,7 @@ import { Registry } from '../registry/registry.service';
 import { Site } from '../site/site-model';
 import { GameCollaborator } from './collaborator/collaborator.model';
 import { Theme } from '../theme/theme.model';
+import { LinkedAccount } from '../linked-account/linked-account.model';
 
 export interface CustomMessage {
 	type: 'info' | 'alert';
@@ -126,6 +127,7 @@ export class Game extends Model {
 	perms?: Perm[];
 
 	theme?: Theme;
+	linkedAccounts?: LinkedAccount[];
 
 	constructor(data: any = {}) {
 		super(data);
@@ -153,6 +155,10 @@ export class Game extends Model {
 
 		if (data.theme) {
 			this.theme = new Theme(data.theme);
+		}
+
+		if (data.linked_accounts) {
+			this.linkedAccounts = LinkedAccount.populate(data.linked_accounts);
 		}
 
 		Registry.store('Game', this);

@@ -36,19 +36,8 @@ export class AppLinkedAccount extends Vue {
 
 	get platformLink() {
 		if (this.account) {
-			const provider = this.getProvider();
-			switch (provider) {
-				case LinkedAccount.PROVIDER_FACEBOOK:
-					return `https://facebook.com/${this.account.provider_id}`;
-				case LinkedAccount.PROVIDER_TWITTER:
-					return `https://twitter.com/${this.account.name}`;
-				case LinkedAccount.PROVIDER_GOOGLE:
-					return `https://plus.google.com/${this.account.provider_id}`;
-				case LinkedAccount.PROVIDER_TWITCH:
-					return `https://twitch.tv/${this.account.name}`;
-			}
+			return this.account.platformLink;
 		}
-		return 'Invalid provider';
 	}
 
 	get isAccountSet() {

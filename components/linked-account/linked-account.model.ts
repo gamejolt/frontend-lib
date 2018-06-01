@@ -42,6 +42,20 @@ export class LinkedAccount extends Model {
 		}
 		return 'Invalid provider';
 	}
+
+	get platformLink() {
+		switch (this.provider) {
+			case LinkedAccount.PROVIDER_FACEBOOK:
+				return `https://facebook.com/${this.provider_id}`;
+			case LinkedAccount.PROVIDER_TWITTER:
+				return `https://twitter.com/${this.name}`;
+			case LinkedAccount.PROVIDER_GOOGLE:
+				return `https://plus.google.com/${this.provider_id}`;
+			case LinkedAccount.PROVIDER_TWITCH:
+				return `https://twitch.tv/${this.name}`;
+		}
+		return 'Invalid provider';
+	}
 }
 
 Model.create(LinkedAccount);
