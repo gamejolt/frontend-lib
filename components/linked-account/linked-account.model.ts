@@ -2,6 +2,8 @@ import { Model } from '../model/model.service';
 import { User } from '../user/user.model';
 import { Game } from '../game/game.model';
 
+export type Provider = 'twitter' | 'facebook' | 'twitch' | 'google';
+
 export class LinkedAccount extends Model {
 	static readonly PROVIDER_FACEBOOK = 'facebook';
 	static readonly PROVIDER_TWITTER = 'twitter';
@@ -25,6 +27,20 @@ export class LinkedAccount extends Model {
 		if (data.game) {
 			this.game = new Game(data.game);
 		}
+	}
+
+	static getProviderDisplayName(provider: string) {
+		switch (provider) {
+			case LinkedAccount.PROVIDER_FACEBOOK:
+				return 'Facebook';
+			case LinkedAccount.PROVIDER_TWITTER:
+				return 'Twitter';
+			case LinkedAccount.PROVIDER_GOOGLE:
+				return 'Google+';
+			case LinkedAccount.PROVIDER_TWITCH:
+				return 'Twitch';
+		}
+		return 'Invalid provider';
 	}
 }
 

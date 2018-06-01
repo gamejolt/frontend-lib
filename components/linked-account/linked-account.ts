@@ -31,18 +31,7 @@ export class AppLinkedAccount extends Vue {
 
 	get providerName() {
 		const provider = this.getProvider();
-		switch (provider) {
-			case LinkedAccount.PROVIDER_FACEBOOK:
-				return 'Facebook';
-			case LinkedAccount.PROVIDER_TWITTER:
-				return 'Twitter';
-			case LinkedAccount.PROVIDER_GOOGLE:
-				return 'Google+';
-			case LinkedAccount.PROVIDER_TWITCH:
-				return 'Twitch';
-		}
-		// invalid provider
-		return 'Invalid provider';
+		return LinkedAccount.getProviderDisplayName(provider);
 	}
 
 	get platformLink() {
@@ -50,11 +39,11 @@ export class AppLinkedAccount extends Vue {
 			const provider = this.getProvider();
 			switch (provider) {
 				case LinkedAccount.PROVIDER_FACEBOOK:
-					return `https://facebook.com/${this.account.id}`;
+					return `https://facebook.com/${this.account.provider_id}`;
 				case LinkedAccount.PROVIDER_TWITTER:
 					return `https://twitter.com/${this.account.name}`;
 				case LinkedAccount.PROVIDER_GOOGLE:
-					return `https://plus.google.com/${this.account.id}`;
+					return `https://plus.google.com/${this.account.provider_id}`;
 				case LinkedAccount.PROVIDER_TWITCH:
 					return `https://twitch.tv/${this.account.name}`;
 			}
@@ -63,7 +52,7 @@ export class AppLinkedAccount extends Vue {
 	}
 
 	get isAccountSet() {
-		return !!this.account;
+		return !!this.account && this.account.provider_id && this.account.name;
 	}
 
 	private getProvider() {
@@ -79,6 +68,6 @@ export class AppLinkedAccount extends Vue {
 	}
 
 	onLink(e: Event) {
-		this.$emit('link', e);
+		this.$emit('link', e, this.getProvider());
 	}
 }
