@@ -17,16 +17,21 @@
 				:spanWidth="true">
 				<app-loading v-if="isLoading" />
 				<div v-else>
-					<select class="form-control" @change="changeSelected($event.target.value)" @click.prevent>
-						<option
-							v-for="page of pages"
-							:key="page.id"
-							:selected="page.id === selectedPage.id"
+					<div v-for="page of pages"
+						:key="page.id"
+						:value="page.id">
+						<input type="radio"
 							:value="page.id"
-							>
-							{{ page.name }}
-						</option>
-					</select>
+							:id="page.id"
+							name="pages"
+							:checked="page.id === selectedPage.id"
+							@change="changeSelected($event.target.value)" />
+						<label :for="page.id">{{page.name}}</label>
+						<small class="text-muted"
+						 	v-if="account.facebookSelectedPage && page.id === account.facebookSelectedPage.id">
+							<translate>Currently Linked</translate>
+						</small>
+					</div>
 				</div>
 			</app-linked-account>
 		</div>
