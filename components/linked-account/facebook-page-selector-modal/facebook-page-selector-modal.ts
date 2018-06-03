@@ -23,14 +23,10 @@ export default class AppModalFacebookPageSelector extends BaseModal {
 
 	isLoading = true;
 	pages: FacebookPage[];
-	selectedPage: FacebookPage;
+	selectedPage: FacebookPage | null;
 
 	get canConfirm() {
-		return (
-			this.selectedPage &&
-			(this.account.facebookSelectedPage === null ||
-				this.selectedPage.id !== this.account.facebookSelectedPage.id)
-		);
+		return this.selectedPage !== null;
 	}
 
 	async created() {
