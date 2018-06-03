@@ -12,6 +12,8 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 export class AppLinkedAccount extends Vue {
 	@Prop(LinkedAccount) account: LinkedAccount | null;
 	@Prop(String) provider: string;
+	@Prop(Boolean) preview: boolean;
+	@Prop(Boolean) spanWidth: boolean;
 
 	get providerIcon() {
 		const provider = this.getProvider();
@@ -42,6 +44,10 @@ export class AppLinkedAccount extends Vue {
 
 	get isAccountSet() {
 		return !!this.account && this.account.provider_id && this.account.name;
+	}
+
+	get mainClass() {
+		return this.spanWidth ? '' : 'col-md-6 ' + 'linked-account';
 	}
 
 	private getProvider() {

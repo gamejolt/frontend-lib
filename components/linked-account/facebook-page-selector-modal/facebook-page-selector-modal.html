@@ -1,0 +1,53 @@
+<app-modal>
+
+	<div class="modal-header">
+		<h2 class="modal-title">
+			{{ title }}
+		</h2>
+	</div>
+
+	<div class="modal-body">
+		<p>{{ message }}</p>
+
+		<div class="row">
+			<app-linked-account
+				provider="facebook"
+				:account="account"
+				:preview="true"
+				:spanWidth="true">
+				<app-loading v-if="isLoading" />
+				<div v-else>
+					<select class="form-control" @change="changeSelected($event.target.value)" @click.prevent>
+						<option
+							v-for="page of pages"
+							:key="page.id"
+							:selected="page.id === selectedPage.id"
+							:value="page.id"
+							>
+							{{ page.name }}
+						</option>
+					</select>
+				</div>
+			</app-linked-account>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<app-button
+			primary
+			solid
+			@click="ok"
+			>
+			<translate v-if="buttonType === 'ok'">OK</translate>
+			<translate v-else-if="buttonType === 'yes'">Yes</translate>
+		</app-button>
+		<app-button
+			trans
+			@click="cancel"
+			>
+			<translate v-if="buttonType === 'ok'">Cancel</translate>
+			<translate v-else-if="buttonType === 'yes'">No</translate>
+		</app-button>
+	</div>
+
+</app-modal>

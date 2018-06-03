@@ -1,4 +1,4 @@
-<div class="col-md-6 linked-account">
+<div :class="mainClass">
     <div class="well fill-offset">
         <div class="linked-account-icon">
             <app-jolticon
@@ -23,6 +23,7 @@
                     primary
                     icon="link"
                     @click="onLink"
+                    v-if="!preview"
                     >
                     <translate>Link Now</translate>
                 </app-button>
@@ -36,7 +37,7 @@
                     </strong>
                 </p>
 
-                <div>
+                <div v-if="!preview">
                     <app-button
                         @click="onSync"
                         >
@@ -50,6 +51,8 @@
                     </app-button>
                 </div>
             </template>
+
+            <slot />
         </div>
 
     </div>
