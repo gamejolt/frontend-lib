@@ -6,6 +6,7 @@ import { LinkedAccount, FacebookPage } from '../linked-account.model';
 import { AppLinkedAccount } from '../linked-account';
 import { Api } from '../../api/api.service';
 import { AppLoading } from '../../../vue/components/loading/loading';
+import { stringSort } from '../../../utils/array';
 
 @View
 @Component({
@@ -41,7 +42,9 @@ export default class AppModalFacebookPageSelector extends BaseModal {
 			null,
 			{ detach: true }
 		);
-		this.pages = payload.pages;
+		this.pages = payload.pages.sort((a: FacebookPage, b: FacebookPage) =>
+			stringSort(a.name, b.name)
+		);
 		if (this.account.facebookSelectedPage) {
 			this.selectedPage = this.account.facebookSelectedPage;
 		} else if (this.pages.length > 0) {
