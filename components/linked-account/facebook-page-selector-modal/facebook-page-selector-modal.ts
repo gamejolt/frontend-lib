@@ -26,7 +26,11 @@ export default class AppModalFacebookPageSelector extends BaseModal {
 	selectedPage: FacebookPage | null;
 
 	get canConfirm() {
-		return this.selectedPage !== null;
+		return !!this.selectedPage;
+	}
+
+	get hasPages() {
+		return this.pages && this.pages.length > 0;
 	}
 
 	async created() {

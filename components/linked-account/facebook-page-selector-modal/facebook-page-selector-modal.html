@@ -17,6 +17,11 @@
 				:spanWidth="true">
 				<app-loading v-if="isLoading" />
 				<div v-else>
+					<div v-if="!hasPages">
+						<small class="text-muted">
+							<translate>You have no Facebook Pages associated with your account.</translate>
+						</small>
+					</div>
 					<div v-for="page of pages"
 						:key="page.id"
 						:value="page.id">
