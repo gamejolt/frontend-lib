@@ -9,6 +9,12 @@ export type FacebookPage = {
 	name: string;
 };
 
+export type TumblrBlog = {
+	name: string;
+	url: string;
+	title: string;
+};
+
 export class LinkedAccount extends Model {
 	static readonly PROVIDER_FACEBOOK = 'facebook';
 	static readonly PROVIDER_TWITTER = 'twitter';
@@ -72,17 +78,6 @@ export class LinkedAccount extends Model {
 		return 'remove'; // invalid provider
 	}
 
-	// returns the name of the page selected for this facebook account
-	get facebookSelectedPage(): FacebookPage | null {
-		if (this.provider === LinkedAccount.PROVIDER_FACEBOOK && this.extra_data) {
-			const selectedPage = this.extra_data.selectedPage;
-			if (selectedPage) {
-				return selectedPage;
-			}
-		}
-		return null;
-	}
-
 	static getProviderDisplayName(provider: string) {
 		switch (provider) {
 			case LinkedAccount.PROVIDER_FACEBOOK:
@@ -99,10 +94,32 @@ export class LinkedAccount extends Model {
 		return 'Invalid provider';
 	}
 
+	// returns the name of the page selected for this facebook account
+	get facebookSelectedPage(): FacebookPage | null {
+		if (this.provider === LinkedAccount.PROVIDER_FACEBOOK && this.extra_data) {
+			const selectedPage = this.extra_data.selectedPage;
+			if (selectedPage) {
+				return selectedPage;
+			}
+		}
+		return null;
+	}
+
 	get facebookPageUrl(): string | null {
 		const selectedPage = this.facebookSelectedPage;
 		if (selectedPage) {
 			return 'https://facebook.com/' + selectedPage.id;
+		}
+		return null;
+	}
+
+	get tumblrSelectedBlog(): TumblrBlog | null {
+		if (this.provider === LinkedAccount.PROVIDER_TUMBLR && this.extra_data) {
+			const selectedBlog = this.extra_data.selectedBlog;
+			if (selectedBlog) {
+				console.log(JSON.stringify(selectedBlog));
+				return selectedBlog;
+			}
 		}
 		return null;
 	}
