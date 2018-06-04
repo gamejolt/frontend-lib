@@ -30,11 +30,14 @@
             </template>
             <template v-else>
                 <p>
-                    <strong>
+                    <strong v-if="platformLink">
                         <a :href="platformLink" target="_blank">
                             {{ account.name }}
                         </a>
                     </strong>
+                    <span v-else>
+                         {{ account.name }}
+                    </span>
                 </p>
 
                 <div v-if="!preview">

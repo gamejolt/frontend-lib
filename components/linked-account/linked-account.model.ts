@@ -2,7 +2,7 @@ import { Model } from '../model/model.service';
 import { User } from '../user/user.model';
 import { Game } from '../game/game.model';
 
-export type Provider = 'twitter' | 'facebook' | 'twitch' | 'google';
+export type Provider = 'twitter' | 'facebook' | 'twitch' | 'google' | 'tumblr';
 
 export type FacebookPage = {
 	id: number;
@@ -14,6 +14,7 @@ export class LinkedAccount extends Model {
 	static readonly PROVIDER_TWITTER = 'twitter';
 	static readonly PROVIDER_GOOGLE = 'google';
 	static readonly PROVIDER_TWITCH = 'twitch';
+	static readonly PROVIDER_TUMBLR = 'tumblr';
 
 	user: User | null;
 	game: Game | null;
@@ -49,8 +50,26 @@ export class LinkedAccount extends Model {
 				return `https://plus.google.com/${this.provider_id}`;
 			case LinkedAccount.PROVIDER_TWITCH:
 				return `https://twitch.tv/${this.name}`;
+			case LinkedAccount.PROVIDER_TUMBLR:
+				return null; // tumblr users don't have a page associated with them that we can show
 		}
 		return 'Invalid provider';
+	}
+
+	static getPlatformIcon(provider: string) {
+		switch (provider) {
+			case LinkedAccount.PROVIDER_FACEBOOK:
+				return 'facebook';
+			case LinkedAccount.PROVIDER_TWITTER:
+				return 'twitter-bird';
+			case LinkedAccount.PROVIDER_GOOGLE:
+				return 'google-plus';
+			case LinkedAccount.PROVIDER_TWITCH:
+				return 'twitch';
+			case LinkedAccount.PROVIDER_TUMBLR:
+				return 'tumblr';
+		}
+		return 'remove'; // invalid provider
 	}
 
 	// returns the name of the page selected for this facebook account
@@ -74,6 +93,8 @@ export class LinkedAccount extends Model {
 				return 'Google+';
 			case LinkedAccount.PROVIDER_TWITCH:
 				return 'Twitch';
+			case LinkedAccount.PROVIDER_TUMBLR:
+				return 'Tumblr';
 		}
 		return 'Invalid provider';
 	}

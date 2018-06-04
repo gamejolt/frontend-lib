@@ -17,18 +17,7 @@ export class AppLinkedAccount extends Vue {
 
 	get providerIcon() {
 		const provider = this.getProvider();
-		switch (provider) {
-			case LinkedAccount.PROVIDER_FACEBOOK:
-				return 'facebook';
-			case LinkedAccount.PROVIDER_TWITTER:
-				return 'twitter-bird';
-			case LinkedAccount.PROVIDER_GOOGLE:
-				return 'google-plus';
-			case LinkedAccount.PROVIDER_TWITCH:
-				return 'twitch';
-		}
-		// invalid provider
-		return 'remove';
+		return LinkedAccount.getPlatformIcon(provider);
 	}
 
 	get providerName() {
