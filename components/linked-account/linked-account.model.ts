@@ -62,6 +62,14 @@ export class LinkedAccount extends Model {
 		return 'Invalid provider';
 	}
 
+	get icon() {
+		return LinkedAccount.getPlatformIcon(this.provider);
+	}
+
+	get displayName() {
+		return LinkedAccount.getProviderDisplayName(this.provider);
+	}
+
 	static getPlatformIcon(provider: string) {
 		switch (provider) {
 			case LinkedAccount.PROVIDER_FACEBOOK:
