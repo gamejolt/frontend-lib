@@ -6,7 +6,7 @@ export class YoutubeChannel extends Model {
 	title: string;
 
 	$remove() {
-		return this.$_remove('/web/dash/linked-accounts/unlink/youtube-channel/' + this.channel_id);
+		return this.$_remove('/web/dash/linked-accounts/unlink-youtube-channel/' + this.channel_id);
 	}
 }
 
