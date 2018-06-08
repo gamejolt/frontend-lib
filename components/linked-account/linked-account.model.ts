@@ -22,6 +22,7 @@ export class LinkedAccount extends Model {
 	static readonly PROVIDER_TWITCH = 'twitch';
 	static readonly PROVIDER_TUMBLR = 'tumblr';
 	static readonly PROVIDER_YOUTUBE = 'youtube';
+	static readonly PROVIDER_YOUTUBE_CHANNEL = 'youtube-channel';
 
 	user: User | null;
 	game: Game | null;
