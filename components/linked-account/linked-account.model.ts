@@ -21,6 +21,7 @@ export class LinkedAccount extends Model {
 	static readonly PROVIDER_GOOGLE = 'google';
 	static readonly PROVIDER_TWITCH = 'twitch';
 	static readonly PROVIDER_TUMBLR = 'tumblr';
+	static readonly PROVIDER_YOUTUBE = 'youtube';
 
 	user: User | null;
 	game: Game | null;
