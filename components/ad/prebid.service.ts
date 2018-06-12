@@ -2,6 +2,9 @@ import { AdSlot, AdSlotPos } from './slot';
 import { loadScript } from '../../utils/utils';
 import { BidsTimeout } from './ads.service';
 
+// Load in the CMP stuff.
+import './cmp.service';
+
 interface AdUnitBid {
 	bidder: string;
 	params: any;
@@ -217,6 +220,11 @@ export class Prebid {
 			this.pbjs.setConfig({
 				bidderTimeout: BidsTimeout,
 				publisherDomain: 'gamejolt.com',
+				consentManagement: {
+					cmpApi: 'iab',
+					timeout: 3000,
+					allowAuctionWithoutConsent: false,
+				},
 			});
 		});
 	}

@@ -59,9 +59,12 @@
 	.package-card-well
 		theme-prop('background-color', 'bg-offset')
 		theme-prop('border-top-color', 'light')
+		theme-prop('border-bottom-color', 'light')
 		padding: 15px
-		border-top-width: 1px
+		border-top-width: 2px
 		border-top-style: dashed
+		border-bottom-width: 2px
+		border-bottom-style: dashed
 
 		p:last-child
 			margin-bottom: 0
@@ -71,10 +74,7 @@
 			font-size: $font-size-small
 
 	&-payment-what-link
-		display: block
-		text-align: center
+		float: right
+		display: inline-block
+		line-height: $button-md-line-height
 		font-size: $font-size-small
-
-		@media $media-sm-up
-			float: right
-			display: inline-block

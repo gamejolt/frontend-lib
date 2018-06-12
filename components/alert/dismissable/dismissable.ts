@@ -20,16 +20,18 @@ export class AppAlertDismissable extends Vue {
 
 	shouldShow = false;
 
-	created() {
-		this.shouldShow = false;
+	get _key() {
+		return STORAGE_KEY_PREFIX + this.dismissKey;
+	}
 
-		if (!localStorage.getItem(STORAGE_KEY_PREFIX + this.dismissKey)) {
+	mounted() {
+		if (!window.localStorage[this._key]) {
 			this.shouldShow = true;
 		}
 	}
 
 	dismiss() {
-		localStorage.setItem(STORAGE_KEY_PREFIX + this.dismissKey, '1');
+		window.localStorage[this._key] = Date.now();
 		this.shouldShow = false;
 
 		this.$emit('dismiss');

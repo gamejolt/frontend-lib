@@ -18,7 +18,9 @@
 		<small v-if="card.platformSupportInfo[ card.showcasedOs ].arch == '64'">
 			<translate>64-bit</translate>
 		</small>
-		<small>({{ card.downloadableBuild.primary_file.filesize | filesize }})</small>
+		<small class="hidden-xs">
+			({{ card.downloadableBuild.primary_file.filesize | filesize }})
+		</small>
 		<app-jolticon class="jolticon-addon" :icon="card.showcasedOsIcon" />
 	</app-button>
 
