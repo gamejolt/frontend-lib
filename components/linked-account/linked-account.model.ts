@@ -68,7 +68,7 @@ export class LinkedAccount extends Model {
 		return LinkedAccount.getPlatformIcon(this.provider);
 	}
 
-	get displayName() {
+	get providerDisplayName() {
 		return LinkedAccount.getProviderDisplayName(this.provider);
 	}
 
@@ -127,11 +127,23 @@ export class LinkedAccount extends Model {
 		if (this.provider === LinkedAccount.PROVIDER_TUMBLR && this.extra_data) {
 			const selectedBlog = this.extra_data.selectedBlog;
 			if (selectedBlog) {
-				console.log(JSON.stringify(selectedBlog));
 				return selectedBlog;
 			}
 		}
 		return null;
+	}
+
+	get profileImageUrl() {
+		switch (this.provider) {
+			case LinkedAccount.PROVIDER_FACEBOOK:
+				return `http://graph.facebook.com/${this.provider_id}/picture`;
+			case LinkedAccount.PROVIDER_TWITTER:
+				return `https://twitter.com/${this.name}/profile_image`;
+			case LinkedAccount.PROVIDER_TUMBLR:
+				if (this.tumblrSelectedBlog) {
+					return `https://api.tumblr.com/v2/blog/${this.tumblrSelectedBlog.name}/avatar`;
+				}
+		}
 	}
 }
 
