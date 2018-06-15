@@ -8,14 +8,8 @@ export class PaymentSource extends Model {
 	exp_year: number;
 	created_on: number;
 
-	async $remove() {
-		const response = await Api.sendRequest(
-			'/web/dash/payment-methods/remove/' + this.id,
-			{},
-			{ detach: true }
-		);
-
-		return response;
+	$remove() {
+		return this.$_remove('/web/dash/payment-methods/remove/' + this.id);
 	}
 }
 

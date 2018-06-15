@@ -1,7 +1,7 @@
 import { Model } from '../../model/model.service';
 import { Api } from '../../api/api.service';
 
-export class Address extends Model {
+export class UserAddress extends Model {
 	static readonly TYPE_BILLING = 'billing';
 	static readonly TYPE_SHIPPING = 'shipping';
 
@@ -15,19 +15,13 @@ export class Address extends Model {
 	postcode: string;
 	country: string;
 
-	async $remove() {
-		const response = await Api.sendRequest(
-			'/web/dash/billing-address/remove/' + this.id,
-			{},
-			{ detach: true }
-		);
-
-		return response;
+	$remove() {
+		return this.$_remove('/web/dash/addresses/remove/' + this.id);
 	}
 
-	async $save() {
-		return await this.$_save('/web/dash/billing-address/save/' + this.id, 'address');
+	$save() {
+		return this.$_save('/web/dash/addresses/save/' + this.id, 'userAddress');
 	}
 }
 
-Model.create(Address);
+Model.create(UserAddress);
