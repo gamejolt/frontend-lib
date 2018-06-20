@@ -9,4 +9,11 @@ export class LinkedAccounts {
 		const response = await Api.sendRequest(routeUrl + provider, {});
 		window.location.href = response.redirectLocation;
 	}
+
+	static async login(router: VueRouter, provider: Provider) {
+		// todo: client
+
+		const response = await Api.sendRequest('/web/auth/linked-accounts/link/' + provider, {});
+		window.location.href = response.redirectLocation;
+	}
 }

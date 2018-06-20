@@ -8,6 +8,7 @@ import { Api } from '../../api/api.service';
 import { UserLinkedAccounts, Provider } from '../../user/linked-accounts/linked-accounts.service';
 import { AppTooltip } from '../../tooltip/tooltip';
 import { Environment } from '../../environment/environment.service';
+import { LinkedAccounts } from '../../linked-account/linked-accounts.service';
 
 export type FormModel = {
 	email: string;
@@ -48,6 +49,7 @@ export class AppAuthJoinForm extends BaseForm<FormModel>
 	 * out if they have an account in the callback URL.
 	 */
 	linkedChoose(provider: Provider) {
-		UserLinkedAccounts.login(this.$router, provider);
+		LinkedAccounts.login(this.$router, provider);
+		//UserLinkedAccounts.login(this.$router, provider);
 	}
 }
