@@ -25,8 +25,8 @@ const GrayLightest = '#f3f3f3';
 // For clamping custom colors.
 //   ("MinLitBase" is summed with a variable portion of BlueBoost for MinLitFinal.)
 const MaxLitBase = 0.8;  // Base lightness ceiling in Light mode.
-const MinLitBase = 0.45; // Base lightness floor in Dark mode.
-const BlueBoost = 0.2;   // Extra blue brightness in Dark mode.
+const MinLitBase = 0.45; // Base lightness floor in Dark mode.  (Originally 0.45. Tried 0.43 & it works.)
+const BlueBoost  = 0.2;  // Extra blue brightness in Dark mode. (Originally 0.2.  Tried 0.18 & it works.)
 
 export function makeThemeFromPreset(preset: ThemePreset) {
 	return new Theme({
@@ -157,10 +157,12 @@ function getReadableCustom(custom: string | undefined, background: 'light' | 'da
 			// Force lightness down to preferred ceiling value.
 			// Due to the preceding IF, this is essentially a ceiling clamp.
 			labColor[0] = MaxLitBase * 100;
-			const convertedRgb = lab2rgb(labColor);
+			const convertedRgb = lab2rgb( labColor );
+			
+			const outColor = rgb( rgbA2O( convertedRgb ) ).substr(1)
 			
 			// **** RETURN ****   #1/3.
-			return   rgb(convertedRgb).substr(1);
+			return   outColor;
 		}
 	} 
 	// ELSE   Dark mode
@@ -176,12 +178,19 @@ function getReadableCustom(custom: string | undefined, background: 'light' | 'da
 		// of the blueBoost value to the final floor value.
 		// The function that uses the hue to determine how much blueBoost to use is biRamp().
 		// Note: Hue degrees, 180 = Cyan, 240 = Blue, 300 = Purple.
+		// Finally, we don't want to apply the blue boost if the hue is blue, but the 
+		// saturation is nearly 0, because that would just boost a nearly gray color, as if 
+		// it were blue. So we calculate a 0-to-1 "colorfulness" value and use it to scale 
+		// the amount of blue boost to apply. The colorfulness is just sat * isNear( lit, 0.5 ).
+		
 		
 		// Calc clamp params. Then do clamp:
 		//   Calc the biRamp boost value for the current hue.
-		const biRampBoost = biRamp( initialHsl.hue, 180, 240, 300, 0, BlueBoost ); 
+		const biRampBoost = biRamp( initialHsl.hue, 180, 240, 300, 0, BlueBoost );
+		//   Calc the "colorfulness" of the current color, because we only need to apply the boost 
+		const colorfulness = initialHsl.saturation * biRamp( initialHsl.lightness , 0 , 0.5 , 1 , 0 , 1 );
 		//   Calc the final lightness floor value. (This incorporates the blue adjustment.)
-		const MinLitAdjusted = MinLitBase + biRampBoost;
+		const MinLitAdjusted = MinLitBase + ( biRampBoost * colorfulness );
 		
 		// IF   Color's lightness is lower than our preferred variable floor value
 		if ( labLitNorm < MinLitAdjusted )
@@ -192,15 +201,20 @@ function getReadableCustom(custom: string | undefined, background: 'light' | 'da
 			//   const clamped = clamp( labLitNorm, MinLitAdjusted, 1 );
 			
 			labColor[0] = MinLitAdjusted * 100;
-			const convertedRgb = lab2rgb(labColor);
+			const convertedRgb = lab2rgb( labColor );
 			const convertedHsl = rgb2hsl( rgbA2O( convertedRgb ) );
 			
-			// **** RETURN ****   #2/3.
 			// Use the original hue and only use the saturation/lightness from the clamped value.
-			return   hsl(initialHsl.hue, convertedHsl.saturation, convertedHsl.lightness).substr(1);
+			const iH = initialHsl.hue;
+			const cS = convertedHsl.saturation;
+			const cL = convertedHsl.lightness;
+			
+			const outColor = hsl( iH ,cS ,cL ).substr(1)
+			
+			// **** RETURN ****   #2/3.
+			return   outColor;
 		}
 	}
-
 	// **** RETURN ****   #3/3.
 	return   custom;
 }
