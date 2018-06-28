@@ -1,5 +1,14 @@
-import { readableColor, mix, parseToRgb, rgb, desaturate, complement } from 'polished';
-import { rgb2lab, lab2rgb } from '../../utils/color';
+import {
+	readableColor,
+	mix,
+	parseToRgb,
+	rgb,
+	desaturate,
+	complement,
+	parseToHsl,
+	hsl,
+} from 'polished';
+import { rgb2lab, lab2rgb, rgb2hsl } from '../../utils/color';
 import { Model } from '../model/model.service';
 import { ThemePreset } from './preset/preset.model';
 
@@ -12,6 +21,12 @@ const GraySubtle = '#444444';
 const GrayLight = '#7e7e7e';
 const GrayLighter = '#d1d1d1';
 const GrayLightest = '#f3f3f3';
+
+// For clamping custom colors.
+//   ("MinLitBase" is summed with a variable portion of BlueBoost for MinLitFinal.)
+const MaxLitBase = 0.8;  // Base lightness ceiling in Light mode.
+const MinLitBase = 0.45; // Base lightness floor in Dark mode.
+const BlueBoost = 0.2;   // Extra blue brightness in Dark mode.
 
 export function makeThemeFromPreset(preset: ThemePreset) {
 	return new Theme({
@@ -27,6 +42,167 @@ export function makeThemeFromColor(color: string) {
 	return new Theme({
 		custom: color,
 	});
+}
+
+
+
+/**
+ * Transform a 0-to-1 range to map to an arbitrary A-to-B range. e.g. If amount is 0.5, and range is
+ * 100 to 200, then return 150. e.g. lerp(100, 200, 0.5) returns 150.
+ */
+function lerp(low: number, high: number, amount: number) {
+	return low * (1 - amount) + high * amount;
+}
+
+/**
+ * Transform an arbitrary A-to-B range to map to a 0-to-1 range. e.g. If amount is 150, and range is
+ * 100 to 200, then return 0.5. e.g. unlerp(100, 200, 150) returns 0.5.
+ */
+function unlerp(low: number, high: number, amount: number) {
+	return (amount - low) / (high - low);
+}
+
+/**
+ * Transform an arbitrary A-to-B range to map to an arbitrary C-to-D range. e.g. If val is 150,
+ * input range is 100 to 200, and output range is 0 to 10, return 5. e.g. remap(150, 100, 200, 0,
+ * 10) returns 5.
+ */
+function remap(val: number, inLow: number, inHigh: number, outLow: number, outHigh: number) {
+	return lerp(outLow, outHigh, unlerp(inLow, inHigh, val));
+}
+
+/**
+ * This is a two ramp envelope function. It ramps up then back down.
+ * It takes an input value that falls into the range of the ramps, 
+ * and remaps it to an output range. 
+ * It's basically 2 remap functions stuck end-to-end, but with a 
+ * clamped minimum value, and some extra conveniences.
+ * 
+ * The ramp has a starting point A, middle point B, and an end point C.
+ * When the input value ranges from A to B to C, 
+ * the output ranges from Min to Max to Min.
+ * 
+ *     B      Output params:
+ *    /\      Max = the value at the top of the ramp.
+ * __/  \__   Min = the value at the bottom of the ramp, 
+ *  A    C          and all values outside the ramp's A to C range.
+ */
+function biRamp(
+	val: number,
+	aInLow: number,
+	bInHigh: number,
+	cInLow: number,
+	outMin: number,
+	outMax: number
+) {
+	var out = outMin;
+	if (val >= aInLow && val < bInHigh) {
+		out = remap(val, aInLow, bInHigh, outMin, outMax);
+	} else if (val >= bInHigh && val <= cInLow) {
+		// "C" then "B", because we're ramping back down.
+		out = remap(val, cInLow, bInHigh, outMin, outMax);
+	}
+
+	return out;
+}
+
+/**
+ * Clamp a value to a [min to max] range.
+ */
+function clamp(val: number, min: number, max: number) {
+	if (val > max) {
+		return max;
+	} else if (val < min) {
+		return min;
+	}
+	return val;
+}
+
+/**
+ * Convert an RGB object {red:r, green:g, blue:b}, to an array [r,g,b].
+ */
+function rgbO2A(rgbObj: object) {
+	return [ rgbObj.red , rgbObj.green , rgbObj.blue ];
+}
+
+/**
+ * Convert an RGB array [r,g,b], to an object {red:r, green:g, blue:b}.
+ */
+function rgbA2O(rgbArray: number[]) {
+	return { red: rgbArray[0] , green: rgbArray[1] , blue: rgbArray[2] };
+}
+
+
+
+function getReadableCustom(custom: string | undefined, background: 'light' | 'dark') {
+	if (!custom) {
+		return undefined;
+	}
+
+	const initialRgb = parseToRgb('#' + custom);
+	const initialRgbArr = rgbO2A( initialRgb );
+	const initialHsl = parseToHsl('#' + custom);
+	const labColor = rgb2lab( initialRgbArr ); // rgb2lab() expects [r,g,b] array, not {red:r,green:g,blue:b} obj.
+	const labLitNorm = labColor[0] / 100; // Lab lightness normalized to 0 to 1 range.
+
+	// IF   Light mode.
+	if ( background === 'light' ) 
+	{
+		// Note: We can use the raw MaxLitBase value for the IF and the clamp, 
+		// because we don't need any hue dependant modifications.
+		
+		// IF   Color's lightness is higher than our preferred ceiling value.
+		if ( labLitNorm > MaxLitBase )
+		{
+			// Force lightness down to preferred ceiling value.
+			// Due to the preceding IF, this is essentially a ceiling clamp.
+			labColor[0] = MaxLitBase * 100;
+			const convertedRgb = lab2rgb(labColor);
+			
+			// **** RETURN ****   #1/3.
+			return   rgb(convertedRgb).substr(1);
+		}
+	} 
+	// ELSE   Dark mode
+	else if ( background === 'dark' ) 
+	{
+		// IMPORTANT: In Dark mode, we don't just use a single fixed value for the 
+		// lightness floor. The lightness floor is variable, because we add a portion
+		// of the blueBoost value, and the amount of boost we add depends on how close 
+		// the custom color's hue is to blue. The closer to blue, the greater the boost.
+		// When the custom color's hue is pure blue, we add 100% of the blueBoost value 
+		// to the final floor value.
+		// When the custom color's hue is more than 60 degrees away from blue, we add 0% 
+		// of the blueBoost value to the final floor value.
+		// The function that uses the hue to determine how much blueBoost to use is biRamp().
+		// Note: Hue degrees, 180 = Cyan, 240 = Blue, 300 = Purple.
+		
+		// Calc clamp params. Then do clamp:
+		//   Calc the biRamp boost value for the current hue.
+		const biRampBoost = biRamp( initialHsl.hue, 180, 240, 300, 0, BlueBoost ); 
+		//   Calc the final lightness floor value. (This incorporates the blue adjustment.)
+		const MinLitAdjusted = MinLitBase + biRampBoost;
+		
+		// IF   Color's lightness is lower than our preferred variable floor value
+		if ( labLitNorm < MinLitAdjusted )
+		{
+			// Force lightness up to preferred floor value.
+			// Due to the preceding IF, this is essentially a floor clamp.
+			// It's roughly equivalent to this: 
+			//   const clamped = clamp( labLitNorm, MinLitAdjusted, 1 );
+			
+			labColor[0] = MinLitAdjusted * 100;
+			const convertedRgb = lab2rgb(labColor);
+			const convertedHsl = rgb2hsl( rgbA2O( convertedRgb ) );
+			
+			// **** RETURN ****   #2/3.
+			// Use the original hue and only use the saturation/lightness from the clamped value.
+			return   hsl(initialHsl.hue, convertedHsl.saturation, convertedHsl.lightness).substr(1);
+		}
+	}
+
+	// **** RETURN ****   #3/3.
+	return   custom;
 }
 
 export class Theme extends Model {
@@ -134,32 +310,11 @@ export class Theme extends Model {
 	}
 
 	private get readableCustomDark() {
-		return this.getReadableCustom('dark');
+		return getReadableCustom(this.custom, 'dark');
 	}
 
 	private get readableCustomLight() {
-		return this.getReadableCustom('light');
-	}
-
-	private getReadableCustom(background: 'light' | 'dark') {
-		if (!this.custom) {
-			return undefined;
-		}
-
-		const customRGB = parseToRgb('#' + this.custom);
-		const customLAB = rgb2lab([customRGB.red, customRGB.green, customRGB.blue]);
-
-		if (background === 'light' && customLAB[0] > 80) {
-			customLAB[0] = 80;
-			const convertedRGB = lab2rgb(customLAB);
-			return rgb(convertedRGB[0], convertedRGB[1], convertedRGB[2]).substr(1);
-		} else if (background === 'dark' && customLAB[0] < 45) {
-			customLAB[0] = 45;
-			const convertedRGB = lab2rgb(customLAB);
-			return rgb(convertedRGB[0], convertedRGB[1], convertedRGB[2]).substr(1);
-		}
-
-		return this.custom;
+		return getReadableCustom(this.custom, 'light');
 	}
 
 	private tintColor(color: string, amount: number) {

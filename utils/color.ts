@@ -1,6 +1,9 @@
 // the following functions are based off of the pseudocode
 // found on www.easyrgb.com
 
+import { RgbColor, HslColor } from 'polished/lib/types/color';
+import { toColorString, parseToHsl, rgb, hsl, parseToRgb } from 'polished';
+
 type ColorLAB = [number, number, number];
 type ColorRGB = [number, number, number];
 
@@ -52,4 +55,17 @@ export function rgb2lab(rgb: ColorRGB): ColorLAB {
 	z = z > 0.008856 ? Math.pow(z, 1 / 3) : 7.787 * z + 16 / 116;
 
 	return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
+}
+
+
+// (Added from frontend-lib/utils/color.ts branch "theme-blue-fix".)
+export function rgb2hsl(color: RgbColor) {
+	const str = toColorString(color);
+	return parseToHsl(str);
+}
+
+// (Added from frontend-lib/utils/color.ts branch "theme-blue-fix".)
+export function hsl2rgb(color: HslColor) {
+	const str = toColorString(color);
+	return parseToRgb(str);
 }
