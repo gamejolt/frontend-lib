@@ -102,8 +102,7 @@ export class Game extends Model {
 
 	has_active_builds: boolean;
 
-	avg_rating: number;
-	rating_count: number;
+	upvote_count: number;
 
 	sites_enabled: boolean;
 	site?: Site;
