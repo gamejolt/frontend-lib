@@ -2,6 +2,7 @@ import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
 import { MediaItem } from '../media-item/media-item-model';
 import { Theme } from '../theme/theme.model';
+import { Registry } from '../registry/registry.service';
 
 export class User extends Model {
 	static readonly TYPE_GAMER = 'User';
@@ -46,6 +47,7 @@ export class User extends Model {
 	level_next_percentage: number;
 
 	follower_count: number;
+	following_count: number;
 	is_following: boolean;
 
 	newsletter: boolean;
@@ -91,6 +93,8 @@ export class User extends Model {
 		if (data.theme) {
 			this.theme = new Theme(data.theme);
 		}
+
+		Registry.store('User', this);
 	}
 
 	static touch() {

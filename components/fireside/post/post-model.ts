@@ -1,4 +1,4 @@
-import { Model } from '../../model/model.service';
+import { Model, ModelSaveRequestOptions } from '../../model/model.service';
 import { FiresidePostTag } from './tag/tag-model';
 import { FiresidePostLike } from './like/like-model';
 import { FiresidePostVideo } from './video/video-model';
@@ -136,38 +136,24 @@ export class FiresidePost extends Model {
 	}
 
 	$save() {
+		const options: ModelSaveRequestOptions = {
+			data: Object.assign({}, this),
+			file: this.file,
+		};
+
 		if (this.game) {
-			const data: any = Object.assign({}, this);
-			data.keyGroups = {};
+			options.data.keyGroups = {};
 			for (const id of this.key_group_ids) {
-				data.keyGroups[id] = true;
+				options.data.keyGroups[id] = true;
 			}
 
-			const options = {
-				allowComplexData: ['keyGroups'],
-				data,
-				file: this.file,
-			};
+			options.allowComplexData = ['keyGroups'];
+		}
 
-			if (!this.id) {
-				return this.$_save(
-					`/web/dash/developer/games/devlog/save/${this.game.id}`,
-					'firesidePost',
-					options
-				);
-			} else {
-				return this.$_save(
-					`/web/dash/developer/games/devlog/save/${this.game.id}/${this.id}`,
-					'firesidePost',
-					options
-				);
-			}
+		if (!this.id) {
+			throw new Error(`Can't add fireside posts through $save.`);
 		} else {
-			if (!this.id) {
-				return this.$_save('/fireside/dash/posts/add', 'firesidePost');
-			} else {
-				return this.$_save(`/fireside/dash/posts/save/${this.id}`, 'firesidePost');
-			}
+			return this.$_save(`/web/dash/posts/save/${this.id}`, 'firesidePost', options);
 		}
 	}
 
