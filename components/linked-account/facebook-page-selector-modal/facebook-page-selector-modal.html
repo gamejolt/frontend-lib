@@ -49,15 +49,13 @@
 			@click="ok"
 			:disabled="!canConfirm"
 			>
-			<translate v-if="buttonType === 'ok'">OK</translate>
-			<translate v-else-if="buttonType === 'yes'">Yes</translate>
+			<translate>OK</translate>
 		</app-button>
 		<app-button
 			trans
 			@click="cancel"
 			>
-			<translate v-if="buttonType === 'ok'">Cancel</translate>
-			<translate v-else-if="buttonType === 'yes'">No</translate>
+			<translate>Cancel</translate>
 		</app-button>
 	</div>
 

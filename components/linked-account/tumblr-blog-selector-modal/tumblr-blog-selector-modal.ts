@@ -19,7 +19,6 @@ export default class AppModalTumblrBlogSelector extends BaseModal {
 	@Prop(String) message: string;
 	@Prop(LinkedAccount) account: LinkedAccount;
 	@Prop(String) title: string;
-	@Prop(String) buttonType: 'ok' | 'yes';
 
 	isLoading = true;
 	blogs: TumblrBlog[];
