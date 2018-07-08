@@ -4,10 +4,11 @@ import View from '!view!./linked-account.html?style=./linked-account.styl';
 
 import { LinkedAccount } from './linked-account.model';
 import { AppJolticon } from '../../vue/components/jolticon/jolticon';
+import { AppCard } from '../card/card';
 
 @View
 @Component({
-	components: { AppJolticon },
+	components: { AppJolticon, AppCard },
 })
 export class AppLinkedAccount extends Vue {
 	@Prop(LinkedAccount) account: LinkedAccount | null;
