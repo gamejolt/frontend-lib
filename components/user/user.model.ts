@@ -26,7 +26,6 @@ export class User extends Model {
 	disable_gravatar: boolean;
 
 	created_on: number;
-	last_logged_on: number;
 
 	twitter_id?: string;
 	twitter_screenname?: string;
