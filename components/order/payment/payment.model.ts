@@ -12,6 +12,8 @@ export class OrderPayment extends Model {
 	currency_code: string;
 	amount: number;
 	stripe_payment_source: any;
+	stripe_last4: string;
+	stripe_brand: string;
 	paypal_email_address: string;
 	refunds: OrderPaymentRefund[];
 
