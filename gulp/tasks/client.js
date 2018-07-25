@@ -77,7 +77,8 @@ module.exports = config => {
 		}
 
 		const nw = new NwBuilder({
-			version: '0.12.3',
+			version: '0.32.0',
+			flavor: config.production ? 'normal' : 'sdk',
 			files: config.buildDir + '/**/*',
 			buildDir: config.clientBuildDir,
 			cacheDir: config.clientBuildCacheDir,
@@ -218,6 +219,9 @@ module.exports = config => {
 			const packageNw = path.join(base, 'package.nw');
 
 			if (fs.existsSync(packageNw)) {
+				console.log('Unzipping from package.nw to ' + path.join(base, 'package'));
+				console.log('base: ' + base + ', packageNw: ' + packageNw);
+
 				p = new Promise((resolve, reject) => {
 					const unzipper = new DecompressZip(packageNw);
 
@@ -262,7 +266,7 @@ module.exports = config => {
 			}
 		}
 
-		// On mac we have to zip the app so we can upload it.
+		// We have to zip the app so we can upload it.
 		p = p.then(() => {
 			return new Promise((resolve, reject) => {
 				const stream = gulp
