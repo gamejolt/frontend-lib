@@ -31,6 +31,32 @@ module.exports = config => {
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
 
+	/**
+	 * Does the actual building into an NW executable.
+	 */
+	gulp.task('client:nw-migrator', () => {
+		const NwBuilder = require('nw-builder');
+
+		const packageJson = require(path.resolve(config.projectBase, 'migrator', 'package.json'));
+
+		const nw = new NwBuilder({
+			version: '0.12.3',
+			files: config.projectBase + '/migrator/**/*',
+			buildDir: path.join(config.clientBuildDir, 'migrator'),
+			cacheDir: config.clientBuildCacheDir,
+			platforms: [config.platformArch],
+			appName: 'migrator',
+			buildType: () => {
+				return 'build';
+			},
+			appVersion: packageJson.version,
+		});
+
+		nw.on('log', console.log);
+
+		return nw.build();
+	});
+
 	let nodeModulesTask = [
 		'cd ' + config.buildDir + ' && yarn --production --ignore-scripts',
 		'cd ' + clientVoodooDir + ' && yarn run postinstall', // We have to run client-voodoo's post install to get the joltron binaries in.
@@ -727,6 +753,7 @@ module.exports = config => {
 	gulp.task(
 		'client',
 		gulp.series(
+			'client:nw-migrator',
 			'client:node-modules',
 			'client:nw',
 			'client:get-gjpush',
