@@ -20,7 +20,7 @@ module.exports = config => {
 		return;
 	}
 
-	const joltronGitVersion = 'v1.2.0-beta';
+	const joltronGitVersion = 'standalone';
 	const joltronVersionArray = [1, 2, 0];
 	const gjpushVersion = 'v0.1.0';
 	const gjServiceApiToken = '78378_token';

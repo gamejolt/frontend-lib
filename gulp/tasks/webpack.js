@@ -38,7 +38,6 @@ module.exports = function(config) {
 		// When building for site, we don't want any of these imports accidentally being pulled in.
 		// Setting these to empty object strings causes the require to return an empty object.
 		externals['client-voodoo'] = '{}';
-		externals['nwjs-snappy-updater'] = '{}';
 		externals['sanitize-filename'] = '{}';
 	} else {
 		// This format sets the externals to just straight up "require('axios')" so it can pull it
@@ -51,13 +50,6 @@ module.exports = function(config) {
 		// We don't want to pull client-voodoo into the build so that it can get proper paths
 		// through variables like __dirname and such.
 		externals['client-voodoo'] = 'commonjs client-voodoo';
-
-		// we need nwjs-snappy-updater to not be bundled in because it contains a dynamic require
-		// for the update-hook.js that webpack flips tables over, but if we exclude nwjs-snappy-updater
-		// from the bundle, it's dependecies will not be transpiled to es5.
-		// We define a specific function to exclude that returns the node's require so we can use it
-		// to reload the update hook without webpack complaining about a dynamic export. sheesh.
-		externals['download'] = 'commonjs download';
 	}
 
 	// Didn't seem to work. Not sure if we need it, though.
