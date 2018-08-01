@@ -27,6 +27,7 @@ export class Environment {
 	static wttfBaseUrl = 'https://gamejolt.com';
 	static authBaseUrl = 'https://gamejolt.com';
 	static checkoutBaseUrl = 'https://gamejolt.com';
+	static clientForceDowngradeUrl = '';
 
 	static jamsBaseUrl = 'http://jams.gamejolt.com';
 	static jamsIoBaseUrl = 'http://jams.gamejolt.io';
@@ -77,9 +78,12 @@ if (GJ_IS_CLIENT) {
 		Environment.wttfBaseUrl = 'chrome-extension://game-jolt-client/package/index.html#';
 		Environment.authBaseUrl = 'chrome-extension://game-jolt-client/package/auth.html#';
 		Environment.checkoutBaseUrl = 'chrome-extension://game-jolt-client/package/checkout.html#';
+		Environment.clientForceDowngradeUrl =
+			'chrome-extension://game-jolt-client/package/downgrade.html#';
 	} else {
 		Environment.wttfBaseUrl = 'chrome-extension://game-jolt-client/index.html#';
 		Environment.authBaseUrl = 'chrome-extension://game-jolt-client/auth.html#';
 		Environment.checkoutBaseUrl = 'chrome-extension://game-jolt-client/checkout.html#';
+		Environment.clientForceDowngradeUrl = 'chrome-extension://game-jolt-client/downgrade.html#';
 	}
 }
