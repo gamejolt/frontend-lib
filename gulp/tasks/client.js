@@ -28,34 +28,12 @@ module.exports = config => {
 	const gjGamePackageId = 331094;
 	const gjGameInstallerPackageId = 331095;
 
+	// If we want to skip gjpush to test the packaging we need to provide the build id ourselves because we won't be hitting service-api to get it.
+	const skipGjPush = false;
+	const gjGameBuildId = 1;
+
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
-
-	/**
-	 * Does the actual building into an NW executable.
-	 */
-	gulp.task('client:nw-migrator', () => {
-		const NwBuilder = require('nw-builder');
-
-		const packageJson = require(path.resolve(config.projectBase, 'migrator', 'package.json'));
-
-		const nw = new NwBuilder({
-			version: '0.12.3',
-			files: config.projectBase + '/migrator/**/*',
-			buildDir: path.join(config.clientBuildDir, 'migrator'),
-			cacheDir: config.clientBuildCacheDir,
-			platforms: [config.platformArch],
-			appName: 'migrator',
-			buildType: () => {
-				return 'build';
-			},
-			appVersion: packageJson.version,
-		});
-
-		nw.on('log', console.log);
-
-		return nw.build();
-	});
 
 	let nodeModulesTask = [
 		'cd ' + config.buildDir + ' && yarn --production --ignore-scripts',
@@ -231,15 +209,12 @@ module.exports = config => {
 	});
 
 	/**
-	 * Pushes the single package to GJ.
-	 * The package is one complete standalone version of the client.
-	 * It is not the package shipped with joltron so it doesn't use the new auto updater.
-	 * It's essentially the "game" people upload to GJ.
+	 * On windows and linux the app is packaged into an package.nw file,
+	 * but for easier debugging we want to unpack it into the build folder
 	 */
-	gulp.task('client:gjpush-package', () => {
+	gulp.task('client:unpack-package.nw', () => {
 		let p = Promise.resolve();
 
-		// On windows and linux we want to extract the app.nw file back into the build folder
 		if (config.platform !== 'osx') {
 			const base = path.join(config.clientBuildDir, 'build', config.platformArch);
 			const packageNw = path.join(base, 'package.nw');
@@ -292,8 +267,18 @@ module.exports = config => {
 			}
 		}
 
+		return p;
+	});
+
+	/**
+	 * Pushes the single package to GJ.
+	 * The package is one complete standalone version of the client.
+	 * It is not the package shipped with joltron so it doesn't use the new auto updater.
+	 * It's essentially the "game" people upload to GJ.
+	 */
+	gulp.task('client:gjpush-package', () => {
 		// We have to zip the app so we can upload it.
-		p = p.then(() => {
+		p = Promise.resolve().then(() => {
 			return new Promise((resolve, reject) => {
 				const stream = gulp
 					.src(config.clientBuildDir + '/build/' + config.platformArch + '/**/*')
@@ -430,192 +415,205 @@ module.exports = config => {
 	 * This is what we want our installer to unpack.
 	 */
 	gulp.task('client:joltron', cb => {
-		// Function to issue an authenticated service API request and return the result as json..
-		let serviceApiRequest = url => {
-			let options = {
-				hostname: 'development.gamejolt.com',
-				path: '/service-api/push' + url,
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json', Authorization: gjServiceApiToken },
-			};
+		let buildIdPromise = Promise.resolve();
 
-			return new Promise((resolve, reject) => {
-				http
-					.request(options, res => {
-						res.setEncoding('utf8');
-
-						let str = '';
-						res
-							.on('data', data => {
-								str += data;
-							})
-							.on('end', () => {
-								resolve(JSON.parse(str));
-							});
-					})
-					.on('error', reject)
-					.end();
-			});
-		};
-
-		// We need to know our build ID for the package zip we just uploaded,
-		// because the build id is part of the game UID ("packageId-buildId)"
-		// which we need for joltron's manifest file.
-		// So we can use the service API to query it!
-
-		// First step is getting the release ID matching the version we just uploaded.
-		return serviceApiRequest(
-			'/releases/by_version/' + gjGamePackageId + '/' + packageJson.version
-		)
-			.then(data => {
-				// Then find the builds for that version.
-				return serviceApiRequest(
-					'/releases/builds/' +
-						data.release.id +
-						'?game_id=' +
-						gjGameId +
-						'&package_id=' +
-						gjGamePackageId
-				);
-			})
-			.then(data => {
-				// The build matching the filename we just uploaded is the build ID we're after.
-				return data.builds.data.find(build => {
-					return (
-						build &&
-						build.file &&
-						build.file.filename === config.platformArch + '-package.zip'
-					);
-				});
-			})
-			.then(build => {
-				if (!build) {
-					throw new Error('Could not get build');
-				}
-
-				// This is joltron's data directory for this client build
-				const buildDir = path.resolve(
-					config.clientBuildDir,
-					'build',
-					'data-' + gjGamePackageId + '-' + build.id
-				);
-
-				// So rename our build folder (which is the contents of our package zip) to it
-				fs.renameSync(
-					path.resolve(config.clientBuildDir, 'build', config.platformArch),
-					buildDir
-				);
-
-				// Next up we want to fetch the same joltron version as the client build is using,
-				// even if there is a newer version of joltron released.
-				// This ensures the client and joltron can communicate without issues.
-
-				// TODO: this is error prone
-				// If we fetched joltron from the previous step we want to use that version over
-				// the one in client-voodoo because this one would be compiled with the platform
-				// specific stuff for game jolt - at the time of writing - the microsoft version info,
-				// and desktop icon.
-				// This might be an issue if the version specified in the joltronGitVersion and the version in client-voodoo
-				// differ. We need a better way to do this.
-				if (!joltronSrc) {
-					// Figure out the correct client voodoo dir based on the platform.
-					let clientVoodooDir = '';
-					if (config.platform === 'osx') {
-						clientVoodooDir = path.resolve(
-							buildDir,
-							'Game Jolt Client.app',
-							'Contents',
-							'Resources',
-							'app.nw',
-							'node_modules',
-							'client-voodoo'
-						);
-					} else {
-						clientVoodooDir = path.resolve(buildDir, 'node_modules', 'client-voodoo');
-					}
-
-					// Joltron is located inside client-voodoo/bin folder.
-					joltronSrc = path.resolve(
-						clientVoodooDir,
-						'bin',
-						config.platform === 'win' ? 'GameJoltRunner.exe' : 'GameJoltRunner'
-					);
-				}
-
-				// Joltron should be placed next to the client build's data folder.
-				// On windows joltron will be linked to and executed directly, so call it GameJoltClient.exe to avoid confusion.
-				// On linux we call the executable game-jolt-client, so we can rename joltron to that.
-				// On mac we can also rename it to game-jolt-client for consistency. the executable is contained in the app directory anyways.
-				const joltronDest = path.resolve(
-					buildDir,
-					'..',
-					config.platform === 'win' ? 'GameJoltClient.exe' : 'game-jolt-client'
-				);
-
-				// Some more info is required for joltron's manifest.
-				// the correct host is needed for the platformURL - this tells joltron where to look for updates.
-				const gjHost = config.developmentEnv
-					? 'http://development.gamejolt.com'
-					: 'https://gamejolt.com';
-
-				// The executable tells joltron what is the executable file within this client build's data folder.
-				let executable = '';
-				if (config.platform === 'win') {
-					executable = 'GameJoltClient.exe';
-				} else if (config.platform === 'osx') {
-					executable = 'Game Jolt Client.app/Contents/MacOS/nwjs';
-				} else {
-					executable = 'game-jolt-client';
-				}
-
-				// joltron expects the platform field to be either windows/mac/linux
-				let platform = '';
-				if (config.platform === 'win') {
-					platform = 'windows';
-				} else if (config.platform === 'osx') {
-					platform = 'mac';
-				} else {
-					platform = 'linux';
-				}
-
-				// Figure out the archive file list.
-				const archiveFiles = readdir(buildDir)
-					.map(file => './' + file.replace(/\\/g, '/'))
-					.sort();
+		if (skipGjPush) {
+			buildIdPromise = buildIdPromise.then(() => gjGameBuildId);
+		} else {
+			// Function to issue an authenticated service API request and return the result as json..
+			let serviceApiRequest = url => {
+				let options = {
+					hostname: 'development.gamejolt.com',
+					path: '/service-api/push' + url,
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: gjServiceApiToken,
+					},
+				};
 
 				return new Promise((resolve, reject) => {
-					// Finally, copy joltron executable over.
-					fs
-						.createReadStream(joltronSrc)
-						.pipe(fs.createWriteStream(joltronDest))
-						.on('error', reject)
-						.on('close', () => {
-							// Make sure it is executable.
-							fs.chmodSync(joltronDest, 0755);
+					http
+						.request(options, res => {
+							res.setEncoding('utf8');
 
-							// Finally create joltron's manifest file
-							fs.writeFileSync(
-								path.resolve(buildDir, '..', '.manifest'),
-								JSON.stringify({
-									version: 2,
-									autoRun: true,
-									gameInfo: {
-										dir: path.basename(buildDir),
-										uid: gjGamePackageId + '-' + build.id,
-										archiveFiles: archiveFiles,
-										platformUrl: gjHost + '/x/updater/check-for-updates',
-									},
-									launchOptions: { executable: executable },
-									os: platform,
-									arch: config.arch + '',
-									isFirstInstall: false,
-								}),
-								'utf8'
-							);
-							resolve();
-						});
+							let str = '';
+							res
+								.on('data', data => {
+									str += data;
+								})
+								.on('end', () => {
+									resolve(JSON.parse(str));
+								});
+						})
+						.on('error', reject)
+						.end();
 				});
+			};
+
+			// We need to know our build ID for the package zip we just uploaded,
+			// because the build id is part of the game UID ("packageId-buildId)"
+			// which we need for joltron's manifest file.
+			// So we can use the service API to query it!
+
+			// First step is getting the release ID matching the version we just uploaded.
+			buildIdPromise = serviceApiRequest(
+				'/releases/by_version/' + gjGamePackageId + '/' + packageJson.version
+			)
+				.then(data => {
+					// Then find the builds for that version.
+					return serviceApiRequest(
+						'/releases/builds/' +
+							data.release.id +
+							'?game_id=' +
+							gjGameId +
+							'&package_id=' +
+							gjGamePackageId
+					);
+				})
+				.then(data => {
+					// The build matching the filename we just uploaded is the build ID we're after.
+					return data.builds.data.find(build => {
+						return (
+							build &&
+							build.file &&
+							build.file.filename === config.platformArch + '-package.zip'
+						);
+					});
+				})
+				.then(build => {
+					if (!build) {
+						throw new Error('Could not get build');
+					}
+
+					return build.id;
+				});
+		}
+
+		return buildIdPromise.then(buildId => {
+			// This is joltron's data directory for this client build
+			const buildDir = path.resolve(
+				config.clientBuildDir,
+				'build',
+				'data-' + gjGamePackageId + '-' + buildId
+			);
+
+			// So rename our build folder (which is the contents of our package zip) to it
+			fs.renameSync(
+				path.resolve(config.clientBuildDir, 'build', config.platformArch),
+				buildDir
+			);
+
+			// Next up we want to fetch the same joltron version as the client build is using,
+			// even if there is a newer version of joltron released.
+			// This ensures the client and joltron can communicate without issues.
+
+			// TODO: this is error prone
+			// If we fetched joltron from the previous step we want to use that version over
+			// the one in client-voodoo because this one would be compiled with the platform
+			// specific stuff for game jolt - at the time of writing - the microsoft version info,
+			// and desktop icon.
+			// This might be an issue if the version specified in the joltronGitVersion and the version in client-voodoo
+			// differ. We need a better way to do this.
+			if (!joltronSrc) {
+				// Figure out the correct client voodoo dir based on the platform.
+				let clientVoodooDir = '';
+				if (config.platform === 'osx') {
+					clientVoodooDir = path.resolve(
+						buildDir,
+						'Game Jolt Client.app',
+						'Contents',
+						'Resources',
+						'app.nw',
+						'node_modules',
+						'client-voodoo'
+					);
+				} else {
+					clientVoodooDir = path.resolve(buildDir, 'node_modules', 'client-voodoo');
+				}
+
+				// Joltron is located inside client-voodoo/bin folder.
+				joltronSrc = path.resolve(
+					clientVoodooDir,
+					'bin',
+					config.platform === 'win' ? 'GameJoltRunner.exe' : 'GameJoltRunner'
+				);
+			}
+
+			// Joltron should be placed next to the client build's data folder.
+			// On windows joltron will be linked to and executed directly, so call it GameJoltClient.exe to avoid confusion.
+			// On linux we call the executable game-jolt-client, so we can rename joltron to that.
+			// On mac we can also rename it to game-jolt-client for consistency. the executable is contained in the app directory anyways.
+			const joltronDest = path.resolve(
+				buildDir,
+				'..',
+				config.platform === 'win' ? 'GameJoltClient.exe' : 'game-jolt-client'
+			);
+
+			// Some more info is required for joltron's manifest.
+			// the correct host is needed for the platformURL - this tells joltron where to look for updates.
+			const gjHost = config.developmentEnv
+				? 'http://development.gamejolt.com'
+				: 'https://gamejolt.com';
+
+			// The executable tells joltron what is the executable file within this client build's data folder.
+			let executable = '';
+			if (config.platform === 'win') {
+				executable = 'GameJoltClient.exe';
+			} else if (config.platform === 'osx') {
+				executable = 'Game Jolt Client.app/Contents/MacOS/nwjs';
+			} else {
+				executable = 'game-jolt-client';
+			}
+
+			// joltron expects the platform field to be either windows/mac/linux
+			let platform = '';
+			if (config.platform === 'win') {
+				platform = 'windows';
+			} else if (config.platform === 'osx') {
+				platform = 'mac';
+			} else {
+				platform = 'linux';
+			}
+
+			// Figure out the archive file list.
+			const archiveFiles = readdir(buildDir)
+				.map(file => './' + file.replace(/\\/g, '/'))
+				.sort();
+
+			return new Promise((resolve, reject) => {
+				// Finally, copy joltron executable over.
+				fs
+					.createReadStream(joltronSrc)
+					.pipe(fs.createWriteStream(joltronDest))
+					.on('error', reject)
+					.on('close', () => {
+						// Make sure it is executable.
+						fs.chmodSync(joltronDest, 0755);
+
+						// Finally create joltron's manifest file
+						fs.writeFileSync(
+							path.resolve(buildDir, '..', '.manifest'),
+							JSON.stringify({
+								version: 2,
+								autoRun: true,
+								gameInfo: {
+									dir: path.basename(buildDir),
+									uid: gjGamePackageId + '-' + buildId,
+									archiveFiles: archiveFiles,
+									platformUrl: gjHost + '/x/updater/check-for-updates',
+								},
+								launchOptions: { executable: executable },
+								os: platform,
+								arch: config.arch + '',
+								isFirstInstall: false,
+							}),
+							'utf8'
+						);
+						resolve();
+					});
 			});
+		});
 	});
 
 	/**
@@ -750,18 +748,32 @@ module.exports = config => {
 		cb();
 	});
 
-	gulp.task(
-		'client',
-		gulp.series(
-			'client:nw-migrator',
-			'client:node-modules',
-			'client:nw',
-			'client:get-gjpush',
-			'client:gjpush-package',
-			'client:get-joltron',
-			'client:joltron',
-			'client:installer',
-			'client:gjpush-installer'
-		)
-	);
+	if (!skipGjPush) {
+		gulp.task(
+			'client',
+			gulp.series(
+				'client:node-modules',
+				'client:nw',
+				'client:unpack-package.nw',
+				'client:get-gjpush',
+				'client:gjpush-package',
+				'client:get-joltron',
+				'client:joltron',
+				'client:installer',
+				'client:gjpush-installer'
+			)
+		);
+	} else {
+		gulp.task(
+			'client',
+			gulp.series(
+				'client:node-modules',
+				'client:nw',
+				'client:unpack-package.nw',
+				'client:get-joltron',
+				'client:joltron',
+				'client:installer'
+			)
+		);
+	}
 };
