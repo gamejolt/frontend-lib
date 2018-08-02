@@ -1,13 +1,11 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./login.html';
-import './login.styl';
 
 import { Connection } from '../../connection/connection-service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppAuthLoginForm } from './login-form';
 import { Auth } from '../auth.service';
-import { UserLinkedAccounts } from '../../user/linked-accounts/linked-accounts.service';
 import { Environment } from '../../environment/environment.service';
 
 @View
@@ -43,9 +41,5 @@ export class AppAuthLogin extends Vue {
 		}
 
 		Auth.redirectDashboard();
-	}
-
-	linkedAccountLogin(provider: any) {
-		UserLinkedAccounts.login(this.$router, provider);
 	}
 }

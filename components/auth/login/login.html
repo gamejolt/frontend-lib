@@ -1,52 +1,6 @@
 <div class="auth-login">
-
-	<app-button
-		icon="facebook"
-		block
-		class="anim-fade-in-enlarge stagger"
-		:disabled="Connection.isClientOffline"
-		@click="linkedAccountLogin( 'facebook' )"
-		>
-		<translate>Log In With Facebook</translate>
-	</app-button>
-
-	<app-button
-		icon="google-plus"
-		block
-		class="anim-fade-in-enlarge stagger"
-		:disabled="Connection.isClientOffline"
-		@click="linkedAccountLogin( 'google' )"
-		>
-		<translate>Log In With Google+</translate>
-	</app-button>
-
-	<app-button
-		icon="twitter"
-		block
-		class="anim-fade-in-enlarge stagger"
-		:disabled="Connection.isClientOffline"
-		@click="linkedAccountLogin( 'twitter' )"
-		>
-		<translate>Log In With Twitter</translate>
-	</app-button>
-
-	<app-button
-		icon="twitch"
-		block
-		class="anim-fade-in-enlarge stagger"
-		:disabled="Connection.isClientOffline"
-		@click="linkedAccountLogin( 'twitch' )"
-		>
-		<translate>Log In With Twitch</translate>
-	</app-button>
-
-	<div class="auth-line-thru">
-		<translate>or</translate>
-	</div>
-
 	<app-auth-login-form
 		:dark-variant="darkVariant"
 		@submit="onLoggedIn"
 		/>
-
 </div>

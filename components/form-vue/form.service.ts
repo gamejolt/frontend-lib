@@ -18,6 +18,10 @@ export interface FormOnInit {
 	onInit(): void;
 }
 
+export interface FormOnBeforeSubmit {
+	onBeforeSubmit(): void;
+}
+
 export interface FormOnSubmit {
 	onSubmit(): Promise<any>;
 }
@@ -178,7 +182,7 @@ export class BaseForm<T> extends Vue {
 	 * we change a field.
 	 */
 	setField<K extends keyof T>(key: K, value: T[K]) {
-		Vue.set(this.formModel as T, key, value);
+		Vue.set(this.formModel as any, key, value);
 	}
 
 	setState(key: string, value: any) {
@@ -208,6 +212,10 @@ export class BaseForm<T> extends Vue {
 		let response: any;
 
 		try {
+			if ((this as any).onBeforeSubmit) {
+				(this as any).onBeforeSubmit();
+			}
+
 			if ((this as any).onSubmit) {
 				const _response = await (this as any).onSubmit();
 				if (_response.success === false) {

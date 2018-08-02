@@ -38,13 +38,16 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 	theme-prop('background-color', 'bg')
 
 .alert.alert-highlight
-	@extend .fill-highlight
+	&, .fill-offset &
+		@extend .fill-highlight
 
 .alert.alert-notice
-	@extend .fill-notice
+	&, .fill-offset &
+		@extend .fill-notice
 
 .alert.alert-dark
-	@extend .fill-darkest
+	&, .fill-offset &
+		@extend .fill-darkest
 
 .alert-dismiss
 	position: absolute
@@ -60,6 +63,7 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 	margin-right: 30px
 
 .alert-actions
+	theme-dark()
 	theme-prop('background-color', 'darkest')
 	position: relative
 	margin: -($alert-padding)

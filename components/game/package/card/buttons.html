@@ -2,7 +2,6 @@
 
 	<app-button
 		primary
-		block-xs
 		v-if="card.browserBuild"
 		@click="click( card.browserBuild )"
 		>
@@ -12,7 +11,6 @@
 
 	<app-button
 		:primary="!card.browserBuild"
-		block-xs
 		v-if="card.downloadableBuild"
 		@click="click( card.downloadableBuild )"
 		>
@@ -20,7 +18,9 @@
 		<small v-if="card.platformSupportInfo[ card.showcasedOs ].arch == '64'">
 			<translate>64-bit</translate>
 		</small>
-		<small>({{ card.downloadableBuild.primary_file.filesize | filesize }})</small>
+		<small class="hidden-xs">
+			({{ card.downloadableBuild.primary_file.filesize | filesize }})
+		</small>
 		<app-jolticon class="jolticon-addon" :icon="card.showcasedOsIcon" />
 	</app-button>
 
@@ -32,8 +32,8 @@
 	<app-button
 		icon="ellipsis-v"
 		:primary="card.otherOnly"
-		:circle="!card.otherOnly && !Screen.isXs"
-		block-xs
+		:circle="!card.otherOnly"
+		:trans="!card.otherOnly"
 		v-if="card.extraBuilds.length"
 		v-app-popover-trigger="`game-package-card-more-options-${ package.id }`"
 		v-app-track-event="`game-package-card:more-options`"

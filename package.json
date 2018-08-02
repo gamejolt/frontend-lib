@@ -47,6 +47,7 @@
 		"offline-plugin": "4.8.4",
 		"mv": "2.1.1",
 		"gulp-zip": "4.0.0",
-		"follow-redirects": "1.4.1"
+		"follow-redirects": "1.4.1",
+		"polished": "1.9.2"
 	}
 }

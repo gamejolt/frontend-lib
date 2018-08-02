@@ -6,14 +6,6 @@ nav.platform-list
 		margin: 0
 		padding: 0
 
-		// When you hover over the full nav list make the inactive links darker.
-		&:hover a
-			theme-prop('color', 'fg')
-
-			// Don't override the active color on hover, though.
-			&.active
-				theme-prop('color', 'link')
-
 		li
 			margin: 0
 			list-style: none
@@ -22,7 +14,7 @@ nav.platform-list
 				margin-top: 0
 
 		a
-			theme-prop('color', 'fg-muted')
+			theme-prop('color', 'fg')
 			display: block
 			padding: 0 15px
 			margin: $line-height-computed 0

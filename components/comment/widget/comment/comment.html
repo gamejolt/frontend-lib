@@ -6,10 +6,17 @@
 	:is-last="isLastInThread"
 	>
 
-	<template slot="tags" v-if="isOwner || isCollaborator">
-		<span class="tag">
-			<translate v-if="isOwner">Dev</translate>
-			<translate v-else>Collaborator</translate>
+	<template slot="tags" v-if="comment.is_pinned || isOwner || isCollaborator">
+		<span v-if="comment.is_pinned" class="tag">
+			<app-jolticon icon="thumbtack" />
+			<translate>Pinned</translate>
+		</span>
+
+		<span class="tag" v-if="isOwner">
+			<translate>Owner</translate>
+		</span>
+		<span class="tag" v-else-if="isCollaborator">
+			<translate>Collaborator</translate>
 		</span>
 	</template>
 
@@ -33,6 +40,14 @@
 					>
 					<app-jolticon icon="link" />
 					<translate>Copy Link</translate>
+				</a>
+				<a class="list-group-item has-icon"
+					v-if="canPin"
+					@click="pinComment"
+					>
+					<app-jolticon icon="thumbtack" />
+					<translate v-if="comment.is_pinned">Unpin Comment</translate>
+					<translate v-else>Pin Comment</translate>
 				</a>
 				<a class="list-group-item has-icon"
 					v-if="user.id === comment.user.id"
@@ -110,20 +125,11 @@
 				@click="isShowingChildren = !isShowingChildren"
 				>
 				<translate
-					v-if="!isShowingChildren"
 					:translate-n="children.length"
 					:translate-params="{ count: children.length }"
-					translate-plural="+%{ count } replies"
+					translate-plural="%{ count } replies"
 					>
-					+%{ count } reply
-				</translate>
-				<translate
-					v-else
-					:translate-n="children.length"
-					:translate-params="{ count: children.length }"
-					translate-plural="+%{ count } replies"
-					>
-					-%{ count } reply
+					%{ count } reply
 				</translate>
 			</app-button>
 

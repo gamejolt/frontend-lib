@@ -1,28 +1,22 @@
 <app-scroll-scroller
-	overlay
+	:overlay="!noOverlayScrollbars"
 	horizontal
-	class="fill-darker"
+	class="media-bar fill-darker"
 	>
-	<div
-		class="section media-bar"
-		:class="{
-			'-is-loading': !mediaItems || !mediaItems.length,
-		}"
-		>
-		<div class="-items">
+	<div class="-items" :style="{ height: mediaBarHeight + 'px' }">
 
-			<div class="-loading-container" v-if="!mediaItems || !mediaItems.length">
-				<app-loading centered no-color stationary hide-label />
-			</div>
-
-			<template v-if="mediaItems && mediaItems.length">
-				<app-media-bar-item
-					v-for="item of mediaItems"
-					:key="item.id"
-					:item="item"
-					/>
-			</template>
-
+		<div class="-loading-container" v-if="!mediaItems || !mediaItems.length">
+			<app-loading centered no-color stationary hide-label />
 		</div>
+
+		<template v-if="mediaItems && mediaItems.length">
+			<app-media-bar-item
+				v-for="item of mediaItems"
+				:key="item.id"
+				:item="item"
+				@click.native="setActiveItem(item)"
+				/>
+		</template>
+
 	</div>
 </app-scroll-scroller>

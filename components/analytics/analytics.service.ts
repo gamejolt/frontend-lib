@@ -13,6 +13,10 @@ ga('set', 'forceSSL', true);
 // https://discuss.atom.io/t/google-analytics-in-atom-shell/14109/7
 ga('set', 'checkProtocolTask', null);
 
+// IP masking.
+// https://developers.google.com/analytics/devguides/collection/analyticsjs/ip-anonymization
+ga('set', 'anonymizeIp', true);
+
 class PageTracker {
 	pageViewRecorded = false;
 
@@ -54,24 +58,6 @@ export class Analytics {
 
 	private static get appUser() {
 		return appStore.state.user;
-	}
-
-	private static ensureUserId() {
-		const user = this.appUser;
-
-		if (user && user.id) {
-			if (Environment.buildType === 'development') {
-				console.log(`Set tracking User ID: ${user.id}`);
-			} else {
-				ga('set', '&uid', user.id);
-			}
-		} else {
-			if (Environment.buildType === 'development') {
-				console.log('Unset tracking User ID.');
-			} else {
-				ga('set', '&uid', '');
-			}
-		}
 	}
 
 	private static get shouldTrack() {
@@ -159,8 +145,6 @@ export class Analytics {
 			}
 		}
 
-		this.ensureUserId();
-
 		// If no path passed in, then pull it from the location.
 		if (!path) {
 			path = window.location.pathname + window.location.search + window.location.hash;
@@ -190,10 +174,10 @@ export class Analytics {
 			return;
 		}
 
-		this.ensureUserId();
-
 		if (Environment.buildType === 'development') {
-			console.log(`Track event: ${category}:${action || '-'}:${label || '-'}:${value || '-'}`);
+			console.log(
+				`Track event: ${category}:${action || '-'}:${label || '-'}:${value || '-'}`
+			);
 		} else {
 			const options = {
 				nonInteraction: 1,
@@ -209,8 +193,6 @@ export class Analytics {
 			console.log('Skip tracking social event since not a normal user.');
 			return;
 		}
-
-		this.ensureUserId();
 
 		if (Environment.buildType === 'development') {
 			console.log(`Track social event: ${network}:${action}:${target}`);

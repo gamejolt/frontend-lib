@@ -2,6 +2,9 @@ import { AdSlot, AdSlotPos } from './slot';
 import { loadScript } from '../../utils/utils';
 import { BidsTimeout } from './ads.service';
 
+// Load in the CMP stuff.
+import './cmp.service';
+
 interface AdUnitBid {
 	bidder: string;
 	params: any;
@@ -9,7 +12,11 @@ interface AdUnitBid {
 
 interface AdUnit {
 	code: string;
-	sizes: [number, number][];
+	mediaTypes: {
+		banner: {
+			sizes: [number, number][];
+		};
+	};
 	bids: AdUnitBid[];
 }
 
@@ -17,25 +24,20 @@ interface AdPlacementVendorParam {
 	pos: AdSlotPos;
 	size: string;
 	appNexus: object;
-	indexExchange: object;
+	ix: object;
 	rubicon: object;
-	onedisplay: object;
 }
 
 const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'top',
 		size: 'rectangle',
-		onedisplay: {
-			placement: '4762650',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095780',
 		},
-		indexExchange: {
-			id: '01',
-			siteID: '220482',
+		ix: {
+			siteId: '220482',
+			size: [300, 250],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -47,16 +49,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'top',
 		size: 'leaderboard',
-		onedisplay: {
-			placement: '4762652',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095779',
 		},
-		indexExchange: {
-			id: '02',
-			siteID: '220483',
+		ix: {
+			siteId: '220483',
+			size: [728, 90],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -68,16 +66,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'bottom',
 		size: 'rectangle',
-		onedisplay: {
-			placement: '4762651',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095790',
 		},
-		indexExchange: {
-			id: '03',
-			siteID: '220484',
+		ix: {
+			siteId: '220484',
+			size: [300, 250],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -89,16 +83,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'bottom',
 		size: 'leaderboard',
-		onedisplay: {
-			placement: '4762653',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095782',
 		},
-		indexExchange: {
-			id: '04',
-			siteID: '220485',
+		ix: {
+			siteId: '220485',
+			size: [728, 90],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -110,16 +100,12 @@ const AdPlacementVendorParams: AdPlacementVendorParam[] = [
 	{
 		pos: 'footer',
 		size: 'rectangle',
-		onedisplay: {
-			placement: '4762654',
-			network: '11351.1',
-		},
 		appNexus: {
 			placementId: '12095977',
 		},
-		indexExchange: {
-			id: '05',
-			siteID: '220486',
+		ix: {
+			siteId: '220486',
+			size: [300, 250],
 		},
 		rubicon: {
 			accountId: '17266',
@@ -158,19 +144,19 @@ export class Prebid {
 
 		const unit = {
 			code: slot.id,
-			sizes: slot.slotSizes,
-			bids: [
-				{
-					bidder: 'onedisplay',
-					params: placement.onedisplay,
+			mediaTypes: {
+				banner: {
+					sizes: slot.slotSizes,
 				},
+			},
+			bids: [
 				{
 					bidder: 'appnexus',
 					params: placement.appNexus,
 				},
 				{
-					bidder: 'indexExchange',
-					params: placement.indexExchange,
+					bidder: 'ix',
+					params: placement.ix,
 				},
 				{
 					bidder: 'rubicon',
@@ -233,7 +219,12 @@ export class Prebid {
 		this.pbjs.que.push(() => {
 			this.pbjs.setConfig({
 				bidderTimeout: BidsTimeout,
-				publisherDomain: 'https://gamejolt.com',
+				publisherDomain: 'gamejolt.com',
+				consentManagement: {
+					cmpApi: 'iab',
+					timeout: 3000,
+					allowAuctionWithoutConsent: false,
+				},
 			});
 		});
 	}

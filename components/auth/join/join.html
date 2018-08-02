@@ -1,57 +1,9 @@
 <div class="auth-join">
 
-	<app-button
-		icon="facebook"
-		block
-		class="anim-fade-in-enlarge stagger"
-		:disabled="Connection.isClientOffline || blocked"
-		@click="linkedAccountLogin( 'facebook' )"
-		>
-		<translate>Sign Up With Facebook</translate>
-	</app-button>
-
-	<app-button
-		icon="google-plus"
-		block
-		class="anim-fade-in-enlarge stagger"
-		:disabled="Connection.isClientOffline || blocked"
-		@click="linkedAccountLogin( 'google' )"
-		>
-		<translate>Sign Up With Google+</translate>
-	</app-button>
-
-	<app-button
-		icon="twitter"
-		block
-		class="anim-fade-in-enlarge stagger"
-		:disabled="Connection.isClientOffline || blocked"
-		@click="linkedAccountLogin( 'twitter' )"
-		>
-		<translate>Sign Up With Twitter</translate>
-	</app-button>
-
-	<app-button
-		icon="twitch"
-		block
-		class="anim-fade-in-enlarge stagger"
-		:disabled="Connection.isClientOffline || blocked"
-		@click="linkedAccountLogin( 'twitch' )"
-		>
-		<translate>Sign Up With Twitch</translate>
-	</app-button>
-
-	<div class="auth-line-thru">
-		<translate>or</translate>
-	</div>
-
 	<app-auth-join-form
 		:dark-variant="darkVariant"
 		:blocked="blocked"
 		@submit="onJoin"
 		/>
-
-	<div class="alert alert-notice -blocked-message" v-if="blocked">
-		<translate>You must wait 15 minutes before creating another account.</translate>
-	</div>
 
 </div>

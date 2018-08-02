@@ -12,15 +12,22 @@ export type Actions = {};
 export type Mutations = {
 	'app/setUser': any;
 	'app/clearUser': undefined;
+	'app/setConsents': UserConsents;
 	'app/setError': number;
 	'app/clearError': undefined;
 	'app/redirect': string;
 };
 
+interface UserConsents {
+	ads?: boolean;
+	eea?: boolean;
+}
+
 @VuexModule()
 export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 	user: User | null = null;
 	userBootstrapped = false;
+	consents: UserConsents = {};
 	error: number | string | null = null;
 
 	get clientSection() {
@@ -53,6 +60,11 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 	clearUser() {
 		this.user = null;
 		this.userBootstrapped = true;
+	}
+
+	@VuexMutation
+	setConsents(consents: Mutations['app/setConsents']) {
+		this.consents = consents;
 	}
 
 	@VuexMutation

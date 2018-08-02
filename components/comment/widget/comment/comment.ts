@@ -104,14 +104,13 @@ export class AppCommentWidgetComment extends Vue {
 		);
 	}
 
-	get canRemove() {
+	/**
+	 * Whether or not they own the resource this comment was posted to, or they are a collaborator
+	 * on the resource with the correct permissions..
+	 */
+	get hasModPermissions() {
 		if (!this.user) {
 			return false;
-		}
-
-		// The comment author can remove.
-		if (this.user.id === this.comment.user.id) {
-			return true;
 		}
 
 		// The owner of the resource the comment is attached to can remove.
@@ -136,6 +135,28 @@ export class AppCommentWidgetComment extends Vue {
 		}
 
 		return false;
+	}
+
+	get canRemove() {
+		if (!this.user) {
+			return false;
+		}
+
+		// The comment author can remove their own comments.
+		if (this.user.id === this.comment.user.id) {
+			return true;
+		}
+
+		return this.hasModPermissions;
+	}
+
+	get canPin() {
+		if (!this.user) {
+			return false;
+		}
+
+		// Must have "mod" permissions to be able to pin.
+		return !this.comment.parent_id && this.hasModPermissions;
 	}
 
 	get isShowingReplies() {
@@ -190,6 +211,10 @@ export class AppCommentWidgetComment extends Vue {
 		}
 
 		this.widget._onCommentRemove(this.comment);
+	}
+
+	async pinComment() {
+		await this.widget._pinComment(this.comment);
 	}
 
 	onFollowClick() {

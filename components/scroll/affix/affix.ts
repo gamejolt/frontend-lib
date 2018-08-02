@@ -11,7 +11,7 @@ import { Screen } from '../../screen/screen-service';
 /**
  * Wait this long between scroll checks.
  */
-const ScrollSampleTime = 500;
+const ScrollSampleTime = 100;
 
 @View
 @Component({})
@@ -35,6 +35,7 @@ export class AppScrollAffix extends Vue {
 	private resize$: Subscription | undefined;
 	private scroll$: Subscription | undefined;
 	private clickHandler: EventListener;
+	private afterRouteDeregister?: Function;
 
 	$refs: {
 		container: HTMLElement;
@@ -64,10 +65,14 @@ export class AppScrollAffix extends Vue {
 			this.refreshOffsetLoop();
 		});
 
+		// When routes change.
+		this.afterRouteDeregister = this.$router.afterEach(() => this.refreshOffsetLoop());
+
 		this.scroll$ = Scroll.watcher.changes.sampleTime(ScrollSampleTime).subscribe(() => {
 			const { top } = Scroll.watcher.getScrollChange();
 			this.checkScroll(top);
 		});
+
 		this.refreshOffsetLoop();
 	}
 
@@ -84,6 +89,11 @@ export class AppScrollAffix extends Vue {
 		if (this.resize$) {
 			this.resize$.unsubscribe();
 			this.resize$ = undefined;
+		}
+
+		if (this.afterRouteDeregister) {
+			this.afterRouteDeregister();
+			this.afterRouteDeregister = undefined;
 		}
 
 		if (this.scroll$) {

@@ -4,7 +4,7 @@ import View from '!view!./media-bar.html?style=./media-bar.styl';
 
 import { Analytics } from '../analytics/analytics.service';
 import { AppLoading } from '../../vue/components/loading/loading';
-import { AppMediaBarItem } from './item/item';
+import { AppMediaBarItem, MediaBarItemMaxHeight } from './item/item';
 import { AppMediaBarLightbox } from './lightbox/lightbox';
 import { Growls } from '../growls/growls.service';
 import { AppScrollScroller } from '../scroll/scroller/scroller';
@@ -20,12 +20,14 @@ import { AppScrollScroller } from '../scroll/scroller/scroller';
 })
 export class AppMediaBar extends Vue {
 	@Prop(Array) mediaItems: any[];
+	@Prop(Boolean) noOverlayScrollbars?: boolean;
 
 	private urlChecked = false;
 	private lightbox?: AppMediaBarLightbox;
 
 	activeItem: any | null = null;
 	activeIndex: number | null = null;
+	mediaBarHeight = MediaBarItemMaxHeight + 40;
 
 	@Watch('activeItem')
 	activeItemChange() {
@@ -47,7 +49,9 @@ export class AppMediaBar extends Vue {
 			hash += this.activeItem.id;
 		}
 
-		this.$router.replace({ hash });
+		if (this.$router) {
+			this.$router.replace({ hash });
+		}
 	}
 
 	async updated() {
