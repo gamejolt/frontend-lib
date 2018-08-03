@@ -37,6 +37,14 @@ export class Aps {
 		});
 	}
 
+	static getTargetingKeys(): string[] {
+		if (!this.isTagCreated) {
+			throw new Error(`Called before tag created.`);
+		}
+
+		return this.apstag.targetingKeys();
+	}
+
 	private static createTag() {
 		if (this.isTagCreated) {
 			return;
