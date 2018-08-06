@@ -5,10 +5,13 @@
 
 	<p>{{ game.title }}</p>
 
-	<app-rating-widget
-		:game="game"
-		>
-	</app-rating-widget>
+	<div>
+		<app-rating-widget
+			:game="game"
+			>
+		</app-rating-widget>
+	</div>
+	<br />
 
 	<p><em><translate>game.rating_growl.message</translate></em></p>
 </div>
