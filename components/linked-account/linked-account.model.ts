@@ -23,6 +23,7 @@ export class LinkedAccount extends Model {
 	static readonly PROVIDER_TUMBLR = 'tumblr';
 	static readonly PROVIDER_YOUTUBE = 'youtube';
 	static readonly PROVIDER_YOUTUBE_CHANNEL = 'youtube-channel';
+	static readonly PROVIDER_DISCORD = 'discord';
 
 	user: User | null;
 	game: Game | null;
@@ -60,6 +61,8 @@ export class LinkedAccount extends Model {
 				return `https://twitch.tv/${this.name}`;
 			case LinkedAccount.PROVIDER_TUMBLR:
 				return null; // tumblr users don't have a page associated with them that we can show
+			case LinkedAccount.PROVIDER_DISCORD:
+				return null; // discord users don't have a page associated with them
 		}
 		return 'Invalid provider';
 	}
@@ -84,6 +87,8 @@ export class LinkedAccount extends Model {
 				return 'twitch';
 			case LinkedAccount.PROVIDER_TUMBLR:
 				return 'tumblr';
+			case LinkedAccount.PROVIDER_DISCORD:
+				return 'radio';
 		}
 		return 'remove'; // invalid provider
 	}
@@ -100,6 +105,8 @@ export class LinkedAccount extends Model {
 				return 'Twitch';
 			case LinkedAccount.PROVIDER_TUMBLR:
 				return 'Tumblr';
+			case LinkedAccount.PROVIDER_DISCORD:
+				return 'Discord';
 		}
 		return 'Invalid provider';
 	}
