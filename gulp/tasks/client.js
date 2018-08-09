@@ -20,10 +20,9 @@ module.exports = config => {
 		return;
 	}
 
-	const joltronGitVersion = 'standalone';
-	const joltronVersionArray = [1, 2, 0];
-	const gjpushVersion = 'v0.1.0';
-	const gjServiceApiToken = '78378_token';
+	const joltronGitVersion = 'v2.0.0-beta';
+	const joltronVersionArray = [2, 0, 0];
+	const gjpushVersion = 'v0.2.0';
 	const gjGameId = 119176;
 	const gjGamePackageId = 331094;
 	const gjGameInstallerPackageId = 331095;
@@ -291,8 +290,6 @@ module.exports = config => {
 		// We trust the exit codes to tell us if something went wrong because a non 0 exit code will make this throw.
 		return p.then(() => {
 			cp.execFileSync(gjpushExecutable, [
-				'-t',
-				gjServiceApiToken,
 				'-g',
 				gjGameId,
 				'-p',
@@ -428,7 +425,7 @@ module.exports = config => {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
-						Authorization: gjServiceApiToken,
+						Authorization: process.env.GJPUSH_TOKEN,
 					},
 				};
 
@@ -735,8 +732,6 @@ module.exports = config => {
 		installerFile = path.join(config.clientBuildDir, installerFile);
 
 		cp.execFileSync(gjpushExecutable, [
-			'-t',
-			gjServiceApiToken,
 			'-g',
 			gjGameId,
 			'-p',
