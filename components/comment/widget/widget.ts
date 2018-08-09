@@ -195,9 +195,11 @@ export class AppCommentWidget extends Vue {
 		this.$emit('remove', comment);
 	}
 
-	_pinComment(comment: Comment) {
+	async _pinComment(comment: Comment) {
 		if (this.store) {
-			this.pinComment({ store: this.store, comment });
+			this.currentPage = 1;
+			await this.pinComment({ store: this.store, comment });
+			this._fetchComments();
 		}
 	}
 

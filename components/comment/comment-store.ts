@@ -39,33 +39,6 @@ export class CommentStoreModel {
 	get parentComments() {
 		const comments = this.comments.filter(i => !i.parent_id);
 
-		if (this.sort === Comment.SORT_YOU) {
-			// ignore pinned for "you" sort
-			// We sort reverse since we show newest first when showing parents.
-			comments.sort((a, b) => numberSort(b.posted_on, a.posted_on));
-		} else {
-			// remove pinned comments before sorting
-			const pinned = arrayRemove(comments, c => c.is_pinned);
-			switch (this.sort) {
-				case Comment.SORT_NEW:
-					// We sort reverse since we show newest first when showing parents.
-					comments.sort((a, b) => numberSort(b.posted_on, a.posted_on));
-					break;
-				case Comment.SORT_TOP:
-					// show comments with most votes at the top
-					comments.sort((a, b) => numberSort(b.votes, a.votes));
-					break;
-				case Comment.SORT_HOT:
-					// Show comments at the top with the highest confidence value
-					comments.sort((a, b) => numberSort(b.confidence, a.confidence));
-					break;
-			}
-			// insert pinned comments at the beginning
-			if (pinned) {
-				comments.unshift(...pinned);
-			}
-		}
-
 		return comments;
 	}
 
@@ -88,6 +61,13 @@ export class CommentStoreModel {
 		if (removedComments) {
 			this.count -= removedComments.length;
 		}
+	}
+
+	clear() {
+		this.comments = [];
+		this.count = 0;
+		this.parentCount = 0;
+		this.locks = 0;
 	}
 }
 
@@ -157,26 +137,9 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	async pinComment(payload: CommentActions['comment/pinComment']) {
 		const { store, comment } = payload;
 
-		// due to this comment being pinned, another comment is possibly being unpinned
-		// apply the change to its data
-		const otherCommentData = await comment.$pin();
-		if (otherCommentData) {
-			this.updateComment({ store, commentId: otherCommentData.id, data: otherCommentData });
-		}
-
-		// Either old comment was unpinned by pinning a new comment, or the old comment was just
-		// unpinned.
-		const unpinnedComment = otherCommentData || (!comment.is_pinned ? comment : null);
-		if (unpinnedComment) {
-			// If the unpinned comment is sorted to the very end of the comment chain, remove it
-			// from the store. This is done because the comment might not belong on that page.
-			if (
-				store.parentComments.length > 0 &&
-				store.parentComments[store.parentComments.length - 1].id === unpinnedComment.id
-			) {
-				store.remove(unpinnedComment.id);
-			}
-		}
+		await comment.$pin();
+		// clear the store's comments and prepare for reload
+		store.clear();
 	}
 
 	@VuexAction
@@ -184,10 +147,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 		const { store, sort } = payload;
 		store.sort = sort;
 		// clear the store's comments and prepare for reload
-		store.comments = [];
-		store.count = 0;
-		store.parentCount = 0;
-		store.locks = 0;
+		store.clear();
 	}
 
 	@VuexMutation
