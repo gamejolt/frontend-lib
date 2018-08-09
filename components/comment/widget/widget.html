@@ -18,6 +18,33 @@
 			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
+		<div>
+			<app-button
+				:solid="isSortHot"
+				:primary="isSortHot"
+				@click="_onSortHot">
+				<translate>Hot</translate>
+			</app-button>
+			<app-button
+				:solid="isSortTop"
+				:primary="isSortTop"
+				@click="_onSortTop">
+				<translate>Top</translate>
+			</app-button>
+			<app-button
+				:solid="isSortNew"
+				:primary="isSortNew"
+				@click="_onSortNew">
+				<translate>New</translate>
+			</app-button>
+			<app-button
+				:solid="isSortYou"
+				:primary="isSortYou"
+				@click="_onSortYou">
+				<translate>You</translate>
+			</app-button>
+		</div>
+		<br />
 		<app-message-thread>
 			<app-comment-widget-comment
 				v-for="comment of comments"

@@ -13,8 +13,9 @@ export const CommentMutation = namespace(CommentStoreNamespace, Mutation);
 
 export type CommentActions = {
 	'comment/lockCommentStore': { resource: string; resourceId: number };
-	'comment/fetchComments': CommentStoreModel;
+	'comment/fetchComments': { store: CommentStoreModel; page?: number };
 	'comment/pinComment': { store: CommentStoreModel; comment: Comment };
+	'comment/setSort': { store: CommentStoreModel; sort: string };
 };
 
 export type CommentMutations = {
@@ -31,24 +32,45 @@ export class CommentStoreModel {
 	parentCount = 0;
 	comments: Comment[] = [];
 	locks = 0;
+	sort = Comment.SORT_HOT;
 
 	constructor(public resource: string, public resourceId: number) {}
 
 	get parentComments() {
 		const comments = this.comments.filter(i => !i.parent_id);
-		// remove pinned comments before sorting
-		const pinned = arrayRemove(comments, c => c.is_pinned);
-		// We sort reverse since we show newest first when showing parents.
-		comments.sort((a, b) => numberSort(b.posted_on, a.posted_on));
-		// insert pinned comments at the beginning
-		if (pinned) {
-			comments.unshift(...pinned);
+
+		if (this.sort === Comment.SORT_YOU) {
+			// ignore pinned for "you" sort
+			// We sort reverse since we show newest first when showing parents.
+			comments.sort((a, b) => numberSort(b.posted_on, a.posted_on));
+		} else {
+			// remove pinned comments before sorting
+			const pinned = arrayRemove(comments, c => c.is_pinned);
+			switch (this.sort) {
+				case Comment.SORT_NEW:
+					// We sort reverse since we show newest first when showing parents.
+					comments.sort((a, b) => numberSort(b.posted_on, a.posted_on));
+					break;
+				case Comment.SORT_TOP:
+					// show comments with most votes at the top
+					comments.sort((a, b) => numberSort(b.votes, a.votes));
+					break;
+				case Comment.SORT_HOT:
+					// Show comments at the top with the highest confidence value
+					comments.sort((a, b) => numberSort(b.confidence, a.confidence));
+					break;
+			}
+			// insert pinned comments at the beginning
+			if (pinned) {
+				comments.unshift(...pinned);
+			}
 		}
 
 		return comments;
 	}
 
 	get childComments() {
+		// child comments always get sorted by time
 		const comments = this.comments
 			.filter(i => i.parent_id)
 			.sort((a, b) => numberSort(a.posted_on, b.posted_on));
@@ -88,16 +110,35 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	}
 
 	@VuexAction
-	async fetchComments(store: CommentActions['comment/fetchComments']) {
-		// load comments after the last timestamp
-		const lastComment =
-			store.parentComments.length === 0
-				? null // no comments loaded
-				: store.parentComments[store.parentComments.length - 1];
-		// only use the last comment's timestamp if it's not pinned (pinned comment's dates are sorted differently)
-		const lastTimestamp =
-			lastComment !== null && !lastComment.is_pinned ? lastComment.posted_on : null;
-		const response = await Comment.fetch(store.resource, store.resourceId, lastTimestamp);
+	async fetchComments(payload: CommentActions['comment/fetchComments']) {
+		const { store, page } = payload;
+		let response: any;
+
+		// 'new' and 'you' sort by last timestamp using scroll
+		if (store.sort === Comment.SORT_NEW || store.sort === Comment.SORT_YOU) {
+			// load comments after the last timestamp
+			const lastComment =
+				store.parentComments.length === 0
+					? null // no comments loaded
+					: store.parentComments[store.parentComments.length - 1];
+			// only use the last comment's timestamp if it's not pinned (pinned comment's dates are sorted differently)
+			const lastTimestamp =
+				lastComment !== null && !lastComment.is_pinned ? lastComment.posted_on : null;
+			response = await Comment.fetchWithScroll(
+				store.resource,
+				store.resourceId,
+				store.sort,
+				lastTimestamp
+			);
+		} else {
+			// 'hot' and 'top' paginate
+			response = await Comment.fetchWithPage(
+				store.resource,
+				store.resourceId,
+				store.sort,
+				page || 1
+			);
+		}
 
 		const count = response.count || 0;
 		const parentCount = response.parentCount || 0;
@@ -136,6 +177,17 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				store.remove(unpinnedComment.id);
 			}
 		}
+	}
+
+	@VuexAction
+	async setSort(payload: CommentActions['comment/setSort']) {
+		const { store, sort } = payload;
+		store.sort = sort;
+		// clear the store's comments and prepare for reload
+		store.comments = [];
+		store.count = 0;
+		store.parentCount = 0;
+		store.locks = 0;
 	}
 
 	@VuexMutation

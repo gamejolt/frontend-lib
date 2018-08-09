@@ -22,6 +22,11 @@ export class Comment extends Model {
 	static readonly STATUS_VISIBLE = 1;
 	static readonly STATUS_SPAM = 2;
 
+	static readonly SORT_HOT = 'hot';
+	static readonly SORT_TOP = 'top';
+	static readonly SORT_NEW = 'new';
+	static readonly SORT_YOU = 'you';
+
 	parent_id: number;
 	resource: 'Game' | 'FiresidePost';
 	resource_id: number;
@@ -37,6 +42,7 @@ export class Comment extends Model {
 	videos: CommentVideo[] = [];
 	subscription?: Subscription;
 	is_pinned: boolean;
+	confidence: number;
 
 	isVotePending = false;
 	isFollowPending = false;
@@ -66,13 +72,29 @@ export class Comment extends Model {
 	}
 
 	// scroll id is a timestamp that controls where fetching starts (posted_on)
-	static fetch(resource: string, resourceId: number, scrollId: number | null) {
+	static fetchWithScroll(
+		resource: string,
+		resourceId: number,
+		sort: string,
+		scrollId: number | null
+	) {
 		let query = '';
 		if (scrollId) {
 			query = '?scrollId=' + scrollId;
 		}
 
-		return Api.sendRequest(`/comments/${resource}/${resourceId}${query}`, {
+		return Api.sendRequest(`/comments/${resource}/${resourceId}/${sort}${query}`, {
+			detach: true,
+		});
+	}
+
+	static fetchWithPage(resource: string, resourceId: number, sort: string, page: number | null) {
+		let query = '';
+		if (page) {
+			query = '?page=' + page;
+		}
+
+		return Api.sendRequest(`/comments/${resource}/${resourceId}/${sort}${query}`, {
 			detach: true,
 		});
 	}

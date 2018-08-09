@@ -53,6 +53,7 @@ export class AppCommentWidget extends Vue {
 	@CommentAction fetchComments: CommentStore['fetchComments'];
 	@CommentAction lockCommentStore: CommentStore['lockCommentStore'];
 	@CommentAction pinComment: CommentStore['pinComment'];
+	@CommentAction setSort: CommentStore['setSort'];
 	@CommentMutation releaseCommentStore: CommentStore['releaseCommentStore'];
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
@@ -65,6 +66,7 @@ export class AppCommentWidget extends Vue {
 	isLoading = false;
 	resourceOwner: User | null = null;
 	perPage = 10;
+	currentPage = 1;
 
 	collaborators: GameCollaborator[] = [];
 
@@ -96,6 +98,26 @@ export class AppCommentWidget extends Vue {
 
 	get currentParentCount() {
 		return this.store ? this.store.parentComments.length : 0;
+	}
+
+	get currentSort() {
+		return this.store ? this.store.sort : Comment.SORT_HOT;
+	}
+
+	get isSortHot() {
+		return this.currentSort === Comment.SORT_HOT;
+	}
+
+	get isSortTop() {
+		return this.currentSort === Comment.SORT_TOP;
+	}
+
+	get isSortNew() {
+		return this.currentSort === Comment.SORT_NEW;
+	}
+
+	get isSortYou() {
+		return this.currentSort === Comment.SORT_YOU;
 	}
 
 	async created() {
@@ -138,7 +160,7 @@ export class AppCommentWidget extends Vue {
 				this.store = await this.lockCommentStore({ resource, resourceId });
 			}
 
-			const payload = await this.fetchComments(this.store);
+			const payload = await this.fetchComments({ store: this.store, page: this.currentPage });
 
 			this.isLoading = false;
 			this.hasBootstrapped = true;
@@ -179,7 +201,32 @@ export class AppCommentWidget extends Vue {
 		}
 	}
 
+	_onSortHot() {
+		this._setSort(Comment.SORT_HOT);
+	}
+
+	_onSortTop() {
+		this._setSort(Comment.SORT_TOP);
+	}
+
+	_onSortNew() {
+		this._setSort(Comment.SORT_NEW);
+	}
+
+	_onSortYou() {
+		this._setSort(Comment.SORT_YOU);
+	}
+
+	private _setSort(sort: string) {
+		if (this.store) {
+			this.currentPage = 1;
+			this.setSort({ store: this.store, sort: sort });
+			this._fetchComments();
+		}
+	}
+
 	loadMore() {
+		this.currentPage++;
 		this._fetchComments();
 	}
 }
