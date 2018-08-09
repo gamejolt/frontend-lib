@@ -42,7 +42,6 @@ export class Comment extends Model {
 	videos: CommentVideo[] = [];
 	subscription?: Subscription;
 	is_pinned: boolean;
-	confidence: number;
 
 	isVotePending = false;
 	isFollowPending = false;
