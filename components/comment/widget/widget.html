@@ -18,7 +18,7 @@
 			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
-		<div>
+		<div v-if="commentsCount">
 			<app-button
 				:solid="isSortHot"
 				:primary="isSortHot"
