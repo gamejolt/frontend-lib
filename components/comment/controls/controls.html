@@ -1,11 +1,11 @@
 <span class="comment-controls">
 	<span class="comment-vote-button" v-app-auth-required>
 		<app-button
-			icon="heart"
+			icon="chevron-up"
 			circle
-			:primary="!!comment.user_vote"
-			:solid="!!comment.user_vote"
-			@click="onVoteClick()"
+			:primary="hasUpvote"
+			:solid="hasUpvote"
+			@click="onUpvoteClick()"
 			v-app-tooltip="votingTooltip"
 			v-app-track-event="`comment-widget:vote-click`"
 			/>
@@ -14,7 +14,19 @@
 			<span class="blip-caret"></span>
 			<span class="blip-count">{{ comment.votes | number }}</span>
 		</span>
+
+		<app-button
+			icon="chevron-down"
+			circle
+			:primary="hasDownvote"
+			:solid="hasDownvote"
+			@click="onDownvoteClick()"
+			v-app-track-event="`comment-widget:vote-click`"
+			/>
+
 	</span>
+
+	<span class="dot-separator"></span>
 
 	<span v-if="showReply" v-app-auth-required>
 		<app-button

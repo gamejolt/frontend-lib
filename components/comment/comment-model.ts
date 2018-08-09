@@ -123,22 +123,27 @@ export class Comment extends Model {
 		}
 	}
 
-	async $like() {
-		if (this.user_vote || this.isVotePending) {
+	async $vote(vote: number) {
+		if (this.isVotePending || (this.user_vote && this.user_vote.vote === vote)) {
 			return;
 		}
 		this.isVotePending = true;
 
-		const newVote = new CommentVote({ comment_id: this.id });
+		const newVote = new CommentVote({ comment_id: this.id, vote: vote });
+		const changeVote = this.user_vote && this.user_vote.vote !== vote;
 
 		await newVote.$save();
 
 		this.user_vote = newVote;
-		++this.votes;
+		if (vote === CommentVote.VOTE_UPVOTE) {
+			++this.votes;
+		} else if (changeVote) {
+			--this.votes;
+		}
 		this.isVotePending = false;
 	}
 
-	async $removeLike() {
+	async $removeVote() {
 		if (!this.user_vote || this.isVotePending) {
 			return;
 		}
@@ -146,8 +151,10 @@ export class Comment extends Model {
 
 		await this.user_vote.$remove();
 
+		if (this.user_vote.vote === CommentVote.VOTE_UPVOTE) {
+			--this.votes;
+		}
 		this.user_vote = undefined;
-		--this.votes;
 		this.isVotePending = false;
 	}
 
