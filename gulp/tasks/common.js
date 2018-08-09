@@ -27,6 +27,7 @@ module.exports = (config, projectBase) => {
 	config.analyze = argv.analyze || false;
 	config.server = argv.server || false;
 	config.client = argv.client || false;
+	config.noGjPush = argv.noGjPush || false;
 	config.noClean = argv.noClean || false;
 
 	// Whether or not the environment of angular should be production or development.

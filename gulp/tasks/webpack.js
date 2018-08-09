@@ -283,6 +283,7 @@ module.exports = function(config) {
 					GJ_WITH_UPDATER: JSON.stringify(
 						(!config.developmentEnv && !config.watching) || config.withUpdater
 					),
+					GJ_IS_WATCHING: JSON.stringify(config.watching),
 
 					// This sets vue in production mode.
 					'process.env.NODE_ENV': JSON.stringify(

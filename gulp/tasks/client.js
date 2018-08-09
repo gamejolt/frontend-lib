@@ -27,10 +27,7 @@ module.exports = config => {
 	const gjGameId = 119176;
 	const gjGamePackageId = 331094;
 	const gjGameInstallerPackageId = 331095;
-
-	// If we want to skip gjpush to test the packaging we need to provide the build id ourselves because we won't be hitting service-api to get it.
-	const skipGjPush = false;
-	const gjGameBuildId = 1;
+	const nwjsVersion = '0.32.1';
 
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
@@ -81,7 +78,7 @@ module.exports = config => {
 		}
 
 		const nw = new NwBuilder({
-			version: '0.32.0',
+			version: nwjsVersion,
 			flavor: config.production ? 'normal' : 'sdk',
 			files: config.buildDir + '/**/*',
 			buildDir: config.clientBuildDir,
@@ -417,7 +414,10 @@ module.exports = config => {
 	gulp.task('client:joltron', cb => {
 		let buildIdPromise = Promise.resolve();
 
-		if (skipGjPush) {
+		if (config.noGjPush) {
+			// If we want to skip gjpush to test the packaging we need to provide the build id ourselves because we won't be hitting service-api to get it.
+			const gjGameBuildId = 1;
+
 			buildIdPromise = buildIdPromise.then(() => gjGameBuildId);
 		} else {
 			// Function to issue an authenticated service API request and return the result as json..
@@ -748,7 +748,7 @@ module.exports = config => {
 		cb();
 	});
 
-	if (!skipGjPush) {
+	if (!config.noGjPush) {
 		gulp.task(
 			'client',
 			gulp.series(
