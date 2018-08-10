@@ -16,6 +16,7 @@ import { AppMessageThreadContent } from '../../message-thread/content/content';
 import { FormComment } from '../add/add';
 import { GameCollaborator } from '../../game/collaborator/collaborator.model';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
+import { Scroll } from '../../scroll/scroll.service';
 import {
 	CommentState,
 	CommentStore,
@@ -199,6 +200,7 @@ export class AppCommentWidget extends Vue {
 		if (this.store) {
 			this.currentPage = 1;
 			await this.pinComment({ store: this.store, comment });
+			Scroll.to('comments');
 			this._fetchComments();
 		}
 	}
