@@ -11,7 +11,8 @@ export class GameRating extends Model {
 
 	$save() {
 		// This is an upsert.
-		return this.$_save('/web/discover/games/ratings/save/' + this.game_id, 'gameRating', {
+		// "save" is for the old rating system, like/dislike is "save2"
+		return this.$_save('/web/discover/games/ratings/save2/' + this.game_id, 'gameRating', {
 			ignoreLoadingBar: true,
 		});
 	}
