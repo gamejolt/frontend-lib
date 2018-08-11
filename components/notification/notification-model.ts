@@ -136,8 +136,8 @@ export class Notification extends Model {
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_RATING_ADD) {
 			this.action_model = new GameRating(data.action_resource_model);
-			this.jolticon = 'jolticon-chart';
-			this.is_game_based = true;
+			this.jolticon = 'jolticon-thumbs-up';
+			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_FOLLOW) {
 			this.action_model = new GameLibraryGame(data.action_resource_model);
 			this.jolticon = 'jolticon-subscribe';
@@ -393,7 +393,7 @@ export function getNotificationText(notification: Notification) {
 
 		case Notification.TYPE_GAME_RATING_ADD: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } received a new rating.`,
+				`%{ subject } liked %{ object }.`,
 				getTranslationValues(notification)
 			);
 		}
