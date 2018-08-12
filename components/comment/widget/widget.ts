@@ -24,6 +24,7 @@ import {
 	CommentAction,
 	CommentStoreModel,
 } from '../comment-store';
+import { AppNavTabList } from '../../nav/tab-list/tab-list';
 
 let incrementer = 0;
 
@@ -31,6 +32,7 @@ let incrementer = 0;
 @Component({
 	components: {
 		AppLoading,
+		AppNavTabList,
 		AppMessageThread,
 		AppMessageThreadAdd,
 		AppMessageThreadContent,
@@ -205,19 +207,19 @@ export class AppCommentWidget extends Vue {
 		}
 	}
 
-	_onSortHot() {
+	sortHot() {
 		this._setSort(Comment.SORT_HOT);
 	}
 
-	_onSortTop() {
+	sortTop() {
 		this._setSort(Comment.SORT_TOP);
 	}
 
-	_onSortNew() {
+	sortNew() {
 		this._setSort(Comment.SORT_NEW);
 	}
 
-	_onSortYou() {
+	sortYou() {
 		this._setSort(Comment.SORT_YOU);
 	}
 

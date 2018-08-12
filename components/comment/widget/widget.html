@@ -18,33 +18,33 @@
 			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
 		</div>
 
-		<div v-if="commentsCount">
-			<app-button
-				:solid="isSortHot"
-				:primary="isSortHot"
-				@click="_onSortHot">
-				<translate>Hot</translate>
-			</app-button>
-			<app-button
-				:solid="isSortTop"
-				:primary="isSortTop"
-				@click="_onSortTop">
-				<translate>Top</translate>
-			</app-button>
-			<app-button
-				:solid="isSortNew"
-				:primary="isSortNew"
-				@click="_onSortNew">
-				<translate>New</translate>
-			</app-button>
-			<app-button
-				:solid="isSortYou"
-				:primary="isSortYou"
-				@click="_onSortYou">
-				<translate>You</translate>
-			</app-button>
+		<div>
+			<app-nav-tab-list>
+				<ul>
+					<li>
+						<a @click="sortHot()" :class="{ active: isSortHot }">
+							<translate>Hot</translate>
+						</a>
+					</li>
+					<li>
+						<a @click="sortTop()" :class="{ active: isSortTop }">
+							<translate>Top</translate>
+						</a>
+					</li>
+					<li>
+						<a @click="sortNew()" :class="{ active: isSortNew }">
+							<translate>New</translate>
+						</a>
+					</li>
+					<li>
+						<a @click="sortYou()" :class="{ active: isSortYou }">
+							<translate>You</translate>
+						</a>
+					</li>
+				</ul>
+			</app-nav-tab-list>
 		</div>
-		<br />
+
 		<app-message-thread>
 			<app-comment-widget-comment
 				v-for="comment of comments"
@@ -67,6 +67,11 @@
 		</div>
 
 		<app-loading v-if="isLoading" class="loading-centered" />
+		<div v-else-if="!comments.length">
+			<div class="alert alert-info">
+				<translate>It's feeling a bit empty in here. Start talking!</translate>
+			</div>
+		</div>
 
 	</div>
 </div>

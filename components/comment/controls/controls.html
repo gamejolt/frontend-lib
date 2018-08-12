@@ -1,8 +1,9 @@
 <span class="comment-controls">
 	<span class="comment-vote-button" v-app-auth-required>
 		<app-button
-			icon="chevron-up"
+			icon="thumbs-up"
 			circle
+			trans
 			:primary="hasUpvote"
 			:solid="hasUpvote"
 			@click="onUpvoteClick()"
@@ -16,8 +17,9 @@
 		</span>
 
 		<app-button
-			icon="chevron-down"
+			icon="thumbs-down"
 			circle
+			trans
 			:primary="hasDownvote"
 			:solid="hasDownvote"
 			@click="onDownvoteClick()"
@@ -26,12 +28,11 @@
 
 	</span>
 
-	<span class="dot-separator"></span>
-
 	<span v-if="showReply" v-app-auth-required>
 		<app-button
 			icon="reply"
 			circle
+			trans
 			@click="onReplyClick()"
 			v-app-tooltip="$gettext( 'Reply' )"
 			v-app-track-event="`comment-widget:reply-click`"
