@@ -193,10 +193,13 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				Translate.$gettext('Almost there...')
 			);
 		} else if (store && !store.contains(comment)) {
-			++store.count;
-			store.comments.push(comment);
-			if (!comment.parent_id) {
-				++store.parentCount;
+			// insert the new comment at the beginning
+			if (store.sort === Comment.SORT_YOU) {
+				++store.count;
+				store.comments.unshift(comment);
+				if (!comment.parent_id) {
+					++store.parentCount;
+				}
 			}
 		}
 	}
