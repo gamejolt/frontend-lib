@@ -9,6 +9,7 @@ import { number } from '../../../vue/filters/number';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
 import { CommentModal } from '../modal/modal.service';
 import { CommentVote } from '../vote/vote-model';
+import { LikesModal } from '../../likes/modal.service';
 
 @View
 @Component({
@@ -82,5 +83,9 @@ export class AppCommentControls extends Vue {
 
 	onReplyClick() {
 		CommentModal.show({ comment: this.comment });
+	}
+
+	onOpenLikesModalClick() {
+		LikesModal.show({ likeAmount: this.comment.votes, comment: this.comment });
 	}
 }

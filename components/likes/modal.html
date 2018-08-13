@@ -1,0 +1,42 @@
+<app-modal>
+
+	<!-- <div class="modal-controls">
+		<app-button @click="modal.dismiss()">
+			<translate>Close</translate>
+		</app-button>
+	</div> -->
+
+	<div class="modal-header">
+		<h2 class="modal-title">
+			{{ title }}
+		</h2>
+	</div>
+
+	<div class="modal-body">
+
+		<div v-if="post">
+			This is post
+		</div>
+		<div v-else-if="comment">
+			<app-message-thread-item
+				:user="comment.user"
+				:date="comment.posted_on"
+				>
+				<app-comment-content
+					:comment="comment"
+					:content="comment.comment_compiled"
+					/>
+
+			</app-message-thread-item>
+		</div>
+
+		<hr>
+
+		<app-loading v-if="loading" class="loading-centered" />
+		<div v-else v-for="user of users" :key="user.id">
+			{{ user.display_name }}
+		</div>
+
+	</div>
+
+</app-modal>

@@ -8,6 +8,7 @@ import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
 import { AppTooltip } from '../../../../tooltip/tooltip';
 import { number } from '../../../../../vue/filters/number';
 import { Screen } from '../../../../screen/screen-service';
+import { LikesModal } from '../../../../likes/modal.service';
 
 @View
 @Component({
@@ -72,5 +73,9 @@ export class AppFiresidePostLikeWidget extends Vue {
 		}
 
 		this.isProcessing = false;
+	}
+
+	onOpenLikesModalClick() {
+		LikesModal.show({ likeAmount: this.post.like_count, post: this.post });
 	}
 }
