@@ -10,5 +10,5 @@
 			<slot />
 		</div>
 	</app-timeline-list-item>
-	<hr class="message-thread-split">
+	<hr v-if="!hideMessageSplit" class="message-thread-split">
 </div>
