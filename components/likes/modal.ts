@@ -2,11 +2,8 @@ import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./modal.html';
 
 import { BaseModal } from '../modal/base';
-import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 import { FiresidePost } from '../fireside/post/post-model';
 import { Comment } from '../comment/comment-model';
-import { AppCommentContent } from '../comment/content/content';
-import { AppMessageThreadItem } from '../message-thread/item/item';
 import { Api } from '../api/api.service';
 import { User } from '../user/user.model';
 import { AppLoading } from '../../vue/components/loading/loading';
@@ -14,9 +11,6 @@ import { AppLoading } from '../../vue/components/loading/loading';
 @View
 @Component({
 	components: {
-		AppJolticon,
-		AppCommentContent,
-		AppMessageThreadItem,
 		AppLoading,
 	},
 })
@@ -25,6 +19,10 @@ export default class AppLikesModal extends BaseModal {
 	@Prop(FiresidePost) post?: FiresidePost;
 	@Prop(Comment) comment?: Comment;
 
+	static readonly USERS_PER_PAGE = 20;
+
+	reachedEnd = false;
+	currentPage = 0;
 	loading = true;
 	users: User[] = [];
 
@@ -36,14 +34,35 @@ export default class AppLikesModal extends BaseModal {
 		}
 	}
 
+	get shouldShowLoadMore() {
+		return !this.loading && !this.reachedEnd;
+	}
+
 	async created() {
-		const requestUrl = !!this.comment
+		this._loadPage();
+	}
+
+	async loadMore() {
+		this.currentPage++;
+		this._loadPage();
+	}
+
+	private async _loadPage() {
+		this.loading = true;
+		let requestUrl = !!this.comment
 			? '/comments/like_users/' + this.comment.id
 			: '/fireside/posts/like_users/' + this.post!.id;
+		requestUrl += '?page=' + this.currentPage;
+
 		const payload = await Api.sendRequest(requestUrl);
 		if (payload.success) {
-			this.users = User.populate(payload.users);
-			this.loading = false;
+			const newUsers = User.populate(payload.users);
+			this.users = this.users.concat(newUsers);
+
+			if (newUsers.length < AppLikesModal.USERS_PER_PAGE) {
+				this.reachedEnd = true;
+			}
 		}
+		this.loading = false;
 	}
 }
