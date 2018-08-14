@@ -15,7 +15,7 @@ export class LikesModal {
 
 		return await Modal.show<void>({
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "CommentLikesModal" */ './modal')),
+				asyncComponentLoader(import(/* webpackChunkName: "LikesModal" */ './modal')),
 			props: {
 				likeAmount,
 				post,
