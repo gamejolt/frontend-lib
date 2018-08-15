@@ -23,9 +23,9 @@ module.exports = config => {
 	const joltronGitVersion = 'v2.0.0-beta';
 	const joltronVersionArray = [2, 0, 0];
 	const gjpushVersion = 'v0.2.0';
-	const gjGameId = 119176;
-	const gjGamePackageId = 331094;
-	const gjGameInstallerPackageId = 331095;
+	const gjGameId = config.developmentEnv ? 2 : 272864;
+	const gjGamePackageId = config.developmentEnv ? 4 : 375641;
+	const gjGameInstallerPackageId = config.developmentEnv ? 5 : 375642;
 	const nwjsVersion = '0.32.1';
 
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
