@@ -11,7 +11,13 @@
 			v-app-track-event="`comment-widget:vote-click`"
 			/>
 
-		<span class="blip light filled" v-if="comment.votes > 0">
+		<span
+			v-if="comment.votes > 0"
+			class="blip"
+			:class="{
+				'filled': hasUpvote,
+			}"
+			>
 			<span class="blip-caret"></span>
 			<span class="blip-count">{{ comment.votes | number }}</span>
 		</span>
