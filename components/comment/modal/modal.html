@@ -6,6 +6,18 @@
 		</app-button>
 	</div>
 
+	<div class="modal-header" v-if="!comment">
+		<h2 class="modal-title">
+			<translate
+				:translate-n="commentsCount"
+				:translate-params="{ count: number(commentsCount) }"
+				translate-plural="%{ count } comments"
+				>
+				1 comment
+			</translate>
+		</h2>
+	</div>
+
 	<div class="modal-body">
 
 		<app-comment-widget
