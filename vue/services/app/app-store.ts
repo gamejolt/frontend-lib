@@ -31,6 +31,8 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 				return 'auth';
 			} else if (window.location.href.startsWith(Environment.checkoutBaseUrl)) {
 				return 'checkout';
+			} else if (window.location.href.startsWith(Environment.clientSectionBaseUrl)) {
+				return 'client';
 			}
 		}
 

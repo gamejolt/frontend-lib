@@ -27,6 +27,7 @@ export class Environment {
 	static wttfBaseUrl = 'https://gamejolt.com';
 	static authBaseUrl = 'https://gamejolt.com';
 	static checkoutBaseUrl = 'https://gamejolt.com';
+	static clientSectionBaseUrl = '';
 
 	static jamsBaseUrl = 'http://jams.gamejolt.com';
 	static jamsIoBaseUrl = 'http://jams.gamejolt.io';
@@ -75,9 +76,11 @@ if (GJ_IS_CLIENT) {
 		Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#';
 		Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#';
 		Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#';
+		Environment.clientSectionBaseUrl = 'app://game-jolt-client/package/client.html#';
 	} else {
 		Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#';
 		Environment.authBaseUrl = 'app://game-jolt-client/auth.html#';
 		Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#';
+		Environment.clientSectionBaseUrl = 'app://game-jolt-client/client.html#';
 	}
 }

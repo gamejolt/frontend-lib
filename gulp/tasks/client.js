@@ -87,17 +87,25 @@ module.exports = config => {
 			unzipper.on('error', cb);
 			unzipper.on('extract', () => {
 				// We pull some stuff out of the package folder into the main folder.
-				mv(path.join(base, 'package', 'node_modules'), path.join(base, 'node_modules'), err => {
-					if (err) {
-						throw err;
-					}
-					mv(path.join(base, 'package', 'package.json'), path.join(base, 'package.json'), err => {
+				mv(
+					path.join(base, 'package', 'node_modules'),
+					path.join(base, 'node_modules'),
+					err => {
 						if (err) {
 							throw err;
 						}
-						cb();
-					});
-				});
+						mv(
+							path.join(base, 'package', 'package.json'),
+							path.join(base, 'package.json'),
+							err => {
+								if (err) {
+									throw err;
+								}
+								cb();
+							}
+						);
+					}
+				);
 			});
 			unzipper.extract({ path: path.join(base, 'package') });
 		} else {
