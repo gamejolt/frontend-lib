@@ -8,6 +8,7 @@ import { AppTooltip } from '../../tooltip/tooltip';
 import { number } from '../../../vue/filters/number';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
 import { CommentModal } from '../modal/modal.service';
+import { CommentVote } from '../vote/vote-model';
 
 @View
 @Component({
@@ -55,11 +56,27 @@ export class AppCommentControls extends Vue {
 		}
 	}
 
-	onVoteClick() {
-		if (!this.comment.user_vote) {
-			this.comment.$like();
+	get hasUpvote() {
+		return this.comment.user_vote && this.comment.user_vote.vote === CommentVote.VOTE_UPVOTE;
+	}
+
+	get hasDownvote() {
+		return this.comment.user_vote && this.comment.user_vote.vote === CommentVote.VOTE_DOWNVOTE;
+	}
+
+	onUpvoteClick() {
+		this.voteComment(CommentVote.VOTE_UPVOTE);
+	}
+
+	onDownvoteClick() {
+		this.voteComment(CommentVote.VOTE_DOWNVOTE);
+	}
+
+	voteComment(vote: number) {
+		if (!this.comment.user_vote || this.comment.user_vote.vote !== vote) {
+			this.comment.$vote(vote);
 		} else {
-			this.comment.$removeLike();
+			this.comment.$removeVote();
 		}
 	}
 

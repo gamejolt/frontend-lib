@@ -6,6 +6,7 @@ import { CommentVideo } from '../video-model';
 import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
 import { number } from '../../../../vue/filters/number';
 import { Screen } from '../../../screen/screen-service';
+import { CommentVote } from '../../vote/vote-model';
 
 @View
 @Component({
@@ -41,10 +42,10 @@ export class AppCommentVideoLikeWidget extends Vue {
 	async toggle() {
 		this.isProcessing = true;
 
-		if (!this.comment.user_vote) {
-			await this.comment.$like();
+		if (!this.comment.user_vote || this.comment.user_vote.vote === CommentVote.VOTE_DOWNVOTE) {
+			await this.comment.$vote(CommentVote.VOTE_UPVOTE);
 		} else {
-			await this.comment.$removeLike();
+			await this.comment.$removeVote();
 		}
 
 		this.isProcessing = false;
