@@ -79,11 +79,12 @@ if (GJ_IS_CLIENT) {
 		Environment.authBaseUrl = 'chrome-extension://game-jolt-client/package/auth.html#';
 		Environment.checkoutBaseUrl = 'chrome-extension://game-jolt-client/package/checkout.html#';
 		Environment.clientForceDowngradeUrl =
-			'chrome-extension://game-jolt-client/package/downgrade.html#';
+			'chrome-extension://game-jolt-client/package/client.html#/downgrade';
 	} else {
 		Environment.wttfBaseUrl = 'chrome-extension://game-jolt-client/index.html#';
 		Environment.authBaseUrl = 'chrome-extension://game-jolt-client/auth.html#';
 		Environment.checkoutBaseUrl = 'chrome-extension://game-jolt-client/checkout.html#';
-		Environment.clientForceDowngradeUrl = 'chrome-extension://game-jolt-client/downgrade.html#';
+		Environment.clientForceDowngradeUrl =
+			'chrome-extension://game-jolt-client/client.html#/downgrade';
 	}
 }
