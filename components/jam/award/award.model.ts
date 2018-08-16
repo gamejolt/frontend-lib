@@ -2,10 +2,10 @@ import { Model } from '../../model/model.service';
 import { Api } from '../../api/api.service';
 
 export class JamAward extends Model {
-	jam_id: number;
-	name: string;
-	description: string;
-	sort: number;
+	jam_id!: number;
+	name!: string;
+	description!: string;
+	sort!: number;
 
 	constructor(data: any = {}) {
 		super(data);

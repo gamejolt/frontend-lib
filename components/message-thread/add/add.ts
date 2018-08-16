@@ -15,5 +15,5 @@ import { AppTimelineListItem } from '../../timeline-list/item/item';
 	},
 })
 export class AppMessageThreadAdd extends Vue {
-	@State app: AppStore;
+	@State app!: AppStore;
 }

@@ -80,11 +80,11 @@ export class DatepickerDate {
 	},
 })
 export class AppDatepicker extends Vue {
-	@Prop(Date) value: Date;
+	@Prop(Date) value!: Date;
 	@Prop({ type: Date, default: null })
-	minDate: Date;
+	minDate!: Date | null;
 	@Prop({ type: Date, default: null })
-	maxDate: Date;
+	maxDate!: Date | null;
 
 	pickerMode: DateMode = 'day';
 	viewDate: Date = null as any;

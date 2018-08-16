@@ -21,7 +21,7 @@ import { CommentModal } from '../modal/modal.service';
 	},
 })
 export class AppCommentControls extends Vue {
-	@Prop(Comment) comment: Comment;
+	@Prop(Comment) comment!: Comment;
 	@Prop(Boolean) showReply?: boolean;
 
 	get votingTooltip() {

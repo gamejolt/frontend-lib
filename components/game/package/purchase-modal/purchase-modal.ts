@@ -25,10 +25,10 @@ import { GamePlayModal } from '../../play-modal/play-modal.service';
 	},
 })
 export default class AppGamePackagePurchaseModal extends BaseModal {
-	@Prop(Game) game: Game;
-	@Prop(GamePackage) package: GamePackage;
-	@Prop(GameBuild) build: GameBuild | null;
-	@Prop(Boolean) fromExtraSection: boolean;
+	@Prop(Game) game!: Game;
+	@Prop(GamePackage) package!: GamePackage;
+	@Prop(GameBuild) build!: GameBuild | null;
+	@Prop(Boolean) fromExtraSection!: boolean;
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
 

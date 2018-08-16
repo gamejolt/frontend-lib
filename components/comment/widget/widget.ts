@@ -42,21 +42,21 @@ let incrementer = 0;
 	},
 })
 export class AppCommentWidget extends Vue {
-	@Prop(String) resource: string;
-	@Prop(Number) resourceId: number;
+	@Prop(String) resource!: string;
+	@Prop(Number) resourceId!: number;
 	@Prop(Boolean) onlyAdd?: boolean;
 	@Prop(Boolean) autofocus?: boolean;
 
-	@AppState user: AppStore['user'];
+	@AppState user!: AppStore['user'];
 
-	@CommentState getCommentStore: CommentStore['getCommentStore'];
-	@CommentAction fetchComments: CommentStore['fetchComments'];
-	@CommentAction lockCommentStore: CommentStore['lockCommentStore'];
-	@CommentAction pinComment: CommentStore['pinComment'];
-	@CommentMutation releaseCommentStore: CommentStore['releaseCommentStore'];
-	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
-	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
-	@CommentMutation onCommentRemove: CommentStore['onCommentRemove'];
+	@CommentState getCommentStore!: CommentStore['getCommentStore'];
+	@CommentAction fetchComments!: CommentStore['fetchComments'];
+	@CommentAction lockCommentStore!: CommentStore['lockCommentStore'];
+	@CommentAction pinComment!: CommentStore['pinComment'];
+	@CommentMutation releaseCommentStore!: CommentStore['releaseCommentStore'];
+	@CommentMutation onCommentAdd!: CommentStore['onCommentAdd'];
+	@CommentMutation onCommentEdit!: CommentStore['onCommentEdit'];
+	@CommentMutation onCommentRemove!: CommentStore['onCommentRemove'];
 
 	store: CommentStoreModel | null = null;
 	id = ++incrementer;

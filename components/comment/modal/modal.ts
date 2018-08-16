@@ -16,8 +16,8 @@ import { AppCommentModalComment } from './comment/comment';
 	},
 })
 export default class AppCommentModal extends BaseModal {
-	@Prop(String) resource: string;
-	@Prop(Number) resourceId: number;
+	@Prop(String) resource!: string;
+	@Prop(Number) resourceId!: number;
 	@Prop(Comment) comment?: Comment;
 
 	onReplyAdd() {

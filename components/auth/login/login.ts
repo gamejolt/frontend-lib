@@ -17,7 +17,7 @@ import { Environment } from '../../environment/environment.service';
 })
 export class AppAuthLogin extends Vue {
 	@Prop(Boolean) darkVariant?: boolean;
-	@Prop(String) redirectTo: string;
+	@Prop(String) redirectTo!: string;
 
 	readonly Connection = Connection;
 

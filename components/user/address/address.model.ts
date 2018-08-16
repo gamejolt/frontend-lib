@@ -1,19 +1,18 @@
 import { Model } from '../../model/model.service';
-import { Api } from '../../api/api.service';
 
 export class UserAddress extends Model {
 	static readonly TYPE_BILLING = 'billing';
 	static readonly TYPE_SHIPPING = 'shipping';
 
-	user_id: number;
-	type: 'billing' | 'shipping';
-	fullname: string;
-	street1: string;
-	street2: string;
-	city: string;
-	region: string;
-	postcode: string;
-	country: string;
+	user_id!: number;
+	type!: 'billing' | 'shipping';
+	fullname?: string;
+	street1?: string;
+	street2?: string;
+	city?: string;
+	region?: string;
+	postcode?: string;
+	country?: string;
 
 	$remove() {
 		return this.$_remove('/web/dash/addresses/remove/' + this.id);

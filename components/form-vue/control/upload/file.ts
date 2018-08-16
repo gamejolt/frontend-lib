@@ -5,13 +5,13 @@ import View from '!view!./file.html';
 @View
 @Component({})
 export class AppFormControlUploadFile extends Vue {
-	@Prop() id: any;
-	@Prop() name: any;
-	@Prop() value: File | File[] | null;
+	@Prop() id!: any;
+	@Prop() name!: any;
+	@Prop() value!: File | File[] | null;
 	@Prop() multiple?: boolean;
 	@Prop() accept?: string;
 
-	$el: HTMLInputElement;
+	$el!: HTMLInputElement;
 
 	showFileSelect() {
 		this.$el.click();
@@ -22,7 +22,7 @@ export class AppFormControlUploadFile extends Vue {
 		let files: File[] = [];
 		if (fileList) {
 			for (let i = 0; i < fileList.length; ++i) {
-				files.push(fileList.item(i));
+				files.push(fileList.item(i)!);
 			}
 		}
 

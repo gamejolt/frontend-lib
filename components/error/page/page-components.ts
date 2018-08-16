@@ -28,7 +28,7 @@ export class AppErrorPage500 extends Vue {}
 @ViewOffline
 @Component({})
 export class AppErrorPageOffline extends Vue {
-	@State app: AppStore;
+	@State app!: AppStore;
 
 	retry() {
 		window.location.reload();

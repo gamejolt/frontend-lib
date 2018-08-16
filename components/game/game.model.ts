@@ -9,6 +9,7 @@ import { Registry } from '../registry/registry.service';
 import { Site } from '../site/site-model';
 import { GameCollaborator } from './collaborator/collaborator.model';
 import { Theme } from '../theme/theme.model';
+import { RawLocation } from 'vue-router';
 
 export interface CustomMessage {
 	type: 'info' | 'alert';
@@ -56,74 +57,80 @@ export class Game extends Model {
 	static readonly DEVELOPMENT_STATUS_CANCELED = 3;
 	static readonly DEVELOPMENT_STATUS_DEVLOG = 4;
 
-	developer: User;
+	developer!: User;
 	thumbnail_media_item?: MediaItem;
 	header_media_item?: MediaItem;
 
-	title: string;
-	slug: string;
-	path: string;
-	img_thumbnail: string;
-	has_animated_thumbnail: boolean;
-	img_thumbnail_webm: string;
-	img_thumbnail_mp4: string;
-	media_count: number;
-	follower_count: number;
-	ratings_enabled: boolean;
-	referrals_enabled: boolean;
-	compatibility: any;
-	modified_on: number;
-	posted_on: number;
-	published_on: number;
-	status: number;
-	development_status: number;
-	canceled: boolean;
-	tigrs_age: number;
-	sellable: Sellable;
-	can_user_rate: boolean;
-	is_following: boolean;
-	category: string;
-	category_human: string;
-	creation_tool: string;
-	creation_tool_other: string;
-	creation_tool_human: string;
-	category_slug: string;
-	web_site: string;
-	bundle_only: boolean;
-	ga_tracking_id: string;
-	should_show_ads: boolean;
-	ads_enabled: boolean;
-	comments_enabled: boolean;
-
-	description: string;
-	description_markdown: string;
-	description_compiled: string;
-	has_compiled_description: boolean;
-
-	has_active_builds: boolean;
-
-	avg_rating: number;
-	rating_count: number;
-
-	sites_enabled: boolean;
-	site?: Site;
-
-	tigrs_cartoon_violence: number;
-	tigrs_fantasy_violence: number;
-	tigrs_realistic_violence: number;
-	tigrs_bloodshed: number;
-	tigrs_sexual_violence: number;
-	tigrs_alcohol: number;
-	tigrs_drugs: number;
-	tigrs_tobacco: number;
-	tigrs_nudity: number;
-	tigrs_sexual_themes: number;
-	tigrs_language: number;
-	tigrs_humor: number;
-	tigrs_gambling: number;
-
-	// collaborator perms
+	title!: string;
+	slug!: string;
+	path!: string;
+	img_thumbnail!: string;
+	has_animated_thumbnail!: boolean;
+	img_thumbnail_webm!: string;
+	img_thumbnail_mp4!: string;
+	media_count!: number;
+	follower_count!: number;
+	ratings_enabled!: boolean;
+	referrals_enabled!: boolean;
+	compatibility!: any;
+	modified_on!: number;
+	posted_on!: number;
+	published_on!: number;
+	status!: number;
+	development_status!: number;
+	canceled!: boolean;
+	tigrs_age!: number;
+	should_show_ads!: boolean;
+	sellable?: Sellable;
+	can_user_rate?: boolean;
+	is_following?: boolean;
 	perms?: Perm[];
+
+	// Meta settings
+	category?: string;
+	category_human?: string;
+	creation_tool?: string;
+	creation_tool_other?: string;
+	creation_tool_human?: string;
+	category_slug?: string;
+	web_site?: string;
+	bundle_only?: boolean;
+	ga_tracking_id?: string;
+	comments_enabled?: boolean;
+
+	avg_rating?: number;
+	rating_count?: number;
+
+	// Maturity settings
+	tigrs_cartoon_violence?: number;
+	tigrs_fantasy_violence?: number;
+	tigrs_realistic_violence?: number;
+	tigrs_bloodshed?: number;
+	tigrs_sexual_violence?: number;
+	tigrs_alcohol?: number;
+	tigrs_drugs?: number;
+	tigrs_tobacco?: number;
+	tigrs_nudity?: number;
+	tigrs_sexual_themes?: number;
+	tigrs_language?: number;
+	tigrs_humor?: number;
+	tigrs_gambling?: number;
+
+	// Description settings
+	description?: string;
+	description_markdown?: string;
+	description_compiled?: string;
+	has_compiled_description?: boolean;
+
+	// Manage settings
+	ads_enabled?: boolean;
+	has_sales?: boolean;
+	has_active_builds?: boolean;
+	is_listable?: boolean;
+	is_locked?: boolean;
+
+	// Sites settings
+	site?: Site;
 
 	theme?: Theme;
 
@@ -147,8 +154,11 @@ export class Game extends Model {
 		}
 
 		// Should show as owned for the dev and collaborators of the game.
-		if (this.sellable && this.sellable.type !== 'free' && this.hasPerms()) {
-			this.sellable.is_owned = true;
+		if (data.sellable) {
+			this.sellable = new Sellable(data.sellable);
+			if (this.sellable.type !== 'free' && this.hasPerms()) {
+				this.sellable.is_owned = true;
+			}
 		}
 
 		if (data.theme) {
@@ -163,7 +173,7 @@ export class Game extends Model {
 	}
 
 	get _can_buy_primary_sellable() {
-		return this.is_paid_game && !this.sellable.is_owned;
+		return this.is_paid_game && this.sellable && !this.sellable.is_owned;
 	}
 
 	// We don't want to show ads if this game has sellable items.
@@ -203,7 +213,7 @@ export class Game extends Model {
 		return false;
 	}
 
-	get routeLocation() {
+	get routeLocation(): RawLocation {
 		return {
 			name: 'discover.games.view.overview',
 			params: this.getSrefParams(),
@@ -228,14 +238,14 @@ export class Game extends Model {
 		return sref;
 	}
 
-	getSrefParams(page = '') {
+	getSrefParams(page = ''): { [key: string]: string } {
 		if (['dashboard', 'edit'].indexOf(page) !== -1) {
-			return { id: this.id };
+			return { id: this.id + '' };
 		}
 
 		return {
-			id: this.id,
-			category: this.category_slug,
+			id: this.id + '',
+			category: this.category_slug || '',
 			slug: this.slug,
 		};
 	}

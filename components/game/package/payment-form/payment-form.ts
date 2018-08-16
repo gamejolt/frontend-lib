@@ -57,17 +57,17 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 })
 export class FormGamePackagePayment extends BaseForm<any>
 	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess, FormOnSubmitError {
-	@Prop(Game) game: Game;
-	@Prop(GamePackage) package: GamePackage;
+	@Prop(Game) game!: Game;
+	@Prop(GamePackage) package!: GamePackage;
 	@Prop(GameBuild) build?: GameBuild;
-	@Prop(Sellable) sellable: Sellable;
+	@Prop(Sellable) sellable!: Sellable;
 	@Prop(String) partnerKey?: string;
 	@Prop(User) partner?: User;
-	@Prop(String) operation: 'download' | 'play';
+	@Prop(String) operation!: 'download' | 'play';
 
-	@State app: AppStore;
+	@State app!: AppStore;
 
-	$refs: {
+	$refs!: {
 		form: AppForm;
 	};
 

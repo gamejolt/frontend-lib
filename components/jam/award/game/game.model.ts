@@ -3,11 +3,11 @@ import { Api } from '../../../api/api.service';
 import { JamAward } from '../award.model';
 
 export class JamAwardGame extends Model {
-	jam_id: number;
-	game_id: number;
-	jam_award_id: number;
-	jam_award: JamAward;
-	sort: number;
+	jam_id!: number;
+	game_id!: number;
+	jam_award_id!: number;
+	jam_award!: JamAward;
+	sort!: number;
 
 	constructor(data: any = {}) {
 		super(data);

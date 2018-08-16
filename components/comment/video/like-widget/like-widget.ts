@@ -14,7 +14,7 @@ import { Screen } from '../../../screen/screen-service';
 	},
 })
 export class AppCommentVideoLikeWidget extends Vue {
-	@Prop(CommentVideo) video: CommentVideo;
+	@Prop(CommentVideo) video!: CommentVideo;
 	@Prop(Boolean) overlay?: boolean;
 	@Prop(Boolean) circle?: boolean;
 	@Prop(Boolean) block?: boolean;

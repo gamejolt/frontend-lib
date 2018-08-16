@@ -37,9 +37,9 @@ import { CommentVideo } from '../video-model';
 	},
 })
 export default class AppCommentVideoModal extends BaseModal {
-	@Prop(CommentVideo) video: CommentVideo;
+	@Prop(CommentVideo) video!: CommentVideo;
 
-	@State app: AppStore;
+	@State app!: AppStore;
 
 	readonly Screen = Screen;
 

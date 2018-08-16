@@ -6,11 +6,11 @@ import { YoutubeSdk } from '../sdk/sdk.service';
 
 @Component({})
 export class AppSocialYoutubeSubscribe extends Vue {
-	@Prop(String) channel: string;
+	@Prop(String) channel!: string;
 	@Prop({ type: String, default: 'default' })
-	layout: string;
+	layout!: string;
 	@Prop({ type: String, default: 'default' })
-	theme: string;
+	theme!: string;
 
 	render(h: CreateElement) {
 		return h(

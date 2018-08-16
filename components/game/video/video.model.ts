@@ -21,18 +21,18 @@ export class GameVideo extends Model {
 		VIMEO: /^(https?:\/\/)?(www\.)?(vimeo\.com\/)([a-zA-Z0-9_\-]+)(\S*)$/i,
 	};
 
-	media_type: 'video';
+	media_type!: 'video';
 
-	game_id: number;
-	type: string;
-	url: string;
-	title: string;
-	description: string;
-	posted_on: number;
-	status: number;
-	img_thumbnail: string;
-	img_thumbnail_med: string;
-	img_thumbnail_large: string;
+	game_id!: number;
+	type!: string;
+	url!: string;
+	title!: string;
+	description!: string;
+	posted_on!: number;
+	status!: number;
+	img_thumbnail!: string;
+	img_thumbnail_med!: string;
+	img_thumbnail_large!: string;
 
 	getUrl(game: Game) {
 		return game.getUrl() + `#video-${this.id}`;

@@ -33,10 +33,10 @@ import { AppTheme } from '../../theme/theme';
 	},
 })
 export class AppUserCard extends Vue {
-	@Prop(User) user: User;
-	@Prop(Boolean) showExtraInfo: boolean;
+	@Prop(User) user!: User;
+	@Prop(Boolean) showExtraInfo!: boolean;
 
-	@State app: Store['app'];
+	@State app!: Store['app'];
 
 	isLoaded = false;
 	gamesCount = 0;

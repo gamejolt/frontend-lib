@@ -1,9 +1,9 @@
 import { Model } from '../../model/model.service';
 
 export class CommentVote extends Model {
-	comment_id: number;
-	user_id: number;
-	posted_on: number;
+	comment_id!: number;
+	user_id!: number;
+	posted_on!: number;
 
 	$save() {
 		return this.$_save('/comments/votes/add/' + this.comment_id, 'commentVote', {

@@ -12,8 +12,8 @@ import { MediaItem } from '../../media-item/media-item-model';
 	},
 })
 export class AppWidgetCompilerWidgetGameMedia extends Vue {
-	@Prop(Array) items: MediaItem[];
-	@Prop(Number) num: number;
+	@Prop(Array) items!: MediaItem[];
+	@Prop(Number) num!: number;
 
 	// We trim based on their `num` param.
 	_items: MediaItem[] = [];

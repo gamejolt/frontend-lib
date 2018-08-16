@@ -9,9 +9,9 @@ import { Environment } from '../../environment/environment.service';
 @Component({})
 export class AppWidgetCompilerWidgetGamePackages extends Vue {
 	@Prop({ type: Array, default: () => [] })
-	sellables: Sellable[];
+	sellables!: Sellable[];
 	@Prop({ type: String, default: 'dark' })
-	theme: string;
+	theme!: string;
 
 	widgetHost = Environment.widgetHost;
 }

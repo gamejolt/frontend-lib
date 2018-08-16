@@ -23,7 +23,7 @@ import { AppCommentVideoThumbnail } from '../video/thumbnail/thumbnail';
 	},
 })
 export class AppCommentContent extends Vue {
-	@Prop(Comment) comment: Comment;
+	@Prop(Comment) comment!: Comment;
 	@Prop(String) content?: string;
 
 	canToggleContent = false;

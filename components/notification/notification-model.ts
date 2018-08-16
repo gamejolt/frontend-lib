@@ -22,8 +22,9 @@ import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
 import { CommentVideo } from '../comment/video/video-model';
 import { CommentVideoModal } from '../comment/video/modal/modal.service';
+import { RawLocation } from 'vue-router';
 
-function getRouteLocationForModel(model: Game | User | FiresidePost) {
+function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocation {
 	if (model instanceof User) {
 		return model.url;
 	} else if (model instanceof Game) {
@@ -57,18 +58,18 @@ export class Notification extends Model {
 	static TYPE_MENTION = 'mention';
 	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 
-	user_id: number;
-	type: string;
-	added_on: number;
-	viewed_on: number;
+	user_id!: number;
+	type!: string;
+	added_on!: number;
+	viewed_on!: number;
 
-	from_resource: string;
-	from_resource_id: number;
+	from_resource!: string;
+	from_resource_id!: number;
 	from_model?: User;
 
-	action_resource: string;
-	action_resource_id: number;
-	action_model:
+	action_resource!: string;
+	action_resource_id!: number;
+	action_model!:
 		| Comment
 		| ForumPost
 		| UserFriendship
@@ -81,9 +82,9 @@ export class Notification extends Model {
 		| Mention
 		| CommentVideo;
 
-	to_resource: string;
-	to_resource_id: number;
-	to_model: Game | User | FiresidePost | ForumTopic | Sellable;
+	to_resource!: string | null;
+	to_resource_id!: number | null;
+	to_model?: Game | User | FiresidePost | ForumTopic | Sellable;
 
 	// Generated in constructor.
 	jolticon = '';
@@ -177,7 +178,7 @@ export class Notification extends Model {
 		return Api.sendRequest('/web/dash/activity/count', null, { detach: true });
 	}
 
-	get routeLocation() {
+	get routeLocation(): RawLocation {
 		switch (this.type) {
 			case Notification.TYPE_FRIENDSHIP_REQUEST:
 			case Notification.TYPE_FRIENDSHIP_ACCEPT:

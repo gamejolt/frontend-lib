@@ -3,12 +3,12 @@ import { Api } from '../../api/api.service';
 import { Jam } from '../jam.model';
 
 export class JamContentBlock extends Model {
-	jam_id: number;
-	jam_page_id: number;
-	type: string;
-	content: string;
-	added_on: number;
-	updated_on: number;
+	jam_id!: number;
+	jam_page_id!: number;
+	type!: string;
+	content!: string;
+	added_on!: number;
+	updated_on!: number;
 
 	static readonly TYPE_HEADER = 'header';
 	static readonly TYPE_PAGE = 'page';

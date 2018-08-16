@@ -4,13 +4,13 @@ import { Game } from '../../game/game.model';
 import { HistoryTick } from '../../history-tick/history-tick-service';
 
 export class CommentVideo extends Model {
-	video_id: string;
-	channel_id: string;
-	img_thumbnail: string;
-	title: string;
+	video_id!: string;
+	channel_id!: string;
+	img_thumbnail!: string;
+	title!: string;
 
-	comment: Comment;
-	game: Game;
+	comment?: Comment;
+	game?: Game;
 
 	constructor(data: any = {}) {
 		super(data);

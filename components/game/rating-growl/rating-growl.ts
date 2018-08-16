@@ -13,7 +13,7 @@ import { EventBus } from '../../event-bus/event-bus.service';
 	},
 })
 export class AppGameRatingGrowl extends Vue {
-	@Prop(Object) game: Game;
+	@Prop(Object) game!: Game;
 
 	mounted() {
 		// Close the modal as soon as they rate the game. We set up on $on event

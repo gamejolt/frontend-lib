@@ -17,10 +17,10 @@ const ScrollSampleTime = 100;
 @Component({})
 export class AppScrollAffix extends Vue {
 	@Prop({ type: String, default: 'gj-scroll-affixed' })
-	className: string;
+	className!: string;
 
 	@Prop({ type: Boolean, default: true })
-	shouldAffix: boolean;
+	shouldAffix!: boolean;
 
 	@Prop(Number) scrollOffset?: number;
 
@@ -30,14 +30,14 @@ export class AppScrollAffix extends Vue {
 
 	private refreshLoopCount = 0;
 	private timeoutCancel?: NodeJS.Timer;
-	private curOffset: number;
+	private curOffset = 0;
 
 	private resize$: Subscription | undefined;
 	private scroll$: Subscription | undefined;
-	private clickHandler: EventListener;
+	private clickHandler!: EventListener;
 	private afterRouteDeregister?: Function;
 
-	$refs: {
+	$refs!: {
 		container: HTMLElement;
 		placeholder: HTMLElement;
 	};

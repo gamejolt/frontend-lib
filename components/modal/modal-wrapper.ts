@@ -5,7 +5,7 @@ import { Modal } from './modal.service';
 
 @Component({})
 export class AppModalWrapper extends Vue {
-	@Prop(Modal) modal: Modal;
+	@Prop(Modal) modal!: Modal;
 
 	render(h: CreateElement) {
 		return h(this.modal.component, {

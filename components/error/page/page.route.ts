@@ -6,7 +6,7 @@ import { AppStore, AppMutation } from '../../../vue/services/app/app-store';
 // Just a placeholder that sets the 404 error state.
 @Component({})
 export class RouteError404 extends Vue {
-	@AppMutation setError: AppStore['setError'];
+	@AppMutation setError!: AppStore['setError'];
 
 	created() {
 		this.setError(404);

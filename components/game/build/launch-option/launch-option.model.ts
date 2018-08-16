@@ -17,9 +17,9 @@ export class GameBuildLaunchOption extends Model {
 		GameBuildLaunchOption.OS_LINUX_64,
 	];
 
-	game_build_id: number;
-	os: string;
-	executable_path: string;
+	game_build_id!: number;
+	os!: string;
+	executable_path!: string;
 }
 
 Model.create(GameBuildLaunchOption);

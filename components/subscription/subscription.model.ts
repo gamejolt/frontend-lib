@@ -1,12 +1,12 @@
 import { Model } from '../model/model.service';
 
 export class Subscription extends Model {
-	id: number;
-	user_id: number;
-	resource_id: number;
-	resource: string;
-	type: string;
-	created_on: number;
+	id!: number;
+	user_id!: number;
+	resource_id!: number;
+	resource!: string;
+	type!: string | null;
+	created_on!: number;
 
 	// Specifically for comment subscriptions?
 	comment_id?: number;

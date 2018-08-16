@@ -8,11 +8,11 @@ import { findRequiredVueParent } from '../../../utils/vue';
 @View
 @Component({})
 export class AppFormButton extends Vue {
-	@Prop(Boolean) showWhenValid: boolean;
-	@Prop(Boolean) block: boolean;
-	@Prop(Boolean) lg: boolean;
+	@Prop(Boolean) showWhenValid!: boolean;
+	@Prop(Boolean) block!: boolean;
+	@Prop(Boolean) lg!: boolean;
 
-	form: AppForm;
+	form!: AppForm;
 
 	get shouldShow() {
 		if (!this.showWhenValid) {

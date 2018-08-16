@@ -1,14 +1,14 @@
 import { Model } from '../model/model.service';
 
 export class Key extends Model {
-	key_group_id: number;
-	resource: string;
-	resource_id: number;
+	key_group_id!: number;
+	resource!: string;
+	resource_id!: number;
 	user_id?: number;
 	email?: string;
-	key: string;
-	claimed: boolean;
-	viewed_on: number;
+	key!: string;
+	claimed!: boolean;
+	viewed_on!: number;
 	claimed_on?: number;
 	username?: string;
 

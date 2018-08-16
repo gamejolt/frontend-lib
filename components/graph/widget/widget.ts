@@ -15,7 +15,7 @@ import { AppGraph } from '../graph';
 	},
 })
 export class AppGraphWidget extends Vue {
-	@Prop(String) url: string;
+	@Prop(String) url!: string;
 
 	isLoading = true;
 	graphData: any = null;

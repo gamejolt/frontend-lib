@@ -13,9 +13,9 @@ import { AppTimelineListItem } from '../../timeline-list/item/item';
 	},
 })
 export class AppMessageThreadPagination extends Vue {
-	@Prop(Number) itemsPerPage: number;
-	@Prop(Number) totalItems: number;
-	@Prop(Number) currentPage: number;
+	@Prop(Number) itemsPerPage!: number;
+	@Prop(Number) totalItems!: number;
+	@Prop(Number) currentPage!: number;
 	@Prop(Boolean) pager?: boolean;
 	@Prop(Boolean) preventUrlChange?: boolean;
 

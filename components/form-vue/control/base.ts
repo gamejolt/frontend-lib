@@ -9,7 +9,7 @@ import { findRequiredVueParent } from '../../../utils/vue';
 @View
 @Component({})
 export class BaseFormControl extends Vue {
-	@Prop() rules: any;
+	@Prop() rules!: any;
 
 	controlVal: any;
 	changed = false;
@@ -20,8 +20,8 @@ export class BaseFormControl extends Vue {
 	 */
 	multi = false;
 
-	form: AppForm;
-	group: AppFormGroup;
+	form!: AppForm;
+	group!: AppFormGroup;
 
 	get id() {
 		const id = this.form.name + '-' + this.group.name;

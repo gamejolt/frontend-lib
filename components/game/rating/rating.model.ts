@@ -1,10 +1,10 @@
 import { Model } from '../../model/model.service';
 
 export class GameRating extends Model {
-	game_id: number;
-	rating: number;
-	posted_on: number;
-	type: string;
+	game_id!: number;
+	rating!: number;
+	posted_on!: number;
+	type!: string;
 
 	$save() {
 		// This is an upsert.

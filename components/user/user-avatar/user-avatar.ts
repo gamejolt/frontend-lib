@@ -22,7 +22,7 @@ import { AppUserCard } from '../card/card';
 	},
 })
 export class AppUserAvatar extends Vue {
-	@Prop(Object) user: User;
+	@Prop(Object) user!: User;
 	@Prop(String) link?: string;
 	@Prop(Boolean) showName?: boolean;
 	@Prop(Boolean) showHoverCard?: boolean;

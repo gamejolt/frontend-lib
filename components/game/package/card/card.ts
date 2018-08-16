@@ -47,13 +47,13 @@ import { Clipboard } from '../../../clipboard/clipboard-service';
 	},
 })
 export class AppGamePackageCard extends Vue {
-	@Prop(Game) game: Game;
-	@Prop(GamePackage) package: GamePackage;
-	@Prop(Sellable) sellable: Sellable;
+	@Prop(Game) game!: Game;
+	@Prop(GamePackage) package!: GamePackage;
+	@Prop(Sellable) sellable!: Sellable;
 	@Prop({ type: Array, default: () => [] })
-	releases: GameRelease[];
+	releases!: GameRelease[];
 	@Prop({ type: Array, default: () => [] })
-	builds: GameBuild[];
+	builds!: GameBuild[];
 	@Prop(String) accessKey?: string;
 	@Prop(Boolean) isPartner?: boolean;
 	@Prop(String) partnerKey?: string;

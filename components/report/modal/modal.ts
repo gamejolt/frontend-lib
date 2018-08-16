@@ -19,7 +19,7 @@ import { BaseModal } from '../../modal/base';
 	},
 })
 export default class AppReportModal extends BaseModal {
-	@Prop(Object) resource: Comment | User | Game | ForumTopic | ForumPost;
+	@Prop(Object) resource!: Comment | User | Game | ForumTopic | ForumPost;
 
 	get type() {
 		if (this.resource instanceof Comment) {
