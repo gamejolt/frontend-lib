@@ -9,8 +9,8 @@ export class CommentVideo extends Model {
 	img_thumbnail!: string;
 	title!: string;
 
-	comment?: Comment;
-	game?: Game;
+	comment!: Comment;
+	game!: Game;
 
 	constructor(data: any = {}) {
 		super(data);

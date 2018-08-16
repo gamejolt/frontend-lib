@@ -25,7 +25,7 @@ export class AppMediaBarLightboxItem extends Vue {
 	@Prop(Number) itemIndex!: number;
 	@Prop(Number) activeIndex!: number;
 
-	lightbox: AppMediaBarLightbox;
+	lightbox!: AppMediaBarLightbox;
 
 	isActive = false;
 	isNext = false;
@@ -36,7 +36,7 @@ export class AppMediaBarLightboxItem extends Vue {
 
 	private resize$: Subscription | undefined;
 
-	$refs: {
+	$refs!: {
 		caption: HTMLDivElement;
 	};
 

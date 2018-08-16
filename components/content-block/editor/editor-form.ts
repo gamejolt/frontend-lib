@@ -20,7 +20,8 @@ export class FormContentBlockEditor extends BaseForm<SiteContentBlock> {
 	@Watch('formModel.content_markdown')
 	onContentChanged(content: string) {
 		if (this.model) {
-			this.model.content_markdown! = content;
+			// TODO: why are we setting on the model directly? Is this a bug?
+			(this.model as SiteContentBlock).content_markdown! = content;
 		}
 	}
 }

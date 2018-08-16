@@ -25,7 +25,7 @@ export class ForumPost extends Model {
 	modified_on?: number;
 
 	notification?: Notification;
-	topic?: ForumTopic;
+	topic!: ForumTopic;
 
 	// Filled in when saving a reply.
 	reply_to?: number;

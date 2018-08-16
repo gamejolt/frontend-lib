@@ -49,7 +49,7 @@ export class ThemeStore extends VuexStore<ThemeStore, ThemeActions, ThemeMutatio
 	@VuexMutation
 	setUserTheme(theme: ThemeMutations['theme/setUserTheme']) {
 		if (appStore.state.user) {
-			appStore.state.user.theme = theme || undefined;
+			appStore.state.user.theme = theme;
 		}
 	}
 

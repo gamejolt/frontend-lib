@@ -1,9 +1,6 @@
 // the following functions are based off of the pseudocode
 // found on www.easyrgb.com
 
-import { RgbColor, HslColor } from 'polished/lib/types/color';
-import { toColorString, parseToHsl, parseToRgb } from 'polished';
-
 type ColorLAB = [number, number, number];
 type ColorRGB = [number, number, number];
 

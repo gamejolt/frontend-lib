@@ -1,5 +1,4 @@
 import { Model } from '../model/model.service';
-import { Api } from '../api/api.service';
 
 export class PaymentSource extends Model {
 	last4!: string;

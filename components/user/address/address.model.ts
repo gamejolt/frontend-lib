@@ -6,13 +6,13 @@ export class UserAddress extends Model {
 
 	user_id!: number;
 	type!: 'billing' | 'shipping';
-	fullname?: string;
-	street1?: string;
-	street2?: string;
-	city?: string;
-	region?: string;
-	postcode?: string;
-	country?: string;
+	fullname!: string;
+	street1!: string;
+	street2!: string;
+	city!: string;
+	region!: string;
+	postcode!: string;
+	country!: string;
 
 	$remove() {
 		return this.$_remove('/web/dash/addresses/remove/' + this.id);
