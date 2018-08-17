@@ -6,7 +6,10 @@
 		<translate>Couldn't fetch comments.</translate>
 	</div>
 	<div v-else-if="hasBootstrapped">
-		<app-message-thread-add v-if="user">
+		<app-message-thread-add
+			v-if="user"
+			hide-message-split
+			>
 			<form-comment
 				:resource="resource"
 				:resource-id="resourceId"
@@ -26,11 +29,11 @@
 							<translate>Hot</translate>
 						</a>
 					</li>
-					<li>
+					<!-- <li>
 						<a @click="sortTop()" :class="{ active: isSortTop }">
 							<translate>Top</translate>
 						</a>
-					</li>
+					</li> -->
 					<li>
 						<a @click="sortNew()" :class="{ active: isSortNew }">
 							<translate>New</translate>

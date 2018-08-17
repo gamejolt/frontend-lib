@@ -1,10 +1,10 @@
 import Vue from 'vue';
-import { namespace, State, Action, Mutation } from 'vuex-class';
-import { VuexModule, VuexStore, VuexMutation, VuexGetter, VuexAction } from '../../utils/vuex';
-import { Comment } from './comment-model';
+import { Action, Mutation, namespace, State } from 'vuex-class';
 import { arrayGroupBy, arrayRemove, numberSort } from '../../utils/array';
+import { VuexAction, VuexGetter, VuexModule, VuexMutation, VuexStore } from '../../utils/vuex';
 import { Growls } from '../growls/growls.service';
 import { Translate } from '../translate/translate.service';
+import { Comment, fetchComments } from './comment-model';
 
 export const CommentStoreNamespace = 'comment';
 export const CommentState = namespace(CommentStoreNamespace, State);
@@ -21,6 +21,7 @@ export type CommentActions = {
 export type CommentMutations = {
 	'comment/releaseCommentStore': CommentStoreModel;
 	'comment/setCommentCount': { store: CommentStoreModel; count: number };
+	'comment/setParentCommentCount': { store: CommentStoreModel; count: number };
 	'comment/updateComment': { store: CommentStoreModel; commentId: number; data: any };
 	'comment/onCommentAdd': Comment;
 	'comment/onCommentEdit': Comment;
@@ -101,23 +102,19 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				store.parentComments.length === 0
 					? null // no comments loaded
 					: store.parentComments[store.parentComments.length - 1];
+
 			// only use the last comment's timestamp if it's not pinned (pinned comment's dates are sorted differently)
 			const lastTimestamp =
 				lastComment !== null && !lastComment.is_pinned ? lastComment.posted_on : null;
-			response = await Comment.fetchWithScroll(
-				store.resource,
-				store.resourceId,
-				store.sort,
-				lastTimestamp
-			);
+
+			response = await fetchComments(store.resource, store.resourceId, store.sort, {
+				scrollId: lastTimestamp,
+			});
 		} else {
 			// 'hot' and 'top' paginate
-			response = await Comment.fetchWithPage(
-				store.resource,
-				store.resourceId,
-				store.sort,
-				page || 1
-			);
+			response = await fetchComments(store.resource, store.resourceId, store.sort, {
+				page: page || 1,
+			});
 		}
 
 		const count = response.count || 0;
@@ -127,7 +124,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 		);
 
 		this.setCommentCount({ store, count });
-		this._setParentCommentCount({ store, count: parentCount });
+		this.setParentCommentCount({ store, count: parentCount });
 		this._addComments({ store, comments });
 
 		return response;
@@ -161,7 +158,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	}
 
 	@VuexMutation
-	private _setParentCommentCount(payload: { store: CommentStoreModel; count: number }) {
+	private setParentCommentCount(payload: CommentMutations['comment/setParentCommentCount']) {
 		const { store, count } = payload;
 		store.parentCount = count;
 	}

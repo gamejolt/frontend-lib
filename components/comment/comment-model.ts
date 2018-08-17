@@ -17,6 +17,43 @@ export async function fetchComment(id: number) {
 	}
 }
 
+/**
+ * @param options scrollId is a timestamp that controls where fetching starts (posted_on)
+ */
+export async function fetchComments(
+	resource: string,
+	resourceId: number,
+	sort: string,
+	options: { scrollId?: number | null; page?: number | null }
+) {
+	const { scrollId, page } = options;
+	let query = '';
+
+	if (scrollId) {
+		query = '?scroll_id=' + scrollId;
+	}
+
+	if (page) {
+		query = '?page=' + page;
+	}
+
+	return Api.sendRequest(`/comments/${resource}/${resourceId}/${sort}${query}`, {
+		detach: true,
+	});
+}
+
+export async function getCommentUrl(commentId: number): Promise<string> {
+	const response = await Api.sendRequest(`/comments/get-comment-url/${commentId}`, null, {
+		detach: true,
+	});
+
+	if (!response || response.error) {
+		return Promise.reject(response.error);
+	}
+
+	return response.url;
+}
+
 export class Comment extends Model {
 	static readonly STATUS_REMOVED = 0;
 	static readonly STATUS_VISIBLE = 1;
@@ -70,58 +107,6 @@ export class Comment extends Model {
 		}
 	}
 
-	// scroll id is a timestamp that controls where fetching starts (posted_on)
-	static fetchWithScroll(
-		resource: string,
-		resourceId: number,
-		sort: string,
-		scrollId: number | null
-	) {
-		let query = '';
-		if (scrollId) {
-			query = '?scrollId=' + scrollId;
-		}
-
-		return Api.sendRequest(`/comments/${resource}/${resourceId}/${sort}${query}`, {
-			detach: true,
-		});
-	}
-
-	static fetchWithPage(resource: string, resourceId: number, sort: string, page: number | null) {
-		let query = '';
-		if (page) {
-			query = '?page=' + page;
-		}
-
-		return Api.sendRequest(`/comments/${resource}/${resourceId}/${sort}${query}`, {
-			detach: true,
-		});
-	}
-
-	static async getCommentPage(commentId: number): Promise<number> {
-		const response = await Api.sendRequest(`/comments/get-comment-page/${commentId}`, null, {
-			detach: true,
-		});
-
-		if (!response || response.error) {
-			return Promise.reject(response.error);
-		}
-
-		return response.page;
-	}
-
-	static async getCommentUrl(commentId: number): Promise<string> {
-		const response = await Api.sendRequest(`/comments/get-comment-url/${commentId}`, null, {
-			detach: true,
-		});
-
-		if (!response || response.error) {
-			return Promise.reject(response.error);
-		}
-
-		return response.url;
-	}
-
 	$save() {
 		if (!this.id) {
 			return this.$_save(`/comments/save`, 'comment', {
@@ -145,22 +130,28 @@ export class Comment extends Model {
 	}
 
 	async $vote(vote: number) {
+		// Don't do anything if they are setting the same vote.
 		if (this.isVotePending || (this.user_vote && this.user_vote.vote === vote)) {
 			return;
 		}
 		this.isVotePending = true;
 
-		const newVote = new CommentVote({ comment_id: this.id, vote: vote });
-		const changeVote = this.user_vote && this.user_vote.vote !== vote;
-
+		const newVote = new CommentVote({ comment_id: this.id, vote });
 		await newVote.$save();
 
+		const hadPreviousVote = !!this.user_vote;
 		this.user_vote = newVote;
+
+		// We only show upvotes. So we only want to change when it's upvoted, or we decrement 1 if
+		// they had previously set it to upvote and are changing to downvote to signify the removal
+		// of the upvote only.
 		if (vote === CommentVote.VOTE_UPVOTE) {
 			++this.votes;
-		} else if (changeVote) {
+		} else if (hadPreviousVote) {
+			// Their previous vote had to be an upvote in this case.
 			--this.votes;
 		}
+
 		this.isVotePending = false;
 	}
 
@@ -172,9 +163,11 @@ export class Comment extends Model {
 
 		await this.user_vote.$remove();
 
+		// Votes only show upvotes, so don't modify vote count if it was a downvote.
 		if (this.user_vote.vote === CommentVote.VOTE_UPVOTE) {
 			--this.votes;
 		}
+
 		this.user_vote = undefined;
 		this.isVotePending = false;
 	}
