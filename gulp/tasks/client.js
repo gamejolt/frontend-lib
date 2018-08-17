@@ -20,15 +20,26 @@ module.exports = config => {
 		return;
 	}
 
-	const joltronGitVersion = 'v2.0.0-beta';
-	const joltronVersionArray = [2, 0, 0];
+	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
+
+	// Takes the joltron version specified in package.json and expands it into joltronVersionArray. e.g. v2.0.1-beta into [2, 0, 1]
+	const joltronVersion = packageJson.joltronVersion;
+	const versionStuff = joltronVersion.match(/^v?(\d+)\.(\d+)\.(\d+)/);
+	if (!versionStuff) {
+		throw new Error('Joltron version is invalid');
+	}
+	const joltronVersionArray = [
+		parseInt(versionStuff[1]),
+		parseInt(versionStuff[2]),
+		parseInt(versionStuff[3]),
+	];
+
 	const gjpushVersion = 'v0.2.0';
 	const gjGameId = config.developmentEnv ? 2 : 272864;
 	const gjGamePackageId = config.developmentEnv ? 4 : 375641;
 	const gjGameInstallerPackageId = config.developmentEnv ? 5 : 375642;
 	const nwjsVersion = '0.32.1';
 
-	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
 
 	let nodeModulesTask = [
@@ -321,7 +332,7 @@ module.exports = config => {
 						joltronRepoDir +
 						' status' +
 						' || git clone --branch ' +
-						joltronGitVersion +
+						joltronVersion +
 						' https://github.com/gamejolt/joltron ' +
 						joltronRepoDir,
 				]);
@@ -386,7 +397,10 @@ module.exports = config => {
 				.then(() => {
 					return new Promise((resolve, reject) => {
 						const func = shell.task(
-							[path.join('build', 'deps.bat'), path.join('build', 'build.bat')],
+							[
+								path.join('build', 'deps.bat'),
+								path.join('build', config.production ? 'prod.bat' : 'dev.bat'),
+							],
 							{ cwd: joltronRepoDir }
 						);
 
@@ -430,19 +444,16 @@ module.exports = config => {
 				};
 
 				return new Promise((resolve, reject) => {
-					http
-						.request(options, res => {
-							res.setEncoding('utf8');
+					http.request(options, res => {
+						res.setEncoding('utf8');
 
-							let str = '';
-							res
-								.on('data', data => {
-									str += data;
-								})
-								.on('end', () => {
-									resolve(JSON.parse(str));
-								});
-						})
+						let str = '';
+						res.on('data', data => {
+							str += data;
+						}).on('end', () => {
+							resolve(JSON.parse(str));
+						});
+					})
 						.on('error', reject)
 						.end();
 				});
@@ -510,7 +521,7 @@ module.exports = config => {
 			// the one in client-voodoo because this one would be compiled with the platform
 			// specific stuff for game jolt - at the time of writing - the microsoft version info,
 			// and desktop icon.
-			// This might be an issue if the version specified in the joltronGitVersion and the version in client-voodoo
+			// This might be an issue if the version specified in the joltronVersion and the version in client-voodoo
 			// differ. We need a better way to do this.
 			if (!joltronSrc) {
 				// Figure out the correct client voodoo dir based on the platform.
@@ -580,8 +591,7 @@ module.exports = config => {
 
 			return new Promise((resolve, reject) => {
 				// Finally, copy joltron executable over.
-				fs
-					.createReadStream(joltronSrc)
+				fs.createReadStream(joltronSrc)
 					.pipe(fs.createWriteStream(joltronDest))
 					.on('error', reject)
 					.on('close', () => {
