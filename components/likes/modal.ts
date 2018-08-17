@@ -7,11 +7,13 @@ import { Comment } from '../comment/comment-model';
 import { Api } from '../api/api.service';
 import { User } from '../user/user.model';
 import { AppLoading } from '../../vue/components/loading/loading';
+import { AppUserList } from '../../../../app/components/user/list/list';
 
 @View
 @Component({
 	components: {
 		AppLoading,
+		AppUserList,
 	},
 })
 export default class AppLikesModal extends BaseModal {
