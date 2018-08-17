@@ -278,38 +278,37 @@ module.exports = config => {
 	});
 
 	/**
-	 * Pushes the single package to GJ.
-	 * The package is one complete standalone version of the client.
-	 * It is not the package shipped with joltron so it doesn't use the new auto updater.
+	 * Makes the zipped package.
+	 * Note: this is not the package shipped with joltron so it doesn't use the new auto updater.
 	 * It's essentially the "game" people upload to GJ.
 	 */
-	gulp.task('client:gjpush-package', () => {
-		// We have to zip the app so we can upload it.
-		p = Promise.resolve().then(() => {
-			return new Promise((resolve, reject) => {
-				const stream = gulp
-					.src(config.clientBuildDir + '/build/' + config.platformArch + '/**/*')
-					.pipe(plugins.zip(config.platformArch + '-package.zip'))
-					.pipe(gulp.dest(config.clientBuildDir));
+	gulp.task('client:zip-package', () => {
+		return new Promise((resolve, reject) => {
+			const stream = gulp
+				.src(config.clientBuildDir + '/build/' + config.platformArch + '/**/*')
+				.pipe(plugins.zip(config.platformArch + '-package.zip'))
+				.pipe(gulp.dest(config.clientBuildDir));
 
-				stream.on('end', resolve);
-				stream.on('error', reject);
-			});
+			stream.on('end', resolve);
+			stream.on('error', reject);
 		});
+	});
 
+	/**
+	 * Pushes the single package to GJ.
+	 */
+	gulp.task('client:gjpush-package', () => {
 		// GJPUSH!
 		// We trust the exit codes to tell us if something went wrong because a non 0 exit code will make this throw.
-		return p.then(() => {
-			cp.execFileSync(gjpushExecutable, [
-				'-g',
-				gjGameId,
-				'-p',
-				gjGamePackageId,
-				'-r',
-				packageJson.version,
-				path.join(config.clientBuildDir, config.platformArch + '-package.zip'),
-			]);
-		});
+		cp.execFileSync(gjpushExecutable, [
+			'-g',
+			gjGameId,
+			'-p',
+			gjGamePackageId,
+			'-r',
+			packageJson.version,
+			path.join(config.clientBuildDir, config.platformArch + '-package.zip'),
+		]);
 	});
 
 	const joltronRepoDir = path.join(
@@ -760,6 +759,7 @@ module.exports = config => {
 				'client:node-modules',
 				'client:nw',
 				'client:unpack-package.nw',
+				'client:zip-package',
 				'client:get-gjpush',
 				'client:gjpush-package',
 				'client:get-joltron',
@@ -775,6 +775,7 @@ module.exports = config => {
 				'client:node-modules',
 				'client:nw',
 				'client:unpack-package.nw',
+				'client:zip-package',
 				'client:get-joltron',
 				'client:joltron',
 				'client:installer'
