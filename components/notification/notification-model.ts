@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import { Model } from '../model/model.service';
 import { Environment } from '../environment/environment.service';
 import { FiresidePost } from '../fireside/post/post-model';
-import { Comment } from '../comment/comment-model';
+import { Comment, getCommentUrl } from '../comment/comment-model';
 import { User } from '../user/user.model';
 import { Api } from '../api/api.service';
 import { Game } from '../game/game.model';
@@ -261,7 +261,7 @@ export class Notification extends Model {
 
 			try {
 				if (model instanceof Comment) {
-					url = await Comment.getCommentUrl(model.id);
+					url = await getCommentUrl(model.id);
 				} else if (model instanceof ForumPost) {
 					url = await ForumPost.getPostUrl(model.id);
 				} else {

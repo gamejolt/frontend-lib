@@ -1,25 +1,52 @@
 <span class="comment-controls">
-	<span class="comment-vote-button" v-app-auth-required>
+	<span v-app-auth-required>
 		<app-button
-			icon="heart"
+			icon="thumbs-up"
 			circle
-			:primary="!!comment.user_vote"
-			:solid="!!comment.user_vote"
-			@click="onVoteClick()"
+			trans
+			:primary="hasUpvote"
+			:solid="hasUpvote"
+			@click="onUpvoteClick()"
 			v-app-tooltip="votingTooltip"
 			v-app-track-event="`comment-widget:vote-click`"
 			/>
 
-		<span class="blip light filled" v-if="comment.votes > 0">
-			<span class="blip-caret"></span>
-			<span class="blip-count">{{ comment.votes | number }}</span>
-		</span>
+		<a
+			@click="showLikers()"
+			v-app-tooltip="$gettext(`View all people that liked this comment`)"
+			>
+			<span
+				v-if="comment.votes > 0"
+				class="blip"
+				:class="{
+					'filled': hasUpvote,
+				}"
+				>
+				<span class="blip-caret"></span>
+				<span class="blip-count">{{ comment.votes | number }}</span>
+			</span>
+		</a>
+
+		&nbsp;
+
+		<app-button
+			icon="thumbs-down"
+			circle
+			trans
+			:primary="hasDownvote"
+			:solid="hasDownvote"
+			@click="onDownvoteClick()"
+			v-app-track-event="`comment-widget:vote-click`"
+			/>
 	</span>
+
+	&nbsp;
 
 	<span v-if="showReply" v-app-auth-required>
 		<app-button
 			icon="reply"
 			circle
+			trans
 			@click="onReplyClick()"
 			v-app-tooltip="$gettext( 'Reply' )"
 			v-app-track-event="`comment-widget:reply-click`"

@@ -27,22 +27,20 @@ export class AppUserAvatar extends Vue {
 	@Prop(Boolean) showName?: boolean;
 	@Prop(Boolean) showHoverCard?: boolean;
 
-	href = '';
-
 	isHoverCardBootstrapped = false;
 
 	get shouldShowHoverCard() {
 		return this.showHoverCard && Screen.isDesktop;
 	}
 
-	created() {
+	get href() {
 		if (this.user) {
 			if (!this.link) {
-				this.href = Environment.wttfBaseUrl + this.user.url;
+				return Environment.wttfBaseUrl + this.user.url;
 			} else if (this.link === 'dashboard') {
-				this.href = Environment.wttfBaseUrl + '/dashboard';
+				return Environment.wttfBaseUrl + '/dashboard';
 			} else if (this.link === 'fireside') {
-				this.href = Environment.firesideBaseUrl + '/@' + this.user.username;
+				return Environment.firesideBaseUrl + '/@' + this.user.username;
 			}
 		}
 	}

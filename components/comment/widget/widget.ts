@@ -16,6 +16,7 @@ import { AppMessageThreadContent } from '../../message-thread/content/content';
 import { FormComment } from '../add/add';
 import { GameCollaborator } from '../../game/collaborator/collaborator.model';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
+import { Scroll } from '../../scroll/scroll.service';
 import {
 	CommentState,
 	CommentStore,
@@ -23,6 +24,7 @@ import {
 	CommentAction,
 	CommentStoreModel,
 } from '../comment-store';
+import { AppNavTabList } from '../../nav/tab-list/tab-list';
 
 let incrementer = 0;
 
@@ -30,6 +32,7 @@ let incrementer = 0;
 @Component({
 	components: {
 		AppLoading,
+		AppNavTabList,
 		AppMessageThread,
 		AppMessageThreadAdd,
 		AppMessageThreadContent,
@@ -53,6 +56,7 @@ export class AppCommentWidget extends Vue {
 	@CommentAction fetchComments: CommentStore['fetchComments'];
 	@CommentAction lockCommentStore: CommentStore['lockCommentStore'];
 	@CommentAction pinComment: CommentStore['pinComment'];
+	@CommentAction setSort: CommentStore['setSort'];
 	@CommentMutation releaseCommentStore: CommentStore['releaseCommentStore'];
 	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
 	@CommentMutation onCommentEdit: CommentStore['onCommentEdit'];
@@ -65,6 +69,7 @@ export class AppCommentWidget extends Vue {
 	isLoading = false;
 	resourceOwner: User | null = null;
 	perPage = 10;
+	currentPage = 1;
 
 	collaborators: GameCollaborator[] = [];
 
@@ -96,6 +101,30 @@ export class AppCommentWidget extends Vue {
 
 	get currentParentCount() {
 		return this.store ? this.store.parentComments.length : 0;
+	}
+
+	get currentSort() {
+		return this.store ? this.store.sort : Comment.SORT_HOT;
+	}
+
+	get isSortHot() {
+		return this.currentSort === Comment.SORT_HOT;
+	}
+
+	get isSortTop() {
+		return this.currentSort === Comment.SORT_TOP;
+	}
+
+	get isSortNew() {
+		return this.currentSort === Comment.SORT_NEW;
+	}
+
+	get isSortYou() {
+		return this.currentSort === Comment.SORT_YOU;
+	}
+
+	get showTopSorting() {
+		return this.resource === 'Game';
 	}
 
 	async created() {
@@ -138,7 +167,7 @@ export class AppCommentWidget extends Vue {
 				this.store = await this.lockCommentStore({ resource, resourceId });
 			}
 
-			const payload = await this.fetchComments(this.store);
+			const payload = await this.fetchComments({ store: this.store, page: this.currentPage });
 
 			this.isLoading = false;
 			this.hasBootstrapped = true;
@@ -159,6 +188,9 @@ export class AppCommentWidget extends Vue {
 		Analytics.trackEvent('comment-widget', 'add');
 		this.onCommentAdd(comment);
 		this.$emit('add', comment);
+		if (this.store && this.store.sort !== Comment.SORT_YOU) {
+			this._setSort(Comment.SORT_YOU);
+		}
 	}
 
 	_onCommentEdit(comment: Comment) {
@@ -173,13 +205,41 @@ export class AppCommentWidget extends Vue {
 		this.$emit('remove', comment);
 	}
 
-	_pinComment(comment: Comment) {
+	async _pinComment(comment: Comment) {
 		if (this.store) {
-			this.pinComment({ store: this.store, comment });
+			this.currentPage = 1;
+			await this.pinComment({ store: this.store, comment });
+			Scroll.to('comments');
+			this._fetchComments();
+		}
+	}
+
+	sortHot() {
+		this._setSort(Comment.SORT_HOT);
+	}
+
+	sortTop() {
+		this._setSort(Comment.SORT_TOP);
+	}
+
+	sortNew() {
+		this._setSort(Comment.SORT_NEW);
+	}
+
+	sortYou() {
+		this._setSort(Comment.SORT_YOU);
+	}
+
+	private _setSort(sort: string) {
+		if (this.store) {
+			this.currentPage = 1;
+			this.setSort({ store: this.store, sort: sort });
+			this._fetchComments();
 		}
 	}
 
 	loadMore() {
+		this.currentPage++;
 		this._fetchComments();
 	}
 }
