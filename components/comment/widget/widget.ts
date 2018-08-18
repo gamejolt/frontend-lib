@@ -123,6 +123,10 @@ export class AppCommentWidget extends Vue {
 		return this.currentSort === Comment.SORT_YOU;
 	}
 
+	get showTopSorting() {
+		return this.resource === 'Game';
+	}
+
 	async created() {
 		await this.init();
 	}
