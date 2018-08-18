@@ -8,7 +8,13 @@
 
 	<div class="modal-header">
 		<h2 class="modal-title">
-			{{ title }}
+			<translate
+				:translate-n="count"
+				:translate-params="{ count: number(count) }"
+				translate-plural="%{ count } likes"
+				>
+				1 likes
+			</translate>
 		</h2>
 	</div>
 
@@ -18,12 +24,12 @@
 			:users="users"
 			/>
 
-		<app-loading v-if="loading" class="loading-centered" />
+		<app-loading v-if="isLoading" centered />
 
 		<div v-if="shouldShowLoadMore" class="page-cut">
 			<app-button
 				trans
-				@click="loadMore"
+				@click="loadMore()"
 				>
 				<translate>Load More</translate>
 			</app-button>

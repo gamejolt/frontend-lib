@@ -1,14 +1,13 @@
+import View from '!view!./widget.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./widget.html';
-
+import { number } from '../../../../../vue/filters/number';
+import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
+import { LikersModal } from '../../../../likers/modal.service';
+import { Screen } from '../../../../screen/screen-service';
+import { AppTooltip } from '../../../../tooltip/tooltip';
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
-import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
-import { AppTooltip } from '../../../../tooltip/tooltip';
-import { number } from '../../../../../vue/filters/number';
-import { Screen } from '../../../../screen/screen-service';
-import { LikesModal } from '../../../../likes/modal.service';
 
 @View
 @Component({
@@ -75,7 +74,7 @@ export class AppFiresidePostLikeWidget extends Vue {
 		this.isProcessing = false;
 	}
 
-	onOpenLikesModalClick() {
-		LikesModal.show({ likeAmount: this.post.like_count, post: this.post });
+	showLikers() {
+		LikersModal.show({ count: this.post.like_count, post: this.post });
 	}
 }

@@ -1,5 +1,5 @@
 <span class="comment-controls">
-	<span class="comment-vote-button" v-app-auth-required>
+	<span v-app-auth-required>
 		<app-button
 			icon="thumbs-up"
 			circle
@@ -11,21 +11,23 @@
 			v-app-track-event="`comment-widget:vote-click`"
 			/>
 
-		<span
-			v-if="comment.votes > 0"
-			class="blip"
-			:class="{
-				'filled': hasUpvote,
-			}"
+		<a
+			@click="showLikers()"
+			v-app-tooltip="$gettext(`View all people that liked this comment`)"
 			>
-			<span class="blip-caret"></span>
-			<span class="blip-count">{{ comment.votes | number }}</span>
-		</span>
+			<span
+				v-if="comment.votes > 0"
+				class="blip"
+				:class="{
+					'filled': hasUpvote,
+				}"
+				>
+				<span class="blip-caret"></span>
+				<span class="blip-count">{{ comment.votes | number }}</span>
+			</span>
+		</a>
 
-		<app-button
-			@click="onOpenLikesModalClick">
-			Modal
-		</app-button>
+		&nbsp;
 
 		<app-button
 			icon="thumbs-down"
@@ -36,8 +38,9 @@
 			@click="onDownvoteClick()"
 			v-app-track-event="`comment-widget:vote-click`"
 			/>
-
 	</span>
+
+	&nbsp;
 
 	<span v-if="showReply" v-app-auth-required>
 		<app-button
