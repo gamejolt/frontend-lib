@@ -311,17 +311,17 @@ module.exports = config => {
 		]);
 	});
 
-	const joltronRepoDir = path.join(
-		process.env.GOPATH,
-		'src',
-		'github.com',
-		'gamejolt',
-		'joltron'
-	);
-
 	let joltronSrc = '';
 
 	if (config.platform === 'win') {
+		const joltronRepoDir = path.join(
+			process.env.GOPATH,
+			'src',
+			'github.com',
+			'gamejolt',
+			'joltron'
+		);
+
 		joltronSrc = path.join(joltronRepoDir, 'joltron.exe');
 
 		gulp.task('client:get-joltron', cb => {
