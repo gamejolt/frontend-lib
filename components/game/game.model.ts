@@ -325,11 +325,7 @@ export class Game extends Model {
 		return Game.checkDeviceSupport(this.compatibility, os, arch);
 	}
 
-	static pluckInstallableBuilds(
-		packages: GamePackage[],
-		os: string,
-		arch: string | undefined
-	): GameBuild[] {
+	static pluckInstallableBuilds(packages: GamePackage[], os: string, arch?: string): GameBuild[] {
 		let pluckedBuilds: GameBuild[] = [];
 
 		packages.forEach(_package => {
