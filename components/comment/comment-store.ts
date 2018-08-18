@@ -191,7 +191,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 			);
 		} else if (store && !store.contains(comment)) {
 			// insert the new comment at the beginning
-			if (store.sort === Comment.SORT_YOU) {
+			if (store.sort === Comment.SORT_YOU || comment.parent_id) {
 				++store.count;
 				store.comments.unshift(comment);
 				if (!comment.parent_id) {
