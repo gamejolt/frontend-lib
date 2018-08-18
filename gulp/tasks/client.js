@@ -322,6 +322,11 @@ module.exports = config => {
 			'joltron'
 		);
 
+		const mkdirResult = cp.spawnSync('mkdir', [joltronRepoDir]);
+		if (mkdirResult.error) {
+			throw mkdirResult.error;
+		}
+
 		joltronSrc = path.join(joltronRepoDir, 'joltron.exe');
 
 		gulp.task('client:get-joltron', cb => {
@@ -443,16 +448,19 @@ module.exports = config => {
 				};
 
 				return new Promise((resolve, reject) => {
-					http.request(options, res => {
-						res.setEncoding('utf8');
+					http
+						.request(options, res => {
+							res.setEncoding('utf8');
 
-						let str = '';
-						res.on('data', data => {
-							str += data;
-						}).on('end', () => {
-							resolve(JSON.parse(str));
-						});
-					})
+							let str = '';
+							res
+								.on('data', data => {
+									str += data;
+								})
+								.on('end', () => {
+									resolve(JSON.parse(str));
+								});
+						})
 						.on('error', reject)
 						.end();
 				});
@@ -590,7 +598,8 @@ module.exports = config => {
 
 			return new Promise((resolve, reject) => {
 				// Finally, copy joltron executable over.
-				fs.createReadStream(joltronSrc)
+				fs
+					.createReadStream(joltronSrc)
 					.pipe(fs.createWriteStream(joltronDest))
 					.on('error', reject)
 					.on('close', () => {
