@@ -323,12 +323,9 @@ module.exports = config => {
 		);
 
 		console.log('Creating gopath dirs: ' + joltronRepoDir);
-		const mkdirResult = cp.spawnSync('mkdir', [joltronRepoDir]);
+		const mkdirResult = cp.execSync('mkdir "' + joltronRepoDir + '"');
 		console.log(mkdirResult);
 		console.log(readdir(joltronRepoDir));
-		if (mkdirResult.error) {
-			throw mkdirResult.error;
-		}
 
 		joltronSrc = path.join(joltronRepoDir, 'joltron.exe');
 
