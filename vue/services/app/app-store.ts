@@ -30,22 +30,6 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 	consents: UserConsents = {};
 	error: number | string | null = null;
 
-	get clientSection() {
-		if (GJ_IS_CLIENT) {
-			if (window.location.href.startsWith(Environment.wttfBaseUrl)) {
-				return 'app';
-			} else if (window.location.href.startsWith(Environment.authBaseUrl)) {
-				return 'auth';
-			} else if (window.location.href.startsWith(Environment.checkoutBaseUrl)) {
-				return 'checkout';
-			} else if (window.location.href.startsWith(Environment.clientForceDowngradeUrl)) {
-				return 'client';
-			}
-		}
-
-		return null;
-	}
-
 	@VuexMutation
 	setUser(user: Mutations['app/setUser']) {
 		if (this.user) {
