@@ -8,6 +8,8 @@ import { Comment } from '../comment/comment-model';
 import { FiresidePost } from '../fireside/post/post-model';
 import { BaseModal } from '../modal/base';
 import { User } from '../user/user.model';
+import { LikersResource } from './modal.service';
+import { Game } from '../game/game.model';
 
 const UsersPerPage = 20;
 
@@ -20,8 +22,7 @@ const UsersPerPage = 20;
 })
 export default class AppLikesModal extends BaseModal {
 	@Prop(Number) count!: number;
-	@Prop(FiresidePost) post?: FiresidePost;
-	@Prop(Comment) comment?: Comment;
+	@Prop(Object) resource?: LikersResource;
 
 	readonly number = number;
 
@@ -31,9 +32,17 @@ export default class AppLikesModal extends BaseModal {
 	users: User[] = [];
 
 	get requestUrl() {
-		return !!this.comment
-			? '/comments/likers/' + this.comment.id
-			: '/fireside/posts/likers/' + this.post!.id;
+		if (this.resource) {
+			if (this.resource instanceof Comment) {
+				return '/comments/likers/' + this.resource.id;
+			}
+			else if (this.resource instanceof FiresidePost) {
+				return '/fireside/posts/likers/' + this.resource.id;
+			}
+			else if (this.resource instanceof Game) {
+				return '/web/discover/games/likers/' + this.resource.id;
+			}
+		}
 	}
 
 	get shouldShowLoadMore() {

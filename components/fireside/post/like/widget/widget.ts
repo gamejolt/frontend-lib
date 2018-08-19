@@ -75,6 +75,6 @@ export class AppFiresidePostLikeWidget extends Vue {
 	}
 
 	showLikers() {
-		LikersModal.show({ count: this.post.like_count, post: this.post });
+		LikersModal.show({ count: this.post.like_count, resource: this.post });
 	}
 }

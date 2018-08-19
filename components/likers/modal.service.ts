@@ -2,24 +2,25 @@ import { asyncComponentLoader } from '../../utils/utils';
 import { Comment } from '../comment/comment-model';
 import { FiresidePost } from '../fireside/post/post-model';
 import { Modal } from '../modal/modal.service';
+import { Game } from '../game/game.model';
+
+export type LikersResource = Comment | FiresidePost | Game;
 
 interface LikersModalOptions {
 	count: number;
-	post?: FiresidePost;
-	comment?: Comment;
+	resource?: LikersResource;
 }
 
 export class LikersModal {
 	static async show(options: LikersModalOptions) {
-		const { count, post, comment } = options;
+		const { count, resource } = options;
 
 		return await Modal.show<void>({
 			component: () =>
 				asyncComponentLoader(import(/* webpackChunkName: "LikersModal" */ './modal')),
 			props: {
 				count,
-				post,
-				comment,
+				resource,
 			},
 			size: 'sm',
 		});
