@@ -7,6 +7,7 @@ import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppAuthLoginForm } from './login-form';
 import { Auth } from '../auth.service';
 import { Environment } from '../../environment/environment.service';
+import { Navigate } from '../../navigate/navigate.service';
 
 @View
 @Component({
@@ -16,8 +17,10 @@ import { Environment } from '../../environment/environment.service';
 	},
 })
 export class AppAuthLogin extends Vue {
-	@Prop(Boolean) darkVariant?: boolean;
-	@Prop(String) redirectTo!: string;
+	@Prop(Boolean)
+	darkVariant?: boolean;
+	@Prop(String)
+	redirectTo!: string;
 
 	readonly Connection = Connection;
 
@@ -30,13 +33,13 @@ export class AppAuthLogin extends Vue {
 			// Subdomain redirect: jams.gamejolt.io, fireside.gamejolt.com, etc.
 			// This also handles main domain.
 			if (this.redirectTo.search(/^https?:\/\/([a-zA-Z\.]+\.)?gamejolt.(com|io)/) !== -1) {
-				window.location.href = this.redirectTo;
+				Navigate.goto(this.redirectTo);
 				return;
 			}
 
 			// Normal redirect, within the gamejolt.com domain.
 			// This is domain-less so we we'll redirect to the path.
-			window.location.href = Environment.baseUrl + this.redirectTo;
+			Navigate.goto(Environment.baseUrl + this.redirectTo);
 			return;
 		}
 

@@ -4,19 +4,11 @@ import VueRouter, { RouteConfig, Route, Location } from 'vue-router';
 import { routeError404, RouteError404 } from '../components/error/page/page.route';
 import { initScrollBehavior } from '../components/scroll/auto-scroll/autoscroll.service';
 import { Environment } from '../components/environment/environment.service';
+import { Navigate } from '../components/navigate/navigate.service';
 
 const ClientBaseRegex = new RegExp('chrome-extension:\\/\\/game\\-jolt\\-client\\/([^.]+)\\.html#');
 
 export function initRouter(appRoutes: RouteConfig[]) {
-	if (GJ_IS_CLIENT) {
-		// Angular used #! in the urls but vue by default uses only #,
-		// so after the update is done and we reload, we need to redirect the users from the old url.
-		const newHref = window.location.href.replace('#!', '#');
-		if (newHref !== window.location.href) {
-			window.location.href = newHref;
-		}
-	}
-
 	Vue.use(VueRouter);
 
 	const routes = [...appRoutes, routeError404];
@@ -103,7 +95,7 @@ export function hijackLinks(router: VueRouter, host: string) {
 				if (browsable) {
 					// Gotta rewrite the URL to include the correct base URL (to include the #).
 					// Otherwise it'll try to direct to the URL below as the raw URL.
-					window.location.href = Environment.wttfBaseUrl + href;
+					Navigate.goto(Environment.wttfBaseUrl + href);
 					e.preventDefault();
 					return;
 				}
@@ -157,7 +149,7 @@ function guardHijackEvent(e: any): 'passthrough' | 'window' | 'handle' {
 
 function newWindow(e: Event, url: string) {
 	if (GJ_IS_CLIENT) {
-		nw.Shell.openExternal(url);
+		Navigate.gotoExternal(url);
 		e.preventDefault();
 	} else {
 		window.open(url, '_blank');

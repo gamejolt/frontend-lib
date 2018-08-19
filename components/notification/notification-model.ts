@@ -23,6 +23,7 @@ import { currency } from '../../vue/filters/currency';
 import { CommentVideo } from '../comment/video/video-model';
 import { CommentVideoModal } from '../comment/video/modal/modal.service';
 import { RawLocation } from 'vue-router';
+import { Navigate } from '../navigate/navigate.service';
 
 function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocation {
 	if (model instanceof User) {
@@ -273,10 +274,8 @@ export class Notification extends Model {
 				if (url.search(search) === 0) {
 					url = url.replace(search, '');
 					router.push(url);
-				} else if (GJ_IS_CLIENT) {
-					nw.Shell.openExternal(url);
 				} else {
-					window.location.href = url;
+					Navigate.gotoExternal(url);
 				}
 			} catch (e) {
 				console.error(e);

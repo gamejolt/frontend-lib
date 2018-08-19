@@ -3,6 +3,7 @@ import { Api } from '../../api/api.service';
 import { User } from '../user.model';
 import { Growls } from '../../growls/growls.service';
 import { Translate } from '../../translate/translate.service';
+import { Navigate } from '../../navigate/navigate.service';
 
 export type Provider = 'twitter' | 'facebook' | 'twitch' | 'google';
 
@@ -14,14 +15,14 @@ export class UserLinkedAccounts {
 		}
 
 		const response = await Api.sendRequest('/web/auth/' + provider, {});
-		window.location.href = response.redirectLocation;
+		Navigate.goto(response.redirectLocation);
 	}
 
 	static async loginClient(router: VueRouter, provider: Provider) {
 		const response = await Api.sendRequest('/web/auth/' + provider + '?client', {});
 
 		// Gotta open a browser window for them to complete the sign up/login.
-		nw.Shell.openExternal(response.redirectLocation);
+		Navigate.gotoExternal(response.redirectLocation);
 
 		// Now redirect them to the page that will continuously check if they
 		// are authed yet. We pass in the request token returned since this is
@@ -39,7 +40,7 @@ export class UserLinkedAccounts {
 		}
 
 		const response = await Api.sendRequest('/web/dash/linked-accounts/link/' + provider, {});
-		window.location.href = response.redirectLocation;
+		Navigate.goto(response.redirectLocation);
 	}
 
 	static async linkClient(router: VueRouter, provider: Provider) {
@@ -49,7 +50,7 @@ export class UserLinkedAccounts {
 		);
 
 		// Gotta open a browser window for them to complete the sign up/login.
-		nw.Shell.openExternal(response.redirectLocation);
+		Navigate.gotoExternal(response.redirectLocation);
 
 		// Now redirect them to the page that will continuously check if they
 		// are linked yet. We pass in the request token returned since this is

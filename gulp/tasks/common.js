@@ -48,16 +48,19 @@ module.exports = (config, projectBase) => {
 	}
 
 	if (argv['section']) {
-		const argSection = argv['section'];
-		config.sections = {
-			[argSection]: config.sections[argSection],
-		};
+		const newConfigSections = {};
+
+		const argSections = argv['section'].split(',');
+		for (let argSection of argSections) {
+			newConfigSections[argSection] = config.sections[argSection];
+		}
+
+		config.sections = newConfigSections;
 	}
 
 	config.projectBase = projectBase;
 	config.buildBaseDir = process.env.BUILD_DIR || './';
 	config.buildDir = config.buildBaseDir + (config.production ? 'build/prod' : 'build/dev');
-	console.log(config.buildDir);
 	config.libDir = 'src/lib/';
 	config.gjLibDir = 'src/lib/gj-lib-client/';
 	config.bowerDir = 'src/bower-lib/';

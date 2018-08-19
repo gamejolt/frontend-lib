@@ -7,6 +7,7 @@ import { Growls } from '../../growls/growls.service';
 import { Translate } from '../../translate/translate.service';
 import { Popover } from '../../popover/popover.service';
 import { Environment } from '../../environment/environment.service';
+import { Navigate } from '../../navigate/navigate.service';
 
 export interface GameDownloaderOptions {
 	key?: string;
@@ -53,7 +54,7 @@ export class GameDownloader {
 			// The client prepends urls with hashtag (#) that needs to be trimmed when going to external site.
 			urlPath = urlPath.slice(1);
 
-			nw.Shell.openExternal(`${Environment.baseUrl}${urlPath}`);
+			Navigate.gotoExternal(`${Environment.baseUrl}${urlPath}`);
 		} else if (
 			game.bundle_only ||
 			options.key ||
@@ -90,7 +91,7 @@ export class GameDownloader {
 				});
 
 				if (this.shouldTransition) {
-					window.location.href = downloadUrl;
+					Navigate.goto(downloadUrl);
 				}
 			} catch (e) {
 				Growls.error(Translate.$gettext(`Couldn't get download URL.`));

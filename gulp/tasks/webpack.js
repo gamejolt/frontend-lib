@@ -120,6 +120,7 @@ module.exports = function(config) {
 	let webpackSectionConfigs = {};
 	let webpackSectionTasks = [];
 	Object.keys(config.sections).forEach(function(section) {
+		console.log('making config for section ' + section);
 		const sectionConfig = config.sections[section];
 
 		let appEntries = ['./' + section + '/main.ts'];
@@ -176,10 +177,10 @@ module.exports = function(config) {
 			output: {
 				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
-				filename: config.production
-					? section + '.[name].[chunkhash:6].js'
+				filename: true // config.production
+					? section + '.[name].[hash:6].js'
 					: section + '.[name].js',
-				chunkFilename: config.production
+				chunkFilename: true // config.production
 					? section + '.[name].[chunkhash:6].js'
 					: section + '.[name].js',
 				sourceMapFilename: 'maps/[name].[chunkhash:6].map',
@@ -389,7 +390,7 @@ module.exports = function(config) {
 						minChunks: Infinity,
 					}),
 
-				devNoop || new ExtractTextPlugin('[name].[contenthash:6].css'),
+				/* devNoop || */ new ExtractTextPlugin('[name].[contenthash:6].css'),
 				devNoop ||
 					new OptimizeCssPlugin({
 						cssProcessor: {
@@ -443,7 +444,7 @@ module.exports = function(config) {
 								output: 'sjw.js',
 								publicPath: 'https://gamejolt.com/sjw.js',
 							},
-						})
+					  })
 					: noop,
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
@@ -475,27 +476,35 @@ module.exports = function(config) {
 	gulp.task(
 		'watch',
 		gulp.series('clean', function(cb) {
-			let compiler = webpack(webpackSectionConfigs[config.buildSection]);
+			const buildSections = config.buildSection.split(',');
+			let port = parseInt(config.port),
+				portOffset = 0;
+			for (let buildSection of buildSections) {
+				console.log('watching ' + buildSection + ' on port ' + (port + portOffset));
 
-			let server = new WebpackDevServer(compiler, {
-				historyApiFallback: {
-					rewrites: [
-						{
-							from: /./,
-							to:
-								config.buildSection === 'app'
-									? '/index.html'
-									: '/' + config.buildSection + '.html',
-						},
-					],
-				},
-				public: 'development.gamejolt.com',
-				quiet: true,
-				hot: !config.server,
-			});
+				let compiler = webpack(webpackSectionConfigs[buildSection]);
 
-			if (!config.server) {
-				server.listen(config.port, 'localhost');
+				let server = new WebpackDevServer(compiler, {
+					historyApiFallback: {
+						rewrites: [
+							{
+								from: /./,
+								to:
+									buildSection === 'app'
+										? '/index.html'
+										: '/' + buildSection + '.html',
+							},
+						],
+					},
+					public: 'development.gamejolt.com',
+					quiet: true,
+					hot: !config.server,
+				});
+
+				if (!config.server) {
+					server.listen(port + portOffset, 'localhost');
+				}
+				portOffset += 1;
 			}
 		})
 	);

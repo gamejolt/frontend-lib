@@ -9,6 +9,7 @@ import { Analytics } from '../../analytics/analytics.service';
 import { Environment } from '../../environment/environment.service';
 import { Growls } from '../../growls/growls.service';
 import { Translate } from '../../translate/translate.service';
+import { Navigate } from '../../navigate/navigate.service';
 
 export class GamePlayModal {
 	static hasModal = false;
@@ -46,7 +47,7 @@ export class GamePlayModal {
 			build.type !== GameBuild.TYPE_ROM
 		) {
 			const downloadUrl = await this.getDownloadUrl(build, { key: options.key });
-			nw.Shell.openExternal(downloadUrl);
+			Navigate.gotoExternal(downloadUrl);
 			return;
 		}
 

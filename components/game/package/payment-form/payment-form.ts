@@ -34,6 +34,7 @@ import { AppForm } from '../../../form-vue/form';
 import { AppLoadingFade } from '../../../loading/fade/fade';
 import { FormOnSubmitError } from '../../../form-vue/form.service';
 import { GameBuild } from '../../build/build.model';
+import { Navigate } from '../../../navigate/navigate.service';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
@@ -57,15 +58,23 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 })
 export class FormGamePackagePayment extends BaseForm<any>
 	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess, FormOnSubmitError {
-	@Prop(Game) game!: Game;
-	@Prop(GamePackage) package!: GamePackage;
-	@Prop(GameBuild) build?: GameBuild;
-	@Prop(Sellable) sellable!: Sellable;
-	@Prop(String) partnerKey?: string;
-	@Prop(User) partner?: User;
-	@Prop(String) operation!: 'download' | 'play';
+	@Prop(Game)
+	game!: Game;
+	@Prop(GamePackage)
+	package!: GamePackage;
+	@Prop(GameBuild)
+	build?: GameBuild;
+	@Prop(Sellable)
+	sellable!: Sellable;
+	@Prop(String)
+	partnerKey?: string;
+	@Prop(User)
+	partner?: User;
+	@Prop(String)
+	operation!: 'download' | 'play';
 
-	@State app!: AppStore;
+	@State
+	app!: AppStore;
 
 	$refs!: {
 		form: AppForm;
@@ -377,15 +386,14 @@ export class FormGamePackagePayment extends BaseForm<any>
 		if (GJ_IS_CLIENT) {
 			// Our checkout can be done in client.
 			if (this.checkoutType === OrderPayment.METHOD_CC_STRIPE) {
-				window.location.href =
-					Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
+				Navigate.goto(Environment.checkoutBaseUrl + '/checkout/' + response.cart.id);
 			} else {
 				// Otherwise we have to open in browser.
-				nw.Shell.openExternal(response.redirectUrl);
+				Navigate.gotoExternal(response.redirectUrl);
 			}
 		} else {
 			// For site we have to replace the URL completely since we are switching to https.
-			window.location.href = response.redirectUrl;
+			Navigate.goto(response.redirectUrl);
 		}
 	}
 

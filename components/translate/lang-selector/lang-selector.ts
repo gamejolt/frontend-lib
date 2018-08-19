@@ -5,6 +5,7 @@ import View from '!view!./lang-selector.html?style=./lang-selector.styl';
 import { Analytics } from '../../analytics/analytics.service';
 import { getTranslationLang, TranslationLangs, setTranslationLang } from '../translate.service';
 import { stringSort } from '../../../utils/array';
+import { Navigate } from '../../navigate/navigate.service';
 
 @View
 @Component({})
@@ -22,10 +23,6 @@ export class AppTranslateLangSelector extends Vue {
 
 		// We have to refresh the whole browser when language changes so that
 		// all the new language strings get picked up.
-		if (GJ_IS_CLIENT) {
-			nw.Window.get().reload();
-		} else {
-			window.location.reload();
-		}
+		Navigate.reload();
 	}
 }

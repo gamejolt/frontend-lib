@@ -12,6 +12,7 @@ import { AppAudioPlaylist } from '../../../audio/playlist/playlist';
 import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppCard } from '../../../card/card';
 import { number } from '../../../../vue/filters/number';
+import { Navigate } from '../../../navigate/navigate.service';
 
 @View
 @Component({
@@ -26,8 +27,10 @@ import { number } from '../../../../vue/filters/number';
 	},
 })
 export class AppGameSoundtrackCard extends Vue {
-	@Prop(Game) game!: Game;
-	@Prop(Array) songs!: GameSong[];
+	@Prop(Game)
+	game!: Game;
+	@Prop(Array)
+	songs!: GameSong[];
 
 	isPlaying = false;
 	isShowingSoundtrack = false;
@@ -59,7 +62,7 @@ export class AppGameSoundtrackCard extends Vue {
 
 		if (GJ_IS_CLIENT) {
 			// Gotta go past the first char since it's # in client.
-			nw.Shell.openExternal(
+			Navigate.gotoExternal(
 				Environment.baseUrl + this.$router.resolve(location).href.substr(1)
 			);
 			return;
