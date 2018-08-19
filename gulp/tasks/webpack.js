@@ -177,12 +177,8 @@ module.exports = function(config) {
 			output: {
 				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
-				filename: true // config.production
-					? section + '.[name].[hash:6].js'
-					: section + '.[name].js',
-				chunkFilename: true // config.production
-					? section + '.[name].[chunkhash:6].js'
-					: section + '.[name].js',
+				filename: section + '.[name].[hash:6].js',
+				chunkFilename: section + '.[name].[chunkhash:6].js',
 				sourceMapFilename: 'maps/[name].[chunkhash:6].map',
 				libraryTarget: libraryTarget,
 			},
@@ -390,7 +386,7 @@ module.exports = function(config) {
 						minChunks: Infinity,
 					}),
 
-				/* devNoop || */ new ExtractTextPlugin('[name].[contenthash:6].css'),
+				new ExtractTextPlugin('[name].[contenthash:6].css'),
 				devNoop ||
 					new OptimizeCssPlugin({
 						cssProcessor: {
