@@ -24,12 +24,10 @@
 			border-top-right-radius: $border-radius-base
 
 .growl-inner
-	theme-prop('background-color', 'gray')
 	padding: 25px 35px
 	margin-top: $growl-spacing
 	color: $white
 	user-select: none
-	will-change: opacity
 	// We set the border color in the different growl types.
 	border-left-width: 7px
 	border-left-style: solid
@@ -37,14 +35,6 @@
 	@media $media-sm-up
 		border-top-right-radius: $border-radius-base
 		border-bottom-right-radius: $border-radius-base
-
-	// Transition on mouse out, fade it back in to full opacity.
-	transition: opacity 750ms
-
-	&:hover
-		// Immediately switch to slightly transparent on hover.
-		transition: none
-		opacity: 0.85
 
 .growl-content
 	max-height: 200px
@@ -65,7 +55,7 @@
 	width: 45px
 	height: 45px
 
-	> img
+	& > img
 		display: block
 
 .growl-has-icon .growl-content
