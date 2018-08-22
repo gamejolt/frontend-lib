@@ -85,6 +85,6 @@ export class AppCommentControls extends Vue {
 	}
 
 	showLikers() {
-		LikersModal.show({ count: this.comment.votes, comment: this.comment });
+		LikersModal.show({ count: this.comment.votes, resource: this.comment });
 	}
 }

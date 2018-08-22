@@ -1,14 +1,14 @@
-import { Model } from '../model/model.service';
-import { User } from '../user/user.model';
-import { MediaItem } from '../media-item/media-item-model';
 import { Api } from '../api/api.service';
-import { GamePackage } from './package/package.model';
-import { GameBuild } from './build/build.model';
-import { Sellable } from '../sellable/sellable.model';
+import { MediaItem } from '../media-item/media-item-model';
+import { Model } from '../model/model.service';
 import { Registry } from '../registry/registry.service';
+import { Sellable } from '../sellable/sellable.model';
 import { Site } from '../site/site-model';
-import { GameCollaborator } from './collaborator/collaborator.model';
 import { Theme } from '../theme/theme.model';
+import { User } from '../user/user.model';
+import { GameBuild } from './build/build.model';
+import { GameCollaborator } from './collaborator/collaborator.model';
+import { GamePackage } from './package/package.model';
 
 export interface CustomMessage {
 	type: 'info' | 'alert';
@@ -80,7 +80,6 @@ export class Game extends Model {
 	canceled: boolean;
 	tigrs_age: number;
 	sellable: Sellable;
-	can_user_rate: boolean;
 	is_following: boolean;
 	category: string;
 	category_human: string;
@@ -102,8 +101,7 @@ export class Game extends Model {
 
 	has_active_builds: boolean;
 
-	avg_rating: number;
-	rating_count: number;
+	like_count: number;
 
 	sites_enabled: boolean;
 	site?: Site;
