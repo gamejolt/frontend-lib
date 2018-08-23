@@ -1,15 +1,15 @@
-import { Model } from '../model/model.service';
-import { User } from '../user/user.model';
-import { MediaItem } from '../media-item/media-item-model';
 import { Api } from '../api/api.service';
-import { GamePackage } from './package/package.model';
-import { GameBuild } from './build/build.model';
-import { Sellable } from '../sellable/sellable.model';
+import { MediaItem } from '../media-item/media-item-model';
+import { Model } from '../model/model.service';
 import { Registry } from '../registry/registry.service';
+import { Sellable } from '../sellable/sellable.model';
 import { Site } from '../site/site-model';
-import { GameCollaborator } from './collaborator/collaborator.model';
 import { Theme } from '../theme/theme.model';
 import { RawLocation } from 'vue-router';
+import { User } from '../user/user.model';
+import { GameBuild } from './build/build.model';
+import { GameCollaborator } from './collaborator/collaborator.model';
+import { GamePackage } from './package/package.model';
 
 export interface CustomMessage {
 	type: 'info' | 'alert';
@@ -80,10 +80,14 @@ export class Game extends Model {
 	development_status!: number;
 	canceled!: boolean;
 	tigrs_age!: number;
-	should_show_ads!: boolean;
 	sellable?: Sellable;
 	can_user_rate?: boolean;
 	is_following?: boolean;
+	should_show_ads!: boolean;
+	like_count!: number;
+	sites_enabled!: boolean;
+
+	// collaborator perms
 	perms?: Perm[];
 
 	// Meta settings

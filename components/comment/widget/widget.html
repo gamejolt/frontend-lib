@@ -29,11 +29,11 @@
 							<translate>Hot</translate>
 						</a>
 					</li>
-					<!-- <li>
+					<li v-if="showTopSorting">
 						<a @click="sortTop()" :class="{ active: isSortTop }">
 							<translate>Top</translate>
 						</a>
-					</li> -->
+					</li>
 					<li>
 						<a @click="sortNew()" :class="{ active: isSortNew }">
 							<translate>New</translate>

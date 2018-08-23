@@ -1,27 +1,27 @@
 import VueRouter from 'vue-router';
-import { Model } from '../model/model.service';
-import { Environment } from '../environment/environment.service';
-import { FiresidePost } from '../fireside/post/post-model';
-import { Comment, getCommentUrl } from '../comment/comment-model';
-import { User } from '../user/user.model';
-import { Api } from '../api/api.service';
-import { Game } from '../game/game.model';
-import { Growls } from '../growls/growls.service';
-import { ForumTopic } from '../forum/topic/topic.model';
-import { ForumPost } from '../forum/post/post.model';
-import { UserFriendship } from '../user/friendship/friendship.model';
-import { GameRating } from '../game/rating/rating.model';
-import { Sellable } from '../sellable/sellable.model';
-import { Translate } from '../translate/translate.service';
-import { OrderItem } from '../order/item/item.model';
-import { GameLibraryGame } from '../game-library/game/game.model';
-import { Subscription } from '../subscription/subscription.model';
-import { GameCollaborator } from '../game/collaborator/collaborator.model';
-import { Mention } from '../mention/mention.model';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
-import { CommentVideo } from '../comment/video/video-model';
+import { Api } from '../api/api.service';
+import { Comment, getCommentUrl } from '../comment/comment-model';
 import { CommentVideoModal } from '../comment/video/modal/modal.service';
+import { CommentVideo } from '../comment/video/video-model';
+import { Environment } from '../environment/environment.service';
+import { FiresidePost } from '../fireside/post/post-model';
+import { ForumPost } from '../forum/post/post.model';
+import { ForumTopic } from '../forum/topic/topic.model';
+import { GameLibraryGame } from '../game-library/game/game.model';
+import { GameCollaborator } from '../game/collaborator/collaborator.model';
+import { Game } from '../game/game.model';
+import { GameRating } from '../game/rating/rating.model';
+import { Growls } from '../growls/growls.service';
+import { Mention } from '../mention/mention.model';
+import { Model } from '../model/model.service';
+import { OrderItem } from '../order/item/item.model';
+import { Sellable } from '../sellable/sellable.model';
+import { Subscription } from '../subscription/subscription.model';
+import { Translate } from '../translate/translate.service';
+import { UserFriendship } from '../user/friendship/friendship.model';
+import { User } from '../user/user.model';
 import { RawLocation } from 'vue-router';
 import { Navigate } from '../navigate/navigate.service';
 
@@ -136,8 +136,8 @@ export class Notification extends Model {
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_RATING_ADD) {
 			this.action_model = new GameRating(data.action_resource_model);
-			this.jolticon = 'jolticon-chart';
-			this.is_game_based = true;
+			this.jolticon = 'jolticon-thumbs-up';
+			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_FOLLOW) {
 			this.action_model = new GameLibraryGame(data.action_resource_model);
 			this.jolticon = 'jolticon-subscribe';
@@ -189,7 +189,7 @@ export class Notification extends Model {
 				return getRouteLocationForModel(this.from_model!);
 
 			case Notification.TYPE_GAME_RATING_ADD:
-				return getRouteLocationForModel(this.to_model as Game);
+				return getRouteLocationForModel(this.from_model as User);
 
 			case Notification.TYPE_GAME_FOLLOW:
 				return getRouteLocationForModel(this.from_model!);
@@ -390,7 +390,7 @@ export function getNotificationText(notification: Notification) {
 
 		case Notification.TYPE_GAME_RATING_ADD: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } received a new rating.`,
+				`%{ subject } liked %{ object }.`,
 				getTranslationValues(notification)
 			);
 		}

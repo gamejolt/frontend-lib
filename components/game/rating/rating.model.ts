@@ -1,6 +1,9 @@
 import { Model } from '../../model/model.service';
 
 export class GameRating extends Model {
+	public static readonly RATING_LIKE = 1;
+	public static readonly RATING_DISLIKE = 0;
+
 	game_id!: number;
 	rating!: number;
 	posted_on!: number;

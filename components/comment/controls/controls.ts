@@ -1,12 +1,12 @@
+import View from '!view!./controls.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./controls.html';
-
-import { Comment } from '../comment-model';
-import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
-import { AppTooltip } from '../../tooltip/tooltip';
 import { number } from '../../../vue/filters/number';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
+import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
+import { LikersModal } from '../../likers/modal.service';
+import { AppTooltip } from '../../tooltip/tooltip';
+import { Comment } from '../comment-model';
 import { CommentModal } from '../modal/modal.service';
 import { CommentVote } from '../vote/vote-model';
 
@@ -82,5 +82,9 @@ export class AppCommentControls extends Vue {
 
 	onReplyClick() {
 		CommentModal.show({ comment: this.comment });
+	}
+
+	showLikers() {
+		LikersModal.show({ count: this.comment.votes, resource: this.comment });
 	}
 }

@@ -1,32 +1,31 @@
+import View from '!view!./card.html?style=./card.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./card.html?style=./card.styl';
-
-import { Game } from '../../game.model';
-import { GamePackage } from '../package.model';
-import { Sellable } from '../../../sellable/sellable.model';
-import { GameRelease } from '../../release/release.model';
-import { GameBuild } from '../../build/build.model';
-import { GamePackageCardModel } from './card.model';
-import { SellablePricing } from '../../../sellable/pricing/pricing.model';
-import { Analytics } from '../../../analytics/analytics.service';
-import { User } from '../../../user/user.model';
-import { AppCard } from '../../../card/card';
 import { currency } from '../../../../vue/filters/currency';
-import { AppTooltip } from '../../../tooltip/tooltip';
-import { AppTimeAgo } from '../../../time/ago/ago';
-import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
-import { AppExpand } from '../../../expand/expand';
 import { filesize } from '../../../../vue/filters/filesize';
-import { AppCountdown } from '../../../countdown/countdown';
-import { GameDownloader } from '../../downloader/downloader.service';
-import { AppGamePackageCardButtons } from './buttons';
-import { GamePlayModal } from '../../play-modal/play-modal.service';
-import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
-import { EventBus } from '../../../event-bus/event-bus.service';
-import { LinkedKey } from '../../../linked-key/linked-key.model';
+import { Analytics } from '../../../analytics/analytics.service';
+import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppCard } from '../../../card/card';
 import { Clipboard } from '../../../clipboard/clipboard-service';
+import { AppCountdown } from '../../../countdown/countdown';
+import { EventBus } from '../../../event-bus/event-bus.service';
+import { AppExpand } from '../../../expand/expand';
+import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
+import { LinkedKey } from '../../../linked-key/linked-key.model';
+import { SellablePricing } from '../../../sellable/pricing/pricing.model';
+import { Sellable } from '../../../sellable/sellable.model';
+import { AppTimeAgo } from '../../../time/ago/ago';
+import { AppTooltip } from '../../../tooltip/tooltip';
+import { User } from '../../../user/user.model';
+import { GameBuild } from '../../build/build.model';
+import { GameDownloader } from '../../downloader/downloader.service';
+import { Game } from '../../game.model';
+import { GamePlayModal } from '../../play-modal/play-modal.service';
+import { GameRelease } from '../../release/release.model';
+import { GamePackage } from '../package.model';
+import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
+import { AppGamePackageCardButtons } from './buttons';
+import { GamePackageCardModel } from './card.model';
 
 @View
 @Component({
@@ -47,17 +46,32 @@ import { Clipboard } from '../../../clipboard/clipboard-service';
 	},
 })
 export class AppGamePackageCard extends Vue {
-	@Prop(Game) game!: Game;
-	@Prop(GamePackage) package!: GamePackage;
-	@Prop(Sellable) sellable!: Sellable;
+	@Prop(Game)
+	game!: Game;
+
+	@Prop(GamePackage)
+	package!: GamePackage;
+
+	@Prop(Sellable)
+	sellable!: Sellable;
+
 	@Prop({ type: Array, default: () => [] })
 	releases!: GameRelease[];
+
 	@Prop({ type: Array, default: () => [] })
 	builds!: GameBuild[];
-	@Prop(String) accessKey?: string;
-	@Prop(Boolean) isPartner?: boolean;
-	@Prop(String) partnerKey?: string;
-	@Prop(User) partner?: User;
+
+	@Prop(String)
+	accessKey?: string;
+
+	@Prop(Boolean)
+	isPartner?: boolean;
+
+	@Prop(String)
+	partnerKey?: string;
+
+	@Prop(User)
+	partner?: User;
 
 	static hook = {
 		meta: undefined as typeof Vue | undefined,
@@ -76,6 +90,8 @@ export class AppGamePackageCard extends Vue {
 	providerIcons: { [provider: string]: string } = {
 		steam: 'steam',
 	};
+
+	private showPaymentOptionsDeregister?: EventBusDeregister;
 
 	get metaComponent() {
 		return AppGamePackageCard.hook.meta;
@@ -122,24 +138,34 @@ export class AppGamePackageCard extends Vue {
 				this.saleOldPricing = this.sellable.pricings[1];
 				this.sale = true;
 				this.salePercentageOff = (
-					(this.saleOldPricing.amount - this.pricing.amount) /
-					this.saleOldPricing.amount *
+					((this.saleOldPricing.amount - this.pricing.amount) /
+						this.saleOldPricing.amount) *
 					100
 				).toFixed(0);
 			}
 		}
 
 		// Event to be able to open up the payment form.
-		EventBus.on('GamePackageCard.showPaymentOptions', (package_: GamePackage) => {
-			// Ensure that the payment well opens with the correct build
-			// for "skip paying".
-			if (this.package.id === package_.id) {
-				this.showPayment(
-					this.card.downloadableBuild ? this.card.downloadableBuild : null,
-					false
-				);
+		this.showPaymentOptionsDeregister = EventBus.on(
+			'GamePackageCard.showPaymentOptions',
+			(pkg: GamePackage) => {
+				// Ensure that the payment well opens with the correct build
+				// for "skip paying".
+				if (this.package.id === pkg.id) {
+					this.showPayment(
+						this.card.downloadableBuild ? this.card.downloadableBuild : null,
+						false
+					);
+				}
 			}
-		});
+		);
+	}
+
+	destroyed() {
+		if (this.showPaymentOptionsDeregister) {
+			this.showPaymentOptionsDeregister();
+			this.showPaymentOptionsDeregister = undefined;
+		}
 	}
 
 	buildClick(build: GameBuild, fromExtraSection = false) {

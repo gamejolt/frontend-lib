@@ -1,8 +1,4 @@
 <span class="user-avatar-img">
-	<template v-if="user">
-		<img :src="user.img_avatar" class="img-responsive" alt="">
-	</template>
-	<template v-else>
-		<img src="../guest.png" class="img-responsive" alt="">
-	</template>
+	<img key="user" v-if="user" :src="user.img_avatar" class="img-responsive" alt="">
+	<img key="guest" v-else src="../guest.png" class="img-responsive" alt="">
 </span>
