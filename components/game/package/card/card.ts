@@ -8,7 +8,7 @@ import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppCard } from '../../../card/card';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 import { AppCountdown } from '../../../countdown/countdown';
-import { EventBus } from '../../../event-bus/event-bus.service';
+import { EventBus, EventBusDeregister } from '../../../event-bus/event-bus.service';
 import { AppExpand } from '../../../expand/expand';
 import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
 import { LinkedKey } from '../../../linked-key/linked-key.model';
