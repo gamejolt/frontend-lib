@@ -296,7 +296,7 @@ module.exports = config => {
 	/**
 	 * Pushes the single package to GJ.
 	 */
-	gulp.task('client:gjpush-package', () => {
+	gulp.task('client:gjpush-package', cb => {
 		// GJPUSH!
 		// We trust the exit codes to tell us if something went wrong because a non 0 exit code will make this throw.
 		cp.execFileSync(gjpushExecutable, [
@@ -308,6 +308,8 @@ module.exports = config => {
 			packageJson.version,
 			path.join(config.clientBuildDir, config.platformArch + '-package.zip'),
 		]);
+
+		cb();
 	});
 
 	let joltronSrc = '';
@@ -328,7 +330,7 @@ module.exports = config => {
 
 		joltronSrc = path.join(joltronRepoDir, 'joltron.exe');
 
-		gulp.task('client:get-joltron', cb => {
+		gulp.task('client:get-joltron', () => {
 			return new Promise((resolve, reject) => {
 				const func = shell.task([
 					'git -C ' +
@@ -425,7 +427,7 @@ module.exports = config => {
 	 * Structured the build folder with joltron, as if it was installed by it.
 	 * This is what we want our installer to unpack.
 	 */
-	gulp.task('client:joltron', cb => {
+	gulp.task('client:joltron', () => {
 		let buildIdPromise = Promise.resolve();
 
 		if (config.noGjPush) {
@@ -753,6 +755,7 @@ module.exports = config => {
 			packageJson.version,
 			installerFile,
 		]);
+
 		cb();
 	});
 
