@@ -133,7 +133,7 @@ module.exports = config => {
 	/**
 	 * Downloads the gjpush binary used to push the package and installers to GJ automatically.
 	 */
-	gulp.task('client:get-gjpush', cb => {
+	gulp.task('client:get-gjpush', () => {
 		// In development we want to grab a development variant of it,
 		// so we simply copy it over from its Go repo into our build dir.
 		if (config.developmentEnv) {
@@ -151,8 +151,7 @@ module.exports = config => {
 					gjpushExecutable +
 					'"'
 			);
-			cb();
-			return;
+			return Promise.resolve();
 		}
 
 		// In prod we fetch the binary from the github releases page.
@@ -189,7 +188,7 @@ module.exports = config => {
 					}
 
 					res.pipe(file);
-					res.on('end', () => {
+					file.on('finish', () => {
 						file.close();
 						resolve();
 					});
@@ -289,7 +288,7 @@ module.exports = config => {
 				.pipe(plugins.zip(config.platformArch + '-package.zip'))
 				.pipe(gulp.dest(config.clientBuildDir));
 
-			stream.on('end', resolve);
+			stream.on('finish', resolve);
 			stream.on('error', reject);
 		});
 	});

@@ -50,6 +50,9 @@ module.exports = function(config) {
 		// We don't want to pull client-voodoo into the build so that it can get proper paths
 		// through variables like __dirname and such.
 		externals['client-voodoo'] = 'commonjs client-voodoo';
+
+		// fs-extra is used by the client to write the localdb json file.
+		externals['fs-extra'] = 'commonjs fs-extra';
 	}
 
 	// Didn't seem to work. Not sure if we need it, though.
