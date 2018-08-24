@@ -27,7 +27,6 @@ export class AppErrorPage500 extends Vue {}
 @ViewOffline
 @Component({})
 export class AppErrorPageOffline extends Vue {
-	@State
 	retry() {
 		Navigate.reload();
 	}
