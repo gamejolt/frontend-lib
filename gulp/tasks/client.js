@@ -439,7 +439,7 @@ module.exports = config => {
 			// Function to issue an authenticated service API request and return the result as json..
 			let serviceApiRequest = url => {
 				let options = {
-					hostname: 'development.gamejolt.com',
+					hostname: config.developmentEnv ? 'development.gamejolt.com' : 'gamejolt.com',
 					path: '/service-api/push' + url,
 					method: 'GET',
 					headers: {
