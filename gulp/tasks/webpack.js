@@ -37,9 +37,7 @@ module.exports = function(config) {
 	if (!config.client) {
 		// When building for site, we don't want any of these imports accidentally being pulled in.
 		// Setting these to empty object strings causes the require to return an empty object.
-		externals['nw.gui'] = '{}';
 		externals['client-voodoo'] = '{}';
-		externals['nwjs-snappy-updater'] = '{}';
 		externals['sanitize-filename'] = '{}';
 	} else {
 		// This format sets the externals to just straight up "require('axios')" so it can pull it
@@ -52,13 +50,6 @@ module.exports = function(config) {
 		// We don't want to pull client-voodoo into the build so that it can get proper paths
 		// through variables like __dirname and such.
 		externals['client-voodoo'] = 'commonjs client-voodoo';
-
-		// we need nwjs-snappy-updater to not be bundled in because it contains a dynamic require
-		// for the update-hook.js that webpack flips tables over, but if we exclude nwjs-snappy-updater
-		// from the bundle, it's dependecies will not be transpiled to es5.
-		// We define a specific function to exclude that returns the node's require so we can use it
-		// to reload the update hook without webpack complaining about a dynamic export. sheesh.
-		externals['download'] = 'commonjs download';
 	}
 
 	// Didn't seem to work. Not sure if we need it, though.
@@ -129,6 +120,7 @@ module.exports = function(config) {
 	let webpackSectionConfigs = {};
 	let webpackSectionTasks = [];
 	Object.keys(config.sections).forEach(function(section) {
+		console.log('making config for section ' + section);
 		const sectionConfig = config.sections[section];
 
 		let appEntries = ['./' + section + '/main.ts'];
@@ -150,14 +142,12 @@ module.exports = function(config) {
 		}
 
 		let publicPath = '/';
-		if (config.production) {
-			if (!config.client) {
-				publicPath = config.staticCdn + publicPath;
-			} else {
-				// On linux/win we put all the files in a folder called "package".
-				if (config.platform !== 'osx') {
-					publicPath = '/package/';
-				}
+		if (!config.client && config.production) {
+			publicPath = config.staticCdn + publicPath;
+		} else if (config.client && !config.watching) {
+			// On linux/win we put all the files in a folder called "package".
+			if (config.platform !== 'osx') {
+				publicPath = '/package/';
 			}
 		}
 
@@ -187,12 +177,8 @@ module.exports = function(config) {
 			output: {
 				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
-				filename: config.production
-					? section + '.[name].[chunkhash:6].js'
-					: section + '.[name].js',
-				chunkFilename: config.production
-					? section + '.[name].[chunkhash:6].js'
-					: section + '.[name].js',
+				filename: section + '.[name].[hash:6].js',
+				chunkFilename: section + '.[name].[chunkhash:6].js',
 				sourceMapFilename: 'maps/[name].[chunkhash:6].map',
 				libraryTarget: libraryTarget,
 			},
@@ -291,6 +277,10 @@ module.exports = function(config) {
 					GJ_MANIFEST_URL: JSON.stringify(
 						require(path.resolve(process.cwd(), 'package.json')).clientManifestUrl
 					),
+					GJ_WITH_UPDATER: JSON.stringify(
+						(!config.developmentEnv && !config.watching) || config.withUpdater
+					),
+					GJ_IS_WATCHING: JSON.stringify(config.watching),
 
 					// This sets vue in production mode.
 					'process.env.NODE_ENV': JSON.stringify(
@@ -396,7 +386,7 @@ module.exports = function(config) {
 						minChunks: Infinity,
 					}),
 
-				devNoop || new ExtractTextPlugin('[name].[contenthash:6].css'),
+				new ExtractTextPlugin('[name].[contenthash:6].css'),
 				devNoop ||
 					new OptimizeCssPlugin({
 						cssProcessor: {
@@ -450,7 +440,7 @@ module.exports = function(config) {
 								output: 'sjw.js',
 								publicPath: 'https://gamejolt.com/sjw.js',
 							},
-						})
+					  })
 					: noop,
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
@@ -482,27 +472,35 @@ module.exports = function(config) {
 	gulp.task(
 		'watch',
 		gulp.series('clean', function(cb) {
-			let compiler = webpack(webpackSectionConfigs[config.buildSection]);
+			const buildSections = config.buildSection.split(',');
+			let port = parseInt(config.port),
+				portOffset = 0;
+			for (let buildSection of buildSections) {
+				console.log('watching ' + buildSection + ' on port ' + (port + portOffset));
 
-			let server = new WebpackDevServer(compiler, {
-				historyApiFallback: {
-					rewrites: [
-						{
-							from: /./,
-							to:
-								config.buildSection === 'app'
-									? '/index.html'
-									: '/' + config.buildSection + '.html',
-						},
-					],
-				},
-				public: 'development.gamejolt.com',
-				quiet: true,
-				hot: !config.server,
-			});
+				let compiler = webpack(webpackSectionConfigs[buildSection]);
 
-			if (!config.server) {
-				server.listen(config.port, 'localhost');
+				let server = new WebpackDevServer(compiler, {
+					historyApiFallback: {
+						rewrites: [
+							{
+								from: /./,
+								to:
+									buildSection === 'app'
+										? '/index.html'
+										: '/' + buildSection + '.html',
+							},
+						],
+					},
+					public: 'development.gamejolt.com',
+					quiet: true,
+					hot: !config.server,
+				});
+
+				if (!config.server) {
+					server.listen(port + portOffset, 'localhost');
+				}
+				portOffset += 1;
 			}
 		})
 	);
@@ -513,7 +511,7 @@ module.exports = function(config) {
 
 	webpackSectionTasks.unshift('translations:compile');
 
-	if (config.client && config.production) {
+	if (config.client && !config.watching) {
 		webpackSectionTasks.push('client');
 	}
 

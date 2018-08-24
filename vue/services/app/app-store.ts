@@ -2,6 +2,7 @@ import { User } from '../../../components/user/user.model';
 import { VuexStore, VuexModule, VuexMutation } from '../../../utils/vuex';
 import { namespace, State, Action, Mutation } from 'vuex-class';
 import { Environment } from '../../../components/environment/environment.service';
+import { Navigate } from '../../../components/navigate/navigate.service';
 
 export const AppState = namespace('app', State);
 export const AppAction = namespace('app', Action);
@@ -29,20 +30,6 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 	userBootstrapped = false;
 	consents: UserConsents = {};
 	error: number | string | null = null;
-
-	get clientSection() {
-		if (GJ_IS_CLIENT) {
-			if (window.location.href.startsWith(Environment.wttfBaseUrl)) {
-				return 'app';
-			} else if (window.location.href.startsWith(Environment.authBaseUrl)) {
-				return 'auth';
-			} else if (window.location.href.startsWith(Environment.checkoutBaseUrl)) {
-				return 'checkout';
-			}
-		}
-
-		return null;
-	}
 
 	@VuexMutation
 	setUser(user: Mutations['app/setUser']) {
@@ -81,7 +68,7 @@ export class AppStore extends VuexStore<AppStore, Actions, Mutations> {
 		if (GJ_IS_SSR) {
 			Environment.ssrContext.redirect = location;
 		} else {
-			window.location.href = location;
+			Navigate.goto(location);
 		}
 	}
 }

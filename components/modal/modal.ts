@@ -19,7 +19,7 @@ import { AppTheme } from '../theme/theme';
 	},
 })
 export class AppModal extends Vue {
-	@Prop(Number) index: number;
+	@Prop(Number) index!: number;
 	@Prop(Object) theme?: any;
 
 	modal: Modal = null as any;

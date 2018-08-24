@@ -1,4 +1,3 @@
-import * as nwGui from 'nw.gui';
 import { Modal } from '../../modal/modal.service';
 import { asyncComponentLoader } from '../../../utils/utils';
 import { HistoryTick } from '../../history-tick/history-tick-service';
@@ -10,6 +9,7 @@ import { Analytics } from '../../analytics/analytics.service';
 import { Environment } from '../../environment/environment.service';
 import { Growls } from '../../growls/growls.service';
 import { Translate } from '../../translate/translate.service';
+import { Navigate } from '../../navigate/navigate.service';
 
 export class GamePlayModal {
 	static hasModal = false;
@@ -41,10 +41,13 @@ export class GamePlayModal {
 		Popover.hideAll();
 
 		// Will open the gameserver in their browser.
-		if (GJ_IS_CLIENT && build.type !== GameBuild.TYPE_HTML && build.type !== GameBuild.TYPE_ROM) {
-			const gui = require('nw.gui') as typeof nwGui;
+		if (
+			GJ_IS_CLIENT &&
+			build.type !== GameBuild.TYPE_HTML &&
+			build.type !== GameBuild.TYPE_ROM
+		) {
 			const downloadUrl = await this.getDownloadUrl(build, { key: options.key });
-			gui.Shell.openExternal(downloadUrl);
+			Navigate.gotoExternal(downloadUrl);
 			return;
 		}
 
@@ -72,7 +75,9 @@ export class GamePlayModal {
 
 		await Modal.show({
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "GamePlayModal" */ './play-modal')),
+				asyncComponentLoader(
+					import(/* webpackChunkName: "GamePlayModal" */ './play-modal')
+				),
 			props: { game, build, url, canMinimize },
 			noBackdrop: true,
 			noBackdropClose: true,

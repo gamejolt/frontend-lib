@@ -24,10 +24,10 @@ import { CommentMutation, CommentStore } from '../../comment-store';
 	},
 })
 export class AppCommentModalComment extends Vue {
-	@Prop(Comment) comment: Comment;
+	@Prop(Comment) comment!: Comment;
 
-	@AppState user: AppStore['user'];
-	@CommentMutation onCommentAdd: CommentStore['onCommentAdd'];
+	@AppState user!: AppStore['user'];
+	@CommentMutation onCommentAdd!: CommentStore['onCommentAdd'];
 
 	isLoadingReplies = true;
 	replies: Comment[] = [];

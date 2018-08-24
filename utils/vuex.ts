@@ -23,8 +23,8 @@ interface VuexCommit<P> {
 }
 
 export abstract class VuexStore<S = any, A = any, M = any> extends Store<S> {
-	dispatch: VuexDispatch<A>;
-	commit: VuexCommit<M>;
+	dispatch!: VuexDispatch<A>;
+	commit!: VuexCommit<M>;
 	getServerState?: () => any;
 
 	// Just so we can make options optional.

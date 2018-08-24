@@ -23,9 +23,9 @@ const PreviewDebounce = 3000;
 	},
 })
 export class AppContentBlockEditor extends Vue {
-	@Prop(Site) site: Site;
-	@Prop(String) windowId: string;
-	@Prop(SiteContentBlock) contentBlock: SiteContentBlock;
+	@Prop(Site) site!: Site;
+	@Prop(String) windowId!: string;
+	@Prop(SiteContentBlock) contentBlock!: SiteContentBlock;
 
 	isPreviewLoading = false;
 	private previewIndex = 0;
@@ -79,7 +79,7 @@ export class AppContentBlockEditor extends Vue {
 
 	refresh() {
 		const iframe = document.getElementById(this.windowId) as HTMLIFrameElement | undefined;
-		if (iframe) {
+		if (iframe && iframe.contentWindow) {
 			const msg = {
 				type: 'content-update',
 				block: this.contentBlock,

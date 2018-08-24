@@ -8,7 +8,7 @@ import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppCard } from '../../../card/card';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 import { AppCountdown } from '../../../countdown/countdown';
-import { EventBus } from '../../../event-bus/event-bus.service';
+import { EventBus, EventBusDeregister } from '../../../event-bus/event-bus.service';
 import { AppExpand } from '../../../expand/expand';
 import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
 import { LinkedKey } from '../../../linked-key/linked-key.model';
@@ -47,19 +47,19 @@ import { GamePackageCardModel } from './card.model';
 })
 export class AppGamePackageCard extends Vue {
 	@Prop(Game)
-	game: Game;
+	game!: Game;
 
 	@Prop(GamePackage)
-	package: GamePackage;
+	package!: GamePackage;
 
 	@Prop(Sellable)
-	sellable: Sellable;
+	sellable!: Sellable;
 
 	@Prop({ type: Array, default: () => [] })
-	releases: GameRelease[];
+	releases!: GameRelease[];
 
 	@Prop({ type: Array, default: () => [] })
-	builds: GameBuild[];
+	builds!: GameBuild[];
 
 	@Prop(String)
 	accessKey?: string;

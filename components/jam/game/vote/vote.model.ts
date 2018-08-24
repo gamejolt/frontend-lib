@@ -3,11 +3,11 @@ import { Game } from '../../../game/game.model';
 import { Api } from '../../../api/api.service';
 
 export class JamGameVote extends Model {
-	jam_id: number;
-	jam_voting_category_id: number;
-	game_id: number;
-	user_id: number;
-	rating: number;
+	jam_id!: number;
+	jam_voting_category_id!: number;
+	game_id!: number;
+	user_id!: number;
+	rating!: number;
 
 	constructor(data: any = {}) {
 		super(data);

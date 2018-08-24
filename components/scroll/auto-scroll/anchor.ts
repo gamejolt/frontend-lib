@@ -14,7 +14,7 @@ export class AppAutoscrollAnchor extends Vue {
 	 * anchor. This checks to see if a particular prop changes, and if so it
 	 * treats it like a new scroll anchor.
 	 */
-	@Prop() anchorKey: any;
+	@Prop() anchorKey!: any;
 
 	/**
 	 * We can't get the scroll top during the actual scroll behavior because

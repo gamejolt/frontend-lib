@@ -13,8 +13,8 @@ import { AppUserAvatarImg } from '../user-avatar/img/img';
 	},
 })
 export class AppUserBar extends Vue {
-	@Prop(User) user: User;
-	@Prop(String) site: string;
+	@Prop(User) user!: User;
+	@Prop(String) site!: string;
 	@Prop(Boolean) hideSiteSelector?: boolean;
 
 	get userLink() {

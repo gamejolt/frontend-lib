@@ -11,7 +11,7 @@ import { AppImgCrop } from '../../../img/crop/crop';
 	},
 })
 export class AppFormControlCrop extends BaseFormControl {
-	@Prop(String) src: string;
+	@Prop(String) src!: string;
 	@Prop(Number) aspectRatio?: number;
 	@Prop(Number) minWidth?: number;
 	@Prop(Number) minHeight?: number;

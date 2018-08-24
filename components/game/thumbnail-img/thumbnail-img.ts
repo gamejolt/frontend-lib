@@ -18,7 +18,7 @@ import { ContentFocus } from '../../content-focus/content-focus.service';
 	},
 })
 export class AppGameThumbnailImg extends Vue {
-	@Prop(Object) game: Game;
+	@Prop(Object) game!: Game;
 	@Prop(Boolean) hideMedia?: boolean;
 	@Prop(Boolean) animate?: boolean;
 

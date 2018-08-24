@@ -33,9 +33,9 @@ Vue.use(VeeValidate);
 	},
 })
 export class AppForm extends Vue {
-	@Prop(String) name: string;
+	@Prop(String) name!: string;
 
-	base: BaseForm<any>;
+	base!: BaseForm<any>;
 	controls: BaseFormControl[] = [];
 
 	private static hasAddedValidators = false;

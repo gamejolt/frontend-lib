@@ -9,10 +9,10 @@ let inc = 0;
 
 @Component({})
 export class AppTheme extends Vue {
-	@Prop(Theme) theme: Theme | null;
+	@Prop(Theme) theme!: Theme | null;
 
-	@ThemeState isDark: ThemeStore['isDark'];
-	@ThemeState('theme') storeTheme: ThemeStore['theme'];
+	@ThemeState isDark!: ThemeStore['isDark'];
+	@ThemeState('theme') storeTheme!: ThemeStore['theme'];
 
 	scopeId = ++inc;
 

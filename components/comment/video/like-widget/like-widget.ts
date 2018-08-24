@@ -19,7 +19,7 @@ import { LikersModal } from '../../../likers/modal.service';
 })
 export class AppCommentVideoLikeWidget extends Vue {
 	@Prop(CommentVideo)
-	video: CommentVideo;
+	video!: CommentVideo;
 	@Prop(Boolean)
 	overlay?: boolean;
 	@Prop(Boolean)

@@ -17,7 +17,7 @@ import { FiresidePostLike } from '../like-model';
 	},
 })
 export class AppFiresidePostLikeWidget extends Vue {
-	@Prop(FiresidePost) post: FiresidePost;
+	@Prop(FiresidePost) post!: FiresidePost;
 	@Prop(Boolean) overlay?: boolean;
 	@Prop(Boolean) circle?: boolean;
 	@Prop(Boolean) block?: boolean;

@@ -15,7 +15,7 @@ import { AppTimelineListItem } from '../../timeline-list/item/item';
 	},
 })
 export class AppMessageThreadAdd extends Vue {
-	@Prop(Boolean) hideMessageSplit: boolean;
+	@Prop(Boolean) hideMessageSplit!: boolean;
 
-	@State app: AppStore;
+	@State app!: AppStore;
 }

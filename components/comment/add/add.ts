@@ -13,8 +13,8 @@ import { AppFormControlMarkdown } from '../../form-vue/control/markdown/markdown
 	},
 })
 export class FormComment extends BaseForm<Comment> implements FormOnInit {
-	@Prop(String) resource: 'Game' | 'FiresidePost';
-	@Prop(Number) resourceId: number;
+	@Prop(String) resource!: 'Game' | 'FiresidePost';
+	@Prop(Number) resourceId!: number;
 	@Prop(Number) parentId?: number;
 	@Prop(Boolean) autofocus?: boolean;
 

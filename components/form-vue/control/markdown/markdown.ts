@@ -30,7 +30,7 @@ import { AppFocusWhen } from '../../focus-when.directive';
 export class AppFormControlMarkdown extends BaseFormControl {
 	@Prop(String) editorClass?: string;
 	@Prop(String) previewClass?: string;
-	@Prop(String) previewUrl: string;
+	@Prop(String) previewUrl!: string;
 	@Prop(Boolean) disablePreview?: boolean;
 	@Prop(String) placeholder?: string;
 	@Prop({ type: String, default: 'markdown' })

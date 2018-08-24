@@ -36,7 +36,8 @@ if (!GJ_IS_SSR && !GJ_IS_CLIENT) {
 						callId: call.callId,
 					},
 				};
-				event.source.postMessage(returnMsg, '*');
+
+				(event.source as Window).postMessage(returnMsg, '*');
 			});
 		}
 	});

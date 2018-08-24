@@ -7,7 +7,7 @@ const PollInterval = 5000;
 
 @Component({})
 export class AppProgressPoller extends Vue {
-	@Prop(String) url: string;
+	@Prop(String) url!: string;
 	@Prop(Number) interval?: number;
 
 	intervalHandle?: NodeJS.Timer;

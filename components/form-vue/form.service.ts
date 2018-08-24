@@ -72,7 +72,7 @@ export class BaseForm<T> extends Vue {
 	hasFormErrors = false;
 
 	// These get overriden as getters in the child classes.
-	readonly loadUrl: string | null;
+	readonly loadUrl!: string | null;
 	readonly loadData: any | null;
 	isLoaded: boolean | null = null;
 	isLoadedBootstrapped: boolean | null = null;
@@ -182,7 +182,7 @@ export class BaseForm<T> extends Vue {
 	 * we change a field.
 	 */
 	setField<K extends keyof T>(key: K, value: T[K]) {
-		Vue.set(this.formModel as any, key, value);
+		Vue.set(this.formModel as any, key as any, value);
 	}
 
 	setState(key: string, value: any) {

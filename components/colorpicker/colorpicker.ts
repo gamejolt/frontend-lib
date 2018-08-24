@@ -20,7 +20,7 @@ import { Popover } from '../popover/popover.service';
 	},
 })
 export class AppColorpicker extends Vue {
-	@Prop(String) value: string;
+	@Prop(String) value!: string;
 
 	id = '';
 	isOpen = false;

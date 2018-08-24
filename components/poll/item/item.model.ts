@@ -2,10 +2,10 @@ import { Model } from '../../model/model.service';
 import { Poll } from '../poll.model';
 
 export class PollItem extends Model {
-	poll_id: number;
-	text: string;
-	vote_count: number;
-	is_voted: boolean;
+	poll_id!: number;
+	text!: string;
+	vote_count!: number;
+	is_voted?: boolean;
 
 	static createForPoll(poll: Poll, text: string) {
 		const item = new PollItem({

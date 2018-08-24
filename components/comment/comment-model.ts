@@ -64,21 +64,21 @@ export class Comment extends Model {
 	static readonly SORT_NEW = 'new';
 	static readonly SORT_YOU = 'you';
 
-	parent_id: number;
-	resource: 'Game' | 'FiresidePost';
-	resource_id: number;
-	user: User;
+	parent_id!: number;
+	resource!: 'Game' | 'FiresidePost';
+	resource_id!: number;
+	user!: User;
 	comment?: string;
-	comment_compiled: string;
-	votes: number;
+	comment_compiled!: string;
+	votes!: number;
 	user_vote?: CommentVote;
-	status: number;
-	posted_on: number;
+	status!: number;
+	posted_on!: number;
 	modified_on?: number;
-	lang: string;
+	lang!: string;
 	videos: CommentVideo[] = [];
 	subscription?: Subscription;
-	is_pinned: boolean;
+	is_pinned!: boolean;
 
 	isVotePending = false;
 	isFollowPending = false;

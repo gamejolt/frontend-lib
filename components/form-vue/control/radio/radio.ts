@@ -6,7 +6,7 @@ import { BaseFormControl } from '../base';
 @View
 @Component({})
 export class AppFormControlRadio extends BaseFormControl {
-	@Prop() value: any;
+	@Prop() value!: any;
 
 	multi = true;
 

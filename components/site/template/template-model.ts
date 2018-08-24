@@ -1,11 +1,12 @@
 import { Model } from '../../model/model.service';
+import { User } from '../../user/user.model';
 
 export class SiteTemplate extends Model {
-	key: string;
-	name: string;
-	description: string;
-	data: any;
-	user: any;
+	key!: string;
+	name!: string;
+	description!: string;
+	data: any | null;
+	user!: User;
 
 	constructor(data: any = {}) {
 		super(data);
@@ -16,6 +17,10 @@ export class SiteTemplate extends Model {
 			} else {
 				this.data = data.data;
 			}
+		}
+
+		if (data.user) {
+			this.user = new User(data.user);
 		}
 	}
 }

@@ -2,10 +2,10 @@ import { Model } from '../../model/model.service';
 import { User } from '../../user/user.model';
 
 export class JamOrganizer extends Model {
-	jam_id: number;
-	user: User;
-	is_super: boolean;
-	added_on: number;
+	jam_id!: number;
+	user!: User;
+	is_super!: boolean;
+	added_on!: number;
 
 	constructor(data: any = {}) {
 		super(data);

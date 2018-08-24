@@ -8,16 +8,16 @@ import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';
 @Component({})
 export class AppFormControl extends BaseFormControl {
 	@Prop({ type: String, default: 'text' })
-	type: string;
+	type!: string;
 
-	@Prop(Array) validateOn: string[];
-	@Prop(Number) validateDelay: number;
-	@Prop(Array) mask: (string | RegExp)[];
+	@Prop(Array) validateOn!: string[];
+	@Prop(Number) validateDelay!: number;
+	@Prop(Array) mask!: (string | RegExp)[];
 
 	controlVal = '';
 	maskedInputElem: any = null;
 
-	$el: HTMLInputElement;
+	$el!: HTMLInputElement;
 
 	get controlType() {
 		if (this.type === 'currency') {
