@@ -89,7 +89,7 @@ module.exports = config => {
 
 		const nw = new NwBuilder({
 			version: nwjsVersion,
-			flavor: 'sdk', // config.production ? 'normal' : 'sdk',
+			flavor: config.production ? 'normal' : 'sdk',
 			files: config.buildDir + '/**/*',
 			buildDir: config.clientBuildDir,
 			cacheDir: config.clientBuildCacheDir,
