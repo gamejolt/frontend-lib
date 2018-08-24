@@ -51,8 +51,9 @@ module.exports = function(config) {
 		// through variables like __dirname and such.
 		externals['client-voodoo'] = 'commonjs client-voodoo';
 
-		// fs-extra is used by the client to write the localdb json file.
+		// fs-extra and write-file-atomic is used by the client to write the localdb json file.
 		externals['fs-extra'] = 'commonjs fs-extra';
+		externals['write-file-atomic'] = 'commonjs write-file-atomic';
 	}
 
 	// Didn't seem to work. Not sure if we need it, though.
@@ -123,7 +124,6 @@ module.exports = function(config) {
 	let webpackSectionConfigs = {};
 	let webpackSectionTasks = [];
 	Object.keys(config.sections).forEach(function(section) {
-		console.log('making config for section ' + section);
 		const sectionConfig = config.sections[section];
 
 		let appEntries = ['./' + section + '/main.ts'];
