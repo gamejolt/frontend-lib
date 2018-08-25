@@ -298,7 +298,7 @@ module.exports = config => {
 		// doesnt handle symlinks correctly. This results in huge archives as well as failures updating the client.
 		return new Promise((resolve, reject) => {
 			// Adding /. to src dir makes tar also compress the dot files.
-			const func = shell.task(['tar -czf ' + escape([dest + '.tar.gz', src + '/.'])]);
+			const func = shell.task(['tar -czf ' + escape([dest + '.tar.gz', '-C', src, '.'])]);
 
 			func(err => {
 				if (err) {
