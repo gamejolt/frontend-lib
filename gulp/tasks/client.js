@@ -285,7 +285,8 @@ module.exports = config => {
 		return new Promise((resolve, reject) => {
 			const stream = gulp
 				.src(config.clientBuildDir + '/build/' + config.platformArch + '/**/*')
-				.pipe(plugins.zip(config.platformArch + '-package.zip'))
+				.pipe(plugins.tar(config.platformArch + '-package.tar'))
+				.pipe(plugins.gzip())
 				.pipe(gulp.dest(config.clientBuildDir));
 
 			stream.on('finish', resolve);
@@ -306,7 +307,7 @@ module.exports = config => {
 			gjGamePackageId,
 			'-r',
 			packageJson.version,
-			path.join(config.clientBuildDir, config.platformArch + '-package.zip'),
+			path.join(config.clientBuildDir, config.platformArch + '-package.tar.gz'),
 		]);
 
 		cb();
@@ -490,7 +491,7 @@ module.exports = config => {
 						return (
 							build &&
 							build.file &&
-							build.file.filename === config.platformArch + '-package.zip'
+							build.file.filename === config.platformArch + '-package.tar.gz'
 						);
 					});
 				})
