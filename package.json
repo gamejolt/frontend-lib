@@ -48,6 +48,7 @@
 		"mv": "2.1.1",
 		"gulp-zip": "4.0.0",
 		"follow-redirects": "1.4.1",
-		"polished": "1.9.2"
+		"polished": "1.9.2",
+		"shell-escape": "0.2.0"
 	}
 }

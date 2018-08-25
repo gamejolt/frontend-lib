@@ -13,6 +13,7 @@ const https = require('follow-redirects').https;
 const DecompressZip = require('decompress-zip');
 const cp = require('child_process');
 const http = require('http');
+const escape = require('shell-escape');
 
 module.exports = config => {
 	// We can skip all this stuff if not doing a client build.
@@ -276,22 +277,48 @@ module.exports = config => {
 		return p;
 	});
 
+	function targz(src, dest) {
+		// On windows gulp-tar does the job just fine, but on linux and osx we have to use something else.
+		if (config.platform === 'win') {
+			const [destDir, destFilename] = [path.dirname(dest), path.basename(dest)];
+
+			return new Promise((resolve, reject) => {
+				const stream = gulp
+					.src(src + '/**/*')
+					.pipe(plugins.tar(destFilename + '.tar'))
+					.pipe(plugins.gzip())
+					.pipe(gulp.dest(destDir));
+
+				stream.on('finish', resolve);
+				stream.on('error', reject);
+			});
+		}
+
+		// On linux and osx we can't use gulp-tar because it uses vinyl-fs behind the scenes which
+		// doesnt handle symlinks correctly. This results in huge archives as well as failures updating the client.
+		return new Promise((resolve, reject) => {
+			const func = shell.task(['tar -czf ' + escape([dest + '.tar.gz', src])]);
+
+			func(err => {
+				if (err) {
+					reject(err);
+					return;
+				}
+				resolve();
+			});
+		});
+	}
+
 	/**
 	 * Makes the zipped package.
 	 * Note: this is not the package shipped with joltron so it doesn't use the new auto updater.
 	 * It's essentially the "game" people upload to GJ.
 	 */
 	gulp.task('client:zip-package', () => {
-		return new Promise((resolve, reject) => {
-			const stream = gulp
-				.src(config.clientBuildDir + '/build/' + config.platformArch + '/**/*')
-				.pipe(plugins.tar(config.platformArch + '-package.tar'))
-				.pipe(plugins.gzip())
-				.pipe(gulp.dest(config.clientBuildDir));
-
-			stream.on('finish', resolve);
-			stream.on('error', reject);
-		});
+		return targz(
+			path.join(config.clientBuildDir, 'build', config.platformArch),
+			path.join(config.clientBuildDir, config.platformArch + '-package')
+		);
 	});
 
 	/**
@@ -717,14 +744,10 @@ module.exports = config => {
 			);
 			return builder.build();
 		} else {
-			return gulp
-				.src([
-					config.clientBuildDir + '/build/**/*',
-					config.clientBuildDir + '/build/**/.*',
-				])
-				.pipe(plugins.tar(config.platformArch + '.tar'))
-				.pipe(plugins.gzip())
-				.pipe(gulp.dest(config.clientBuildDir));
+			return targz(
+				path.join(config.clientBuildDir, 'build'),
+				path.join(config.clientBuildDir, config.platformArch)
+			);
 		}
 	});
 
@@ -790,4 +813,4 @@ module.exports = config => {
 			)
 		);
 	}
-};
+});
