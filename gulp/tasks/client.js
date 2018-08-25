@@ -14,6 +14,7 @@ const DecompressZip = require('decompress-zip');
 const cp = require('child_process');
 const http = require('http');
 const escape = require('shell-escape');
+const tar = require('tar');
 
 module.exports = config => {
 	// We can skip all this stuff if not doing a client build.
@@ -278,36 +279,15 @@ module.exports = config => {
 	});
 
 	function targz(src, dest) {
-		// On windows gulp-tar does the job just fine, but on linux and osx we have to use something else.
-		if (config.platform === 'win') {
-			const [destDir, destFilename] = [path.dirname(dest), path.basename(dest)];
-
-			return new Promise((resolve, reject) => {
-				const stream = gulp
-					.src(src + '/**/*')
-					.pipe(plugins.tar(destFilename + '.tar'))
-					.pipe(plugins.gzip())
-					.pipe(gulp.dest(destDir));
-
-				stream.on('finish', resolve);
-				stream.on('error', reject);
-			});
-		}
-
-		// On linux and osx we can't use gulp-tar because it uses vinyl-fs behind the scenes which
-		// doesnt handle symlinks correctly. This results in huge archives as well as failures updating the client.
-		return new Promise((resolve, reject) => {
-			// Adding /. to src dir makes tar also compress the dot files.
-			const func = shell.task(['tar -czf ' + escape([dest + '.tar.gz', '-C', src, '.'])]);
-
-			func(err => {
-				if (err) {
-					reject(err);
-					return;
-				}
-				resolve();
-			});
-		});
+		return tar.c(
+			{
+				file: dest,
+				gzip: true,
+				C: src,
+				portable: true,
+			},
+			['.']
+		);
 	}
 
 	/**
@@ -318,7 +298,7 @@ module.exports = config => {
 	gulp.task('client:zip-package', () => {
 		return targz(
 			path.join(config.clientBuildDir, 'build', config.platformArch),
-			path.join(config.clientBuildDir, config.platformArch + '-package')
+			path.join(config.clientBuildDir, config.platformArch + '-package.tar.gz')
 		);
 	});
 
@@ -747,7 +727,7 @@ module.exports = config => {
 		} else {
 			return targz(
 				path.join(config.clientBuildDir, 'build'),
-				path.join(config.clientBuildDir, config.platformArch)
+				path.join(config.clientBuildDir, config.platformArch + '.tar.gz')
 			);
 		}
 	});
