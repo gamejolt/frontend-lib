@@ -297,7 +297,8 @@ module.exports = config => {
 		// On linux and osx we can't use gulp-tar because it uses vinyl-fs behind the scenes which
 		// doesnt handle symlinks correctly. This results in huge archives as well as failures updating the client.
 		return new Promise((resolve, reject) => {
-			const func = shell.task(['tar -czf ' + escape([dest + '.tar.gz', src])]);
+			// Adding /. to src dir makes tar also compress the dot files.
+			const func = shell.task(['tar -czf ' + escape([dest + '.tar.gz', src + '/.'])]);
 
 			func(err => {
 				if (err) {
@@ -813,4 +814,4 @@ module.exports = config => {
 			)
 		);
 	}
-});
+};
