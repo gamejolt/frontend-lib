@@ -29,6 +29,7 @@ export class FiresidePost extends Model {
 	type!: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
 	hash!: string;
 	title!: string;
+	lead_compiled!: string;
 	lead!: string;
 	header?: MediaItem;
 	status!: string;
