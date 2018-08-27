@@ -1,20 +1,20 @@
-import { Model } from '../../model/model.service';
-import { FiresidePostTag } from './tag/tag-model';
-import { FiresidePostLike } from './like/like-model';
-import { FiresidePostVideo } from './video/video-model';
-import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
-import { ModalConfirm } from '../../modal/confirm/confirm-service';
-import { HistoryTick } from '../../history-tick/history-tick-service';
-import { Environment } from '../../environment/environment.service';
-import { MediaItem } from '../../media-item/media-item-model';
-import { Game } from '../../game/game.model';
-import { Api } from '../../api/api.service';
 import { appStore } from '../../../vue/services/app/app-store';
+import { Api } from '../../api/api.service';
+import { Environment } from '../../environment/environment.service';
+import { Game } from '../../game/game.model';
+import { HistoryTick } from '../../history-tick/history-tick-service';
+import { KeyGroup } from '../../key-group/key-group.model';
+import { MediaItem } from '../../media-item/media-item-model';
+import { ModalConfirm } from '../../modal/confirm/confirm-service';
+import { Model } from '../../model/model.service';
+import { Poll } from '../../poll/poll.model';
 import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
-import { KeyGroup } from '../../key-group/key-group.model';
 import { User } from '../../user/user.model';
-import { Poll } from '../../poll/poll.model';
+import { FiresidePostLike } from './like/like-model';
+import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
+import { FiresidePostTag } from './tag/tag-model';
+import { FiresidePostVideo } from './video/video-model';
 
 export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
@@ -124,6 +124,26 @@ export class FiresidePost extends Model {
 
 	get isScheduled() {
 		return !!this.scheduled_for;
+	}
+
+	get hasMedia() {
+		return this.media.length > 0;
+	}
+
+	get hasSketchfab() {
+		return this.sketchfabs.length > 0;
+	}
+
+	get hasVideo() {
+		return this.videos.length > 0;
+	}
+
+	get hasArticle() {
+		return !!this.content_compiled;
+	}
+
+	get hasPoll() {
+		return !!this.poll;
 	}
 
 	static pullHashFromUrl(url: string) {
