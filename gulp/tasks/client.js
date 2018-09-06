@@ -416,10 +416,20 @@ module.exports = config => {
 			})
 			.then(() => {
 				return new Promise((resolve, reject) => {
-					const func = shell.task(
-						[path.join('build', 'deps.bat'), path.join('build', 'prod.bat') + ' -l'],
-						{ cwd: joltronRepoDir }
-					);
+					let cmds = [];
+					if (config.platform === 'win') {
+						cmds = [
+							path.join('build', 'deps.bat'),
+							path.join('build', 'prod.bat') + ' -l',
+						];
+					} else {
+						cmds = [
+							path.join('build', 'deps.sh'),
+							path.join('build', 'prod.sh') + ' -l',
+						];
+					}
+
+					const func = shell.task(cmds, { cwd: joltronRepoDir });
 
 					func(err => {
 						if (err) {
