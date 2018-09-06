@@ -25,7 +25,9 @@ module.exports = config => {
 	const packageJson = require(path.resolve(config.projectBase, 'package.json'));
 
 	// Takes the joltron version specified in package.json and expands it into joltronVersionArray. e.g. v2.0.1-beta into [2, 0, 1]
-	const joltronVersion = packageJson.joltronVersion;
+	// The joltron version will specify the loader variant to signal the backend to use the correct variant when offering updates to joltron itself.
+	// The loader variant version looks like `${version}.loader`, but git's release version is simply `${version}` so we gotta transform it.
+	const joltronVersion = packageJson.joltronVersion.replace(/\.loader$/, '');
 	const versionStuff = joltronVersion.match(/^v?(\d+)\.(\d+)\.(\d+)/);
 	if (!versionStuff) {
 		throw new Error('Joltron version is invalid');
@@ -323,43 +325,46 @@ module.exports = config => {
 
 	let joltronSrc = '';
 
+	const joltronRepoDir = path.join(
+		process.env.GOPATH,
+		'src',
+		'github.com',
+		'gamejolt',
+		'joltron'
+	);
+
+	if (!fs.existsSync(joltronRepoDir)) {
+		console.log('Creating gopath dirs: ' + joltronRepoDir);
+		cp.execSync('mkdir "' + joltronRepoDir + '"');
+	}
+
+	joltronSrc = path.join(joltronRepoDir, 'joltron');
 	if (config.platform === 'win') {
-		const joltronRepoDir = path.join(
-			process.env.GOPATH,
-			'src',
-			'github.com',
-			'gamejolt',
-			'joltron'
-		);
+		joltronSrc += '.exe';
+	}
 
-		if (!fs.existsSync(joltronRepoDir)) {
-			console.log('Creating gopath dirs: ' + joltronRepoDir);
-			cp.execSync('mkdir "' + joltronRepoDir + '"');
-		}
+	gulp.task('client:get-joltron', () => {
+		return new Promise((resolve, reject) => {
+			const func = shell.task([
+				'git -C ' +
+					joltronRepoDir +
+					' status' +
+					' || git clone --branch ' +
+					joltronVersion +
+					' https://github.com/gamejolt/joltron ' +
+					joltronRepoDir,
+			]);
 
-		joltronSrc = path.join(joltronRepoDir, 'joltron.exe');
-
-		gulp.task('client:get-joltron', () => {
-			return new Promise((resolve, reject) => {
-				const func = shell.task([
-					'git -C ' +
-						joltronRepoDir +
-						' status' +
-						' || git clone --branch ' +
-						joltronVersion +
-						' https://github.com/gamejolt/joltron ' +
-						joltronRepoDir,
-				]);
-
-				func(err => {
-					if (err) {
-						reject(err);
-						return;
-					}
-					resolve();
-				});
-			})
-				.then(() => {
+			func(err => {
+				if (err) {
+					reject(err);
+					return;
+				}
+				resolve();
+			});
+		})
+			.then(() => {
+				if (config.platform === 'win') {
 					fs.writeFileSync(
 						path.join(joltronRepoDir, 'versioninfo.json'),
 						JSON.stringify({
@@ -407,30 +412,25 @@ module.exports = config => {
 						}),
 						{ encoding: 'utf8' }
 					);
-				})
-				.then(() => {
-					return new Promise((resolve, reject) => {
-						const func = shell.task(
-							[
-								path.join('build', 'deps.bat'),
-								path.join('build', config.production ? 'prod.bat' : 'dev.bat'),
-							],
-							{ cwd: joltronRepoDir }
-						);
+				}
+			})
+			.then(() => {
+				return new Promise((resolve, reject) => {
+					const func = shell.task(
+						[path.join('build', 'deps.bat'), path.join('build', 'prod.bat') + ' -l'],
+						{ cwd: joltronRepoDir }
+					);
 
-						func(err => {
-							if (err) {
-								reject(err);
-								return;
-							}
-							resolve();
-						});
+					func(err => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						resolve();
 					});
 				});
-		});
-	} else {
-		gulp.task('client:get-joltron', cb => cb());
-	}
+			});
+	});
 
 	/**
 	 * Structured the build folder with joltron, as if it was installed by it.
@@ -529,38 +529,6 @@ module.exports = config => {
 			// Next up we want to fetch the same joltron version as the client build is using,
 			// even if there is a newer version of joltron released.
 			// This ensures the client and joltron can communicate without issues.
-
-			// TODO: this is error prone
-			// If we fetched joltron from the previous step we want to use that version over
-			// the one in client-voodoo because this one would be compiled with the platform
-			// specific stuff for game jolt - at the time of writing - the microsoft version info,
-			// and desktop icon.
-			// This might be an issue if the version specified in the joltronVersion and the version in client-voodoo
-			// differ. We need a better way to do this.
-			if (!joltronSrc) {
-				// Figure out the correct client voodoo dir based on the platform.
-				let clientVoodooDir = '';
-				if (config.platform === 'osx') {
-					clientVoodooDir = path.resolve(
-						buildDir,
-						'Game Jolt Client.app',
-						'Contents',
-						'Resources',
-						'app.nw',
-						'node_modules',
-						'client-voodoo'
-					);
-				} else {
-					clientVoodooDir = path.resolve(buildDir, 'node_modules', 'client-voodoo');
-				}
-
-				// Joltron is located inside client-voodoo/bin folder.
-				joltronSrc = path.resolve(
-					clientVoodooDir,
-					'bin',
-					config.platform === 'win' ? 'GameJoltRunner.exe' : 'GameJoltRunner'
-				);
-			}
 
 			// Joltron should be placed next to the client build's data folder.
 			// On windows joltron will be linked to and executed directly, so call it GameJoltClient.exe to avoid confusion.
