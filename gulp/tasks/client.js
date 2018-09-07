@@ -353,10 +353,8 @@ module.exports = config => {
 				'git -C ' +
 					joltronRepoDir +
 					' status' +
-					// Temporarily just pull master for testing
-					// ' || git clone --branch ' +
-					// joltronVersion +
-					' || git clone ' +
+					' || git clone --branch ' +
+					joltronVersion +
 					' https://github.com/gamejolt/joltron ' +
 					joltronRepoDir,
 			]);
