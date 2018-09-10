@@ -53,6 +53,9 @@ Source: "data-{{GAME_UID}}\*"; DestDir: "{app}\data-{{GAME_UID}}"; Flags: ignore
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\data-*"
 Type: files; Name: "{app}\.tempDownload"
+Type: files; Name: "{app}\.tempDownloadUpdater"
+Type: files; Name: "{app}\GameJoltClient.exe.old"
+Type: files; Name: "{app}\GameJoltClient.exe.new.exe"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
