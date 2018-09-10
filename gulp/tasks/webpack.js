@@ -39,6 +39,10 @@ module.exports = function(config) {
 		// Setting these to empty object strings causes the require to return an empty object.
 		externals['client-voodoo'] = '{}';
 		externals['sanitize-filename'] = '{}';
+
+		// fs-extra and write-file-atomic is used by the client to write the localdb json file.
+		externals['fs-extra'] = '{}';
+		externals['write-file-atomic'] = '{}';
 	} else {
 		// This format sets the externals to just straight up "require('axios')" so it can pull it
 		// directly and not pull in through webpack's build process. We need this for axios since it
