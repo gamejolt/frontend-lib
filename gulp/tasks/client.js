@@ -605,6 +605,10 @@ module.exports = config => {
 									uid: gjGamePackageId + '-' + buildId,
 									archiveFiles: archiveFiles,
 									platformUrl: gjHost + '/x/updater/check-for-updates',
+									delcaredImplementations: {
+										presence: true,
+										badUpdateRecovery: true,
+									},
 								},
 								launchOptions: { executable: executable },
 								os: platform,
