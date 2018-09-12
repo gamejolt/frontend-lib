@@ -18,7 +18,7 @@ import { Screen } from '../../../screen/screen-service';
 	},
 })
 export class AppCardListItem extends Vue {
-	@Prop() item: any;
+	@Prop() item!: any;
 	@Prop(Boolean) forceActive?: boolean;
 
 	list: AppCardList = null as any;

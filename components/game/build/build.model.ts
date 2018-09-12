@@ -140,34 +140,34 @@ export class GameBuild extends Model {
 		[GameBuild.EMULATOR_MSX]: 'MSX',
 	};
 
-	primary_file: GameBuildFile;
+	primary_file!: GameBuildFile;
 	params: GameBuildParam[] = [];
 	errors?: string[];
 
-	game_id: number;
-	game_package_id: number;
-	game_release_id: number;
-	archive_type: string;
-	folder: string;
-	type: string;
-	os_windows: boolean;
-	os_windows_64: boolean;
-	os_mac: boolean;
-	os_mac_64: boolean;
-	os_linux: boolean;
-	os_linux_64: boolean;
-	os_other: boolean;
-	emulator_type: string;
-	embed_width: number;
-	embed_height: number;
-	embed_fit_to_screen: boolean;
-	java_class_name: string;
-	browser_disable_right_click: boolean;
-	https_enabled: boolean;
-	added_on: number;
-	updated_on: number;
-	modified_on: number;
-	status: string;
+	game_id!: number;
+	game_package_id!: number;
+	game_release_id!: number;
+	archive_type!: string;
+	folder!: string;
+	type!: string;
+	os_windows!: boolean;
+	os_windows_64!: boolean;
+	os_mac!: boolean;
+	os_mac_64!: boolean;
+	os_linux!: boolean;
+	os_linux_64!: boolean;
+	os_other!: boolean;
+	emulator_type!: string;
+	embed_width!: number;
+	embed_height!: number;
+	embed_fit_to_screen!: boolean;
+	java_class_name!: string;
+	browser_disable_right_click!: boolean;
+	https_enabled!: boolean;
+	added_on!: number;
+	updated_on!: number;
+	modified_on!: number;
+	status!: string;
 
 	// These fields get added only during GamePackagePayloadModel.
 	_package?: GamePackage;

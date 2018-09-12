@@ -7,16 +7,18 @@ export class Sellable extends Model {
 	static readonly TYPE_PAID = 'paid';
 	static readonly TYPE_PWYW = 'pwyw';
 
+	type!: 'free' | 'paid' | 'pwyw';
+	primary!: boolean;
+	key!: string;
+	title!: string;
+	description!: string;
 	pricings: SellablePricing[] = [];
+	is_owned?: boolean;
+
+	// keys settings
+	linked_keys?: LinkedKey[];
 
 	game_package_id?: number;
-	type: 'free' | 'paid' | 'pwyw';
-	primary: boolean;
-	key: string;
-	title: string;
-	description: string;
-	is_owned: boolean;
-	linked_keys: LinkedKey[];
 
 	constructor(data: any = {}) {
 		super(data);

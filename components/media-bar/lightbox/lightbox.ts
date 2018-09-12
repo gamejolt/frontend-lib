@@ -36,9 +36,9 @@ bootstrapShortkey();
 	},
 })
 export class AppMediaBarLightbox extends Vue {
-	@Prop(Object) mediaBar: AppMediaBar;
+	@Prop(Object) mediaBar!: AppMediaBar;
 
-	sliderElem: HTMLElement;
+	sliderElem?: HTMLElement;
 	currentSliderOffset = 0;
 	isDragging = false;
 	waitingForFrame = false;
@@ -92,7 +92,9 @@ export class AppMediaBarLightbox extends Vue {
 
 	refreshSliderPosition() {
 		const newOffset = -(Screen.width * this.mediaBar.activeIndex!);
-		this.sliderElem.style.transform = `translate3d( ${newOffset}px, 0, 0 )`;
+		if (this.sliderElem) {
+			this.sliderElem.style.transform = `translate3d( ${newOffset}px, 0, 0 )`;
+		}
 		this.currentSliderOffset = newOffset;
 	}
 
@@ -113,6 +115,10 @@ export class AppMediaBarLightbox extends Vue {
 
 		// In case the animation frame was retrieved after we stopped dragging.
 		if (!this.isDragging) {
+			return;
+		}
+
+		if (!this.sliderElem) {
 			return;
 		}
 

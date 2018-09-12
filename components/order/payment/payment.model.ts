@@ -7,13 +7,13 @@ export class OrderPayment extends Model {
 	static readonly METHOD_AMAZON = 'amazon';
 	static readonly METHOD_WALLET = 'wallet';
 
-	order_id: number;
-	method: string;
-	currency_code: string;
-	amount: number;
-	stripe_payment_source: any;
-	paypal_email_address: string;
-	refunds: OrderPaymentRefund[];
+	order_id!: number;
+	method!: string;
+	currency_code!: string;
+	amount!: number;
+	stripe_payment_source!: any | null;
+	paypal_email_address!: string | null;
+	refunds: OrderPaymentRefund[] = [];
 
 	constructor(data: any = {}) {
 		super(data);

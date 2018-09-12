@@ -13,8 +13,8 @@ import { AppTimepicker } from '../timepicker/timepicker';
 	},
 })
 export class AppDatetimePicker extends Vue {
-	@Prop(Number) value: number;
-	@Prop(Number) timezoneOffset: number;
+	@Prop(Number) value!: number;
+	@Prop(Number) timezoneOffset!: number;
 	@Prop(Number) minDate?: number;
 	@Prop(Number) maxDate?: number;
 

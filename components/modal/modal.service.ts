@@ -1,8 +1,8 @@
-import Vue from 'vue';
+import Vue, { AsyncComponent } from 'vue';
 import { arrayRemove } from '../../utils/array';
 import { makeObservableService } from '../../utils/vue';
 
-type ModalComponent = typeof Vue | (() => Promise<Vue>);
+type ModalComponent = typeof Vue | AsyncComponent<Vue>;
 
 export interface ModalOptions {
 	size?: 'sm' | 'lg' | 'full' | undefined;

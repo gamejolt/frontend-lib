@@ -6,18 +6,26 @@ import { CommentVideo } from '../video-model';
 import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
 import { number } from '../../../../vue/filters/number';
 import { Screen } from '../../../screen/screen-service';
+import { CommentVote } from '../../vote/vote-model';
+import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
+import { LikersModal } from '../../../likers/modal.service';
 
 @View
 @Component({
 	directives: {
 		AppAuthRequired,
+		AppTooltip,
 	},
 })
 export class AppCommentVideoLikeWidget extends Vue {
-	@Prop(CommentVideo) video: CommentVideo;
-	@Prop(Boolean) overlay?: boolean;
-	@Prop(Boolean) circle?: boolean;
-	@Prop(Boolean) block?: boolean;
+	@Prop(CommentVideo)
+	video!: CommentVideo;
+	@Prop(Boolean)
+	overlay?: boolean;
+	@Prop(Boolean)
+	circle?: boolean;
+	@Prop(Boolean)
+	block?: boolean;
 
 	isProcessing = false;
 
@@ -41,12 +49,16 @@ export class AppCommentVideoLikeWidget extends Vue {
 	async toggle() {
 		this.isProcessing = true;
 
-		if (!this.comment.user_vote) {
-			await this.comment.$like();
+		if (!this.comment.user_vote || this.comment.user_vote.vote === CommentVote.VOTE_DOWNVOTE) {
+			await this.comment.$vote(CommentVote.VOTE_UPVOTE);
 		} else {
-			await this.comment.$removeLike();
+			await this.comment.$removeVote();
 		}
 
 		this.isProcessing = false;
+	}
+
+	showLikers() {
+		LikersModal.show({ count: this.comment.votes, resource: this.comment });
 	}
 }

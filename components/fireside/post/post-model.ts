@@ -26,26 +26,26 @@ export class FiresidePost extends Model {
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
-	type: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
-	hash: string;
-	title: string;
-	lead: string;
+	type!: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
+	hash!: string;
+	title!: string;
+	lead!: string;
 	header?: MediaItem;
-	status: string;
-	added_on: number;
-	updated_on: number;
-	published_on: number;
-	scheduled_for_timezone: string | null;
-	scheduled_for: number | null;
-	like_count: number;
-	comment_count: number;
-	user: User;
-	game: Game;
-	as_game_owner: boolean;
-	slug: string;
-	subline: string;
-	content_compiled: string;
-	content_markdown: string;
+	status!: string;
+	added_on!: number;
+	updated_on!: number;
+	published_on!: number;
+	scheduled_for_timezone!: string | null;
+	scheduled_for!: number | null;
+	like_count!: number;
+	comment_count!: number;
+	user!: User;
+	game!: Game;
+	as_game_owner!: boolean;
+	slug!: string;
+	subline!: string;
+	content_compiled!: string;
+	content_markdown?: string;
 	view_count?: number;
 	expand_count?: number;
 
@@ -53,9 +53,9 @@ export class FiresidePost extends Model {
 	media: MediaItem[] = [];
 	videos: FiresidePostVideo[] = [];
 	sketchfabs: FiresidePostSketchfab[] = [];
-	user_like: FiresidePostLike | null;
+	user_like?: FiresidePostLike | null;
 	key_groups: KeyGroup[] = [];
-	poll: Poll | null;
+	poll!: Poll | null;
 
 	url: string;
 

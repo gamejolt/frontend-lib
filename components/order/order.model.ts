@@ -4,14 +4,14 @@ import { OrderPayment } from './payment/payment.model';
 import { OrderAddress } from './address/address.model';
 
 export class Order extends Model {
-	is_gift: boolean;
-	currency_code: string;
-	completed_on: number;
-	amount: number;
-	tax_amount: number;
-	items: OrderItem[];
-	payments: OrderPayment[];
-	addresses: OrderAddress[];
+	is_gift!: boolean;
+	currency_code!: string;
+	completed_on!: number;
+	amount!: number;
+	tax_amount!: number;
+	items: OrderItem[] = [];
+	payments?: OrderPayment[];
+	addresses?: OrderAddress[];
 
 	constructor(data: any = {}) {
 		super(data);
@@ -34,10 +34,16 @@ export class Order extends Model {
 	}
 
 	get billing_address() {
+		if (!this.addresses) {
+			return [];
+		}
 		return this.addresses.find(item => item.type === OrderAddress.TYPE_BILLING);
 	}
 
 	get shipping_address() {
+		if (!this.addresses) {
+			return [];
+		}
 		return this.addresses.find(item => item.type === OrderAddress.TYPE_SHIPPING);
 	}
 

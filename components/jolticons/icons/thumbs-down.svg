@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,13 +6,13 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg3892">
+   id="svg3870"
+   height="16px"
+   width="16px">
   <defs
-     id="defs3894" />
+     id="defs3872" />
   <metadata
-     id="metadata3897">
+     id="metadata3875">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -27,16 +25,15 @@
             <dc:title>T. Gantt</dc:title>
           </cc:Agent>
         </dc:creator>
-        <cc:license
-           rdf:resource="" />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1">
+     style="display:inline;opacity:1"
+     id="layer3">
     <path
-       d="M 2,3 2,4 5,4 5,3 z m 4,0 0,2 1,0 0,4 -1,0 0,2 -1,0 0,2 1,0 0,1 1,0 0,-3 1,0 0,-1 1,0 L 9,9 10,9 10,4 9,4 9,3 z M 6,5 1,5 1,6 6,6 z m 5,-1 0,7 4,0 0,-7 z m 1,1 1,0 0,1 -1,0 z M 1,7 1,8 6,8 6,7 z m 0,2 0,1 4,0 0,-1 z"
-       id="rect5702"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       id="rect925"
+       d="M 4,3 V 5 H 3 V 7 H 2 v 3 h 4 v 3 h 2 v -2 h 1 v -1 h 1 V 9 h 1 V 4 H 10 V 3 Z m 8,0 v 7 h 2 V 3 Z"
+       style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
 </svg>

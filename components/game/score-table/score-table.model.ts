@@ -2,13 +2,13 @@ import { Model } from '../../model/model.service';
 import { Api } from '../../api/api.service';
 
 export class GameScoreTable extends Model {
-	game_id: number;
-	name: string;
-	description: string;
-	sort: number;
-	allow_guest_scores: boolean;
-	scores_sorting_direction: number;
-	unique_scores: boolean;
+	game_id!: number;
+	name!: string;
+	description!: string;
+	sort!: number;
+	allow_guest_scores!: boolean;
+	scores_sorting_direction!: number;
+	unique_scores!: boolean;
 
 	static readonly SORTING_DIRECTION_DESC = 0;
 	static readonly SORTING_DIRECTION_ASC = 1;

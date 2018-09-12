@@ -4,14 +4,15 @@ import { Api } from '../../api/api.service';
 import { Jam } from '../jam.model';
 
 export class JamPage extends Model {
-	jam_id: number;
-	type: string;
-	url: string;
-	title: string;
-	status: number;
-	added_on: number;
-	updated_on: number;
-	block: JamContentBlock;
+	jam_id!: number;
+	type!: string;
+	url!: string;
+	title!: string;
+	status!: number;
+	added_on!: number;
+	updated_on!: number;
+
+	block?: JamContentBlock;
 
 	static readonly TYPE_HOME = 'home';
 	static readonly TYPE_PARTICIPANTS = 'participants';
@@ -53,7 +54,7 @@ export class JamPage extends Model {
 	}
 
 	getEditUrl(jam: Jam) {
-		if (jam) {
+		if (jam && this.block) {
 			return this.getFullUrl(jam) + '#edit-content:' + this.block.id;
 		}
 

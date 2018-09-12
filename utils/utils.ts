@@ -35,3 +35,6 @@ export function sleep(ms: number) {
 export function assertNever(x: never): never {
 	throw new Error('Unexpected object: ' + x);
 }
+
+export type Primitives = Number | String | Boolean;
+export type Properties<T, U> = { [K in keyof T]: T[K] extends U ? K : never}[keyof T];

@@ -4,16 +4,16 @@ import { Game } from '../game.model';
 import { Api } from '../../api/api.service';
 
 export class GameScreenshot extends Model {
-	media_type: 'image';
+	media_type!: 'image';
 
-	game_id: number;
-	caption: string;
-	posted_on: number;
-	status: number;
-	media_item: MediaItem;
-	img_thumbnail: string;
-	img_thumbnail_med: string;
-	img_thumbnail_large: string;
+	game_id!: number;
+	caption!: string;
+	posted_on!: number;
+	status!: number;
+	media_item!: MediaItem;
+	img_thumbnail!: string;
+	img_thumbnail_med!: string;
+	img_thumbnail_large!: string;
 
 	constructor(data: any = {}) {
 		super(data);

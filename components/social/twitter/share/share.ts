@@ -6,10 +6,10 @@ import { TwitterSdk } from '../sdk/sdk.service';
 
 @Component({})
 export class AppSocialTwitterShare extends Vue {
-	@Prop(String) content: string;
+	@Prop(String) content!: string;
 	@Prop(String) url?: string;
 	@Prop({ type: String, default: 'small' })
-	size: string;
+	size!: string;
 
 	render(h: CreateElement) {
 		return h('a', {

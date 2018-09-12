@@ -14,13 +14,13 @@ require('./card.styl');
 })
 export class AppCard extends Vue {
 	@Prop({ type: Boolean, default: false })
-	isDraggable: boolean;
+	isDraggable!: boolean;
 	@Prop({ type: Boolean, default: false })
-	isExpandable: boolean;
+	isExpandable!: boolean;
 	@Prop({ type: Boolean, default: false })
-	isExpanded: boolean;
+	isExpanded!: boolean;
 	@Prop({ type: Boolean, default: false })
-	isInactive: boolean;
+	isInactive!: boolean;
 	@Prop({ type: Boolean, default: false })
-	isDisabled: boolean;
+	isDisabled!: boolean;
 }

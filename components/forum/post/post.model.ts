@@ -10,22 +10,22 @@ export class ForumPost extends Model {
 	static readonly STATUS_SPAM = 'spam';
 	static readonly STATUS_REMOVED = 'removed';
 
-	user_id: number;
-	user: User;
-	topic_id: number;
-	parent_post_id: number;
-	content_markdown: string;
-	content_compiled: string;
-	status: string;
-	posted_on: number;
+	user_id!: number;
+	user!: User;
+	topic_id!: number;
+	parent_post_id!: number;
+	content_markdown!: string;
+	content_compiled!: string;
+	status!: string;
+	posted_on!: number;
 	replied_to?: User;
-	replies_count: number;
+	replies_count?: number;
 	modified_by?: number;
 	modified_by_user?: User;
 	modified_on?: number;
 
 	notification?: Notification;
-	topic?: ForumTopic;
+	topic!: ForumTopic;
 
 	// Filled in when saving a reply.
 	reply_to?: number;

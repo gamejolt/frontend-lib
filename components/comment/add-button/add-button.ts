@@ -11,8 +11,8 @@ import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 	},
 })
 export class AppCommentAddButton extends Vue {
-	@Prop(String) resource: string;
-	@Prop(Number) resourceId: number;
+	@Prop(String) resource!: string;
+	@Prop(Number) resourceId!: number;
 
 	open() {
 		CommentModal.show({ resource: this.resource, resourceId: this.resourceId });

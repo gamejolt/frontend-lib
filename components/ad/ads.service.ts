@@ -1,19 +1,18 @@
 import VueRouter from 'vue-router';
+import { arrayRemove } from '../../utils/array';
+import { objectEquals } from '../../utils/object';
+import { makeObservableService } from '../../utils/vue';
 import { Environment } from '../environment/environment.service';
 import { EventBus } from '../event-bus/event-bus.service';
-import { objectEquals } from '../../utils/object';
-import { AdSlot, AdSlotTargetingMap } from './slot';
-import { AppAd } from './ad';
-import { arrayRemove } from '../../utils/array';
-import { Model } from '../model/model.service';
 import { Game } from '../game/game.model';
-import { makeObservableService } from '../../utils/vue';
-import { Prebid } from './prebid.service';
+import { Model } from '../model/model.service';
+import { AppAd } from './ad';
 import { Aps } from './aps.service';
+import { Prebid } from './prebid.service';
+import { AdSlot, AdSlotTargetingMap } from './slot';
 
 // To show ads on the page for dev, just change this to false.
-// const DevDisabled = GJ_BUILD_TYPE === 'development';
-const DevDisabled = false;
+const DevDisabled = GJ_BUILD_TYPE === 'development';
 
 // The timeout for any bid requests.
 export const BidsTimeout = 2000;

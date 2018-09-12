@@ -14,7 +14,7 @@ import { findRequiredVueParent } from '../../../../utils/vue';
 	},
 })
 export class AppCardListAdd extends Vue {
-	@Prop(String) label: string;
+	@Prop(String) label!: string;
 
 	list: AppCardList = null as any;
 

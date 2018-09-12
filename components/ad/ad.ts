@@ -49,15 +49,15 @@ function initClickTracking() {
 @Component({})
 export class AppAd extends Vue {
 	@Prop({ type: String, default: 'rectangle' })
-	size: 'rectangle' | 'leaderboard';
+	size!: 'rectangle' | 'leaderboard';
 
 	@Prop({
 		type: String,
 		validator: AdSlotPosValidator,
 	})
-	pos: AdSlotPos;
+	pos!: AdSlotPos;
 
-	@State app: AppStore;
+	@State app!: AppStore;
 
 	slot: AdSlot | null = null;
 	refreshCount = 0;

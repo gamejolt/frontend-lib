@@ -1,38 +1,44 @@
 import { Model } from '../model/model.service';
 import { Environment } from '../environment/environment.service';
 import { Api } from '../api/api.service';
+import { JamOrganizer } from './organizer/organizer.model';
 
 const moment = require('moment');
 
 export class Jam extends Model {
-	url: string;
-	domain: string;
-	timezone: string;
-	start_date: number;
-	end_date: number;
-	voting_end_date: number;
-	name: string;
-	description: string;
-	jam_hashtag: string;
-	twitter_hashtag: string;
-	activity_feed_enabled: boolean;
-	livestreams_enabled: boolean;
-	blog_enabled: boolean;
-	voting_enabled: boolean;
-	forum_enabled: boolean;
-	chat_enabled: boolean;
-	theme: any;
-	ga_tracking_id: string;
-	has_community_voting: boolean;
-	voting_user_restriction: string;
-	voting_type: string;
-	voting_user_weighting: boolean;
-	has_awards: boolean;
-	status: string;
-	are_results_calculated: boolean;
-	added_on: number;
-	updated_on: number;
-	published_on: number;
+	url!: string;
+	domain!: string;
+	timezone!: string;
+	start_date!: number;
+	end_date!: number;
+	voting_end_date!: number;
+	name!: string;
+	description!: string;
+	jam_hashtag!: string;
+	twitter_hashtag!: string;
+	activity_feed_enabled!: boolean;
+	livestreams_enabled!: boolean;
+	blog_enabled!: boolean;
+	voting_enabled!: boolean;
+	forum_enabled!: boolean;
+	chat_enabled!: boolean;
+	theme!: any;
+	ga_tracking_id!: string;
+	has_community_voting!: boolean;
+	voting_user_restriction!: string;
+	voting_type!: string;
+	voting_user_weighting!: boolean;
+	has_awards!: boolean;
+	status!: string;
+	are_results_calculated!: boolean;
+	added_on!: number;
+	updated_on!: number;
+	published_on!: number;
+	is_approved!: boolean;
+
+	organizers: JamOrganizer[] = [];
+	follower_count!: number;
+	is_following?: boolean;
 
 	static readonly STATUS_HIDDEN = 'hidden';
 	static readonly STATUS_ACTIVE = 'active';
@@ -53,6 +59,10 @@ export class Jam extends Model {
 
 	constructor(data: any = {}) {
 		super(data);
+
+		if (data.organizers) {
+			this.organizers = JamOrganizer.populate(data.organizers);
+		}
 	}
 
 	get manageUrl() {

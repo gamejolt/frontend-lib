@@ -12,7 +12,7 @@ export class EventItem extends Model {
 
 	type: 'comment-video-add' | 'game-publish' | 'post-add';
 	added_on: number;
-	from: User;
+	from?: User;
 	action: any;
 	to: any;
 

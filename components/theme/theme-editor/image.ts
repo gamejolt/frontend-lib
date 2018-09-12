@@ -10,9 +10,9 @@ import { FormThemeEditorImage } from './image-form';
 	},
 })
 export class AppThemeEditorImage extends Vue {
-	@Prop(String) type: string;
-	@Prop(Number) parentId: number;
-	@Prop(Object) value: any;
+	@Prop(String) type!: string;
+	@Prop(Number) parentId!: number;
+	@Prop(Object) value!: any;
 
 	onImageAdded(_model: any, response: any) {
 		this.$emit('input', response.mediaItem);

@@ -8,14 +8,14 @@ export class UserFriendship extends Model {
 	static readonly STATE_REQUEST_RECEIVED = 2;
 	static readonly STATE_FRIENDS = 3;
 
-	user_id: number;
-	target_user_id: number;
-	user: User;
-	target_user: User;
-	created_on: number;
-	accepted_on: number;
-	declined_on: number;
-	state: number;
+	user_id!: number;
+	target_user_id!: number;
+	user!: User;
+	target_user!: User;
+	created_on!: number;
+	accepted_on!: number | null;
+	declined_on!: number | null;
+	state?: number;
 
 	constructor(data: any = {}) {
 		super(data);

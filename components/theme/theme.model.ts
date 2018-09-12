@@ -100,7 +100,7 @@ function biRamp(
 	outMin: number,
 	outMax: number
 ) {
-	var out = outMin;
+	let out = outMin;
 	if (val >= aInLow && val < bInHigh) {
 		out = remap(val, aInLow, bInHigh, outMin, outMax);
 	} else if (val >= bInHigh && val <= cInLow) {
@@ -191,9 +191,9 @@ function getReadableCustom(custom: string | undefined, background: 'light' | 'da
 }
 
 export class Theme extends Model {
-	highlight: string;
-	backlight: string;
-	notice: string;
+	highlight!: string;
+	backlight!: string;
+	notice!: string;
 	tint?: string;
 	theme_preset_id?: number;
 	custom?: string;

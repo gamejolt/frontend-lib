@@ -6,7 +6,7 @@ import { date } from '../../../vue/filters/date';
 @Component({})
 export class AppTimeAgo extends Vue {
 	@Prop([Number, Date])
-	date: number | Date;
+	date!: number | Date;
 	@Prop(Boolean) withoutSuffix?: boolean;
 	@Prop(Boolean) isFuture?: boolean;
 

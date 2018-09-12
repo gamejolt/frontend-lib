@@ -9,7 +9,7 @@ export class AppScrollInviewParent extends Vue {
 	@Prop(Number) velocity?: number;
 
 	// Don't have Vue watch these by not setting their default values.
-	container: ScrollInviewContainer;
+	container!: ScrollInviewContainer;
 
 	mounted() {
 		this.container = new ScrollInviewContainer(this.$el, this.throttle, this.velocity);

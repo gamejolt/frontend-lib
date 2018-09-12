@@ -22,7 +22,7 @@ import { time } from '../../../vue/filters/time';
 	},
 })
 export class AppAudioPlaylist extends Vue {
-	@Prop(Array) songs: GameSong[];
+	@Prop(Array) songs!: GameSong[];
 
 	currentSong: GameSong | null = null;
 	duration = 0;
@@ -47,7 +47,7 @@ export class AppAudioPlaylist extends Vue {
 	}
 
 	async seek(pos: number) {
-		const time = this.duration * pos;
+		const seekTime = this.duration * pos;
 		let player = this.$refs.player as AppAudioPlayer | undefined;
 
 		if (!player) {
@@ -56,7 +56,7 @@ export class AppAudioPlaylist extends Vue {
 			player = this.$refs.player as AppAudioPlayer;
 		}
 
-		player.seek(time);
+		player.seek(seekTime);
 	}
 
 	stopSong() {

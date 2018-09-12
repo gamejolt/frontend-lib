@@ -30,7 +30,7 @@ DisableWelcomePage=yes
 DisableStartupPrompt=yes
 PrivilegesRequired=lowest
 OutputDir={{OUT_DIR}}
-OutputBaseFilename=Setup
+OutputBaseFilename=GameJoltClientSetup
 SetupIconFile={{ICON_DIR}}\winico.ico
 Compression=lzma
 SolidCompression=yes
@@ -46,14 +46,16 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
 Source: "GameJoltClient.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".manifest"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "package.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "*.pak"; DestDir: "{app}"; Flags: ignoreversion
-Source: "icudtl.dat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "locales\*"; DestDir: "{app}\locales"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "node_modules\*"; DestDir: "{app}\node_modules"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "package\*"; DestDir: "{app}\package"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "data-{{GAME_UID}}\*"; DestDir: "{app}\data-{{GAME_UID}}"; Flags: ignoreversion createallsubdirs recursesubdirs
+
+[UninstallDelete]
+Type: filesandordirs; Name: "{app}\data-*"
+Type: files; Name: "{app}\.tempDownload"
+Type: files; Name: "{app}\.tempDownloadUpdater"
+Type: files; Name: "{app}\GameJoltClient.exe.old"
+Type: files; Name: "{app}\GameJoltClient.exe.new.exe"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -68,7 +70,7 @@ Root: "HKCU"; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType
 
 [Code]
 Const UninstallRegKey = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GameJoltClient';
-Const SquirrelUninstallCmd = 'GameJoltClient\Update.exe --uninstall -s';
+Const SquirrelUninstallCmd = 'GameJoltClient\Update2.exe --uninstall -s';
 
 Const CR = #13;
 Const LF = #10;

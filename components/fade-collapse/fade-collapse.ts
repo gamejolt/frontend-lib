@@ -16,7 +16,7 @@ const Threshold = 50;
 @View
 @Component({})
 export class AppFadeCollapse extends Vue {
-	@Prop(Number) collapseHeight: number;
+	@Prop(Number) collapseHeight!: number;
 	@Prop(Boolean) isOpen?: boolean;
 	@Prop({ type: Boolean, default: true })
 	animate?: boolean;

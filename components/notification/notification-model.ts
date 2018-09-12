@@ -1,31 +1,31 @@
-import * as nwGui from 'nw.gui';
-
 import VueRouter from 'vue-router';
-import { Model } from '../model/model.service';
-import { Environment } from '../environment/environment.service';
-import { FiresidePost } from '../fireside/post/post-model';
-import { Comment } from '../comment/comment-model';
-import { User } from '../user/user.model';
-import { Api } from '../api/api.service';
-import { Game } from '../game/game.model';
-import { Growls } from '../growls/growls.service';
-import { ForumTopic } from '../forum/topic/topic.model';
-import { ForumPost } from '../forum/post/post.model';
-import { UserFriendship } from '../user/friendship/friendship.model';
-import { GameRating } from '../game/rating/rating.model';
-import { Sellable } from '../sellable/sellable.model';
-import { Translate } from '../translate/translate.service';
-import { OrderItem } from '../order/item/item.model';
-import { GameLibraryGame } from '../game-library/game/game.model';
-import { Subscription } from '../subscription/subscription.model';
-import { GameCollaborator } from '../game/collaborator/collaborator.model';
-import { Mention } from '../mention/mention.model';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
-import { CommentVideo } from '../comment/video/video-model';
+import { Api } from '../api/api.service';
+import { Comment, getCommentUrl } from '../comment/comment-model';
 import { CommentVideoModal } from '../comment/video/modal/modal.service';
+import { CommentVideo } from '../comment/video/video-model';
+import { Environment } from '../environment/environment.service';
+import { FiresidePost } from '../fireside/post/post-model';
+import { ForumPost } from '../forum/post/post.model';
+import { ForumTopic } from '../forum/topic/topic.model';
+import { GameLibraryGame } from '../game-library/game/game.model';
+import { GameCollaborator } from '../game/collaborator/collaborator.model';
+import { Game } from '../game/game.model';
+import { GameRating } from '../game/rating/rating.model';
+import { Growls } from '../growls/growls.service';
+import { Mention } from '../mention/mention.model';
+import { Model } from '../model/model.service';
+import { OrderItem } from '../order/item/item.model';
+import { Sellable } from '../sellable/sellable.model';
+import { Subscription } from '../subscription/subscription.model';
+import { Translate } from '../translate/translate.service';
+import { UserFriendship } from '../user/friendship/friendship.model';
+import { User } from '../user/user.model';
+import { RawLocation } from 'vue-router';
+import { Navigate } from '../navigate/navigate.service';
 
-function getRouteLocationForModel(model: Game | User | FiresidePost) {
+function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocation {
 	if (model instanceof User) {
 		return model.url;
 	} else if (model instanceof Game) {
@@ -60,18 +60,18 @@ export class Notification extends Model {
 	static TYPE_MENTION = 'mention';
 	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 
-	user_id: number;
-	type: string;
-	added_on: number;
-	viewed_on: number;
+	user_id!: number;
+	type!: string;
+	added_on!: number;
+	viewed_on!: number;
 
-	from_resource: string;
-	from_resource_id: number;
+	from_resource!: string;
+	from_resource_id!: number;
 	from_model?: User;
 
-	action_resource: string;
-	action_resource_id: number;
-	action_model:
+	action_resource!: string;
+	action_resource_id!: number;
+	action_model!:
 		| Comment
 		| ForumPost
 		| UserFriendship
@@ -84,9 +84,9 @@ export class Notification extends Model {
 		| Mention
 		| CommentVideo;
 
-	to_resource: string;
-	to_resource_id: number;
-	to_model: Game | User | FiresidePost | ForumTopic | Sellable;
+	to_resource!: string | null;
+	to_resource_id!: number | null;
+	to_model?: Game | User | FiresidePost | ForumTopic | Sellable;
 
 	// Generated in constructor.
 	jolticon = '';
@@ -137,8 +137,8 @@ export class Notification extends Model {
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_RATING_ADD) {
 			this.action_model = new GameRating(data.action_resource_model);
-			this.jolticon = 'jolticon-chart';
-			this.is_game_based = true;
+			this.jolticon = 'jolticon-thumbs-up';
+			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_FOLLOW) {
 			this.action_model = new GameLibraryGame(data.action_resource_model);
 			this.jolticon = 'jolticon-subscribe';
@@ -180,7 +180,7 @@ export class Notification extends Model {
 		return Api.sendRequest('/web/dash/activity/count', null, { detach: true });
 	}
 
-	get routeLocation() {
+	get routeLocation(): RawLocation {
 		switch (this.type) {
 			case Notification.TYPE_FRIENDSHIP_REQUEST:
 			case Notification.TYPE_FRIENDSHIP_ACCEPT:
@@ -190,7 +190,7 @@ export class Notification extends Model {
 				return getRouteLocationForModel(this.from_model!);
 
 			case Notification.TYPE_GAME_RATING_ADD:
-				return getRouteLocationForModel(this.to_model as Game);
+				return getRouteLocationForModel(this.from_model as User);
 
 			case Notification.TYPE_GAME_FOLLOW:
 				return getRouteLocationForModel(this.from_model!);
@@ -262,7 +262,7 @@ export class Notification extends Model {
 
 			try {
 				if (model instanceof Comment) {
-					url = await Comment.getCommentUrl(model.id);
+					url = await getCommentUrl(model.id);
 				} else if (model instanceof ForumPost) {
 					url = await ForumPost.getPostUrl(model.id);
 				} else {
@@ -275,11 +275,8 @@ export class Notification extends Model {
 				if (url.search(search) === 0) {
 					url = url.replace(search, '');
 					router.push(url);
-				} else if (GJ_IS_CLIENT) {
-					const gui = require('nw.gui') as typeof nwGui;
-					gui.Shell.openExternal(url);
 				} else {
-					window.location.href = url;
+					Navigate.gotoExternal(url);
 				}
 			} catch (e) {
 				console.error(e);
@@ -394,7 +391,7 @@ export function getNotificationText(notification: Notification) {
 
 		case Notification.TYPE_GAME_RATING_ADD: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } received a new rating.`,
+				`%{ subject } liked %{ object }.`,
 				getTranslationValues(notification)
 			);
 		}

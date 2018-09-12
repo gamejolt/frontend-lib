@@ -2,10 +2,10 @@ import { Model } from '../../model/model.service';
 import { arrayIndexBy } from '../../../utils/array';
 
 export class UserGameTrophy extends Model {
-	user_id: number;
-	game_id: number;
-	game_trophy_id: number;
-	logged_on: number;
+	user_id!: number;
+	game_id!: number;
+	game_trophy_id!: number;
+	logged_on!: number;
 
 	constructor(data: any = {}) {
 		super(data);
