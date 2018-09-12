@@ -285,10 +285,10 @@ module.exports = config => {
 			{
 				file: dest,
 				gzip: true,
-				C: src,
+				C: path.resolve(src),
 				portable: true,
 			},
-			['.']
+			['./']
 		);
 	}
 
@@ -772,7 +772,7 @@ module.exports = config => {
 			gulp.series(
 				'client:node-modules',
 				'client:nw',
-				'client:unpack-package.nw',
+				'client:unpack-package.nw'
 				'client:zip-package',
 				'client:get-joltron',
 				'client:joltron',
