@@ -42,7 +42,10 @@ module.exports = config => {
 	const gjGameId = config.developmentEnv ? 2 : 362412;
 	const gjGamePackageId = config.developmentEnv ? 4 : 376715;
 	const gjGameInstallerPackageId = config.developmentEnv ? 5 : 376713;
+
+	// Check the matching chromium version from the version's release notes: https://nwjs.io/blog/v<nwjs version>
 	const nwjsVersion = '0.32.1';
+	const chromiumVersion = '68.0.3440.84';
 
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
 
@@ -290,6 +293,91 @@ module.exports = config => {
 			},
 			['.']
 		);
+	}
+
+	if (config.ffmpegNoGPL) {
+		gulp.task('client:get-ffmpeg', cb => cb());
+	} else {
+		/**
+		 * Downloads the ffmpeg binary with the GPL codecs enabled
+		 * We fetch the binary from the https://github.com/iteufel/nwjs-ffmpeg-prebuilt releases page
+		 */
+		gulp.task('client:get-ffmpeg', () => {
+			let platform = '';
+			let ffmpegPath = '';
+			switch (config.platform) {
+				case 'win':
+					platform = 'win';
+					ffmpegPath = '.';
+					break;
+				case 'osx':
+					platform = 'osx';
+					ffmpegPath = path.join(
+						'Game Jolt Client.app',
+						'Content',
+						'Versions',
+						chromiumVersion
+					);
+					break;
+				default:
+					platform = 'linux';
+					ffmpegPath = 'lib';
+					break;
+			}
+
+			let arch = config.arch == '32' ? 'ia32' : 'x64';
+			let remoteExecutable = nwjsVersion + '-' + platform + '-' + arch + '.zip';
+
+			const options = {
+				host: 'github.com',
+				path:
+					'/iteufel/nwjs-ffmpeg-prebuilt/releases/download/' +
+					nwjsVersion +
+					'/' +
+					remoteExecutable,
+			};
+
+			const ffmpegZip = path.join(config.clientBuildDir, 'ffmpeg.zip');
+			const file = fs.createWriteStream(ffmpegZip);
+
+			// Download the ffmpeg zip.
+			return new Promise((resolve, reject) => {
+				https
+					.get(options, res => {
+						if (res.statusCode !== 200) {
+							return reject(
+								new Error('Invalid status code. Expected 200 got ' + res.statusCode)
+							);
+						}
+
+						res.pipe(file);
+						file.on('finish', () => {
+							file.close();
+							resolve();
+						});
+					})
+					.on('error', err => {
+						reject(err);
+					})
+					.end();
+			}).then(() => {
+				// Extract it to our client build folder.
+				return new Promise((resolve, reject) => {
+					const extractTo = path.join(
+						config.clientBuildDir,
+						'build',
+						config.platformArch,
+						ffmpegPath
+					);
+
+					const unzipper = new DecompressZip(ffmpegZip);
+
+					unzipper.on('error', reject);
+					unzipper.on('extract', () => resolve());
+					unzipper.extract({ path: extractTo });
+				});
+			});
+		});
 	}
 
 	/**
@@ -757,6 +845,7 @@ module.exports = config => {
 				'client:node-modules',
 				'client:nw',
 				'client:unpack-package.nw',
+				'client:get-ffmpeg',
 				'client:zip-package',
 				'client:get-gjpush',
 				'client:gjpush-package',
@@ -773,6 +862,7 @@ module.exports = config => {
 				'client:node-modules',
 				'client:nw',
 				'client:unpack-package.nw',
+				'client:get-ffmpeg',
 				'client:zip-package',
 				'client:get-joltron',
 				'client:joltron',

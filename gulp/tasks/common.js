@@ -29,6 +29,7 @@ module.exports = (config, projectBase) => {
 	config.client = argv.client || false;
 	config.noGjPush = argv.noGjPush || false;
 	config.noClean = argv.noClean || false;
+	config.ffmpegNoGPL = argv['ffmpeg-no-gpl'] || false;
 
 	// Whether or not the environment of angular should be production or development.
 	// Even when not doing prod builds we use the prod environment by default.
