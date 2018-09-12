@@ -659,7 +659,7 @@ module.exports = config => {
 			const appdmg = require('appdmg');
 
 			const dmg = appdmg({
-				target: config.clientBuildDir + '/osx.dmg',
+				target: config.clientBuildDir + '/GameJoltClient.dmg',
 				basepath: config.projectBase,
 				specification: {
 					title: 'Game Jolt Client',
@@ -713,7 +713,7 @@ module.exports = config => {
 		} else {
 			return targz(
 				path.join(config.clientBuildDir, 'build'),
-				path.join(config.clientBuildDir, config.platformArch + '.tar.gz')
+				path.join(config.clientBuildDir, 'GameJoltClient.tar.gz')
 			);
 		}
 	});
@@ -726,13 +726,13 @@ module.exports = config => {
 		let installerFile = '';
 		switch (config.platform) {
 			case 'win':
-				installerFile = 'Setup.exe';
+				installerFile = 'GameJoltClientSetup.exe';
 				break;
 			case 'osx':
-				installerFile = 'osx.dmg';
+				installerFile = 'GameJoltClient.dmg';
 				break;
 			default:
-				installerFile = config.platformArch + '.tar.gz';
+				installerFile = 'GameJoltClient.tar.gz';
 				break;
 		}
 		installerFile = path.join(config.clientBuildDir, installerFile);
