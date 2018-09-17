@@ -14,6 +14,7 @@ export class MediaItem extends Model {
 
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_REMOVED = 'removed';
+	static readonly STATUS_INACTIVE = 'inactive';
 
 	type!: string;
 	parent_id!: number;
