@@ -6,21 +6,30 @@
 	font-size: $font-size-base
 	border: 0
 
-	&::before
-		theme-prop('border-bottom-color', 'bg-subtle')
-		position: absolute
-		content: ''
-		height: 1px
-		border-bottom-width: 2px
-		border-bottom-style: solid
-		top: 50%
-		right: 0
-		left: 50%
-
 .-expandable
 	cursor: pointer
 	user-select: none
 
-// This makes it so that the expander takes up the same amount of space.
+.-inner
+	display: flex
+	align-items: center
+
 .-expander
+	flex: none
+	// This makes it so that the expander takes up the same amount of space.
 	font-family: monospace
+
+.-label
+	flex: none
+
+.-compactbar
+	theme-prop('border-bottom-color', 'bg-subtle')
+	flex: auto
+	height: 1px
+	border-bottom-width: 2px
+	border-bottom-style: solid
+	margin-left: 20px
+
+.-delete
+	flex: none
+	margin-left: 20px
