@@ -1,4 +1,4 @@
-import VueRouter from 'vue-router';
+import VueRouter, { RawLocation } from 'vue-router';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
 import { Api } from '../api/api.service';
@@ -16,14 +16,13 @@ import { GameRating } from '../game/rating/rating.model';
 import { Growls } from '../growls/growls.service';
 import { Mention } from '../mention/mention.model';
 import { Model } from '../model/model.service';
+import { Navigate } from '../navigate/navigate.service';
 import { OrderItem } from '../order/item/item.model';
 import { Sellable } from '../sellable/sellable.model';
 import { Subscription } from '../subscription/subscription.model';
 import { Translate } from '../translate/translate.service';
 import { UserFriendship } from '../user/friendship/friendship.model';
 import { User } from '../user/user.model';
-import { RawLocation } from 'vue-router';
-import { Navigate } from '../navigate/navigate.service';
 
 function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocation {
 	if (model instanceof User) {
@@ -314,14 +313,15 @@ function getSubjectTranslationValue(notification: Notification) {
 function getTranslationValues(notification: Notification) {
 	const subject = getSubjectTranslationValue(notification);
 
-	if (
-		notification.to_model instanceof Game ||
-		notification.to_model instanceof ForumTopic ||
-		notification.to_model instanceof FiresidePost
-	) {
+	if (notification.to_model instanceof Game || notification.to_model instanceof ForumTopic) {
 		return {
 			subject: subject,
 			object: notification.to_model.title,
+		};
+	} else if (notification.to_model instanceof FiresidePost) {
+		return {
+			subject: subject,
+			object: notification.to_model.lead_snippet,
 		};
 	}
 
@@ -339,7 +339,7 @@ export function getNotificationText(notification: Notification) {
 				gameTitle = notification.to_model.title;
 			}
 			if (notification.action_model instanceof FiresidePost) {
-				postTitle = notification.action_model.title;
+				postTitle = notification.action_model.lead_snippet;
 			}
 			return `${gameTitle} - ${postTitle}`;
 		}
@@ -448,7 +448,7 @@ export function getNotificationText(notification: Notification) {
 						return Translate.$gettextInterpolate(
 							`%{ subject } mentioned you in a comment on the post %{ object }.`,
 							{
-								object: notification.to_model.title,
+								object: notification.to_model.lead_snippet,
 								subject: getSubjectTranslationValue(notification),
 							}
 						);
@@ -477,7 +477,7 @@ export function getNotificationText(notification: Notification) {
 					return Translate.$gettextInterpolate(
 						`%{ subject } mentioned you in the post %{ object }.`,
 						{
-							object: (notification.to_model as FiresidePost).title,
+							object: (notification.to_model as FiresidePost).lead_snippet,
 							subject: getSubjectTranslationValue(notification),
 						}
 					);
