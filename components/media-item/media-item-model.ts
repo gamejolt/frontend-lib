@@ -8,6 +8,7 @@ export class MediaItem extends Model {
 
 	static readonly TYPE_FIRESIDE_POST_HEADER = 'fireside-post-header';
 	static readonly TYPE_FIRESIDE_POST_IMAGE = 'fireside-post-image';
+	static readonly TYPE_FIRESIDE_POST_ARTICLE_IMAGE = 'fireside-post-article-image';
 
 	static readonly TYPE_FEATURED_HEADER = 'featured-header';
 
