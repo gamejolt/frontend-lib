@@ -34,8 +34,10 @@
 	width: 0
 	min-width: 5px
 	height: 100%
-	transition: width 600ms ease
-	will-change: width
+
+	.progress.animate &
+		transition: width 600ms ease
+		will-change: width
 
 .progress-bar + .progress-bar
 	theme-prop('border-left-color', 'fg-muted')
