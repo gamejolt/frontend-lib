@@ -16,6 +16,22 @@ import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
 import { FiresidePostTag } from './tag/tag-model';
 import { FiresidePostVideo } from './video/video-model';
 
+export function canUserManagePost(post: FiresidePost, user: User | undefined | null) {
+	if (!user) {
+		return false;
+	}
+
+	if (post.user.id === user.id) {
+		return true;
+	}
+
+	if (post.game && post.game.hasPerms('devlogs')) {
+		return true;
+	}
+
+	return false;
+}
+
 export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';
