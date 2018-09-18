@@ -36,7 +36,7 @@
 	<template v-if="!disabled">
 		<br>
 		<app-form name="markdownEditorMediaItemForm" ref="form">
-			<app-form-group name="image" :hide-label="true">
+			<app-form-group name="image" hide-label optional>
 				<app-form-control-upload
 					:rules="{
 						filesize: maxFilesize,
@@ -47,6 +47,7 @@
 					:multiple="true"
 					@changed="imageSelected()"
 					/>
+
 				<app-form-control-errors />
 			</app-form-group>
 		</app-form>
