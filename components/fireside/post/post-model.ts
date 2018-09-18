@@ -181,7 +181,7 @@ export class FiresidePost extends Model {
 			}
 
 			const options = {
-				allowComplexData: ['keyGroups'],
+				allowComplexData: ['keyGroups', 'mediaItemIds'],
 				data,
 				file: this.file,
 			};
