@@ -1,7 +1,6 @@
+import View from '!view!./fade.html?style=./fade.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./fade.html?style=./fade.styl';
-
 import { AppLoading } from '../../../vue/components/loading/loading';
 
 @View
@@ -11,5 +10,6 @@ import { AppLoading } from '../../../vue/components/loading/loading';
 	},
 })
 export class AppLoadingFade extends Vue {
-	@Prop(Boolean) isLoading!: boolean;
+	@Prop(Boolean)
+	isLoading!: boolean;
 }
