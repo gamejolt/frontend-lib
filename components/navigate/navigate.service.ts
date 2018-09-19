@@ -3,7 +3,12 @@ import { Environment } from '../environment/environment.service';
 export type DestructorFunc = (href?: string) => void;
 
 export class Navigate {
+	private static redirecting = false;
 	private static destructors: DestructorFunc[] = [];
+
+	static get isRedirecting() {
+		return this.redirecting;
+	}
 
 	static get currentSection() {
 		if (window.location.href.startsWith(Environment.wttfBaseUrl)) {
@@ -33,6 +38,8 @@ export class Navigate {
 	}
 
 	static reload() {
+		this.redirecting = true;
+
 		this.callDestructors();
 
 		if (GJ_IS_CLIENT) {
@@ -43,6 +50,8 @@ export class Navigate {
 	}
 
 	static goto(href: string) {
+		this.redirecting = true;
+
 		this.callDestructors(href);
 		window.location.href = href;
 	}

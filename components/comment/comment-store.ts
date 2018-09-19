@@ -245,6 +245,13 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	@VuexMutation
 	releaseCommentStore(store: CommentMutations['comment/releaseCommentStore']) {
 		const storeId = store.resource + '/' + store.resourceId;
+		if (!this.stores[storeId]) {
+			console.warn(
+				`Tried releasing a comment store that doesn't exist: ${storeId} - most likely it was released twice`
+			);
+			return;
+		}
+
 		--this.stores[storeId].locks;
 		if (this.stores[storeId].locks <= 0) {
 			Vue.delete(this.stores, storeId);
