@@ -6,6 +6,6 @@
 	}"
 	@transitionend="afterTransition"
 	>
-	<div class="-fade" @click="fadeClick()"></div>
+	<div class="-fade" @click="fadeClick($event)"></div>
 	<slot></slot>
 </div>

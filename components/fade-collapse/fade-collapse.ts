@@ -1,9 +1,8 @@
-import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./fade-collapse.html?style=./fade-collapse.styl';
-
-import { Scroll } from '../scroll/scroll.service';
+import Vue from 'vue';
+import { Component, Emit, Prop, Watch } from 'vue-property-decorator';
 import { Screen } from '../screen/screen-service';
+import { Scroll } from '../scroll/scroll.service';
 
 const ExtraCollapsePadding = 200;
 
@@ -16,16 +15,28 @@ const Threshold = 50;
 @View
 @Component({})
 export class AppFadeCollapse extends Vue {
-	@Prop(Number) collapseHeight!: number;
-	@Prop(Boolean) isOpen?: boolean;
+	@Prop(Number)
+	collapseHeight!: number;
+
+	@Prop(Boolean)
+	isOpen?: boolean;
+
 	@Prop({ type: Boolean, default: true })
 	animate?: boolean;
-	@Prop(String) size?: 'sm';
+
+	@Prop(String)
+	size?: 'sm';
 
 	isCollapsed = false;
 	private isPrimed = false;
 	private frameRequestHandle?: number = undefined;
 	private isRequired = false;
+
+	@Emit('require-change')
+	emitRequireChange(_isRequired: boolean) {}
+
+	@Emit('expand')
+	emitExpand(_e: Event) {}
 
 	async mounted() {
 		// Let it compile DOM.
@@ -39,7 +50,7 @@ export class AppFadeCollapse extends Vue {
 			this.isRequired = true;
 		}
 
-		this.$emit('require-change', this.isRequired);
+		this.emitRequireChange(this.isRequired);
 
 		if (this.isRequired && !this.isOpen) {
 			this.collapse();
@@ -65,8 +76,8 @@ export class AppFadeCollapse extends Vue {
 	 * Called when the fade at the bottom is clicked on. We want to open it up in that case so that
 	 * they can actually click on what's below.
 	 */
-	fadeClick() {
-		this.$emit('expand');
+	fadeClick(e: Event) {
+		this.emitExpand(e);
 	}
 
 	expand() {
