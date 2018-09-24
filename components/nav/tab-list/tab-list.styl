@@ -41,11 +41,12 @@
 			display: inline-block
 			margin: 0
 
-			&:first-of-type > a
-				margin-left: 0
+			@media $media-sm-up
+				&:first-of-type > a
+					margin-left: 0
 
-			&:last-of-type > a
-				margin-right: 0
+				&:last-of-type > a
+					margin-right: 0
 
 			& > a
 				theme-prop('color', 'fg')
