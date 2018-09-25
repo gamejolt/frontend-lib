@@ -1,20 +1,21 @@
-import { Model } from '../model/model.service';
-import { User } from '../user/user.model';
 import { Comment } from '../comment/comment-model';
 import { CommentVideo } from '../comment/video/video-model';
-import { Game } from '../game/game.model';
 import { FiresidePost } from '../fireside/post/post-model';
+import { Game } from '../game/game.model';
+import { Model } from '../model/model.service';
+import { User } from '../user/user.model';
 
 export class EventItem extends Model {
 	static readonly TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 	static readonly TYPE_GAME_PUBLISH = 'game-publish';
 	static readonly TYPE_POST_ADD = 'post-add';
 
-	type: 'comment-video-add' | 'game-publish' | 'post-add';
+	type!: 'comment-video-add' | 'game-publish' | 'post-add';
 	added_on: number;
+
 	from?: User;
-	action: any;
-	to: any;
+	action!: any;
+	to?: any;
 
 	// For feeds.
 	scroll_id?: string;
@@ -23,6 +24,7 @@ export class EventItem extends Model {
 		// Don't auto assign data. We pull what we want.
 		super();
 
+		this.id = data.id;
 		this.type = data.type;
 		this.added_on = data.added_on;
 		this.scroll_id = data.scroll_id;

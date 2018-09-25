@@ -223,5 +223,47 @@ pull-right()
 pull-left()
 	float: left !important
 
+/**
+ * Spacer
+ */
+spacer-xs()
+	@media $media-xs
+		full-bleed()
+		theme-prop('background-color', 'bg-offset')
+		theme-prop('border-top-color', 'bg-subtle')
+		theme-prop('border-bottom-color', 'bg-subtle')
+		display: block
+		height: ($line-height-computed / 2)
+		border-top-width: 1px
+		border-top-style: solid
+		border-bottom-width: 1px
+		border-bottom-style: solid
+		margin-bottom: $line-height-computed
+
+spacer()
+	display: block
+	height: $line-height-computed
+	spacer-xs()
+
+/**
+ * Input Placeholder Button
+ */
+input-placeholder-button()
+	theme-prop('border-color', 'bg-subtle')
+	theme-prop('color', 'fg-muted')
+	theme-prop('background-color', 'bg')
+	height: $input-height-base * 1.5
+	line-height: $input-height-base * 1.5
+	padding-left: $padding-base-horizontal
+	padding-right: $padding-base-horizontal
+	border-width: 2px
+	border-style: solid
+	border-radius: $input-border-radius
+	font-style: italic
+	cursor: pointer
+
+	&:hover
+		theme-prop('border-color', 'fg-muted')
+
 @require '../mixins/animations'
 @require '../mixins/play-button-overlay'

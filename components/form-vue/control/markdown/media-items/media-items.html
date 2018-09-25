@@ -36,17 +36,18 @@
 	<template v-if="!disabled">
 		<br>
 		<app-form name="markdownEditorMediaItemForm" ref="form">
-			<app-form-group name="image" :hide-label="true">
+			<app-form-group name="image" hide-label optional>
 				<app-form-control-upload
 					:rules="{
 						filesize: maxFilesize,
 						max_img_dimensions: [maxWidth, maxHeight],
 					}"
 					accept=".png,.jpg,.jpeg,.gif"
-					:upload-link-label="$gettext( `Upload a PNG, JPG, or GIF image.` )"
+					:upload-link-label="$gettext( `Upload a PNG, JPG, or GIF image for use in the content.` )"
 					:multiple="true"
 					@changed="imageSelected()"
 					/>
+
 				<app-form-control-errors />
 			</app-form-group>
 		</app-form>

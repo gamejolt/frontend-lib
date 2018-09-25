@@ -2,8 +2,21 @@
 	:class="{
 		'-compact': compact,
 		'-expandable': expandable,
+		'-deletable': deletable,
 	}"
 	>
-	<span class="-expander" v-if="expandable">{{ expanded ? `[-]` : `[+]` }}</span>
-	<slot />
+	<div class="-inner">
+		<div class="-expander" v-if="expandable">{{ expanded ? `[-]` : `[+]` }}</div>
+		<div class="-label"><slot /></div>
+		<div class="-compactbar" v-if="compact" />
+		<div class="-delete" v-if="deletable">
+			<!-- Make sure it doesn't bubble up the click since it's in a form -->
+			<app-button
+				sparse
+				circle
+				icon="remove"
+				@click.prevent="emitDelete()"
+				/>
+		</div>
+	</div>
 </legend>

@@ -59,9 +59,16 @@ export class Navigate {
 	static gotoExternal(href: string) {
 		if (GJ_IS_CLIENT) {
 			nw.Shell.openExternal(href);
-			return;
+		} else {
+			this.goto(href);
 		}
+	}
 
-		this.goto(href);
+	static newWindow(url: string) {
+		if (GJ_IS_CLIENT) {
+			Navigate.gotoExternal(url);
+		} else {
+			window.open(url, '_blank');
+		}
 	}
 }
