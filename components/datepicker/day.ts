@@ -15,7 +15,7 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 	},
 })
 export class AppDatepickerDay extends Vue {
-	@Prop(Date) value: Date;
+	@Prop(Date) value!: Date;
 
 	parent: AppDatepicker = null as any;
 

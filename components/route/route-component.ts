@@ -9,6 +9,7 @@ import { PayloadError } from '../payload/payload-service';
 import { LocationRedirect } from '../../utils/router';
 import { arrayRemove } from '../../utils/array';
 import { Meta } from '../meta/meta-service';
+import { Navigate } from '../navigate/navigate.service';
 
 // This is component state that the server may have returned to the browser. It
 // can be used to bootstrap components with initial data.
@@ -302,7 +303,7 @@ export class BaseRouteComponent extends Vue {
 				if (payload.type === PayloadError.ERROR_NEW_VERSION) {
 					// If it was a version change payload error, we want to
 					// refresh the page so that it gets the new code.
-					window.location.reload();
+					Navigate.reload();
 				} else if (payload.type === PayloadError.ERROR_HTTP_ERROR) {
 					this.$store.commit('app/setError', payload.status || 500);
 				}

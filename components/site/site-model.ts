@@ -8,19 +8,19 @@ export class Site extends Model {
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
-	user_id: number;
-	game_id: number;
-	domain_type: string;
+	user_id!: number;
+	game_id!: number;
+	domain_type!: string;
 	domain?: string;
-	url: string;
-	theme: SiteTheme;
-	content_blocks: SiteContentBlock[];
-	is_static: boolean;
+	url!: string;
+	theme!: SiteTheme;
+	content_blocks?: SiteContentBlock[];
+	is_static!: boolean;
 	build?: SiteBuild;
 	title?: string;
 	description?: string;
 	ga_tracking_id?: string;
-	status: string;
+	status!: string;
 
 	constructor(data: any = {}) {
 		super(data);

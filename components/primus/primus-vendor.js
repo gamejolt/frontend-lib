@@ -1389,7 +1389,7 @@
 							// this will trigger annoying memory leak warnings and other potential issues
 							// outlined in the issue linked below.
 							//
-							// @see https://github.com/joyent/node/issues/4971
+							// @see https!://github.com/joyent/node/issues/4971
 							//
 							Primus.require('util').inherits(Primus, Stream);
 						} catch (e) {

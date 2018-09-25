@@ -22,12 +22,10 @@ import { AppUserCard } from '../card/card';
 	},
 })
 export class AppUserAvatar extends Vue {
-	@Prop(Object) user: User;
+	@Prop(Object) user!: User;
 	@Prop(String) link?: string;
 	@Prop(Boolean) showName?: boolean;
 	@Prop(Boolean) showHoverCard?: boolean;
-
-	href = '';
 
 	isHoverCardBootstrapped = false;
 
@@ -35,14 +33,14 @@ export class AppUserAvatar extends Vue {
 		return this.showHoverCard && Screen.isDesktop;
 	}
 
-	created() {
+	get href() {
 		if (this.user) {
 			if (!this.link) {
-				this.href = Environment.wttfBaseUrl + this.user.url;
+				return Environment.wttfBaseUrl + this.user.url;
 			} else if (this.link === 'dashboard') {
-				this.href = Environment.wttfBaseUrl + '/dashboard';
+				return Environment.wttfBaseUrl + '/dashboard';
 			} else if (this.link === 'fireside') {
-				this.href = Environment.firesideBaseUrl + '/@' + this.user.username;
+				return Environment.firesideBaseUrl + '/@' + this.user.username;
 			}
 		}
 	}

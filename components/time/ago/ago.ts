@@ -1,14 +1,22 @@
-import Vue, { CreateElement } from 'vue';
+import * as distanceStrict from 'date-fns/distance_in_words_strict';
 import * as distance from 'date-fns/distance_in_words_to_now';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { date } from '../../../vue/filters/date';
 
 @Component({})
 export class AppTimeAgo extends Vue {
 	@Prop([Number, Date])
-	date: number | Date;
-	@Prop(Boolean) withoutSuffix?: boolean;
-	@Prop(Boolean) isFuture?: boolean;
+	date!: number | Date;
+
+	@Prop(Boolean)
+	withoutSuffix?: boolean;
+
+	@Prop(Boolean)
+	short?: boolean;
+
+	@Prop(Boolean)
+	isFuture?: boolean;
 
 	private timeout?: number;
 	private timeAgo = '';
@@ -37,14 +45,17 @@ export class AppTimeAgo extends Vue {
 	}
 
 	private refresh() {
-		const time = distance(this.date);
-
-		if (this.withoutSuffix) {
-			this.timeAgo = time;
-		} else if (this.isFuture) {
-			this.timeAgo = this.$gettextInterpolate('%{ time } left', { time });
+		if (this.short) {
+			this.timeAgo = distanceStrict(this.date, new Date());
 		} else {
-			this.timeAgo = this.$gettextInterpolate('%{ time } ago', { time });
+			const time = distance(this.date);
+			if (this.withoutSuffix) {
+				this.timeAgo = time;
+			} else if (this.isFuture) {
+				this.timeAgo = this.$gettextInterpolate('%{ time } left', { time });
+			} else {
+				this.timeAgo = this.$gettextInterpolate('%{ time } ago', { time });
+			}
 		}
 
 		// In minutes.

@@ -4,13 +4,13 @@ import { Comment } from '../comment/comment-model';
 import { ForumPost } from '../forum/post/post.model';
 
 export class Mention extends Model {
-	user: User;
-	resource: 'Comment' | 'Game' | 'User' | 'Fireside_Post' | 'Forum_Post';
-	resource_id: number;
-	mentioned_user: User;
-	status: string;
-	comment?: Comment;
-	forum_post?: ForumPost;
+	user!: User;
+	resource!: 'Comment' | 'Game' | 'User' | 'Fireside_Post' | 'Forum_Post';
+	resource_id!: number;
+	mentioned_user!: User;
+	status!: string;
+	comment!: Comment;
+	forum_post!: ForumPost;
 
 	constructor(data: any = {}) {
 		super(data);

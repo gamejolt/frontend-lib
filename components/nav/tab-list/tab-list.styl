@@ -5,8 +5,8 @@
 	full-bleed-xs()
 	position: relative
 	margin-bottom: $line-height-computed
-	padding-left: $line-height-computed
-	padding-right: $line-height-computed
+	padding-left: $grid-gutter-width * 0.5
+	padding-right: $grid-gutter-width * 0.5
 
 	&::after
 		theme-prop('background-color', 'bg-subtle')
@@ -40,6 +40,13 @@
 		& > li
 			display: inline-block
 			margin: 0
+
+			@media $media-sm-up
+				&:first-of-type > a
+					margin-left: 0
+
+				&:last-of-type > a
+					margin-right: 0
 
 			& > a
 				theme-prop('color', 'fg')

@@ -14,14 +14,14 @@ const defaultOptions = {
 @View
 @Component({})
 export class AppCodemirror extends Vue {
-	$el: HTMLTextAreaElement;
+	$el!: HTMLTextAreaElement;
 
-	@Prop(String) value: string;
+	@Prop(String) value!: string;
 	@Prop({ type: Object, default: () => new Object() })
 	options: any;
 
 	private _options: any = {};
-	private editor: CodeMirror.EditorFromTextArea;
+	private editor!: CodeMirror.EditorFromTextArea;
 	private bootstrapped = false;
 
 	async mounted() {

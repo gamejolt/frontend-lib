@@ -5,15 +5,15 @@ export class Poll extends Model {
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_REMOVED = 'removed';
 
-	fireside_post_id: number;
-	created_on: number;
-	end_time: number;
-	duration: number;
-	is_private: boolean;
-	status: string;
+	fireside_post_id!: number;
+	created_on!: number;
+	end_time!: number;
+	duration!: number;
+	is_private!: boolean;
+	status!: string;
 
 	items: PollItem[] = [];
-	vote_count: number;
+	vote_count!: number;
 
 	constructor(data?: any) {
 		super(data);

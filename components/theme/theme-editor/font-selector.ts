@@ -21,7 +21,7 @@ interface FontDefinition {
 export class AppThemeEditorFontSelector extends Vue {
 	@Prop(Object) value?: FontDefinition;
 
-	$refs: {
+	$refs!: {
 		list: HTMLElement;
 	};
 

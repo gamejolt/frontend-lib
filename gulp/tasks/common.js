@@ -27,6 +27,7 @@ module.exports = (config, projectBase) => {
 	config.analyze = argv.analyze || false;
 	config.server = argv.server || false;
 	config.client = argv.client || false;
+	config.noGjPush = argv.noGjPush || false;
 	config.noClean = argv.noClean || false;
 
 	// Whether or not the environment of angular should be production or development.
@@ -34,6 +35,7 @@ module.exports = (config, projectBase) => {
 	// This way it's easy for anyone to build without the GJ dev environment.
 	// You can pass this flag in to include the dev environment config for angular instead.
 	config.developmentEnv = argv.development || false;
+	config.withUpdater = argv.withUpdater || false;
 	config.port = config.port || argv.port || 8080;
 
 	config.translationSections = config.translationSections || [];
@@ -46,10 +48,14 @@ module.exports = (config, projectBase) => {
 	}
 
 	if (argv['section']) {
-		const argSection = argv['section'];
-		config.sections = {
-			[argSection]: config.sections[argSection],
-		};
+		const newConfigSections = {};
+
+		const argSections = argv['section'].split(',');
+		for (let argSection of argSections) {
+			newConfigSections[argSection] = config.sections[argSection];
+		}
+
+		config.sections = newConfigSections;
 	}
 
 	config.projectBase = projectBase;

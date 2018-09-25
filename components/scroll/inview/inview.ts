@@ -15,15 +15,15 @@ if (!GJ_IS_SSR) {
 @Component({})
 export class AppScrollInview extends Vue {
 	@Prop({ type: String, default: 'div' })
-	tag: string;
+	tag!: string;
 	@Prop({ type: Number, default: 0 })
-	extraPadding: number;
+	extraPadding!: number;
 
 	inView = false;
 
 	// Don't have Vue watch these by not setting their default values.
-	top: number;
-	bottom: number;
+	top!: number;
+	bottom!: number;
 
 	get container() {
 		const parent = findVueParent(this, AppScrollInviewParent);

@@ -1,20 +1,36 @@
-import { Model } from '../../model/model.service';
-import { FiresidePostTag } from './tag/tag-model';
-import { FiresidePostLike } from './like/like-model';
-import { FiresidePostVideo } from './video/video-model';
-import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
-import { ModalConfirm } from '../../modal/confirm/confirm-service';
-import { HistoryTick } from '../../history-tick/history-tick-service';
-import { Environment } from '../../environment/environment.service';
-import { MediaItem } from '../../media-item/media-item-model';
-import { Game } from '../../game/game.model';
-import { Api } from '../../api/api.service';
 import { appStore } from '../../../vue/services/app/app-store';
+import { Api } from '../../api/api.service';
+import { Environment } from '../../environment/environment.service';
+import { Game } from '../../game/game.model';
+import { HistoryTick } from '../../history-tick/history-tick-service';
+import { KeyGroup } from '../../key-group/key-group.model';
+import { MediaItem } from '../../media-item/media-item-model';
+import { ModalConfirm } from '../../modal/confirm/confirm-service';
+import { Model } from '../../model/model.service';
+import { Poll } from '../../poll/poll.model';
 import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
-import { KeyGroup } from '../../key-group/key-group.model';
 import { User } from '../../user/user.model';
-import { Poll } from '../../poll/poll.model';
+import { FiresidePostLike } from './like/like-model';
+import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
+import { FiresidePostTag } from './tag/tag-model';
+import { FiresidePostVideo } from './video/video-model';
+
+export function canUserManagePost(post: FiresidePost, user: User | undefined | null) {
+	if (!user) {
+		return false;
+	}
+
+	if (post.user.id === user.id) {
+		return true;
+	}
+
+	if (post.game && post.game.hasPerms('devlogs')) {
+		return true;
+	}
+
+	return false;
+}
 
 export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
@@ -26,26 +42,27 @@ export class FiresidePost extends Model {
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
-	type: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
-	hash: string;
-	title: string;
-	lead: string;
+	type!: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
+	hash!: string;
+	lead!: string;
+	lead_compiled!: string;
+	lead_snippet!: string;
 	header?: MediaItem;
-	status: string;
-	added_on: number;
-	updated_on: number;
-	published_on: number;
-	scheduled_for_timezone: string | null;
-	scheduled_for: number | null;
-	like_count: number;
-	comment_count: number;
-	user: User;
-	game: Game;
-	as_game_owner: boolean;
-	slug: string;
-	subline: string;
-	content_compiled: string;
-	content_markdown: string;
+	status!: string;
+	added_on!: number;
+	updated_on!: number;
+	published_on!: number;
+	scheduled_for_timezone!: string | null;
+	scheduled_for!: number | null;
+	like_count!: number;
+	comment_count!: number;
+	user!: User;
+	game!: Game;
+	as_game_owner!: boolean;
+	slug!: string;
+	subline!: string;
+	content_compiled!: string;
+	content_markdown?: string;
 	view_count?: number;
 	expand_count?: number;
 	publish_to_platforms: string | null;
@@ -54,9 +71,9 @@ export class FiresidePost extends Model {
 	media: MediaItem[] = [];
 	videos: FiresidePostVideo[] = [];
 	sketchfabs: FiresidePostSketchfab[] = [];
-	user_like: FiresidePostLike | null;
+	user_like?: FiresidePostLike | null;
 	key_groups: KeyGroup[] = [];
-	poll: Poll | null;
+	poll!: Poll | null;
 
 	url: string;
 
@@ -127,6 +144,26 @@ export class FiresidePost extends Model {
 		return !!this.scheduled_for;
 	}
 
+	get hasMedia() {
+		return this.media.length > 0;
+	}
+
+	get hasSketchfab() {
+		return this.sketchfabs.length > 0;
+	}
+
+	get hasVideo() {
+		return this.videos.length > 0;
+	}
+
+	get hasArticle() {
+		return !!this.content_compiled;
+	}
+
+	get hasPoll() {
+		return !!this.poll;
+	}
+
 	static pullHashFromUrl(url: string) {
 		return url.substring(url.lastIndexOf('-') + 1);
 	}
@@ -145,7 +182,7 @@ export class FiresidePost extends Model {
 			}
 
 			const options = {
-				allowComplexData: ['keyGroups'],
+				allowComplexData: ['keyGroups', 'mediaItemIds'],
 				data,
 				file: this.file,
 			};

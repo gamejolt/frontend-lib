@@ -1,7 +1,7 @@
 import { Api, RequestOptions } from '../api/api.service';
 
 export class Model {
-	id: number;
+	id!: number;
 
 	// Set default values so Vue can see them when instantiating the model and
 	// set up observers.
@@ -11,7 +11,7 @@ export class Model {
 
 	// We need to create some methods dynamically on the model.
 	static populate: (rows: any[]) => any[];
-	assign: (other: any) => void;
+	assign!: (other: any) => void;
 
 	static create(self: any) {
 		// These need to be created dynamically for each model type.

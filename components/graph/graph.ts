@@ -91,9 +91,9 @@ const backgroundVariantChartOptions: any = {
 @View
 @Component({})
 export class AppGraph extends Vue {
-	@Prop(Array) dataset: any[];
+	@Prop(Array) dataset!: any[];
 	@Prop({ type: String, default: 'line' })
-	type: string;
+	type!: string;
 	@Prop(Boolean) backgroundVariant?: boolean;
 
 	@ThemeState theme?: ThemeStore['theme'];

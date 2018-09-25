@@ -8,12 +8,12 @@ import { parseToHsl, lighten, darken } from 'polished';
 
 @Component({})
 export class AppThemeSvg extends Vue {
-	@Prop(String) src: string;
+	@Prop(String) src!: string;
 
-	@ThemeState theme: ThemeStore['theme'];
+	@ThemeState theme!: ThemeStore['theme'];
 
 	rawSvg = '';
-	request: Promise<any>;
+	request?: Promise<any>;
 
 	get processedSvg() {
 		let svgData = this.rawSvg;
@@ -51,7 +51,7 @@ export class AppThemeSvg extends Vue {
 	onSrcChange() {
 		const request = Axios.get(this.src).then(response => {
 			// If we have multiple requests in process, only handle the latest one.
-			if (this.request !== request) {
+			if (!this.request || this.request !== request) {
 				return;
 			}
 

@@ -19,7 +19,7 @@ import { AppScrollScroller } from '../scroll/scroller/scroller';
 	},
 })
 export class AppMediaBar extends Vue {
-	@Prop(Array) mediaItems: any[];
+	@Prop(Array) mediaItems!: any[];
 	@Prop(Boolean) noOverlayScrollbars?: boolean;
 
 	private urlChecked = false;

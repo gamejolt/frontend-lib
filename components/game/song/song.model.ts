@@ -2,12 +2,12 @@ import { Model } from '../../model/model.service';
 import { Api } from '../../api/api.service';
 
 export class GameSong extends Model {
-	game_id: number;
-	filename: string;
-	title: string;
-	posted_on: number;
-	sort: number;
-	url: string;
+	game_id!: number;
+	filename!: string;
+	title!: string;
+	posted_on!: number;
+	sort!: number;
+	url!: string;
 
 	static getSoundtrackDownloadUrl(gameId: number) {
 		return Api.sendRequest(

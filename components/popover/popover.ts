@@ -27,28 +27,28 @@ interface PopoverTiggerEvent extends Event {
 	},
 })
 export class AppPopover extends Vue {
-	@Prop(String) popoverId: string;
-	@Prop(Boolean) appendToBody: boolean;
-	@Prop(Boolean) triggerManually: boolean;
+	@Prop(String) popoverId!: string;
+	@Prop(Boolean) appendToBody!: boolean;
+	@Prop(Boolean) triggerManually!: boolean;
 	@Prop(String) positionBy?: 'position' | 'offset' | 'fixed';
 	@Prop(String) trackElementWidth?: string;
 	@Prop({ type: String, default: 'bottom' })
-	position: 'top' | 'right' | 'bottom' | 'left';
+	position!: 'top' | 'right' | 'bottom' | 'left';
 	@Prop(String) positionHorizontal?: string;
-	@Prop(Boolean) hideOnStateChange: boolean;
-	@Prop(Boolean) noMaxHeight: boolean;
+	@Prop(Boolean) hideOnStateChange!: boolean;
+	@Prop(Boolean) noMaxHeight!: boolean;
 
 	isVisible = false;
 	isAppendedToBody = false;
 	arrowLeft?: string = undefined;
 	arrowTop?: string = undefined;
-	popoverElem: HTMLElement;
+	popoverElem!: HTMLElement;
 
 	private transitioning: 'enter' | 'leave' | false = false;
 
 	attachedTrigger?: PopoverTrigger;
 
-	private context: HTMLElement | null;
+	private context: HTMLElement | null = null;
 	private backdropElem?: HTMLElement;
 
 	// We use the wrapped to generate an on/off click handler.
@@ -56,7 +56,7 @@ export class AppPopover extends Vue {
 
 	readonly Screen = Screen;
 
-	$refs: {
+	$refs!: {
 		popover: HTMLElement;
 		inviewParent: AppScrollInviewParent;
 	};

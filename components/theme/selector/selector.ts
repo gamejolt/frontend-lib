@@ -19,8 +19,8 @@ import { AppPopoverTrigger } from '../../popover/popover-trigger.directive.vue';
 	},
 })
 export class AppThemeSelector extends Vue {
-	@Prop(Array) templates: SiteTemplate[];
-	@Prop(Number) currentTemplate: number;
+	@Prop(Array) templates!: SiteTemplate[];
+	@Prop(Number) currentTemplate!: number;
 
 	current: SiteTemplate | null = null;
 

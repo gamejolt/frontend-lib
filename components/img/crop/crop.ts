@@ -15,16 +15,16 @@ interface CropData {
 @View
 @Component({})
 export class AppImgCrop extends Vue {
-	@Prop(String) src: string;
+	@Prop(String) src!: string;
 	@Prop(Object) value?: CropData;
 	@Prop(Number) aspectRatio?: number;
 	@Prop(Number) minWidth?: number;
 	@Prop(Number) minHeight?: number;
 	@Prop(Boolean) disabled?: boolean;
 
-	cropper: Cropper;
+	cropper!: Cropper;
 
-	$refs: {
+	$refs!: {
 		img: HTMLImageElement;
 	};
 

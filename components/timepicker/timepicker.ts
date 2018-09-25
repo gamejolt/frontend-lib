@@ -10,11 +10,11 @@ import { AppJolticon } from '../../vue/components/jolticon/jolticon';
 	},
 })
 export class AppTimepicker extends Vue {
-	@Prop(Date) value: Date;
+	@Prop(Date) value!: Date;
 	@Prop({ type: Boolean, default: true })
-	showMeridian: boolean;
+	showMeridian!: boolean;
 	@Prop(Array) meridians?: [string, string];
-	@Prop(Boolean) readonlyInput: boolean;
+	@Prop(Boolean) readonlyInput!: boolean;
 
 	hours = '';
 	minutes = '';

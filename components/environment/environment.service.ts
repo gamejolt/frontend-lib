@@ -27,6 +27,7 @@ export class Environment {
 	static wttfBaseUrl = 'https://gamejolt.com';
 	static authBaseUrl = 'https://gamejolt.com';
 	static checkoutBaseUrl = 'https://gamejolt.com';
+	static clientSectionUrl = '';
 
 	static jamsBaseUrl = 'http://jams.gamejolt.com';
 	static jamsIoBaseUrl = 'http://jams.gamejolt.io';
@@ -71,13 +72,17 @@ if (GJ_ENVIRONMENT === 'development') {
 
 if (GJ_IS_CLIENT) {
 	// When it gets packaged up for production, the URL changes.
-	if (window.location.href.search(/^app\:\/\/game\-jolt\-client\/package\//) !== -1) {
-		Environment.wttfBaseUrl = 'app://game-jolt-client/package/index.html#';
-		Environment.authBaseUrl = 'app://game-jolt-client/package/auth.html#';
-		Environment.checkoutBaseUrl = 'app://game-jolt-client/package/checkout.html#';
+	if (
+		window.location.href.search(/^chrome\-extension\:\/\/game\-jolt\-client\/package\//) !== -1
+	) {
+		Environment.wttfBaseUrl = 'chrome-extension://game-jolt-client/package/index.html#';
+		Environment.authBaseUrl = 'chrome-extension://game-jolt-client/package/auth.html#';
+		Environment.checkoutBaseUrl = 'chrome-extension://game-jolt-client/package/checkout.html#';
+		Environment.clientSectionUrl = 'chrome-extension://game-jolt-client/package/client.html#';
 	} else {
-		Environment.wttfBaseUrl = 'app://game-jolt-client/index.html#';
-		Environment.authBaseUrl = 'app://game-jolt-client/auth.html#';
-		Environment.checkoutBaseUrl = 'app://game-jolt-client/checkout.html#';
+		Environment.wttfBaseUrl = 'chrome-extension://game-jolt-client/index.html#';
+		Environment.authBaseUrl = 'chrome-extension://game-jolt-client/auth.html#';
+		Environment.checkoutBaseUrl = 'chrome-extension://game-jolt-client/checkout.html#';
+		Environment.clientSectionUrl = 'chrome-extension://game-jolt-client/client.html#';
 	}
 }

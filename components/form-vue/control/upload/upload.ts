@@ -23,10 +23,10 @@ export class AppFormControlUpload extends BaseFormControl {
 	@Prop(String) uploadLinkLabel?: string;
 	@Prop(String) accept?: string;
 
-	@Prop(Array) validateOn: string[];
-	@Prop(Number) validateDelay: number;
+	@Prop(Array) validateOn!: string[];
+	@Prop(Number) validateDelay!: number;
 
-	$refs: {
+	$refs!: {
 		input: AppFormControlUploadFile;
 	};
 
@@ -203,7 +203,7 @@ async function getFiles(e: DragEvent) {
 		const fileList = e.dataTransfer.files;
 		if (fileList) {
 			for (let i = 0; i < fileList.length; ++i) {
-				files.push(fileList.item(i));
+				files.push(fileList.item(i)!);
 			}
 		}
 	}

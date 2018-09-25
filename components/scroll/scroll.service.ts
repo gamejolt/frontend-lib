@@ -114,7 +114,7 @@ export class Scroll {
 	/**
 	 * Scrolls to the element passed in.
 	 */
-	static async to(input: string | number | HTMLElement, options: { animate?: boolean } = {}) {
+	static to(input: string | number | HTMLElement, options: { animate?: boolean } = {}) {
 		if (GJ_IS_SSR) {
 			return;
 		}

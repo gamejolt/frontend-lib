@@ -1,9 +1,9 @@
 import { Model } from '../../model/model.service';
 
 export class GamePlaylistGame extends Model {
-	game_playlist_id: number;
-	game_id: number;
-	added_on: number;
+	game_playlist_id!: number;
+	game_id!: number;
+	added_on!: number;
 
 	$save() {
 		return this.$_save(

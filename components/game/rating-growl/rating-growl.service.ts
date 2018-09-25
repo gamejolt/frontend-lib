@@ -1,8 +1,8 @@
-import { AppGameRatingGrowl } from './rating-growl';
-import { Game } from '../game.model';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
 import { Growls } from '../../growls/growls.service';
+import { Game } from '../game.model';
+import { AppGameRatingGrowl } from './rating-growl';
 
 export class GameRatingGrowl {
 	static async show(game: Game) {
@@ -12,7 +12,7 @@ export class GameRatingGrowl {
 		}
 
 		// Don't show if ratings are disabled for the game.
-		if (!game.ratings_enabled || !game.can_user_rate) {
+		if (!game.ratings_enabled) {
 			return;
 		}
 

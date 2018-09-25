@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 
 @Component({})
 export class AppThemeEditorFontSelectorStyleInjector extends Vue {
-	@Prop(String) fontDefinitions: string;
+	@Prop(String) fontDefinitions!: string;
 
 	@Watch('fontDefinitions')
 	onDefinitionsChanged() {

@@ -15,7 +15,7 @@ export const MediaBarItemMaxHeight = 150;
 	},
 })
 export class AppMediaBarItem extends Vue {
-	@Prop(Object) item: any;
+	@Prop(Object) item!: any;
 
 	width = 'auto';
 	height = 'auto';

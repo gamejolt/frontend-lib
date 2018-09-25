@@ -24,10 +24,10 @@ export class FormThemeEditorImage extends BaseForm<FormModel>
 	resetOnSubmit = true;
 	warnOnDiscard = false;
 
-	@Prop(String) type: string;
-	@Prop(Number) parentId: number;
+	@Prop(String) type!: string;
+	@Prop(Number) parentId!: number;
 
-	$refs: {
+	$refs!: {
 		form: AppForm;
 	};
 

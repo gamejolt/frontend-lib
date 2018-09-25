@@ -37,9 +37,9 @@ export class AppScrollParallax extends Vue {
 	private scroll$: Subscription | undefined;
 	private resize$: Subscription | undefined;
 
-	private elementHeight: number;
-	private elementTop: number;
-	private lastCalculated: number;
+	private elementHeight!: number;
+	private elementTop!: number;
+	private lastCalculated!: number;
 
 	async mounted() {
 		this.scroll$ = Scroll.watcher.changes.subscribe(() => {

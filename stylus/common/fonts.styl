@@ -1,8 +1,7 @@
 $gj-font-lib = '../../components/fonts/'
 
 font-url($font-url, $variant)
-	src: url($gj-font-lib + $font-url + '/' + $variant + '/' + $font-url + '.woff2') format('woff2'),
-	url($gj-font-lib + $font-url + '/' + $variant + '/' + $font-url + '.woff') format('woff')
+	src: url($gj-font-lib + $font-url + '/' + $variant + '/' + $font-url + '.woff2') format('woff2'), url($gj-font-lib + $font-url + '/' + $variant + '/' + $font-url + '.woff') format('woff')
 
 /**
  * Lato
@@ -50,6 +49,18 @@ font-url($font-url, $variant)
 	font-family: 'Nunito'
 	font-url('nunito', 'bold-italic')
 	font-weight: 700
+	font-style: italic
+
+@font-face
+	font-family: 'Nunito'
+	font-url('nunito', 'semibold')
+	font-weight: 600
+	font-style: normal
+
+@font-face
+	font-family: 'Nunito'
+	font-url('nunito', 'semibold-italic')
+	font-weight: 600
 	font-style: italic
 
 /**

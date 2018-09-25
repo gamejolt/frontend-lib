@@ -16,6 +16,7 @@ import { AppUserAvatar } from '../../../user/user-avatar/user-avatar';
 import { AppVideoEmbed } from '../../../video/embed/embed';
 import { AppCommentVideoLikeWidget } from '../like-widget/like-widget';
 import { CommentVideo } from '../video-model';
+import { CommentVote } from '../../vote/vote-model';
 
 @View
 @Component({
@@ -37,9 +38,9 @@ import { CommentVideo } from '../video-model';
 	},
 })
 export default class AppCommentVideoModal extends BaseModal {
-	@Prop(CommentVideo) video: CommentVideo;
+	@Prop(CommentVideo) video!: CommentVideo;
 
-	@State app: AppStore;
+	@State app!: AppStore;
 
 	readonly Screen = Screen;
 
@@ -80,11 +81,11 @@ export default class AppCommentVideoModal extends BaseModal {
 
 	toggleVote() {
 		// If adding a vote.
-		if (!this.comment.user_vote) {
-			this.comment.$like();
+		if (!this.comment.user_vote || this.comment.user_vote.vote === CommentVote.VOTE_DOWNVOTE) {
+			this.comment.$vote(CommentVote.VOTE_UPVOTE);
 		} else {
 			// If removing a vote.
-			this.comment.$removeLike();
+			this.comment.$removeVote();
 		}
 	}
 }

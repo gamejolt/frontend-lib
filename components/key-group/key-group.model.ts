@@ -8,13 +8,17 @@ export class KeyGroup extends Model {
 	static readonly TYPE_EMAIL = 'email';
 	static readonly TYPE_USER = 'user';
 
-	game_id: number;
-	type: string;
-	name: string;
+	game_id!: number;
+	type!: string;
+	name!: string;
+
+	// Packages settings
 	packages: GamePackage[] = [];
-	key_count: number;
-	viewed_count: number;
-	claimed_count: number;
+
+	// Counts settings
+	key_count?: number;
+	viewed_count?: number;
+	claimed_count?: number;
 
 	// Used for forms and saving.
 	package_ids: number[] = [];

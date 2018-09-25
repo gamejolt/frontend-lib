@@ -1,13 +1,13 @@
+import View from '!view!./widget.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./widget.html';
-
+import { number } from '../../../../../vue/filters/number';
+import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
+import { LikersModal } from '../../../../likers/modal.service';
+import { Screen } from '../../../../screen/screen-service';
+import { AppTooltip } from '../../../../tooltip/tooltip';
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
-import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
-import { AppTooltip } from '../../../../tooltip/tooltip';
-import { number } from '../../../../../vue/filters/number';
-import { Screen } from '../../../../screen/screen-service';
 
 @View
 @Component({
@@ -17,7 +17,7 @@ import { Screen } from '../../../../screen/screen-service';
 	},
 })
 export class AppFiresidePostLikeWidget extends Vue {
-	@Prop(FiresidePost) post: FiresidePost;
+	@Prop(FiresidePost) post!: FiresidePost;
 	@Prop(Boolean) overlay?: boolean;
 	@Prop(Boolean) circle?: boolean;
 	@Prop(Boolean) block?: boolean;
@@ -72,5 +72,9 @@ export class AppFiresidePostLikeWidget extends Vue {
 		}
 
 		this.isProcessing = false;
+	}
+
+	showLikers() {
+		LikersModal.show({ count: this.post.like_count, resource: this.post });
 	}
 }

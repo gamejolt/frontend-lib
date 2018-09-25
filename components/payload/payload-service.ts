@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios';
+import { VuexStore } from '../../utils/vuex';
+import { Analytics } from '../analytics/analytics.service';
 import { RequestOptions } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
-import { Analytics } from '../analytics/analytics.service';
-import { VuexStore } from '../../utils/vuex';
 
 export class PayloadError {
 	static readonly ERROR_NEW_VERSION = 'payload-new-version';
@@ -11,6 +11,7 @@ export class PayloadError {
 	static readonly ERROR_HTTP_ERROR = 'payload-error';
 	static readonly ERROR_OFFLINE = 'payload-offline';
 	static readonly ERROR_REDIRECT = 'payload-redirect';
+	static readonly ERROR_NEW_CLIENT_VERSION = 'payload-new-client-version';
 
 	redirect?: string;
 
@@ -80,6 +81,7 @@ export class Payload {
 
 			const data = response.data;
 
+			this.checkClientForceUpgrade(data);
 			this.checkPayloadUser(response, options);
 			this.checkPayloadConsents(response);
 			this.checkPayloadVersion(data, options);
@@ -161,6 +163,17 @@ export class Payload {
 		this.store.commit('app/setConsents', {});
 	}
 
+	private static checkClientForceUpgrade(data: any) {
+		// We ignore completely if we're not in the client.
+		if (!GJ_IS_CLIENT) {
+			return;
+		}
+
+		if (data.clientForceUpgrade) {
+			throw new PayloadError(PayloadError.ERROR_NEW_CLIENT_VERSION);
+		}
+	}
+
 	private static checkAnalyticsExperiments(response: any, _options: RequestOptions) {
 		if (!response.data.payload) {
 			return;
@@ -187,6 +200,8 @@ export class Payload {
 			);
 			const location = Environment.authBaseUrl + '/login?redirect=' + redirect;
 			this.store.commit('app/redirect', location);
+		} else if (error.type === PayloadError.ERROR_NEW_CLIENT_VERSION) {
+			this.store.commit('app/redirect', Environment.clientSectionUrl + '/upgrade');
 		} else if (error.type === PayloadError.ERROR_INVALID) {
 			this.store.commit('app/setError', 500);
 		} else if (

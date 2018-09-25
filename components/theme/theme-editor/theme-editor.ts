@@ -29,10 +29,10 @@ interface StyleGroup {
 	},
 })
 export class AppThemeEditor extends Vue {
-	@Prop(String) windowId: string;
-	@Prop(Number) template: number;
-	@Prop(Object) theme: any;
-	@Prop(Number) resourceId: number;
+	@Prop(String) windowId!: string;
+	@Prop(Number) template!: number;
+	@Prop(Object) theme!: any;
+	@Prop(Number) resourceId!: number;
 
 	isLoaded = false;
 
@@ -60,7 +60,7 @@ export class AppThemeEditor extends Vue {
 		await this.$nextTick();
 
 		const iframe = document.getElementById(this.windowId) as HTMLIFrameElement | undefined;
-		if (iframe) {
+		if (iframe && iframe.contentWindow) {
 			const msg = {
 				type: 'theme-update',
 				template: this.templateObj,

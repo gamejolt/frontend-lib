@@ -8,25 +8,25 @@ export class ForumTopic extends Model {
 	static readonly STATUS_SPAM = 'spam';
 	static readonly STATUS_REMOVED = 'removed';
 
-	user_id: number;
-	user: User;
-	channel_id: number;
-	title: string;
-	slug: string;
-	main_post: ForumPost;
-	status: string;
-	posted_on: number;
-	is_sticky: boolean;
-	is_locked: boolean;
-	is_upvoted: boolean;
-	can_upvote: boolean;
+	user_id!: number;
+	user!: User;
+	channel_id!: number;
+	title!: string;
+	slug!: string;
+	main_post!: ForumPost;
+	status!: string;
+	posted_on!: number;
+	is_sticky!: boolean;
+	is_locked!: boolean;
+	is_upvoted?: boolean;
+	can_upvote!: boolean;
 
-	replies_count: number;
-	followers_count: number;
-	upvotes_count: number;
+	replies_count?: number;
+	followers_count?: number;
+	upvotes_count?: number;
 
 	notifications: Notification[] = [];
-	latest_post: ForumPost;
+	latest_post?: ForumPost;
 
 	// When saving.
 	content_markdown?: string;

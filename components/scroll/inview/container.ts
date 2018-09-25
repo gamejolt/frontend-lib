@@ -14,7 +14,7 @@ const DefaultScrollThrottleTime = 300;
 export class ScrollInviewContainer {
 	items: AppScrollInview[] = [];
 
-	private scrollWatcher: ScrollWatcher;
+	private scrollWatcher!: ScrollWatcher;
 	private lastScrollTop = 0;
 	private lastThrottleTime = Date.now();
 	private lastScrollHeight?: number;

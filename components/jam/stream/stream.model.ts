@@ -2,12 +2,12 @@ import { Model } from '../../model/model.service';
 import { User } from '../../user/user.model';
 
 export class JamStream extends Model {
-	jam_id: number;
-	user: User;
-	provider: string;
-	stream_handle: string;
-	on_air: boolean;
-	added_on: number;
+	jam_id!: number;
+	user!: User;
+	provider!: string;
+	stream_handle!: string;
+	on_air!: boolean;
+	added_on!: number;
 
 	static readonly PROVIDER_TWITCH = 'twitch';
 

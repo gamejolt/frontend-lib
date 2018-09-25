@@ -8,12 +8,12 @@ import { importContext } from '../../../utils/utils';
 @Component({})
 export class AppLoading extends Vue {
 	@Prop({ type: String, default: 'Loading...' })
-	label: string;
-	@Prop(Boolean) hideLabel: boolean;
-	@Prop(Boolean) big: boolean;
-	@Prop(Boolean) noColor: boolean;
-	@Prop(Boolean) stationary: boolean;
-	@Prop(Boolean) centered: boolean;
+	label!: string;
+	@Prop(Boolean) hideLabel!: boolean;
+	@Prop(Boolean) big!: boolean;
+	@Prop(Boolean) noColor!: boolean;
+	@Prop(Boolean) stationary!: boolean;
+	@Prop(Boolean) centered!: boolean;
 
 	images = importContext(require.context('../../../components/loading/', false, /\.gif$/));
 

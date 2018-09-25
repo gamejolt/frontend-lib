@@ -2,7 +2,7 @@ import { Model } from '../../model/model.service';
 import { SiteTemplate } from '../template/template-model';
 
 export class SiteTheme extends Model {
-	template: SiteTemplate;
+	template!: SiteTemplate;
 	data: any;
 
 	constructor(data: any = {}) {
