@@ -1,3 +1,4 @@
+import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
 import { Environment } from '../../environment/environment.service';
@@ -79,6 +80,10 @@ export class FiresidePost extends Model {
 	// Used for forms and saving.
 	key_group_ids: number[] = [];
 
+	// Returned when saving a post for the first time.
+	// The feed no longer works with posts directly - we need the event item.
+	event_item?: EventItem;
+
 	constructor(data: any = {}) {
 		super(data);
 
@@ -121,6 +126,10 @@ export class FiresidePost extends Model {
 
 		if (data.poll) {
 			this.poll = new Poll(data.poll);
+		}
+
+		if (data.event_item) {
+			this.event_item = new EventItem(data.event_item);
 		}
 
 		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
