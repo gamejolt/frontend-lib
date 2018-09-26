@@ -76,9 +76,6 @@ export class FiresidePost extends Model {
 
 	url: string;
 
-	// For feeds.
-	scroll_id?: string;
-
 	// Used for forms and saving.
 	key_group_ids: number[] = [];
 
