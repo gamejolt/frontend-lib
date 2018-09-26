@@ -170,7 +170,7 @@ export class FiresidePost extends Model {
 	}
 
 	static async $create(gameId?: number) {
-		let url = `/web/dash/posts/new-post`;
+		let url = `/web/posts/manage/new-post`;
 		if (gameId) {
 			url += '/' + gameId;
 		}
@@ -199,7 +199,7 @@ export class FiresidePost extends Model {
 			}
 		}
 
-		return this.$_save(`/web/dash/posts/save/${this.id}`, 'firesidePost', options);
+		return this.$_save(`/web/posts/manage/save/${this.id}`, 'firesidePost', options);
 	}
 
 	$viewed() {
@@ -218,7 +218,7 @@ export class FiresidePost extends Model {
 
 	$publish() {
 		if (this.game) {
-			return this.$_save(`/web/dash/posts/publish/${this.id}`, 'firesidePost');
+			return this.$_save(`/web/posts/manage/publish/${this.id}`, 'firesidePost');
 		}
 
 		throw new Error('Must be attached to a game to publish.');
@@ -240,7 +240,7 @@ export class FiresidePost extends Model {
 	}
 
 	$remove() {
-		return this.$_remove(`/web/dash/posts/remove/${this.id}`);
+		return this.$_remove(`/web/posts/manage/remove/${this.id}`);
 	}
 }
 
