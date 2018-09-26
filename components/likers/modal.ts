@@ -6,10 +6,10 @@ import { AppLoading } from '../../vue/components/loading/loading';
 import { Api } from '../api/api.service';
 import { Comment } from '../comment/comment-model';
 import { FiresidePost } from '../fireside/post/post-model';
+import { Game } from '../game/game.model';
 import { BaseModal } from '../modal/base';
 import { User } from '../user/user.model';
 import { LikersResource } from './modal.service';
-import { Game } from '../game/game.model';
 
 const UsersPerPage = 20;
 
@@ -21,8 +21,11 @@ const UsersPerPage = 20;
 	},
 })
 export default class AppLikesModal extends BaseModal {
-	@Prop(Number) count!: number;
-	@Prop(Object) resource?: LikersResource;
+	@Prop(Number)
+	count!: number;
+
+	@Prop(Object)
+	resource?: LikersResource;
 
 	readonly number = number;
 
@@ -35,11 +38,9 @@ export default class AppLikesModal extends BaseModal {
 		if (this.resource) {
 			if (this.resource instanceof Comment) {
 				return '/comments/likers/' + this.resource.id;
-			}
-			else if (this.resource instanceof FiresidePost) {
-				return '/fireside/posts/likers/' + this.resource.id;
-			}
-			else if (this.resource instanceof Game) {
+			} else if (this.resource instanceof FiresidePost) {
+				return '/posts/votes/likers/' + this.resource.id;
+			} else if (this.resource instanceof Game) {
 				return '/web/discover/games/likers/' + this.resource.id;
 			}
 		}
@@ -60,9 +61,7 @@ export default class AppLikesModal extends BaseModal {
 
 		this.isLoading = true;
 		++this.currentPage;
-		const payload = await Api.sendRequest(
-			this.requestUrl + '?page=' + this.currentPage
-		);
+		const payload = await Api.sendRequest(this.requestUrl + '?page=' + this.currentPage);
 
 		const users = User.populate(payload.users);
 		this.users = this.users.concat(users);

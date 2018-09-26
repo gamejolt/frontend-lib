@@ -1,8 +1,8 @@
-import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
 import { MediaItem } from '../media-item/media-item-model';
-import { Theme } from '../theme/theme.model';
+import { Model } from '../model/model.service';
 import { Registry } from '../registry/registry.service';
+import { Theme } from '../theme/theme.model';
 
 export class User extends Model {
 	static readonly TYPE_GAMER = 'User';
@@ -210,14 +210,6 @@ export class User extends Model {
 		return this.$_save('/web/dash/email-preferences/toggle-emails', 'user', {
 			data: { state },
 		});
-	}
-
-	$saveFireside() {
-		return this.$_save('/fireside/dash/profile/save', 'user');
-	}
-
-	$saveFiresideSettings() {
-		return this.$_save('/fireside/dash/settings/save', 'user');
 	}
 
 	$unlinkAccount(provider: string) {

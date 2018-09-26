@@ -168,13 +168,26 @@ export class FiresidePost extends Model {
 	}
 
 	async fetchLikes(): Promise<FiresidePostLike[]> {
-		const response = await Api.sendRequest(`/fireside/posts/likes/${this.id}`);
+		const response = await Api.sendRequest(`/posts/votes/likes/${this.id}`);
 		return FiresidePostLike.populate(response.likes);
+	}
+
+	static async $create(gameId?: number) {
+		let url = `/web/dash/posts/new-post`;
+		if (gameId) {
+			url += '/' + gameId;
+		}
+
+		const response = await Api.sendRequest(url);
+		await FiresidePost.processCreate(response, 'post');
+		return new FiresidePost(response.post);
 	}
 
 	$save() {
 		if (!this.id) {
-			throw new Error(`Can't add fireside posts through $save() anymore`);
+			throw new Error(
+				`Can't add fireside posts through $save() anymore. Use $create() instead`
+			);
 		}
 
 		const options: ModelSaveRequestOptions = {
@@ -206,10 +219,6 @@ export class FiresidePost extends Model {
 		}
 	}
 
-	$clearHeader() {
-		return this.$_save(`/fireside/dash/posts/clear-header/${this.id}`, 'firesidePost');
-	}
-
 	$publish() {
 		if (this.game) {
 			return this.$_save(`/web/dash/posts/publish/${this.id}`, 'firesidePost');
@@ -234,7 +243,7 @@ export class FiresidePost extends Model {
 	}
 
 	$remove() {
-		return this.$_remove(`/fireside/dash/posts/remove/${this.id}`);
+		return this.$_remove(`/web/dash/posts/remove/${this.id}`);
 	}
 }
 

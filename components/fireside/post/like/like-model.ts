@@ -16,16 +16,17 @@ export class FiresidePostLike extends Model {
 	}
 
 	$save() {
-		if (!this.id) {
-			return this.$_save('/fireside/posts/like/' + this.fireside_post_id, 'firesidePostLike', {
-				ignorePayloadUser: true,
-			});
+		if (this.id) {
+			throw new Error(`Can't update like data`);
 		}
-		throw new Error(`Can't update like data.`);
+
+		return this.$_save('/posts/votes/like/' + this.fireside_post_id, 'firesidePostLike', {
+			ignorePayloadUser: true,
+		});
 	}
 
 	$remove() {
-		return this.$_remove('/fireside/posts/unlike/' + this.fireside_post_id, {
+		return this.$_remove('/posts/votes/unlike/' + this.fireside_post_id, {
 			ignorePayloadUser: true,
 		});
 	}

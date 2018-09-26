@@ -102,34 +102,6 @@ export class MediaItem extends Model {
 			y2: this.crop_end_y,
 		};
 	}
-
-	$save() {
-		if (
-			this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE &&
-			this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
-		) {
-			throw new Error('Can only save fireside media items.');
-		}
-
-		if (!this.id) {
-			return this.$_save(
-				'/fireside/dash/posts/media/upload/' + this.post_id + '/' + this.type,
-				'mediaItem',
-				{ file: this.file }
-			);
-		}
-	}
-
-	$remove() {
-		if (
-			this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE &&
-			this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
-		) {
-			throw new Error('Can only save fireside media items.');
-		}
-
-		return this.$_remove('/fireside/dash/posts/media/remove/' + this.id);
-	}
 }
 
 Model.create(MediaItem);
