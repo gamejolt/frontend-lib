@@ -1,3 +1,4 @@
+import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
 import VueRouter, { RawLocation } from 'vue-router';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
@@ -229,6 +230,16 @@ export class Notification extends Model {
 
 		// Must pull asynchronously when they click on the notification.
 		return '';
+	}
+
+	get isActivityFeedNotification() {
+		switch (this.type) {
+			case EventItem.TYPE_COMMENT_VIDEO_ADD:
+			case EventItem.TYPE_DEVLOG_POST_ADD:
+			case EventItem.TYPE_GAME_PUBLISH:
+				return true;
+		}
+		return false;
 	}
 
 	async go(router: VueRouter) {
