@@ -59,6 +59,25 @@ export class Notification extends Model {
 	static TYPE_MENTION = 'mention';
 	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 
+	static ACTIVITY_FEED_TYPES = [
+		EventItem.TYPE_DEVLOG_POST_ADD,
+		EventItem.TYPE_COMMENT_VIDEO_ADD,
+		EventItem.TYPE_GAME_PUBLISH,
+	];
+
+	static NOTIFICATION_FEED_TYPES = [
+		Notification.TYPE_COMMENT_ADD,
+		Notification.TYPE_COMMENT_ADD_OBJECT_OWNER,
+		Notification.TYPE_FORUM_POST_ADD,
+		Notification.TYPE_FRIENDSHIP_ACCEPT,
+		Notification.TYPE_GAME_RATING_ADD,
+		Notification.TYPE_GAME_FOLLOW,
+		Notification.TYPE_SELLABLE_SELL,
+		Notification.TYPE_USER_FOLLOW,
+		Notification.TYPE_MENTION,
+		Notification.TYPE_COLLABORATOR_INVITE,
+	];
+
 	user_id!: number;
 	type!: string;
 	added_on!: number;
@@ -232,14 +251,13 @@ export class Notification extends Model {
 		return '';
 	}
 
-	get isActivityFeedNotification() {
-		switch (this.type) {
-			case EventItem.TYPE_COMMENT_VIDEO_ADD:
-			case EventItem.TYPE_DEVLOG_POST_ADD:
-			case EventItem.TYPE_GAME_PUBLISH:
-				return true;
+	get feedType() {
+		if (Notification.ACTIVITY_FEED_TYPES.indexOf(this.type) !== -1) {
+			return 'activity';
+		} else if (Notification.NOTIFICATION_FEED_TYPES.indexOf(this.type) !== -1) {
+			return 'notifications';
 		}
-		return false;
+		return '';
 	}
 
 	async go(router: VueRouter) {
