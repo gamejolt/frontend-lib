@@ -39,7 +39,7 @@ export default class AppLikesModal extends BaseModal {
 			if (this.resource instanceof Comment) {
 				return '/comments/likers/' + this.resource.id;
 			} else if (this.resource instanceof FiresidePost) {
-				return '/posts/votes/likers/' + this.resource.id;
+				return '/web/posts/likers/' + this.resource.id;
 			} else if (this.resource instanceof Game) {
 				return '/web/discover/games/likers/' + this.resource.id;
 			}

@@ -20,13 +20,13 @@ export class FiresidePostLike extends Model {
 			throw new Error(`Can't update like data`);
 		}
 
-		return this.$_save('/posts/votes/like/' + this.fireside_post_id, 'firesidePostLike', {
+		return this.$_save('/web/posts/like/' + this.fireside_post_id, 'firesidePostLike', {
 			ignorePayloadUser: true,
 		});
 	}
 
 	$remove() {
-		return this.$_remove('/posts/votes/unlike/' + this.fireside_post_id, {
+		return this.$_remove('/web/posts/unlike/' + this.fireside_post_id, {
 			ignorePayloadUser: true,
 		});
 	}

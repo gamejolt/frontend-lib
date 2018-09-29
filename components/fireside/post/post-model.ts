@@ -174,7 +174,7 @@ export class FiresidePost extends Model {
 	}
 
 	async fetchLikes(): Promise<FiresidePostLike[]> {
-		const response = await Api.sendRequest(`/posts/votes/likes/${this.id}`);
+		const response = await Api.sendRequest(`/web/posts/likes/${this.id}`);
 		return FiresidePostLike.populate(response.likes);
 	}
 
@@ -226,11 +226,7 @@ export class FiresidePost extends Model {
 	}
 
 	$publish() {
-		if (this.game) {
-			return this.$_save(`/web/posts/manage/publish/${this.id}`, 'firesidePost');
-		}
-
-		throw new Error('Must be attached to a game to publish.');
+		return this.$_save(`/web/posts/manage/publish/${this.id}`, 'firesidePost');
 	}
 
 	async remove() {
