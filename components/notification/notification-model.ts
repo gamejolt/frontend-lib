@@ -1,3 +1,4 @@
+import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
 import VueRouter, { RawLocation } from 'vue-router';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
@@ -58,6 +59,25 @@ export class Notification extends Model {
 	static TYPE_COLLABORATOR_INVITE = 'collaborator-invite';
 	static TYPE_MENTION = 'mention';
 	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
+
+	static ACTIVITY_FEED_TYPES = [
+		EventItem.TYPE_DEVLOG_POST_ADD,
+		EventItem.TYPE_COMMENT_VIDEO_ADD,
+		EventItem.TYPE_GAME_PUBLISH,
+	];
+
+	static NOTIFICATION_FEED_TYPES = [
+		Notification.TYPE_COMMENT_ADD,
+		Notification.TYPE_COMMENT_ADD_OBJECT_OWNER,
+		Notification.TYPE_FORUM_POST_ADD,
+		Notification.TYPE_FRIENDSHIP_ACCEPT,
+		Notification.TYPE_GAME_RATING_ADD,
+		Notification.TYPE_GAME_FOLLOW,
+		Notification.TYPE_SELLABLE_SELL,
+		Notification.TYPE_USER_FOLLOW,
+		Notification.TYPE_MENTION,
+		Notification.TYPE_COLLABORATOR_INVITE,
+	];
 
 	user_id!: number;
 	type!: string;
@@ -229,6 +249,15 @@ export class Notification extends Model {
 		}
 
 		// Must pull asynchronously when they click on the notification.
+		return '';
+	}
+
+	get feedType() {
+		if (Notification.ACTIVITY_FEED_TYPES.indexOf(this.type) !== -1) {
+			return 'activity';
+		} else if (Notification.NOTIFICATION_FEED_TYPES.indexOf(this.type) !== -1) {
+			return 'notifications';
+		}
 		return '';
 	}
 
