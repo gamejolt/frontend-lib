@@ -1,15 +1,15 @@
 import Vue, { ComponentOptions } from 'vue';
-import { Route, RawLocation } from 'vue-router';
-import { Component } from 'vue-property-decorator';
 import { createDecorator } from 'vue-class-component';
-import { EventBus } from '../event-bus/event-bus.service';
-import { objectEquals } from '../../utils/object';
-import { HistoryCache } from '../history/cache/cache.service';
-import { PayloadError } from '../payload/payload-service';
-import { LocationRedirect } from '../../utils/router';
+import { Component } from 'vue-property-decorator';
+import { RawLocation, Route } from 'vue-router';
 import { arrayRemove } from '../../utils/array';
+import { objectEquals } from '../../utils/object';
+import { LocationRedirect } from '../../utils/router';
+import { EventBus } from '../event-bus/event-bus.service';
+import { HistoryCache } from '../history/cache/cache.service';
 import { Meta } from '../meta/meta-service';
 import { Navigate } from '../navigate/navigate.service';
+import { PayloadError } from '../payload/payload-service';
 
 // This is component state that the server may have returned to the browser. It
 // can be used to bootstrap components with initial data.
@@ -22,6 +22,8 @@ export interface RouteOptions {
 	lazy?: boolean;
 	cache?: boolean;
 	cacheTag?: string;
+	reloadOnQueryChange?: boolean;
+	reloadOnHashChange?: boolean;
 }
 
 class RouteResolver {
@@ -245,7 +247,7 @@ export class BaseRouteComponent extends Vue {
 		const options = this.$options.routeOptions || {};
 
 		// Only do work if the route params/query has actually changed.
-		if (this.canSkipRouteUpdate(from, to)) {
+		if (this.canSkipRouteUpdate(from, to, options)) {
 			return;
 		}
 
@@ -361,14 +363,25 @@ export class BaseRouteComponent extends Vue {
 	}
 
 	/**
-	 * If all of the previous params are the same, then the already activated
-	 * components can stay the same. We only initialize routes that have
-	 * probably changed between updates.
+	 * If all of the previous params are the same, then the already activated components can stay
+	 * the same. We only initialize routes that have probably changed between updates.
 	 */
-	private canSkipRouteUpdate(from: Route, to: Route) {
+	private canSkipRouteUpdate(from: Route, to: Route, options: RouteOptions) {
 		// TODO: We can probably try to be smarter about this in the future and
 		// only update if params that affect the route have changed.
-		return objectEquals(to.params, from.params) && objectEquals(to.query, from.query);
+		if (!objectEquals(to.params, from.params)) {
+			return false;
+		}
+
+		if (options.reloadOnQueryChange && !objectEquals(to.query, from.query)) {
+			return false;
+		}
+
+		if (options.reloadOnHashChange && to.hash !== from.hash) {
+			return false;
+		}
+
+		return true;
 	}
 }
 

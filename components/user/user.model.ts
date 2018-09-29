@@ -1,6 +1,7 @@
-import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
 import { MediaItem } from '../media-item/media-item-model';
+import { Model } from '../model/model.service';
+import { Registry } from '../registry/registry.service';
 import { Theme } from '../theme/theme.model';
 
 export class User extends Model {
@@ -36,6 +37,7 @@ export class User extends Model {
 
 	theme!: Theme | null;
 	follower_count!: number;
+	following_count!: number;
 	is_following?: boolean;
 
 	// Manage linked accounts settings - fb is only returned in the profile pages
@@ -100,7 +102,6 @@ export class User extends Model {
 	is_gamer = false;
 	is_developer = false;
 
-
 	get isMod() {
 		return this.permission_level >= 3;
 	}
@@ -125,6 +126,8 @@ export class User extends Model {
 		if (data.theme) {
 			this.theme = new Theme(data.theme);
 		}
+
+		Registry.store('User', this);
 	}
 
 	static touch() {
@@ -207,14 +210,6 @@ export class User extends Model {
 		return this.$_save('/web/dash/email-preferences/toggle-emails', 'user', {
 			data: { state },
 		});
-	}
-
-	$saveFireside() {
-		return this.$_save('/fireside/dash/profile/save', 'user');
-	}
-
-	$saveFiresideSettings() {
-		return this.$_save('/fireside/dash/settings/save', 'user');
 	}
 
 	$unlinkAccount(provider: string) {
