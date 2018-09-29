@@ -61,7 +61,7 @@ export class Notification extends Model {
 	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 
 	static ACTIVITY_FEED_TYPES = [
-		EventItem.TYPE_DEVLOG_POST_ADD,
+		EventItem.TYPE_POST_ADD,
 		EventItem.TYPE_COMMENT_VIDEO_ADD,
 		EventItem.TYPE_GAME_PUBLISH,
 	];
