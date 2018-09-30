@@ -1,7 +1,8 @@
+import { Comment } from '../comment/comment-model';
+import { FiresidePost } from '../fireside/post/post-model';
+import { ForumPost } from '../forum/post/post.model';
 import { Model } from '../model/model.service';
 import { User } from '../user/user.model';
-import { Comment } from '../comment/comment-model';
-import { ForumPost } from '../forum/post/post.model';
 
 export class Mention extends Model {
 	user!: User;
@@ -9,8 +10,9 @@ export class Mention extends Model {
 	resource_id!: number;
 	mentioned_user!: User;
 	status!: string;
-	comment!: Comment;
-	forum_post!: ForumPost;
+	comment?: Comment;
+	forum_post?: ForumPost;
+	fireside_post?: FiresidePost;
 
 	constructor(data: any = {}) {
 		super(data);
@@ -29,6 +31,10 @@ export class Mention extends Model {
 
 		if (data.forum_post) {
 			this.forum_post = new ForumPost(data.forum_post);
+		}
+
+		if (data.fireside_post) {
+			this.fireside_post = new FiresidePost(data.fireside_post);
 		}
 	}
 }

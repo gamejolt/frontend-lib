@@ -283,6 +283,8 @@ export class Notification extends Model {
 					model = this.action_model.comment;
 				} else if (this.action_model.forum_post) {
 					model = this.action_model.forum_post;
+				} else if (this.action_model.fireside_post) {
+					model = this.action_model.fireside_post;
 				} else {
 					throw new Error(`Invalid mention model.`);
 				}
@@ -293,6 +295,8 @@ export class Notification extends Model {
 					url = await getCommentUrl(model.id);
 				} else if (model instanceof ForumPost) {
 					url = await ForumPost.getPostUrl(model.id);
+				} else if (model instanceof FiresidePost) {
+					url = model.url;
 				} else {
 					throw new Error('Invalid type.');
 				}
