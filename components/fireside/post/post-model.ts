@@ -1,7 +1,6 @@
 import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
-import { Environment } from '../../environment/environment.service';
 import { Game } from '../../game/game.model';
 import { HistoryTick } from '../../history-tick/history-tick-service';
 import { KeyGroup } from '../../key-group/key-group.model';
@@ -62,6 +61,7 @@ export class FiresidePost extends Model {
 	as_game_owner!: boolean;
 	slug!: string;
 	subline!: string;
+	url!: string;
 	content_compiled!: string;
 	content_markdown?: string;
 	view_count?: number;
@@ -74,8 +74,6 @@ export class FiresidePost extends Model {
 	user_like?: FiresidePostLike | null;
 	key_groups: KeyGroup[] = [];
 	poll!: Poll | null;
-
-	url: string;
 
 	// Used for forms and saving.
 	key_group_ids: number[] = [];
@@ -131,8 +129,6 @@ export class FiresidePost extends Model {
 		if (data.event_item) {
 			this.event_item = new EventItem(data.event_item);
 		}
-
-		this.url = Environment.baseUrl + '/post/' + this.slug;
 
 		Registry.store('FiresidePost', this);
 	}
