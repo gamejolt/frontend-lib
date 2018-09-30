@@ -132,7 +132,7 @@ export class FiresidePost extends Model {
 			this.event_item = new EventItem(data.event_item);
 		}
 
-		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
+		this.url = Environment.baseUrl + '/post/' + this.slug;
 
 		Registry.store('FiresidePost', this);
 	}
