@@ -21,7 +21,6 @@ const serverComponentState =
 export interface RouteOptions {
 	lazy?: boolean;
 	cache?: boolean;
-	reloadOnQueryChange?: boolean;
 	reloadOnHashChange?: boolean;
 }
 
@@ -367,11 +366,7 @@ export class BaseRouteComponent extends Vue {
 	private canSkipRouteUpdate(from: Route, to: Route, options: RouteOptions) {
 		// TODO: We can probably try to be smarter about this in the future and
 		// only update if params that affect the route have changed.
-		if (!objectEquals(to.params, from.params)) {
-			return false;
-		}
-
-		if (options.reloadOnQueryChange && !objectEquals(to.query, from.query)) {
+		if (!objectEquals(to.params, from.params) || !objectEquals(to.query, from.query)) {
 			return false;
 		}
 
