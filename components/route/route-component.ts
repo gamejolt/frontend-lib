@@ -21,7 +21,6 @@ const serverComponentState =
 export interface RouteOptions {
 	lazy?: boolean;
 	cache?: boolean;
-	cacheTag?: string;
 	reloadOnQueryChange?: boolean;
 	reloadOnHashChange?: boolean;
 }
@@ -100,9 +99,7 @@ export function RouteResolve(options: RouteOptions = {}) {
 				}
 
 				let promise: Promise<{ fromCache: boolean; payload: any }> | undefined;
-				let hasCache = !!routeOptions.cache
-					? HistoryCache.has(to, routeOptions.cacheTag)
-					: false;
+				let hasCache = !!routeOptions.cache ? HistoryCache.has(to, name) : false;
 				const resolver = RouteResolver.startResolve(componentOptions, to);
 
 				if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
@@ -277,10 +274,11 @@ export class BaseRouteComponent extends Vue {
 	// hook after SSR returns data to client.
 	resolveRoute(route: Route, resolver: RouteResolver, fromCache?: boolean) {
 		const routeOptions = this.$options.routeOptions || {};
+		const name = this.$options.name!;
 
 		// We do a cache refresh if the cache was used for this route.
 		if (fromCache === undefined) {
-			fromCache = HistoryCache.has(route, routeOptions.cacheTag);
+			fromCache = HistoryCache.has(route, name);
 		}
 
 		// If we are no longer resolving this resolver, let's early out.
@@ -323,7 +321,7 @@ export class BaseRouteComponent extends Vue {
 			}
 
 			if (routeOptions.cache) {
-				HistoryCache.store(route, payload, routeOptions.cacheTag);
+				HistoryCache.store(route, payload, name);
 			}
 		}
 
@@ -407,10 +405,8 @@ async function getPayload(
 	route: Route,
 	useCache: boolean
 ) {
-	const routeOptions = componentOptions.routeOptions || {};
-
 	if (useCache) {
-		const cache = HistoryCache.get(route, routeOptions.cacheTag);
+		const cache = HistoryCache.get(route, componentOptions.name);
 		if (cache) {
 			return { fromCache: true, payload: cache.data };
 		}
