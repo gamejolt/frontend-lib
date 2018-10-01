@@ -1,12 +1,11 @@
-import Vue from 'vue';
-import { Component, Prop, Emit } from 'vue-property-decorator';
 import View from '!view!./popper.html';
-
-import './popper.styl';
-const mod: any = require('v-tooltip');
-
-import { AppScrollInviewParent } from '../scroll/inview/parent';
+import Vue from 'vue';
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import { Screen } from '../screen/screen-service';
+import { AppScrollInviewParent } from '../scroll/inview/parent';
+import './popper.styl';
+
+const mod: any = require('v-tooltip');
 
 // Sync with the styles files.
 const TransitionTime = 200;
@@ -22,15 +21,28 @@ let PopperIndex = 0;
 })
 export class AppPopper extends Vue {
 	@Prop({ type: String, default: 'bottom' })
-	placement: 'top' | 'right' | 'bottom' | 'left';
+	placement!: 'top' | 'right' | 'bottom' | 'left';
+
 	@Prop({ type: String, default: 'click' })
-	trigger: string;
-	@Prop(Boolean) hideOnStateChange?: boolean;
-	@Prop(Boolean) trackTriggerWidth?: boolean;
-	@Prop() delay?: any;
-	@Prop(Boolean) disabled?: boolean;
-	@Prop(Boolean) show?: boolean;
-	@Prop(Boolean) block?: boolean;
+	trigger!: string;
+
+	@Prop(Boolean)
+	hideOnStateChange?: boolean;
+
+	@Prop(Boolean)
+	trackTriggerWidth?: boolean;
+
+	@Prop()
+	delay?: any;
+
+	@Prop(Boolean)
+	disabled?: boolean;
+
+	@Prop(Boolean)
+	show?: boolean;
+
+	@Prop(Boolean)
+	block?: boolean;
 
 	isVisible = false;
 	width = '';
