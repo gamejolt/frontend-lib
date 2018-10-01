@@ -57,21 +57,21 @@ let CommentNum = 0;
 	},
 })
 export class AppCommentWidgetComment extends Vue {
-	@Prop(Comment) comment: Comment;
+	@Prop(Comment) comment!: Comment;
 	@Prop(Array) children?: Comment[];
 	@Prop(Comment) parent?: Comment;
-	@Prop(String) resource: string;
-	@Prop(Number) resourceId: number;
+	@Prop(String) resource!: string;
+	@Prop(Number) resourceId!: number;
 	@Prop(Boolean) isLastInThread?: boolean;
 
-	@AppState user: AppStore['user'];
+	@AppState user!: AppStore['user'];
 
 	componentId = ++CommentNum;
 	isFollowPending = false;
 	isShowingChildren = false;
 	isEditing = false;
 
-	widget: AppCommentWidget;
+	widget!: AppCommentWidget;
 
 	readonly date = date;
 	readonly Environment = Environment;

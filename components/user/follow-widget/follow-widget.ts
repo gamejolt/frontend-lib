@@ -21,7 +21,7 @@ import { findTooltipContainer } from '../../tooltip/container/container';
 	},
 })
 export class AppUserFollowWidget extends Vue {
-	@Prop(User) user: User;
+	@Prop(User) user!: User;
 	@Prop(Boolean) overlay?: boolean;
 	@Prop(Boolean) circle?: boolean;
 	@Prop(Boolean) block?: boolean;
@@ -29,7 +29,7 @@ export class AppUserFollowWidget extends Vue {
 	@Prop(Boolean) hideCount?: boolean;
 	@Prop(String) eventLabel?: string;
 
-	@State app: AppStore;
+	@State app!: AppStore;
 
 	isProcessing = false;
 

@@ -1,45 +1,43 @@
+import View from '!view!./payment-form.html?style=./payment-form.styl';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import View from '!view!./payment-form.html?style=./payment-form.styl';
-
+import { arrayIndexBy } from '../../../../utils/array';
+import { AppLoading } from '../../../../vue/components/loading/loading';
+import { currency } from '../../../../vue/filters/currency';
+import { AppStore } from '../../../../vue/services/app/app-store';
+import { Api } from '../../../api/api.service';
+import { Device } from '../../../device/device.service';
+import { Environment } from '../../../environment/environment.service';
+import { AppExpand } from '../../../expand/expand';
+import { AppFocusWhen } from '../../../form-vue/focus-when.directive';
+import { AppForm } from '../../../form-vue/form';
 import {
 	BaseForm,
 	FormOnInit,
-	FormOnSubmitSuccess,
 	FormOnSubmit,
+	FormOnSubmitError,
+	FormOnSubmitSuccess,
 } from '../../../form-vue/form.service';
+import { Geo, Region } from '../../../geo/geo.service';
+import { Growls } from '../../../growls/growls.service';
+import { HistoryTick } from '../../../history-tick/history-tick-service';
+import { AppLoadingFade } from '../../../loading/fade/fade';
+import { Navigate } from '../../../navigate/navigate.service';
+import { OrderPayment } from '../../../order/payment/payment.model';
+import { AppPopper } from '../../../popper/popper';
+import { Screen } from '../../../screen/screen-service';
+import { Sellable } from '../../../sellable/sellable.model';
+import { AppTooltip } from '../../../tooltip/tooltip';
+import { User } from '../../../user/user.model';
+import { GameBuild } from '../../build/build.model';
 import { Game } from '../../game.model';
 import { GamePackage } from '../package.model';
-import { Sellable } from '../../../sellable/sellable.model';
-import { User } from '../../../user/user.model';
-import { Screen } from '../../../screen/screen-service';
-import { Api } from '../../../api/api.service';
-import { arrayIndexBy } from '../../../../utils/array';
-import { Geo, Region } from '../../../geo/geo.service';
-import { HistoryTick } from '../../../history-tick/history-tick-service';
-import { Device } from '../../../device/device.service';
-import { OrderPayment } from '../../../order/payment/payment.model';
-import { Environment } from '../../../environment/environment.service';
-import { AppStore } from '../../../../vue/services/app/app-store';
-import { Growls } from '../../../growls/growls.service';
-import { currency } from '../../../../vue/filters/currency';
-import { AppLoading } from '../../../../vue/components/loading/loading';
-import { AppExpand } from '../../../expand/expand';
-import { AppTooltip } from '../../../tooltip/tooltip';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { AppFocusWhen } from '../../../form-vue/focus-when.directive';
-import { AppForm } from '../../../form-vue/form';
-import { AppLoadingFade } from '../../../loading/fade/fade';
-import { FormOnSubmitError } from '../../../form-vue/form.service';
-import { GameBuild } from '../../build/build.model';
-import { AppPopper } from '../../../popper/popper';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
 @View
 @Component({
 	components: {
-		AppJolticon,
 		AppLoading,
 		AppLoadingFade,
 		AppExpand,
@@ -55,17 +53,25 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 })
 export class FormGamePackagePayment extends BaseForm<any>
 	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess, FormOnSubmitError {
-	@Prop(Game) game: Game;
-	@Prop(GamePackage) package: GamePackage;
-	@Prop(GameBuild) build?: GameBuild;
-	@Prop(Sellable) sellable: Sellable;
-	@Prop(String) partnerKey?: string;
-	@Prop(User) partner?: User;
-	@Prop(String) operation: 'download' | 'play';
+	@Prop(Game)
+	game!: Game;
+	@Prop(GamePackage)
+	package!: GamePackage;
+	@Prop(GameBuild)
+	build?: GameBuild;
+	@Prop(Sellable)
+	sellable!: Sellable;
+	@Prop(String)
+	partnerKey?: string;
+	@Prop(User)
+	partner?: User;
+	@Prop(String)
+	operation!: 'download' | 'play';
 
-	@State app: AppStore;
+	@State
+	app!: AppStore;
 
-	$refs: {
+	$refs!: {
 		form: AppForm;
 	};
 
@@ -375,15 +381,14 @@ export class FormGamePackagePayment extends BaseForm<any>
 		if (GJ_IS_CLIENT) {
 			// Our checkout can be done in client.
 			if (this.checkoutType === OrderPayment.METHOD_CC_STRIPE) {
-				window.location.href =
-					Environment.checkoutBaseUrl + '/checkout/' + response.cart.id;
+				Navigate.goto(Environment.checkoutBaseUrl + '/checkout/' + response.cart.id);
 			} else {
 				// Otherwise we have to open in browser.
-				require('nw.gui').Shell.openExternal(response.redirectUrl);
+				Navigate.gotoExternal(response.redirectUrl);
 			}
 		} else {
 			// For site we have to replace the URL completely since we are switching to https.
-			window.location.href = response.redirectUrl;
+			Navigate.goto(response.redirectUrl);
 		}
 	}
 

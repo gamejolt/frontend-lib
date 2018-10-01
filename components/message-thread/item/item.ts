@@ -21,9 +21,9 @@ import { AppUserCardHover } from '../../user/card/hover/hover';
 	},
 })
 export class AppMessageThreadItem extends Vue {
-	@Prop(User) user: User;
+	@Prop(User) user!: User;
 	@Prop(User) repliedTo?: User;
-	@Prop(Number) date: number;
+	@Prop(Number) date!: number;
 	@Prop(String) id?: string;
 	@Prop(Boolean) isActive?: boolean;
 	@Prop(Boolean) isNew?: boolean;

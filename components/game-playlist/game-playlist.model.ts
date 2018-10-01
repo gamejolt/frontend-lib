@@ -4,13 +4,13 @@ import { Api } from '../api/api.service';
 import { GamePlaylistGame } from './game/game.model';
 
 export class GamePlaylist extends Model {
-	user_id: number;
-	user: User;
-	name: string;
-	slug: string;
-	is_secret: boolean;
-	added_on: number;
-	updated_on: number;
+	user_id!: number;
+	user!: User;
+	name!: string;
+	slug!: string;
+	is_secret!: boolean;
+	added_on!: number;
+	updated_on!: number;
 
 	constructor(data: any = {}) {
 		super(data);

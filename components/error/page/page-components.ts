@@ -1,13 +1,11 @@
 import Vue from 'vue';
-import { State } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import View400 from '!view!./page-400.html';
 import View403 from '!view!./page-403.html';
 import View500 from '!view!./page-500.html';
 import View404 from '!view!./page-404.html';
 import ViewOffline from '!view!./page-offline.html';
-
-import { AppStore } from '../../../vue/services/app/app-store';
+import { Navigate } from '../../navigate/navigate.service';
 
 @View400
 @Component({})
@@ -28,10 +26,8 @@ export class AppErrorPage500 extends Vue {}
 @ViewOffline
 @Component({})
 export class AppErrorPageOffline extends Vue {
-	@State app: AppStore;
-
 	retry() {
-		window.location.reload();
+		Navigate.reload();
 	}
 }
 

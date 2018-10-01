@@ -8,8 +8,8 @@ import { ErrorPages } from './page-components';
 @View
 @Component({})
 export class AppErrorPage extends Vue {
-	@AppState error: AppStore['error'];
-	@AppMutation clearError: AppStore['clearError'];
+	@AppState error!: AppStore['error'];
+	@AppMutation clearError!: AppStore['clearError'];
 
 	watcher?: Function;
 

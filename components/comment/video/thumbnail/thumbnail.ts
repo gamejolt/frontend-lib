@@ -24,9 +24,9 @@ import { AppUserCardHover } from '../../../user/card/hover/hover';
 	},
 })
 export class AppCommentVideoThumbnail extends Vue {
-	@Prop(CommentVideo) video: CommentVideo;
+	@Prop(CommentVideo) video!: CommentVideo;
 
-	@State app: Store['app'];
+	@State app!: Store['app'];
 
 	isLoaded = false;
 

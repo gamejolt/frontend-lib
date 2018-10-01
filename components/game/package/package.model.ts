@@ -13,22 +13,22 @@ export class GamePackage extends Model {
 	static readonly VISIBILITY_PRIVATE = 'private';
 	static readonly VISIBILITY_PUBLIC = 'public';
 
-	game_id: number;
-	sellable_id: number;
-	title: string;
-	description: string;
-	sort: number;
-	added_on: number;
-	published_on: number;
-	updated_on: number;
-	visibility: string;
-	partner_visibility: boolean;
-	status: string;
-	is_game_owner: boolean;
+	game_id!: number;
+	sellable_id?: number;
+	title!: string;
+	description!: string;
+	sort!: number;
+	added_on!: number;
+	published_on!: number;
+	updated_on!: number;
+	visibility!: string;
+	partner_visibility!: boolean;
+	status!: string;
+	is_game_owner?: boolean;
 
-	has_sales: boolean;
-	has_browser_builds: boolean;
-	is_in_paid_sellable: boolean;
+	has_sales?: boolean;
+	has_browser_builds?: boolean;
+	is_in_paid_sellable?: boolean;
 
 	// These fields get added only during GamePackagePayloadModel.
 	_releases?: GameRelease[];

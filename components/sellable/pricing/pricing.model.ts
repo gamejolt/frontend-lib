@@ -1,13 +1,15 @@
 import { Model } from '../../model/model.service';
 
 export class SellablePricing extends Model {
-	amount: number;
-	currency_code: string;
-	country_code: string;
-	promotional: boolean;
-	start: number;
-	end: number;
-	timezone: string;
+	amount!: number;
+	currency_code!: string;
+	country_code!: string;
+	promotional!: boolean;
+
+	// Promotional settings
+	start?: number;
+	end?: number;
+	timezone?: string;
 
 	static getOriginalPricing(pricings: SellablePricing[]) {
 		if (Array.isArray(pricings)) {

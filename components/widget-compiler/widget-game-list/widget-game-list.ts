@@ -15,7 +15,7 @@ import { WidgetCompiler } from '../widget-compiler.service';
 })
 export class AppWidgetCompilerWidgetGameList extends Vue {
 	@Prop({ type: Array, default: () => [] })
-	games: Game[];
+	games!: Game[];
 
 	get contentClass() {
 		return WidgetCompiler.getContentClass();

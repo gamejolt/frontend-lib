@@ -32,8 +32,8 @@ export class AppFormControlErrors extends Vue {
 	@Prop(String) label?: string;
 	@Prop(String) position?: string;
 
-	form: AppForm;
-	group: AppFormGroup;
+	form!: AppForm;
+	group!: AppFormGroup;
 
 	private errorMessageOverrides: { [k: string]: string } = {};
 

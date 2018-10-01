@@ -37,12 +37,22 @@ export class Aps {
 		});
 	}
 
+	static getTargetingKeys(): string[] {
+		if (!this.isTagCreated) {
+			throw new Error(`Called before tag created.`);
+		}
+
+		return this.apstag.targetingKeys();
+	}
+
 	private static createTag() {
 		if (this.isTagCreated) {
 			return;
 		}
 		this.isTagCreated = true;
 
+		// tslint:disable:no-unused-expression
+		// tslint:disable:curly
 		// FROM AMAZON
 		!(function(a9: any, a: any, p: any, s: any, t: any) {
 			if (a[a9]) return;
@@ -70,6 +80,8 @@ export class Aps {
 			g.parentNode.insertBefore(A, g);
 		})('apstag', window, document, 'script', 'https://c.amazon-adsystem.com/aax2/apstag.js');
 		// END FROM AMAZON
+		// tslint:enable:no-unused-expression
+		// tslint:enable:curly
 
 		this.apstag.init({
 			pubID: '78dcb131-6f52-468a-84dc-e9840b75724f',

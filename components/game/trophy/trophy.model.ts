@@ -24,17 +24,17 @@ export class GameTrophy extends Model {
 		[GameTrophy.DIFFICULTY_PLATINUM]: 'Platinum',
 	};
 
-	game_id: number;
-	difficulty: number;
-	title: string;
-	description: string;
-	secret: boolean;
-	visible: boolean;
-	sort: number;
-	experience: number;
-	img_thumbnail: string;
-	has_thumbnail: boolean;
-	is_owner: boolean;
+	game_id!: number;
+	difficulty!: number;
+	title!: string;
+	description!: string;
+	secret!: boolean;
+	visible!: boolean;
+	sort!: number;
+	experience!: number;
+	img_thumbnail!: string;
+	has_thumbnail!: boolean;
+	is_owner!: boolean;
 
 	constructor(data: any = {}) {
 		super(data);

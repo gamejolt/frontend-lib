@@ -11,7 +11,7 @@ import { AppDatetimePicker } from '../../../datetime-picker/datetime-picker';
 	},
 })
 export class AppFormControlDate extends BaseFormControl {
-	@Prop(Number) timezoneOffset: number;
+	@Prop(Number) timezoneOffset!: number;
 
 	controlVal = Date.now();
 

@@ -1,14 +1,21 @@
 <div>
 	<h4>
-		<translate>game.rating_growl.title</translate>
+		<translate>What did you think?</translate>
 	</h4>
 
 	<p>{{ game.title }}</p>
 
-	<app-rating-widget
-		:game="game"
-		>
-	</app-rating-widget>
+	<div>
+		<app-rating-widget
+			:game="game"
+			/>
+	</div>
 
-	<p><em><translate>game.rating_growl.message</translate></em></p>
+	<br>
+
+	<p>
+		<em>
+			<translate>Rating the games you play helps us show you better stuff.</translate>
+		</em>
+	</p>
 </div>

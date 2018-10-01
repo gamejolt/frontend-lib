@@ -14,8 +14,8 @@ const STORAGE_KEY_PREFIX = 'dismiss-alert:';
 	},
 })
 export class AppAlertDismissable extends Vue {
-	@Prop(String) alertType: string;
-	@Prop(String) dismissKey: string;
+	@Prop(String) alertType!: string;
+	@Prop(String) dismissKey!: string;
 	@Prop(Boolean) noMargin?: boolean;
 
 	shouldShow = false;
@@ -25,13 +25,13 @@ export class AppAlertDismissable extends Vue {
 	}
 
 	mounted() {
-		if (!window.localStorage[this._key]) {
+		if (!window.localStorage.getItem(this._key)) {
 			this.shouldShow = true;
 		}
 	}
 
 	dismiss() {
-		window.localStorage[this._key] = Date.now();
+		window.localStorage.setItem(this._key, Date.now() + '');
 		this.shouldShow = false;
 
 		this.$emit('dismiss');

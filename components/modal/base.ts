@@ -10,5 +10,5 @@ import { AppModal } from './modal';
 	},
 })
 export class BaseModal extends Vue {
-	@Prop(Modal) modal: Modal;
+	@Prop(Modal) modal!: Modal;
 }

@@ -26,14 +26,14 @@ export class GameCollaborator extends Model {
 	static readonly ROLE_COMMUNITY_MANAGER = 'community-manager';
 	static readonly ROLE_DEVELOPER = 'developer';
 
-	game_id: number;
-	user_id: number;
-	status: typeof GameCollaborator.STATUS_ACTIVE | typeof GameCollaborator.STATUS_INVITE;
-	username: string; // for submitting
-	role: GameCollaboratorRole;
-	perms: Perm[];
-	added_on: number;
-	accepted_on: number;
+	game_id!: number;
+	user_id!: number;
+	status!: typeof GameCollaborator.STATUS_ACTIVE | typeof GameCollaborator.STATUS_INVITE;
+	username?: string; // for submitting
+	role!: GameCollaboratorRole;
+	perms: Perm[] = [];
+	added_on!: number;
+	accepted_on!: number;
 
 	game?: Game;
 	user?: User;

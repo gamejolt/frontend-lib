@@ -1,36 +1,37 @@
-import * as nwGui from 'nw.gui';
-
-import VueRouter from 'vue-router';
-import { Model } from '../model/model.service';
-import { Environment } from '../environment/environment.service';
-import { FiresidePost } from '../fireside/post/post-model';
-import { Comment } from '../comment/comment-model';
-import { User } from '../user/user.model';
-import { Api } from '../api/api.service';
-import { Game } from '../game/game.model';
-import { Growls } from '../growls/growls.service';
-import { ForumTopic } from '../forum/topic/topic.model';
-import { ForumPost } from '../forum/post/post.model';
-import { UserFriendship } from '../user/friendship/friendship.model';
-import { GameRating } from '../game/rating/rating.model';
-import { Sellable } from '../sellable/sellable.model';
-import { Translate } from '../translate/translate.service';
-import { OrderItem } from '../order/item/item.model';
-import { GameLibraryGame } from '../game-library/game/game.model';
-import { Subscription } from '../subscription/subscription.model';
-import { GameCollaborator } from '../game/collaborator/collaborator.model';
-import { Mention } from '../mention/mention.model';
+import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
+import VueRouter, { RawLocation } from 'vue-router';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
-import { CommentVideo } from '../comment/video/video-model';
+import { Api } from '../api/api.service';
+import { Comment, getCommentUrl } from '../comment/comment-model';
 import { CommentVideoModal } from '../comment/video/modal/modal.service';
+import { CommentVideo } from '../comment/video/video-model';
+import { Environment } from '../environment/environment.service';
+import { FiresidePost } from '../fireside/post/post-model';
+import { ForumPost } from '../forum/post/post.model';
+import { ForumTopic } from '../forum/topic/topic.model';
+import { GameLibraryGame } from '../game-library/game/game.model';
+import { GameCollaborator } from '../game/collaborator/collaborator.model';
+import { Game } from '../game/game.model';
+import { GameRating } from '../game/rating/rating.model';
+import { Growls } from '../growls/growls.service';
+import { Mention } from '../mention/mention.model';
+import { Model } from '../model/model.service';
+import { Navigate } from '../navigate/navigate.service';
+import { OrderItem } from '../order/item/item.model';
+import { Sellable } from '../sellable/sellable.model';
+import { Subscription } from '../subscription/subscription.model';
+import { Translate } from '../translate/translate.service';
+import { UserFriendship } from '../user/friendship/friendship.model';
+import { User } from '../user/user.model';
 
-function getRouteLocationForModel(model: Game | User | FiresidePost) {
+function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocation {
 	if (model instanceof User) {
 		return model.url;
 	} else if (model instanceof Game) {
 		return model.routeLocation;
 	} else if (model instanceof FiresidePost && !!model.game) {
+		// TODO(userposts)
 		return {
 			name: 'discover.games.view.devlog.view',
 			params: {
@@ -52,25 +53,44 @@ export class Notification extends Model {
 	static TYPE_FRIENDSHIP_CANCEL = 'friendship-cancel';
 	static TYPE_GAME_RATING_ADD = 'game-rating-add';
 	static TYPE_GAME_FOLLOW = 'game-follow';
-	static TYPE_DEVLOG_POST_ADD = 'devlog-post-add';
+	static TYPE_POST_ADD = 'post-add';
 	static TYPE_SELLABLE_SELL = 'sellable-sell';
 	static TYPE_USER_FOLLOW = 'user-follow';
 	static TYPE_COLLABORATOR_INVITE = 'collaborator-invite';
 	static TYPE_MENTION = 'mention';
 	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
 
-	user_id: number;
-	type: string;
-	added_on: number;
-	viewed_on: number;
+	static ACTIVITY_FEED_TYPES = [
+		EventItem.TYPE_POST_ADD,
+		EventItem.TYPE_COMMENT_VIDEO_ADD,
+		EventItem.TYPE_GAME_PUBLISH,
+	];
 
-	from_resource: string;
-	from_resource_id: number;
+	static NOTIFICATION_FEED_TYPES = [
+		Notification.TYPE_COMMENT_ADD,
+		Notification.TYPE_COMMENT_ADD_OBJECT_OWNER,
+		Notification.TYPE_FORUM_POST_ADD,
+		Notification.TYPE_FRIENDSHIP_ACCEPT,
+		Notification.TYPE_GAME_RATING_ADD,
+		Notification.TYPE_GAME_FOLLOW,
+		Notification.TYPE_SELLABLE_SELL,
+		Notification.TYPE_USER_FOLLOW,
+		Notification.TYPE_MENTION,
+		Notification.TYPE_COLLABORATOR_INVITE,
+	];
+
+	user_id!: number;
+	type!: string;
+	added_on!: number;
+	viewed_on!: number;
+
+	from_resource!: string;
+	from_resource_id!: number;
 	from_model?: User;
 
-	action_resource: string;
-	action_resource_id: number;
-	action_model:
+	action_resource!: string;
+	action_resource_id!: number;
+	action_model!:
 		| Comment
 		| ForumPost
 		| UserFriendship
@@ -83,9 +103,9 @@ export class Notification extends Model {
 		| Mention
 		| CommentVideo;
 
-	to_resource: string;
-	to_resource_id: number;
-	to_model: Game | User | FiresidePost | ForumTopic | Sellable;
+	to_resource!: string | null;
+	to_resource_id!: number | null;
+	to_model?: Game | User | FiresidePost | ForumTopic | Sellable;
 
 	// Generated in constructor.
 	jolticon = '';
@@ -136,16 +156,16 @@ export class Notification extends Model {
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_RATING_ADD) {
 			this.action_model = new GameRating(data.action_resource_model);
-			this.jolticon = 'jolticon-chart';
-			this.is_game_based = true;
+			this.jolticon = 'jolticon-thumbs-up';
+			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_FOLLOW) {
 			this.action_model = new GameLibraryGame(data.action_resource_model);
 			this.jolticon = 'jolticon-subscribe';
 			this.is_user_based = true;
-		} else if (this.type === Notification.TYPE_DEVLOG_POST_ADD) {
+		} else if (this.type === Notification.TYPE_POST_ADD) {
 			this.action_model = new FiresidePost(data.action_resource_model);
 			this.jolticon = 'jolticon-blog-article';
-			this.is_game_based = true;
+			this.is_game_based = this.to_model instanceof Game;
 		} else if (this.type === Notification.TYPE_SELLABLE_SELL) {
 			this.action_model = new OrderItem(data.action_resource_model);
 			this.jolticon = 'jolticon-heart';
@@ -179,7 +199,7 @@ export class Notification extends Model {
 		return Api.sendRequest('/web/dash/activity/count', null, { detach: true });
 	}
 
-	get routeLocation() {
+	get routeLocation(): RawLocation {
 		switch (this.type) {
 			case Notification.TYPE_FRIENDSHIP_REQUEST:
 			case Notification.TYPE_FRIENDSHIP_ACCEPT:
@@ -189,7 +209,7 @@ export class Notification extends Model {
 				return getRouteLocationForModel(this.from_model!);
 
 			case Notification.TYPE_GAME_RATING_ADD:
-				return getRouteLocationForModel(this.to_model as Game);
+				return getRouteLocationForModel(this.from_model as User);
 
 			case Notification.TYPE_GAME_FOLLOW:
 				return getRouteLocationForModel(this.from_model!);
@@ -197,7 +217,7 @@ export class Notification extends Model {
 			case Notification.TYPE_COLLABORATOR_INVITE:
 				return getRouteLocationForModel(this.to_model as Game);
 
-			case Notification.TYPE_DEVLOG_POST_ADD:
+			case Notification.TYPE_POST_ADD:
 				return getRouteLocationForModel(this.action_model as FiresidePost);
 
 			case Notification.TYPE_SELLABLE_SELL:
@@ -232,6 +252,15 @@ export class Notification extends Model {
 		return '';
 	}
 
+	get feedType() {
+		if (Notification.ACTIVITY_FEED_TYPES.indexOf(this.type) !== -1) {
+			return 'activity';
+		} else if (Notification.NOTIFICATION_FEED_TYPES.indexOf(this.type) !== -1) {
+			return 'notifications';
+		}
+		return '';
+	}
+
 	async go(router: VueRouter) {
 		if (this.routeLocation) {
 			router.push(this.routeLocation);
@@ -254,6 +283,8 @@ export class Notification extends Model {
 					model = this.action_model.comment;
 				} else if (this.action_model.forum_post) {
 					model = this.action_model.forum_post;
+				} else if (this.action_model.fireside_post) {
+					model = this.action_model.fireside_post;
 				} else {
 					throw new Error(`Invalid mention model.`);
 				}
@@ -261,9 +292,11 @@ export class Notification extends Model {
 
 			try {
 				if (model instanceof Comment) {
-					url = await Comment.getCommentUrl(model.id);
+					url = await getCommentUrl(model.id);
 				} else if (model instanceof ForumPost) {
 					url = await ForumPost.getPostUrl(model.id);
+				} else if (model instanceof FiresidePost) {
+					url = model.url;
 				} else {
 					throw new Error('Invalid type.');
 				}
@@ -274,11 +307,8 @@ export class Notification extends Model {
 				if (url.search(search) === 0) {
 					url = url.replace(search, '');
 					router.push(url);
-				} else if (GJ_IS_CLIENT) {
-					const gui = require('nw.gui') as typeof nwGui;
-					gui.Shell.openExternal(url);
 				} else {
-					window.location.href = url;
+					Navigate.gotoExternal(url);
 				}
 			} catch (e) {
 				console.error(e);
@@ -317,14 +347,15 @@ function getSubjectTranslationValue(notification: Notification) {
 function getTranslationValues(notification: Notification) {
 	const subject = getSubjectTranslationValue(notification);
 
-	if (
-		notification.to_model instanceof Game ||
-		notification.to_model instanceof ForumTopic ||
-		notification.to_model instanceof FiresidePost
-	) {
+	if (notification.to_model instanceof Game || notification.to_model instanceof ForumTopic) {
 		return {
 			subject: subject,
 			object: notification.to_model.title,
+		};
+	} else if (notification.to_model instanceof FiresidePost) {
+		return {
+			subject: subject,
+			object: notification.to_model.lead_snippet,
 		};
 	}
 
@@ -335,16 +366,16 @@ function getTranslationValues(notification: Notification) {
 
 export function getNotificationText(notification: Notification) {
 	switch (notification.type) {
-		case Notification.TYPE_DEVLOG_POST_ADD: {
+		case Notification.TYPE_POST_ADD: {
 			let gameTitle = '';
 			let postTitle = '';
 			if (notification.to_model instanceof Game) {
-				gameTitle = notification.to_model.title;
+				gameTitle = notification.to_model.title + ' - ';
 			}
 			if (notification.action_model instanceof FiresidePost) {
-				postTitle = notification.action_model.title;
+				postTitle = notification.action_model.lead_snippet;
 			}
-			return `${gameTitle} - ${postTitle}`;
+			return gameTitle + postTitle;
 		}
 
 		case Notification.TYPE_COMMENT_VIDEO_ADD: {
@@ -393,7 +424,7 @@ export function getNotificationText(notification: Notification) {
 
 		case Notification.TYPE_GAME_RATING_ADD: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } received a new rating.`,
+				`%{ subject } liked %{ object }.`,
 				getTranslationValues(notification)
 			);
 		}
@@ -451,7 +482,7 @@ export function getNotificationText(notification: Notification) {
 						return Translate.$gettextInterpolate(
 							`%{ subject } mentioned you in a comment on the post %{ object }.`,
 							{
-								object: notification.to_model.title,
+								object: notification.to_model.lead_snippet,
 								subject: getSubjectTranslationValue(notification),
 							}
 						);
@@ -480,7 +511,7 @@ export function getNotificationText(notification: Notification) {
 					return Translate.$gettextInterpolate(
 						`%{ subject } mentioned you in the post %{ object }.`,
 						{
-							object: (notification.to_model as FiresidePost).title,
+							object: (notification.to_model as FiresidePost).lead_snippet,
 							subject: getSubjectTranslationValue(notification),
 						}
 					);

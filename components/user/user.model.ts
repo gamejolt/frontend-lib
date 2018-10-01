@@ -1,38 +1,33 @@
-import { Model } from '../model/model.service';
 import { Api } from '../api/api.service';
 import { MediaItem } from '../media-item/media-item-model';
+import { Model } from '../model/model.service';
+import { Registry } from '../registry/registry.service';
 import { Theme } from '../theme/theme.model';
 
 export class User extends Model {
 	static readonly TYPE_GAMER = 'User';
 	static readonly TYPE_DEVELOPER = 'Developer';
 
-	type: 'User' | 'Developer';
-	username: string;
-	name: string;
-	web_site: string;
-	display_name: string;
-	url: string;
-	slug: string;
-	img_avatar: string;
-	dogtag: string;
+	type!: 'User' | 'Developer';
+	username!: string;
+	name!: string;
+	web_site!: string;
+	display_name!: string;
+	url!: string;
+	slug!: string;
+	img_avatar!: string;
+	dogtag!: string;
 
-	status: number;
-	permission_level: number;
-	is_verified: boolean;
-	is_partner: boolean;
-	avatar_media_item?: MediaItem;
-	header_media_item?: MediaItem;
-	disable_gravatar: boolean;
+	status!: number;
+	permission_level!: number;
+	is_verified!: boolean;
+	is_partner!: boolean | null;
 
-	created_on: number;
-	last_logged_on: number;
+	created_on!: number;
+	last_logged_on!: number;
 
 	twitter_id?: string;
 	twitter_screenname?: string;
-
-	facebook_id?: string;
-	facebook_name?: string;
 
 	twitch_id?: string;
 	twitch_name?: string;
@@ -40,23 +35,52 @@ export class User extends Model {
 	google_id?: string;
 	google_nickname?: string;
 
-	is_gamer = false;
-	is_developer = false;
+	theme!: Theme | null;
+	follower_count!: number;
+	following_count!: number;
+	is_following?: boolean;
 
-	level_next_percentage: number;
+	// Manage linked accounts settings - fb is only returned in the profile pages
+	facebook_id?: string;
+	facebook_name?: string;
 
-	follower_count: number;
-	is_following: boolean;
+	// exp settings.
+	level?: number;
+	experience?: number;
+	experience_next?: number;
+	level_next_percentage?: number;
 
-	newsletter: boolean;
+	// Profile settings.
+	avatar_media_item?: MediaItem;
+	header_media_item?: MediaItem;
+	disable_gravatar?: boolean;
 
-	// Fireside.
-	can_manage: boolean;
-	fireside_ga_tracking_id: string;
-	fireside_profile: string;
-	compiled_fireside_profile: string;
-	fireside_about: string;
-	compiled_fireside_about: string;
+	description?: string;
+	description_compiled?: string;
+	description_markdown?: string;
+	has_compiled_description?: boolean;
+
+	// Notifications settings.
+	newsletter?: boolean;
+	notifiy_shouts?: boolean;
+	notifiy_comments?: boolean;
+	notifiy_comment_replies?: boolean;
+	notifiy_ratings?: boolean;
+	notifiy_game_follows?: boolean;
+	notifiy_user_follows?: boolean;
+	notifiy_user_uploads?: boolean;
+	notifiy_private_messages?: boolean;
+	notifiy_friendships?: boolean;
+	notifiy_forum_posts?: boolean;
+	notifiy_followed_game_updates?: boolean;
+	notifiy_sales?: boolean;
+	notifiy_collaborator_invites?: boolean;
+	notifiy_mentions?: boolean;
+	notifiy_gj_news?: boolean;
+	notifiy_gj_recommendations?: boolean;
+
+	// Email settings
+	email_address?: string;
 
 	// Financials
 	paypal_id?: string;
@@ -65,7 +89,18 @@ export class User extends Model {
 	revenue_payout_minimum?: number;
 	revenue_wallet_maximum?: number;
 
-	theme?: Theme;
+	// Fireside.
+	can_manage?: boolean;
+	fireside_ga_tracking_id?: string;
+
+	// Fireside profile
+	fireside_profile?: string;
+	compiled_fireside_profile?: string;
+	fireside_about?: string;
+	compiled_fireside_about?: string;
+
+	is_gamer = false;
+	is_developer = false;
 
 	get isMod() {
 		return this.permission_level >= 3;
@@ -91,6 +126,8 @@ export class User extends Model {
 		if (data.theme) {
 			this.theme = new Theme(data.theme);
 		}
+
+		Registry.store('User', this);
 	}
 
 	static touch() {
@@ -173,14 +210,6 @@ export class User extends Model {
 		return this.$_save('/web/dash/email-preferences/toggle-emails', 'user', {
 			data: { state },
 		});
-	}
-
-	$saveFireside() {
-		return this.$_save('/fireside/dash/profile/save', 'user');
-	}
-
-	$saveFiresideSettings() {
-		return this.$_save('/fireside/dash/settings/save', 'user');
 	}
 
 	$unlinkAccount(provider: string) {

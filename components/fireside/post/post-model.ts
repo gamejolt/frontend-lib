@@ -1,20 +1,36 @@
-import { Model } from '../../model/model.service';
-import { FiresidePostTag } from './tag/tag-model';
-import { FiresidePostLike } from './like/like-model';
-import { FiresidePostVideo } from './video/video-model';
-import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
-import { ModalConfirm } from '../../modal/confirm/confirm-service';
-import { HistoryTick } from '../../history-tick/history-tick-service';
-import { Environment } from '../../environment/environment.service';
-import { MediaItem } from '../../media-item/media-item-model';
-import { Game } from '../../game/game.model';
-import { Api } from '../../api/api.service';
+import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
 import { appStore } from '../../../vue/services/app/app-store';
+import { Api } from '../../api/api.service';
+import { Game } from '../../game/game.model';
+import { HistoryTick } from '../../history-tick/history-tick-service';
+import { KeyGroup } from '../../key-group/key-group.model';
+import { MediaItem } from '../../media-item/media-item-model';
+import { ModalConfirm } from '../../modal/confirm/confirm-service';
+import { Model, ModelSaveRequestOptions } from '../../model/model.service';
+import { Poll } from '../../poll/poll.model';
 import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
-import { KeyGroup } from '../../key-group/key-group.model';
 import { User } from '../../user/user.model';
-import { Poll } from '../../poll/poll.model';
+import { FiresidePostLike } from './like/like-model';
+import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
+import { FiresidePostTag } from './tag/tag-model';
+import { FiresidePostVideo } from './video/video-model';
+
+export function canUserManagePost(post: FiresidePost, user: User | undefined | null) {
+	if (!user) {
+		return false;
+	}
+
+	if (post.user.id === user.id) {
+		return true;
+	}
+
+	if (post.game && post.game.hasPerms('devlogs')) {
+		return true;
+	}
+
+	return false;
+}
 
 export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
@@ -26,26 +42,28 @@ export class FiresidePost extends Model {
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
-	type: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
-	hash: string;
-	title: string;
-	lead: string;
+	type!: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
+	hash!: string;
+	lead!: string;
+	lead_compiled!: string;
+	lead_snippet!: string;
 	header?: MediaItem;
-	status: string;
-	added_on: number;
-	updated_on: number;
-	published_on: number;
-	scheduled_for_timezone: string | null;
-	scheduled_for: number | null;
-	like_count: number;
-	comment_count: number;
-	user: User;
-	game: Game;
-	as_game_owner: boolean;
-	slug: string;
-	subline: string;
-	content_compiled: string;
-	content_markdown: string;
+	status!: string;
+	added_on!: number;
+	updated_on!: number;
+	published_on!: number;
+	scheduled_for_timezone!: string | null;
+	scheduled_for!: number | null;
+	like_count!: number;
+	comment_count!: number;
+	user!: User;
+	game!: Game;
+	as_game_owner!: boolean;
+	slug!: string;
+	subline!: string;
+	url!: string;
+	content_compiled!: string;
+	content_markdown?: string;
 	view_count?: number;
 	expand_count?: number;
 
@@ -53,17 +71,16 @@ export class FiresidePost extends Model {
 	media: MediaItem[] = [];
 	videos: FiresidePostVideo[] = [];
 	sketchfabs: FiresidePostSketchfab[] = [];
-	user_like: FiresidePostLike | null;
+	user_like?: FiresidePostLike | null;
 	key_groups: KeyGroup[] = [];
-	poll: Poll | null;
-
-	url: string;
-
-	// For feeds.
-	scroll_id?: string;
+	poll!: Poll | null;
 
 	// Used for forms and saving.
 	key_group_ids: number[] = [];
+
+	// Returned when saving a post for the first time.
+	// The feed no longer works with posts directly - we need the event item.
+	event_item?: EventItem;
 
 	constructor(data: any = {}) {
 		super(data);
@@ -109,7 +126,9 @@ export class FiresidePost extends Model {
 			this.poll = new Poll(data.poll);
 		}
 
-		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
+		if (data.event_item) {
+			this.event_item = new EventItem(data.event_item);
+		}
 
 		Registry.store('FiresidePost', this);
 	}
@@ -126,49 +145,66 @@ export class FiresidePost extends Model {
 		return !!this.scheduled_for;
 	}
 
+	get hasMedia() {
+		return this.media.length > 0;
+	}
+
+	get hasSketchfab() {
+		return this.sketchfabs.length > 0;
+	}
+
+	get hasVideo() {
+		return this.videos.length > 0;
+	}
+
+	get hasArticle() {
+		return !!this.content_compiled;
+	}
+
+	get hasPoll() {
+		return !!this.poll;
+	}
+
 	static pullHashFromUrl(url: string) {
 		return url.substring(url.lastIndexOf('-') + 1);
 	}
 
 	async fetchLikes(): Promise<FiresidePostLike[]> {
-		const response = await Api.sendRequest(`/fireside/posts/likes/${this.id}`);
+		const response = await Api.sendRequest(`/web/posts/likes/${this.id}`);
 		return FiresidePostLike.populate(response.likes);
 	}
 
+	static async $create(gameId?: number) {
+		let url = `/web/posts/manage/new-post`;
+		if (gameId) {
+			url += '/' + gameId;
+		}
+
+		const response = await Api.sendRequest(url);
+		await FiresidePost.processCreate(response, 'post');
+		return new FiresidePost(response.post);
+	}
+
 	$save() {
+		if (!this.id) {
+			throw new Error(
+				`Can't add fireside posts through $save() anymore. Use $create() instead`
+			);
+		}
+
+		const options: ModelSaveRequestOptions = {
+			data: Object.assign({}, this),
+			allowComplexData: ['keyGroups', 'mediaItemIds'],
+		};
+
 		if (this.game) {
-			const data: any = Object.assign({}, this);
-			data.keyGroups = {};
+			options.data.keyGroups = {};
 			for (const id of this.key_group_ids) {
-				data.keyGroups[id] = true;
-			}
-
-			const options = {
-				allowComplexData: ['keyGroups'],
-				data,
-				file: this.file,
-			};
-
-			if (!this.id) {
-				return this.$_save(
-					`/web/dash/developer/games/devlog/save/${this.game.id}`,
-					'firesidePost',
-					options
-				);
-			} else {
-				return this.$_save(
-					`/web/dash/developer/games/devlog/save/${this.game.id}/${this.id}`,
-					'firesidePost',
-					options
-				);
-			}
-		} else {
-			if (!this.id) {
-				return this.$_save('/fireside/dash/posts/add', 'firesidePost');
-			} else {
-				return this.$_save(`/fireside/dash/posts/save/${this.id}`, 'firesidePost');
+				options.data.keyGroups[id] = true;
 			}
 		}
+
+		return this.$_save(`/web/posts/manage/save/${this.id}`, 'firesidePost', options);
 	}
 
 	$viewed() {
@@ -185,19 +221,8 @@ export class FiresidePost extends Model {
 		}
 	}
 
-	$clearHeader() {
-		return this.$_save(`/fireside/dash/posts/clear-header/${this.id}`, 'firesidePost');
-	}
-
 	$publish() {
-		if (this.game) {
-			return this.$_save(
-				`/web/dash/developer/games/devlog/publish/${this.game.id}/${this.id}`,
-				'firesidePost'
-			);
-		}
-
-		throw new Error('Must be attached to a game to publish.');
+		return this.$_save(`/web/posts/manage/publish/${this.id}`, 'firesidePost');
 	}
 
 	async remove() {
@@ -216,13 +241,7 @@ export class FiresidePost extends Model {
 	}
 
 	$remove() {
-		if (this.game) {
-			return this.$_remove(
-				`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`
-			);
-		} else {
-			return this.$_remove(`/fireside/dash/posts/remove/${this.id}`);
-		}
+		return this.$_remove(`/web/posts/manage/remove/${this.id}`);
 	}
 }
 

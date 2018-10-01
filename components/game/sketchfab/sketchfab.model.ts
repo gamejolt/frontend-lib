@@ -2,14 +2,14 @@ import { Model } from '../../model/model.service';
 import { Game } from '../game.model';
 
 export class GameSketchfab extends Model {
-	media_type: 'sketchfab';
-	game_id: number;
-	sketchfab_id: string;
-	added_on: number;
-	status: string;
-	img_thumbnail: string;
-	img_thumbnail_med: string;
-	img_thumbnail_large: string;
+	media_type!: 'sketchfab';
+	game_id!: number;
+	sketchfab_id!: string;
+	added_on!: number;
+	status!: string;
+	img_thumbnail!: string;
+	img_thumbnail_med!: string;
+	img_thumbnail_large!: string;
 
 	getUrl(game: Game) {
 		return game.getUrl() + '#sketchfab-' + this.id;

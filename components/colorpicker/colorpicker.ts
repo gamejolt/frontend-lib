@@ -16,7 +16,7 @@ import { AppPopper } from '../popper/popper';
 	},
 })
 export class AppColorpicker extends Vue {
-	@Prop(String) value: string;
+	@Prop(String) value!: string;
 
 	colors: any = {};
 

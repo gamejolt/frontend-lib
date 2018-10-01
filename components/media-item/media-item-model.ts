@@ -8,33 +8,35 @@ export class MediaItem extends Model {
 
 	static readonly TYPE_FIRESIDE_POST_HEADER = 'fireside-post-header';
 	static readonly TYPE_FIRESIDE_POST_IMAGE = 'fireside-post-image';
+	static readonly TYPE_FIRESIDE_POST_ARTICLE_IMAGE = 'fireside-post-article-image';
 
 	static readonly TYPE_FEATURED_HEADER = 'featured-header';
 
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_REMOVED = 'removed';
+	static readonly STATUS_INACTIVE = 'inactive';
 
-	type: string;
-	parent_id: number;
-	hash: string;
-	filename: string;
-	filetype: string;
-	is_animated: boolean;
-	width: number;
-	height: number;
-	filesize: number;
-	crop_start_x: number;
-	crop_start_y: number;
-	crop_end_x: number;
-	crop_end_y: number;
-	added_on: number;
-	status: string;
-	img_url: string;
-	mediaserver_url_webm: string;
-	mediaserver_url_mp4: string;
-	mediaserver_url: string;
+	type!: string;
+	parent_id!: number;
+	hash!: string;
+	filename!: string;
+	filetype!: string;
+	is_animated!: boolean;
+	width!: number;
+	height!: number;
+	filesize!: number;
+	crop_start_x!: number;
+	crop_start_y!: number;
+	crop_end_x!: number;
+	crop_end_y!: number;
+	added_on!: number;
+	status!: string;
+	img_url!: string;
+	mediaserver_url_webm!: string;
+	mediaserver_url_mp4!: string;
+	mediaserver_url!: string;
 
-	post_id: number;
+	post_id?: number;
 
 	getDimensions(
 		maxWidth: number | undefined,
@@ -99,34 +101,6 @@ export class MediaItem extends Model {
 			x2: this.crop_end_x,
 			y2: this.crop_end_y,
 		};
-	}
-
-	$save() {
-		if (
-			this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE &&
-			this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
-		) {
-			throw new Error('Can only save fireside media items.');
-		}
-
-		if (!this.id) {
-			return this.$_save(
-				'/fireside/dash/posts/media/upload/' + this.post_id + '/' + this.type,
-				'mediaItem',
-				{ file: this.file }
-			);
-		}
-	}
-
-	$remove() {
-		if (
-			this.type !== MediaItem.TYPE_FIRESIDE_POST_IMAGE &&
-			this.type !== MediaItem.TYPE_FIRESIDE_POST_HEADER
-		) {
-			throw new Error('Can only save fireside media items.');
-		}
-
-		return this.$_remove('/fireside/dash/posts/media/remove/' + this.id);
 	}
 }
 

@@ -1,15 +1,15 @@
 import VueRouter from 'vue-router';
+import { arrayRemove } from '../../utils/array';
+import { objectEquals } from '../../utils/object';
+import { makeObservableService } from '../../utils/vue';
 import { Environment } from '../environment/environment.service';
 import { EventBus } from '../event-bus/event-bus.service';
-import { objectEquals } from '../../utils/object';
-import { AdSlot, AdSlotTargetingMap } from './slot';
-import { AppAd } from './ad';
-import { arrayRemove } from '../../utils/array';
-import { Model } from '../model/model.service';
 import { Game } from '../game/game.model';
-import { makeObservableService } from '../../utils/vue';
-import { Prebid } from './prebid.service';
+import { Model } from '../model/model.service';
+import { AppAd } from './ad';
 import { Aps } from './aps.service';
+import { Prebid } from './prebid.service';
+import { AdSlot, AdSlotTargetingMap } from './slot';
 
 // To show ads on the page for dev, just change this to false.
 const DevDisabled = GJ_BUILD_TYPE === 'development';
@@ -176,7 +176,7 @@ export class Ads {
 				definedSlot.clearTargeting();
 				Object.keys(targeting).forEach(k => {
 					const val = targeting[k];
-					if (!val || (Array.isArray(val) && val.length === 0)) {
+					if (Array.isArray(val) && val.length === 0) {
 						return;
 					}
 
@@ -337,7 +337,12 @@ export class Ads {
 		}
 
 		for (const bid of apsBids) {
-			this.addSlotBidTargeting(bid.slotID, bid);
+			// Only pull over the keys that Amazon tells us to.
+			const apsTargeting: { [k: string]: string } = {};
+			for (const key of Aps.getTargetingKeys()) {
+				apsTargeting[key] = bid[key];
+			}
+			this.addSlotBidTargeting(bid.slotID, apsTargeting);
 		}
 	}
 

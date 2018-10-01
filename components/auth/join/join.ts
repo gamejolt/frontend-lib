@@ -7,6 +7,7 @@ import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { FormModel, AppAuthJoinForm } from './join-form';
 import { Environment } from '../../environment/environment.service';
 import { Api } from '../../api/api.service';
+import { Navigate } from '../../navigate/navigate.service';
 
 @View
 @Component({
@@ -16,7 +17,8 @@ import { Api } from '../../api/api.service';
 	},
 })
 export class AppAuthJoin extends Vue {
-	@Prop(Boolean) darkVariant?: boolean;
+	@Prop(Boolean)
+	darkVariant?: boolean;
 
 	blocked = false;
 
@@ -35,7 +37,7 @@ export class AppAuthJoin extends Vue {
 		sessionStorage.setItem('signup-password', formModel.password);
 
 		if (GJ_SECTION !== 'auth') {
-			window.location.href = `${Environment.authBaseUrl}/join/captcha`;
+			Navigate.goto(`${Environment.authBaseUrl}/join/captcha`);
 		} else {
 			this.$router.push({
 				name: 'auth.join-captcha',

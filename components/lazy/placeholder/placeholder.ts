@@ -4,9 +4,9 @@ import './placeholder.styl';
 
 @Component({})
 export class AppLazyPlaceholder extends Vue {
-	@Prop() when: any;
+	@Prop() when!: any;
 	@Prop({ type: String, default: 'div' })
-	tag: string;
+	tag!: string;
 
 	render(h: CreateElement) {
 		return h(
