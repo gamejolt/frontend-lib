@@ -64,9 +64,6 @@ export class Game extends Model {
 	slug: string;
 	path: string;
 	img_thumbnail: string;
-	has_animated_thumbnail: boolean;
-	img_thumbnail_webm: string;
-	img_thumbnail_mp4: string;
 	media_count: number;
 	follower_count: number;
 	ratings_enabled: boolean;

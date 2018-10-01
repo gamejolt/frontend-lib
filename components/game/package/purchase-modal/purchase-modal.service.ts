@@ -24,8 +24,6 @@ export class GamePackagePurchaseModal {
 				),
 			size: 'sm',
 			props: options,
-			noBackdropClose: true,
-			noEscClose: true,
 		});
 	}
 }

@@ -1,0 +1,113 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
+// Sync with the JS so we know how long hides take.
+$-transition-time = 200ms
+
+.v-popover
+	display: inline-block
+
+	> .wrapper
+		display: inline-block
+
+.v-popover.-block
+	&, .trigger
+		display: block !important
+
+.popper
+	display: block !important
+	z-index: $zindex-popover
+
+	.popper-arrow
+		width: 0
+		height: 0
+		border-style: solid
+		position: absolute
+		margin: $popover-arrow-size
+		border-color: var(--theme-bg-subtle)
+		z-index: 1
+
+	&[x-placement^='top']
+		padding-bottom: $popover-arrow-size
+
+		.popper-arrow
+			border-width: $popover-arrow-size $popover-arrow-size 0 $popover-arrow-size
+			border-left-color: transparent !important
+			border-right-color: transparent !important
+			border-bottom-color: transparent !important
+			bottom: 0
+			margin-top: 0
+			margin-bottom: 0
+
+	&[x-placement^='bottom']
+		padding-top: $popover-arrow-size
+
+		.popper-arrow
+			border-width: 0 $popover-arrow-size $popover-arrow-size $popover-arrow-size
+			border-left-color: transparent !important
+			border-right-color: transparent !important
+			border-top-color: transparent !important
+			top: 0
+			margin-top: 0
+			margin-bottom: 0
+
+	&[x-placement^='right']
+		padding-left: $popover-arrow-size
+
+		.popper-arrow
+			border-width: $popover-arrow-size $popover-arrow-size $popover-arrow-size 0
+			border-left-color: transparent !important
+			border-top-color: transparent !important
+			border-bottom-color: transparent !important
+			left: 0
+			margin-left: 0
+			margin-right: 0
+
+	&[x-placement^='left']
+		padding-right: $popover-arrow-size
+
+		.popper-arrow
+			border-width: $popover-arrow-size 0 $popover-arrow-size $popover-arrow-size
+			border-top-color: transparent !important
+			border-right-color: transparent !important
+			border-bottom-color: transparent !important
+			right: 0
+			margin-left: 0
+			margin-right: 0
+
+	&[aria-hidden='true']
+		visibility: hidden
+		opacity: 0
+		transition: opacity $-transition-time, visibility $-transition-time
+
+	&[aria-hidden='false']
+		visibility: visible
+		opacity: 1
+		transition: opacity $-transition-time
+
+.popper-content
+	rounded-corners()
+	theme-prop('background-color', 'bg-offset')
+	theme-prop('border-color', 'bg-subtle')
+	max-width: $popover-size
+	min-width: 200px
+	border-width: 2px
+	border-style: solid
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
+
+	&.-track-trigger-width
+		max-width: none
+		min-width: none
+
+	> nav.pills > ul, > .button
+		margin-bottom: $popover-spacing !important
+
+	> nav.platform-list
+		margin-bottom: 0
+		margin-top: $popover-spacing * 2
+
+	.alert
+		margin-bottom: 0
+
+	.well
+		margin-bottom: 0

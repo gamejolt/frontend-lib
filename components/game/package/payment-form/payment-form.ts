@@ -26,14 +26,13 @@ import { currency } from '../../../../vue/filters/currency';
 import { AppLoading } from '../../../../vue/components/loading/loading';
 import { AppExpand } from '../../../expand/expand';
 import { AppTooltip } from '../../../tooltip/tooltip';
-import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vue';
-import { AppPopover } from '../../../popover/popover';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppFocusWhen } from '../../../form-vue/focus-when.directive';
 import { AppForm } from '../../../form-vue/form';
 import { AppLoadingFade } from '../../../loading/fade/fade';
 import { FormOnSubmitError } from '../../../form-vue/form.service';
 import { GameBuild } from '../../build/build.model';
+import { AppPopper } from '../../../popper/popper';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
@@ -44,11 +43,10 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 		AppLoading,
 		AppLoadingFade,
 		AppExpand,
-		AppPopover,
+		AppPopper,
 	},
 	directives: {
 		AppTooltip,
-		AppPopoverTrigger,
 		AppFocusWhen,
 	},
 	filters: {

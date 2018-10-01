@@ -21,88 +21,90 @@
 	</template>
 
 	<template slot="meta">
-		<a
+		<app-popper
 			v-if="user"
-			class="link-muted"
-			v-app-tooltip="$gettext( 'More Options' )"
-			v-app-popover-trigger="`comment-more-options-${componentId}`"
 			>
-			<app-jolticon icon="ellipsis-v" class="middle" />
-		</a>
+			<a
+				class="link-muted"
+				v-app-tooltip="$gettext( 'More Options' )"
+				>
+				<app-jolticon icon="ellipsis-v" class="middle" />
+			</a>
 
-		<app-popover
-			v-if="user"
-			:popover-id="`comment-more-options-${componentId}`"
-			>
-			<div class="list-group list-group-dark">
-				<a class="list-group-item has-icon"
-					@click="copyPermalink"
-					>
-					<app-jolticon icon="link" />
-					<translate>Copy Link</translate>
-				</a>
-				<a class="list-group-item has-icon"
-					v-if="canPin"
-					@click="pinComment"
-					>
-					<app-jolticon icon="thumbtack" />
-					<translate v-if="comment.is_pinned">Unpin Comment</translate>
-					<translate v-else>Pin Comment</translate>
-				</a>
-				<a class="list-group-item has-icon"
-					v-if="user.id === comment.user.id"
-					@click="startEdit"
-					>
-					<app-jolticon icon="edit" />
-					<translate>Edit Comment</translate>
-				</a>
-				<a class="list-group-item has-icon"
-					v-if="canFollow"
-					@click="onFollowClick"
-					v-app-tooltip.left="
-						comment.subscription
-						? $gettext( `You're following this comment thread and will be notified of replies.` )
-						: $gettext( `Get notifications when people post new replies to this thread.` )
-					"
-					v-app-track-event="`comment-widget:follow-click`"
-					>
-					<app-jolticon icon="subscribe" />
-					<translate v-if="comment.subscription">
-						Following
-					</translate>
-					<translate v-else>
-						Follow Thread
-					</translate>
-				</a>
-				<a class="list-group-item has-icon"
-					v-if="canRemove"
-					@click="removeComment"
-					>
-					<app-jolticon icon="remove" notice />
-					<translate>Remove Comment</translate>
-				</a>
-				<a class="list-group-item has-icon"
-					v-if="user.id !== comment.user.id"
-					@click="report"
-					>
-					<app-jolticon icon="flag" notice />
-					<translate>Report Comment</translate>
-				</a>
-				<a class="list-group-item has-icon"
-					v-if="user.permission_level >= 3"
-					:href="`${Environment.baseUrl}/moderate/comments/remove/${ comment.id}`"
-					target="_blank"
-					>
-					<app-jolticon icon="remove" notice />
-					<template v-if="user.id === comment.user.id || (widget.resourceOwner && widget.resourceOwner.id === user.id)">
-						<translate>Remove Comment (Moderate)</translate>
-					</template>
-					<template v-else>
+			<!-- <app-popover
+				v-if="user"
+				:popover-id="`comment-more-options-${componentId}`"
+				> -->
+				<div slot="popover" class="list-group list-group-dark">
+					<a class="list-group-item has-icon"
+						@click="copyPermalink"
+						>
+						<app-jolticon icon="link" />
+						<translate>Copy Link</translate>
+					</a>
+					<a class="list-group-item has-icon"
+						v-if="canPin"
+						@click="pinComment"
+						>
+						<app-jolticon icon="thumbtack" />
+						<translate v-if="comment.is_pinned">Unpin Comment</translate>
+						<translate v-else>Pin Comment</translate>
+					</a>
+					<a class="list-group-item has-icon"
+						v-if="user.id === comment.user.id"
+						@click="startEdit"
+						>
+						<app-jolticon icon="edit" />
+						<translate>Edit Comment</translate>
+					</a>
+					<a class="list-group-item has-icon"
+						v-if="canFollow"
+						@click="onFollowClick"
+						v-app-tooltip.left="
+							comment.subscription
+							? $gettext( `You're following this comment thread and will be notified of replies.` )
+							: $gettext( `Get notifications when people post new replies to this thread.` )
+						"
+						v-app-track-event="`comment-widget:follow-click`"
+						>
+						<app-jolticon icon="subscribe" />
+						<translate v-if="comment.subscription">
+							Following
+						</translate>
+						<translate v-else>
+							Follow Thread
+						</translate>
+					</a>
+					<a class="list-group-item has-icon"
+						v-if="canRemove"
+						@click="removeComment"
+						>
+						<app-jolticon icon="remove" notice />
 						<translate>Remove Comment</translate>
-					</template>
-				</a>
-			</div>
-		</app-popover>
+					</a>
+					<a class="list-group-item has-icon"
+						v-if="user.id !== comment.user.id"
+						@click="report"
+						>
+						<app-jolticon icon="flag" notice />
+						<translate>Report Comment</translate>
+					</a>
+					<a class="list-group-item has-icon"
+						v-if="user.permission_level >= 3"
+						:href="`${Environment.baseUrl}/moderate/comments/remove/${ comment.id}`"
+						target="_blank"
+						>
+						<app-jolticon icon="remove" notice />
+						<template v-if="user.id === comment.user.id || (widget.resourceOwner && widget.resourceOwner.id === user.id)">
+							<translate>Remove Comment (Moderate)</translate>
+						</template>
+						<template v-else>
+							<translate>Remove Comment</translate>
+						</template>
+					</a>
+				</div>
+			<!-- </app-popover> -->
+		</app-popper>
 	</template>
 
 	<template v-if="!isEditing">

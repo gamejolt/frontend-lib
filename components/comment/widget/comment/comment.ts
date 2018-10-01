@@ -11,8 +11,6 @@ import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
 import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { AppTooltip } from '../../../tooltip/tooltip';
-import { AppPopover } from '../../../popover/popover';
-import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vue';
 import { ReportModal } from '../../../report/modal/modal.service';
 import { date } from '../../../../vue/filters/date';
 import { AppMessageThreadItem } from '../../../message-thread/item/item';
@@ -27,6 +25,7 @@ import { Popover } from '../../../popover/popover.service';
 import { ModalConfirm } from '../../../modal/confirm/confirm-service';
 import { AppCommentControls } from '../../controls/controls';
 import { AppCommentContent } from '../../content/content';
+import { AppPopper } from '../../../popper/popper';
 
 let CommentNum = 0;
 
@@ -40,7 +39,7 @@ let CommentNum = 0;
 		AppMessageThreadAdd,
 		AppFadeCollapse,
 		AppJolticon,
-		AppPopover,
+		AppPopper,
 		AppExpand,
 		FormComment,
 
@@ -50,7 +49,6 @@ let CommentNum = 0;
 	directives: {
 		AppTrackEvent,
 		AppTooltip,
-		AppPopoverTrigger,
 		AppAuthRequired,
 	},
 	filters: {

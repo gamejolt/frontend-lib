@@ -6,12 +6,11 @@ import { AppThemeBubble } from '../../../theme/bubble/bubble';
 import { AppTooltip } from '../../../tooltip/tooltip';
 import { Api } from '../../../api/api.service';
 import { ThemePreset } from '../../../theme/preset/preset.model';
-import { AppPopover } from '../../../popover/popover';
-import { AppPopoverTrigger } from '../../../popover/popover-trigger.directive.vue';
 import { makeThemeFromPreset, Theme, makeThemeFromColor } from '../../../theme/theme.model';
 import { Sketch } from 'vue-color';
 import { AppLoading } from '../../../../vue/components/loading/loading';
 import { AppButton } from '../../../button/button';
+import { AppPopper } from '../../../popper/popper';
 
 interface VueColor {
 	hex: string | null;
@@ -22,12 +21,11 @@ interface VueColor {
 	components: {
 		AppLoading,
 		AppThemeBubble,
-		AppPopover,
+		AppPopper,
 		AppButton,
 		picker: Sketch,
 	},
 	directives: {
-		AppPopoverTrigger,
 		AppTooltip,
 	},
 })

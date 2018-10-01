@@ -1,77 +1,85 @@
 <div class="form-control-theme">
-	<a class="-current">
-		<app-theme-bubble
-			:highlight="highlight"
-			:backlight="backlight"
-			active
-			v-app-popover-trigger="`form-control-theme`"
-			/>
-	</a>
-
-	<app-popover
-		class="-popover"
-		popover-id="form-control-theme"
-		no-max-height
-		@focused="onPopover()"
+	<app-popper
+		@show="onPopover()"
 		>
-		<div class="well">
-			<nav class="platform-list inline nav-justified">
-				<ul>
-					<li>
-						<a
-							:class="{ active: activeTab === 'preset' }"
-							@click="activeTab = 'preset'"
-							>
-							<translate>Theme Preset</translate>
-						</a>
-					</li>
-					<li>
-						<a
-							:class="{ active: activeTab === 'custom' }"
-							@click="activeTab = 'custom'"
-							>
-							<translate>Custom Color</translate>
-						</a>
-					</li>
-				</ul>
-			</nav>
+		<a class="-current">
+			<app-theme-bubble
+				:highlight="highlight"
+				:backlight="backlight"
+				active
+				/>
+		</a>
 
-			<div class="-presets" v-if="activeTab === 'preset'">
-				<app-loading v-if="presets.length === 0" />
-				<template v-else>
-					<a
-						class="-preset"
-						v-for="preset of presets"
-						:key="preset.id"
-						v-app-tooltip="preset.name"
-						@click="selectPreset(preset)"
-						>
-						<app-theme-bubble
-							:highlight="preset.highlight"
-							:backlight="preset.backlight"
-							:active="isPresetActive(preset)"
-							/>
-					</a>
-				</template>
-			</div>
-			<div v-else-if="activeTab === 'custom'">
-				<picker
-					disable-alpha
-					:preset-colors="[]"
-					:value="customSelection"
-					@input="onCustomChange"
-					/>
-				<br>
-			</div>
+		<div
+			slot="popover"
+			class="-popover"
+			>
+		<!-- <app-popover
+			class="-popover"
+			popover-id="form-control-theme"
+			no-max-height
+			@focused="onPopover()"
+			> -->
+			<div class="well">
+				<nav class="platform-list inline nav-justified">
+					<ul>
+						<li>
+							<a
+								:class="{ active: activeTab === 'preset' }"
+								@click="activeTab = 'preset'"
+								>
+								<translate>Theme Preset</translate>
+							</a>
+						</li>
+						<li>
+							<a
+								:class="{ active: activeTab === 'custom' }"
+								@click="activeTab = 'custom'"
+								>
+								<translate>Custom Color</translate>
+							</a>
+						</li>
+					</ul>
+				</nav>
 
-			<app-button
-				v-if="!!controlVal"
-				block
-				trans
-				@click.stop.prevent="clear()"
-				>
-				<translate>Clear Theme</translate>
-			</app-button>
+				<div class="-presets" v-if="activeTab === 'preset'">
+					<app-loading v-if="presets.length === 0" />
+					<template v-else>
+						<a
+							class="-preset"
+							v-for="preset of presets"
+							:key="preset.id"
+							v-app-tooltip="preset.name"
+							@click="selectPreset(preset)"
+							>
+							<app-theme-bubble
+								:highlight="preset.highlight"
+								:backlight="preset.backlight"
+								:active="isPresetActive(preset)"
+								/>
+						</a>
+					</template>
+				</div>
+				<div v-else-if="activeTab === 'custom'">
+					<picker
+						disable-alpha
+						:preset-colors="[]"
+						:value="customSelection"
+						@input="onCustomChange"
+						/>
+					<br>
+				</div>
+
+				<app-button
+					v-if="!!controlVal"
+					block
+					trans
+					@click.stop.prevent="clear()"
+					>
+					<translate>Clear Theme</translate>
+				</app-button>
+			</div>
+		<!-- </app-popover> -->
 		</div>
-	</app-popover>
+	</app-popper>
 </div>

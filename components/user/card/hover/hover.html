@@ -1,0 +1,15 @@
+<app-popper
+	trigger="hover"
+	:delay="{ show: 500, hide: 0 }"
+	>
+
+	<slot />
+
+	<template v-if="shouldShow" slot="popover">
+		<app-user-card
+			show-extra-info
+			:user="user"
+			/>
+	</template>
+
+</app-popper>
