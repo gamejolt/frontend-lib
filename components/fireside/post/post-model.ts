@@ -1,12 +1,12 @@
+import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
-import { Environment } from '../../environment/environment.service';
 import { Game } from '../../game/game.model';
 import { HistoryTick } from '../../history-tick/history-tick-service';
 import { KeyGroup } from '../../key-group/key-group.model';
 import { MediaItem } from '../../media-item/media-item-model';
 import { ModalConfirm } from '../../modal/confirm/confirm-service';
-import { Model } from '../../model/model.service';
+import { Model, ModelSaveRequestOptions } from '../../model/model.service';
 import { Poll } from '../../poll/poll.model';
 import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
@@ -61,6 +61,7 @@ export class FiresidePost extends Model {
 	as_game_owner!: boolean;
 	slug!: string;
 	subline!: string;
+	url!: string;
 	content_compiled!: string;
 	content_markdown?: string;
 	view_count?: number;
@@ -75,13 +76,12 @@ export class FiresidePost extends Model {
 	key_groups: KeyGroup[] = [];
 	poll!: Poll | null;
 
-	url: string;
-
-	// For feeds.
-	scroll_id?: string;
-
 	// Used for forms and saving.
 	key_group_ids: number[] = [];
+
+	// Returned when saving a post for the first time.
+	// The feed no longer works with posts directly - we need the event item.
+	event_item?: EventItem;
 
 	constructor(data: any = {}) {
 		super(data);
@@ -127,7 +127,9 @@ export class FiresidePost extends Model {
 			this.poll = new Poll(data.poll);
 		}
 
-		this.url = Environment.firesideBaseUrl + '/post/' + this.slug;
+		if (data.event_item) {
+			this.event_item = new EventItem(data.event_item);
+		}
 
 		Registry.store('FiresidePost', this);
 	}
@@ -169,44 +171,41 @@ export class FiresidePost extends Model {
 	}
 
 	async fetchLikes(): Promise<FiresidePostLike[]> {
-		const response = await Api.sendRequest(`/fireside/posts/likes/${this.id}`);
+		const response = await Api.sendRequest(`/web/posts/likes/${this.id}`);
 		return FiresidePostLike.populate(response.likes);
 	}
 
+	static async $create(gameId?: number) {
+		let url = `/web/posts/manage/new-post`;
+		if (gameId) {
+			url += '/' + gameId;
+		}
+
+		const response = await Api.sendRequest(url);
+		await FiresidePost.processCreate(response, 'post');
+		return new FiresidePost(response.post);
+	}
+
 	$save() {
+		if (!this.id) {
+			throw new Error(
+				`Can't add fireside posts through $save() anymore. Use $create() instead`
+			);
+		}
+
+		const options: ModelSaveRequestOptions = {
+			data: Object.assign({}, this),
+			allowComplexData: ['keyGroups', 'mediaItemIds'],
+		};
+
 		if (this.game) {
-			const data: any = Object.assign({}, this);
-			data.keyGroups = {};
+			options.data.keyGroups = {};
 			for (const id of this.key_group_ids) {
-				data.keyGroups[id] = true;
-			}
-
-			const options = {
-				allowComplexData: ['keyGroups', 'mediaItemIds'],
-				data,
-				file: this.file,
-			};
-
-			if (!this.id) {
-				return this.$_save(
-					`/web/dash/developer/games/devlog/save/${this.game.id}`,
-					'firesidePost',
-					options
-				);
-			} else {
-				return this.$_save(
-					`/web/dash/developer/games/devlog/save/${this.game.id}/${this.id}`,
-					'firesidePost',
-					options
-				);
-			}
-		} else {
-			if (!this.id) {
-				return this.$_save('/fireside/dash/posts/add', 'firesidePost');
-			} else {
-				return this.$_save(`/fireside/dash/posts/save/${this.id}`, 'firesidePost');
+				options.data.keyGroups[id] = true;
 			}
 		}
+
+		return this.$_save(`/web/posts/manage/save/${this.id}`, 'firesidePost', options);
 	}
 
 	$viewed() {
@@ -223,19 +222,8 @@ export class FiresidePost extends Model {
 		}
 	}
 
-	$clearHeader() {
-		return this.$_save(`/fireside/dash/posts/clear-header/${this.id}`, 'firesidePost');
-	}
-
 	$publish() {
-		if (this.game) {
-			return this.$_save(
-				`/web/dash/developer/games/devlog/publish/${this.game.id}/${this.id}`,
-				'firesidePost'
-			);
-		}
-
-		throw new Error('Must be attached to a game to publish.');
+		return this.$_save(`/web/posts/manage/publish/${this.id}`, 'firesidePost');
 	}
 
 	async remove() {
@@ -254,13 +242,7 @@ export class FiresidePost extends Model {
 	}
 
 	$remove() {
-		if (this.game) {
-			return this.$_remove(
-				`/web/dash/developer/games/devlog/remove/${this.game.id}/${this.id}`
-			);
-		} else {
-			return this.$_remove(`/fireside/dash/posts/remove/${this.id}`);
-		}
+		return this.$_remove(`/web/posts/manage/remove/${this.id}`);
 	}
 }
 

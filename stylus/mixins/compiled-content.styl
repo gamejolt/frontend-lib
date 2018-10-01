@@ -15,6 +15,9 @@ compiled-content($font-size, $computed-line-height)
 	p > img
 		margin-top: $font-size + (($computed-line-height - $font-size) / 2)
 
+		&:first-child
+			margin-top: 0
+
 	hr
 		margin-top: $computed-line-height
 		margin-bottom: $computed-line-height

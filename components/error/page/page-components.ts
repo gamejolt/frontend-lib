@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { State } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import View400 from '!view!./page-400.html';
 import View403 from '!view!./page-403.html';
