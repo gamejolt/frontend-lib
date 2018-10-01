@@ -70,14 +70,24 @@
 					</router-link>
 				</div>
 
-				<div class="-follow">
+				<div class="-follow" v-if="app.user">
 					<app-user-follow-widget
-						v-if="!app.user || user.id !== app.user.id"
+						v-if="user.id !== app.user.id"
 						:user="user"
 						block
 						hide-count
 						event-label="user-card"
 						/>
+					<app-button
+						v-else
+						:to="{
+							name: 'profile.overview',
+							params: { username: app.user.username },
+						}"
+						block
+						>
+						<translate>View Profile</translate>
+					</app-button>
 				</div>
 			</div>
 		</div>
