@@ -1,15 +1,16 @@
-<app-popper
-	trigger="hover"
-	:delay="{ show: 500, hide: 0 }"
+<component
+	:is="component"
+	v-bind="componentProps"
 	>
 
 	<slot />
 
 	<template v-if="shouldShow" slot="popover">
 		<app-user-card
-			show-extra-info
+			class="-card"
 			:user="user"
+			:is-loading="!isLoaded"
 			/>
 	</template>
 
-</app-popper>
+</component>

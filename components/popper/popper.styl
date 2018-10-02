@@ -18,6 +18,9 @@ $-transition-time = 200ms
 	display: block !important
 	z-index: $zindex-popover
 
+	&-backdrop
+		z-index: $zindex-popover - 1 !important
+
 	.popper-arrow
 		width: 0
 		height: 0
@@ -111,3 +114,8 @@ $-transition-time = 200ms
 
 	.well
 		margin-bottom: 0
+
+.popper-heading
+	padding: $popover-spacing
+	white-space: nowrap
+	font-weight: bold
