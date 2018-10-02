@@ -30,9 +30,3 @@ $-thumb-border-radius = $-track-width
 
 .-hide-scrollbar >>> .simplebar-track
 	display: none
-
-// While simplebar is bootstrapping (before it has attached to DOM) we want to hide scrollbars so
-// that it doesn't flicker in the browser ones.
-.-simplebar-bootstrapping
-	&, >>> .simplebar-scroll-content, >>> .simplebar-content
-		overflow: hidden !important

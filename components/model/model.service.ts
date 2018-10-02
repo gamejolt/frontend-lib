@@ -1,5 +1,7 @@
 import { Api, RequestOptions } from '../api/api.service';
 
+export type ModelSaveRequestOptions = RequestOptions & { data?: any };
+
 export class Model {
 	id!: number;
 
@@ -85,11 +87,7 @@ export class Model {
 		return Promise.reject(response);
 	}
 
-	async $_save(
-		url: string,
-		field: string,
-		options: RequestOptions & { data?: any } = {}
-	): Promise<any> {
+	async $_save(url: string, field: string, options: ModelSaveRequestOptions = {}): Promise<any> {
 		// Keep track of progress within the model.
 		if (!options.progress) {
 			options.progress = event => (this._progress = event);

@@ -1,3 +1,4 @@
+import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
 import VueRouter, { RawLocation } from 'vue-router';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
@@ -30,6 +31,7 @@ function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocatio
 	} else if (model instanceof Game) {
 		return model.routeLocation;
 	} else if (model instanceof FiresidePost && !!model.game) {
+		// TODO(userposts)
 		return {
 			name: 'discover.games.view.devlog.view',
 			params: {
@@ -51,12 +53,31 @@ export class Notification extends Model {
 	static TYPE_FRIENDSHIP_CANCEL = 'friendship-cancel';
 	static TYPE_GAME_RATING_ADD = 'game-rating-add';
 	static TYPE_GAME_FOLLOW = 'game-follow';
-	static TYPE_DEVLOG_POST_ADD = 'devlog-post-add';
+	static TYPE_POST_ADD = 'post-add';
 	static TYPE_SELLABLE_SELL = 'sellable-sell';
 	static TYPE_USER_FOLLOW = 'user-follow';
 	static TYPE_COLLABORATOR_INVITE = 'collaborator-invite';
 	static TYPE_MENTION = 'mention';
 	static TYPE_COMMENT_VIDEO_ADD = 'comment-video-add';
+
+	static ACTIVITY_FEED_TYPES = [
+		EventItem.TYPE_POST_ADD,
+		EventItem.TYPE_COMMENT_VIDEO_ADD,
+		EventItem.TYPE_GAME_PUBLISH,
+	];
+
+	static NOTIFICATION_FEED_TYPES = [
+		Notification.TYPE_COMMENT_ADD,
+		Notification.TYPE_COMMENT_ADD_OBJECT_OWNER,
+		Notification.TYPE_FORUM_POST_ADD,
+		Notification.TYPE_FRIENDSHIP_ACCEPT,
+		Notification.TYPE_GAME_RATING_ADD,
+		Notification.TYPE_GAME_FOLLOW,
+		Notification.TYPE_SELLABLE_SELL,
+		Notification.TYPE_USER_FOLLOW,
+		Notification.TYPE_MENTION,
+		Notification.TYPE_COLLABORATOR_INVITE,
+	];
 
 	user_id!: number;
 	type!: string;
@@ -141,10 +162,10 @@ export class Notification extends Model {
 			this.action_model = new GameLibraryGame(data.action_resource_model);
 			this.jolticon = 'jolticon-subscribe';
 			this.is_user_based = true;
-		} else if (this.type === Notification.TYPE_DEVLOG_POST_ADD) {
+		} else if (this.type === Notification.TYPE_POST_ADD) {
 			this.action_model = new FiresidePost(data.action_resource_model);
 			this.jolticon = 'jolticon-blog-article';
-			this.is_game_based = true;
+			this.is_game_based = this.to_model instanceof Game;
 		} else if (this.type === Notification.TYPE_SELLABLE_SELL) {
 			this.action_model = new OrderItem(data.action_resource_model);
 			this.jolticon = 'jolticon-heart';
@@ -196,7 +217,7 @@ export class Notification extends Model {
 			case Notification.TYPE_COLLABORATOR_INVITE:
 				return getRouteLocationForModel(this.to_model as Game);
 
-			case Notification.TYPE_DEVLOG_POST_ADD:
+			case Notification.TYPE_POST_ADD:
 				return getRouteLocationForModel(this.action_model as FiresidePost);
 
 			case Notification.TYPE_SELLABLE_SELL:
@@ -231,6 +252,15 @@ export class Notification extends Model {
 		return '';
 	}
 
+	get feedType() {
+		if (Notification.ACTIVITY_FEED_TYPES.indexOf(this.type) !== -1) {
+			return 'activity';
+		} else if (Notification.NOTIFICATION_FEED_TYPES.indexOf(this.type) !== -1) {
+			return 'notifications';
+		}
+		return '';
+	}
+
 	async go(router: VueRouter) {
 		if (this.routeLocation) {
 			router.push(this.routeLocation);
@@ -253,6 +283,8 @@ export class Notification extends Model {
 					model = this.action_model.comment;
 				} else if (this.action_model.forum_post) {
 					model = this.action_model.forum_post;
+				} else if (this.action_model.fireside_post) {
+					model = this.action_model.fireside_post;
 				} else {
 					throw new Error(`Invalid mention model.`);
 				}
@@ -263,6 +295,8 @@ export class Notification extends Model {
 					url = await getCommentUrl(model.id);
 				} else if (model instanceof ForumPost) {
 					url = await ForumPost.getPostUrl(model.id);
+				} else if (model instanceof FiresidePost) {
+					url = model.url;
 				} else {
 					throw new Error('Invalid type.');
 				}
@@ -332,16 +366,16 @@ function getTranslationValues(notification: Notification) {
 
 export function getNotificationText(notification: Notification) {
 	switch (notification.type) {
-		case Notification.TYPE_DEVLOG_POST_ADD: {
+		case Notification.TYPE_POST_ADD: {
 			let gameTitle = '';
 			let postTitle = '';
 			if (notification.to_model instanceof Game) {
-				gameTitle = notification.to_model.title;
+				gameTitle = notification.to_model.title + ' - ';
 			}
 			if (notification.action_model instanceof FiresidePost) {
 				postTitle = notification.action_model.lead_snippet;
 			}
-			return `${gameTitle} - ${postTitle}`;
+			return gameTitle + postTitle;
 		}
 
 		case Notification.TYPE_COMMENT_VIDEO_ADD: {

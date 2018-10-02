@@ -49,21 +49,11 @@ export class Registry {
 		this.items[type] = this.items[type].slice(-this.config[type].maxItems);
 	}
 
-	static find<T>(type: string, id: string | number, field = 'id'): T | null {
+	static find<T>(type: string, fn: (i: T) => boolean): T | null {
 		if (typeof this.items[type] === 'undefined') {
 			this.items[type] = [];
 		}
 
-		if (field === 'id' && typeof id === 'string') {
-			id = parseInt(id, 10);
-		}
-
-		for (const item of this.items[type]) {
-			if (item[field] === id) {
-				return item;
-			}
-		}
-
-		return null;
+		return this.items[type].find(fn) || null;
 	}
 }

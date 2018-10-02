@@ -1,6 +1,5 @@
 @require '~styles/variables'
 @require '~styles-lib/mixins'
-@require '../overlay-scrollbar/overlay-scrollbar'
 @require '~codemirror/lib/codemirror.css'
 
 // Based on Splash of Gray
@@ -29,9 +28,6 @@ $codemirror-gray = #a4a9b0
 	&-focused
 		border-color: $input-border-focus
 		outline: 0
-
-	&-vscrollbar, &-hscrollbar
-		@extend .overlay-scrollbar
 
 /**
  * Default theme.

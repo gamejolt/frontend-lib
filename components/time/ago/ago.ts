@@ -13,7 +13,7 @@ export class AppTimeAgo extends Vue {
 	withoutSuffix?: boolean;
 
 	@Prop(Boolean)
-	short?: boolean;
+	strict?: boolean;
 
 	@Prop(Boolean)
 	isFuture?: boolean;
@@ -45,17 +45,14 @@ export class AppTimeAgo extends Vue {
 	}
 
 	private refresh() {
-		if (this.short) {
-			this.timeAgo = distanceStrict(this.date, new Date());
+		const time = this.strict ? distanceStrict(this.date, new Date()) : distance(this.date);
+
+		if (this.withoutSuffix) {
+			this.timeAgo = time;
+		} else if (this.isFuture) {
+			this.timeAgo = this.$gettextInterpolate('%{ time } left', { time });
 		} else {
-			const time = distance(this.date);
-			if (this.withoutSuffix) {
-				this.timeAgo = time;
-			} else if (this.isFuture) {
-				this.timeAgo = this.$gettextInterpolate('%{ time } left', { time });
-			} else {
-				this.timeAgo = this.$gettextInterpolate('%{ time } ago', { time });
-			}
+			this.timeAgo = this.$gettextInterpolate('%{ time } ago', { time });
 		}
 
 		// In minutes.
