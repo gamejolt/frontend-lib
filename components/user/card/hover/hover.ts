@@ -24,16 +24,20 @@ export class AppUserCardHover extends Vue {
 	isShowing = false;
 	isLoaded = false;
 
+	get isDisabled() {
+		return Screen.isXs || GJ_IS_CLIENT;
+	}
+
 	get shouldShow() {
 		return !!this.user && this.isShowing;
 	}
 
 	get component() {
-		return Screen.isXs ? 'span' : AppPopper;
+		return this.isDisabled ? 'span' : AppPopper;
 	}
 
 	get componentProps() {
-		return Screen.isXs
+		return this.isDisabled
 			? {}
 			: {
 					placement: 'top',
@@ -45,7 +49,7 @@ export class AppUserCardHover extends Vue {
 	}
 
 	get componentOn() {
-		return Screen.isXs
+		return this.isDisabled
 			? {}
 			: {
 					show: () => this.onShow(),
