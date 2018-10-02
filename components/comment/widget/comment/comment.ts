@@ -1,31 +1,30 @@
+import View from '!view!./comment.html';
+import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./comment.html';
-
-import { Environment } from '../../../environment/environment.service';
-import { AppCommentWidget } from '../widget';
 import { findRequiredVueParent } from '../../../../utils/vue';
-import { Comment } from '../../comment-model';
-import { AppStore, AppState } from '../../../../vue/services/app/app-store';
-import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { AppTooltip } from '../../../tooltip/tooltip';
-import { ReportModal } from '../../../report/modal/modal.service';
 import { date } from '../../../../vue/filters/date';
-import { AppMessageThreadItem } from '../../../message-thread/item/item';
 import { number } from '../../../../vue/filters/number';
-import { AppExpand } from '../../../expand/expand';
-import { FormComment } from '../../add/add';
-import { Clipboard } from '../../../clipboard/clipboard-service';
-import { AppMessageThreadAdd } from '../../../message-thread/add/add';
+import { AppState, AppStore } from '../../../../vue/services/app/app-store';
+import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
+import { Clipboard } from '../../../clipboard/clipboard-service';
+import { Environment } from '../../../environment/environment.service';
+import { AppExpand } from '../../../expand/expand';
+import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
+import { AppMessageThreadAdd } from '../../../message-thread/add/add';
+import { AppMessageThreadItem } from '../../../message-thread/item/item';
 import { AppMessageThread } from '../../../message-thread/message-thread';
-import { Popover } from '../../../popover/popover.service';
 import { ModalConfirm } from '../../../modal/confirm/confirm-service';
-import { AppCommentControls } from '../../controls/controls';
-import { AppCommentContent } from '../../content/content';
 import { AppPopper } from '../../../popper/popper';
+import { ReportModal } from '../../../report/modal/modal.service';
+import { AppTooltip } from '../../../tooltip/tooltip';
+import { FormComment } from '../../add/add';
+import { Comment } from '../../comment-model';
+import { AppCommentContent } from '../../content/content';
+import { AppCommentControls } from '../../controls/controls';
+import { AppCommentWidget } from '../widget';
 
 let CommentNum = 0;
 
@@ -57,14 +56,21 @@ let CommentNum = 0;
 	},
 })
 export class AppCommentWidgetComment extends Vue {
-	@Prop(Comment) comment!: Comment;
-	@Prop(Array) children?: Comment[];
-	@Prop(Comment) parent?: Comment;
-	@Prop(String) resource!: string;
-	@Prop(Number) resourceId!: number;
-	@Prop(Boolean) isLastInThread?: boolean;
+	@Prop(Comment)
+	comment!: Comment;
+	@Prop(Array)
+	children?: Comment[];
+	@Prop(Comment)
+	parent?: Comment;
+	@Prop(String)
+	resource!: string;
+	@Prop(Number)
+	resourceId!: number;
+	@Prop(Boolean)
+	isLastInThread?: boolean;
 
-	@AppState user!: AppStore['user'];
+	@AppState
+	user!: AppStore['user'];
 
 	componentId = ++CommentNum;
 	isFollowPending = false;
@@ -179,7 +185,7 @@ export class AppCommentWidgetComment extends Vue {
 
 	startEdit() {
 		this.isEditing = true;
-		Popover.hideAll();
+		Popper.hideAll();
 	}
 
 	onCommentEdit(comment: Comment) {
@@ -189,7 +195,7 @@ export class AppCommentWidgetComment extends Vue {
 
 	async removeComment() {
 		this.isEditing = false;
-		Popover.hideAll();
+		Popper.hideAll();
 
 		const result = await ModalConfirm.show(
 			this.$gettext(`Are you sure you want to remove this comment?`),

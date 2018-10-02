@@ -1,5 +1,6 @@
 <v-popover
 	:id="popperId"
+	ref="popover"
 	:class="{
 		'-block': block,
 	}"
@@ -12,8 +13,8 @@
 	:delay="delay"
 	:disabled="disabled"
 	:open="show"
-	@show="onShow"
-	@hide="onHide"
+	@apply-show="onShow"
+	@apply-hide="onHide"
 	>
 	<slot />
 		<!--

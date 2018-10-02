@@ -1,4 +1,5 @@
 import View from '!view!./popper.html';
+import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 import { Screen } from '../screen/screen-service';
@@ -24,7 +25,7 @@ export class AppPopper extends Vue {
 	placement!: 'top' | 'right' | 'bottom' | 'left';
 
 	@Prop({ type: String, default: 'click' })
-	trigger!: string;
+	trigger!: 'click' | 'hover' | 'manual';
 
 	@Prop(Boolean)
 	hideOnStateChange?: boolean;
@@ -44,12 +45,15 @@ export class AppPopper extends Vue {
 	@Prop(Boolean)
 	block?: boolean;
 
+	$refs!: {
+		popover: any;
+	};
+
 	isVisible = false;
 	width = '';
 	maxWidth = '';
 	popperIndex = PopperIndex++;
 
-	private stateChangeDeregister?: Function;
 	private hideTimeout?: NodeJS.Timer;
 
 	get maxHeight() {
@@ -69,22 +73,16 @@ export class AppPopper extends Vue {
 	}
 
 	mounted() {
-		if (this.$router) {
-			this.stateChangeDeregister = this.$router.beforeEach(
-				(_to: any, _from: any, next: Function) => {
-					this.stateChangeHide();
-					next();
-				}
-			);
-		}
+		Popper.registerPopper(this.$router, this);
 	}
 
 	destroyed() {
+		Popper.deregisterPopper(this);
 		this.clearHideTimeout();
-		if (this.stateChangeDeregister) {
-			this.stateChangeDeregister();
-			this.stateChangeDeregister = undefined;
-		}
+	}
+
+	hide() {
+		this.$refs.popover.hide();
 	}
 
 	@Emit('show')
@@ -125,13 +123,6 @@ export class AppPopper extends Vue {
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 			this.hideTimeout = undefined;
-		}
-	}
-
-	// Pretty hacky, but just simulate a click on the popover to close.
-	private stateChangeHide() {
-		if (this.isVisible && this.hideOnStateChange) {
-			this.$el.click();
 		}
 	}
 }

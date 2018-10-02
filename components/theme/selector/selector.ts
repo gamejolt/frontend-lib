@@ -1,12 +1,11 @@
+import View from '!view!./selector.html';
+import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./selector.html';
-
-import { SiteTemplate } from '../../site/template/template-model';
-import { Popover } from '../../popover/popover.service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppPopover } from '../../popover/popover';
 import { AppPopoverTrigger } from '../../popover/popover-trigger.directive.vue';
+import { SiteTemplate } from '../../site/template/template-model';
 
 @View
 @Component({
@@ -19,8 +18,10 @@ import { AppPopoverTrigger } from '../../popover/popover-trigger.directive.vue';
 	},
 })
 export class AppThemeSelector extends Vue {
-	@Prop(Array) templates!: SiteTemplate[];
-	@Prop(Number) currentTemplate!: number;
+	@Prop(Array)
+	templates!: SiteTemplate[];
+	@Prop(Number)
+	currentTemplate!: number;
 
 	current: SiteTemplate | null = null;
 
@@ -37,6 +38,6 @@ export class AppThemeSelector extends Vue {
 
 	select(id: number) {
 		this.$emit('change', id);
-		Popover.hideAll();
+		Popper.hideAll();
 	}
 }
