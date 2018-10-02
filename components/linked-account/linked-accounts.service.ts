@@ -1,19 +1,60 @@
+import { Navigate } from 'game-jolt-frontend-lib/components/navigate/navigate.service';
 import VueRouter from 'vue-router';
 import { Api } from '../api/api.service';
 import { Provider } from './linked-account.model';
 
 export class LinkedAccounts {
 	static async link(router: VueRouter, provider: Provider | '', routeUrl: string) {
-		// todo: client
+		if (GJ_IS_CLIENT) {
+			if (!provider) {
+				return;
+			}
+			return this.linkClient(router, provider, routeUrl);
+		}
 
 		const response = await Api.sendRequest(routeUrl + provider, {});
-		window.location.href = response.redirectLocation;
+		Navigate.goto(response.redirectLocation);
+	}
+
+	static async linkClient(router: VueRouter, provider: Provider, routeUrl: string) {
+		const response = await Api.sendRequest(routeUrl + provider + '?client', {});
+
+		// Gotta open a browser window for them to complete the sign up/login.
+		Navigate.gotoExternal(response.redirectLocation);
+
+		// Now redirect them to the page that will continuously check if they
+		// are linked yet. We pass in the request token returned since this is
+		// what tells us our oauth state.
+		router.push({
+			name: 'dash.account.linked-accounts.linking',
+			query: { token: response.token },
+		});
 	}
 
 	static async login(router: VueRouter, provider: Provider) {
-		// todo: client
+		if (GJ_IS_CLIENT) {
+			return this.loginClient(router, provider);
+		}
 
 		const response = await Api.sendRequest('/web/auth/linked-accounts/link/' + provider, {});
-		window.location.href = response.redirectLocation;
+		Navigate.goto(response.redirectLocation);
+	}
+
+	static async loginClient(router: VueRouter, provider: Provider) {
+		const response = await Api.sendRequest(
+			'/web/auth/linked-accounts/link/' + provider + '?client',
+			{}
+		);
+
+		// Gotta open a browser window for them to complete the sign up/login.
+		Navigate.gotoExternal(response.redirectLocation);
+
+		// Now redirect them to the page that will continuously check if they
+		// are authed yet. We pass in the request token returned since this is
+		// what tells us our oauth state.
+		router.push({
+			name: 'auth.linked-account.poll',
+			params: { token: response.token },
+		});
 	}
 }

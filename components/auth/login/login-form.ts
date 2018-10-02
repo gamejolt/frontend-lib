@@ -1,13 +1,13 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./login-form.html?style=./login-form.styl';
-
-import { Connection } from '../../connection/connection-service';
-import { BaseForm, FormOnSubmit } from '../../form-vue/form.service';
+import { Provider } from 'game-jolt-frontend-lib/components/linked-account/linked-account.model';
+import { LinkedAccounts } from 'game-jolt-frontend-lib/components/linked-account/linked-accounts.service';
+import { Component, Prop } from 'vue-property-decorator';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { Api } from '../../api/api.service';
-import { Provider, UserLinkedAccounts } from '../../user/linked-accounts/linked-accounts.service';
-import { AppTooltip } from '../../tooltip/tooltip';
+import { Connection } from '../../connection/connection-service';
 import { Environment } from '../../environment/environment.service';
+import { BaseForm, FormOnSubmit } from '../../form-vue/form.service';
+import { AppTooltip } from '../../tooltip/tooltip';
 
 @View
 @Component({
@@ -19,7 +19,8 @@ import { Environment } from '../../environment/environment.service';
 	},
 })
 export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
-	@Prop(Boolean) darkVariant?: boolean;
+	@Prop(Boolean)
+	darkVariant?: boolean;
 
 	warnOnDiscard = false;
 
@@ -57,6 +58,6 @@ export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
 	}
 
 	linkedChoose(provider: Provider) {
-		UserLinkedAccounts.login(this.$router, provider);
+		LinkedAccounts.login(this.$router, provider);
 	}
 }
