@@ -18,6 +18,9 @@ export class AppUserCardHover extends Vue {
 	@Prop(User)
 	user?: User;
 
+	@Prop(Boolean)
+	block?: boolean;
+
 	isLoaded = false;
 
 	get shouldShow() {
@@ -36,6 +39,7 @@ export class AppUserCardHover extends Vue {
 					trigger: 'hover',
 					delay: { show: 500, hide: 0 },
 					openGroup: 'user-card-hover',
+					block: this.block,
 			  };
 	}
 
