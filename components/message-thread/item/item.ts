@@ -8,11 +8,13 @@ import { AppTimeAgo } from '../../time/ago/ago';
 import { AppUserAvatar } from '../../user/user-avatar/user-avatar';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppTimelineListItem } from '../../timeline-list/item/item';
+import { AppUserCardHover } from '../../user/card/hover/hover';
 
 @View
 @Component({
 	components: {
 		AppTimelineListItem,
+		AppUserCardHover,
 		AppUserAvatar,
 		AppTimeAgo,
 		AppJolticon,

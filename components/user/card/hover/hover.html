@@ -1,0 +1,16 @@
+<component
+	:is="component"
+	v-bind="componentProps"
+	>
+
+	<slot />
+
+	<template v-if="shouldShow" slot="popover">
+		<app-user-card
+			class="-card"
+			:user="user"
+			:is-loading="!isLoaded"
+			/>
+	</template>
+
+</component>

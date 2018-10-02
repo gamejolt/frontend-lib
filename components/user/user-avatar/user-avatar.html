@@ -1,32 +1,13 @@
-<span>
-	<a
-		v-if="user"
-		class="user-avatar"
-		:href="href"
-		:title="user.display_name"
-		v-app-popover-trigger.hover="{
-			id: `user-card-hover-${user.id}`,
-			disabled: !shouldShowHoverCard,
-		}"
-		>
-		<app-user-avatar-img :user="user" />
-		<div class="avatar-name" v-if="showName">
-			{{ user.display_name }}
-			<br>
-			@{{ user.username }}
-		</div>
-	</a>
-	<app-user-avatar-img v-else title="Guest" />
-
-	<app-popover
-		v-if="shouldShowHoverCard"
-		append-to-body
-		:popover-id="`user-card-hover-${user.id}`"
-		@focused="onCardShown"
-		>
-		<app-user-card-popover
-			v-if="isHoverCardBootstrapped"
-			:user="user"
-			/>
-	</app-popover>
-</span>
+<a
+	v-if="user"
+	class="user-avatar"
+	:href="href"
+	>
+	<app-user-avatar-img :user="user" />
+	<div class="avatar-name" v-if="showName">
+		{{ user.display_name }}
+		<br>
+		@{{ user.username }}
+	</div>
+</a>
+<app-user-avatar-img v-else />

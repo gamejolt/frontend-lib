@@ -46,18 +46,6 @@
 				<div class="-follow-counts small">
 					<router-link
 						:to="{
-							name: 'profile.followers',
-							params: { username: user.username },
-						}"
-						:translate-n="followerCount"
-						v-translate="{ count: number(followerCount) }"
-						translate-plural="<b>%{count}</b> followers"
-						>
-						1 follower
-					</router-link>
-					<span class="dot-separator" />
-					<router-link
-						:to="{
 							name: 'profile.following',
 							params: { username: user.username },
 						}"
@@ -66,6 +54,18 @@
 						translate-plural="<b>%{count}</b> following"
 						>
 						<b>1</b> following
+					</router-link>
+					<span class="dot-separator" />
+					<router-link
+						:to="{
+							name: 'profile.followers',
+							params: { username: user.username },
+						}"
+						:translate-n="followerCount"
+						v-translate="{ count: number(followerCount) }"
+						translate-plural="<b>%{count}</b> followers"
+						>
+						1 follower
 					</router-link>
 				</div>
 

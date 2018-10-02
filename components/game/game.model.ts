@@ -1,3 +1,4 @@
+import { RawLocation } from 'vue-router';
 import { Api } from '../api/api.service';
 import { MediaItem } from '../media-item/media-item-model';
 import { Model } from '../model/model.service';
@@ -5,7 +6,6 @@ import { Registry } from '../registry/registry.service';
 import { Sellable } from '../sellable/sellable.model';
 import { Site } from '../site/site-model';
 import { Theme } from '../theme/theme.model';
-import { RawLocation } from 'vue-router';
 import { User } from '../user/user.model';
 import { GameBuild } from './build/build.model';
 import { GameCollaborator } from './collaborator/collaborator.model';

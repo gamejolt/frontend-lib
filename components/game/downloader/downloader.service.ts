@@ -1,13 +1,13 @@
+import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import VueRouter from 'vue-router';
-import { Game } from '../game.model';
-import { GameBuild } from '../build/build.model';
 import { Analytics } from '../../analytics/analytics.service';
-import { HistoryTick } from '../../history-tick/history-tick-service';
-import { Growls } from '../../growls/growls.service';
-import { Translate } from '../../translate/translate.service';
-import { Popover } from '../../popover/popover.service';
 import { Environment } from '../../environment/environment.service';
+import { Growls } from '../../growls/growls.service';
+import { HistoryTick } from '../../history-tick/history-tick-service';
 import { Navigate } from '../../navigate/navigate.service';
+import { Translate } from '../../translate/translate.service';
+import { GameBuild } from '../build/build.model';
+import { Game } from '../game.model';
 
 export interface GameDownloaderOptions {
 	key?: string;
@@ -27,7 +27,7 @@ export class GameDownloader {
 		Analytics.trackEvent('game-play', 'download');
 
 		// In case any popover was used to click the download.
-		Popover.hideAll();
+		Popper.hideAll();
 
 		// Any time we transition away from the page, make sure we reset our
 		// download transition. This will ensure the download won't start.

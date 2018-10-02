@@ -29,26 +29,27 @@
 		[...] after. If the package has normal builds too, then we just show it as a more options
 		sparse button.
 	-->
-	<app-button
-		icon="ellipsis-v"
-		:primary="card.otherOnly"
-		:circle="!card.otherOnly"
-		:trans="!card.otherOnly"
+	<app-popper
 		v-if="card.extraBuilds.length"
-		v-app-popover-trigger="`game-package-card-more-options-${ package.id }`"
-		v-app-track-event="`game-package-card:more-options`"
 		>
-		<template v-if="card.otherOnly">
-			<translate>Download</translate>
-			<app-jolticon class="jolticon-addon" icon="other-os" />
-		</template>
-	</app-button>
+		<app-button
+			icon="ellipsis-v"
+			:primary="card.otherOnly"
+			:circle="!card.otherOnly"
+			:trans="!card.otherOnly"
+			v-app-track-event="`game-package-card:more-options`"
+			>
+			<template v-if="card.otherOnly">
+				<translate>Download</translate>
+				<app-jolticon class="jolticon-addon" icon="other-os" />
+			</template>
+		</app-button>
 
-	<app-popover :popover-id="`game-package-card-more-options-${ package.id }`">
 		<app-game-package-card-more-options
+			slot="popover"
 			:card="card"
 			@click="click( $event, true )"
 			/>
-	</app-popover>
+	</app-popper>
 
 </div>

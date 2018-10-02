@@ -217,22 +217,20 @@
 										</span>
 									</div>
 
-									<span
+									<app-popper
+										v-if="cards.length > 1"
 										class="saved-card-more"
-										v-if="cards.length > 1"
-										:class="{ disabled: isLoadingMethods }"
-										v-app-tooltip="$gettext( 'Select another card' )"
-										v-app-popover-trigger="`payment-form-card-selector-${ sellable.id }`"
 										>
-										<app-jolticon icon="chevron-down" />
-									</span>
+										<span
+											:class="{ disabled: isLoadingMethods }"
+											v-app-tooltip="$gettext( 'Select another card' )"
+											>
+											<app-jolticon icon="chevron-down" />
+										</span>
 
-									<app-popover
-										v-if="cards.length > 1"
-										:popover-id="'payment-form-card-selector-' + sellable.id"
-										position-horizontal="left"
-										>
-										<div class="list-group list-group-dark">
+										<div
+											slot="popover"
+											class="list-group list-group-dark">
 											<a
 												class="list-group-item"
 												v-for="card of cards"
@@ -250,7 +248,7 @@
 												</small>
 											</a>
 										</div>
-									</app-popover>
+									</app-popper>
 								</div>
 							</template>
 						</app-expand>
