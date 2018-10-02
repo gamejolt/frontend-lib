@@ -21,10 +21,11 @@ export class AppUserCardHover extends Vue {
 	@Prop(Boolean)
 	block?: boolean;
 
+	isShowing = false;
 	isLoaded = false;
 
 	get shouldShow() {
-		return !!this.user;
+		return !!this.user && this.isShowing;
 	}
 
 	get component() {
@@ -43,12 +44,31 @@ export class AppUserCardHover extends Vue {
 			  };
 	}
 
-	@Watch('user', { immediate: true })
+	get componentOn() {
+		return Screen.isXs
+			? {}
+			: {
+					show: () => this.onShow(),
+					hide: () => this.onHide(),
+			  };
+	}
+
+	@Watch('user.id', { immediate: true })
 	onUserChange() {
 		if (this.user) {
 			this.isLoaded = false;
+		}
+	}
+
+	onShow() {
+		this.isShowing = true;
+		if (!this.isLoaded) {
 			this.fetchCardInfo();
 		}
+	}
+
+	onHide() {
+		this.isShowing = false;
 	}
 
 	async fetchCardInfo() {
