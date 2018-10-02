@@ -32,6 +32,7 @@ export class AppUserCardHover extends Vue {
 		return Screen.isXs
 			? {}
 			: {
+					placement: 'top',
 					trigger: 'hover',
 					delay: { show: 500, hide: 0 },
 					openGroup: 'user-card-hover',
