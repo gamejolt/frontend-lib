@@ -4,6 +4,8 @@
 .user-card
 	rounded-corners()
 	theme-prop('background-color', 'bg-offset')
+	margin-bottom: $line-height-computed
+	overflow: hidden
 
 >>> .popper .user-card
 	min-width: 300px
@@ -18,19 +20,35 @@ hr
 	margin: 0
 
 .-user-info
-	clearfix()
+	theme-prop('background-color', 'darker')
+	text-align: center
 
-	&-inner
-		margin-left: 50px + ($grid-gutter-width / 2)
+.-header
+	theme-prop('background-color', 'link')
+	height: 100px
+	background-repeat: no-repeat
+	background-position: center center
+	background-size: cover
 
 .-verified
 	theme-prop('color', 'highlight')
-	float: right
-	margin-left: ($grid-gutter-width / 2)
+	vertical-align: middle
 
 .-avatar
-	width: 50px
-	float: left
+	theme-prop('background-color', 'darker')
+	theme-prop('border-color', 'darker')
+	position: relative
+	display: block
+	width: 100px
+	height: 100px
+	margin-top: -(@width * (1 - 0.618))
+	margin-left: auto
+	margin-right: auto
+	border-width: 4px
+	border-style: solid
+	border-radius: 50%
+	overflow: hidden
+	z-index: 2
 
 .-display-name
 	text-overflow()

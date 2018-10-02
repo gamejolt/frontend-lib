@@ -1,8 +1,8 @@
 import VueRouter from 'vue-router';
-import { Environment } from '../environment/environment.service';
-import { appStore } from '../../vue/services/app/app-store';
-import { EventBus } from '../event-bus/event-bus.service';
 import { arrayRemove } from '../../utils/array';
+import { appStore } from '../../vue/services/app/app-store';
+import { Environment } from '../environment/environment.service';
+import { EventBus } from '../event-bus/event-bus.service';
 
 const ga: any = (typeof window !== 'undefined' && (window as any).ga) || function() {};
 
@@ -186,6 +186,10 @@ export class Analytics {
 
 			await this.ga('send', 'event', category, action, label, value, options);
 		}
+	}
+
+	static async trackError(action: string, label?: string, value?: string) {
+		this.trackEvent('errors', action, label, value);
 	}
 
 	static async trackSocial(network: string, action: string, target: string) {
