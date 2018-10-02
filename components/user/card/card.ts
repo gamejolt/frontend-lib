@@ -34,15 +34,6 @@ export class AppUserCard extends Vue {
 	@Prop(User)
 	user!: User;
 
-	@Prop(Number)
-	posts?: number;
-
-	@Prop(Number)
-	games?: number;
-
-	@Prop(Number)
-	videos?: number;
-
 	@Prop(Boolean)
 	isLoading?: boolean;
 
@@ -57,6 +48,18 @@ export class AppUserCard extends Vue {
 
 	get followingCount() {
 		return this.user.following_count || 0;
+	}
+
+	get postCount() {
+		return this.user.post_count || 0;
+	}
+
+	get gameCount() {
+		return this.user.game_count || 0;
+	}
+
+	get videoCount() {
+		return this.user.video_count || 0;
 	}
 
 	get headerBackgroundImage() {

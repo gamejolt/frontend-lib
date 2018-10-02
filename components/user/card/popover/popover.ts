@@ -16,9 +16,6 @@ export class AppUserCardPopover extends Vue {
 	user!: User;
 
 	isLoaded = false;
-	postsCount = 0;
-	gamesCount = 0;
-	videosCount = 0;
 
 	mounted() {
 		this.fetchCardInfo();
@@ -29,9 +26,6 @@ export class AppUserCardPopover extends Vue {
 			detach: true,
 		});
 
-		this.postsCount = response.postsCount || 0;
-		this.gamesCount = response.gamesCount || 0;
-		this.videosCount = response.videosCount || 0;
 		this.isLoaded = true;
 
 		// Assign to the user to make sure the following status is up to date.

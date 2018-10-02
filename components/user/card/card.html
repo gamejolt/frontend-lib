@@ -110,11 +110,11 @@
 							<translate>Posts</translate>
 						</div>
 						<div class="stat-big-digit">
-							{{ posts || 0 | number }}
+							{{ postCount | number }}
 						</div>
 					</router-link>
 				</li>
-				<li class="stat-big stat-big-smaller" v-if="games">
+				<li class="stat-big stat-big-smaller" v-if="gameCount">
 					<router-link
 						class="link-unstyled"
 						:to="{
@@ -126,11 +126,11 @@
 							<translate>Games</translate>
 						</div>
 						<div class="stat-big-digit">
-							{{ games | number }}
+							{{ gameCount | number }}
 						</div>
 					</router-link>
 				</li>
-				<li class="stat-big stat-big-smaller" v-if="videos">
+				<li class="stat-big stat-big-smaller" v-if="videoCount">
 					<router-link
 						class="link-unstyled"
 						:to="{
@@ -142,7 +142,7 @@
 							<translate>Videos</translate>
 						</div>
 						<div class="stat-big-digit">
-							{{ videos | number }}
+							{{ videoCount | number }}
 						</div>
 					</router-link>
 				</li>
