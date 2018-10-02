@@ -1,7 +1,7 @@
 import View from '!view!./modal.html?style=./modal.styl';
+import { AppUserCardHover } from 'game-jolt-frontend-lib/components/user/card/hover/hover';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-
 import { AppGameThumbnail } from '../../../../../../_common/game/thumbnail/thumbnail';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { number } from '../../../../vue/filters/number';
@@ -14,9 +14,9 @@ import { Screen } from '../../../screen/screen-service';
 import { AppUserFollowWidget } from '../../../user/follow-widget/follow-widget';
 import { AppUserAvatar } from '../../../user/user-avatar/user-avatar';
 import { AppVideoEmbed } from '../../../video/embed/embed';
+import { CommentVote } from '../../vote/vote-model';
 import { AppCommentVideoLikeWidget } from '../like-widget/like-widget';
 import { CommentVideo } from '../video-model';
-import { CommentVote } from '../../vote/vote-model';
 
 @View
 @Component({
@@ -27,6 +27,7 @@ import { CommentVote } from '../../vote/vote-model';
 		AppFadeCollapse,
 		AppGameThumbnail,
 		AppUserAvatar,
+		AppUserCardHover,
 		AppUserFollowWidget,
 		AppCommentVideoLikeWidget,
 	},
@@ -38,9 +39,11 @@ import { CommentVote } from '../../vote/vote-model';
 	},
 })
 export default class AppCommentVideoModal extends BaseModal {
-	@Prop(CommentVideo) video!: CommentVideo;
+	@Prop(CommentVideo)
+	video!: CommentVideo;
 
-	@State app!: AppStore;
+	@State
+	app!: AppStore;
 
 	readonly Screen = Screen;
 
