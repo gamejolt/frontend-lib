@@ -13,14 +13,11 @@
 	:delay="delay"
 	:disabled="disabled"
 	:open="show"
+	:auto-hide="autoHide"
 	@apply-show="onShow"
 	@apply-hide="onHide"
 	>
 	<slot />
-		<!--
-		:class="{
-			'popover-no-max-height': noMaxHeight,
-		}" -->
 	<app-scroll-inview-parent
 		v-if="isVisible"
 		slot="popover"

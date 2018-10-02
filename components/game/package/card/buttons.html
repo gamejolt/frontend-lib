@@ -45,13 +45,11 @@
 			</template>
 		</app-button>
 
-		<!-- <app-popover :popover-id="`game-package-card-more-options-${ package.id }`"> -->
-			<app-game-package-card-more-options
-				slot="popover"
-				:card="card"
-				@click="click( $event, true )"
-				/>
-		<!-- </app-popover> -->
+		<app-game-package-card-more-options
+			slot="popover"
+			:card="card"
+			@click="click( $event, true )"
+			/>
 	</app-popper>
 
 </div>

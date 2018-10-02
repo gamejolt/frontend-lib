@@ -217,8 +217,8 @@
 										</span>
 									</div>
 
-										<!-- v-if="cards.length > 1" -->
 									<app-popper
+										v-if="cards.length > 1"
 										class="saved-card-more"
 										>
 										<span
@@ -228,32 +228,26 @@
 											<app-jolticon icon="chevron-down" />
 										</span>
 
-										<!-- <app-popover
-											v-if="cards.length > 1"
-											:popover-id="'payment-form-card-selector-' + sellable.id"
-											position-horizontal="left"
-											> -->
-											<div
-												slot="popover"
-												class="list-group list-group-dark">
-												<a
-													class="list-group-item"
-													v-for="card of cards"
-													:key="card.id"
-													@click="checkoutSavedCard( card )"
-													>
-													<span class="tag">
-														{{ card.brand }}
-													</span>
-													****
-													{{ card.last4 }}
-													<small class="text-muted" v-if="cardsTax[ card.id ] && cardsTax[ card.id ].amount > 0">
-														+{{ cardsTax[ card.id ].amount | currency }}
-														<translate>tax</translate>
-													</small>
-												</a>
-											</div>
-										<!-- </app-popover> -->
+										<div
+											slot="popover"
+											class="list-group list-group-dark">
+											<a
+												class="list-group-item"
+												v-for="card of cards"
+												:key="card.id"
+												@click="checkoutSavedCard( card )"
+												>
+												<span class="tag">
+													{{ card.brand }}
+												</span>
+												****
+												{{ card.last4 }}
+												<small class="text-muted" v-if="cardsTax[ card.id ] && cardsTax[ card.id ].amount > 0">
+													+{{ cardsTax[ card.id ].amount | currency }}
+													<translate>tax</translate>
+												</small>
+											</a>
+										</div>
 									</app-popper>
 								</div>
 							</template>

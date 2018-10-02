@@ -1,4 +1,6 @@
 import View from '!view!./popper.html';
+import { AppBackdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop';
+import { Backdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop.service';
 import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
@@ -42,6 +44,9 @@ export class AppPopper extends Vue {
 	@Prop(Boolean)
 	show?: boolean;
 
+	@Prop({ type: Boolean, default: true })
+	autoHide!: boolean;
+
 	@Prop(Boolean)
 	block?: boolean;
 
@@ -55,6 +60,7 @@ export class AppPopper extends Vue {
 	popperIndex = PopperIndex++;
 
 	private hideTimeout?: NodeJS.Timer;
+	private mobileBackdrop: AppBackdrop | null = null;
 
 	get maxHeight() {
 		return Screen.height - 100 + 'px';
@@ -107,11 +113,22 @@ export class AppPopper extends Vue {
 			this.maxWidth = '';
 			this.width = '';
 		}
+
+		if (!this.mobileBackdrop) {
+			this.mobileBackdrop = Backdrop.push();
+		}
 	}
 
 	onHide() {
 		this.clearHideTimeout();
 		this.hideTimeout = setTimeout(() => this.hideDone(), TransitionTime);
+
+		setTimeout(() => {
+			if (this.mobileBackdrop) {
+				Backdrop.remove(this.mobileBackdrop);
+				this.mobileBackdrop = null;
+			}
+		}, 100);
 	}
 
 	@Emit('hide')
