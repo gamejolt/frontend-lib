@@ -1,14 +1,14 @@
+import View from '!view!./backdrop.html?style=./backdrop.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./backdrop.html?style=./backdrop.styl';
 import './backdrop-global.styl';
-
 import { Backdrop } from './backdrop.service';
 
 @View
 @Component({})
 export class AppBackdrop extends Vue {
-	@Prop(String) className?: string;
+	@Prop(String)
+	className?: string;
 
 	active = false;
 

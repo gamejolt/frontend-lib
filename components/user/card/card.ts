@@ -1,19 +1,17 @@
+import View from '!view!./card.html?style=./card.styl';
+import { number } from 'game-jolt-frontend-lib/vue/filters/number';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./card.html?style=./card.styl';
 import { State } from 'vuex-class';
-
-import { User } from '../user.model';
-import { AppUserFollowWidget } from '../follow-widget/follow-widget';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppTooltip } from '../../tooltip/tooltip';
-import { number } from '../../../vue/filters/number';
-import { Api } from '../../api/api.service';
-import { AppLoading } from '../../../vue/components/loading/loading';
-import { AppTooltipContainer } from '../../tooltip/container/container';
-import { AppUserAvatarImg } from '../user-avatar/img/img';
 import { Store } from '../../../../../app/store/index';
+import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { AppTheme } from '../../theme/theme';
+import { AppTooltipContainer } from '../../tooltip/container/container';
+import { AppTooltip } from '../../tooltip/tooltip';
+import { AppUserFollowWidget } from '../follow-widget/follow-widget';
+import { AppUserAvatarImg } from '../user-avatar/img/img';
+import { User } from '../user.model';
+import { AppLoading } from './../../../vue/components/loading/loading';
 
 @View
 @Component({
@@ -21,9 +19,9 @@ import { AppTheme } from '../../theme/theme';
 		AppJolticon,
 		AppUserAvatarImg,
 		AppUserFollowWidget,
-		AppLoading,
 		AppTheme,
 		AppTooltipContainer,
+		AppLoading,
 	},
 	directives: {
 		AppTooltip,
@@ -33,30 +31,40 @@ import { AppTheme } from '../../theme/theme';
 	},
 })
 export class AppUserCard extends Vue {
-	@Prop(User) user!: User;
-	@Prop(Boolean) showExtraInfo!: boolean;
+	@Prop(User)
+	user!: User;
 
-	@State app!: Store['app'];
+	@Prop(Boolean)
+	isLoading?: boolean;
 
-	isLoaded = false;
-	gamesCount = 0;
-	videosCount = 0;
+	@State
+	app!: Store['app'];
 
-	mounted() {
-		if (this.showExtraInfo) {
-			this.fetchCardInfo();
-		}
+	readonly number = number;
+
+	get followerCount() {
+		return this.user.follower_count || 0;
 	}
 
-	async fetchCardInfo() {
-		const response = await Api.sendRequest('/web/profile/card/' + this.user.id, undefined, {
-			detach: true,
-		});
-		this.gamesCount = response.gamesCount || 0;
-		this.videosCount = response.videosCount || 0;
-		this.isLoaded = true;
+	get followingCount() {
+		return this.user.following_count || 0;
+	}
 
-		// Assign to the user to make sure the following status is up to date.
-		this.user.assign(response.user);
+	get postCount() {
+		return this.user.post_count || 0;
+	}
+
+	get gameCount() {
+		return this.user.game_count || 0;
+	}
+
+	get videoCount() {
+		return this.user.video_count || 0;
+	}
+
+	get headerBackgroundImage() {
+		return this.user.header_media_item
+			? `url('${this.user.header_media_item.mediaserver_url}')`
+			: undefined;
 	}
 }

@@ -11,24 +11,25 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 		theme-prop('color', 'lighter')
 
 .navbar-left
-	flex: 0 1 auto
+	flex: none
 
 .navbar-center
-	flex: 1 1 auto
+	flex: auto
 
 .navbar-right
-	flex: 0 1 auto
+	flex: none
 
 .navbar-items
 	@extend .list-unstyled
 
 .navbar-items, .navbar-items > li
 	display: inline-block
-	margin-bottom: 0
 	vertical-align: top
+	margin-bottom: 0
 
 .navbar-items > li > a, .navbar-item
 	display: inline-block
+	vertical-align: top
 	overflow: hidden
 	height: $navbar-height
 	line-height: 20px
@@ -56,12 +57,14 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 	top: ($navbar-height - @height) * 0.5
 
 .navbar-avatar
-	// Gotta overide specificity
-	.navbar-items > li > &
-		padding: 10px
-		line-height: 30px
-		width: 30px + (@padding * 2)
-		height: @width
+	display: inline-block
+	vertical-align: top
+	overflow: hidden
+	padding: 10px
+	line-height: 30px
+	width: 30px + (@padding * 2)
+	height: @width
+	user-select: none
 
 	img
 		width: 30px
@@ -90,7 +93,7 @@ $navbar-height = $shell-top-nav-height is defined ? $shell-top-nav-height : 50px
 /**
  * Hover/active state underline.
  */
-.navbar-items > li > a, .navbar-item, .navbar-form-control
+.navbar-items > li > a, .navbar-item, .navbar-form-control, .navbar-avatar
 	position: relative
 
 	&::before

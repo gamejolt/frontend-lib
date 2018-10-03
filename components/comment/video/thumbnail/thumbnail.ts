@@ -10,10 +10,12 @@ import { AppTooltip } from '../../../tooltip/tooltip';
 import { CommentVideoModal } from '../modal/modal.service';
 import { AppUserAvatar } from '../../../user/user-avatar/user-avatar';
 import { Store } from '../../../../../../app/store/index';
+import { AppUserCardHover } from '../../../user/card/hover/hover';
 
 @View
 @Component({
 	components: {
+		AppUserCardHover,
 		AppUserAvatar,
 	},
 	directives: {

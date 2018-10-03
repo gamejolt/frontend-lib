@@ -1,6 +1,13 @@
 <app-theme class="user-card" :theme="user.theme">
 	<app-tooltip-container>
-		<div class="-user-info -well fill-darker">
+		<div class="-user-info">
+			<div
+				class="-header"
+				:style="{
+					'background-image': headerBackgroundImage,
+				}"
+				/>
+
 			<router-link
 				:to="user.url"
 				class="-avatar"
@@ -10,16 +17,15 @@
 					/>
 			</router-link>
 
-			<app-jolticon
-				v-if="user.is_verified"
-				icon="verified"
-				big
-				class="-verified"
-				v-app-tooltip="$gettext( 'profile.verified_tooltip' )"
-				/>
-
-			<div class="-user-info-inner">
+			<div class="-well fill-darker">
 				<div class="-display-name">
+					<app-jolticon
+						v-if="user.is_verified"
+						icon="verified"
+						class="-verified"
+						v-app-tooltip="$gettext( 'profile.verified_tooltip' )"
+						/>
+
 					<router-link
 						:to="user.url"
 						class="link-unstyled"
@@ -36,30 +42,79 @@
 						@{{ user.username }}
 					</router-link>
 				</div>
-			</div>
 
-			<div class="-follow">
-				<app-user-follow-widget
-					v-if="!app.user || user.id !== app.user.id"
-					:user="user"
-					block
-					hide-count
-					event-label="user-card"
-					/>
+				<div class="-follow-counts small">
+					<router-link
+						:to="{
+							name: 'profile.following',
+							params: { username: user.username },
+						}"
+						:translate-n="followingCount"
+						v-translate="{ count: number(followingCount || 0) }"
+						translate-plural="<b>%{count}</b> following"
+						>
+						<b>1</b> following
+					</router-link>
+					<span class="dot-separator" />
+					<router-link
+						:to="{
+							name: 'profile.followers',
+							params: { username: user.username },
+						}"
+						:translate-n="followerCount"
+						v-translate="{ count: number(followerCount) }"
+						translate-plural="<b>%{count}</b> followers"
+						>
+						1 follower
+					</router-link>
+				</div>
+
+				<div class="-follow" v-if="app.user">
+					<app-user-follow-widget
+						v-if="user.id !== app.user.id"
+						:user="user"
+						block
+						hide-count
+						event-label="user-card"
+						/>
+					<app-button
+						v-else
+						:to="{
+							name: 'profile.overview',
+							params: { username: app.user.username },
+						}"
+						block
+						>
+						<translate>View Profile</translate>
+					</app-button>
+				</div>
 			</div>
 		</div>
 
-		<div class="-stats -well" v-if="showExtraInfo">
-			<ul class="stat-list">
+		<div class="-stats -well">
+			<app-loading
+				v-if="isLoading"
+				class="sans-margin"
+				centered
+				/>
+			<ul class="stat-list" v-else>
 				<li class="stat-big stat-big-smaller">
-					<div class="stat-big-label">
-						<translate>Followers</translate>
-					</div>
-					<div class="stat-big-digit">
-						{{ user.follower_count | number }}
-					</div>
+					<router-link
+						class="link-unstyled"
+						:to="{
+							name: 'profile.overview',
+							params: { username: user.username },
+						}"
+						>
+						<div class="stat-big-label">
+							<translate>Posts</translate>
+						</div>
+						<div class="stat-big-digit">
+							{{ postCount | number }}
+						</div>
+					</router-link>
 				</li>
-				<li class="stat-big stat-big-smaller" v-if="gamesCount">
+				<li class="stat-big stat-big-smaller" v-if="gameCount">
 					<router-link
 						class="link-unstyled"
 						:to="{
@@ -71,11 +126,11 @@
 							<translate>Games</translate>
 						</div>
 						<div class="stat-big-digit">
-							{{ gamesCount | number }}
+							{{ gameCount | number }}
 						</div>
 					</router-link>
 				</li>
-				<li class="stat-big stat-big-smaller" v-if="videosCount">
+				<li class="stat-big stat-big-smaller" v-if="videoCount">
 					<router-link
 						class="link-unstyled"
 						:to="{
@@ -87,15 +142,9 @@
 							<translate>Videos</translate>
 						</div>
 						<div class="stat-big-digit">
-							{{ videosCount | number }}
+							{{ videoCount | number }}
 						</div>
 					</router-link>
-				</li>
-				<li class="stat-big" v-if="!isLoaded">
-					<app-loading
-						:stationary="true"
-						:hide-label="true"
-						/>
 				</li>
 			</ul>
 		</div>

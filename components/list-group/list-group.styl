@@ -7,6 +7,7 @@ $list-group-drag-handle-width = 20px
 .list-group
 	rounded-corners()
 	theme-prop('border-color', 'bg-subtle')
+	theme-prop('background-color', 'bg')
 	margin-bottom: $font-size-base
 	border-width: 1px
 	border-style: solid
@@ -15,7 +16,6 @@ $list-group-drag-handle-width = 20px
 		white-space: nowrap
 
 .list-group-item
-	theme-prop('background-color', 'bg')
 	theme-prop('border-bottom-color', 'bg-subtle')
 	color: inherit
 	position: relative
@@ -128,7 +128,7 @@ $list-group-drag-handle-width = 20px
 
 // When a list-group is inside a popover.
 // Darken the borders.
-.popover .list-group
+.popover .list-group, .popper .list-group
 	margin-bottom: $list-group-item-padding
 
 	&:last-child
@@ -143,10 +143,11 @@ $list-group-drag-handle-width = 20px
  * Dark list groups
  */
 .list-group-dark
+	@extend .fill-darkest
+	theme-prop('background-color', 'darkest')
 	border: 0
 
 	.list-group-item
-		@extend .fill-darkest
 		border: 0
 
 		&.disabled

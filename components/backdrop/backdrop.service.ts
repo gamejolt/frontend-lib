@@ -1,5 +1,5 @@
-import { AppBackdrop } from './backdrop';
 import { arrayRemove } from '../../utils/array';
+import { AppBackdrop } from './backdrop';
 
 export interface BackdropOptions {
 	context?: HTMLElement;

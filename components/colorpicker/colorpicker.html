@@ -1,22 +1,22 @@
 <div class="colorpicker">
 
-	<div
-		class="color"
-		:class="{ empty: !colors.hex }"
-		v-app-popover-trigger="`colorpicker-${id}`"
-		:style="{
-			'background-color': colors.hex,
-		}"
-		>
-	</div>
+	<app-popper>
+		<!-- position-horizontal="left"
+			@focused="isOpen = true"
+			@blurred="isOpen = false" -->
+		<div
+			class="color"
+			:class="{ empty: !colors.hex }"
+			:style="{
+				'background-color': colors.hex,
+			}"
+			>
+		</div>
 
-	<app-popover
-		:popover-id="`colorpicker-${id}`"
-		position-horizontal="left"
-		@focused="isOpen = true"
-		@blurred="isOpen = false"
-		>
-		<div class="colorpicker-popover" v-if="isOpen">
+		<div
+			class="colorpicker-popover"
+			slot="popover"
+			>
 			<picker
 				:value="colors"
 				@input="onChange"
@@ -35,6 +35,6 @@
 				</div>
 			</div>
 		</div>
-	</app-popover>
+	</app-popper>
 
 </div>

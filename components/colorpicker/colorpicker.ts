@@ -1,29 +1,23 @@
-import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./colorpicker.html?style=./colorpicker.styl';
-
+import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
+import Vue from 'vue';
 import { Sketch } from 'vue-color';
-import { AppPopover } from '../popover/popover';
-import { AppPopoverTrigger } from '../popover/popover-trigger.directive.vue';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { AppJolticon } from '../../vue/components/jolticon/jolticon';
-import { Popover } from '../popover/popover.service';
+import { AppPopper } from '../popper/popper';
 
 @View
 @Component({
 	components: {
 		picker: Sketch,
-		AppPopover,
+		AppPopper,
 		AppJolticon,
-	},
-	directives: {
-		AppPopoverTrigger,
 	},
 })
 export class AppColorpicker extends Vue {
-	@Prop(String) value!: string;
+	@Prop(String)
+	value!: string;
 
-	id = '';
-	isOpen = false;
 	colors: any = {};
 
 	@Watch('value', { immediate: true })
@@ -33,23 +27,19 @@ export class AppColorpicker extends Vue {
 		};
 	}
 
-	created() {
-		this.id = Math.random() + '';
-	}
-
 	onChange(value: any) {
 		this.colors = value;
 	}
 
 	accept() {
 		this.$emit('input', this.colors.hex);
-		Popover.hideAll();
+		Popper.hideAll();
 	}
 
 	cancel() {
 		this.colors = {
 			hex: this.value,
 		};
-		Popover.hideAll();
+		Popper.hideAll();
 	}
 }

@@ -1,0 +1,36 @@
+<v-popover
+	:id="popperId"
+	ref="popover"
+	:class="{
+		'-block': block,
+	}"
+	popover-base-class="popper"
+	popover-wrapper-class="popper-wrapper"
+	popover-arrow-class="popper-arrow"
+	:popover-inner-class="popoverInnerClass"
+	:placement="placement"
+	:trigger="trigger"
+	:delay="delay"
+	:disabled="disabled"
+	:open="show"
+	:auto-hide="autoHide"
+	:open-group="openGroup"
+	@apply-show="onShow"
+	@apply-hide="onHide"
+	>
+	<slot />
+	<app-scroll-inview-parent
+		v-if="isVisible"
+		slot="popover"
+		ref="inviewParent"
+		class="scrollable"
+		:style="{
+			maxHeight,
+			width,
+			maxWidth,
+		}"
+		:throttle="0"
+		>
+		<slot name="popover"  />
+	</app-scroll-inview-parent>
+</v-popover>

@@ -1,15 +1,15 @@
-import { Modal } from '../../modal/modal.service';
+import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import { asyncComponentLoader } from '../../../utils/utils';
-import { HistoryTick } from '../../history-tick/history-tick-service';
-import { Popover } from '../../popover/popover.service';
-import { Device } from '../../device/device.service';
-import { Game } from '../game.model';
-import { GameBuild } from '../build/build.model';
 import { Analytics } from '../../analytics/analytics.service';
+import { Device } from '../../device/device.service';
 import { Environment } from '../../environment/environment.service';
 import { Growls } from '../../growls/growls.service';
-import { Translate } from '../../translate/translate.service';
+import { HistoryTick } from '../../history-tick/history-tick-service';
+import { Modal } from '../../modal/modal.service';
 import { Navigate } from '../../navigate/navigate.service';
+import { Translate } from '../../translate/translate.service';
+import { GameBuild } from '../build/build.model';
+import { Game } from '../game.model';
 
 export class GamePlayModal {
 	static hasModal = false;
@@ -38,7 +38,7 @@ export class GamePlayModal {
 		});
 
 		// If they clicked into this through a popover.
-		Popover.hideAll();
+		Popper.hideAll();
 
 		// Will open the gameserver in their browser.
 		if (

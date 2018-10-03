@@ -21,20 +21,17 @@
 	</template>
 
 	<template slot="meta">
-		<a
+		<app-popper
 			v-if="user"
-			class="link-muted"
-			v-app-tooltip="$gettext( 'More Options' )"
-			v-app-popover-trigger="`comment-more-options-${componentId}`"
 			>
-			<app-jolticon icon="ellipsis-v" class="middle" />
-		</a>
+			<a
+				class="link-muted"
+				v-app-tooltip="$gettext( 'More Options' )"
+				>
+				<app-jolticon icon="ellipsis-v" class="middle" />
+			</a>
 
-		<app-popover
-			v-if="user"
-			:popover-id="`comment-more-options-${componentId}`"
-			>
-			<div class="list-group list-group-dark">
+			<div slot="popover" class="list-group list-group-dark">
 				<a class="list-group-item has-icon"
 					@click="copyPermalink"
 					>
@@ -102,7 +99,7 @@
 					</template>
 				</a>
 			</div>
-		</app-popover>
+		</app-popper>
 	</template>
 
 	<template v-if="!isEditing">

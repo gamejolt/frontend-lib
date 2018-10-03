@@ -9,12 +9,14 @@
 		:is-last="isLast"
 		>
 
-		<app-user-avatar
-			slot="bubble"
-			class="avatar-circle"
-			:user="user"
-			:show-hover-card="true"
-			/>
+		<div slot="bubble">
+			<app-user-card-hover :user="user">
+				<app-user-avatar
+					class="avatar-circle"
+					:user="user"
+					/>
+			</app-user-card-hover>
+		</div>
 
 		<div class="timeline-list-item-details">
 

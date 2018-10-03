@@ -1,14 +1,13 @@
-import Vue from 'vue';
-import { State } from 'vuex-class';
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./ad.html?style=./ad.styl';
-
-import { Ads } from './ads.service';
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import { State } from 'vuex-class';
+import { AppStore } from '../../vue/services/app/app-store';
+import { FiresidePost } from '../fireside/post/post-model';
 import { Game } from '../game/game.model';
 import { User } from '../user/user.model';
-import { FiresidePost } from '../fireside/post/post-model';
+import { Ads } from './ads.service';
 import { AdSlot, AdSlotPos, AdSlotPosValidator, AdSlotTargetingMap } from './slot';
-import { AppStore } from '../../vue/services/app/app-store';
 
 let clickTrackerBootstrapped = false;
 let focusedElem: Element | null = null;
@@ -57,7 +56,8 @@ export class AppAd extends Vue {
 	})
 	pos!: AdSlotPos;
 
-	@State app!: AppStore;
+	@State
+	app!: AppStore;
 
 	slot: AdSlot | null = null;
 	refreshCount = 0;
@@ -69,7 +69,7 @@ export class AppAd extends Vue {
 		let resource: string = undefined as any;
 		let resourceId: number = undefined as any;
 
-		const adResource = Ads.resource;
+		const adResource = Ads.settings.resource;
 		if (adResource instanceof Game) {
 			resource = 'Game';
 			resourceId = adResource.id;
@@ -85,7 +85,7 @@ export class AppAd extends Vue {
 	}
 
 	get shouldShow() {
-		return Ads.shouldShow && this.slot && !this.isDestroyed;
+		return Ads.shouldShow && !this.isDestroyed;
 	}
 
 	get isDebugEnabled() {
@@ -176,7 +176,7 @@ export class AppAd extends Vue {
 		// Pull in any targeting for bids that may be set for this slot.
 		const targeting = Object.assign(
 			{},
-			Ads.globalTargeting,
+			Ads.settings.targeting,
 			Ads.bidTargeting[this.slot.id] || {}
 		);
 
@@ -190,7 +190,7 @@ export class AppAd extends Vue {
 	}
 
 	private generateDebugInfo() {
-		const resource = Ads.resource;
+		const resource = Ads.settings.resource;
 
 		this.debugInfo = {
 			adUnit: this.slot && this.slot.adUnit,

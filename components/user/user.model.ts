@@ -101,6 +101,11 @@ export class User extends Model {
 	fireside_about?: string;
 	compiled_fireside_about?: string;
 
+	// Card
+	post_count?: number;
+	game_count?: number;
+	video_count?: number;
+
 	is_gamer = false;
 	is_developer = false;
 

@@ -39,7 +39,9 @@
 
 					<div class="-user-info">
 						<div class="-avatar">
-							<app-user-avatar :user="user" />
+							<app-user-card-hover :user="user">
+								<app-user-avatar :user="user" />
+							</app-user-card-hover>
 						</div>
 						<div class="-content">
 							<div>

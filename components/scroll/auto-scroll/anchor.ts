@@ -1,11 +1,12 @@
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
+import { Scroll } from '../scroll.service';
 
 @Component({})
 export class AppAutoscrollAnchor extends Vue {
-	@Prop(Boolean) disabled?: boolean;
+	@Prop(Boolean)
+	disabled?: boolean;
 
 	/**
 	 * Scroll anchor can stay on the page while the page content technically
@@ -14,7 +15,8 @@ export class AppAutoscrollAnchor extends Vue {
 	 * anchor. This checks to see if a particular prop changes, and if so it
 	 * treats it like a new scroll anchor.
 	 */
-	@Prop() anchorKey!: any;
+	@Prop()
+	anchorKey!: any;
 
 	/**
 	 * We can't get the scroll top during the actual scroll behavior because
@@ -23,9 +25,7 @@ export class AppAutoscrollAnchor extends Vue {
 	 */
 	scrollTo? = 0;
 
-	// Set that we changed the key so that the initial render won't trigger an
-	// anchor scrolling affect. Only subsequent route changes will.
-	keyChanged = true;
+	keyChanged = false;
 
 	private beforeRouteDeregister?: Function;
 

@@ -4,7 +4,6 @@ import { objectEquals } from '../../utils/object';
 import { makeObservableService } from '../../utils/vue';
 import { Environment } from '../environment/environment.service';
 import { EventBus } from '../event-bus/event-bus.service';
-import { Game } from '../game/game.model';
 import { Model } from '../model/model.service';
 import { AppAd } from './ad';
 import { Aps } from './aps.service';
@@ -32,6 +31,28 @@ const DfpAdUnitCodes = [
 	'user',
 ];
 
+export class AdSettingsContainer {
+	isPageDisabled = false;
+	targeting: AdSlotTargetingMap = {};
+	resource: Model | null = null;
+
+	private _adUnit = DefaultAdUnit;
+
+	get adUnit() {
+		return this._adUnit;
+	}
+
+	set adUnit(unit: string) {
+		if (DfpAdUnitCodes.indexOf(unit) === -1) {
+			throw new Error(`Invalid ad unit code: ${unit}`);
+		}
+
+		this._adUnit = unit;
+	}
+}
+
+const defaultSettings = new AdSettingsContainer();
+
 export class Ads {
 	static readonly EVENT_VIEW = 'view';
 	static readonly EVENT_CLICK = 'click';
@@ -54,17 +75,19 @@ export class Ads {
 	 */
 	static definedSlots: any = {};
 
-	static isPageDisabled = false;
-	static globalTargeting: AdSlotTargetingMap = {};
+	static get settings() {
+		return this.pageSettings || defaultSettings;
+	}
+
 	static bidTargeting: { [k: string]: AdSlotTargetingMap } = {};
-	static resource: Model | null = null;
-	private static adUnit = DefaultAdUnit;
+
+	private static pageSettings: AdSettingsContainer | null = null;
 	private static routeResolved = false;
 
 	private static get googletag() {
 		// makeObservableService will call this, sadly.
 		if (!this.shouldShow) {
-			return null;
+			return {};
 		}
 
 		const _window = window as any;
@@ -85,11 +108,7 @@ export class Ads {
 			return false;
 		}
 
-		if (this.isPageDisabled) {
-			return false;
-		}
-
-		if (this.resource && this.resource instanceof Game && !this.resource._should_show_ads) {
+		if (this.settings.isPageDisabled) {
 			return false;
 		}
 
@@ -103,11 +122,7 @@ export class Ads {
 
 		router.beforeEach((to, from, next) => {
 			// Clear all our route-level settings.
-			this.adUnit = DefaultAdUnit;
-			this.globalTargeting = {};
 			this.bidTargeting = {};
-			this.resource = null;
-			this.isPageDisabled = false;
 
 			// Don't change ads if just the hash has changed.
 			const fromParams = Object.assign({}, from.params, from.query);
@@ -146,6 +161,14 @@ export class Ads {
 		});
 	}
 
+	static setPageSettings(container: AdSettingsContainer) {
+		Ads.pageSettings = container;
+	}
+
+	static releasePageSettings() {
+		Ads.pageSettings = null;
+	}
+
 	static addAd(ad: AppAd) {
 		this.ads.push(ad);
 
@@ -160,16 +183,11 @@ export class Ads {
 		arrayRemove(this.ads, i => i === ad);
 	}
 
-	static setAdUnit(adUnit: string) {
-		if (DfpAdUnitCodes.indexOf(adUnit) === -1) {
-			throw new Error(`Invalid ad unit code: ${adUnit}`);
+	static async setSlotTargeting(slot: AdSlot, targeting: AdSlotTargetingMap) {
+		if (DevDisabled) {
+			return;
 		}
 
-		this.adUnit = adUnit;
-		return this;
-	}
-
-	static async setSlotTargeting(slot: AdSlot, targeting: AdSlotTargetingMap) {
 		this.run(() => {
 			const definedSlot = this.definedSlots[slot.id];
 			if (definedSlot) {
@@ -190,7 +208,7 @@ export class Ads {
 		// Copies the current set of ads so that it doesn't change during the async/await.
 		const adsToDisplay = ads.map(i => i);
 
-		if (!this.shouldShow) {
+		if (!this.shouldShow || DevDisabled) {
 			return;
 		}
 
@@ -202,17 +220,15 @@ export class Ads {
 			ad.refreshAdSlot();
 		}
 
-		if (!DevDisabled) {
-			const prebidUnits = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
-			const apsSlots = adsToDisplay.map(ad => Aps.makeSlot(ad.slot!));
+		const prebidUnits = adsToDisplay.map(ad => Prebid.makeAdUnitFromSlot(ad.slot!));
+		const apsSlots = adsToDisplay.map(ad => Aps.makeSlot(ad.slot!));
 
-			const [prebidBids, apsBids] = await Promise.all([
-				Prebid.getBids(prebidUnits),
-				Aps.getBids(apsSlots),
-			]);
+		const [prebidBids, apsBids] = await Promise.all([
+			Prebid.getBids(prebidUnits),
+			Aps.getBids(apsSlots),
+		]);
 
-			this.storeBidTargeting(prebidBids, apsBids);
-		}
+		this.storeBidTargeting(prebidBids, apsBids);
 
 		this.run(() => {
 			for (const ad of adsToDisplay) {
@@ -222,20 +238,12 @@ export class Ads {
 	}
 
 	static display(slot: AdSlot) {
-		if (DevDisabled) {
-			return;
-		}
-
 		this.run(() => {
 			this.googletag.display(slot.id);
 		});
 	}
 
 	static refresh(slot: AdSlot) {
-		if (DevDisabled) {
-			return;
-		}
-
 		this.run(() => {
 			const definedSlot = this.definedSlots[slot.id];
 			this.googletag.pubads().refresh([definedSlot], { changeCorrelator: false });
@@ -275,7 +283,7 @@ export class Ads {
 	}
 
 	static getUnusedAdSlot(size: 'rectangle' | 'leaderboard') {
-		const adUnit = `/${DfpNetworkId}/${this.adUnit}`;
+		const adUnit = `/${DfpNetworkId}/${this.settings.adUnit}`;
 
 		// Try to reuse a slot.
 		const slot = this.slots.find(i => i.adUnit === adUnit && i.size === size && !i.isUsed);
