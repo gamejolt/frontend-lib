@@ -27,6 +27,15 @@ export function initScrollBehavior() {
 		_from: Route,
 		savedPosition?: { x: number; y: number }
 	) {
+		// We always want to clear the keyChanged attribute for anchors every
+		// autoscroll event.
+		const anchor = Scroll.autoscrollAnchor;
+		let didAnchorChange = false;
+		if (anchor) {
+			didAnchorChange = anchor.keyChanged;
+			anchor.keyChanged = false;
+		}
+
 		// Skip one auto scroll trigger.
 		if (!Scroll.shouldAutoScroll) {
 			Scroll.shouldAutoScroll = true;
@@ -37,24 +46,17 @@ export function initScrollBehavior() {
 			return scroll(savedPosition);
 		}
 
-		// If there's an anchor, then we want to either scroll to the anchor's
-		// spot, or we want to leave the scroll as is.
-		const anchor = Scroll.autoscrollAnchor;
-		if (anchor) {
-			// If the anchor key hasn't changed then we can do the anchor
-			// scrolling. If it has changed it means we gotta skip this cycle
-			// and reset it.
-			if (!anchor.keyChanged) {
-				if (typeof anchor.scrollTo !== 'undefined') {
-					return scroll({
-						x: 0,
-						y: anchor.scrollTo,
-					});
-				} else {
-					return undefined;
-				}
+		// If the anchor key hasn't changed then we can do the anchor scrolling.
+		// If it has changed, it means that we should do the normal scroll
+		// behavior since the content on the page is going to be different.
+		if (anchor && !didAnchorChange) {
+			if (typeof anchor.scrollTo !== 'undefined') {
+				return scroll({
+					x: 0,
+					y: anchor.scrollTo,
+				});
 			} else {
-				anchor.keyChanged = false;
+				return undefined;
 			}
 		}
 
