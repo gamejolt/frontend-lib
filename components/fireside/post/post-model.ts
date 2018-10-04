@@ -195,7 +195,7 @@ export class FiresidePost extends Model {
 
 		const options: ModelSaveRequestOptions = {
 			data: Object.assign({}, this),
-			allowComplexData: ['keyGroups', 'mediaItemIds'],
+			allowComplexData: ['keyGroups', 'mediaItemIds', 'publish_to_platforms'],
 		};
 
 		if (this.game) {
