@@ -1,12 +1,11 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./tumblr-blog-selector-modal.html';
-
-import { BaseModal } from '../../modal/base';
-import { LinkedAccount, TumblrBlog } from '../linked-account.model';
-import { AppLinkedAccount } from '../linked-account';
+import { Component, Prop } from 'vue-property-decorator';
+import { stringSort } from '../../../utils/array';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { Api } from '../../api/api.service';
-import { stringSort } from '../../../utils/array';
+import { BaseModal } from '../../modal/base';
+import { AppLinkedAccount } from '../linked-account';
+import { LinkedAccount, TumblrBlog } from '../linked-account.model';
 
 @View
 @Component({
@@ -16,12 +15,17 @@ import { stringSort } from '../../../utils/array';
 	},
 })
 export default class AppModalTumblrBlogSelector extends BaseModal {
-	@Prop(String) message: string;
-	@Prop(LinkedAccount) account: LinkedAccount;
-	@Prop(String) title: string;
+	@Prop(String)
+	message!: string;
+
+	@Prop(LinkedAccount)
+	account!: LinkedAccount;
+
+	@Prop(String)
+	title!: string;
 
 	isLoading = true;
-	blogs: TumblrBlog[];
+	blogs: TumblrBlog[] = [];
 	selectedBlog: TumblrBlog | null = null;
 
 	get canConfirm() {
@@ -41,14 +45,17 @@ export default class AppModalTumblrBlogSelector extends BaseModal {
 			null,
 			{ detach: true }
 		);
+
 		this.blogs = payload.blogs.sort((a: TumblrBlog, b: TumblrBlog) =>
 			stringSort(a.name, b.name)
 		);
+
 		if (this.account.tumblrSelectedBlog) {
 			this.selectedBlog = this.account.tumblrSelectedBlog;
 		} else if (this.blogs.length > 0) {
 			this.selectedBlog = this.blogs[0];
 		}
+
 		this.isLoading = false;
 	}
 

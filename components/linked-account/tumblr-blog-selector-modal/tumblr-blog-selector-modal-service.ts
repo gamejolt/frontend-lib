@@ -1,5 +1,5 @@
-import { Modal } from '../../modal/modal.service';
 import { asyncComponentLoader } from '../../../utils/utils';
+import { Modal } from '../../modal/modal.service';
 import { LinkedAccount, TumblrBlog } from '../linked-account.model';
 
 export class ModalTumblrBlogSelector {

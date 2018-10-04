@@ -1,6 +1,6 @@
-import { Modal } from '../../modal/modal.service';
 import { asyncComponentLoader } from '../../../utils/utils';
-import { LinkedAccount, FacebookPage } from '../linked-account.model';
+import { Modal } from '../../modal/modal.service';
+import { FacebookPage, LinkedAccount } from '../linked-account.model';
 
 export class ModalFacebookPageSelector {
 	static async show(message: string, account: LinkedAccount, title = 'Confirm...') {

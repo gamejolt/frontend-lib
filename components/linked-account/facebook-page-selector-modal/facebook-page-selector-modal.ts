@@ -1,12 +1,11 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./facebook-page-selector-modal.html';
-
-import { BaseModal } from '../../modal/base';
-import { LinkedAccount, FacebookPage } from '../linked-account.model';
-import { AppLinkedAccount } from '../linked-account';
-import { Api } from '../../api/api.service';
-import { AppLoading } from '../../../vue/components/loading/loading';
+import { Component, Prop } from 'vue-property-decorator';
 import { stringSort } from '../../../utils/array';
+import { AppLoading } from '../../../vue/components/loading/loading';
+import { Api } from '../../api/api.service';
+import { BaseModal } from '../../modal/base';
+import { AppLinkedAccount } from '../linked-account';
+import { FacebookPage, LinkedAccount } from '../linked-account.model';
 
 @View
 @Component({
@@ -16,12 +15,17 @@ import { stringSort } from '../../../utils/array';
 	},
 })
 export default class AppModalFacebookPageSelector extends BaseModal {
-	@Prop(String) message: string;
-	@Prop(LinkedAccount) account: LinkedAccount;
-	@Prop(String) title: string;
+	@Prop(String)
+	message!: string;
+
+	@Prop(LinkedAccount)
+	account!: LinkedAccount;
+
+	@Prop(String)
+	title!: string;
 
 	isLoading = true;
-	pages: FacebookPage[];
+	pages: FacebookPage[] = [];
 	selectedPage: FacebookPage | null = null;
 
 	get canConfirm() {
@@ -41,14 +45,17 @@ export default class AppModalFacebookPageSelector extends BaseModal {
 			null,
 			{ detach: true }
 		);
+
 		this.pages = payload.pages.sort((a: FacebookPage, b: FacebookPage) =>
 			stringSort(a.name, b.name)
 		);
+
 		if (this.account.facebookSelectedPage) {
 			this.selectedPage = this.account.facebookSelectedPage;
 		} else if (this.pages.length > 0) {
 			this.selectedPage = this.pages[0];
 		}
+
 		this.isLoading = false;
 	}
 

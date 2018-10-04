@@ -1,19 +1,55 @@
+import { Game } from '../game/game.model';
 import { Model } from '../model/model.service';
 import { User } from '../user/user.model';
-import { Game } from '../game/game.model';
 
 export type Provider = 'twitter' | 'facebook' | 'twitch' | 'google' | 'tumblr';
 
-export type FacebookPage = {
+export interface FacebookPage {
 	id: number;
 	name: string;
-};
+}
 
-export type TumblrBlog = {
+export interface TumblrBlog {
 	name: string;
 	url: string;
 	title: string;
-};
+}
+
+export function getLinkedAccountPlatformIcon(provider: string) {
+	switch (provider) {
+		case LinkedAccount.PROVIDER_FACEBOOK:
+			return 'facebook';
+		case LinkedAccount.PROVIDER_TWITTER:
+			return 'twitter-bird';
+		case LinkedAccount.PROVIDER_GOOGLE:
+			return 'google-plus';
+		case LinkedAccount.PROVIDER_TWITCH:
+			return 'twitch';
+		case LinkedAccount.PROVIDER_TUMBLR:
+			return 'tumblr';
+		case LinkedAccount.PROVIDER_DISCORD:
+			return 'radio';
+	}
+	return 'remove'; // invalid provider
+}
+
+export function getLinkedAccountProviderDisplayName(provider: string) {
+	switch (provider) {
+		case LinkedAccount.PROVIDER_FACEBOOK:
+			return 'Facebook';
+		case LinkedAccount.PROVIDER_TWITTER:
+			return 'Twitter';
+		case LinkedAccount.PROVIDER_GOOGLE:
+			return 'Google+';
+		case LinkedAccount.PROVIDER_TWITCH:
+			return 'Twitch';
+		case LinkedAccount.PROVIDER_TUMBLR:
+			return 'Tumblr';
+		case LinkedAccount.PROVIDER_DISCORD:
+			return 'Discord';
+	}
+	return 'Invalid provider';
+}
 
 export class LinkedAccount extends Model {
 	static readonly PROVIDER_FACEBOOK = 'facebook';
@@ -25,13 +61,13 @@ export class LinkedAccount extends Model {
 	static readonly PROVIDER_YOUTUBE_CHANNEL = 'youtube-channel';
 	static readonly PROVIDER_DISCORD = 'discord';
 
-	user: User | null;
-	game: Game | null;
+	user!: User | null;
+	game!: Game | null;
 
-	provider: string;
-	provider_id: string;
-	name: string;
-	extra_data: any;
+	provider!: string;
+	provider_id!: string;
+	name!: string;
+	extra_data!: any;
 
 	constructor(data: any = {}) {
 		super(data);
@@ -68,47 +104,11 @@ export class LinkedAccount extends Model {
 	}
 
 	get icon() {
-		return LinkedAccount.getPlatformIcon(this.provider);
+		return getLinkedAccountPlatformIcon(this.provider);
 	}
 
 	get providerDisplayName() {
-		return LinkedAccount.getProviderDisplayName(this.provider);
-	}
-
-	static getPlatformIcon(provider: string) {
-		switch (provider) {
-			case LinkedAccount.PROVIDER_FACEBOOK:
-				return 'facebook';
-			case LinkedAccount.PROVIDER_TWITTER:
-				return 'twitter-bird';
-			case LinkedAccount.PROVIDER_GOOGLE:
-				return 'google-plus';
-			case LinkedAccount.PROVIDER_TWITCH:
-				return 'twitch';
-			case LinkedAccount.PROVIDER_TUMBLR:
-				return 'tumblr';
-			case LinkedAccount.PROVIDER_DISCORD:
-				return 'radio';
-		}
-		return 'remove'; // invalid provider
-	}
-
-	static getProviderDisplayName(provider: string) {
-		switch (provider) {
-			case LinkedAccount.PROVIDER_FACEBOOK:
-				return 'Facebook';
-			case LinkedAccount.PROVIDER_TWITTER:
-				return 'Twitter';
-			case LinkedAccount.PROVIDER_GOOGLE:
-				return 'Google+';
-			case LinkedAccount.PROVIDER_TWITCH:
-				return 'Twitch';
-			case LinkedAccount.PROVIDER_TUMBLR:
-				return 'Tumblr';
-			case LinkedAccount.PROVIDER_DISCORD:
-				return 'Discord';
-		}
-		return 'Invalid provider';
+		return getLinkedAccountProviderDisplayName(this.provider);
 	}
 
 	// returns the name of the page selected for this facebook account
