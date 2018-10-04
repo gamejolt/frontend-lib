@@ -66,7 +66,7 @@ export class FiresidePost extends Model {
 	content_markdown?: string;
 	view_count?: number;
 	expand_count?: number;
-	publish_to_platforms!: string | null;
+	publish_to_platforms: number[] | null = null;
 
 	tags: FiresidePostTag[] = [];
 	media: MediaItem[] = [];
