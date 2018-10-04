@@ -3,6 +3,7 @@ import { Route } from 'vue-router';
 const MAX_ITEMS = 10;
 
 interface HistoryCacheState {
+	stateKey: any;
 	tag: string | undefined;
 	url: string;
 	data?: any;
@@ -11,8 +12,16 @@ interface HistoryCacheState {
 export class HistoryCache {
 	private static states: HistoryCacheState[] = [];
 
+	private static getStateKey() {
+		// vue-router maintains a history key for each route in the history.
+		return typeof history !== 'undefined' ? history.state && history.state.key : undefined;
+	}
+
 	static get(route: Route, tag?: string) {
-		return this.states.find(item => item.url === route.fullPath && item.tag === tag);
+		const stateKey = this.getStateKey();
+		return this.states.find(
+			i => i.url === route.fullPath && i.tag === tag && i.stateKey === stateKey
+		);
 	}
 
 	static has(route: Route, tag?: string) {
@@ -26,8 +35,10 @@ export class HistoryCache {
 			state.data = data;
 		} else {
 			const url = route.fullPath;
+			const stateKey = this.getStateKey();
 
 			this.states.push({
+				stateKey,
 				tag,
 				url,
 				data,
