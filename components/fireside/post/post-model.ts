@@ -66,7 +66,6 @@ export class FiresidePost extends Model {
 	content_markdown?: string;
 	view_count?: number;
 	expand_count?: number;
-	publish_to_platforms: number[] | null = null;
 
 	tags: FiresidePostTag[] = [];
 	media: MediaItem[] = [];
@@ -195,7 +194,7 @@ export class FiresidePost extends Model {
 
 		const options: ModelSaveRequestOptions = {
 			data: Object.assign({}, this),
-			allowComplexData: ['keyGroups', 'mediaItemIds', 'publish_to_platforms'],
+			allowComplexData: ['keyGroups', 'mediaItemIds', 'publishToPlatforms'],
 		};
 
 		if (this.game) {
