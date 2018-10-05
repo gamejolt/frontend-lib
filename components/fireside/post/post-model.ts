@@ -32,6 +32,12 @@ export function canUserManagePost(post: FiresidePost, user: User | undefined | n
 	return false;
 }
 
+interface FiresidePostPublishedPlatform {
+	provider: string;
+	account_name: string;
+	url: string;
+}
+
 export class FiresidePost extends Model {
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';
@@ -74,6 +80,7 @@ export class FiresidePost extends Model {
 	user_like?: FiresidePostLike | null;
 	key_groups: KeyGroup[] = [];
 	poll!: Poll | null;
+	platforms_published_to: FiresidePostPublishedPlatform[] = [];
 
 	// Used for forms and saving.
 	key_group_ids: number[] = [];
@@ -128,6 +135,10 @@ export class FiresidePost extends Model {
 
 		if (data.event_item) {
 			this.event_item = new EventItem(data.event_item);
+		}
+
+		if (data.platforms_published_to) {
+			this.platforms_published_to = data.platforms_published_to;
 		}
 
 		Registry.store('FiresidePost', this);
