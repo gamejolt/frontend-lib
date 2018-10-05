@@ -4,7 +4,13 @@ import { Api } from '../api/api.service';
 import { Provider } from './linked-account.model';
 
 export class LinkedAccounts {
-	static async link(router: VueRouter, provider: Provider | '', routeUrl: string) {
+	static async link(
+		router: VueRouter,
+		provider: Provider | '',
+		routeUrl: string,
+		resource: 'User' | 'Game',
+		resourceId: number | null = null
+	) {
 		if (GJ_IS_CLIENT) {
 			if (!provider) {
 				return;
@@ -12,7 +18,11 @@ export class LinkedAccounts {
 			return this.linkClient(router, provider, routeUrl);
 		}
 
-		const response = await Api.sendRequest(routeUrl + provider, {});
+		let url = routeUrl + provider + '?resource=' + resource;
+		if (resourceId !== null) {
+			url += '&resourceId=' + resourceId;
+		}
+		const response = await Api.sendRequest(url, {});
 		Navigate.goto(response.redirectLocation);
 	}
 
