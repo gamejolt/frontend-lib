@@ -26,6 +26,9 @@ export class AppLinkedAccount extends Vue {
 	@Prop(Boolean)
 	spanWidth?: boolean;
 
+	@Prop(Boolean)
+	disabled?: boolean;
+
 	get providerIcon() {
 		const provider = this.getProvider();
 		return getLinkedAccountPlatformIcon(provider);

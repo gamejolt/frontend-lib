@@ -22,6 +22,7 @@
 			<app-button
 				v-if="!preview"
 				primary
+				:disabled="disabled"
 				icon="link"
 				@click="onLink()"
 				>
@@ -42,12 +43,14 @@
 
 			<div v-if="!preview">
 				<app-button
+					:disabled="disabled"
 					@click="onSync()"
 					>
 					<translate>Sync</translate>
 				</app-button>
 				<app-button
 					trans
+					:disabled="disabled"
 					@click="onUnlink()"
 					>
 					<translate>Unlink</translate>
