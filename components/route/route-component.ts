@@ -3,7 +3,6 @@ import { createDecorator } from 'vue-class-component';
 import { Component } from 'vue-property-decorator';
 import { RawLocation, Route } from 'vue-router';
 import { arrayRemove } from '../../utils/array';
-import { objectEquals } from '../../utils/object';
 import { LocationRedirect } from '../../utils/router';
 import { EventBus } from '../event-bus/event-bus.service';
 import { HistoryCache } from '../history/cache/cache.service';
@@ -22,6 +21,34 @@ export interface RouteOptions {
 	lazy?: boolean;
 	cache?: boolean;
 	reloadOnHashChange?: boolean;
+	deps?: { params?: string[]; query?: string[] };
+}
+
+/**
+ * Takes 2 objects as input, and returns any keys that are either new, deleted,
+ * or updated.
+ */
+function getChangedProperties(base: { [k: string]: any }, compare: { [k: string]: any }) {
+	const changed = [];
+	for (const k in base) {
+		// New params.
+		if (!(k in compare)) {
+			changed.push(k);
+		}
+		// Updated params.
+		else if (base[k] !== compare[k]) {
+			changed.push(k);
+		}
+	}
+
+	for (const k in compare) {
+		// Deleted params.
+		if (!(k in base)) {
+			changed.push(k);
+		}
+	}
+
+	return changed;
 }
 
 class RouteResolver {
@@ -239,11 +266,59 @@ export class BaseRouteComponent extends Vue {
 		return this._reloadRoute(false);
 	}
 
+	private findDeps(to: Route) {
+		const collected: BaseRouteComponent[] = [];
+		let found = false;
+
+		for (const matched of to.matched) {
+			const currentInstances = Object.values(matched.instances) as BaseRouteComponent[];
+			collected.push(...currentInstances);
+
+			if (currentInstances.indexOf(this) !== -1) {
+				found = true;
+				break;
+			}
+		}
+
+		// This shouldn't happen, but if it doesn't, we want to mark this route
+		// component as not being able to pull deps so that it reloads for any
+		// param changes. It's the safest bet.
+		if (!found) {
+			return null;
+		}
+
+		const params: string[] = [];
+		const query: string[] = [];
+		for (const i of collected) {
+			if (i.$options.routeOptions) {
+				const options = i.$options.routeOptions || {};
+
+				// If there is a route resolve, but no deps were defined, it
+				// makes the whole chain "dirty" and forces anything below it to
+				// resolve always. It's because we don't know if the params can
+				// be ignored or not.
+				if (!options.deps) {
+					return null;
+				} else {
+					if (options.deps.params) {
+						params.push(...options.deps.params);
+					}
+
+					if (options.deps.query) {
+						query.push(...options.deps.query);
+					}
+				}
+			}
+		}
+
+		return { params, query };
+	}
+
 	private async _onRouteChange(to: Route, from: Route) {
 		const options = this.$options.routeOptions || {};
 
 		// Only do work if the route params/query has actually changed.
-		if (this.canSkipRouteUpdate(from, to, options)) {
+		if (this.canSkipRouteUpdate(from, to)) {
 			return;
 		}
 
@@ -363,15 +438,33 @@ export class BaseRouteComponent extends Vue {
 	 * If all of the previous params are the same, then the already activated components can stay
 	 * the same. We only initialize routes that have probably changed between updates.
 	 */
-	private canSkipRouteUpdate(from: Route, to: Route, options: RouteOptions) {
-		// TODO: We can probably try to be smarter about this in the future and
-		// only update if params that affect the route have changed.
-		if (!objectEquals(to.params, from.params) || !objectEquals(to.query, from.query)) {
-			return false;
-		}
+	private canSkipRouteUpdate(from: Route, to: Route) {
+		const deps = this.findDeps(to);
+		const changedParams = getChangedProperties(from.params, to.params);
+		const changedQuery = getChangedProperties(from.query, to.query);
 
-		if (options.reloadOnHashChange && to.hash !== from.hash) {
-			return false;
+		if (deps === null) {
+			// If deps weren't defined, and either params or query has changed,
+			// then we need to refresh since the route _might_ depend on a
+			// changed param/query.
+			if (changedParams.length > 0 || changedQuery.length > 0) {
+				return false;
+			}
+		} else {
+			// Otherwise we should check the params and query against the deps to
+			// see if we actually need to update.
+
+			for (const param of changedParams) {
+				if (deps.params.indexOf(param) !== -1) {
+					return false;
+				}
+			}
+
+			for (const query of changedQuery) {
+				if (deps.query.indexOf(query) !== -1) {
+					return false;
+				}
+			}
 		}
 
 		return true;
