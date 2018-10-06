@@ -33,8 +33,8 @@ export function canUserManagePost(post: FiresidePost, user: User | undefined | n
 }
 
 interface FiresidePostPublishedPlatform {
-	provider: string;
-	account_name: string;
+	created_resource_provider: string;
+	created_resource_account_name: string;
 	url: string;
 }
 
