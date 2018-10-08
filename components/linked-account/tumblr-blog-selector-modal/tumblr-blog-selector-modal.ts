@@ -39,7 +39,7 @@ export default class AppModalTumblrBlogSelector extends BaseModal {
 	async created() {
 		const payload = await Api.sendRequest(
 			'/web/dash/linked-accounts/tumblr-blogs/' +
-				this.account.game!.id +
+				this.account.game_id +
 				'/' +
 				this.account.id,
 			null,

@@ -39,7 +39,7 @@ export default class AppModalFacebookPageSelector extends BaseModal {
 	async created() {
 		const payload = await Api.sendRequest(
 			'/web/dash/linked-accounts/facebook-pages/' +
-				this.account.game!.id +
+				this.account.game_id +
 				'/' +
 				this.account.id,
 			null,
