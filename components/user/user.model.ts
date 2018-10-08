@@ -1,4 +1,5 @@
 import { Api } from '../api/api.service';
+import { LinkedAccount } from '../linked-account/linked-account.model';
 import { MediaItem } from '../media-item/media-item-model';
 import { Model } from '../model/model.service';
 import { Registry } from '../registry/registry.service';
@@ -89,6 +90,7 @@ export class User extends Model {
 	revenue_payout_minimum?: number;
 	revenue_wallet_maximum?: number;
 
+	linkedAccounts?: LinkedAccount[];
 	// Fireside.
 	can_manage?: boolean;
 	fireside_ga_tracking_id?: string;
@@ -130,6 +132,10 @@ export class User extends Model {
 
 		if (data.theme) {
 			this.theme = new Theme(data.theme);
+		}
+
+		if (data.linked_accounts) {
+			this.linkedAccounts = LinkedAccount.populate(data.linked_accounts);
 		}
 
 		Registry.store('User', this);

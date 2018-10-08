@@ -1,5 +1,6 @@
 import { RawLocation } from 'vue-router';
 import { Api } from '../api/api.service';
+import { LinkedAccount } from '../linked-account/linked-account.model';
 import { MediaItem } from '../media-item/media-item-model';
 import { Model } from '../model/model.service';
 import { Registry } from '../registry/registry.service';
@@ -137,6 +138,7 @@ export class Game extends Model {
 	site?: Site;
 
 	theme?: Theme;
+	linkedAccounts?: LinkedAccount[];
 
 	constructor(data: any = {}) {
 		super(data);
@@ -167,6 +169,10 @@ export class Game extends Model {
 
 		if (data.theme) {
 			this.theme = new Theme(data.theme);
+		}
+
+		if (data.linked_accounts) {
+			this.linkedAccounts = LinkedAccount.populate(data.linked_accounts);
 		}
 
 		Registry.store('Game', this);

@@ -1,13 +1,13 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./join-form.html?style=./join-form.styl';
-
-import { Connection } from '../../connection/connection-service';
-import { FormOnSubmit, BaseForm, FormOnSubmitSuccess } from '../../form-vue/form.service';
+import { Provider } from 'game-jolt-frontend-lib/components/linked-account/linked-account.model';
+import { Component, Prop } from 'vue-property-decorator';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { Api } from '../../api/api.service';
-import { UserLinkedAccounts, Provider } from '../../user/linked-accounts/linked-accounts.service';
-import { AppTooltip } from '../../tooltip/tooltip';
+import { Connection } from '../../connection/connection-service';
 import { Environment } from '../../environment/environment.service';
+import { BaseForm, FormOnSubmit, FormOnSubmitSuccess } from '../../form-vue/form.service';
+import { LinkedAccounts } from '../../linked-account/linked-accounts.service';
+import { AppTooltip } from '../../tooltip/tooltip';
 
 export type FormModel = {
 	email: string;
@@ -27,8 +27,10 @@ export type FormModel = {
 })
 export class AppAuthJoinForm extends BaseForm<FormModel>
 	implements FormOnSubmit, FormOnSubmitSuccess {
-	@Prop(Boolean) darkVariant?: boolean;
-	@Prop(Boolean) blocked?: boolean;
+	@Prop(Boolean)
+	darkVariant?: boolean;
+	@Prop(Boolean)
+	blocked?: boolean;
 
 	warnOnDiscard = false;
 
@@ -48,6 +50,6 @@ export class AppAuthJoinForm extends BaseForm<FormModel>
 	 * out if they have an account in the callback URL.
 	 */
 	linkedChoose(provider: Provider) {
-		UserLinkedAccounts.login(this.$router, provider);
+		LinkedAccounts.login(this.$router, provider);
 	}
 }
