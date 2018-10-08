@@ -30,7 +30,7 @@ export class LinkedAccounts {
 			// are linked yet. We pass in the request token returned since this is
 			// what tells us our oauth state.
 			router.push({
-				name: 'dash.account.linked-accounts.linking',
+				name: 'dash.linking',
 				query: { token: response.token },
 			});
 		} else {
