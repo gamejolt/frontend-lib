@@ -67,10 +67,10 @@ export class AppLinkedAccount extends Vue {
 	@Emit('link')
 	emitLink(_provider: string) {}
 
-	@Emit('linkTumblrBlog')
+	@Emit('link-tumblr-blog')
 	emitLinkTumblrBlog(_blog: TumblrBlog) {}
 
-	@Emit('unlinkTumblrBlog')
+	@Emit('unlink-tumblr-blog')
 	emitUnlinkTumblrBlog() {}
 
 	onSync() {

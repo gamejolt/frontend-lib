@@ -68,11 +68,13 @@
 						</strong>
 					</p>
 					<app-button
+						:disabled="disabled"
 						@click="onSelectTumblrBlog"
 						>
 						<translate>Change Blog</translate>
 					</app-button>
 					<app-button
+						:disabled="disabled"
 						v-if="account.tumblrSelectedBlog"
 						@click="onUnlinkTumblrBlog"
 						trans
@@ -85,6 +87,7 @@
 						<translate>Before you can publish to Tumblr, you have to select a blog within your Tumblr account that you'd like to use.</translate>
 					</div>
 					<app-button
+						:disabled="disabled"
 						@click="onSelectTumblrBlog"
 						>
 						<translate>Select Blog</translate>
