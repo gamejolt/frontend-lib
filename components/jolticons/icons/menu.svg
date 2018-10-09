@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,13 +6,13 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg3892">
+   id="svg3870"
+   height="16px"
+   width="16px">
   <defs
-     id="defs3894" />
+     id="defs3872" />
   <metadata
-     id="metadata3897">
+     id="metadata3875">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -27,16 +25,14 @@
             <dc:title>T. Gantt</dc:title>
           </cc:Agent>
         </dc:creator>
-        <cc:license
-           rdf:resource="" />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1">
+     id="layer2">
     <path
-       d="M 1,2 1,5 15,5 15,2 1,2 z m 0,5 0,3 14,0 0,-3 -14,0 z m 0,5 0,3 14,0 0,-3 -14,0 z"
-       id="rect5957"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       id="rect815"
+       d="M 1.5,2 C 1.223,2 1,2.223 1,2.5 v 2 C 1,4.777 1.223,5 1.5,5 h 13 C 14.777,5 15,4.777 15,4.5 v -2 C 15,2.223 14.777,2 14.5,2 Z m 0,5 C 1.223,7 1,7.223 1,7.5 v 2 C 1,9.777 1.223,10 1.5,10 h 13 C 14.777,10 15,9.777 15,9.5 v -2 C 15,7.223 14.777,7 14.5,7 Z m 0,5 C 1.223,12 1,12.223 1,12.5 v 2 C 1,14.777 1.223,15 1.5,15 h 13 c 0.277,0 0.5,-0.223 0.5,-0.5 v -2 C 15,12.223 14.777,12 14.5,12 Z"
+       style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
 </svg>

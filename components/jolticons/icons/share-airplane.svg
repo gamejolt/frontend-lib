@@ -30,11 +30,11 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:inline"
-     id="layer2">
+     style="display:inline;opacity:1"
+     id="layer1">
     <path
-       id="rect5107"
-       d="M 13,1 V 2 H 11 V 3 H 9 V 4 H 7 V 5 H 5 V 6 H 3 V 7 H 1 v 2 h 3 v 1 H 6 V 9 H 7 V 8 H 9 V 7 h 1 V 6 h 1 V 5 h 1 V 4 h 1 V 5 H 12 V 6 H 11 V 7 H 10 V 8 H 9 V 9 H 8 v 1 H 7 v 5 h 1 v -1 h 1 v -1 h 1 V 12 H 8 v -1 h 2 v 1 h 2 v 1 h 2 v 1 h 1 V 1 Z"
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:11.33858299;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
+       id="path849-0"
+       d="M 14.74217,1 A 0.2500421,0.25002499 0 0 0 14.638647,1.025391 L 1.137723,7.7578125 a 0.2500421,0.25002499 0 0 0 0.013673,0.453125 L 5.1145575,9.9042969 13.499897,3 6.999452,10.714844 V 14.75 a 0.2500421,0.250025 0 0 0 0.4277637,0.175781 L 9.5640805,12.742188 7.4838601,10.916016 14.65232,13.980469 A 0.2500421,0.25002499 0 0 0 15,13.75 V 1.25 A 0.2500421,0.25002499 0 0 0 14.74217,1 Z"
+       style="opacity:1;fill:#000000;stroke:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
 </svg>

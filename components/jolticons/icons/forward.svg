@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,9 +6,9 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg2985">
+   id="svg2985"
+   height="16px"
+   width="16px">
   <defs
      id="defs2987" />
   <metadata
@@ -31,10 +29,10 @@
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1">
+     id="layer2">
     <path
-       d="m 4,4 0,8 1,0 0,-1 1,0 0,-1 1,0 0,-1 1,0 0,3 1,0 0,-1 1,0 0,-1 1,0 0,-1 1,0 L 12,7 11,7 11,6 10,6 10,5 9,5 9,4 8,4 8,7 7,7 7,6 6,6 6,5 5,5 5,4 4,4 z"
-       id="rect3853"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       id="path817"
+       d="m 4.1660156,4.0078125 c -0.2221696,0.1996198 -0.2221696,7.7847555 0,7.9843755 C 4.3363635,12.145245 6.8447401,9.9618426 8.0117188,8.75 c 0.013329,1.644019 0.058701,3.156295 0.1542968,3.242188 C 8.3881853,12.191807 12.609375,8.3992395 12.609375,8 12.609375,7.6007605 8.3881853,3.8081927 8.1660156,4.0078125 8.0704198,4.0937055 8.025048,5.6059812 8.0117188,7.25 6.8447401,6.0381576 4.3363635,3.8547547 4.1660156,4.0078125 Z"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.73908293;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:normal;enable-background:accumulate" />
   </g>
 </svg>

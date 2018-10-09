@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,9 +6,9 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg2985">
+   id="svg2985"
+   height="16px"
+   width="16px">
   <defs
      id="defs2987" />
   <metadata
@@ -31,10 +29,11 @@
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1">
+     style="display:inline"
+     id="layer2">
     <path
-       d="m 9,2 0,1 4,0 0,-1 z m 4,1 0,4 1,0 0,-4 z M 9,3 8,3 8,7 2,7 l 0,7 8,0 0,-7 -1,0 z"
-       id="rect3794"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       id="rect817"
+       d="M 11,2 C 9.338,2 8,3.338 8,5 V 7 H 2.25 C 2.1115,7 2,7.1115 2,7.25 v 6.5 C 2,13.8885 2.1115,14 2.25,14 h 7.5 C 9.8885,14 10,13.8885 10,13.75 V 7.25 C 10,7.1115 9.8885,7 9.75,7 H 9 V 5 c 0,-1.108 0.892,-2 2,-2 1.108,0 2,0.892 2,2 V 6.75 C 13,6.8885 13.1115,7 13.25,7 h 0.5 C 13.8885,7 14,6.8885 14,6.75 V 5 C 14,3.338 12.662,2 11,2 Z"
+       style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
 </svg>

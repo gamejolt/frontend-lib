@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,13 +6,13 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg3892">
+   id="svg3870"
+   height="16px"
+   width="16px">
   <defs
-     id="defs3894" />
+     id="defs3872" />
   <metadata
-     id="metadata3897">
+     id="metadata3875">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -27,16 +25,15 @@
             <dc:title>T. Gantt</dc:title>
           </cc:Agent>
         </dc:creator>
-        <cc:license
-           rdf:resource="" />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1">
+     style="opacity:1"
+     id="layer2">
     <path
-       d="m 1,0 0,1 -1,0 0,12 1,0 0,1 5,0 0,1 1,0 0,1 2,0 0,-1 1,0 0,-1 5,0 0,-1 1,0 0,-12 -1,0 0,-1 z m 1,2 12,0 0,10 -4,0 0,1 -1,0 0,1 -2,0 0,-1 -1,0 0,-1 -4,0 z M 7,3 7,6 4,6 4,8 7,8 7,11 9,11 9,8 12,8 12,6 9,6 9,3 z"
-       id="rect5237"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       id="rect815"
+       d="M 1,0 C 0.446,0 0,0.446 0,1 v 12 c 0,0.554 0.446,1 1,1 h 5 l 2,2 2,-2 h 5 c 0.554,0 1,-0.446 1,-1 V 1 C 16,0.446 15.554,0 15,0 Z m 1.5,2 h 11 C 13.777,2 14,2.223 14,2.5 v 9 C 14,11.777 13.777,12 13.5,12 H 9 L 8,13 7,12 H 2.5 C 2.223,12 2,11.777 2,11.5 v -9 C 2,2.223 2.223,2 2.5,2 Z M 7.25,4 C 7.1115,4 7,4.1115 7,4.25 V 6 H 5.25 C 5.1115,6 5,6.1115 5,6.25 v 1.5 C 5,7.8885 5.1115,8 5.25,8 H 7 V 9.75 C 7,9.8885 7.1115,10 7.25,10 h 1.5 C 8.8885,10 9,9.8885 9,9.75 V 8 h 1.75 C 10.8885,8 11,7.8885 11,7.75 V 6.25 C 11,6.1115 10.8885,6 10.75,6 H 9 V 4.25 C 9,4.1115 8.8885,4 8.75,4 Z"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:41.71699905;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" />
   </g>
 </svg>

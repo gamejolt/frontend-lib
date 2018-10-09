@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,9 +6,9 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg2985">
+   id="svg2985"
+   height="16px"
+   width="16px">
   <defs
      id="defs2987" />
   <metadata
@@ -31,10 +29,11 @@
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1">
+     style="opacity:1"
+     id="layer2">
     <path
-       d="m 1,1 0,14 14,0 0,-8 -1,0 0,1 -1,0 0,5 -10,0 0,-10 9,0 0,-1 1,0 0,-1 z m 12,2 0,1 -1,0 0,1 -1,0 0,1 -1,0 0,1 L 9,7 9,8 7,8 7,7 6,7 6,6 5,6 5,7 4,7 l 0,1 1,0 0,1 1,0 0,1 1,0 0,1 2,0 0,-1 1,0 0,-1 1,0 0,-1 1,0 0,-1 1,0 0,-1 1,0 0,-1 1,0 0,-1 -1,0 0,-1 z"
-       id="rect3879"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       id="rect815"
+       d="M 1.25,1 C 1.1115,1 1,1.1115 1,1.25 v 13.5 C 1,14.8885 1.1115,15 1.25,15 h 13.5 C 14.8885,15 15,14.8885 15,14.75 V 6.5722656 l -2,2 V 13 H 3 V 3 h 8.427734 l 2,-2 z M 14,2.6894531 c -0.06391,0 -0.128767,0.023298 -0.177734,0.072266 L 8,8.5859375 5.1777344,5.7617188 c -0.097934,-0.097934 -0.2575345,-0.097934 -0.3554688,0 L 3.7617188,6.8222656 c -0.097934,0.097934 -0.097934,0.2575345 0,0.3554688 l 4.0605468,4.0605466 c 0.097934,0.09793 0.2575345,0.09793 0.3554688,0 L 15.238281,4.1777344 c 0.09793,-0.097934 0.09793,-0.2575345 0,-0.3554688 L 14.177734,2.7617188 C 14.128767,2.7127515 14.063905,2.6894531 14,2.6894531 Z"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:normal;enable-background:accumulate" />
   </g>
 </svg>
