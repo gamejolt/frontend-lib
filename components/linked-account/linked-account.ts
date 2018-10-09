@@ -7,7 +7,9 @@ import {
 	getLinkedAccountPlatformIcon,
 	getLinkedAccountProviderDisplayName,
 	LinkedAccount,
+	TumblrBlog,
 } from './linked-account.model';
+import { ModalTumblrBlogSelector } from './tumblr-blog-selector-modal/tumblr-blog-selector-modal-service';
 
 @View
 @Component({
@@ -28,6 +30,9 @@ export class AppLinkedAccount extends Vue {
 
 	@Prop(Boolean)
 	disabled?: boolean;
+
+	@Prop(Boolean)
+	showTumblrBlog?: boolean;
 
 	get providerIcon() {
 		const provider = this.getProvider();
@@ -62,6 +67,12 @@ export class AppLinkedAccount extends Vue {
 	@Emit('link')
 	emitLink(_provider: string) {}
 
+	@Emit('linkTumblrBlog')
+	emitLinkTumblrBlog(_blog: TumblrBlog) {}
+
+	@Emit('unlinkTumblrBlog')
+	emitUnlinkTumblrBlog() {}
+
 	onSync() {
 		this.emitSync(this.getProvider());
 	}
@@ -72,5 +83,32 @@ export class AppLinkedAccount extends Vue {
 
 	onLink() {
 		this.emitLink(this.getProvider());
+	}
+
+	async onSelectTumblrBlog() {
+		if (!this.account) {
+			return;
+		}
+
+		const modalResult = await ModalTumblrBlogSelector.show(
+			this.account,
+			this.$gettext('Select Tumblr Blog')
+		);
+
+		if (modalResult) {
+			// do not send if the same blog was already selected
+			if (
+				this.account.tumblrSelectedBlog &&
+				JSON.stringify(modalResult) === JSON.stringify(this.account.tumblrSelectedBlog)
+			) {
+				return;
+			}
+
+			this.emitLinkTumblrBlog(modalResult);
+		}
+	}
+
+	async onUnlinkTumblrBlog() {
+		this.emitUnlinkTumblrBlog();
 	}
 }
