@@ -37,14 +37,14 @@ export default class AppModalTumblrBlogSelector extends BaseModal {
 	}
 
 	async created() {
-		const payload = await Api.sendRequest(
-			'/web/dash/linked-accounts/tumblr-blogs/' +
-				this.account.game_id +
-				'/' +
-				this.account.id,
-			null,
-			{ detach: true }
-		);
+		let url = '/web/dash/linked-accounts/tumblr-blogs/' + this.account.id;
+		if (this.account.game_id) {
+			url += '?resource=Game&resourceId=' + this.account.game_id;
+		} else {
+			url += '?resource=User';
+		}
+
+		const payload = await Api.sendRequest(url, null, { detach: true });
 
 		this.blogs = payload.blogs.sort((a: TumblrBlog, b: TumblrBlog) =>
 			stringSort(a.name, b.name)
