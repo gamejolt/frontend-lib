@@ -1,4 +1,5 @@
 import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
+import { FiresidePostCommunity } from 'game-jolt-frontend-lib/components/fireside/post/community/community.model';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
 import { Game } from '../../game/game.model';
@@ -74,6 +75,7 @@ export class FiresidePost extends Model {
 	expand_count?: number;
 
 	tags: FiresidePostTag[] = [];
+	tagged_communities: FiresidePostCommunity[] = [];
 	media: MediaItem[] = [];
 	videos: FiresidePostVideo[] = [];
 	sketchfabs: FiresidePostSketchfab[] = [];
@@ -106,6 +108,10 @@ export class FiresidePost extends Model {
 
 		if (data.tags) {
 			this.tags = FiresidePostTag.populate(data.tags);
+		}
+
+		if (data.tagged_communities) {
+			this.tagged_communities = FiresidePostCommunity.populate(data.tagged_communities);
 		}
 
 		if (data.media) {
