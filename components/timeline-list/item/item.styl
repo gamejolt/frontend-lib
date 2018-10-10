@@ -67,9 +67,12 @@
 		&-title
 			theme-prop('color', 'fg')
 			display: block
-			margin-top: 5px
-			font-weight: bold
 			font-size: $font-size-h4
+
+			em
+				theme-prop('color', 'link')
+				font-style: normal
+				font-weight: bold
 
 		&-title-small
 			font-size: $font-size-base
@@ -127,3 +130,10 @@
 		 */
 		&-bubble.active, &-bubble.new
 			theme-prop('border-color', 'notice')
+
+>>> .timeline-list-item-split
+	theme-prop('border-top-color', 'bg-subtle')
+	border-top-width: 1px
+	border-top-style: solid
+	margin-top: 0
+	margin-bottom: $line-height-computed
