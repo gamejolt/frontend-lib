@@ -1,21 +1,22 @@
 import {
-	readableColor,
-	mix,
-	parseToRgb,
-	rgb,
-	desaturate,
 	complement,
-	parseToHsl,
+	desaturate,
 	hsl,
+	mix,
+	parseToHsl,
+	parseToRgb,
+	readableColor,
+	rgb,
 	toColorString,
 } from 'polished';
-import { rgb2lab, lab2rgb } from '../../utils/color';
+import { RgbColor } from 'polished/lib/types/color';
+import { lab2rgb, rgb2lab } from '../../utils/color';
 import { Model } from '../model/model.service';
 import { ThemePreset } from './preset/preset.model';
-import { RgbColor } from 'polished/lib/types/color';
 
 // Sync with variables in stylus.
 const GrayDarkest = '#111111';
+const GrayDarkestSubtle = '#191919';
 const GrayDarker = '#212121';
 const GrayDark = '#292929';
 const Gray = '#363636';
@@ -264,6 +265,10 @@ export class Theme extends Model {
 
 	get darkest_() {
 		return this.tintColor(GrayDarkest, 0.02);
+	}
+
+	get darkestSubtle_() {
+		return this.tintColor(GrayDarkestSubtle, 0.04);
 	}
 
 	get darker_() {
