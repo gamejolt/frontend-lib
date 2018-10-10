@@ -331,6 +331,12 @@ export class Notification extends Model {
 			detach: true,
 		});
 	}
+
+	$unread() {
+		return this.$_save('/web/dash/activity/mark-unread/' + this.id, 'notification', {
+			detach: true,
+		});
+	}
 }
 
 Model.create(Notification);
