@@ -23,12 +23,5 @@
 	theme-prop('background-color', 'notice')
 	theme-prop('color', 'notice-fg')
 
-.badge
-	&.warning, nav.pills > ul > li > .active > &.warning
-		@extend .badge-notice
-
-	nav.pills > ul > li > .active > &
-		@extend .badge-highlight
-
-	nav.pills > ul > li > a > &
-		margin-left: 3px
+.badge.warning
+	@extend .badge-notice
