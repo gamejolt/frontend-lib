@@ -1,0 +1,25 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
+.pill
+	rounded-corners()
+	theme-prop('background-color', 'bg-offset')
+	theme-prop('color', 'fg')
+	display: inline-block
+	padding: 5px 10px
+	font-size: $font-size-small
+	pointer-events: none
+	margin-right: 5px
+
+	&.active
+		theme-prop('background-color', 'bi-bg')
+		theme-prop('color', 'bi-fg')
+		font-weight: bold
+
+>>> a
+	& > .pill
+		cursor: pointer
+
+	&:hover > .pill
+		theme-prop('background-color', 'bi-bg')
+		theme-prop('color', 'bi-fg')
