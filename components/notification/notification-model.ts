@@ -30,14 +30,23 @@ function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocatio
 		return model.url;
 	} else if (model instanceof Game) {
 		return model.routeLocation;
-	} else if (model instanceof FiresidePost && !!model.game) {
-		// TODO(userposts)
+	} else if (model instanceof FiresidePost) {
+		if (!!model.game) {
+			return {
+				name: 'discover.games.view.devlog.view',
+				params: {
+					slug: model.game.slug,
+					id: model.game.id + '',
+					postSlug: model.slug,
+				},
+			};
+		}
+
 		return {
-			name: 'discover.games.view.devlog.view',
+			name: 'profile.post.view',
 			params: {
-				slug: model.game.slug,
-				id: model.game.id + '',
-				postSlug: model.slug,
+				username: model.user.username,
+				slug: model.slug,
 			},
 		};
 	}
@@ -136,55 +145,55 @@ export class Notification extends Model {
 
 		if (this.type === Notification.TYPE_COMMENT_ADD) {
 			this.action_model = new Comment(data.action_resource_model);
-			this.jolticon = 'jolticon-share';
+			this.jolticon = 'arrow-forward';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER) {
 			this.action_model = new Comment(data.action_resource_model);
-			this.jolticon = 'jolticon-add-comment';
+			this.jolticon = 'add-comment';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FORUM_POST_ADD) {
 			this.action_model = new ForumPost(data.action_resource_model);
-			this.jolticon = 'jolticon-pencil-box'; // TODO: needs-icon
+			this.jolticon = 'pencil-box';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FRIENDSHIP_REQUEST) {
 			this.action_model = new UserFriendship(data.action_resource_model);
-			this.jolticon = 'jolticon-friend-add-1';
+			this.jolticon = 'friend-add-1';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FRIENDSHIP_ACCEPT) {
 			this.action_model = new UserFriendship(data.action_resource_model);
-			this.jolticon = 'jolticon-friend-add-2';
+			this.jolticon = 'friend-add-2';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_RATING_ADD) {
 			this.action_model = new GameRating(data.action_resource_model);
-			this.jolticon = 'jolticon-thumbs-up';
+			this.jolticon = 'heart';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_FOLLOW) {
 			this.action_model = new GameLibraryGame(data.action_resource_model);
-			this.jolticon = 'jolticon-subscribe';
+			this.jolticon = 'subscribe';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_POST_ADD) {
 			this.action_model = new FiresidePost(data.action_resource_model);
-			this.jolticon = 'jolticon-blog-article';
+			this.jolticon = 'devlogs';
 			this.is_game_based = this.to_model instanceof Game;
 		} else if (this.type === Notification.TYPE_SELLABLE_SELL) {
 			this.action_model = new OrderItem(data.action_resource_model);
-			this.jolticon = 'jolticon-heart';
+			this.jolticon = 'heart';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_USER_FOLLOW) {
 			this.action_model = new Subscription(data.action_resource_model);
-			this.jolticon = 'jolticon-subscribe';
+			this.jolticon = 'subscribe';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COLLABORATOR_INVITE) {
 			this.action_model = new GameCollaborator(data.action_resource_model);
-			this.jolticon = 'jolticon-wrench';
+			this.jolticon = 'users';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_MENTION) {
 			this.action_model = new Mention(data.action_resource_model);
-			this.jolticon = 'jolticon-comment';
+			this.jolticon = 'comment';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COMMENT_VIDEO_ADD) {
 			this.action_model = new CommentVideo(data.action_resource_model);
-			this.jolticon = 'jolticon-comment';
+			this.jolticon = 'comment';
 			this.is_user_based = true;
 		}
 

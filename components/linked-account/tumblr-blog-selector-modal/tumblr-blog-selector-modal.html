@@ -7,20 +7,17 @@
 	</div>
 
 	<div class="modal-body">
-		<p>{{ message }}</p>
-
-		<div class="row">
+		<div class="full-bleed">
 			<app-linked-account
 				provider="tumblr"
 				:account="account"
 				:preview="true"
-				:spanWidth="true"
 				>
 				<app-loading v-if="isLoading" />
 				<div v-else>
 					<div v-if="!hasBlogs">
 						<small class="text-muted">
-							<translate>You have no Tumblr Blogs associated with your account.</translate>
+							<translate>You have no Tumblr blogs associated with your account.</translate>
 						</small>
 					</div>
 
@@ -37,7 +34,7 @@
 							:checked="blog.name === selectedBlog.name"
 							@change="changeSelected($event.target.value)"
 							/>
-						<label :for="blog.id">{{blog.title}}</label>
+						<label :for="blog.id">{{ blog.title }}</label>
 						<small
 							class="text-muted"
 							v-if="account.tumblrSelectedBlog && blog.name === account.tumblrSelectedBlog.name"
