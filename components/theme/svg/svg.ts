@@ -1,21 +1,26 @@
-import Vue from 'vue';
 import Axios from 'axios';
+import { darken, lighten, parseToHsl } from 'polished';
+import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-
-import { ThemeState, ThemeStore } from '../theme.store';
 import { CreateElement } from 'vue/types/vue';
-import { parseToHsl, lighten, darken } from 'polished';
+import { ThemeState, ThemeStore } from '../theme.store';
 
 @Component({})
 export class AppThemeSvg extends Vue {
-	@Prop(String) src!: string;
+	@Prop(String)
+	src!: string;
 
-	@ThemeState theme!: ThemeStore['theme'];
+	@ThemeState
+	theme!: ThemeStore['theme'];
 
 	rawSvg = '';
 	request?: Promise<any>;
 
 	get processedSvg() {
+		if (GJ_IS_SSR) {
+			return this.src;
+		}
+
 		let svgData = this.rawSvg;
 
 		if (this.theme) {
