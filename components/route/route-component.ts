@@ -493,7 +493,7 @@ async function getPayload(
 	route: Route,
 	useCache: boolean
 ) {
-	if (useCache) {
+	if (!GJ_IS_SSR && useCache) {
 		const cache = HistoryCache.get(route, componentOptions.name);
 		if (cache) {
 			return { fromCache: true, payload: cache.data };
