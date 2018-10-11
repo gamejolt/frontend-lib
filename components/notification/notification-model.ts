@@ -31,15 +31,7 @@ function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocatio
 	} else if (model instanceof Game) {
 		return model.routeLocation;
 	} else if (model instanceof FiresidePost && !!model.game) {
-		// TODO(userposts)
-		return {
-			name: 'discover.games.view.devlog.view',
-			params: {
-				slug: model.game.slug,
-				id: model.game.id + '',
-				postSlug: model.slug,
-			},
-		};
+		return model.routeLocation;
 	}
 	return '';
 }
