@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Vuex, {
-	ModuleTree,
+	CommitOptions,
+	DispatchOptions,
 	Module,
+	ModuleTree,
 	Payload,
 	Store,
 	StoreOptions,
-	DispatchOptions,
-	CommitOptions,
 } from 'vuex';
 
 Vue.use(Vuex);
@@ -31,6 +31,34 @@ export abstract class VuexStore<S = any, A = any, M = any> extends Store<S> {
 	constructor(options?: StoreOptions<S>) {
 		super(options || {});
 	}
+}
+
+type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T];
+type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
+
+export function NamespaceVuexStore<T extends VuexStore, A, M>(
+	globalStore: VuexStore,
+	namespace: string
+) {
+	class NamespacedStore {
+		get state() {
+			return globalStore.state[namespace] as NonFunctionProperties<T>;
+		}
+
+		dispatch<K extends keyof A>(
+			type: K,
+			payload?: A[K],
+			options?: DispatchOptions
+		): Promise<any> {
+			return globalStore.dispatch(namespace + '/' + type, payload, options);
+		}
+
+		commit<K extends keyof M>(type: K, payload?: M[K], options?: CommitOptions): void {
+			return globalStore.commit(namespace + '/' + type, payload, options);
+		}
+	}
+
+	return new NamespacedStore();
 }
 
 const storeInstance = new Vuex.Store({});
