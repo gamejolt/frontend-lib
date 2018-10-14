@@ -1,3 +1,4 @@
+import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue, { AsyncComponent } from 'vue';
 import { arrayRemove } from '../../utils/array';
 import { makeObservableService } from '../../utils/vue';
@@ -30,6 +31,7 @@ export class Modal {
 
 	static show<T>(options: ModalOptions) {
 		return new Promise<T | undefined>(resolve => {
+			Popper.hideAll();
 			++this.incrementer;
 			const modal = new Modal(this.incrementer, resolve, options);
 			this.modals.push(modal);
