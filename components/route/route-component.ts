@@ -161,7 +161,7 @@ export function RouteResolver(options: RouteResolverOptions = {}) {
 					}
 
 					if (promise) {
-						vm.routeLoading = true;
+						vm.isRouteLoading = true;
 						const { payload } = await promise;
 						resolver.payload = payload;
 					}
@@ -175,9 +175,9 @@ export function RouteResolver(options: RouteResolverOptions = {}) {
 
 @Component({})
 export class BaseRouteComponent extends Vue {
-	routeDestroyed = false;
-	routeLoading = false;
-	routeBootstrapped = false;
+	isRouteDestroyed = false;
+	isRouteLoading = false;
+	isRouteBootstrapped = false;
 
 	get routeTitle(): null | string {
 		return null;
@@ -197,7 +197,7 @@ export class BaseRouteComponent extends Vue {
 	/**
 	 * Called when the route component is completely destroyed.
 	 */
-	routeDestroy() {}
+	routeDestroyed() {}
 
 	// Don't allow this to be async. We want it to execute right away so that
 	// SSR doesn't break.
@@ -251,8 +251,8 @@ export class BaseRouteComponent extends Vue {
 	}
 
 	destroyed() {
-		this.routeDestroyed = true;
-		this.routeDestroy();
+		this.isRouteDestroyed = true;
+		this.routeDestroyed();
 	}
 
 	reloadRoute() {
@@ -326,7 +326,7 @@ export class BaseRouteComponent extends Vue {
 
 		if (options.hasResolver) {
 			const resolver = Resolver.startResolve(this.$options, to);
-			this.routeLoading = true;
+			this.isRouteLoading = true;
 
 			const { fromCache, payload } = await getPayload(this.$options, to, useCache);
 			resolver.payload = payload;
@@ -359,7 +359,7 @@ export class BaseRouteComponent extends Vue {
 
 		// Since this happens async, the component instance may be destroyed
 		// already.
-		if (this.routeDestroyed) {
+		if (this.isRouteDestroyed) {
 			return;
 		}
 
@@ -393,8 +393,8 @@ export class BaseRouteComponent extends Vue {
 		}
 
 		this.routeResolved(payload, fromCache);
-		this.routeLoading = false;
-		this.routeBootstrapped = true;
+		this.isRouteLoading = false;
+		this.isRouteBootstrapped = true;
 
 		// Now that we've routed, make sure our title is up to date. We have to
 		// do this outside the watcher that we set up in "created()" so that SSR
