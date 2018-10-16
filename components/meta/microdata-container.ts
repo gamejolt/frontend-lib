@@ -37,6 +37,8 @@ export class MicrodataContainer {
 	}
 
 	render() {
-		return `<script type="application/ld+json">${JSON.stringify(this.microdata)}</script>` + '\n';
+		return this.microdata
+			? `<script type="application/ld+json">${JSON.stringify(this.microdata)}</script>` + '\n'
+			: '';
 	}
 }
