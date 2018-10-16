@@ -20,17 +20,28 @@
 	@apply-hide="onHide"
 	>
 	<slot />
-	<app-scroll-scroller
+	<div
 		v-if="isVisible"
 		slot="popover"
+		class="-container"
 		:style="{
 			maxHeight,
 			width,
 			maxWidth,
 		}"
-		overlay
-		:inview-throttle="0"
 		>
-		<slot name="popover"  />
-	</app-scroll-scroller>
+		<div class="-header">
+			<slot name="header" />
+		</div>
+		<app-scroll-scroller
+			class="-main"
+			overlay
+			:inview-throttle="0"
+			>
+			<slot name="popover" />
+		</app-scroll-scroller>
+		<div class="-footer">
+			<slot name="footer" />
+		</div>
+	</div>
 </v-popover>

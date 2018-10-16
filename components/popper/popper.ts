@@ -1,4 +1,4 @@
-import View from '!view!./popper.html';
+import View from '!view!./popper.html?style=./popper-content.styl';
 import { AppBackdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop';
 import { Backdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop.service';
 import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
@@ -74,7 +74,7 @@ export class AppPopper extends Vue {
 	}
 
 	get popoverInnerClass() {
-		let classes = ['popper-content', 'scrollable', 'overlay-scrollbar'];
+		let classes = ['popper-content'];
 		if (this.trackTriggerWidth) {
 			classes.push('-track-trigger-width');
 		}
