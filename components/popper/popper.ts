@@ -2,10 +2,10 @@ import View from '!view!./popper.html';
 import { AppBackdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop';
 import { Backdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop.service';
 import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
+import { AppScrollScroller } from 'game-jolt-frontend-lib/components/scroll/scroller/scroller';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 import { Screen } from '../screen/screen-service';
-import { AppScrollInviewParent } from '../scroll/inview/parent';
 import './popper.styl';
 
 const mod: any = require('v-tooltip');
@@ -19,7 +19,7 @@ let PopperIndex = 0;
 @Component({
 	components: {
 		VPopover: mod.VPopover,
-		AppScrollInviewParent,
+		AppScrollScroller,
 	},
 })
 export class AppPopper extends Vue {

@@ -20,18 +20,17 @@
 	@apply-hide="onHide"
 	>
 	<slot />
-	<app-scroll-inview-parent
+	<app-scroll-scroller
 		v-if="isVisible"
 		slot="popover"
-		ref="inviewParent"
-		class="scrollable"
 		:style="{
 			maxHeight,
 			width,
 			maxWidth,
 		}"
-		:throttle="0"
+		overlay
+		:inview-throttle="0"
 		>
 		<slot name="popover"  />
-	</app-scroll-inview-parent>
+	</app-scroll-scroller>
 </v-popover>
