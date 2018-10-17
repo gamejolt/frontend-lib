@@ -48,6 +48,8 @@ function pluckBuilds(packages: GamePackage[], func: (build: GameBuild) => boolea
 }
 
 export class Game extends Model {
+	static readonly CREATION_TOOL_OTHER = 'Other';
+
 	static readonly STATUS_HIDDEN = 0;
 	static readonly STATUS_VISIBLE = 1;
 	static readonly STATUS_REMOVED = 2;
