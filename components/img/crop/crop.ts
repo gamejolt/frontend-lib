@@ -1,9 +1,8 @@
-import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./crop.html?style=./crop.styl';
-
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
+import Vue from 'vue';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 
 interface CropData {
 	x: number;
@@ -15,12 +14,22 @@ interface CropData {
 @View
 @Component({})
 export class AppImgCrop extends Vue {
-	@Prop(String) src!: string;
-	@Prop(Object) value?: CropData;
-	@Prop(Number) aspectRatio?: number;
-	@Prop(Number) minWidth?: number;
-	@Prop(Number) minHeight?: number;
-	@Prop(Boolean) disabled?: boolean;
+	@Prop(String)
+	src!: string;
+	@Prop(Object)
+	value?: CropData;
+	@Prop(Number)
+	aspectRatio?: number;
+	@Prop(Number)
+	minAspectRatio?: number;
+	@Prop(Number)
+	maxAspectRatio?: number;
+	@Prop(Number)
+	minWidth?: number;
+	@Prop(Number)
+	minHeight?: number;
+	@Prop(Boolean)
+	disabled?: boolean;
 
 	cropper!: Cropper;
 
@@ -70,6 +79,39 @@ export class AppImgCrop extends Vue {
 
 				if (this.value) {
 					this.onValueChange();
+				}
+
+				// If the aspect ratio is outside a set min/max aspect ratio, resize the crop box.
+				if (this.minAspectRatio && this.maxAspectRatio && !this.aspectRatio) {
+					const containerData = this.cropper.getContainerData();
+					const cropBoxData = this.cropper.getCropBoxData();
+					const aspectRatio = cropBoxData.width / cropBoxData.height;
+
+					if (aspectRatio < this.minAspectRatio || aspectRatio > this.maxAspectRatio) {
+						const newCropBoxWidth =
+							cropBoxData.height * ((this.minAspectRatio + this.maxAspectRatio) / 2);
+
+						this.cropper.setCropBoxData({
+							left: (containerData.width - newCropBoxWidth) / 2,
+							width: newCropBoxWidth,
+						});
+					}
+				}
+			},
+			cropmove: () => {
+				if (this.minAspectRatio && this.maxAspectRatio && !this.aspectRatio) {
+					const cropBoxData = this.cropper.getCropBoxData();
+					const aspectRatio = cropBoxData.width / cropBoxData.height;
+
+					if (aspectRatio < this.minAspectRatio) {
+						this.cropper.setCropBoxData({
+							width: cropBoxData.height * this.minAspectRatio,
+						});
+					} else if (aspectRatio > this.maxAspectRatio) {
+						this.cropper.setCropBoxData({
+							width: cropBoxData.height * this.maxAspectRatio,
+						});
+					}
 				}
 			},
 		});
