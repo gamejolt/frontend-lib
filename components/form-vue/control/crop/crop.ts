@@ -22,6 +22,10 @@ export class AppFormControlCrop extends BaseFormControl {
 	minWidth?: number;
 	@Prop(Number)
 	minHeight?: number;
+	@Prop(Number)
+	maxWidth?: number;
+	@Prop(Number)
+	maxHeight?: number;
 	@Prop(Boolean)
 	disabled?: boolean;
 
