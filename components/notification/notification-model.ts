@@ -117,7 +117,6 @@ export class Notification extends Model {
 	to_model?: Game | User | FiresidePost | ForumTopic | Sellable;
 
 	// Generated in constructor.
-	jolticon = '';
 	is_user_based = false;
 	is_game_based = false;
 
@@ -145,55 +144,42 @@ export class Notification extends Model {
 
 		if (this.type === Notification.TYPE_COMMENT_ADD) {
 			this.action_model = new Comment(data.action_resource_model);
-			this.jolticon = 'arrow-forward';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER) {
 			this.action_model = new Comment(data.action_resource_model);
-			this.jolticon = 'add-comment';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FORUM_POST_ADD) {
 			this.action_model = new ForumPost(data.action_resource_model);
-			this.jolticon = 'pencil-box';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FRIENDSHIP_REQUEST) {
 			this.action_model = new UserFriendship(data.action_resource_model);
-			this.jolticon = 'friend-add-1';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FRIENDSHIP_ACCEPT) {
 			this.action_model = new UserFriendship(data.action_resource_model);
-			this.jolticon = 'friend-add-2';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_RATING_ADD) {
 			this.action_model = new GameRating(data.action_resource_model);
-			this.jolticon = 'heart';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_FOLLOW) {
 			this.action_model = new GameLibraryGame(data.action_resource_model);
-			this.jolticon = 'subscribe';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_POST_ADD) {
 			this.action_model = new FiresidePost(data.action_resource_model);
-			this.jolticon = 'devlogs';
 			this.is_game_based = this.to_model instanceof Game;
 		} else if (this.type === Notification.TYPE_SELLABLE_SELL) {
 			this.action_model = new OrderItem(data.action_resource_model);
-			this.jolticon = 'heart';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_USER_FOLLOW) {
 			this.action_model = new Subscription(data.action_resource_model);
-			this.jolticon = 'subscribe';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COLLABORATOR_INVITE) {
 			this.action_model = new GameCollaborator(data.action_resource_model);
-			this.jolticon = 'users';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_MENTION) {
 			this.action_model = new Mention(data.action_resource_model);
-			this.jolticon = 'comment';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COMMENT_VIDEO_ADD) {
 			this.action_model = new CommentVideo(data.action_resource_model);
-			this.jolticon = 'comment';
 			this.is_user_based = true;
 		}
 

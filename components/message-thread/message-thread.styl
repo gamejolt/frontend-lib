@@ -1,13 +1,6 @@
 @require '~styles/variables'
 @require '~styles-lib/mixins'
 
->>> .message-thread-split
-	theme-prop('border-top-color', 'bg-subtle')
-	border-top-width: 1px
-	border-top-style: solid
-	margin-top: 0
-	margin-bottom: $line-height-computed
-
 // Don't show the message thread split for the last item in the list.
 >>> .message-thread-item:last-of-type .timeline-list-item-split
 	display: none

@@ -14,7 +14,6 @@
 			theme-prop('background-color', 'bg-offset')
 			theme-prop('color', 'fg-muted')
 			theme-prop('border-color', 'bg')
-			text-align: center
 			border-radius: 50%
 			position: absolute
 			left: 0
@@ -22,18 +21,23 @@
 			width: $timeline-list-icon-size
 			height: $timeline-list-icon-size
 			line-height: $timeline-list-icon-size
-			border-width: 3px
+			border-width: 2px
 			border-style: solid
 			z-index: 1
 
-			> .jolticon
-				position: relative
-				top: -2px
-				margin: 0
-				vertical-align: baseline
-
 			img
 				border-radius: 50% !important
+
+			/**
+			 * Active Item
+			 */
+			&.active, &.new
+				theme-prop('border-color', 'notice')
+
+				.timeline-list-item-bubble-inner
+					theme-prop('background-color', 'bg')
+					padding: 2px
+					border-radius: 50%
 
 		&-main
 			clearfix()
@@ -124,12 +128,6 @@
 			.blip
 				position: relative
 				left: -5px
-
-		/**
-		 * Active Item
-		 */
-		&-bubble.active, &-bubble.new
-			theme-prop('border-color', 'notice')
 
 >>> .timeline-list-item-split
 	theme-prop('border-top-color', 'bg-subtle')

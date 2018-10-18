@@ -71,6 +71,16 @@ export class AppScrollScroller extends Vue {
 		this.isMounted = true;
 	}
 
+	/**
+	 * Can be used by parent components to queue a check against the inview
+	 * container.
+	 */
+	queueInviewCheck() {
+		if (this._inviewContainer) {
+			this._inviewContainer.queueCheck();
+		}
+	}
+
 	destroyed() {
 		this._isDestroyed = true;
 		this._simplebar = undefined;

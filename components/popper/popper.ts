@@ -55,6 +55,7 @@ export class AppPopper extends Vue {
 
 	$refs!: {
 		popover: any;
+		scroller: AppScrollScroller;
 	};
 
 	isVisible = false;
