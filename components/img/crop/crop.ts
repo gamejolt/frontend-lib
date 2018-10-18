@@ -39,7 +39,7 @@ export class AppImgCrop extends Vue {
 
 	mounted() {
 		const useAspectRatio =
-			this.minAspectRatio && this.maxAspectRatio ? this.maxAspectRatio : this.aspectRatio;
+			this.minAspectRatio && this.maxAspectRatio ? undefined : this.aspectRatio;
 
 		this.cropper = new Cropper(this.$refs.img, {
 			aspectRatio: useAspectRatio,
@@ -109,13 +109,14 @@ export class AppImgCrop extends Vue {
 			cropmove: () => {
 				if (this.minAspectRatio && this.maxAspectRatio && !this.aspectRatio) {
 					const cropBoxData = this.cropper.getCropBoxData();
+					const containerData = this.cropper.getContainerData();
 					const aspectRatio = cropBoxData.width / cropBoxData.height;
 
 					if (aspectRatio < this.minAspectRatio) {
 						let targetWidth = cropBoxData.height * this.minAspectRatio;
 						let targetHeight = cropBoxData.height;
-						if (targetWidth > this.$refs.img.width) {
-							targetWidth = this.$refs.img.width;
+						if (targetWidth > containerData.width) {
+							targetWidth = containerData.width;
 							targetHeight = targetWidth / this.minAspectRatio;
 						}
 						this.cropper.setCropBoxData({
