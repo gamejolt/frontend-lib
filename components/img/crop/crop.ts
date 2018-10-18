@@ -28,6 +28,10 @@ export class AppImgCrop extends Vue {
 	minWidth?: number;
 	@Prop(Number)
 	minHeight?: number;
+	@Prop(Number)
+	maxWidth?: number;
+	@Prop(Number)
+	maxHeight?: number;
 	@Prop(Boolean)
 	disabled?: boolean;
 
@@ -56,8 +60,8 @@ export class AppImgCrop extends Vue {
 					const widthDiff = Math.abs(e.detail.width - this.minWidth);
 					const heightDiff = Math.abs(e.detail.height - this.minHeight);
 					if (
-						(e.detail.width < this.minWidth && widthDiff > 0.01) ||
-						(e.detail.height < this.minHeight && heightDiff > 0.01)
+						(e.detail.width < this.minWidth && widthDiff > 0.5) ||
+						(e.detail.height < this.minHeight && heightDiff > 0.5)
 					) {
 						const targetWidth =
 							e.detail.width < this.minWidth ? this.minWidth : e.detail.width;
@@ -73,12 +77,13 @@ export class AppImgCrop extends Vue {
 					}
 				}
 
-				this.$emit('input', {
+				const crop = this.fixCrop({
 					x: e.detail.x,
 					y: e.detail.y,
 					x2: e.detail.x + e.detail.width,
 					y2: e.detail.y + e.detail.height,
-				} as CropData);
+				});
+				this.$emit('input', crop as CropData);
 			},
 			ready: () => {
 				if (this.disabled) {
@@ -171,5 +176,40 @@ export class AppImgCrop extends Vue {
 		} else {
 			this.cropper.clear();
 		}
+	}
+
+	// Due to rounding errors introduced by scaling down the image in the cropper,
+	// the crop needs to be rounded to full pixels and consider min/max width/height.
+	fixCrop(crop: CropData): CropData {
+		crop.x = Math.round(crop.x);
+		crop.x2 = Math.round(crop.x2);
+		crop.y = Math.round(crop.y);
+		crop.y2 = Math.round(crop.y2);
+
+		const cropWidth = Math.abs(crop.x - crop.x2);
+		if (this.minWidth) {
+			if (cropWidth < this.minWidth) {
+				crop.x2 = crop.x + this.minWidth;
+			}
+		}
+		if (this.maxWidth) {
+			if (cropWidth > this.maxWidth) {
+				crop.x2 = crop.x + this.maxWidth;
+			}
+		}
+
+		const cropHeight = Math.abs(crop.y - crop.y2);
+		if (this.minHeight) {
+			if (cropHeight < this.minHeight) {
+				crop.y2 = crop.y + this.minHeight;
+			}
+		}
+		if (this.maxHeight) {
+			if (cropHeight > this.maxHeight) {
+				crop.y2 = crop.y + this.maxHeight;
+			}
+		}
+
+		return crop;
 	}
 }
