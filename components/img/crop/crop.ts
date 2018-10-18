@@ -53,15 +53,20 @@ export class AppImgCrop extends Vue {
 				// Have to do it like this since the cropper doesn't allow
 				// img-relative minimums.
 				if (this.minWidth && this.minHeight) {
-					if (e.detail.width < this.minWidth || e.detail.height < this.minHeight) {
+					const widthDiff = Math.abs(e.detail.width - this.minWidth);
+					const heightDiff = Math.abs(e.detail.height - this.minHeight);
+					if (
+						(e.detail.width < this.minWidth && widthDiff > 0.01) ||
+						(e.detail.height < this.minHeight && heightDiff > 0.01)
+					) {
+						const targetWidth =
+							e.detail.width < this.minWidth ? this.minWidth : e.detail.width;
+						const targetHeight =
+							e.detail.height < this.minHeight ? this.minHeight : e.detail.height;
 						this.cropper.setData(
 							Object.assign({}, e.detail, {
-								width:
-									e.detail.width < this.minWidth ? this.minWidth : e.detail.width,
-								height:
-									e.detail.height < this.minHeight
-										? this.minHeight
-										: e.detail.height,
+								width: targetWidth,
+								height: targetHeight,
 							})
 						);
 						return;
