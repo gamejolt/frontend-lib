@@ -40,15 +40,9 @@
 					border-radius: 50%
 
 		&-main
+			$-padding-left = $timeline-list-avatar-margin + $timeline-list-icon-size
 			clearfix()
 			padding-bottom: $line-height-computed
-
-			// On desktop it goes full-width. On mobile we have to add the normal padding to the
-			// right so it doesn't hit up against the edge.
-			@media $media-xs
-				padding-right: ($grid-gutter-width-xs / 2)
-
-			$-padding-left = $timeline-list-avatar-margin + $timeline-list-icon-size
 			padding-left: $border-size + $-padding-left
 
 			&.is-thread

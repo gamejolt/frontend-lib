@@ -91,7 +91,7 @@ export class Notification extends Model {
 	user_id!: number;
 	type!: string;
 	added_on!: number;
-	viewed_on!: number;
+	viewed_on!: number | null;
 
 	from_resource!: string;
 	from_resource_id!: number;
@@ -313,12 +313,18 @@ export class Notification extends Model {
 	}
 
 	$read() {
+		// We want this to look like it happens immediately.
+		this.viewed_on = Date.now();
+
 		return this.$_save('/web/dash/activity/mark-read/' + this.id, 'notification', {
 			detach: true,
 		});
 	}
 
 	$unread() {
+		// We want this to look like it happens immediately.
+		this.viewed_on = null;
+
 		return this.$_save('/web/dash/activity/mark-unread/' + this.id, 'notification', {
 			detach: true,
 		});

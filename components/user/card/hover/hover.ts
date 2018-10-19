@@ -18,11 +18,14 @@ export class AppUserCardHover extends Vue {
 	@Prop(User)
 	user?: User;
 
+	@Prop(Boolean)
+	disabled?: boolean;
+
 	isShowing = false;
 	isLoaded = false;
 
 	get isDisabled() {
-		return Screen.isXs || GJ_IS_CLIENT;
+		return Screen.isXs || GJ_IS_CLIENT || !!this.disabled;
 	}
 
 	get shouldShow() {
