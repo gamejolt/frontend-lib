@@ -438,6 +438,7 @@ export class Game extends Model {
 	$saveHeader() {
 		return this.$_save('/web/dash/developer/games/header/save/' + this.id, 'game', {
 			file: this.file,
+			allowComplexData: ['crop'],
 		});
 	}
 
