@@ -59,6 +59,7 @@ export class AppImgCrop extends Vue {
 				if (this.minWidth && this.minHeight) {
 					const widthDiff = Math.abs(e.detail.width - this.minWidth);
 					const heightDiff = Math.abs(e.detail.height - this.minHeight);
+
 					if (
 						(e.detail.width < this.minWidth && widthDiff > 0.5) ||
 						(e.detail.height < this.minHeight && heightDiff > 0.5)
@@ -73,6 +74,38 @@ export class AppImgCrop extends Vue {
 								height: targetHeight,
 							})
 						);
+						return;
+					}
+				}
+
+				// Enforce aspect ratios.
+				if (this.minAspectRatio && this.maxAspectRatio && !this.aspectRatio) {
+					const cropBoxData = this.cropper.getCropBoxData();
+					const containerData = this.cropper.getContainerData();
+					const aspectRatio = cropBoxData.width / cropBoxData.height;
+
+					if (
+						aspectRatio < this.minAspectRatio &&
+						Math.abs(aspectRatio - this.minAspectRatio) > 0.01
+					) {
+						let targetWidth = cropBoxData.height * this.minAspectRatio;
+						let targetHeight = cropBoxData.height;
+						if (targetWidth > containerData.width) {
+							targetWidth = containerData.width;
+							targetHeight = targetWidth / this.minAspectRatio;
+						}
+						this.cropper.setCropBoxData({
+							width: targetWidth,
+							height: targetHeight,
+						});
+						return;
+					} else if (
+						aspectRatio > this.maxAspectRatio &&
+						Math.abs(aspectRatio - this.maxAspectRatio) > 0.01
+					) {
+						this.cropper.setCropBoxData({
+							width: cropBoxData.height * this.maxAspectRatio,
+						});
 						return;
 					}
 				}
@@ -107,30 +140,6 @@ export class AppImgCrop extends Vue {
 						this.cropper.setCropBoxData({
 							left: (containerData.width - newCropBoxWidth) / 2,
 							width: newCropBoxWidth,
-						});
-					}
-				}
-			},
-			cropmove: () => {
-				if (this.minAspectRatio && this.maxAspectRatio && !this.aspectRatio) {
-					const cropBoxData = this.cropper.getCropBoxData();
-					const containerData = this.cropper.getContainerData();
-					const aspectRatio = cropBoxData.width / cropBoxData.height;
-
-					if (aspectRatio < this.minAspectRatio) {
-						let targetWidth = cropBoxData.height * this.minAspectRatio;
-						let targetHeight = cropBoxData.height;
-						if (targetWidth > containerData.width) {
-							targetWidth = containerData.width;
-							targetHeight = targetWidth / this.minAspectRatio;
-						}
-						this.cropper.setCropBoxData({
-							width: targetWidth,
-							height: targetHeight,
-						});
-					} else if (aspectRatio > this.maxAspectRatio) {
-						this.cropper.setCropBoxData({
-							width: cropBoxData.height * this.maxAspectRatio,
 						});
 					}
 				}
@@ -186,29 +195,78 @@ export class AppImgCrop extends Vue {
 		crop.y = Math.round(crop.y);
 		crop.y2 = Math.round(crop.y2);
 
-		const cropWidth = Math.abs(crop.x - crop.x2);
-		if (this.minWidth) {
-			if (cropWidth < this.minWidth) {
-				crop.x2 = crop.x + this.minWidth;
-			}
-		}
-		if (this.maxWidth) {
-			if (cropWidth > this.maxWidth) {
-				crop.x2 = crop.x + this.maxWidth;
-			}
+		const rect = {
+			x: crop.x,
+			y: crop.y,
+			width: Math.abs(crop.x - crop.x2),
+			height: Math.abs(crop.y - crop.y2),
+		};
+
+		if (this.minWidth && rect.width < this.minWidth) {
+			rect.width = this.minWidth;
 		}
 
-		const cropHeight = Math.abs(crop.y - crop.y2);
-		if (this.minHeight) {
-			if (cropHeight < this.minHeight) {
-				crop.y2 = crop.y + this.minHeight;
-			}
+		if (this.maxWidth && rect.width > this.maxWidth) {
+			rect.width = this.maxWidth;
 		}
-		if (this.maxHeight) {
-			if (cropHeight > this.maxHeight) {
-				crop.y2 = crop.y + this.maxHeight;
-			}
+
+		if (this.minHeight && rect.height < this.minHeight) {
+			rect.height = this.minHeight;
 		}
+
+		if (this.maxHeight && rect.height > this.maxHeight) {
+			rect.height = this.maxHeight;
+		}
+
+		const ratio = rect.width / rect.height;
+		const imgWidth = this.$refs.img.width;
+		const imgHeight = this.$refs.img.height;
+
+		if (this.minAspectRatio && this.maxAspectRatio) {
+			let targetWidth = rect.width;
+			let targetHeight = rect.height;
+
+			if (ratio < this.minAspectRatio) {
+				targetWidth = rect.height * this.minAspectRatio;
+
+				if (targetWidth > imgWidth) {
+					targetWidth = imgWidth;
+					targetHeight = targetWidth / this.minAspectRatio;
+
+					if (targetHeight > imgHeight) {
+						targetHeight = imgHeight;
+						targetWidth = targetHeight * this.minAspectRatio;
+					}
+				}
+			} else if (ratio > this.maxAspectRatio) {
+				targetHeight = rect.width / this.maxAspectRatio;
+
+				if (targetHeight > imgHeight) {
+					targetHeight = rect.height;
+					targetWidth = targetHeight * this.maxAspectRatio;
+
+					if (targetWidth > imgWidth) {
+						targetWidth = imgWidth;
+						targetHeight = targetWidth / this.maxAspectRatio;
+					}
+				}
+			}
+
+			if (rect.x + targetWidth > imgWidth) {
+				rect.x = imgWidth - targetWidth;
+			}
+
+			if (rect.y + targetHeight > imgHeight) {
+				rect.y = imgHeight - targetHeight;
+			}
+			rect.width = targetWidth;
+			rect.height = targetHeight;
+		}
+
+		crop.x = rect.x;
+		crop.y = rect.y;
+		crop.x2 = rect.x + rect.width;
+		crop.y2 = rect.y + rect.height;
 
 		return crop;
 	}
