@@ -114,8 +114,11 @@ export class Api {
 				// It must be set explicitly if you want to send in an object as a value.
 				if (options.sanitizeComplexData) {
 					if (
-						(options.allowComplexData && options.allowComplexData.indexOf(key) !== -1) ||
-						(valueType !== 'function' && valueType !== 'object' && !Array.isArray(value))
+						(options.allowComplexData &&
+							options.allowComplexData.indexOf(key) !== -1) ||
+						(valueType !== 'function' &&
+							valueType !== 'object' &&
+							!Array.isArray(value))
 					) {
 						sanitizedPostData[key] = value;
 					}
@@ -135,7 +138,7 @@ export class Api {
 			return await requestPromise;
 		}
 
-		return await Payload.processResponse(requestPromise, options);
+		return Payload.processResponse(requestPromise, options);
 	}
 
 	private static createRequest(method: string, url: string, data: any, options: RequestOptions) {

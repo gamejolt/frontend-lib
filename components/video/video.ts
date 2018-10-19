@@ -1,7 +1,6 @@
+import View from '!view!./video.html?style=./video.styl';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./video.html?style=./video.styl';
-
 import { AppLoading } from '../../vue/components/loading/loading';
 
 // We have to not use Vue for video embed stuff!
@@ -15,11 +14,18 @@ import { AppLoading } from '../../vue/components/loading/loading';
 	},
 })
 export class AppVideo extends Vue {
-	@Prop(String) poster!: string;
-	@Prop(String) webm!: string;
-	@Prop(String) mp4!: string;
+	@Prop(String)
+	poster!: string;
+
+	@Prop(String)
+	webm!: string;
+
+	@Prop(String)
+	mp4!: string;
+
 	@Prop({ type: Boolean, default: false })
 	showLoading!: boolean;
+
 	@Prop({ type: Boolean, default: true })
 	shouldPlay!: boolean;
 
@@ -39,6 +45,7 @@ export class AppVideo extends Vue {
 	}
 
 	mounted() {
+		// We have to recreate this in the template for SSR-only.
 		const webm = document.createElement('source');
 		webm.type = 'video/webm';
 		webm.src = this.webm;

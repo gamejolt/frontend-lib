@@ -197,6 +197,7 @@ export class User extends Model {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
 		return this.$_save('/web/dash/header/save', 'user', {
 			file: this.file,
+			allowComplexData: ['crop'],
 		});
 	}
 
