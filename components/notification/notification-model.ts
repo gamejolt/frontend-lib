@@ -91,7 +91,7 @@ export class Notification extends Model {
 	user_id!: number;
 	type!: string;
 	added_on!: number;
-	viewed_on!: number;
+	viewed_on!: number | null;
 
 	from_resource!: string;
 	from_resource_id!: number;
@@ -117,7 +117,6 @@ export class Notification extends Model {
 	to_model?: Game | User | FiresidePost | ForumTopic | Sellable;
 
 	// Generated in constructor.
-	jolticon = '';
 	is_user_based = false;
 	is_game_based = false;
 
@@ -145,55 +144,42 @@ export class Notification extends Model {
 
 		if (this.type === Notification.TYPE_COMMENT_ADD) {
 			this.action_model = new Comment(data.action_resource_model);
-			this.jolticon = 'arrow-forward';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COMMENT_ADD_OBJECT_OWNER) {
 			this.action_model = new Comment(data.action_resource_model);
-			this.jolticon = 'add-comment';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FORUM_POST_ADD) {
 			this.action_model = new ForumPost(data.action_resource_model);
-			this.jolticon = 'pencil-box';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FRIENDSHIP_REQUEST) {
 			this.action_model = new UserFriendship(data.action_resource_model);
-			this.jolticon = 'friend-add-1';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_FRIENDSHIP_ACCEPT) {
 			this.action_model = new UserFriendship(data.action_resource_model);
-			this.jolticon = 'friend-add-2';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_RATING_ADD) {
 			this.action_model = new GameRating(data.action_resource_model);
-			this.jolticon = 'heart';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_GAME_FOLLOW) {
 			this.action_model = new GameLibraryGame(data.action_resource_model);
-			this.jolticon = 'subscribe';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_POST_ADD) {
 			this.action_model = new FiresidePost(data.action_resource_model);
-			this.jolticon = 'devlogs';
 			this.is_game_based = this.to_model instanceof Game;
 		} else if (this.type === Notification.TYPE_SELLABLE_SELL) {
 			this.action_model = new OrderItem(data.action_resource_model);
-			this.jolticon = 'heart';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_USER_FOLLOW) {
 			this.action_model = new Subscription(data.action_resource_model);
-			this.jolticon = 'subscribe';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COLLABORATOR_INVITE) {
 			this.action_model = new GameCollaborator(data.action_resource_model);
-			this.jolticon = 'users';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_MENTION) {
 			this.action_model = new Mention(data.action_resource_model);
-			this.jolticon = 'comment';
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COMMENT_VIDEO_ADD) {
 			this.action_model = new CommentVideo(data.action_resource_model);
-			this.jolticon = 'comment';
 			this.is_user_based = true;
 		}
 
@@ -327,7 +313,19 @@ export class Notification extends Model {
 	}
 
 	$read() {
+		// We want this to look like it happens immediately.
+		this.viewed_on = Date.now();
+
 		return this.$_save('/web/dash/activity/mark-read/' + this.id, 'notification', {
+			detach: true,
+		});
+	}
+
+	$unread() {
+		// We want this to look like it happens immediately.
+		this.viewed_on = null;
+
+		return this.$_save('/web/dash/activity/mark-unread/' + this.id, 'notification', {
 			detach: true,
 		});
 	}
@@ -398,49 +396,49 @@ export function getNotificationText(notification: Notification) {
 
 		case Notification.TYPE_COMMENT_ADD_OBJECT_OWNER: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } commented on %{ object }.`,
+				`<em>%{ subject }</em> commented on <b>%{ object }</b>.`,
 				getTranslationValues(notification)
 			);
 		}
 
 		case Notification.TYPE_COMMENT_ADD: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } replied to your comment on %{ object }.`,
+				`<em>%{ subject }</em> replied to your comment on <b>%{ object }</b>.`,
 				getTranslationValues(notification)
 			);
 		}
 
 		case Notification.TYPE_FORUM_POST_ADD: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } posted a new forum post to %{ object }.`,
+				`<em>%{ subject }</em> posted a new forum post to <b>%{ object }</b>.`,
 				getTranslationValues(notification)
 			);
 		}
 
 		case Notification.TYPE_FRIENDSHIP_REQUEST: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } sent you a friend request.`,
+				`<em>%{ subject }</em> sent you a friend request.`,
 				getTranslationValues(notification)
 			);
 		}
 
 		case Notification.TYPE_FRIENDSHIP_ACCEPT: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } accepted your friend request.`,
+				`<em>%{ subject }</em> accepted your friend request.`,
 				getTranslationValues(notification)
 			);
 		}
 
 		case Notification.TYPE_GAME_RATING_ADD: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } liked %{ object }.`,
+				`<em>%{ subject }</em> liked <b>%{ object }</b>.`,
 				getTranslationValues(notification)
 			);
 		}
 
 		case Notification.TYPE_GAME_FOLLOW: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } followed %{ object }.`,
+				`<em>%{ subject }</em> followed <b>%{ object }</b>.`,
 				getTranslationValues(notification)
 			);
 		}
@@ -455,21 +453,21 @@ export function getNotificationText(notification: Notification) {
 			};
 
 			return Translate.$gettextInterpolate(
-				`%{ subject } bought a package in %{ object } for %{ amount }.`,
+				`<em>%{ subject }</em> bought a package in <b>%{ object }</b> for %{ amount }.`,
 				translationValues
 			);
 		}
 
 		case Notification.TYPE_USER_FOLLOW: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } followed you.`,
+				`<em>%{ subject }</em> followed you.`,
 				getTranslationValues(notification)
 			);
 		}
 
 		case Notification.TYPE_COLLABORATOR_INVITE: {
 			return Translate.$gettextInterpolate(
-				`%{ subject } invited you to collaborate on %{ object }.`,
+				`<em>%{ subject }</em> invited you to collaborate on <b>%{ object }</b>.`,
 				getTranslationValues(notification)
 			);
 		}
@@ -481,7 +479,7 @@ export function getNotificationText(notification: Notification) {
 				case 'Comment': {
 					if (notification.to_model instanceof Game) {
 						return Translate.$gettextInterpolate(
-							`%{ subject } mentioned you in a comment on the game %{ object }.`,
+							`<em>%{ subject }</em> mentioned you in a comment on the game <b>%{ object }</b>.`,
 							{
 								object: notification.to_model.title,
 								subject: getSubjectTranslationValue(notification),
@@ -489,7 +487,7 @@ export function getNotificationText(notification: Notification) {
 						);
 					} else if (notification.to_model instanceof FiresidePost) {
 						return Translate.$gettextInterpolate(
-							`%{ subject } mentioned you in a comment on the post %{ object }.`,
+							`<em>%{ subject }</em> mentioned you in a comment on the post <b>%{ object }</b>.`,
 							{
 								object: notification.to_model.lead_snippet,
 								subject: getSubjectTranslationValue(notification),
@@ -501,7 +499,7 @@ export function getNotificationText(notification: Notification) {
 
 				case 'Game': {
 					return Translate.$gettextInterpolate(
-						`%{ subject } mentioned you in the game %{ object }.`,
+						`<em>%{ subject }</em> mentioned you in the game <b>%{ object }</b>.`,
 						{
 							object: (notification.to_model as Game).title,
 							subject: getSubjectTranslationValue(notification),
@@ -511,14 +509,14 @@ export function getNotificationText(notification: Notification) {
 
 				case 'User': {
 					return Translate.$gettextInterpolate(
-						`%{ subject } mentioned you in their user bio.`,
+						`<em>%{ subject }</em> mentioned you in their user bio.`,
 						getTranslationValues(notification)
 					);
 				}
 
 				case 'Fireside_Post': {
 					return Translate.$gettextInterpolate(
-						`%{ subject } mentioned you in the post %{ object }.`,
+						`<em>%{ subject }</em> mentioned you in the post <b>%{ object }</b>.`,
 						{
 							object: (notification.to_model as FiresidePost).lead_snippet,
 							subject: getSubjectTranslationValue(notification),
@@ -528,7 +526,7 @@ export function getNotificationText(notification: Notification) {
 
 				case 'Forum_Post': {
 					return Translate.$gettextInterpolate(
-						`%{ subject } mentioned you in a forum post to %{ object }.`,
+						`<em>%{ subject }</em> mentioned you in a forum post to <b>%{ object }</b>.`,
 						{
 							object: (notification.to_model as ForumTopic).title,
 							subject: getSubjectTranslationValue(notification),

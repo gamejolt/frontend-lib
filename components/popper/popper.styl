@@ -104,8 +104,13 @@ $-transition-time = 200ms
 	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
 
 	&.-track-trigger-width
-		max-width: none
-		min-width: none
+		max-width: auto
+		min-width: auto
+
+	&.-force-max-width
+		min-width: auto
+		width: calc(100vw - 10px)
+		max-width: $popover-size
 
 	> nav.pills > ul, > .button
 		margin-bottom: $popover-spacing !important

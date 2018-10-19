@@ -14,7 +14,6 @@
 			theme-prop('background-color', 'bg-offset')
 			theme-prop('color', 'fg-muted')
 			theme-prop('border-color', 'bg')
-			text-align: center
 			border-radius: 50%
 			position: absolute
 			left: 0
@@ -22,29 +21,28 @@
 			width: $timeline-list-icon-size
 			height: $timeline-list-icon-size
 			line-height: $timeline-list-icon-size
-			border-width: 3px
+			border-width: 2px
 			border-style: solid
 			z-index: 1
-
-			> .jolticon
-				position: relative
-				top: -2px
-				margin: 0
-				vertical-align: baseline
 
 			img
 				border-radius: 50% !important
 
+			/**
+			 * Active Item
+			 */
+			&.active, &.new
+				theme-prop('border-color', 'notice')
+
+				.timeline-list-item-bubble-inner
+					theme-prop('background-color', 'bg')
+					padding: 2px
+					border-radius: 50%
+
 		&-main
+			$-padding-left = $timeline-list-avatar-margin + $timeline-list-icon-size
 			clearfix()
 			padding-bottom: $line-height-computed
-
-			// On desktop it goes full-width. On mobile we have to add the normal padding to the
-			// right so it doesn't hit up against the edge.
-			@media $media-xs
-				padding-right: ($grid-gutter-width-xs / 2)
-
-			$-padding-left = $timeline-list-avatar-margin + $timeline-list-icon-size
 			padding-left: $border-size + $-padding-left
 
 			&.is-thread
@@ -67,9 +65,12 @@
 		&-title
 			theme-prop('color', 'fg')
 			display: block
-			margin-top: 5px
-			font-weight: bold
 			font-size: $font-size-h4
+
+			em
+				theme-prop('color', 'link')
+				font-style: normal
+				font-weight: bold
 
 		&-title-small
 			font-size: $font-size-base
@@ -122,8 +123,9 @@
 				position: relative
 				left: -5px
 
-		/**
-		 * Active Item
-		 */
-		&-bubble.active, &-bubble.new
-			theme-prop('border-color', 'notice')
+>>> .timeline-list-item-split
+	theme-prop('border-top-color', 'bg-subtle')
+	border-top-width: 1px
+	border-top-style: solid
+	margin-top: 0
+	margin-bottom: $line-height-computed

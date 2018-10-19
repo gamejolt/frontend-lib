@@ -1,11 +1,11 @@
-import View from '!view!./popper.html';
+import View from '!view!./popper.html?style=./popper-content.styl';
 import { AppBackdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop';
 import { Backdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop.service';
 import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
+import { AppScrollScroller } from 'game-jolt-frontend-lib/components/scroll/scroller/scroller';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 import { Screen } from '../screen/screen-service';
-import { AppScrollInviewParent } from '../scroll/inview/parent';
 import './popper.styl';
 
 const mod: any = require('v-tooltip');
@@ -19,7 +19,7 @@ let PopperIndex = 0;
 @Component({
 	components: {
 		VPopover: mod.VPopover,
-		AppScrollInviewParent,
+		AppScrollScroller,
 	},
 })
 export class AppPopper extends Vue {
@@ -29,11 +29,28 @@ export class AppPopper extends Vue {
 	@Prop({ type: String, default: 'click' })
 	trigger!: 'click' | 'hover' | 'manual';
 
+	/**
+	 * By default the popper will stay on the page until the user clicks outside
+	 * of the popper. This tells the popper to close anytime the state changes.
+	 * Useful for poppers in the shell that link to other pages on the site.
+	 */
 	@Prop(Boolean)
 	hideOnStateChange?: boolean;
 
+	/**
+	 * Whether or not the popper should size itself to the same width as the
+	 * trigger. Useful for poppers that work like "select" type controls.
+	 */
 	@Prop(Boolean)
 	trackTriggerWidth?: boolean;
+
+	/**
+	 * Whether or not the popper should take up the full max width instead of
+	 * relying on its content to size itself. Useful for poppers that change the
+	 * content dynamically and you want it to stay one consistent size.
+	 */
+	@Prop(Boolean)
+	forceMaxWidth?: boolean;
 
 	@Prop()
 	delay?: any;
@@ -55,6 +72,7 @@ export class AppPopper extends Vue {
 
 	$refs!: {
 		popover: any;
+		scroller: AppScrollScroller;
 	};
 
 	isVisible = false;
@@ -74,9 +92,12 @@ export class AppPopper extends Vue {
 	}
 
 	get popoverInnerClass() {
-		let classes = ['popper-content', 'scrollable', 'overlay-scrollbar'];
+		let classes = ['popper-content'];
 		if (this.trackTriggerWidth) {
 			classes.push('-track-trigger-width');
+		}
+		if (this.forceMaxWidth) {
+			classes.push('-force-max-width');
 		}
 		return classes.join(' ');
 	}
