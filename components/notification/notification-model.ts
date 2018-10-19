@@ -130,6 +130,10 @@ export class Notification extends Model {
 			this.from_model = new User(data.from_resource_model);
 		}
 
+		if (!this.viewed_on) {
+			this.viewed_on = null;
+		}
+
 		if (data.to_resource === 'Game') {
 			this.to_model = new Game(data.to_resource_model);
 		} else if (data.to_resource === 'User') {
