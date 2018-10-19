@@ -1,13 +1,13 @@
-export function objectEquals(a: any, b: any) {
-	const aProps = Object.getOwnPropertyNames(a);
-	const bProps = Object.getOwnPropertyNames(b);
+export function objectEquals(a: object, b: object) {
+	const aProps = Object.getOwnPropertyNames(a).filter(i => a.propertyIsEnumerable(i));
+	const bProps = Object.getOwnPropertyNames(b).filter(i => b.propertyIsEnumerable(i));
 
 	if (aProps.length !== bProps.length) {
 		return false;
 	}
 
 	for (const propName of aProps) {
-		if (a[propName] !== b[propName]) {
+		if ((a as any)[propName] !== (b as any)[propName]) {
 			return false;
 		}
 	}
