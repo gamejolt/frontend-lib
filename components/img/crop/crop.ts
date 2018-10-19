@@ -16,22 +16,31 @@ interface CropData {
 export class AppImgCrop extends Vue {
 	@Prop(String)
 	src!: string;
+
 	@Prop(Object)
 	value?: CropData;
+
 	@Prop(Number)
 	aspectRatio?: number;
+
 	@Prop(Number)
 	minAspectRatio?: number;
+
 	@Prop(Number)
 	maxAspectRatio?: number;
+
 	@Prop(Number)
 	minWidth?: number;
+
 	@Prop(Number)
 	minHeight?: number;
+
 	@Prop(Number)
 	maxWidth?: number;
+
 	@Prop(Number)
 	maxHeight?: number;
+
 	@Prop(Boolean)
 	disabled?: boolean;
 
@@ -53,6 +62,32 @@ export class AppImgCrop extends Vue {
 			zoomable: false,
 			autoCropArea: 1,
 			checkCrossOrigin: false,
+			ready: () => {
+				if (this.disabled) {
+					this.onDisabledChange();
+				}
+
+				if (this.value) {
+					this.onValueChange();
+				}
+
+				// If the aspect ratio is outside a set min/max aspect ratio, resize the crop box.
+				if (this.minAspectRatio && this.maxAspectRatio && !this.aspectRatio) {
+					const containerData = this.cropper.getContainerData();
+					const cropBoxData = this.cropper.getCropBoxData();
+					const aspectRatio = cropBoxData.width / cropBoxData.height;
+
+					if (aspectRatio < this.minAspectRatio || aspectRatio > this.maxAspectRatio) {
+						const newCropBoxWidth =
+							cropBoxData.height * ((this.minAspectRatio + this.maxAspectRatio) / 2);
+
+						this.cropper.setCropBoxData({
+							left: (containerData.width - newCropBoxWidth) / 2,
+							width: newCropBoxWidth,
+						});
+					}
+				}
+			},
 			crop: e => {
 				// Have to do it like this since the cropper doesn't allow
 				// img-relative minimums.
@@ -109,40 +144,10 @@ export class AppImgCrop extends Vue {
 						return;
 					}
 				}
-
-				const crop = this.fixCrop({
-					x: e.detail.x,
-					y: e.detail.y,
-					x2: e.detail.x + e.detail.width,
-					y2: e.detail.y + e.detail.height,
-				});
-				this.$emit('input', crop as CropData);
 			},
-			ready: () => {
-				if (this.disabled) {
-					this.onDisabledChange();
-				}
-
-				if (this.value) {
-					this.onValueChange();
-				}
-
-				// If the aspect ratio is outside a set min/max aspect ratio, resize the crop box.
-				if (this.minAspectRatio && this.maxAspectRatio && !this.aspectRatio) {
-					const containerData = this.cropper.getContainerData();
-					const cropBoxData = this.cropper.getCropBoxData();
-					const aspectRatio = cropBoxData.width / cropBoxData.height;
-
-					if (aspectRatio < this.minAspectRatio || aspectRatio > this.maxAspectRatio) {
-						const newCropBoxWidth =
-							cropBoxData.height * ((this.minAspectRatio + this.maxAspectRatio) / 2);
-
-						this.cropper.setCropBoxData({
-							left: (containerData.width - newCropBoxWidth) / 2,
-							width: newCropBoxWidth,
-						});
-					}
-				}
+			cropend: () => {
+				const crop = this.getCropperDataAsCropData();
+				this.$emit('input', crop);
 			},
 		});
 	}
@@ -170,6 +175,11 @@ export class AppImgCrop extends Vue {
 		}
 	}
 
+	/**
+	 * This gets called when bootstrapping the component with data, and when
+	 * input changes. When this runs, it'll pass through the "crop()" callback
+	 * above still for further processing..
+	 */
 	@Watch('value')
 	onValueChange() {
 		if (this.value) {
@@ -187,13 +197,22 @@ export class AppImgCrop extends Vue {
 		}
 	}
 
-	// Due to rounding errors introduced by scaling down the image in the cropper,
-	// the crop needs to be rounded to full pixels and consider min/max width/height.
-	fixCrop(crop: CropData): CropData {
-		crop.x = Math.round(crop.x);
-		crop.x2 = Math.round(crop.x2);
-		crop.y = Math.round(crop.y);
-		crop.y2 = Math.round(crop.y2);
+	/**
+	 * Returns the cropper data in the format we expect this crop component to
+	 * work with.
+	 */
+	private getCropperDataAsCropData(): CropData {
+		const cropperData = this.cropper.getData();
+
+		// Due to rounding errors introduced by scaling down the image in the
+		// cropper, the crop needs to be rounded to full pixels and consider
+		// min/max width/height before returning the data.
+		const crop = {
+			x: Math.round(cropperData.x),
+			y: Math.round(cropperData.y),
+			x2: Math.round(cropperData.x + cropperData.width),
+			y2: Math.round(cropperData.y + cropperData.height),
+		};
 
 		const rect = {
 			x: crop.x,
