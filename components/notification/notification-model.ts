@@ -375,7 +375,23 @@ function getTranslationValues(notification: Notification) {
 	};
 }
 
-export function getNotificationText(notification: Notification) {
+/**
+ * @param plaintext You can set this to `true` to return strings without any
+ * HTML.
+ */
+export function getNotificationText(notification: Notification, plaintext = false) {
+	// Super hack time!
+	function _process(text: string) {
+		if (plaintext) {
+			return text
+				.replace(/<em>/g, '')
+				.replace(/<\/em>/g, '')
+				.replace(/<b>/g, '')
+				.replace(/<\/b>/g, '');
+		}
+		return text;
+	}
+
 	switch (notification.type) {
 		case Notification.TYPE_POST_ADD: {
 			let gameTitle = '';
@@ -399,51 +415,65 @@ export function getNotificationText(notification: Notification) {
 		}
 
 		case Notification.TYPE_COMMENT_ADD_OBJECT_OWNER: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> commented on <b>%{ object }</b>.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> commented on <b>%{ object }</b>.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
 		case Notification.TYPE_COMMENT_ADD: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> replied to your comment on <b>%{ object }</b>.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> replied to your comment on <b>%{ object }</b>.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
 		case Notification.TYPE_FORUM_POST_ADD: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> posted a new forum post to <b>%{ object }</b>.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> posted a new forum post to <b>%{ object }</b>.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
 		case Notification.TYPE_FRIENDSHIP_REQUEST: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> sent you a friend request.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> sent you a friend request.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
 		case Notification.TYPE_FRIENDSHIP_ACCEPT: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> accepted your friend request.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> accepted your friend request.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
 		case Notification.TYPE_GAME_RATING_ADD: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> liked <b>%{ object }</b>.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> liked <b>%{ object }</b>.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
 		case Notification.TYPE_GAME_FOLLOW: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> followed <b>%{ object }</b>.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> followed <b>%{ object }</b>.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
@@ -456,23 +486,29 @@ export function getNotificationText(notification: Notification) {
 				subject: getSubjectTranslationValue(notification),
 			};
 
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> bought a package in <b>%{ object }</b> for %{ amount }.`,
-				translationValues
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> bought a package in <b>%{ object }</b> for %{ amount }.`,
+					translationValues
+				)
 			);
 		}
 
 		case Notification.TYPE_USER_FOLLOW: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> followed you.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> followed you.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
 		case Notification.TYPE_COLLABORATOR_INVITE: {
-			return Translate.$gettextInterpolate(
-				`<em>%{ subject }</em> invited you to collaborate on <b>%{ object }</b>.`,
-				getTranslationValues(notification)
+			return _process(
+				Translate.$gettextInterpolate(
+					`<em>%{ subject }</em> invited you to collaborate on <b>%{ object }</b>.`,
+					getTranslationValues(notification)
+				)
 			);
 		}
 
@@ -482,59 +518,71 @@ export function getNotificationText(notification: Notification) {
 			switch (mention.resource) {
 				case 'Comment': {
 					if (notification.to_model instanceof Game) {
-						return Translate.$gettextInterpolate(
-							`<em>%{ subject }</em> mentioned you in a comment on the game <b>%{ object }</b>.`,
-							{
-								object: notification.to_model.title,
-								subject: getSubjectTranslationValue(notification),
-							}
+						return _process(
+							Translate.$gettextInterpolate(
+								`<em>%{ subject }</em> mentioned you in a comment on the game <b>%{ object }</b>.`,
+								{
+									object: notification.to_model.title,
+									subject: getSubjectTranslationValue(notification),
+								}
+							)
 						);
 					} else if (notification.to_model instanceof FiresidePost) {
-						return Translate.$gettextInterpolate(
-							`<em>%{ subject }</em> mentioned you in a comment on the post <b>%{ object }</b>.`,
-							{
-								object: notification.to_model.lead_snippet,
-								subject: getSubjectTranslationValue(notification),
-							}
+						return _process(
+							Translate.$gettextInterpolate(
+								`<em>%{ subject }</em> mentioned you in a comment on the post <b>%{ object }</b>.`,
+								{
+									object: notification.to_model.lead_snippet,
+									subject: getSubjectTranslationValue(notification),
+								}
+							)
 						);
 					}
 					break;
 				}
 
 				case 'Game': {
-					return Translate.$gettextInterpolate(
-						`<em>%{ subject }</em> mentioned you in the game <b>%{ object }</b>.`,
-						{
-							object: (notification.to_model as Game).title,
-							subject: getSubjectTranslationValue(notification),
-						}
+					return _process(
+						Translate.$gettextInterpolate(
+							`<em>%{ subject }</em> mentioned you in the game <b>%{ object }</b>.`,
+							{
+								object: (notification.to_model as Game).title,
+								subject: getSubjectTranslationValue(notification),
+							}
+						)
 					);
 				}
 
 				case 'User': {
-					return Translate.$gettextInterpolate(
-						`<em>%{ subject }</em> mentioned you in their user bio.`,
-						getTranslationValues(notification)
+					return _process(
+						Translate.$gettextInterpolate(
+							`<em>%{ subject }</em> mentioned you in their user bio.`,
+							getTranslationValues(notification)
+						)
 					);
 				}
 
 				case 'Fireside_Post': {
-					return Translate.$gettextInterpolate(
-						`<em>%{ subject }</em> mentioned you in the post <b>%{ object }</b>.`,
-						{
-							object: (notification.to_model as FiresidePost).lead_snippet,
-							subject: getSubjectTranslationValue(notification),
-						}
+					return _process(
+						Translate.$gettextInterpolate(
+							`<em>%{ subject }</em> mentioned you in the post <b>%{ object }</b>.`,
+							{
+								object: (notification.to_model as FiresidePost).lead_snippet,
+								subject: getSubjectTranslationValue(notification),
+							}
+						)
 					);
 				}
 
 				case 'Forum_Post': {
-					return Translate.$gettextInterpolate(
-						`<em>%{ subject }</em> mentioned you in a forum post to <b>%{ object }</b>.`,
-						{
-							object: (notification.to_model as ForumTopic).title,
-							subject: getSubjectTranslationValue(notification),
-						}
+					return _process(
+						Translate.$gettextInterpolate(
+							`<em>%{ subject }</em> mentioned you in a forum post to <b>%{ object }</b>.`,
+							{
+								object: (notification.to_model as ForumTopic).title,
+								subject: getSubjectTranslationValue(notification),
+							}
+						)
 					);
 				}
 
