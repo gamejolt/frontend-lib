@@ -28,7 +28,7 @@ export class AppScrollScroller extends Vue {
 	@Prop(Number)
 	inviewVelocity?: number;
 
-	isMounted = false;
+	isMounted = GJ_IS_SSR;
 
 	// No watching.
 	_simplebar?: SimpleBar;
