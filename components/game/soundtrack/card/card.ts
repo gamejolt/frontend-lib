@@ -1,18 +1,18 @@
+import View from '!view!./card.html';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./card.html';
-
+import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import { number } from '../../../../vue/filters/number';
+import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppAudioPlaylist } from '../../../audio/playlist/playlist';
+import { AppCard } from '../../../card/card';
+import { Environment } from '../../../environment/environment.service';
+import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
+import { Navigate } from '../../../navigate/navigate.service';
+import { Screen } from '../../../screen/screen-service';
 import { Game } from '../../game.model';
 import { GameSong } from '../../song/song.model';
-import { Screen } from '../../../screen/screen-service';
-import { Environment } from '../../../environment/environment.service';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
-import { AppAudioPlaylist } from '../../../audio/playlist/playlist';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
-import { AppCard } from '../../../card/card';
-import { number } from '../../../../vue/filters/number';
-import { Navigate } from '../../../navigate/navigate.service';
+
 
 @View
 @Component({
@@ -29,6 +29,7 @@ import { Navigate } from '../../../navigate/navigate.service';
 export class AppGameSoundtrackCard extends Vue {
 	@Prop(Game)
 	game!: Game;
+
 	@Prop(Array)
 	songs!: GameSong[];
 

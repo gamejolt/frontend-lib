@@ -1,17 +1,28 @@
 import Vue, { CreateElement } from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
-
+import { Component, Emit, Prop, Watch } from 'vue-property-decorator';
 import { GameSong } from '../../game/song/song.model';
+
+interface DurationPayload {
+	currentTime: number;
+	duration: number;
+}
 
 @Component({})
 export class AppAudioPlayer extends Vue {
-	@Prop(GameSong) song!: GameSong;
+	@Prop(GameSong)
+	song!: GameSong;
 
 	$el!: HTMLAudioElement;
 
 	src = '';
 
 	private timer?: NodeJS.Timer;
+
+	@Emit('end')
+	emitEnd() {}
+
+	@Emit('duration')
+	emitDuration(_payload: DurationPayload) {}
 
 	@Watch('song.url')
 	onChanged() {
@@ -52,7 +63,7 @@ export class AppAudioPlayer extends Vue {
 		this.clearWatcher();
 
 		if (sendEvent && this.onSongEnded) {
-			this.$emit('end');
+			this.emitEnd();
 		}
 	}
 
@@ -61,7 +72,7 @@ export class AppAudioPlayer extends Vue {
 			if (this.$el.ended) {
 				this.onSongEnded(true);
 			} else {
-				this.$emit('duration', {
+				this.emitDuration({
 					currentTime: this.$el.currentTime,
 					duration: this.$el.duration,
 				});

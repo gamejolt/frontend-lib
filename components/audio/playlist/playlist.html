@@ -1,6 +1,6 @@
 <div>
 
-	<div class="audio-playlist-player clearfix">
+	<div class="-player clearfix">
 
 		<app-audio-player
 			v-if="currentSong"
@@ -11,58 +11,71 @@
 			/>
 
 		<app-button
-			class="audio-playlist-player-play"
+			class="-player-play"
 			sparse
-			trans
-			:icon="currentSong ? 'stop' : 'play'"
+			:icon="currentSong ? 'pause' : 'play'"
 			@click="mainSongButton"
 			v-app-track-event="`audio-playlist:click:button`"
 			/>
 
-		<div class="audio-playlist-player-track-info">
-			<span class="audio-playlist-player-title">
-				{{ currentSong ? currentSong.title : songs[0].title }}
-			</span>
+		<div class="-player-title">
+			{{ songTitle }}
+		</div>
 
-			<transition mode="out-in">
-				<span class="audio-playlist-player-playtime text-muted anim-fade-enter anim-fade-leave"
+		<div class="-scrubber">
+			<app-audio-scrubber
+				class="-scrubber-component"
+				:duration="duration"
+				:current-time="currentTime"
+				@seek="seek"
+				/>
+
+			<!--
+				We add a placeholder just so that it takes up the same height.
+			-->
+			<div class="-scrubber-playtime">
+				<span
 					v-if="currentTime && duration"
+					key="duration"
+					class="text-muted"
 					>
 					{{ (currentTime || 0) | time }}
 					/
 					{{ (duration || 0) | time }}
 				</span>
-			</transition>
+				<span
+					v-else
+					key="placeholder"
+					>
+					&nbsp;
+				</span>
+			</div>
 		</div>
-
-		<app-audio-scrubber
-			:duration="duration"
-			:current-time="currentTime"
-			@seek="seek"
-			/>
 	</div>
 
-	<ul class="audio-playlist list-unstyled">
+	<ul class="-playlist list-unstyled">
 		<li
+			class="-playlist-item"
 			v-for="( song, i ) of songs"
 			:key="song.id"
 			:class="{ active: currentSong && song.id === currentSong.id }"
 			>
-			<span class="audio-playlist-play">
+			<span class="-playlist-play">
 				<app-button
 					sparse
 					trans
 					sm
-					:icon="currentSong && song.id === currentSong.id ? 'stop' : 'play-small'"
+					:icon="currentSong && song.id === currentSong.id ? 'pause' : 'play-small'"
 					@click="toggleSong( song )"
 					v-app-track-event="`audio-playlist:click:icon`"
 					/>
 			</span>
-			<span class="audio-playlist-number text-muted">
+			<span class="-playlist-number text-muted">
 				{{ (i + 1) }}.
 			</span>
 			<a
-				class="audio-playlist-song-title link-unstyled"
+				class="-playlist-title link-unstyled"
+				:title="song.title"
 				@click="toggleSong( song )"
 				v-app-track-event="`audio-playlist:click:title`"
 				>
