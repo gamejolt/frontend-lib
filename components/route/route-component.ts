@@ -156,7 +156,6 @@ export function RouteResolver(options: RouteResolverOptions = {}) {
 					// component, so it's pointless to do things here.
 					// Instead we do it in the component created() func.
 					if (GJ_IS_SSR) {
-						console.log('NEXT CALLED');
 						return;
 					}
 
