@@ -1,6 +1,6 @@
+import { LinkedKey } from '../linked-key/linked-key.model';
 import { Model } from '../model/model.service';
 import { SellablePricing } from './pricing/pricing.model';
-import { LinkedKey } from '../linked-key/linked-key.model';
 
 export class Sellable extends Model {
 	static readonly TYPE_FREE = 'free';
@@ -14,6 +14,7 @@ export class Sellable extends Model {
 	description!: string;
 	pricings: SellablePricing[] = [];
 	is_owned?: boolean;
+	linked_key_providers: string[] = [];
 
 	// keys settings
 	linked_keys?: LinkedKey[];
@@ -29,6 +30,11 @@ export class Sellable extends Model {
 
 		if (data.linked_keys) {
 			this.linked_keys = LinkedKey.populate(data.linked_keys);
+		}
+
+		if (data.linked_key_providers) {
+			// Just an array of strings.
+			this.linked_key_providers = data.linked_key_providers || [];
 		}
 	}
 }

@@ -102,7 +102,7 @@ export class AppGamePackageCard extends Vue {
 	}
 
 	get card() {
-		return new GamePackageCardModel(this.releases, this.builds, this.linkedKeys);
+		return new GamePackageCardModel(this.sellable, this.releases, this.builds, this.linkedKeys);
 	}
 
 	get isOwned() {
