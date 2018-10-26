@@ -94,8 +94,7 @@
 			@expand="showFullDescription = true"
 			>
 
-			<!--TODO: This used to link-->
-			<div v-html="package.description"></div>
+			<div v-html="package.description" />
 
 		</app-fade-collapse>
 
@@ -103,8 +102,14 @@
 			v-if="canToggleDescription"
 			@click="showFullDescription = !showFullDescription"
 			v-app-track-event="`game-package-card:show-full-description`"
-			>
-		</a>
+			/>
+	</div>
+
+	<div class="card-content" v-if="!isOwned && card.hasSteamKey">
+		<p>
+			<app-jolticon icon="steam" />
+			<translate>You will also get a Steam key with this purchase.</translate>
+		</p>
 	</div>
 
 	<template v-if="!card.showcasedRelease">
@@ -113,7 +118,6 @@
 			<translate>No published releases yet.</translate>
 		</div>
 	</template>
-
 	<div class="card-controls" v-else>
 
 		<template v-if="sellable.type !== 'paid' || isOwned || isPartner">
@@ -204,6 +208,10 @@
 					</template>
 				</span>
 
+			</div>
+
+			<div v-if="card.hasSteamKey">
+				<translate>1 Steam key</translate>
 			</div>
 
 			<br>
