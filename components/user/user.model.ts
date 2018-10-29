@@ -38,6 +38,7 @@ export class User extends Model {
 	theme!: Theme | null;
 	follower_count!: number;
 	following_count!: number;
+	comment_count!: number;
 	is_following?: boolean;
 
 	// Manage linked accounts settings - fb is only returned in the profile pages
