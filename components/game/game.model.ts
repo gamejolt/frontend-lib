@@ -123,10 +123,8 @@ export class Game extends Model {
 	tigrs_gambling?: number;
 
 	// Description settings
-	description?: string;
 	description_markdown?: string;
 	description_compiled?: string;
-	has_compiled_description?: boolean;
 
 	// Manage settings
 	ads_enabled?: boolean;
