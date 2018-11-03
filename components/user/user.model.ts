@@ -17,6 +17,7 @@ export class User extends Model {
 	slug!: string;
 	img_avatar!: string;
 	dogtag!: string;
+	shouts_enabled!: boolean;
 
 	status!: number;
 	permission_level!: number;
