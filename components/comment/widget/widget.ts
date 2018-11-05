@@ -22,6 +22,11 @@ import {
 	CommentStore,
 	CommentStoreModel,
 } from '../comment-store';
+import {
+	CommentStoreSliceView,
+	CommentStoreThreadView,
+	CommentStoreView,
+} from '../comment-store-view';
 import { AppCommentWidgetComment } from './comment/comment';
 
 let incrementer = 0;
@@ -55,6 +60,15 @@ export class AppCommentWidget extends Vue {
 	@Prop(Boolean)
 	autofocus?: boolean;
 
+	@Prop(Number)
+	parentCommentId?: number;
+
+	@Prop({ type: Boolean, default: true })
+	showAdd!: boolean;
+
+	@Prop({ type: Boolean, default: true })
+	showTabs!: boolean;
+
 	@AppState
 	user!: AppStore['user'];
 
@@ -63,6 +77,9 @@ export class AppCommentWidget extends Vue {
 
 	@CommentAction
 	fetchComments!: CommentStore['fetchComments'];
+
+	@CommentAction
+	fetchThread!: CommentStore['fetchThread'];
 
 	@CommentAction
 	lockCommentStore!: CommentStore['lockCommentStore'];
@@ -86,6 +103,7 @@ export class AppCommentWidget extends Vue {
 	onCommentRemove!: CommentStore['onCommentRemove'];
 
 	store: CommentStoreModel | null = null;
+	storeView: CommentStoreView | null = null;
 	id = ++incrementer;
 	hasBootstrapped = false;
 	hasError = false;
@@ -103,11 +121,16 @@ export class AppCommentWidget extends Vue {
 	}
 
 	get shouldShowLoadMore() {
-		return !this.isLoading && this.totalParentCount > this.currentParentCount;
+		return (
+			!this.isLoading && !this.isThreadView && this.totalParentCount > this.currentParentCount
+		);
 	}
 
 	get comments() {
-		return this.store ? this.store.parentComments : [];
+		if (this.storeView && this.store) {
+			return this.storeView.getParents(this.store);
+		}
+		return [];
 	}
 
 	get childComments() {
@@ -123,7 +146,7 @@ export class AppCommentWidget extends Vue {
 	}
 
 	get currentParentCount() {
-		return this.store ? this.store.parentComments.length : 0;
+		return this.comments.length;
 	}
 
 	get currentSort() {
@@ -148,6 +171,19 @@ export class AppCommentWidget extends Vue {
 
 	get showTopSorting() {
 		return this.resource === 'Game';
+	}
+
+	get isThreadView() {
+		return !!this.parentCommentId;
+	}
+
+	get expandChildren() {
+		if (this.isThreadView && this.parentCommentId && this.storeView && this.store) {
+			const parents = this.storeView.getParents(this.store);
+			const parent = parents.find(c => c.id === this.parentCommentId);
+			return !parent;
+		}
+		return false;
 	}
 
 	async created() {
@@ -176,6 +212,12 @@ export class AppCommentWidget extends Vue {
 			this.store = null;
 		}
 
+		if (this.isThreadView && this.parentCommentId) {
+			this.storeView = new CommentStoreThreadView(this.parentCommentId);
+		} else {
+			this.storeView = new CommentStoreSliceView();
+		}
+
 		await this._fetchComments();
 	}
 
@@ -190,13 +232,30 @@ export class AppCommentWidget extends Vue {
 				this.store = await this.lockCommentStore({ resource, resourceId });
 			}
 
-			const payload = await this.fetchComments({ store: this.store, page: this.currentPage });
+			let payload: any;
+			if (this.isThreadView && this.parentCommentId) {
+				payload = await this.fetchThread({
+					store: this.store,
+					parentId: this.parentCommentId,
+				});
+			} else {
+				payload = await this.fetchComments({
+					store: this.store,
+					page: this.currentPage,
+				});
+			}
 
 			this.isLoading = false;
 			this.hasBootstrapped = true;
 			this.hasError = false;
 			this.resourceOwner = new User(payload.resourceOwner);
 			this.perPage = payload.perPage || 10;
+
+			// Display all loaded comments.
+			if (this.storeView instanceof CommentStoreSliceView) {
+				const ids = (payload.comments as any[]).map(o => o.id as number);
+				this.storeView.registerIds(ids);
+			}
 
 			this.collaborators = payload.collaborators
 				? GameCollaborator.populate(payload.collaborators)

@@ -1,0 +1,38 @@
+<app-modal>
+
+	<div class="modal-controls">
+		<app-button @click="modal.dismiss()">
+			<translate>Close</translate>
+		</app-button>
+	</div>
+
+	<div v-if="username" class="modal-header">
+		<h2 class="modal-title">
+			<translate :translate-params="{ username: username }">
+				Comment by @%{ username }
+			</translate>
+		</h2>
+	</div>
+
+	<div class="modal-body">
+
+		<app-comment-widget
+			:resource="resource"
+			:resource-id="resourceId"
+			:parent-comment-id="commentId"
+			:show-tabs="false"
+			:show-add="false"
+			@remove="onRemove"
+			/>
+
+		<form-comment
+			v-if="parent"
+			:resource="resource"
+			:resource-id="resourceId"
+			:parent-id="parent.id"
+			@submit="_onCommentAdd"
+			/>
+
+	</div>
+
+</app-modal>

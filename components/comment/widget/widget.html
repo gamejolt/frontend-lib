@@ -6,22 +6,24 @@
 		<translate>Couldn't fetch comments.</translate>
 	</div>
 	<div v-else-if="hasBootstrapped">
-		<app-message-thread-add
-			v-if="user"
-			hide-message-split
-			>
-			<form-comment
-				:resource="resource"
-				:resource-id="resourceId"
-				:autofocus="autofocus"
-				@submit="_onCommentAdd"
-				/>
-		</app-message-thread-add>
-		<div v-else class="alert">
-			<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
-		</div>
+		<template v-if="showAdd">
+			<app-message-thread-add
+				v-if="user"
+				hide-message-split
+				>
+				<form-comment
+					:resource="resource"
+					:resource-id="resourceId"
+					:autofocus="autofocus"
+					@submit="_onCommentAdd"
+					/>
+			</app-message-thread-add>
+			<div v-else class="alert">
+				<p>You must be <a v-app-auth-required :href="loginUrl">logged in</a> to Game Jolt to post a comment.</p>
+			</div>
+		</template>
 
-		<div>
+		<div v-if="showTabs">
 			<app-nav-tab-list>
 				<ul>
 					<li>
@@ -56,6 +58,8 @@
 				:resource-id="resourceId"
 				:comment="comment"
 				:children="childComments[ comment.id ]"
+				:expand-children="expandChildren"
+				:hide-reply="isThreadView"
 				/>
 		</app-message-thread>
 

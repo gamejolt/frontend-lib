@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { Action, Mutation, namespace, State } from 'vuex-class';
 import { arrayGroupBy, arrayRemove, numberSort } from '../../utils/array';
 import { VuexAction, VuexGetter, VuexModule, VuexMutation, VuexStore } from '../../utils/vuex';
+import { Api } from '../api/api.service';
 import { Growls } from '../growls/growls.service';
 import { Translate } from '../translate/translate.service';
 import { Comment, fetchComments } from './comment-model';
@@ -16,6 +17,7 @@ export type CommentActions = {
 	'comment/fetchComments': { store: CommentStoreModel; page?: number };
 	'comment/pinComment': { store: CommentStoreModel; comment: Comment };
 	'comment/setSort': { store: CommentStoreModel; sort: string };
+	'comment/fetchThread': { store: CommentStoreModel; parentId: number };
 };
 
 export type CommentMutations = {
@@ -91,6 +93,22 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	}
 
 	@VuexAction
+	async fetchThread(payload: CommentActions['comment/fetchThread']) {
+		const { store, parentId } = payload;
+		const response = await Api.sendRequest(`/comments/get-thread/${parentId}`);
+
+		const parent = new Comment(response.parent);
+		const children = Comment.populate(response.children);
+
+		const comments = children;
+		comments.push(parent);
+
+		this._addComments({ store, comments });
+
+		return response;
+	}
+
+	@VuexAction
 	async fetchComments(payload: CommentActions['comment/fetchComments']) {
 		const { store, page } = payload;
 		let response: any;
@@ -151,9 +169,11 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	private _addComments(payload: { store: CommentStoreModel; comments: Comment[] }) {
 		const { store, comments } = payload;
 		for (const comment of comments) {
-			if (!store.contains(comment)) {
-				store.comments.push(comment);
+			// Remove an old instance of the comment from the store if it already exists.
+			if (store.comments.some(c => c.id === comment.id)) {
+				arrayRemove(store.comments, c => c.id === comment.id);
 			}
+			store.comments.push(comment);
 		}
 	}
 

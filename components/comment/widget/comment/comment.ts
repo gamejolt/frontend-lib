@@ -68,6 +68,10 @@ export class AppCommentWidgetComment extends Vue {
 	resourceId!: number;
 	@Prop(Boolean)
 	isLastInThread?: boolean;
+	@Prop(Boolean)
+	expandChildren?: boolean;
+	@Prop(Boolean)
+	hideReply?: boolean;
 
 	@AppState
 	user!: AppStore['user'];
@@ -84,6 +88,9 @@ export class AppCommentWidgetComment extends Vue {
 
 	created() {
 		this.widget = findRequiredVueParent(this, AppCommentWidget);
+		if (this.expandChildren) {
+			this.isShowingChildren = true;
+		}
 	}
 
 	get isChild() {

@@ -1,21 +1,32 @@
+import { Comment } from './comment-model';
 import { CommentStoreModel } from './comment-store';
-// Acts as a view on the comment store model.
-// It can either pull a certain amount of comments from the start or a specific thread (parent + children)
-export class CommentStoreView {
-	private pageSize?: number;
-	private parentCommentId?: number;
 
-	public static getSliceView(pageSize: number) {
-		const view = new CommentStoreView();
-		view.pageSize = pageSize;
-		return view;
+export interface CommentStoreView {
+	getParents(storeModel: CommentStoreModel): Comment[];
+}
+
+export class CommentStoreSliceView implements CommentStoreView {
+	private _commentIds: number[] = [];
+
+	public registerIds(ids: number[]) {
+		this._commentIds.push(...ids);
 	}
 
-	public static getThreadView(parentCommentId: number) {
-		const view = new CommentStoreView();
-		view.parentCommentId = parentCommentId;
-		return view;
+	public getParents(storeModel: CommentStoreModel) {
+		return storeModel.parentComments.filter(c => this._commentIds.indexOf(c.id) !== -1);
+	}
+}
+
+export class CommentStoreThreadView implements CommentStoreView {
+	public constructor(public parentCommentId: number) {}
+
+	public getParents(storeModel: CommentStoreModel) {
+		const parent = storeModel.parentComments.find(c => c.id === this.parentCommentId);
+		return parent ? [parent] : [];
 	}
 
-	public getComments(storeModel: CommentStoreModel) {}
+	public getChildren(storeModel: CommentStoreModel) {
+		const children = storeModel.childComments;
+		return children[this.parentCommentId];
+	}
 }

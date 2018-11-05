@@ -113,7 +113,7 @@
 
 			<app-comment-controls
 				:comment="comment"
-				show-reply
+				:show-reply="!hideReply"
 				/>
 
 			<app-button
@@ -149,6 +149,7 @@
 			:resource-id="resourceId"
 			:comment="child"
 			:parent="comment"
+			:hide-reply="hideReply"
 			:is-last-in-thread="i === children.length - 1"
 			/>
 
