@@ -22,8 +22,10 @@ import { CommentVote } from '../vote/vote-model';
 	},
 })
 export class AppCommentControls extends Vue {
-	@Prop(Comment) comment!: Comment;
-	@Prop(Boolean) showReply?: boolean;
+	@Prop(Comment)
+	comment!: Comment;
+	@Prop(Boolean)
+	showReply?: boolean;
 
 	get votingTooltip() {
 		const userHasVoted = !!this.comment.user_vote;
