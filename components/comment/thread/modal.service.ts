@@ -9,7 +9,7 @@ interface CommentThreadModalOptions {
 }
 
 export class CommentThreadModal {
-	private static async show(options: CommentThreadModalOptions) {
+	static async show(options: CommentThreadModalOptions) {
 		const { resource, resourceId, commentId } = options;
 
 		return await Modal.show<void>({

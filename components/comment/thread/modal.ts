@@ -4,8 +4,10 @@ import {
 	CommentStore,
 } from 'game-jolt-frontend-lib/components/comment/comment-store';
 import { BaseModal } from 'game-jolt-frontend-lib/components/modal/base';
+import { AppState, AppStore } from 'game-jolt-frontend-lib/vue/services/app/app-store';
 import { Component, Prop } from 'vue-property-decorator';
 import { Analytics } from '../../analytics/analytics.service';
+import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { FormComment } from '../add/add';
 import { Comment } from '../comment-model';
 import { CommentMutation } from '../comment-store';
@@ -16,6 +18,7 @@ import { AppCommentWidget } from '../widget/widget';
 	components: {
 		AppCommentWidget,
 		FormComment,
+		AppMessageThreadAdd,
 	},
 })
 export default class AppCommentThreadModal extends BaseModal {
@@ -25,6 +28,9 @@ export default class AppCommentThreadModal extends BaseModal {
 	resource!: string;
 	@Prop(Number)
 	resourceId!: number;
+
+	@AppState
+	user!: AppStore['user'];
 
 	@CommentState
 	getCommentStore!: CommentStore['getCommentStore'];

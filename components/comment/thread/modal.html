@@ -24,14 +24,18 @@
 			:show-add="false"
 			@remove="onRemove"
 			/>
-
-		<form-comment
-			v-if="parent"
-			:resource="resource"
-			:resource-id="resourceId"
-			:parent-id="parent.id"
-			@submit="_onCommentAdd"
-			/>
+		<app-message-thread-add
+			v-if="user"
+			hide-message-split
+			>
+			<form-comment
+				v-if="parent"
+				:resource="resource"
+				:resource-id="resourceId"
+				:parent-id="parent.id"
+				@submit="_onCommentAdd"
+				/>
+		</app-message-thread-add>
 
 	</div>
 
