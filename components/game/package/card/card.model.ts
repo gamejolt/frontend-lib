@@ -1,8 +1,9 @@
+import { Sellable } from 'game-jolt-frontend-lib/components/sellable/sellable.model';
+import { arrayUnique } from '../../../../utils/array';
+import { Device } from '../../../device/device.service';
+import { LinkedKey } from '../../../linked-key/linked-key.model';
 import { GameBuild } from '../../build/build.model';
 import { GameRelease } from '../../release/release.model';
-import { Device } from '../../../device/device.service';
-import { arrayUnique } from '../../../../utils/array';
-import { LinkedKey } from '../../../linked-key/linked-key.model';
 
 interface ExtraBuild {
 	type: string;
@@ -25,7 +26,16 @@ export class GamePackageCardModel {
 	otherOnly = false;
 	linkedKeys: LinkedKey[] = [];
 
-	constructor(releases: GameRelease[], builds: GameBuild[], linkedKeys?: LinkedKey[]) {
+	get hasSteamKey() {
+		return this.platformSupport.indexOf('steam') !== -1;
+	}
+
+	constructor(
+		sellable: Sellable,
+		releases: GameRelease[],
+		builds: GameBuild[],
+		linkedKeys?: LinkedKey[]
+	) {
 		if (builds) {
 			const os = Device.os();
 			const arch = Device.arch();
@@ -52,6 +62,10 @@ export class GamePackageCardModel {
 				}
 			});
 
+			for (const provider of sellable.linked_key_providers) {
+				this.platformSupport.push(provider);
+			}
+
 			this.platformSupport = arrayUnique(this.platformSupport);
 
 			// At this point we should have all the OS/browser support, so let's sort it.
@@ -67,7 +81,14 @@ export class GamePackageCardModel {
 			// Now that we have all the builds indexed by the platform they support
 			// we need to try to pick one to showcase as the default download. We put
 			// their detected OS first so that it tries to pick that one first.
-			let checkDownloadables = ['windows', 'windows_64', 'mac', 'mac_64', 'linux', 'linux_64'];
+			let checkDownloadables = [
+				'windows',
+				'windows_64',
+				'mac',
+				'mac_64',
+				'linux',
+				'linux_64',
+			];
 
 			// This will put the 64 bit version as higher priority.
 			if (arch === '64') {
@@ -111,7 +132,8 @@ export class GamePackageCardModel {
 			// Lower sort value is a "newer" version.
 			if (
 				this.browserBuild &&
-				(!this.showcasedRelease || this.browserBuild._release!.sort < this.showcasedRelease.sort)
+				(!this.showcasedRelease ||
+					this.browserBuild._release!.sort < this.showcasedRelease.sort)
 			) {
 				this.showcasedRelease = this.browserBuild._release || null;
 			}
@@ -171,7 +193,8 @@ export class GamePackageCardModel {
 			if (this.extraBuilds.length) {
 				this.extraBuilds.sort((a, b) => {
 					return (
-						this.platformSupportInfo[a.platform].sort - this.platformSupportInfo[b.platform].sort
+						this.platformSupportInfo[a.platform].sort -
+						this.platformSupportInfo[b.platform].sort
 					);
 				});
 			}

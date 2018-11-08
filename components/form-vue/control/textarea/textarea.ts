@@ -1,13 +1,14 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./textarea.html';
-
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import { BaseFormControl } from '../base';
 
 @View
 @Component({})
 export class AppFormControlTextarea extends BaseFormControl {
-	@Prop(Array) validateOn!: string[];
-	@Prop(Number) validateDelay!: number;
+	@Prop(Array)
+	validateOn!: string[];
+	@Prop(Number)
+	validateDelay!: number;
 
 	controlVal = '';
 
@@ -20,4 +21,7 @@ export class AppFormControlTextarea extends BaseFormControl {
 	onChange(value: string) {
 		this.applyValue(value);
 	}
+
+	@Emit('paste')
+	emitPaste(_event: ClipboardEvent) {}
 }

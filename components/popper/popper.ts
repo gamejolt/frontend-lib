@@ -109,6 +109,7 @@ export class AppPopper extends Vue {
 	destroyed() {
 		Popper.deregisterPopper(this);
 		this.clearHideTimeout();
+		this.removeBackdrop();
 	}
 
 	hide() {
@@ -138,15 +139,22 @@ export class AppPopper extends Vue {
 			this.width = '';
 		}
 
-		if (Screen.isXs && !this.mobileBackdrop) {
-			this.mobileBackdrop = Backdrop.push({ className: 'popper-backdrop' });
-		}
+		this.addBackdrop();
 	}
 
 	onHide() {
 		this.clearHideTimeout();
 		this.hideTimeout = setTimeout(() => this.hideDone(), TransitionTime);
+		this.removeBackdrop();
+	}
 
+	private addBackdrop() {
+		if (Screen.isXs && !this.mobileBackdrop) {
+			this.mobileBackdrop = Backdrop.push({ className: 'popper-backdrop' });
+		}
+	}
+
+	private removeBackdrop() {
 		if (Screen.isXs && this.mobileBackdrop) {
 			Backdrop.remove(this.mobileBackdrop);
 			this.mobileBackdrop = null;

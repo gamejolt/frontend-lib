@@ -1,4 +1,5 @@
 import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
+import { RawLocation } from 'vue-router';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
 import { Game } from '../../game/game.model';
@@ -183,6 +184,27 @@ export class FiresidePost extends Model {
 	async fetchLikes(): Promise<FiresidePostLike[]> {
 		const response = await Api.sendRequest(`/web/posts/likes/${this.id}`);
 		return FiresidePostLike.populate(response.likes);
+	}
+
+	get routeLocation(): RawLocation {
+		if (this.game) {
+			return {
+				name: 'discover.games.view.devlog.view',
+				params: {
+					slug: this.game.slug,
+					id: this.game.id + '',
+					postSlug: this.slug,
+				},
+			};
+		}
+
+		return {
+			name: 'profile.post.view',
+			params: {
+				username: this.user.username,
+				slug: this.slug,
+			},
+		};
 	}
 
 	static async $create(gameId?: number) {
