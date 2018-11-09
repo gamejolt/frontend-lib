@@ -93,12 +93,9 @@ export class Game extends Model {
 	perms?: Perm[];
 
 	// Meta settings
-	category?: string;
-	category_human?: string;
 	creation_tool?: string;
 	creation_tool_other?: string;
 	creation_tool_human?: string;
-	category_slug?: string;
 	web_site?: string;
 	bundle_only?: boolean;
 	ga_tracking_id?: string;
@@ -249,7 +246,6 @@ export class Game extends Model {
 
 		return {
 			id: this.id + '',
-			category: this.category_slug || '',
 			slug: this.slug,
 		};
 	}
