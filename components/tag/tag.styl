@@ -13,6 +13,7 @@
 	white-space: nowrap
 	border-radius: $border-radius-small
 	line-height: 16px // Same size as a jolticon.
+	transition: transform 300ms $ease-out-back
 
 	a&:hover
 		transform: scale(1.1)
@@ -34,9 +35,11 @@
 			vertical-align: baseline
 
 .tag-highlight
-	theme-prop('background-color', 'highlight')
-	theme-prop('color', 'highlight-fg')
+	&, &:hover
+		theme-prop('background-color', 'highlight')
+		theme-prop('color', 'highlight-fg')
 
 .tag-notice
-	theme-prop('background-color', 'notice')
-	theme-prop('color', 'notice-fg')
+	&, &:hover
+		theme-prop('background-color', 'notice')
+		theme-prop('color', 'notice-fg')

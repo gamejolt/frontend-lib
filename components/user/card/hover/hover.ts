@@ -19,13 +19,13 @@ export class AppUserCardHover extends Vue {
 	user?: User;
 
 	@Prop(Boolean)
-	block?: boolean;
+	disabled?: boolean;
 
 	isShowing = false;
 	isLoaded = false;
 
 	get isDisabled() {
-		return Screen.isXs || GJ_IS_CLIENT;
+		return Screen.isXs || GJ_IS_CLIENT || !!this.disabled;
 	}
 
 	get shouldShow() {
@@ -44,7 +44,7 @@ export class AppUserCardHover extends Vue {
 					trigger: 'hover',
 					delay: { show: 500, hide: 0 },
 					openGroup: 'user-card-hover',
-					block: this.block,
+					block: true,
 			  };
 	}
 

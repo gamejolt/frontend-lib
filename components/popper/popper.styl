@@ -18,6 +18,11 @@ $-transition-time = 200ms
 	display: block !important
 	z-index: $zindex-popover
 
+	// We don't want to show the popover stuff at all on SSR, or it breaks
+	// styling since it tries to fit the container into the page.
+	.-ssr &
+		display: none !important
+
 	&-backdrop
 		z-index: $zindex-popover - 1 !important
 
@@ -102,7 +107,12 @@ $-transition-time = 200ms
 		max-width: none
 		min-width: none
 
-	> .button
+	&.-force-max-width
+		min-width: none
+		width: calc(100vw - 10px)
+		max-width: $popover-size
+
+	> nav.pills > ul, > .button
 		margin-bottom: $popover-spacing !important
 
 	> nav.platform-list

@@ -38,6 +38,22 @@ export class MediaItem extends Model {
 
 	post_id?: number;
 
+	get croppedWidth() {
+		const crop = this.getCrop();
+		if (!crop) {
+			return this.width;
+		}
+		return crop.x2 - crop.x;
+	}
+
+	get croppedHeight() {
+		const crop = this.getCrop();
+		if (!crop) {
+			return this.height;
+		}
+		return crop.y2 - crop.y;
+	}
+
 	getDimensions(
 		maxWidth: number | undefined,
 		maxHeight: number | undefined,
@@ -46,8 +62,8 @@ export class MediaItem extends Model {
 		// Simple getter for dimensions.
 		if (!maxWidth && !maxHeight) {
 			return {
-				width: this.width,
-				height: this.height,
+				width: this.croppedWidth,
+				height: this.croppedHeight,
 			};
 		} else if (options && options.force && maxWidth && maxHeight) {
 			// This case is a bit silly, but whatever.
@@ -57,7 +73,7 @@ export class MediaItem extends Model {
 			};
 		}
 
-		const aspectRatio = this.height / this.width;
+		const aspectRatio = this.croppedHeight / this.croppedWidth;
 		let width = 0;
 		let height = 0;
 
@@ -68,7 +84,7 @@ export class MediaItem extends Model {
 		} else {
 			// Setting max for both.
 			if (maxWidth && maxHeight) {
-				width = Math.min(this.width, maxWidth);
+				width = Math.min(this.croppedWidth, maxWidth);
 				height = width * aspectRatio;
 
 				if (height > maxHeight) {
@@ -76,10 +92,10 @@ export class MediaItem extends Model {
 					width = height / aspectRatio;
 				}
 			} else if (maxWidth && !maxHeight) {
-				width = Math.min(this.width, maxWidth);
+				width = Math.min(this.croppedWidth, maxWidth);
 				height = width * aspectRatio;
 			} else if (!maxWidth && maxHeight) {
-				height = Math.min(this.height, maxHeight);
+				height = Math.min(this.croppedHeight, maxHeight);
 				width = height / aspectRatio;
 			}
 		}

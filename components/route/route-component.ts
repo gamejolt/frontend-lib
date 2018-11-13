@@ -17,12 +17,18 @@ const serverComponentState =
 	window.__INITIAL_STATE__ &&
 	window.__INITIAL_STATE__.components;
 
-export interface RouteOptions {
+export interface RouteResolverOptions {
 	lazy?: boolean;
 	cache?: boolean;
 	reloadOnHashChange?: boolean;
 	deps?: { params?: string[]; query?: string[] };
+	resolver?: (data: { route: Route }) => Promise<any>;
+	resolveStore?: (data: { route: Route; payload: any; fromCache: boolean }) => void;
 }
+
+export type RouteStoreResolveCallback = (
+	data: { route: Route; payload: any; fromCache: boolean }
+) => void;
 
 /**
  * Takes 2 objects as input, and returns any keys that are either new, deleted,
@@ -51,29 +57,29 @@ function getChangedProperties(base: { [k: string]: any }, compare: { [k: string]
 	return changed;
 }
 
-class RouteResolver {
-	private static resolvers: RouteResolver[] = [];
+class Resolver {
+	private static resolvers: Resolver[] = [];
 
 	payload: any | PayloadError | LocationRedirect;
 
 	constructor(public componentName: string, public route: Route) {}
 
 	isValid(currentRoute: Route) {
-		return RouteResolver.resolvers.indexOf(this) !== -1 && this.route === currentRoute;
+		return Resolver.resolvers.indexOf(this) !== -1 && this.route === currentRoute;
 	}
 
 	static startResolve(componentOptions: ComponentOptions<Vue>, to: Route) {
-		const resolver = new RouteResolver(componentOptions.name!, to);
-		RouteResolver.resolvers.push(resolver);
+		const resolver = new Resolver(componentOptions.name!, to);
+		Resolver.resolvers.push(resolver);
 		return resolver;
 	}
 
-	static removeResolver(resolver: RouteResolver) {
-		arrayRemove(RouteResolver.resolvers, i => i === resolver);
+	static removeResolver(resolver: Resolver) {
+		arrayRemove(Resolver.resolvers, i => i === resolver);
 	}
 
 	static isComponentResolving(name: string) {
-		return RouteResolver.resolvers.findIndex(i => i.componentName === name) !== -1;
+		return Resolver.resolvers.findIndex(i => i.componentName === name) !== -1;
 	}
 
 	static clearResolvers() {
@@ -81,14 +87,11 @@ class RouteResolver {
 	}
 }
 
-export function RouteResolve(options: RouteOptions = {}) {
-	return createDecorator((componentOptions: ComponentOptions<Vue>, key: string) => {
-		if (key !== 'routeResolve') {
-			throw new Error(`Decorated route resolve function must be called "routeResolve".`);
-		}
-
+export function RouteResolver(options: RouteResolverOptions = {}) {
+	return createDecorator(componentOptions => {
 		// Store the options passed in.
-		componentOptions.routeOptions = {
+		componentOptions.routeResolverOptions = {
+			...componentOptions.routeResolverOptions,
 			...options,
 			hasResolver: true,
 		};
@@ -106,7 +109,7 @@ export function RouteResolve(options: RouteOptions = {}) {
 				next: (to?: RawLocation | false | ((vm: Vue) => any) | void) => void
 			) {
 				const name = componentOptions.name!;
-				const routeOptions = componentOptions.routeOptions || {};
+				const resolverOptions = componentOptions.routeResolverOptions || {};
 
 				// The router crawls through each matched route and calls
 				// beforeRouteEnter on them one by one. Since we continue to
@@ -125,16 +128,16 @@ export function RouteResolve(options: RouteOptions = {}) {
 				}
 
 				let promise: Promise<{ fromCache: boolean; payload: any }> | undefined;
-				let hasCache = !!routeOptions.cache ? HistoryCache.has(to, name) : false;
-				const resolver = RouteResolver.startResolve(componentOptions, to);
+				let hasCache = !!resolverOptions.cache ? HistoryCache.has(to, name) : false;
+				const resolver = Resolver.startResolve(componentOptions, to);
 
-				if (routeOptions.lazy && !hasCache && !GJ_IS_SSR) {
+				if (resolverOptions.lazy && !hasCache && !GJ_IS_SSR) {
 					promise = getPayload(componentOptions, to, false);
 				} else {
 					const { payload } = await getPayload(
 						componentOptions,
 						to,
-						!!routeOptions.cache
+						!!resolverOptions.cache
 					);
 					resolver.payload = payload;
 
@@ -157,7 +160,7 @@ export function RouteResolve(options: RouteOptions = {}) {
 					}
 
 					if (promise) {
-						vm.routeLoading = true;
+						vm.isRouteLoading = true;
 						const { payload } = await promise;
 						resolver.payload = payload;
 					}
@@ -171,14 +174,9 @@ export function RouteResolve(options: RouteOptions = {}) {
 
 @Component({})
 export class BaseRouteComponent extends Vue {
-	routeDestroyed = false;
-	routeLoading = false;
-	routeBootstrapped = false;
-
-	storeName?: string;
-	storeModule?: any;
-
-	async routeResolve(this: undefined, _route: Route): Promise<any> {}
+	isRouteDestroyed = false;
+	isRouteLoading = false;
+	isRouteBootstrapped = false;
 
 	get routeTitle(): null | string {
 		return null;
@@ -188,27 +186,24 @@ export class BaseRouteComponent extends Vue {
 	 * Called to initialize the route either at the first route to this
 	 * component or after the $route object changes.
 	 */
-	routeInit(): void {}
+	routeCreated(): void {}
 
 	/**
-	 * Called after routeResolve resolves with data.
+	 * Called after the resolver resolves with data.
 	 */
-	routed(_payload: any, _fromCache: boolean) {}
+	routeResolved(_payload: any, _fromCache: boolean) {}
 
 	/**
 	 * Called when the route component is completely destroyed.
 	 */
-	routeDestroy() {}
+	routeDestroyed() {}
 
-	// Don't allow this to be async. We want it to execute right away.
+	// Don't allow this to be async. We want it to execute right away so that
+	// SSR doesn't break.
 	created() {
 		const name = this.$options.name!;
 
-		if (this.storeName && this.storeModule) {
-			this.$store.registerModule(this.storeName, new this.storeModule());
-		}
-
-		this.routeInit();
+		this.routeCreated();
 
 		// For some reason the @Watch decorator was attaching multiple times in
 		// very random scenarios.
@@ -237,7 +232,7 @@ export class BaseRouteComponent extends Vue {
 			// If we are in a browser context, the server may have set initial
 			// state for the routed components. If this is the case we want to
 			// pull it into the component options so it can bootstrap fast.
-			const resolver = RouteResolver.startResolve(this.$options, this.$route);
+			const resolver = Resolver.startResolve(this.$options, this.$route);
 			resolver.payload = serverComponentState[name];
 			serverComponentState[name] = undefined;
 
@@ -247,26 +242,23 @@ export class BaseRouteComponent extends Vue {
 			// If this route component wasn't in the DOM (v-if maybe?) when the
 			// route changed, then it won't trigger the resolve flow. We have to
 			// manually trigger the resolve in this case.
-			const options = this.$options.routeOptions || {};
-			if (options.hasResolver && !RouteResolver.isComponentResolving(name)) {
+			const options = this.$options.routeResolverOptions || {};
+			if (options.hasResolver && !Resolver.isComponentResolving(name)) {
 				this._reloadRoute(false);
 			}
 		}
 	}
 
 	destroyed() {
-		if (this.storeName) {
-			this.$store.unregisterModule(this.storeName);
-		}
-		this.routeDestroyed = true;
-		this.routeDestroy();
+		this.isRouteDestroyed = true;
+		this.routeDestroyed();
 	}
 
 	reloadRoute() {
 		return this._reloadRoute(false);
 	}
 
-	private findDeps(to: Route) {
+	private _findDeps(to: Route) {
 		const collected: BaseRouteComponent[] = [];
 		let found = false;
 
@@ -290,8 +282,8 @@ export class BaseRouteComponent extends Vue {
 		const params: string[] = [];
 		const query: string[] = [];
 		for (const i of collected) {
-			if (i.$options.routeOptions) {
-				const options = i.$options.routeOptions || {};
+			if (i.$options.routeResolverOptions) {
+				const options = i.$options.routeResolverOptions || {};
 
 				// If there is a route resolve, but no deps were defined, it
 				// makes the whole chain "dirty" and forces anything below it to
@@ -315,10 +307,10 @@ export class BaseRouteComponent extends Vue {
 	}
 
 	private async _onRouteChange(to: Route, from: Route) {
-		const options = this.$options.routeOptions || {};
+		const options = this.$options.routeResolverOptions || {};
 
 		// Only do work if the route params/query has actually changed.
-		if (this.canSkipRouteUpdate(from, to)) {
+		if (this._canSkipRouteUpdate(from, to)) {
 			return;
 		}
 
@@ -326,14 +318,14 @@ export class BaseRouteComponent extends Vue {
 	}
 
 	private async _reloadRoute(useCache = true) {
-		const options = this.$options.routeOptions || {};
+		const options = this.$options.routeResolverOptions || {};
 		const to = this.$router.currentRoute;
 
-		this.routeInit();
+		this.routeCreated();
 
 		if (options.hasResolver) {
-			const resolver = RouteResolver.startResolve(this.$options, to);
-			this.routeLoading = true;
+			const resolver = Resolver.startResolve(this.$options, to);
+			this.isRouteLoading = true;
 
 			const { fromCache, payload } = await getPayload(this.$options, to, useCache);
 			resolver.payload = payload;
@@ -346,8 +338,8 @@ export class BaseRouteComponent extends Vue {
 	// Make sure this function isn't an async func. We want to make sure it can
 	// do most of its work in the same tick so we can call it in the created()
 	// hook after SSR returns data to client.
-	resolveRoute(route: Route, resolver: RouteResolver, fromCache?: boolean) {
-		const routeOptions = this.$options.routeOptions || {};
+	resolveRoute(route: Route, resolver: Resolver, fromCache?: boolean) {
+		const resolverOptions = this.$options.routeResolverOptions || {};
 		const name = this.$options.name!;
 
 		// We do a cache refresh if the cache was used for this route.
@@ -362,11 +354,11 @@ export class BaseRouteComponent extends Vue {
 
 		// We want to remove the resolver before we do any of the early returns
 		// below, or it may be stuck in the resolvers list forever.
-		RouteResolver.removeResolver(resolver);
+		Resolver.removeResolver(resolver);
 
 		// Since this happens async, the component instance may be destroyed
 		// already.
-		if (this.routeDestroyed) {
+		if (this.isRouteDestroyed) {
 			return;
 		}
 
@@ -388,20 +380,20 @@ export class BaseRouteComponent extends Vue {
 				if (GJ_IS_SSR) {
 					this.$store.commit('app/redirect', this.$router.resolve(payload.location).href);
 				} else {
-					RouteResolver.clearResolvers();
+					Resolver.clearResolvers();
 					this.$router.replace(payload.location);
 				}
 				return;
 			}
 
-			if (routeOptions.cache) {
+			if (resolverOptions.cache) {
 				HistoryCache.store(route, payload, name);
 			}
 		}
 
-		this.routed(payload, fromCache);
-		this.routeLoading = false;
-		this.routeBootstrapped = true;
+		this.routeResolved(payload, fromCache);
+		this.isRouteLoading = false;
+		this.isRouteBootstrapped = true;
 
 		// Now that we've routed, make sure our title is up to date. We have to
 		// do this outside the watcher that we set up in "created()" so that SSR
@@ -423,12 +415,12 @@ export class BaseRouteComponent extends Vue {
 		// allows cache to show really fast but still pull correct and new data
 		// from the server.
 		if (fromCache) {
-			return this.refreshCache(route);
+			return this._refreshCache(route);
 		}
 	}
 
-	private async refreshCache(route: Route) {
-		const resolver = RouteResolver.startResolve(this.$options, route);
+	private async _refreshCache(route: Route) {
+		const resolver = Resolver.startResolve(this.$options, route);
 		const { payload } = await getPayload(this.$options, route, false);
 		resolver.payload = payload;
 		await this.resolveRoute(route, resolver, false);
@@ -438,8 +430,8 @@ export class BaseRouteComponent extends Vue {
 	 * If all of the previous params are the same, then the already activated components can stay
 	 * the same. We only initialize routes that have probably changed between updates.
 	 */
-	private canSkipRouteUpdate(from: Route, to: Route) {
-		const deps = this.findDeps(to);
+	private _canSkipRouteUpdate(from: Route, to: Route) {
+		const deps = this._findDeps(to);
 		const changedParams = getChangedProperties(from.params, to.params);
 		const changedQuery = getChangedProperties(from.query, to.query);
 
@@ -493,15 +485,31 @@ async function getPayload(
 	route: Route,
 	useCache: boolean
 ) {
-	if (useCache) {
+	const resolverOptions = componentOptions.routeResolverOptions || {};
+
+	// Make a default resolver that returned void if there is none set.
+	const resolverFunc = resolverOptions.resolver || (() => Promise.resolve());
+
+	function resolveStore(route: Route, payload: any, fromCache: boolean) {
+		if (resolverOptions.resolveStore) {
+			const ret = resolverOptions.resolveStore({ route, payload, fromCache });
+			if ((ret as any) instanceof Promise) {
+				throw new Error(`resolveStore function can't be async.`);
+			}
+		}
+	}
+
+	if (!GJ_IS_SSR && useCache) {
 		const cache = HistoryCache.get(route, componentOptions.name);
 		if (cache) {
+			resolveStore(route, cache.data, true);
 			return { fromCache: true, payload: cache.data };
 		}
 	}
 
 	try {
-		const payload = await (componentOptions.methods as any).routeResolve(route);
+		const payload = await resolverFunc({ route });
+		resolveStore(route, payload, false);
 		return { fromCache: false, payload };
 	} catch (e) {
 		if (e instanceof PayloadError) {

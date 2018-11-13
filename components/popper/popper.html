@@ -3,6 +3,7 @@
 	ref="popover"
 	:class="{
 		'-block': block,
+		'-ssr': GJ_IS_SSR,
 	}"
 	popover-base-class="popper"
 	popover-wrapper-class="popper-wrapper"
@@ -19,18 +20,29 @@
 	@apply-hide="onHide"
 	>
 	<slot />
-	<app-scroll-inview-parent
+	<div
 		v-if="isVisible"
 		slot="popover"
-		ref="inviewParent"
-		class="scrollable"
+		class="-container"
 		:style="{
 			maxHeight,
 			width,
 			maxWidth,
 		}"
-		:throttle="0"
 		>
-		<slot name="popover"  />
-	</app-scroll-inview-parent>
+		<div class="-header">
+			<slot name="header" />
+		</div>
+		<app-scroll-scroller
+			ref="scroller"
+			class="-main"
+			overlay
+			:inview-throttle="0"
+			>
+			<slot name="popover" />
+		</app-scroll-scroller>
+		<div class="-footer">
+			<slot name="footer" />
+		</div>
+	</div>
 </v-popover>

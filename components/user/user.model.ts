@@ -55,10 +55,8 @@ export class User extends Model {
 	header_media_item?: MediaItem;
 	disable_gravatar?: boolean;
 
-	description?: string;
 	description_compiled?: string;
 	description_markdown?: string;
-	has_compiled_description?: boolean;
 
 	// Notifications settings.
 	newsletter?: boolean;
@@ -199,6 +197,7 @@ export class User extends Model {
 		// You can only save yourself, so we don't pass in an ID to the endpoint.
 		return this.$_save('/web/dash/header/save', 'user', {
 			file: this.file,
+			allowComplexData: ['crop'],
 		});
 	}
 

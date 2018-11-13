@@ -1,10 +1,9 @@
 import Vue, { CreateElement } from 'vue';
-import { Component, Watch, Prop } from 'vue-property-decorator';
-
-import { ScrollInviewContainer } from './container';
-import { findVueParent } from '../../../utils/vue';
-import { AppScrollInviewParent } from './parent';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { arrayRemove } from '../../../utils/array';
+import { findVueParent } from '../../../utils/vue';
+import { ScrollInviewContainer } from './container';
+import { AppScrollInviewParent } from './parent';
 
 // This is the root container we use if there's no inview parent.
 let BaseContainer: ScrollInviewContainer;
@@ -27,7 +26,7 @@ export class AppScrollInview extends Vue {
 
 	get container() {
 		const parent = findVueParent(this, AppScrollInviewParent);
-		return parent ? parent.container : BaseContainer;
+		return parent ? parent._container : BaseContainer;
 	}
 
 	async mounted() {

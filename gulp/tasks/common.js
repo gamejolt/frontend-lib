@@ -23,7 +23,7 @@ module.exports = (config, projectBase) => {
 	config.production = argv.production || false;
 	config.watching = argv._.indexOf('watch') !== -1 ? 'initial' : false;
 	config.noSourcemaps = config.noSourcemaps || false;
-	config.write = argv.write || false;
+	config.write = argv.fs || false;
 	config.analyze = argv.analyze || false;
 	config.server = argv.server || false;
 	config.client = argv.client || false;
