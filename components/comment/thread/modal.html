@@ -23,9 +23,10 @@
 			:show-tabs="false"
 			:show-add="false"
 			@remove="onRemove"
+			@error="onError"
 			/>
 		<app-message-thread-add
-			v-if="user"
+			v-if="user && !hasError"
 			hide-message-split
 			>
 			<form-comment

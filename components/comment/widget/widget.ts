@@ -263,6 +263,7 @@ export class AppCommentWidget extends Vue {
 		} catch (e) {
 			console.error(e);
 			this.hasError = true;
+			this.$emit('error', e);
 		}
 	}
 
@@ -288,12 +289,7 @@ export class AppCommentWidget extends Vue {
 	}
 
 	async _pinComment(comment: Comment) {
-		if (this.store) {
-			this.currentPage = 1;
-			await this.pinComment({ store: this.store, comment });
-			// Scroll.to('comments'); I couldn't find where this originally tried scrolling to. Is this still needed?
-			this._fetchComments();
-		}
+		await this.pinComment({ comment });
 	}
 
 	sortHot() {

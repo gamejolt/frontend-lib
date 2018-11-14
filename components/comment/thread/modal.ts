@@ -38,6 +38,8 @@ export default class AppCommentThreadModal extends BaseModal {
 	@CommentMutation
 	onCommentAdd!: CommentStore['onCommentAdd'];
 
+	hasError = false;
+
 	get parent() {
 		const store = this.getCommentStore(this.resource, this.resourceId);
 		if (store) {
@@ -71,5 +73,9 @@ export default class AppCommentThreadModal extends BaseModal {
 		if (!this.parent) {
 			this.modal.dismiss();
 		}
+	}
+
+	onError(_e: Error) {
+		this.hasError = true;
 	}
 }

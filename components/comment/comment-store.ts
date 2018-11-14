@@ -15,7 +15,7 @@ export const CommentMutation = namespace(CommentStoreNamespace, Mutation);
 export type CommentActions = {
 	'comment/lockCommentStore': { resource: string; resourceId: number };
 	'comment/fetchComments': { store: CommentStoreModel; page?: number };
-	'comment/pinComment': { store: CommentStoreModel; comment: Comment };
+	'comment/pinComment': { comment: Comment };
 	'comment/setSort': { store: CommentStoreModel; sort: string };
 	'comment/fetchThread': { store: CommentStoreModel; parentId: number };
 };
@@ -95,7 +95,9 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	@VuexAction
 	async fetchThread(payload: CommentActions['comment/fetchThread']) {
 		const { store, parentId } = payload;
-		const response = await Api.sendRequest(`/comments/get-thread/${parentId}`);
+		const response = await Api.sendRequest(`/comments/get-thread/${parentId}`, null, {
+			noErrorRedirect: true,
+		});
 
 		const parent = new Comment(response.parent);
 		const children = Comment.populate(response.children);
@@ -150,11 +152,8 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 
 	@VuexAction
 	async pinComment(payload: CommentActions['comment/pinComment']) {
-		const { store, comment } = payload;
-
+		const { comment } = payload;
 		await comment.$pin();
-		// clear the store's comments and prepare for reload
-		store.clear();
 	}
 
 	@VuexAction
