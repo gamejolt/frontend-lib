@@ -15,6 +15,10 @@ export class TagSuggester {
 		return this.tags.length && this.recommendedTags.length + this.otherTags.length > 0;
 	}
 
+	get lcText() {
+		return this.text.toLowerCase();
+	}
+
 	get recommendedTags() {
 		if (this.tags.length === 0) {
 			return [];
@@ -22,8 +26,8 @@ export class TagSuggester {
 
 		return this.tags
 			.map(t => {
-				const count = this.text.split(t.toLowerCase()).length - 1;
-				const hashtagCount = this.text.split('#' + t.toLowerCase()).length - 1;
+				const count = this.lcText.split(t.toLowerCase()).length - 1;
+				const hashtagCount = this.lcText.split('#' + t.toLowerCase()).length - 1;
 				return {
 					tag: t,
 					count: hashtagCount > 0 ? -1 : count,
@@ -51,7 +55,7 @@ export class TagSuggester {
 		return this.tags.filter(
 			t =>
 				recommended!.indexOf(t) === -1 &&
-				this.text.split('#' + t.toLowerCase()).length - 1 === 0
+				this.lcText.split('#' + t.toLowerCase()).length - 1 === 0
 		);
 	}
 }
