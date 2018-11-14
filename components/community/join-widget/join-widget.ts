@@ -12,7 +12,7 @@ import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { number } from 'game-jolt-frontend-lib/vue/filters/number';
 import { AppStore } from 'game-jolt-frontend-lib/vue/services/app/app-store';
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 
 @View
@@ -65,6 +65,12 @@ export class AppCommunityJoinWidget extends Vue {
 		}`;
 	}
 
+	@Emit('join')
+	join(_community: Community) {}
+
+	@Emit('leave')
+	leave(_community: Community) {}
+
 	async onClick() {
 		if (!this.app.user || this.isProcessing) {
 			return;
@@ -75,6 +81,7 @@ export class AppCommunityJoinWidget extends Vue {
 		if (!this.community.is_member) {
 			try {
 				await $joinCommunity(this.community);
+				this.join(this.community);
 			} catch (e) {
 				Growls.error(
 					this.$gettext(`Something has prevented you from joining this community.`)
@@ -83,6 +90,7 @@ export class AppCommunityJoinWidget extends Vue {
 		} else {
 			try {
 				await $leaveCommunity(this.community);
+				this.leave(this.community);
 			} catch (e) {
 				Growls.error(this.$gettext(`For some reason we couldn't leave this community.`));
 			}
