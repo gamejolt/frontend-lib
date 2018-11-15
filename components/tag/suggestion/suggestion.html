@@ -1,4 +1,6 @@
-<div>
+<div v-if="shouldShow">
+	<slot/>
+
 	<div v-if="recommendedTags.length">
 		<a
 			class="badge -tag"

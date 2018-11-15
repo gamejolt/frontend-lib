@@ -2,14 +2,17 @@ import View from '!view!./suggestion.html?style=./suggestion.styl';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 
-export class TagSuggester {
-	public tags!: string[];
-	public text!: string;
+@View
+@Component({})
+export class AppTagSuggestion extends Vue {
+	@Prop(Array)
+	tags!: string[];
 
-	constructor(tags: string[], text: string) {
-		Vue.set(this, 'tags', tags);
-		Vue.set(this, 'text', text);
-	}
+	@Prop(String)
+	text!: string;
+
+	@Emit('tag')
+	emitTag(_tag: string) {}
 
 	get shouldShow() {
 		return this.tags.length && this.recommendedTags.length + this.otherTags.length > 0;
@@ -57,26 +60,5 @@ export class TagSuggester {
 				recommended!.indexOf(t) === -1 &&
 				this.lcText.split('#' + t.toLowerCase()).length - 1 === 0
 		);
-	}
-}
-
-@View
-@Component({})
-export class AppTagSuggestion extends Vue {
-	@Prop(TagSuggester)
-	suggester!: TagSuggester;
-
-	@Emit('tag')
-	emitTag(_tag: string) {}
-
-	/**
-	 * This will do a simple recommendation of tags based on their text content.
-	 */
-	get recommendedTags() {
-		return this.suggester.recommendedTags;
-	}
-
-	get otherTags() {
-		return this.suggester.otherTags;
 	}
 }
