@@ -27,5 +27,5 @@ declare module '!file-loader!*' {
 
 declare module '*.json' {
 	const content: any;
-	export = content;
+	export default content;
 }
