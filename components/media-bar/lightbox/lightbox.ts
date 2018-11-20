@@ -1,16 +1,16 @@
+import View from '!view!./lightbox.html?style=./lightbox.styl';
+import { Subscription } from 'rxjs/Subscription';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Subscription } from 'rxjs/Subscription';
-import View from '!view!./lightbox.html?style=./lightbox.styl';
-
+import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import { bootstrapShortkey } from '../../../vue/shortkey';
+import { Analytics } from '../../analytics/analytics.service';
+import { EscapeStack } from '../../escape-stack/escape-stack.service';
 import { Screen } from '../../screen/screen-service';
 import { AppMediaBar } from '../media-bar';
-import { Analytics } from '../../analytics/analytics.service';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppMediaBarLightboxSlider } from './slider';
 import { AppMediaBarLightboxItem } from './item/item';
-import { bootstrapShortkey } from '../../../vue/shortkey';
-import { EscapeStack } from '../../escape-stack/escape-stack.service';
+import './lightbox-global.styl';
+import { AppMediaBarLightboxSlider } from './slider';
 
 if (!GJ_IS_SSR) {
 	const VueTouch = require('vue-touch');
@@ -36,7 +36,8 @@ bootstrapShortkey();
 	},
 })
 export class AppMediaBarLightbox extends Vue {
-	@Prop(Object) mediaBar!: AppMediaBar;
+	@Prop(Object)
+	mediaBar!: AppMediaBar;
 
 	sliderElem?: HTMLElement;
 	currentSliderOffset = 0;

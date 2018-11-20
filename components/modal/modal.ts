@@ -1,16 +1,15 @@
+import View from '!view!./modal.html?style=./modal.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./modal.html?style=./modal.styl';
-import './modal-content.styl';
-
-import { Modal } from './modal.service';
+import { findRequiredVueParent } from '../../utils/vue';
 import { AppBackdrop } from '../backdrop/backdrop';
 import { Backdrop } from '../backdrop/backdrop.service';
-import { findRequiredVueParent } from '../../utils/vue';
-import { BaseModal } from './base';
-import { Screen } from '../screen/screen-service';
 import { EscapeStack } from '../escape-stack/escape-stack.service';
+import { Screen } from '../screen/screen-service';
 import { AppTheme } from '../theme/theme';
+import { BaseModal } from './base';
+import './modal-global.styl';
+import { Modal } from './modal.service';
 
 @View
 @Component({
@@ -19,8 +18,11 @@ import { AppTheme } from '../theme/theme';
 	},
 })
 export class AppModal extends Vue {
-	@Prop(Number) index!: number;
-	@Prop(Object) theme?: any;
+	@Prop(Number)
+	index!: number;
+
+	@Prop(Object)
+	theme?: any;
 
 	modal: Modal = null as any;
 	isHoveringContent = false;

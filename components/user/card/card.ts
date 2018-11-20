@@ -12,6 +12,7 @@ import { AppUserFollowWidget } from '../follow-widget/follow-widget';
 import { AppUserAvatarImg } from '../user-avatar/img/img';
 import { User } from '../user.model';
 import { AppLoading } from './../../../vue/components/loading/loading';
+import './card-global.styl';
 
 @View
 @Component({
