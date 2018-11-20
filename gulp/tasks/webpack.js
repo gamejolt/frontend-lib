@@ -382,14 +382,14 @@ module.exports = function (config) {
 				browserNoop || clientNoop || new VueSSRServerPlugin({
 					filename: 'vue-ssr-server-bundle-' + section + '.json',
 				}),
-				hasOfflineSupport ? new OfflinePlugin({
-					excludes: ['**/.*', '**/*.map', 'vue-ssr-*', '**/*gameApiDocContent*'],
-					ServiceWorker: {
-						events: true,
-						output: 'sjw.js',
-						publicPath: 'https://gamejolt.com/sjw.js',
-					},
-				}) : noop,
+				// hasOfflineSupport ? new OfflinePlugin({
+				// 	excludes: ['**/.*', '**/*.map', 'vue-ssr-*', '**/*gameApiDocContent*'],
+				// 	ServiceWorker: {
+				// 		events: true,
+				// 		output: 'sjw.js',
+				// 		publicPath: 'https://gamejolt.com/sjw.js',
+				// 	},
+				// }) : noop,
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			],
