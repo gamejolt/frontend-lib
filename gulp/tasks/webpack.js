@@ -283,7 +283,7 @@ module.exports = function (config) {
 				],
 			},
 			devtool,
-			optimization: config.production ? {
+			optimization: config.production && !config.server ? {
 				splitChunks: {
 					// Does chunk splitting logic for entry point chunks as well.
 					// https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
