@@ -345,7 +345,7 @@ module.exports = function (config) {
 					filename: section + '.[name].[contenthash:8].css',
 					chunkFilename: section + '.[name].[contenthash:8].css',
 				}),
-				devNoop || serverNoop || new OptimizeCssnanoPlugin({
+				devNoop || new OptimizeCssnanoPlugin({
 					sourceMap: false,
 					cssnanoOptions: {
 						preset: [
