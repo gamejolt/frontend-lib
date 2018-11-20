@@ -177,9 +177,9 @@ module.exports = function (config) {
 			output: {
 				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
-				filename: config.production ? section + '.[name].[contenthash:8].js' : section + '.[name].js',
-				chunkFilename: config.production ? section + '.[name].[contenthash:8].js' : section + '.[name].js',
-				sourceMapFilename: config.production ? 'maps/[name].[contenthash:8].map' : 'maps/[name].map',
+				filename: config.production ? section + '.[contenthash:8].js' : section + '.[name].js',
+				chunkFilename: config.production ? section + '.[contenthash:8].js' : section + '.[name].js',
+				sourceMapFilename: config.production ? 'maps/[contenthash:8].map' : 'maps/[name].map',
 				libraryTarget: libraryTarget,
 			},
 			resolve: {
@@ -288,9 +288,9 @@ module.exports = function (config) {
 					// Does chunk splitting logic for entry point chunks as well.
 					// https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
 					chunks: !config.server ? 'all' : undefined,
-					// Don't generate names so that chunks don't have to download again when dependencies change.
-					name: false,
 				},
+				// Splits the runtime into its own chunk for long-term caching.
+				runtimeChunk: 'single',
 			} : undefined,
 			plugins: [
 				prodNoop || new webpack.ProgressPlugin(),
@@ -342,8 +342,8 @@ module.exports = function (config) {
 				devNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
 				devNoop || new MiniCssExtractPlugin({
-					filename: section + '.[name].[contenthash:8].css',
-					chunkFilename: section + '.[name].[contenthash:8].css',
+					filename: section + '.[contenthash:8].css',
+					chunkFilename: section + '.[contenthash:8].css',
 				}),
 				devNoop || new OptimizeCssnanoPlugin({
 					sourceMap: false,
@@ -390,6 +390,7 @@ module.exports = function (config) {
 				// 		publicPath: 'https://gamejolt.com/sjw.js',
 				// 	},
 				// }) : noop,
+				devNoop || new webpack.HashedModuleIdsPlugin(),
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			],
