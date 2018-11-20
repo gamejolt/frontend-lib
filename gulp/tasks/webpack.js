@@ -289,7 +289,7 @@ module.exports = function (config) {
 					// https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
 					chunks: 'all',
 					// Don't generate names so that chunks don't have to download again when dependencies change.
-					// name: false,
+					name: false,
 				},
 			} : undefined,
 			plugins: [
