@@ -58,7 +58,7 @@ export class AppGameExternalPackageCard extends Vue {
 	}
 
 	gotoExternal() {
-		Analytics.trackEvent('game-package-card', 'external', 'external');
+		Analytics.trackEvent('game-package-card', 'download', 'external');
 
 		Navigate.newWindow(this.package.url);
 	}
