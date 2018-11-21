@@ -14,7 +14,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 const OfflinePlugin = require('offline-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
@@ -59,7 +58,6 @@ module.exports = function (config) {
 		externals['write-file-atomic'] = 'commonjs write-file-atomic';
 	}
 
-
 	let webpackTarget = 'web';
 	if (config.server) {
 		webpackTarget = 'node';
@@ -72,13 +70,10 @@ module.exports = function (config) {
 		libraryTarget = 'commonjs2';
 	}
 
-	// Inline allows us to debug by setting breakpoints.
-	// Eval may be faster, but it doesn't allow setting breakpoints.
 	let devtool = 'source-map';
 	if (!config.production) {
-		if (config.server) {
-			devTool = 'source-map';
-		} else {
+		if (!config.server) {
+			// eval doesn't allow breakpoitns, inline does
 			devTool = 'cheap-module-eval-source-map';
 		}
 	} else if (config.client) {
@@ -102,8 +97,7 @@ module.exports = function (config) {
 			},
 		];
 
-
-		if (config.production) {
+		if (config.production && !config.server) {
 			loaders.unshift(MiniCssExtractPlugin.loader);
 		} else {
 			loaders.unshift({
@@ -339,9 +333,9 @@ module.exports = function (config) {
 						to: 'update-hook.js',
 					},
 				]),
-				devNoop || new ImageminPlugin(),
+				devNoop || serverNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
-				devNoop || new MiniCssExtractPlugin({
+				devNoop || serverNoop || new MiniCssExtractPlugin({
 					filename: section + '.[contenthash:8].css',
 					chunkFilename: section + '.[contenthash:8].css',
 				}),
