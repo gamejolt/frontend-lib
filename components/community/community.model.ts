@@ -42,6 +42,8 @@ export class Community extends Model {
 	member_count!: number;
 	is_member?: boolean;
 
+	is_unread = false;
+
 	constructor(data: any = {}) {
 		super(data);
 
