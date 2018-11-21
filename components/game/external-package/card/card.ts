@@ -1,7 +1,7 @@
 import View from '!view!./card.html?style=./card.styl';
 import { Navigate } from 'game-jolt-frontend-lib/components/navigate/navigate.service';
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import { Analytics } from '../../../analytics/analytics.service';
 import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { AppCard } from '../../../card/card';
@@ -28,8 +28,6 @@ export class AppGameExternalPackageCard extends Vue {
 	showFullDescription = false;
 	canToggleDescription = false;
 
-	a: HTMLAnchorElement = null as any;
-
 	readonly GameBuild = GameBuild;
 
 	get platforms() {
@@ -54,15 +52,9 @@ export class AppGameExternalPackageCard extends Vue {
 	}
 
 	get playOnTooltip() {
-		return this.$gettextInterpolate('Play on %{ url }', { url: this.a.hostname });
-	}
-
-	@Watch('package.url', { immediate: true })
-	onUrlChanged() {
-		if (!this.a) {
-			this.a = document.createElement('a');
-		}
-		this.a.href = this.package.url;
+		const a = document.createElement('a');
+		a.href = this.package.url;
+		return this.$gettextInterpolate('Play on %{ url }', { url: a.hostname });
 	}
 
 	gotoExternal() {
