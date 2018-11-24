@@ -8,4 +8,12 @@ import { Component, Prop } from 'vue-property-decorator';
 export class AppCommunityThumbnailImg extends Vue {
 	@Prop(Community)
 	community!: Community;
+
+	get src() {
+		if (!this.community.thumbnail) {
+			return '';
+		}
+
+		return this.community.thumbnail.mediaserver_url;
+	}
 }
