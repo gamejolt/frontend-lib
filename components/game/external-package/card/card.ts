@@ -51,12 +51,6 @@ export class AppGameExternalPackageCard extends Vue {
 		return platforms;
 	}
 
-	get playOnTooltip() {
-		const a = document.createElement('a');
-		a.href = this.package.url;
-		return this.$gettextInterpolate('Play on %{ url }', { url: a.hostname });
-	}
-
 	gotoExternal() {
 		Analytics.trackEvent('game-package-card', 'download', 'external');
 
