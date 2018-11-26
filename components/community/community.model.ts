@@ -3,6 +3,8 @@ import { MediaItem } from 'game-jolt-frontend-lib/components/media-item/media-it
 import { Model } from 'game-jolt-frontend-lib/components/model/model.service';
 import { Theme } from 'game-jolt-frontend-lib/components/theme/theme.model';
 
+export type Perm = 'feature' | 'all';
+
 export async function $joinCommunity(community: Community) {
 	const response = await Api.sendRequest(
 		'/web/communities/join/' + community.path,
@@ -42,6 +44,8 @@ export class Community extends Model {
 	member_count!: number;
 	is_member?: boolean;
 
+	perms?: Perm[];
+
 	is_unread = false;
 
 	constructor(data: any = {}) {
@@ -57,6 +61,24 @@ export class Community extends Model {
 
 		if (data.theme) {
 			this.theme = new Theme(data.theme);
+		}
+	}
+
+	hasPerms(required?: Perm | Perm[], either?: boolean) {
+		if (!this.perms) {
+			return false;
+		}
+
+		if (!required || this.perms.indexOf('all') !== -1) {
+			return true;
+		}
+
+		required = Array.isArray(required) ? required : [required];
+		const missingPerms = required.filter(perm => this.perms!.indexOf(perm) === -1);
+		if (either) {
+			return missingPerms.length !== required.length;
+		} else {
+			return missingPerms.length === 0;
 		}
 	}
 }

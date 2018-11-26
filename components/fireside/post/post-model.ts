@@ -1,8 +1,8 @@
-import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
-import { FiresidePostCommunity } from 'game-jolt-frontend-lib/components/fireside/post/community/community.model';
 import { RawLocation } from 'vue-router';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
+import { Community, Perm as CommunityPerm } from '../../community/community.model';
+import { EventItem } from '../../event-item/event-item.model';
 import { Game } from '../../game/game.model';
 import { HistoryTick } from '../../history-tick/history-tick-service';
 import { KeyGroup } from '../../key-group/key-group.model';
@@ -13,26 +13,11 @@ import { Poll } from '../../poll/poll.model';
 import { Registry } from '../../registry/registry.service';
 import { Translate } from '../../translate/translate.service';
 import { User } from '../../user/user.model';
+import { FiresidePostCommunity } from './community/community.model';
 import { FiresidePostLike } from './like/like-model';
 import { FiresidePostSketchfab } from './sketchfab/sketchfab-model';
 import { FiresidePostTag } from './tag/tag-model';
 import { FiresidePostVideo } from './video/video-model';
-
-export function canUserManagePost(post: FiresidePost, user: User | undefined | null) {
-	if (!user) {
-		return false;
-	}
-
-	if (post.user.id === user.id) {
-		return true;
-	}
-
-	if (post.game && post.game.hasPerms('devlogs')) {
-		return true;
-	}
-
-	return false;
-}
 
 interface FiresidePostPublishedPlatform {
 	created_resource_provider: string;
@@ -213,6 +198,34 @@ export class FiresidePost extends Model {
 		};
 	}
 
+	get manageableCommunities() {
+		return this.getManageableCommunities();
+	}
+
+	getManageableCommunities(perms?: CommunityPerm | CommunityPerm[], either?: boolean) {
+		return this.tagged_communities
+			.filter(tc => tc.community.hasPerms(perms, either))
+			.map(tc => tc.community);
+	}
+
+	isManageableByUser(user?: User | null) {
+		return this.isEditableByUser(user) || this.manageableCommunities.length !== 0;
+	}
+
+	isEditableByUser(user?: User | null) {
+		if (!(user instanceof User)) {
+			return false;
+		}
+
+		if (this.user.id === user.id) {
+			return true;
+		}
+
+		if (this.game && this.game.hasPerms('devlogs')) {
+			return true;
+		}
+	}
+
 	static async $create(gameId?: number) {
 		let url = `/web/posts/manage/new-post`;
 		if (gameId) {
@@ -258,6 +271,28 @@ export class FiresidePost extends Model {
 		if (!appStore.state.user || this.user.id !== appStore.state.user.id) {
 			HistoryTick.sendBeacon('fireside-post-expand', this.id);
 		}
+	}
+
+	$feature(community: Community) {
+		const c = this.getTaggedCommunity(community);
+		if (!c) {
+			throw new Error('Cannot feature a post to a community it is not tagged in');
+		}
+
+		return this.$_save(`/web/communities/manage/feature/${c.id}`, 'post');
+	}
+
+	$unfeature(community: Community) {
+		const c = this.getTaggedCommunity(community);
+		if (!c) {
+			throw new Error('Cannot unfeature a post to a community it is not tagged in');
+		}
+
+		return this.$_save(`/web/communities/manage/unfeature/${c.id}`, 'post');
+	}
+
+	getTaggedCommunity(community: Community) {
+		return this.tagged_communities.find(c => c.community.id === community.id);
 	}
 
 	$publish() {
