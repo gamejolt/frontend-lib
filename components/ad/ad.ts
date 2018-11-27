@@ -1,4 +1,4 @@
-import View from '!view!./ad.html?style=./ad.styl';
+import View from '!view!./ad.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
@@ -6,7 +6,6 @@ import { AppStore } from '../../vue/services/app/app-store';
 import { FiresidePost } from '../fireside/post/post-model';
 import { Game } from '../game/game.model';
 import { User } from '../user/user.model';
-import './ad-content.styl';
 import { Ads } from './ads.service';
 import { AdSlot, AdSlotPos, AdSlotPosValidator, AdSlotTargetingMap } from './slot';
 

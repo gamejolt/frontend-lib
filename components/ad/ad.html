@@ -1,19 +1,9 @@
-<div
-	class="ad"
-	v-if="shouldShow"
-	:class="{
-		'ad-leaderboard': size === 'leaderboard',
-		'ad-rectangle': size === 'rectangle',
-	}"
-	>
-	<div class="ad-inner">
-		<div
-			v-if="slot"
-			:id="slot.id"
-			:key="slot.id"
-			class="ad-slot"
-			/>
-	</div>
+<div>
+	<div
+		v-if="slot"
+		:id="slot.id"
+		:key="slot.id"
+		/>
 
 	<pre v-if="isDebugEnabled" class="text-left">{{ debugInfo }}</pre>
 </div>
