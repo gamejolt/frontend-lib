@@ -6,20 +6,33 @@ import { loadScript } from 'game-jolt-frontend-lib/utils/utils';
 import VueRouter from 'vue-router';
 import '../cmp.service';
 
+let _isInitialized = false;
+
 export class Playwire {
-	private static isInitialized = false;
 	private static routeResolved = false;
 	private static ads: Set<AppAdPlaywire> = new Set();
 
-	static async init(router: VueRouter) {
+	static init(router: VueRouter) {
 		if (GJ_IS_CLIENT || GJ_IS_SSR || AdsDisabledDev) {
 			return;
 		}
 
-		if (this.isInitialized) {
+		if (_isInitialized) {
 			return;
 		}
-		this.isInitialized = true;
+		_isInitialized = true;
+
+		(window as any).tyche = {
+			mode: 'tyche',
+			config: 'https://config.playwire.com/1391/v2/websites/30391/banner.json',
+			observerMode: {
+				enabled: true,
+				selector: 'root',
+			},
+		};
+
+		console.log('Attempting to load playwire.', (window as any).tyche);
+		loadScript('https://cdn.intergi.com/hera/tyche.js');
 
 		// We set up events so that we know when a route begins and when the
 		// routing is fully resolved.
@@ -32,22 +45,6 @@ export class Playwire {
 			this.routeResolved = true;
 			this.displayAds(Array.from(this.ads));
 		});
-
-		(window as any).tyche = {
-			mode: 'tyche',
-			config: 'https://config.playwire.com/1391/v2/websites/30391/banner.json',
-			observerMode: {
-				enabled: true,
-				selector: 'root',
-			},
-		};
-
-		try {
-			console.log('Attempting to load playwire.', (window as any).tyche);
-			await loadScript('https://cdn.intergi.com/hera/tyche.js');
-		} catch (e) {
-			console.error('Caught error trying to load playwire.', e);
-		}
 	}
 
 	static addAd(ad: AppAdPlaywire) {
@@ -65,7 +62,7 @@ export class Playwire {
 	}
 
 	private static async displayAds(ads: AppAdPlaywire[]) {
-		if (!ads.length || !this.isInitialized) {
+		if (!ads.length || !_isInitialized) {
 			return;
 		}
 
