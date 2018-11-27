@@ -11,7 +11,7 @@ export class Playwire {
 	private static routeResolved = false;
 	private static ads: Set<AppAdPlaywire> = new Set();
 
-	static init(router: VueRouter) {
+	static async init(router: VueRouter) {
 		if (GJ_IS_CLIENT || GJ_IS_SSR || AdsDisabledDev) {
 			return;
 		}
@@ -20,17 +20,6 @@ export class Playwire {
 			return;
 		}
 		this.isInitialized = true;
-
-		(window as any).tyche = {
-			mode: 'tyche',
-			config: 'https://config.playwire.com/1391/v2/websites/30391/banner.json',
-			observerMode: {
-				enabled: true,
-				selector: 'root',
-			},
-		};
-
-		loadScript('https://cdn.intergi.com/hera/tyche.js');
 
 		// We set up events so that we know when a route begins and when the
 		// routing is fully resolved.
@@ -43,6 +32,22 @@ export class Playwire {
 			this.routeResolved = true;
 			this.displayAds(Array.from(this.ads));
 		});
+
+		(window as any).tyche = {
+			mode: 'tyche',
+			config: 'https://config.playwire.com/1391/v2/websites/30391/banner.json',
+			observerMode: {
+				enabled: true,
+				selector: 'root',
+			},
+		};
+
+		try {
+			console.log('Attempting to load playwire.', (window as any).tyche);
+			await loadScript('https://cdn.intergi.com/hera/tyche.js');
+		} catch (e) {
+			console.error('Caught error trying to load playwire.', e);
+		}
 	}
 
 	static addAd(ad: AppAdPlaywire) {
