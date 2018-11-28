@@ -14,6 +14,7 @@ export class CommentVote extends Model {
 			'/comments/votes/add/' + this.comment_id + '/' + this.vote,
 			'commentVote',
 			{
+				detach: true,
 				ignorePayloadUser: true,
 			}
 		);
@@ -21,6 +22,7 @@ export class CommentVote extends Model {
 
 	$remove() {
 		return this.$_remove('/comments/votes/remove/' + this.id, {
+			detach: true,
 			ignorePayloadUser: true,
 		});
 	}
