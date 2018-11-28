@@ -3,6 +3,11 @@
 		v-if="slot"
 		:id="slot.id"
 		:key="slot.id"
+		class="-slot"
+		:class="{
+			'-size-leaderboard': size === 'leaderboard',
+			'-size-rectangle': size === 'rectangle',
+		}"
 		/>
 
 	<pre v-if="isDebugEnabled" class="text-left">{{ debugInfo }}</pre>

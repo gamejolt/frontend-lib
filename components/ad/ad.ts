@@ -1,4 +1,4 @@
-import View from '!view!./ad.html';
+import View from '!view!./ad.html?style=./ad.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
