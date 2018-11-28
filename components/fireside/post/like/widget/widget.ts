@@ -3,6 +3,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { number } from '../../../../../vue/filters/number';
 import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
+import { Growls } from '../../../../growls/growls.service';
 import { LikersModal } from '../../../../likers/modal.service';
 import { Screen } from '../../../../screen/screen-service';
 import { AppTooltip } from '../../../../tooltip/tooltip';
@@ -17,10 +18,14 @@ import { FiresidePostLike } from '../like-model';
 	},
 })
 export class AppFiresidePostLikeWidget extends Vue {
-	@Prop(FiresidePost) post!: FiresidePost;
-	@Prop(Boolean) overlay?: boolean;
-	@Prop(Boolean) circle?: boolean;
-	@Prop(Boolean) block?: boolean;
+	@Prop(FiresidePost)
+	post!: FiresidePost;
+	@Prop(Boolean)
+	overlay?: boolean;
+	@Prop(Boolean)
+	circle?: boolean;
+	@Prop(Boolean)
+	block?: boolean;
 
 	isProcessing = false;
 
@@ -57,18 +62,33 @@ export class AppFiresidePostLikeWidget extends Vue {
 
 		this.isProcessing = true;
 
-		if (!this.post.user_like) {
+		const currentLike = this.post.user_like;
+		if (!currentLike) {
 			const newLike = new FiresidePostLike({
 				fireside_post_id: this.post.id,
 			});
 
-			await newLike.$save();
 			this.post.user_like = newLike;
 			++this.post.like_count;
+
+			try {
+				await newLike.$save();
+			} catch (e) {
+				this.post.user_like = null;
+				--this.post.like_count;
+				Growls.error(`Can't do that now. Try again later?`);
+			}
 		} else {
-			await this.post.user_like.$remove();
 			this.post.user_like = null;
 			--this.post.like_count;
+
+			try {
+				await currentLike.$remove();
+			} catch (e) {
+				this.post.user_like = currentLike;
+				++this.post.like_count;
+				Growls.error(`Can't do that now. Try again later?`);
+			}
 		}
 
 		this.isProcessing = false;
