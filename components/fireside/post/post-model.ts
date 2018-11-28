@@ -204,8 +204,7 @@ export class FiresidePost extends Model {
 
 	getManageableCommunities(perms?: CommunityPerm | CommunityPerm[], either?: boolean) {
 		return this.tagged_communities
-			.filter(tc => tc.community.hasPerms(perms, either))
-			.map(tc => tc.community);
+			.filter(tc => tc.community.hasPerms(perms, either));
 	}
 
 	isManageableByUser(user?: User | null) {
