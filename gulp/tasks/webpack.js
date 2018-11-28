@@ -73,8 +73,8 @@ module.exports = function (config) {
 	let devtool = 'source-map';
 	if (!config.production) {
 		if (!config.server) {
-			// eval doesn't allow breakpoitns, inline does
-			devTool = 'cheap-module-eval-source-map';
+			// Seemed to be the fastest.
+			devtool = 'eval-source-map';
 		}
 	} else if (config.client) {
 		devtool = false;
@@ -84,16 +84,12 @@ module.exports = function (config) {
 		const loaders = [{
 				loader: 'css-loader',
 				options: {
-					sourceMap: false,
 					// How many loaders run before this.
 					importLoaders: 2
 				}
 			},
 			{
 				loader: 'postcss-loader',
-				options: {
-					sourceMap: false
-				}
 			},
 		];
 
@@ -103,7 +99,6 @@ module.exports = function (config) {
 			loaders.unshift({
 				loader: 'vue-style-loader',
 				options: {
-					sourceMap: false,
 					shadowMode: false
 				}
 			});
@@ -228,7 +223,6 @@ module.exports = function (config) {
 								'resolve url': true,
 								'include css': true,
 								preferPathResolver: 'webpack',
-								sourceMap: false,
 							}
 						}]
 					},
@@ -340,7 +334,6 @@ module.exports = function (config) {
 					chunkFilename: section + '.[contenthash:8].css',
 				}),
 				devNoop || new OptimizeCssnanoPlugin({
-					sourceMap: false,
 					cssnanoOptions: {
 						preset: [
 							'default',
