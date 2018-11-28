@@ -149,29 +149,29 @@ export class User extends Model {
 	}
 
 	async $follow() {
-		const response = await Api.sendRequest(
-			'/web/profile/follow/' + this.id,
-			{},
-			{ detach: true }
-		);
-
 		this.is_following = true;
 		++this.follower_count;
 
-		return response;
+		try {
+			return await Api.sendRequest('/web/profile/follow/' + this.id, {}, { detach: true });
+		} catch (e) {
+			this.is_following = false;
+			--this.follower_count;
+			throw e;
+		}
 	}
 
 	async $unfollow() {
-		const response = await Api.sendRequest(
-			'/web/profile/unfollow/' + this.id,
-			{},
-			{ detach: true }
-		);
-
 		this.is_following = false;
 		--this.follower_count;
 
-		return response;
+		try {
+			return await Api.sendRequest('/web/profile/unfollow/' + this.id, {}, { detach: true });
+		} catch (e) {
+			this.is_following = true;
+			++this.follower_count;
+			throw e;
+		}
 	}
 
 	$save() {
