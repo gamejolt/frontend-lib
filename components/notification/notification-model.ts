@@ -204,7 +204,7 @@ export class Notification extends Model {
 
 			case Notification.TYPE_SELLABLE_SELL:
 				return {
-					name: 'dash.main.overview',
+					name: 'home',
 				};
 
 			case Notification.TYPE_MENTION: {
