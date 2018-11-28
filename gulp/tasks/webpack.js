@@ -6,24 +6,22 @@ const os = require('os');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackDevServer = require('webpack-dev-server');
-const OptimizeCssPlugin = require('optimize-css-assets-webpack-plugin');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
-const CleanCss = require('clean-css');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 const OfflinePlugin = require('offline-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 
-module.exports = function(config) {
+module.exports = function (config) {
 	let base = path.resolve(config.projectBase);
 
-	let noop = function() {};
+	let noop = function () {};
 	let devNoop = !config.production ? noop : undefined;
 	let prodNoop = config.production ? noop : undefined;
 
@@ -60,24 +58,6 @@ module.exports = function(config) {
 		externals['write-file-atomic'] = 'commonjs write-file-atomic';
 	}
 
-	// Didn't seem to work. Not sure if we need it, though.
-	// if (config.server) {
-	// 	// For server builds, keep the node stuff external so that it can make smaller server
-	// 	// builds.
-	// 	externals = nodeExternals({
-	// 		// do not externalize dependencies that need to be processed by webpack.
-	// 		// you can add more file types here e.g. raw *.vue files
-	// 		// you should also whitelist deps that modifies `global` (e.g. polyfills)
-	// 		whitelist: /\.css$/,
-	// 	});
-	// }
-
-	const cleanCssOptions = {
-		level: 1,
-	};
-
-	let cleanCss = new CleanCss(cleanCssOptions);
-
 	let webpackTarget = 'web';
 	if (config.server) {
 		webpackTarget = 'node';
@@ -90,44 +70,51 @@ module.exports = function(config) {
 		libraryTarget = 'commonjs2';
 	}
 
-	// Inline allows us to debug by setting breakpoints.
-	// Eval may be faster, but it doesn't allow setting breakpoints.
 	let devtool = 'source-map';
 	if (!config.production) {
-		if (config.server) {
-			devTool = 'source-map';
-		} else if (config.client) {
-			// The old node-webkit versions of the client (currently 0.12.3) have trouble processing inline source maps in webpack 2.
-			// They have an issue with the //# prefix. Using @ forces it back to webpack 1's //@ for inline sourcemaps.
-			devTool = '@cheap-module-inline-source-map';
-		} else {
-			devTool = 'cheap-module-inline-source-map';
+		if (!config.server) {
+			// eval doesn't allow breakpoitns, inline does
+			devTool = 'cheap-module-eval-source-map';
 		}
 	} else if (config.client) {
 		devtool = false;
 	}
 
-	function stylesLoader(loaders, options) {
-		if (config.production) {
-			loaders.push({
-				loader: 'clean-css-loader',
-				options: cleanCssOptions,
-			});
+	function stylesLoader() {
+		const loaders = [{
+				loader: 'css-loader',
+				options: {
+					sourceMap: false,
+					// How many loaders run before this.
+					importLoaders: 2
+				}
+			},
+			{
+				loader: 'postcss-loader',
+				options: {
+					sourceMap: false
+				}
+			},
+		];
 
-			return ExtractTextPlugin.extract({
-				use: loaders,
-				fallback: 'vue-style-loader',
+		if (config.production && !config.server) {
+			loaders.unshift(MiniCssExtractPlugin.loader);
+		} else {
+			loaders.unshift({
+				loader: 'vue-style-loader',
+				options: {
+					sourceMap: false,
+					shadowMode: false
+				}
 			});
 		}
-
-		loaders.unshift('vue-style-loader');
 
 		return loaders;
 	}
 
 	let webpackSectionConfigs = {};
 	let webpackSectionTasks = [];
-	Object.keys(config.sections).forEach(function(section) {
+	Object.keys(config.sections).forEach(function (section) {
 		const sectionConfig = config.sections[section];
 
 		let appEntries = ['./' + section + '/main.ts'];
@@ -167,10 +154,10 @@ module.exports = function(config) {
 			}
 		}
 
-		let hasOfflineSupport =
-			!config.server && !config.client && config.production && sectionConfig.offline;
+		let hasOfflineSupport = !config.server && !config.client && config.production && sectionConfig.offline;
 
 		webpackSectionConfigs[section] = {
+			mode: config.production ? 'production' : 'development',
 			entry,
 			target: webpackTarget,
 			context: path.resolve(base, 'src'),
@@ -184,9 +171,9 @@ module.exports = function(config) {
 			output: {
 				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
-				filename: section + '.[name].[hash:6].js',
-				chunkFilename: section + '.[name].[chunkhash:6].js',
-				sourceMapFilename: 'maps/[name].[chunkhash:6].map',
+				filename: config.production ? section + '.[contenthash:8].js' : section + '.[name].js',
+				chunkFilename: config.production ? section + '.[contenthash:8].js' : section + '.[name].js',
+				sourceMapFilename: config.production ? 'maps/[contenthash:8].map' : 'maps/[name].map',
 				libraryTarget: libraryTarget,
 			},
 			resolve: {
@@ -202,11 +189,10 @@ module.exports = function(config) {
 			externals: externals,
 			resolveLoader: {
 				alias: {
-					view:
-						'vue-template-loader?' +
+					view: 'vue-template-loader?' +
 						JSON.stringify({
 							scoped: true,
-							transformToRequire: {
+							transformAssetUrls: {
 								img: 'src',
 								'app-theme-svg': 'src',
 							},
@@ -214,10 +200,14 @@ module.exports = function(config) {
 				},
 			},
 			module: {
-				rules: [
-					{
-						test: /\.tsx?$/,
-						use: [
+				rules: [{
+						test: /\.ts$/,
+						use: [{
+								loader: 'cache-loader',
+								options: {
+									cacheDirectory: path.resolve(base, '.cache/ts-loader'),
+								}
+							},
 							{
 								loader: 'ts-loader',
 								options: {
@@ -227,49 +217,77 @@ module.exports = function(config) {
 						],
 					},
 					{
-						enforce: 'pre',
 						test: /\.styl$/,
-						use: 'stylus-loader?paths[]=src/&resolve url&include css',
+						use: [{
+							loader: 'stylus-loader',
+							options: {
+								use: [],
+								paths: [
+									'src/',
+								],
+								'resolve url': true,
+								'include css': true,
+								preferPathResolver: 'webpack',
+								sourceMap: false,
+							}
+						}]
 					},
 					{
 						enforce: 'post',
 						test: /\.styl$/,
-						use: stylesLoader([
-							'css-loader?-minimize',
-							{ loader: 'postcss-loader', options: { sourceMap: true } },
-						]),
+						use: stylesLoader(),
 					},
 					{
+						enforce: 'post',
 						test: /\.css$/,
-						use: stylesLoader([
-							'css-loader?-minimize',
-							{ loader: 'postcss-loader', options: { sourceMap: true } },
-						]),
+						use: stylesLoader(),
 					},
 					{
 						test: /\.md$/,
 						use: ['html-loader', 'markdown-loader'],
 					},
 					{
-						test: /\.(png|jpe?g|gif|svg|json|ogg|mp4)(\?.*)?$/,
-						loader: 'file-loader?name=assets/[name].[hash:6].[ext]',
+						test: /\.(png|jpe?g|gif|svg|ogg|mp4)(\?.*)?$/,
+						use: [{
+							loader: 'file-loader',
+							options: {
+								name: 'assets/[name].[hash:8].[ext]',
+							}
+						}],
 						exclude: /node_modules/,
 					},
 					{
 						test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-						loader: 'file-loader?name=assets/[name].[hash:6].[ext]',
+						use: [{
+							loader: 'file-loader',
+							options: {
+								name: 'assets/[name].[hash:8].[ext]',
+							}
+						}]
+					},
+					{
+						test: /\.json$/,
+						resourceQuery: /file/,
+						loader: 'file-loader',
+						type: 'javascript/auto',
+						options: {
+							name: 'assets/[name].[hash:8].[ext]',
+						}
 					},
 				],
 			},
 			devtool,
+			optimization: config.production && !config.server ? {
+				splitChunks: {
+					// Does chunk splitting logic for entry point chunks as well.
+					// https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+					chunks: 'all',
+				},
+				// Splits the runtime into its own chunk for long-term caching.
+				runtimeChunk: 'single',
+			} : undefined,
 			plugins: [
-				// We use this in prod build too since gzip is able to zip up
-				// path names better than hashed module IDs resulting in smaller
-				// file sizes.
-				new webpack.NamedModulesPlugin(),
-				new webpack.NamedChunksPlugin(),
-				// Hoists modules instead of using a function call when it can.
-				devNoop || new webpack.optimize.ModuleConcatenationPlugin(),
+				prodNoop || new webpack.ProgressPlugin(),
 				new webpack.DefinePlugin({
 					GJ_SECTION: JSON.stringify(section),
 					GJ_ENVIRONMENT: JSON.stringify(
@@ -288,175 +306,93 @@ module.exports = function(config) {
 						(!config.developmentEnv && !config.watching) || config.withUpdater
 					),
 					GJ_IS_WATCHING: JSON.stringify(config.watching),
-
-					// This sets vue in production mode.
-					'process.env.NODE_ENV': JSON.stringify(
-						config.production ? 'production' : 'development'
-					),
 				}),
-				new webpack.LoaderOptionsPlugin({
-					options: {
-						// Fix extract-loader: https://github.com/peerigon/extract-loader/issues/16
-						output: {},
-						htmlLoader: {
-							minimize: config.production,
-						},
-						stylus: {
-							use: [],
-							preferPathResolver: 'webpack',
+				new CopyWebpackPlugin([{
+					context: path.resolve(base, 'src/static-assets'),
+					from: '**/*',
+					to: 'static-assets',
+				}, ]),
+				// Copy over stupid client stuff that's needed.
+				siteNoop || new CopyWebpackPlugin([{
+						from: path.join(base, 'package.json'),
+						to: 'package.json',
+						transform: (content, _path) => {
+							const pkg = JSON.parse(content);
+
+							// We don't want to install dev/optional deps into the client build.
+							// We only need those when building the client, not for runtime.
+							delete pkg.devDependencies;
+							delete pkg.optionalDependencies;
+							delete pkg.scripts;
+
+							return JSON.stringify(pkg);
 						},
 					},
-				}),
-				new CopyWebpackPlugin([
 					{
-						context: path.resolve(base, 'src/static-assets'),
-						from: '**/*',
-						to: 'static-assets',
+						from: 'update-hook.js',
+						to: 'update-hook.js',
 					},
 				]),
-				// Copy over stupid client stuff that's needed.
-				siteNoop ||
-					new CopyWebpackPlugin([
-						{
-							from: path.join(base, 'package.json'),
-							to: 'package.json',
-							transform: (content, _path) => {
-								const pkg = JSON.parse(content);
-
-								// We don't want to install dev/optional deps into the client build.
-								// We only need those when building the client, not for runtime.
-								delete pkg.devDependencies;
-								delete pkg.optionalDependencies;
-								delete pkg.scripts;
-
-								return JSON.stringify(pkg);
-							},
-						},
-						{
-							from: 'update-hook.js',
-							to: 'update-hook.js',
-						},
-					]),
-				devNoop ||
-					new webpack.optimize.UglifyJsPlugin({
-						sourceMap: true,
-						compress: {
-							warnings: false,
-							screw_ie8: true,
-						},
-					}),
-				devNoop || new ImageminPlugin(),
+				devNoop || serverNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
+				devNoop || serverNoop || new MiniCssExtractPlugin({
+					filename: section + '.[contenthash:8].css',
+					chunkFilename: section + '.[contenthash:8].css',
+				}),
+				devNoop || new OptimizeCssnanoPlugin({
+					sourceMap: false,
+					cssnanoOptions: {
+						preset: [
+							'default',
+							{
+								mergeLonghand: false,
+								cssDeclarationSorter: false
+							}
+						]
+					}
+				}),
+				serverNoop || new HtmlWebpackPlugin({
+					filename: indexHtml,
+					template: 'index.html',
+					favicon: 'app/img/favicon.png',
+					inject: true,
+					chunksSortMode: 'none',
 
-				// Since form stuff is so large, we split it into an async chunk
-				// that will get loaded alongside any chunks that need it.
-				devNoop ||
-					clientNoop ||
-					serverNoop ||
-					new webpack.optimize.CommonsChunkPlugin({
-						name: 'app',
-						async: 'forms',
-						minChunks: function(module) {
-							return (
-								module.context &&
-								(module.context.indexOf('vee-validate') !== -1 ||
-									module.context.indexOf('gj-lib-client/components/form') !== -1)
-							);
-						},
-					}),
-
-				// Pull out vendor code from the main entry point.
-				devNoop ||
-					clientNoop ||
-					serverNoop ||
-					new webpack.optimize.CommonsChunkPlugin({
-						name: 'vendor',
-						minChunks: function(module) {
-							return (
-								module.context &&
-								module.context.indexOf('node_modules') !== -1 &&
-								// Don't pull styles into a vendor stylesheet (not worth it).
-								module.resource &&
-								module.resource.indexOf('.css') === -1
-							);
-						},
-					}),
-
-				// This generates a manifest file that allows our vendor chunk
-				// to be cached longer if it doesn't change.
-				// More info: https://webpack.js.org/guides/code-splitting-libraries/#implicit-common-vendor-chunk
-				devNoop ||
-					clientNoop ||
-					serverNoop ||
-					new webpack.optimize.CommonsChunkPlugin({
-						name: 'manifest',
-						minChunks: Infinity,
-					}),
-
-				new ExtractTextPlugin('[name].[contenthash:6].css'),
-				devNoop ||
-					new OptimizeCssPlugin({
-						cssProcessor: {
-							process: function(css) {
-								return new Promise(function(resolve, reject) {
-									let output = cleanCss.minify(css);
-									if (output.errors.length) {
-										reject(output.errors);
-									} else {
-										resolve({
-											css: output.styles,
-										});
-									}
-								});
-							},
-						},
-					}),
-				serverNoop ||
-					new HtmlWebpackPlugin({
-						filename: indexHtml,
-						template: 'index.html',
-						favicon: 'app/img/favicon.png',
-						inject: true,
-						chunksSortMode: 'dependency',
-
-						// Our own vars for injection into template.
+					// Our own vars for injection into template.
+					templateParameters: {
 						_section: section,
 						_isClient: config.client,
 						_title: sectionConfig.title,
 						_crawl: sectionConfig.crawl,
 						_scripts: sectionConfig.scripts,
 						_bodyClass: sectionConfig.bodyClass || '',
-					}),
+					}
+				}),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
-				serverNoop ||
-					clientNoop ||
-					new VueSSRClientPlugin({
-						filename: 'vue-ssr-client-manifest-' + section + '.json',
-					}),
-				browserNoop ||
-					clientNoop ||
-					new VueSSRServerPlugin({
-						filename: 'vue-ssr-server-bundle-' + section + '.json',
-					}),
-				hasOfflineSupport
-					? new OfflinePlugin({
-							excludes: ['**/.*', '**/*.map', 'vue-ssr-*', '**/*gameApiDocContent*'],
-							ServiceWorker: {
-								events: true,
-								output: 'sjw.js',
-								publicPath: 'https://gamejolt.com/sjw.js',
-							},
-					  })
-					: noop,
+				serverNoop || clientNoop || new VueSSRClientPlugin({
+					filename: 'vue-ssr-client-manifest-' + section + '.json',
+				}),
+				browserNoop || clientNoop || new VueSSRServerPlugin({
+					filename: 'vue-ssr-server-bundle-' + section + '.json',
+				}),
+				hasOfflineSupport ? new OfflinePlugin({
+					excludes: ['**/.*', '**/*.map', 'vue-ssr-*', '**/*gameApiDocContent*'],
+					ServiceWorker: {
+						events: true,
+						output: 'sjw.js',
+						publicPath: 'https://gamejolt.com/sjw.js',
+					},
+				}) : noop,
+				devNoop || new webpack.HashedModuleIdsPlugin(),
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			],
 		};
 
-		gulp.task('compile:' + section, function(cb) {
+		gulp.task('compile:' + section, function (cb) {
 			let compiler = webpack(webpackSectionConfigs[section]);
-			compiler.run(function(err, stats) {
+			compiler.run(function (err, stats) {
 				if (err) {
 					throw new gutil.PluginError('webpack:build', err);
 				}
@@ -478,7 +414,7 @@ module.exports = function(config) {
 
 	gulp.task(
 		'watch',
-		gulp.series('clean', function(cb) {
+		gulp.series('clean', function (cb) {
 			const buildSections = config.buildSection.split(',');
 			let port = parseInt(config.port),
 				portOffset = 0;
@@ -489,15 +425,11 @@ module.exports = function(config) {
 
 				let server = new WebpackDevServer(compiler, {
 					historyApiFallback: {
-						rewrites: [
-							{
-								from: /./,
-								to:
-									buildSection === 'app'
-										? '/index.html'
-										: '/' + buildSection + '.html',
-							},
-						],
+						rewrites: [{
+							from: /./,
+							to: buildSection === 'app' ?
+								'/index.html' : '/' + buildSection + '.html',
+						}, ],
 					},
 					public: 'development.gamejolt.com',
 					quiet: true,

@@ -1,11 +1,11 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./play-modal.html?style=./play-modal.styl';
-
-import { BaseModal } from '../../modal/base';
+import { Component, Prop } from 'vue-property-decorator';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { Game } from '../game.model';
 import { Minbar } from '../../minbar/minbar.service';
+import { BaseModal } from '../../modal/base';
+import { Game } from '../game.model';
 import { GameRatingGrowl } from '../rating-growl/rating-growl.service';
+import './play-modal-global.styl';
 
 @View
 @Component({
@@ -14,9 +14,14 @@ import { GameRatingGrowl } from '../rating-growl/rating-growl.service';
 	},
 })
 export default class AppGamePlayModal extends BaseModal {
-	@Prop(Game) game!: Game;
-	@Prop(String) url!: string;
-	@Prop(Boolean) canMinimize?: boolean;
+	@Prop(Game)
+	game!: Game;
+
+	@Prop(String)
+	url!: string;
+
+	@Prop(Boolean)
+	canMinimize?: boolean;
 
 	mounted() {
 		document.body.classList.add('game-play-modal-open');

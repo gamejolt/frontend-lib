@@ -2,7 +2,8 @@ import Axios from 'axios';
 
 export class Primus {
 	static async createConnection(host: string) {
-		const PrimusConstructor: any = await import(/* webpackChunkName: "primus" */ './primus-vendor');
+		const PrimusConstructor: any = (await import(/* webpackChunkName: "primus" */ './primus-vendor'))
+			.default;
 
 		// We first have to make an API call to get a host to use.
 		// This allows us to go through the load balancer to get a host to contact.

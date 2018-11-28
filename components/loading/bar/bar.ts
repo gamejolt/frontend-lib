@@ -1,7 +1,18 @@
-import Vue from 'vue';
-import Axios from 'axios';
-import { Component } from 'vue-property-decorator';
 import View from '!view!./bar.html?style=./bar.styl';
+import Axios from 'axios';
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+
+/**
+ * How long to wait after a request has started before showing the loading bar.
+ */
+const ShowDelay = 500;
+
+/**
+ * How long to wait before hiding the bar again after it has been visible. We
+ * delay this so that it doesn't flash really fast.
+ */
+const HideDelay = 200;
 
 @View
 @Component({})
@@ -19,7 +30,7 @@ export class AppLoadingBar extends Vue {
 			return 0;
 		}
 
-		return this.completedCount / this.requestCount * 100;
+		return (this.completedCount / this.requestCount) * 100;
 	}
 
 	mounted() {
@@ -99,7 +110,7 @@ export class AppLoadingBar extends Vue {
 	private show() {
 		this.showTimeout = setTimeout(() => {
 			this.shouldShow = true;
-		}, 2000);
+		}, ShowDelay);
 	}
 
 	private clear() {
@@ -113,6 +124,6 @@ export class AppLoadingBar extends Vue {
 			this.requestCount = 0;
 			this.completedCount = 0;
 			this.shouldShow = false;
-		}, 300);
+		}, HideDelay);
 	}
 }
