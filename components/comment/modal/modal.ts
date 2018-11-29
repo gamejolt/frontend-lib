@@ -23,10 +23,13 @@ import { DisplayMode } from './modal.service';
 export default class AppCommentModal extends BaseModal {
 	@Prop(String)
 	resource!: string;
+
 	@Prop(Number)
 	resourceId!: number;
+
 	@Prop(Comment)
 	comment?: Comment;
+
 	@Prop(String)
 	displayMode!: DisplayMode;
 

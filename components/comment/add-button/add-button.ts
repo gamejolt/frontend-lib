@@ -13,10 +13,13 @@ import { CommentModal, DisplayMode } from '../modal/modal.service';
 export class AppCommentAddButton extends Vue {
 	@Prop(String)
 	resource!: string;
+
 	@Prop(Number)
 	resourceId!: number;
+
 	@Prop(String)
 	placeholder?: string;
+
 	@Prop(String)
 	displayMode!: DisplayMode;
 
