@@ -18,9 +18,6 @@ export class AppUserAvatar extends Vue {
 	@Prop(String)
 	link?: string;
 
-	@Prop(Boolean)
-	showName?: boolean;
-
 	get href() {
 		if (this.user) {
 			if (!this.link) {

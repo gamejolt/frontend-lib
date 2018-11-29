@@ -351,6 +351,25 @@ function getTranslationValues(notification: Notification) {
 			subject: subject,
 			object: notification.to_model.lead_snippet,
 		};
+	} else if (notification.to_model instanceof User) {
+		if (
+			notification.from_model instanceof User &&
+			notification.from_model.id === notification.to_model.id
+		) {
+			return {
+				subject: subject,
+				object: 'them',
+			};
+		} else {
+			return {
+				subject: subject,
+				object:
+					notification.to_model.display_name +
+					' (@' +
+					notification.to_model.username +
+					')',
+			};
+		}
 	}
 
 	return {
@@ -398,21 +417,39 @@ export function getNotificationText(notification: Notification, plaintext = fals
 		}
 
 		case Notification.TYPE_COMMENT_ADD_OBJECT_OWNER: {
-			return _process(
-				Translate.$gettextInterpolate(
-					`<em>%{ subject }</em> commented on <b>%{ object }</b>.`,
-					getTranslationValues(notification)
-				)
-			);
+			if (notification.to_model instanceof User) {
+				return _process(
+					Translate.$gettextInterpolate(
+						`<em>%{ subject }</em> shouted at you!`,
+						getTranslationValues(notification)
+					)
+				);
+			} else {
+				return _process(
+					Translate.$gettextInterpolate(
+						`<em>%{ subject }</em> commented on <b>%{ object }</b>.`,
+						getTranslationValues(notification)
+					)
+				);
+			}
 		}
 
 		case Notification.TYPE_COMMENT_ADD: {
-			return _process(
-				Translate.$gettextInterpolate(
-					`<em>%{ subject }</em> replied to your comment on <b>%{ object }</b>.`,
-					getTranslationValues(notification)
-				)
-			);
+			if (notification.to_model instanceof User) {
+				return _process(
+					Translate.$gettextInterpolate(
+						`<em>%{ subject }</em> replied to your shout to <b>%{ object }</b>.`,
+						getTranslationValues(notification)
+					)
+				);
+			} else {
+				return _process(
+					Translate.$gettextInterpolate(
+						`<em>%{ subject }</em> replied to your comment on <b>%{ object }</b>.`,
+						getTranslationValues(notification)
+					)
+				);
+			}
 		}
 
 		case Notification.TYPE_FORUM_POST_ADD: {
@@ -516,6 +553,16 @@ export function getNotificationText(notification: Notification, plaintext = fals
 								`<em>%{ subject }</em> mentioned you in a comment on the post <b>%{ object }</b>.`,
 								{
 									object: notification.to_model.lead_snippet,
+									subject: getSubjectTranslationValue(notification),
+								}
+							)
+						);
+					} else if (notification.to_model instanceof User) {
+						return _process(
+							Translate.$gettextInterpolate(
+								`<em>%{ subject }</em> mentioned you in a shout to @<b>%{ object }</b>.`,
+								{
+									object: notification.to_model.username,
 									subject: getSubjectTranslationValue(notification),
 								}
 							)
