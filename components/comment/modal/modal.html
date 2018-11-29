@@ -9,11 +9,19 @@
 	<div class="modal-header" v-if="!comment">
 		<h2 class="modal-title">
 			<translate
+				v-if="displayMode === 'comments'"
 				:translate-n="commentsCount"
 				:translate-params="{ count: number(commentsCount) }"
 				translate-plural="%{ count } comments"
 				>
 				1 comment
+			</translate>
+			<translate
+				v-else
+				:translate-n="commentsCount"
+				:translate-params="{ count: number(commentsCount) }"
+				translate-plural="%{ count } shouts">
+				1 shout
 			</translate>
 		</h2>
 	</div>

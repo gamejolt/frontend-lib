@@ -1,19 +1,22 @@
-import { Modal } from '../../modal/modal.service';
-import { asyncComponentLoader } from '../../../utils/utils';
-import { Comment, fetchComment } from '../comment-model';
 import { VueRouter } from 'vue-router/types/router';
+import { asyncComponentLoader } from '../../../utils/utils';
 import { Growls } from '../../growls/growls.service';
+import { Modal } from '../../modal/modal.service';
 import { Translate } from '../../translate/translate.service';
+import { Comment, fetchComment } from '../comment-model';
+
+export type DisplayMode = 'comments' | 'shouts';
 
 interface CommentModalOptions {
 	resource?: string;
 	resourceId?: number;
 	comment?: Comment;
+	displayMode?: DisplayMode;
 }
 
 export class CommentModal {
 	static async show(options: CommentModalOptions) {
-		const { resource, resourceId, comment } = options;
+		const { resource, resourceId, comment, displayMode } = options;
 
 		return await Modal.show<void>({
 			component: () =>
@@ -22,6 +25,7 @@ export class CommentModal {
 				resource,
 				resourceId,
 				comment,
+				displayMode,
 			},
 			size: 'sm',
 		});
