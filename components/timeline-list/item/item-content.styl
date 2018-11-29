@@ -14,7 +14,7 @@
 			theme-prop('background-color', 'bg-offset')
 			theme-prop('color', 'fg-muted')
 			theme-prop('border-color', 'bg')
-			border-radius: 50%
+			img-circle()
 			position: absolute
 			left: 0
 			top: 0
@@ -25,9 +25,6 @@
 			border-style: solid
 			z-index: 1
 
-			img
-				border-radius: 50% !important
-
 			/**
 			 * Active Item
 			 */
@@ -37,7 +34,7 @@
 				.timeline-list-item-bubble-inner
 					theme-prop('background-color', 'bg')
 					padding: 2px
-					border-radius: 50%
+					img-circle()
 
 		&-main
 			$-padding-left = $timeline-list-avatar-margin + $timeline-list-icon-size
