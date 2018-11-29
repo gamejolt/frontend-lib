@@ -23,7 +23,7 @@ export class AppUserAvatar extends Vue {
 			if (!this.link) {
 				return Environment.wttfBaseUrl + this.user.url;
 			} else if (this.link === 'dashboard') {
-				return Environment.wttfBaseUrl + '/dashboard';
+				return Environment.wttfBaseUrl;
 			} else if (this.link === 'fireside') {
 				return Environment.firesideBaseUrl + '/@' + this.user.username;
 			}
