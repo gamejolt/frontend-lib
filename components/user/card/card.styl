@@ -8,6 +8,7 @@
 	overflow: hidden
 
 .-well
+	position: relative
 	padding: 10px
 
 hr
@@ -44,6 +45,15 @@ hr
 	overflow: hidden
 	z-index: 2
 
+.-follows-you
+	position: absolute
+	top: -15px
+	left: 0
+	right: 0
+	text-align: center
+	pointer-events: none
+	z-index: 3
+
 .-display-name
 	text-overflow()
 	font-weight: bold
@@ -60,6 +70,3 @@ hr
 
 .-stats
 	text-align: center
-
-.-follows-you-tag
-	margin-left: 10px;
