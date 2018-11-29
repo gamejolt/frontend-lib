@@ -41,6 +41,14 @@
 						>
 						@{{ user.username }}
 					</router-link>
+
+					<!-- Following status -->
+					<span
+						v-if="user.follows_you"
+						class="tag -follows-you-tag"
+						>
+						<translate>Follows you</translate>
+					</span>
 				</div>
 
 				<div class="-follow-counts small">
