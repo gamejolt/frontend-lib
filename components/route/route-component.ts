@@ -244,7 +244,7 @@ export class BaseRouteComponent extends Vue {
 			// manually trigger the resolve in this case.
 			const options = this.$options.routeResolverOptions || {};
 			if (options.hasResolver && !Resolver.isComponentResolving(name)) {
-				this._reloadRoute(false);
+				this._reloadRoute(!!options.cache);
 			}
 		}
 	}
