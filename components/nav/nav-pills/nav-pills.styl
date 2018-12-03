@@ -30,3 +30,8 @@ nav.pills
 				&.active
 					theme-prop('background-color', 'highlight')
 					theme-prop('color', 'highlight-fg')
+
+				// Nothing needs to be clickable or anything within the item,
+				// since all the events happen within the <a> tag.
+				& > *
+					pointer-events: none
