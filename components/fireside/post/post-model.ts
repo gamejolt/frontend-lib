@@ -203,8 +203,7 @@ export class FiresidePost extends Model {
 	}
 
 	getManageableCommunities(perms?: CommunityPerm | CommunityPerm[], either?: boolean) {
-		return this.tagged_communities
-			.filter(tc => tc.community.hasPerms(perms, either));
+		return this.tagged_communities.filter(tc => tc.community.hasPerms(perms, either));
 	}
 
 	isManageableByUser(user?: User | null) {
@@ -288,6 +287,15 @@ export class FiresidePost extends Model {
 		}
 
 		return this.$_save(`/web/communities/manage/unfeature/${c.id}`, 'post');
+	}
+
+	$reject(community: Community) {
+		const c = this.getTaggedCommunity(community);
+		if (!c) {
+			throw new Error('Cannot reject a post to a community it is not tagged in');
+		}
+
+		return this.$_save(`/web/communities/manage/reject/${c.id}`, 'post');
 	}
 
 	getTaggedCommunity(community: Community) {
