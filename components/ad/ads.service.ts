@@ -11,7 +11,8 @@ import { Prebid } from './prebid.service';
 import { AdSlot, AdSlotTargetingMap } from './slot';
 
 // To show ads on the page for dev, just change this to false.
-const DevDisabled = GJ_BUILD_TYPE === 'development';
+export const AdsDisabledDev = GJ_BUILD_TYPE === 'development';
+// export const AdsDisabledDev = false;
 
 // The timeout for any bid requests.
 export const BidsTimeout = 2000;
@@ -184,7 +185,7 @@ export class Ads {
 	}
 
 	static async setSlotTargeting(slot: AdSlot, targeting: AdSlotTargetingMap) {
-		if (DevDisabled) {
+		if (AdsDisabledDev) {
 			return;
 		}
 
@@ -208,7 +209,7 @@ export class Ads {
 		// Copies the current set of ads so that it doesn't change during the async/await.
 		const adsToDisplay = ads.map(i => i);
 
-		if (!this.shouldShow || DevDisabled) {
+		if (!this.shouldShow || AdsDisabledDev) {
 			return;
 		}
 

@@ -1,8 +1,9 @@
-import { GamePackage } from './package.model';
-import { GameRelease } from '../release/release.model';
+import { Sellable } from '../../sellable/sellable.model';
 import { GameBuild } from '../build/build.model';
 import { GameBuildLaunchOption } from '../build/launch-option/launch-option.model';
-import { Sellable } from '../../sellable/sellable.model';
+import { GameExternalPackage } from '../external-package/external-package.model';
+import { GameRelease } from '../release/release.model';
+import { GamePackage } from './package.model';
 
 export class GamePackagePayloadModel {
 	packages: GamePackage[];
@@ -11,6 +12,7 @@ export class GamePackagePayloadModel {
 	launchOptions: GameBuildLaunchOption[];
 	sellables: Sellable[];
 	installableBuilds?: GameBuild[];
+	externalPackages: GameExternalPackage[];
 
 	constructor(payload: any) {
 		this.packages = payload.packages ? GamePackage.populate(payload.packages) : [];
@@ -20,6 +22,9 @@ export class GamePackagePayloadModel {
 			? GameBuildLaunchOption.populate(payload.launchOptions)
 			: [];
 		this.sellables = payload.sellables ? Sellable.populate(payload.sellables) : [];
+		this.externalPackages = payload.externalPackages
+			? GameExternalPackage.populate(payload.externalPackages)
+			: [];
 
 		let indexedPackages: { [k: number]: GamePackage } = {};
 		let indexedReleases: { [k: number]: GameRelease } = {};
@@ -42,8 +47,9 @@ export class GamePackagePayloadModel {
 
 		for (let release of this.releases) {
 			release._package = indexedPackages[release.game_package_id];
-			release._builds = (release._package!._builds || [])
-				.filter(b => b.game_release_id === release.id);
+			release._builds = (release._package!._builds || []).filter(
+				b => b.game_release_id === release.id
+			);
 		}
 
 		for (let build of this.builds) {

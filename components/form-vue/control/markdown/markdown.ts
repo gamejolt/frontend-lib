@@ -1,17 +1,16 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./markdown.html?style=./markdown.styl';
-
-import { BaseFormControl } from '../base';
-import { Screen } from '../../../screen/screen-service';
-import { Environment } from '../../../environment/environment.service';
-import { Api } from '../../../api/api.service';
+import { Component, Prop } from 'vue-property-decorator';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { AppTooltip } from '../../../tooltip/tooltip';
 import { AppLoading } from '../../../../vue/components/loading/loading';
-import { AppFormAutosize } from '../../autosize.directive';
+import { Api } from '../../../api/api.service';
 import { AppCodemirror } from '../../../codemirror/codemirror';
-import { AppFormControlMarkdownMediaItems } from './media-items/media-items';
+import { Environment } from '../../../environment/environment.service';
+import { Screen } from '../../../screen/screen-service';
+import { AppTooltip } from '../../../tooltip/tooltip';
+import { AppFormAutosize, AutosizeBootstrap } from '../../autosize.directive';
 import { AppFocusWhen } from '../../focus-when.directive';
+import { BaseFormControl } from '../base';
+import { AppFormControlMarkdownMediaItems } from './media-items/media-items';
 
 @View
 @Component({
@@ -28,19 +27,41 @@ import { AppFocusWhen } from '../../focus-when.directive';
 	},
 })
 export class AppFormControlMarkdown extends BaseFormControl {
-	@Prop(String) editorClass?: string;
-	@Prop(String) previewClass?: string;
-	@Prop(String) previewUrl!: string;
-	@Prop(Boolean) disablePreview?: boolean;
-	@Prop(String) placeholder?: string;
+	@Prop(String)
+	editorClass?: string;
+
+	@Prop(String)
+	previewClass?: string;
+
+	@Prop(String)
+	previewUrl!: string;
+
+	@Prop(Boolean)
+	disablePreview?: boolean;
+
+	@Prop(String)
+	placeholder?: string;
+
 	@Prop({ type: String, default: 'markdown' })
 	markdownMode?: string;
-	@Prop(Boolean) htmlSupport?: boolean;
-	@Prop(Boolean) showMediaItems?: boolean;
-	@Prop(String) mediaItemType?: string;
-	@Prop(Boolean) allowCodeEditor?: boolean;
-	@Prop(Boolean) disabled?: boolean;
-	@Prop(Boolean) autofocus?: boolean;
+
+	@Prop(Boolean)
+	htmlSupport?: boolean;
+
+	@Prop(Boolean)
+	showMediaItems?: boolean;
+
+	@Prop(String)
+	mediaItemType?: string;
+
+	@Prop(Boolean)
+	allowCodeEditor?: boolean;
+
+	@Prop(Boolean)
+	disabled?: boolean;
+
+	@Prop(Boolean)
+	autofocus?: boolean;
 
 	controlVal = '';
 	currentTab = 'edit';
@@ -51,6 +72,7 @@ export class AppFormControlMarkdown extends BaseFormControl {
 	mediaItemParentId = 0;
 	previewContent = '';
 	isLoadingPreview = false;
+	_updateAutosize?: () => void;
 
 	readonly Screen = Screen;
 	readonly Environment = Environment;
@@ -133,5 +155,23 @@ export class AppFormControlMarkdown extends BaseFormControl {
 		this.currentTab = 'edit';
 
 		this.applyValue(value);
+	}
+
+	/**
+	 * This is called when the autosize directive is bootstrapped. It passes us
+	 * some hooks that we can call to modify it.
+	 */
+	bootstrapAutosize({ updater }: AutosizeBootstrap) {
+		this._updateAutosize = updater;
+	}
+
+	/**
+	 * Can be called to update the autosize height in case content has changed
+	 * outside the normal editing flow.
+	 */
+	updateAutosize() {
+		if (this._updateAutosize) {
+			this._updateAutosize();
+		}
 	}
 }

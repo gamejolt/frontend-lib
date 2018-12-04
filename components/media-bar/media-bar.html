@@ -9,14 +9,14 @@
 			<app-loading centered no-color stationary hide-label />
 		</div>
 
-		<template v-if="mediaItems && mediaItems.length">
+		<div v-if="mediaItems && mediaItems.length">
 			<app-media-bar-item
 				v-for="item of mediaItems"
 				:key="item.id"
 				:item="item"
 				@click.native="setActiveItem(item)"
 				/>
-		</template>
+		</div>
 
 	</div>
 </app-scroll-scroller>

@@ -1,7 +1,8 @@
+import { asyncComponentLoader } from 'game-jolt-frontend-lib/utils/utils';
 import Vue, { ComponentOptions } from 'vue';
 import { createDecorator } from 'vue-class-component';
 import { Component } from 'vue-property-decorator';
-import { RawLocation, Route } from 'vue-router';
+import VueRouter, { RawLocation, Route } from 'vue-router';
 import { arrayRemove } from '../../utils/array';
 import { LocationRedirect } from '../../utils/router';
 import { EventBus } from '../event-bus/event-bus.service';
@@ -87,6 +88,33 @@ class Resolver {
 	}
 }
 
+/**
+ * If we aysynchronously load a route component into another component (through
+ * a v-if), then it won't do the proper route resolving in SSR, since the
+ * "created()" can't be async and the next() function will never find the
+ * beforeRouteEnter hook since it's not in the route list to call. This allows
+ * us to still resolve properly on SSR. Basically, we make an async component
+ * out of the route, and assign the payload to it so that "created()" hook can
+ * resolve it synchonously later.
+ */
+export async function asyncRouteLoader(loader: Promise<any>, router: VueRouter) {
+	const component = await asyncComponentLoader(loader);
+	if (!GJ_IS_SSR) {
+		return component;
+	}
+
+	// Basically copy the flow of the beforeRouteEnter for SSR.
+	const options = component.options as ComponentOptions<Vue>;
+	const to = router.currentRoute;
+	const resolver = Resolver.startResolve(options, to);
+
+	const { payload } = await getPayload(options, to, false);
+	resolver.payload = payload;
+	options.__RESOLVER__ = resolver;
+
+	return component;
+}
+
 export function RouteResolver(options: RouteResolverOptions = {}) {
 	return createDecorator(componentOptions => {
 		// Store the options passed in.
@@ -156,7 +184,6 @@ export function RouteResolver(options: RouteResolverOptions = {}) {
 					// component, so it's pointless to do things here.
 					// Instead we do it in the component created() func.
 					if (GJ_IS_SSR) {
-						console.log('NEXT CALLED');
 						return;
 					}
 
@@ -245,7 +272,7 @@ export class BaseRouteComponent extends Vue {
 			// manually trigger the resolve in this case.
 			const options = this.$options.routeResolverOptions || {};
 			if (options.hasResolver && !Resolver.isComponentResolving(name)) {
-				this._reloadRoute(false);
+				this._reloadRoute(!!options.cache);
 			}
 		}
 	}

@@ -1,0 +1,16 @@
+<div
+	v-if="shouldShow"
+	class="-container"
+	:class="{
+		'-size-leaderboard': size === 'leaderboard',
+		'-size-rectangle': size === 'rectangle',
+	}"
+	>
+	<div class="-inner">
+		<component
+			:is="adComponent"
+			:size="size"
+			:pos="pos"
+			/>
+	</div>
+</div>

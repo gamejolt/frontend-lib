@@ -1,11 +1,11 @@
-import { Model } from '../../model/model.service';
-import { GameBuildFile } from './file/file.model';
-import { GameBuildParam } from './param/param.model';
-import { GameBuildLaunchOption } from './launch-option/launch-option.model';
 import { Api } from '../../api/api.service';
+import { Model } from '../../model/model.service';
 import { Game } from '../game.model';
 import { GamePackage } from '../package/package.model';
 import { GameRelease } from '../release/release.model';
+import { GameBuildFile } from './file/file.model';
+import { GameBuildLaunchOption } from './launch-option/launch-option.model';
+import { GameBuildParam } from './param/param.model';
 
 interface PlatformSupport {
 	icon: string;
@@ -122,6 +122,11 @@ export class GameBuild extends Model {
 			icon: 'rom',
 			tooltip: 'ROM',
 			sort: 60,
+		},
+		steam: {
+			icon: 'steam',
+			tooltip: 'Steam Key',
+			sort: 70,
 		},
 	};
 

@@ -73,7 +73,7 @@
 			:value="controlVal"
 			@input="onChange( $event.target.value )"
 			v-validate="{ rules: validationRules }"
-			v-app-form-autosize
+			v-app-form-autosize="bootstrapAutosize"
 			v-app-focus-when="autofocus"
 			>
 		</textarea>
