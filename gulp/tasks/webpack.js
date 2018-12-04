@@ -93,7 +93,12 @@ module.exports = function (config) {
 			},
 		];
 
-		if (config.production && !config.server) {
+		// Can't load CSS on server, so we use null-loader which basically does
+		// nothing when including CSS, however it still tracks the chunk, which
+		// vue ssr will use for initial/async CSS.
+		if (config.server) {
+			loaders.unshift('null-loader');
+		} else if (config.production) {
 			loaders.unshift(MiniCssExtractPlugin.loader);
 		} else {
 			loaders.unshift({
@@ -329,7 +334,7 @@ module.exports = function (config) {
 				]),
 				devNoop || serverNoop || new ImageminPlugin(),
 				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
-				devNoop || serverNoop || new MiniCssExtractPlugin({
+				devNoop || new MiniCssExtractPlugin({
 					filename: section + '.[contenthash:8].css',
 					chunkFilename: section + '.[contenthash:8].css',
 				}),
