@@ -1,16 +1,18 @@
 import { Modal } from 'game-jolt-frontend-lib/components/modal/modal.service';
 import { VueRouter } from 'vue-router/types/router';
 import { asyncComponentLoader } from '../../../utils/utils';
+import { DisplayMode } from '../modal/modal.service';
 
 interface CommentThreadModalOptions {
 	resource: string;
 	resourceId: number;
 	commentId: number;
+	displayMode: DisplayMode;
 }
 
 export class CommentThreadModal {
 	static async show(options: CommentThreadModalOptions) {
-		const { resource, resourceId, commentId } = options;
+		const { resource, resourceId, commentId, displayMode } = options;
 
 		return await Modal.show<void>({
 			component: () =>
@@ -19,6 +21,7 @@ export class CommentThreadModal {
 				resource,
 				resourceId,
 				commentId,
+				displayMode,
 			},
 			size: 'sm',
 		});
@@ -27,7 +30,12 @@ export class CommentThreadModal {
 	/**
 	 * Checks if the url has a comment permalink and opens the modal
 	 */
-	static async showFromPermalink(router: VueRouter, resource: string, resourceId: number) {
+	static async showFromPermalink(
+		router: VueRouter,
+		resource: string,
+		resourceId: number,
+		displayMode: DisplayMode
+	) {
 		const hash = router.currentRoute.hash;
 		if (!hash || hash.indexOf('#comment-') !== 0) {
 			return;
@@ -38,6 +46,6 @@ export class CommentThreadModal {
 			return;
 		}
 
-		CommentThreadModal.show({ commentId: id, resource, resourceId });
+		CommentThreadModal.show({ commentId: id, resource, resourceId, displayMode });
 	}
 }

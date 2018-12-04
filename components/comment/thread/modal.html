@@ -8,8 +8,9 @@
 
 	<div v-if="username" class="modal-header">
 		<h2 class="modal-title">
+			{{displayModeTitle}}
 			<translate :translate-params="{ username: username }">
-				Comment by @%{ username }
+				by @%{ username }
 			</translate>
 		</h2>
 	</div>

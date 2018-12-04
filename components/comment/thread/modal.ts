@@ -11,6 +11,7 @@ import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { FormComment } from '../add/add';
 import { Comment } from '../comment-model';
 import { CommentMutation } from '../comment-store';
+import { DisplayMode } from '../modal/modal.service';
 import { AppCommentWidget } from '../widget/widget';
 
 @View
@@ -28,6 +29,8 @@ export default class AppCommentThreadModal extends BaseModal {
 	resource!: string;
 	@Prop(Number)
 	resourceId!: number;
+	@Prop(String)
+	displayMode!: DisplayMode;
 
 	@AppState
 	user!: AppStore['user'];
@@ -60,6 +63,16 @@ export default class AppCommentThreadModal extends BaseModal {
 				return comment.user.username;
 			}
 		}
+	}
+
+	get displayModeTitle() {
+		switch (this.displayMode) {
+			case 'comments':
+				return this.$gettext('Comment');
+			case 'shouts':
+				return this.$gettext('Shout');
+		}
+		return '';
 	}
 
 	_onCommentAdd(comment: Comment) {
