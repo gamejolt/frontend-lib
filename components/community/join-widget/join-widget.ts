@@ -14,6 +14,7 @@ import { AppStore } from 'game-jolt-frontend-lib/vue/services/app/app-store';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
+import { GridClient } from '../../../../../app/components/grid/client.service';
 
 @View
 @Component({
@@ -38,6 +39,9 @@ export class AppCommunityJoinWidget extends Vue {
 
 	@State
 	app!: AppStore;
+
+	@State
+	grid!: GridClient;
 
 	isProcessing = false;
 
@@ -81,6 +85,7 @@ export class AppCommunityJoinWidget extends Vue {
 		if (!this.community.is_member) {
 			try {
 				await $joinCommunity(this.community);
+				this.grid.joinCommunity(this.community);
 				this.join(this.community);
 			} catch (e) {
 				Growls.error(
@@ -90,6 +95,7 @@ export class AppCommunityJoinWidget extends Vue {
 		} else {
 			try {
 				await $leaveCommunity(this.community);
+				this.grid.leaveCommunity(this.community);
 				this.leave(this.community);
 			} catch (e) {
 				Growls.error(this.$gettext(`For some reason we couldn't leave this community.`));
