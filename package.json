@@ -8,7 +8,6 @@
 		"css-loader": "1.0.1",
 		"extract-loader": "3.0.0",
 		"file-loader": "2.0.0",
-		"null-loader": "0.1.1",
 		"friendly-errors-webpack-plugin": "1.7.0",
 		"gulp": "gulpjs/gulp#4.0",
 		"gulp-angular-gettext": "2.2.0",
