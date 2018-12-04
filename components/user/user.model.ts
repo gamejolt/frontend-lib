@@ -17,6 +17,7 @@ export class User extends Model {
 	slug!: string;
 	img_avatar!: string;
 	dogtag!: string;
+	shouts_enabled!: boolean;
 
 	status!: number;
 	permission_level!: number;
@@ -38,7 +39,9 @@ export class User extends Model {
 	theme!: Theme | null;
 	follower_count!: number;
 	following_count!: number;
+	comment_count!: number;
 	is_following?: boolean;
+	follows_you?: boolean;
 
 	// Manage linked accounts settings - fb is only returned in the profile pages
 	facebook_id?: string;

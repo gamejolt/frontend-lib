@@ -1,35 +1,16 @@
 @require '~styles/variables'
 @require '~styles-lib/mixins'
 
-.ad-leaderboard, .ad-rectangle
-	text-align: center
-
-	.ad-inner
+.-size-leaderboard
+	.-slot, >>> div
+		display: block
 		margin: 0 auto
-
-	.text-left &
-		text-align: left
-
-.ad-inner
-	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
-
-.ad-leaderboard
-	.ad-inner, >>> .ad-slot > div
 		width: 728px !important
 		height: 90px !important
 
-.ad-rectangle
-	.ad-inner, >>> .ad-slot > div
+.-size-rectangle
+	.-slot, >>> div
+		display: block
+		margin: 0 auto
 		width: 300px !important
 		height: 250px !important
-
-.ad-skyscraper
-	.ad-inner, >>> .ad-slot > div
-		width: 160px !important
-		height: 600px !important
-
->>> .ad-label
-	theme-prop('color', 'fg-muted')
-	font-size: $font-size-small
-	text-transform: uppercase

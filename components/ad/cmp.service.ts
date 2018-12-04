@@ -1,6 +1,6 @@
-import { appStore } from '../../vue/services/app/app-store';
+import { appStore } from 'game-jolt-frontend-lib/vue/services/app/app-store';
 
-type CmpCommand = 'getConsentData' | 'getVendorConsents';
+type CmpCommand = 'getConsentData' | 'getVendorConsents' | 'ping';
 
 if (!GJ_IS_SSR && !GJ_IS_CLIENT) {
 	const _window = window as any;
@@ -15,7 +15,15 @@ if (!GJ_IS_SSR && !GJ_IS_CLIENT) {
 		// False if there was an error, else true.
 		const responseCode = true;
 
-		if (command === 'getConsentData') {
+		if (command === 'ping') {
+			callback(
+				{
+					gdprAppliesGlobally: false,
+					cmpLoaded: true,
+				},
+				responseCode
+			);
+		} else if (command === 'getConsentData') {
 			callback({ consentData: iabConsentData, gdprApplies }, responseCode);
 		} else if (command === 'getVendorConsents') {
 			callback({ metadata: iabConsentData, gdprApplies }, responseCode);

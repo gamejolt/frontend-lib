@@ -2,15 +2,18 @@ import { asyncComponentLoader } from '../../../utils/utils';
 import { Modal } from '../../modal/modal.service';
 import { Comment } from '../comment-model';
 
+export type DisplayMode = 'comments' | 'shouts';
+
 interface CommentModalOptions {
 	resource?: string;
 	resourceId?: number;
 	comment?: Comment;
+	displayMode?: DisplayMode;
 }
 
 export class CommentModal {
 	static async show(options: CommentModalOptions) {
-		const { resource, resourceId, comment } = options;
+		const { resource, resourceId, comment, displayMode } = options;
 
 		return await Modal.show<void>({
 			component: () =>
@@ -19,6 +22,7 @@ export class CommentModal {
 				resource,
 				resourceId,
 				comment,
+				displayMode,
 			},
 			size: 'sm',
 		});
