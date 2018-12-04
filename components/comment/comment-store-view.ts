@@ -18,7 +18,11 @@ export class CommentStoreSliceView implements CommentStoreView {
 }
 
 export class CommentStoreThreadView implements CommentStoreView {
-	public constructor(public parentCommentId: number) {}
+	parentCommentId: number;
+
+	public constructor(parentCommentId: number) {
+		this.parentCommentId = parentCommentId;
+	}
 
 	public getParents(storeModel: CommentStoreModel) {
 		const parent = storeModel.parentComments.find(c => c.id === this.parentCommentId);

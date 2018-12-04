@@ -61,7 +61,7 @@ export class AppCommentWidget extends Vue {
 	autofocus?: boolean;
 
 	@Prop(Number)
-	parentCommentId?: number;
+	threadCommentId?: number;
 
 	@Prop({ type: Boolean, default: true })
 	showAdd!: boolean;
@@ -174,13 +174,13 @@ export class AppCommentWidget extends Vue {
 	}
 
 	get isThreadView() {
-		return !!this.parentCommentId;
+		return !!this.threadCommentId;
 	}
 
 	get expandChildren() {
-		if (this.isThreadView && this.parentCommentId && this.storeView && this.store) {
+		if (this.isThreadView && this.threadCommentId && this.storeView && this.store) {
 			const parents = this.storeView.getParents(this.store);
-			const parent = parents.find(c => c.id === this.parentCommentId);
+			const parent = parents.find(c => c.id === this.threadCommentId);
 			return !parent;
 		}
 		return false;
@@ -212,8 +212,8 @@ export class AppCommentWidget extends Vue {
 			this.store = null;
 		}
 
-		if (this.isThreadView && this.parentCommentId) {
-			this.storeView = new CommentStoreThreadView(this.parentCommentId);
+		if (this.isThreadView && this.threadCommentId) {
+			this.storeView = new CommentStoreThreadView(this.threadCommentId);
 		} else {
 			this.storeView = new CommentStoreSliceView();
 		}
@@ -233,11 +233,15 @@ export class AppCommentWidget extends Vue {
 			}
 
 			let payload: any;
-			if (this.isThreadView && this.parentCommentId) {
+			if (this.isThreadView && this.threadCommentId) {
 				payload = await this.fetchThread({
 					store: this.store,
-					parentId: this.parentCommentId,
+					parentId: this.threadCommentId,
 				});
+				// It's possible that the thread comment is actually a child. In that case, update the view's parent id to the returned parent id
+				if (this.storeView instanceof CommentStoreThreadView) {
+					this.storeView.parentCommentId = new Comment(payload.parent).id;
+				}
 			} else {
 				payload = await this.fetchComments({
 					store: this.store,
