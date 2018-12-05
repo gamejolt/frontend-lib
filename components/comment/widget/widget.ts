@@ -6,8 +6,8 @@ import { AppState, AppStore } from '../../../vue/services/app/app-store';
 import { Analytics } from '../../analytics/analytics.service';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
 import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
+import { Collaborator } from '../../collaborator/collaborator.model';
 import { Environment } from '../../environment/environment.service';
-import { GameCollaborator } from '../../game/collaborator/collaborator.model';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { AppMessageThreadContent } from '../../message-thread/content/content';
 import { AppMessageThread } from '../../message-thread/message-thread';
@@ -94,7 +94,7 @@ export class AppCommentWidget extends Vue {
 	perPage = 10;
 	currentPage = 1;
 
-	collaborators: GameCollaborator[] = [];
+	collaborators: Collaborator[] = [];
 
 	get loginUrl() {
 		return (
@@ -199,7 +199,7 @@ export class AppCommentWidget extends Vue {
 			this.perPage = payload.perPage || 10;
 
 			this.collaborators = payload.collaborators
-				? GameCollaborator.populate(payload.collaborators)
+				? Collaborator.populate(payload.collaborators)
 				: [];
 		} catch (e) {
 			console.error(e);

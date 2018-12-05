@@ -3,6 +3,7 @@ import VueRouter, { RawLocation } from 'vue-router';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
 import { Api } from '../api/api.service';
+import { Collaborator } from '../collaborator/collaborator.model';
 import { Comment, getCommentUrl } from '../comment/comment-model';
 import { CommentVideoModal } from '../comment/video/modal/modal.service';
 import { CommentVideo } from '../comment/video/video-model';
@@ -11,7 +12,6 @@ import { FiresidePost } from '../fireside/post/post-model';
 import { ForumPost } from '../forum/post/post.model';
 import { ForumTopic } from '../forum/topic/topic.model';
 import { GameLibraryGame } from '../game-library/game/game.model';
-import { GameCollaborator } from '../game/collaborator/collaborator.model';
 import { Game } from '../game/game.model';
 import { GameRating } from '../game/rating/rating.model';
 import { Growls } from '../growls/growls.service';
@@ -91,7 +91,7 @@ export class Notification extends Model {
 		| FiresidePost
 		| OrderItem
 		| Subscription
-		| GameCollaborator
+		| Collaborator
 		| Mention
 		| CommentVideo;
 
@@ -160,7 +160,7 @@ export class Notification extends Model {
 			this.action_model = new Subscription(data.action_resource_model);
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_COLLABORATOR_INVITE) {
-			this.action_model = new GameCollaborator(data.action_resource_model);
+			this.action_model = new Collaborator(data.action_resource_model);
 			this.is_user_based = true;
 		} else if (this.type === Notification.TYPE_MENTION) {
 			this.action_model = new Mention(data.action_resource_model);
