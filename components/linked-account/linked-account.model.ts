@@ -1,6 +1,14 @@
 import { Model } from '../model/model.service';
 
-export type Provider = 'twitter' | 'facebook' | 'twitch' | 'google' | 'tumblr';
+export type Provider =
+	| 'twitter'
+	| 'facebook'
+	| 'twitch'
+	| 'google'
+	| 'tumblr'
+	| 'discord'
+	| 'youtube'
+	| 'mixer';
 
 export interface FacebookPage {
 	id: number;
@@ -27,6 +35,8 @@ export function getLinkedAccountPlatformIcon(provider: string) {
 			return 'tumblr';
 		case LinkedAccount.PROVIDER_DISCORD:
 			return 'radio';
+		case LinkedAccount.PROVIDER_MIXER:
+			return 'other-os';
 	}
 	return 'remove'; // invalid provider
 }
@@ -45,19 +55,22 @@ export function getLinkedAccountProviderDisplayName(provider: string) {
 			return 'Tumblr';
 		case LinkedAccount.PROVIDER_DISCORD:
 			return 'Discord';
+		case LinkedAccount.PROVIDER_MIXER:
+			return 'Mixer';
 	}
 	return 'Invalid provider';
 }
 
 export class LinkedAccount extends Model {
-	static readonly PROVIDER_FACEBOOK = 'facebook';
-	static readonly PROVIDER_TWITTER = 'twitter';
-	static readonly PROVIDER_GOOGLE = 'google';
-	static readonly PROVIDER_TWITCH = 'twitch';
-	static readonly PROVIDER_TUMBLR = 'tumblr';
-	static readonly PROVIDER_YOUTUBE = 'youtube';
+	static readonly PROVIDER_FACEBOOK: Provider = 'facebook';
+	static readonly PROVIDER_TWITTER: Provider = 'twitter';
+	static readonly PROVIDER_GOOGLE: Provider = 'google';
+	static readonly PROVIDER_TWITCH: Provider = 'twitch';
+	static readonly PROVIDER_TUMBLR: Provider = 'tumblr';
+	static readonly PROVIDER_YOUTUBE: Provider = 'youtube';
 	static readonly PROVIDER_YOUTUBE_CHANNEL = 'youtube-channel';
-	static readonly PROVIDER_DISCORD = 'discord';
+	static readonly PROVIDER_DISCORD: Provider = 'discord';
+	static readonly PROVIDER_MIXER: Provider = 'mixer';
 
 	game_id!: number;
 	provider!: string;
@@ -87,6 +100,8 @@ export class LinkedAccount extends Model {
 				return null; // tumblr users don't have a page associated with them that we can show
 			case LinkedAccount.PROVIDER_DISCORD:
 				return null; // discord users don't have a page associated with them
+			case LinkedAccount.PROVIDER_MIXER:
+				return `https://mixer.com/${this.name}`;
 		}
 		return 'Invalid provider';
 	}
