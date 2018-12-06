@@ -36,7 +36,7 @@ export function getLinkedAccountPlatformIcon(provider: string) {
 		case LinkedAccount.PROVIDER_DISCORD:
 			return 'radio';
 		case LinkedAccount.PROVIDER_MIXER:
-			return 'other-os';
+			return 'mixer';
 	}
 	return 'remove'; // invalid provider
 }
