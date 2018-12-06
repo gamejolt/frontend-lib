@@ -1,4 +1,4 @@
-import VueRouter from 'vue-router';
+import VueRouter, { Route } from 'vue-router';
 import { arrayRemove } from '../../utils/array';
 import { objectEquals } from '../../utils/object';
 import { makeObservableService } from '../../utils/vue';
@@ -53,6 +53,15 @@ export class AdSettingsContainer {
 }
 
 const defaultSettings = new AdSettingsContainer();
+
+// Only check once and then freeze so they can navigate site with it sticky.
+let _hasPlaywire: boolean | undefined;
+export function hasPlaywire(route: Route) {
+	if (_hasPlaywire === undefined) {
+		_hasPlaywire = 'PLAYWIRE_TEST' in route.query;
+	}
+	return _hasPlaywire;
+}
 
 export class Ads {
 	static readonly EVENT_VIEW = 'view';
