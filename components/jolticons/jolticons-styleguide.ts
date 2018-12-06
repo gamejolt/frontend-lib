@@ -154,6 +154,7 @@ export class AppJolticonsStyleguide extends Vue {
 			'world',
 			'youtube',
 			'compass-needle',
+			'mixer',
 		]
 			.sort()
 			.filter(i => i.indexOf(this.filter) !== -1);
