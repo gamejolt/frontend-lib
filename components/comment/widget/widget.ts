@@ -275,8 +275,14 @@ export class AppCommentWidget extends Vue {
 		Analytics.trackEvent('comment-widget', 'add');
 		this.onCommentAdd(comment);
 		this.$emit('add', comment);
-		if (this.store && this.store.sort !== Comment.SORT_YOU) {
-			this._setSort(Comment.SORT_YOU);
+		if (this.store) {
+			if (this.store.sort !== Comment.SORT_YOU) {
+				this._setSort(Comment.SORT_YOU);
+			} else {
+				if (this.storeView instanceof CommentStoreSliceView) {
+					this.storeView.registerIds([comment.id]);
+				}
+			}
 		}
 	}
 
