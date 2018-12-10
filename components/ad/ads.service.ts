@@ -57,6 +57,7 @@ const defaultSettings = new AdSettingsContainer();
 // Only check once and then freeze so they can navigate site with it sticky.
 let _hasPlaywire: boolean | undefined;
 export function hasPlaywire(route: Route) {
+	return true;
 	if (_hasPlaywire === undefined) {
 		_hasPlaywire = 'PLAYWIRE_TEST' in route.query;
 	}
