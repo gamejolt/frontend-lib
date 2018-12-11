@@ -36,6 +36,8 @@ export class CommentStoreModel {
 	comments: Comment[] = [];
 	locks = 0;
 	sort = Comment.SORT_HOT;
+	// This flag gets set for every change (add/remove/update), that prompts the overview component owner to update the commment info
+	overviewNeedsRefresh = false;
 
 	constructor(public resource: string, public resourceId: number) {}
 
@@ -71,6 +73,10 @@ export class CommentStoreModel {
 		this.count = 0;
 		this.parentCount = 0;
 		this.locks = 0;
+	}
+
+	afterModification() {
+		this.overviewNeedsRefresh = true;
 	}
 }
 
@@ -154,6 +160,10 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	async pinComment(payload: CommentActions['comment/pinComment']) {
 		const { comment } = payload;
 		await comment.$pin();
+		const store = this.getCommentStore(comment.resource, comment.resource_id);
+		if (store instanceof CommentStoreModel) {
+			store.afterModification();
+		}
 	}
 
 	@VuexAction
@@ -217,6 +227,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 					++store.parentCount;
 				}
 			}
+			store.afterModification();
 		}
 	}
 
@@ -230,6 +241,10 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				),
 				Translate.$gettext('Almost there...')
 			);
+		}
+		const store = this.getCommentStore(comment.resource, comment.resource_id);
+		if (store instanceof CommentStoreModel) {
+			store.afterModification();
 		}
 	}
 
@@ -246,6 +261,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				--store.count;
 			}
 			arrayRemove(store.comments, i => i.id === comment.id);
+			store.afterModification();
 		}
 	}
 
