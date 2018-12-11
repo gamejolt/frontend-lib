@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/throttleTime';
-import { AppScrollInview } from './inview';
+import { Scroll } from '../scroll.service';
 import { ScrollWatcher } from '../watcher.service';
-import { ScrollContext, Scroll } from '../scroll.service';
+import { AppScrollInview } from './inview';
 
 /**
  * When the scroll velocity is below this minimum distance in px, we will check inview items every
@@ -14,25 +14,22 @@ const DefaultScrollThrottleTime = 300;
 export class ScrollInviewContainer {
 	items: AppScrollInview[] = [];
 
-	private scrollWatcher!: ScrollWatcher;
 	private lastScrollTop = 0;
 	private lastThrottleTime = Date.now();
 	private lastScrollHeight?: number;
 	private queueTimeout?: number;
 
+	get context() {
+		return this.scrollWatcher.context;
+	}
+
 	constructor(
-		public context: ScrollContext,
-		private throttle = DefaultScrollThrottleTime,
-		private velocity = DefaultScrollVelocityMinimum
+		private readonly scrollWatcher: ScrollWatcher,
+		private readonly throttle = DefaultScrollThrottleTime,
+		private readonly velocity = DefaultScrollVelocityMinimum
 	) {
 		if (GJ_IS_SSR) {
 			return;
-		}
-
-		if (context instanceof HTMLDocument) {
-			this.scrollWatcher = Scroll.watcher;
-		} else {
-			this.scrollWatcher = new ScrollWatcher(context);
 		}
 
 		this.scrollWatcher.stop.subscribe(() => this.check());

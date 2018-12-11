@@ -1,12 +1,13 @@
-import Vue from 'vue';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/sampleTime';
-import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./affix.html?style=./affix.styl';
-
-import { Scroll } from '../scroll.service';
+import { AppScrollScroller } from 'game-jolt-frontend-lib/components/scroll/scroller/scroller';
+import { findVueParent } from 'game-jolt-frontend-lib/utils/vue';
+import 'rxjs/add/operator/sampleTime';
+import { Subscription } from 'rxjs/Subscription';
+import Vue from 'vue';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
+import { Scroll } from '../scroll.service';
 
 /**
  * Wait this long between scroll checks.
@@ -19,10 +20,18 @@ export class AppScrollAffix extends Vue {
 	@Prop({ type: String, default: 'gj-scroll-affixed' })
 	className!: string;
 
-	@Prop({ type: Boolean, default: true })
-	shouldAffix!: boolean;
+	@Prop(Boolean)
+	disabled!: boolean;
 
-	@Prop(Number) scrollOffset?: number;
+	@Prop(Number)
+	scrollOffset?: number;
+
+	@Prop({
+		type: String,
+		validator: i => ['top', 'bottom'].indexOf(i) !== -1,
+		default: 'top',
+	})
+	anchor!: 'top' | 'bottom';
 
 	isAffixed = false;
 	placeholderHeight = 0;
@@ -30,7 +39,6 @@ export class AppScrollAffix extends Vue {
 
 	private refreshLoopCount = 0;
 	private timeoutCancel?: NodeJS.Timer;
-	private curOffset = 0;
 
 	private resize$: Subscription | undefined;
 	private scroll$: Subscription | undefined;
@@ -42,19 +50,42 @@ export class AppScrollAffix extends Vue {
 		placeholder: HTMLElement;
 	};
 
-	get attachedClass() {
-		const className = this.className;
-		return this.isAffixed ? className : undefined;
+	get cssClasses() {
+		const classes = [];
+		if (this.isAffixed) {
+			classes.push(this.className);
+		}
+
+		if (this.anchor === 'top') {
+			classes.push('-anchor-top');
+		} else if (this.anchor === 'bottom') {
+			classes.push('-anchor-bottom');
+		}
+
+		return classes;
+	}
+
+	private get scrollWatcher() {
+		// We use any parent scrollers if there are any, otherwise use the root
+		// scroll watcher.
+		const scroller = findVueParent(this, AppScrollScroller);
+		return scroller ? scroller._scrollWatcher : Scroll.watcher;
+	}
+
+	private get scrollContext() {
+		return this.scrollWatcher.context;
 	}
 
 	mounted() {
-		// In case the click changed the page position, or changed element positions.
+		// In case the click changed the page position, or changed element
+		// positions.
 		this.clickHandler = () => this.refreshOffsetLoop();
 		document.addEventListener('click', this.clickHandler);
 
 		// If we resized, then the element dimensions most likely changed.
 		this.resize$ = Screen.resizeChanges.subscribe(() => {
-			// Pull from the placeholder which should be the source of the true width now.
+			// Pull from the placeholder which should be the source of the true
+			// width now.
 			if (this.isAffixed) {
 				const placeholder = this.$refs.placeholder;
 				if (placeholder) {
@@ -68,9 +99,9 @@ export class AppScrollAffix extends Vue {
 		// When routes change.
 		this.afterRouteDeregister = this.$router.afterEach(() => this.refreshOffsetLoop());
 
-		this.scroll$ = Scroll.watcher.changes.sampleTime(ScrollSampleTime).subscribe(() => {
-			const { top } = Scroll.watcher.getScrollChange();
-			this.checkScroll(top);
+		this.scroll$ = this.scrollWatcher.changes.sampleTime(ScrollSampleTime).subscribe(() => {
+			const { top, height } = this.scrollWatcher.getScrollChange();
+			this.checkScroll(top, height);
 		});
 
 		this.refreshOffsetLoop();
@@ -81,103 +112,127 @@ export class AppScrollAffix extends Vue {
 			document.removeEventListener('click', this.clickHandler);
 		}
 
-		if (this.timeoutCancel) {
-			clearTimeout(this.timeoutCancel);
-			this.timeoutCancel = undefined;
-		}
+		this.cancelOffsetLoop();
 
 		if (this.resize$) {
 			this.resize$.unsubscribe();
 			this.resize$ = undefined;
 		}
 
-		if (this.afterRouteDeregister) {
-			this.afterRouteDeregister();
-			this.afterRouteDeregister = undefined;
-		}
-
 		if (this.scroll$) {
 			this.scroll$.unsubscribe();
 			this.scroll$ = undefined;
 		}
+
+		if (this.afterRouteDeregister) {
+			this.afterRouteDeregister();
+			this.afterRouteDeregister = undefined;
+		}
 	}
 
-	@Watch('shouldAffix')
-	onShouldAffixChange() {
-		this.refreshOffset();
+	@Watch('disabled')
+	onDisabledChange() {
+		this.queueCheck();
 	}
 
-	// This sets up a loop that syncs repeatedly for a bit.
-	// This is needed if an action is done that may have triggered an animation
-	// that would change height of element.
+	// This sets up a loop that syncs repeatedly for a bit. This is needed if an
+	// action is done that may have triggered an animation that would change
+	// height of element.
 	private refreshOffsetLoop() {
+		this.cancelOffsetLoop();
+		this.tickOffsetLoop();
+	}
+
+	private tickOffsetLoop() {
+		this.timeoutCancel = setTimeout(() => {
+			this.queueCheck();
+
+			++this.refreshLoopCount;
+			if (this.refreshLoopCount <= 6) {
+				this.tickOffsetLoop();
+			}
+		}, 500);
+	}
+
+	private cancelOffsetLoop() {
 		this.refreshLoopCount = 0;
 		if (this.timeoutCancel) {
 			clearTimeout(this.timeoutCancel);
 			this.timeoutCancel = undefined;
 		}
-
-		this.refreshOffsetLoopTick();
 	}
 
-	private refreshOffsetLoopTick() {
-		this.timeoutCancel = setTimeout(() => {
-			this.refreshOffset();
-
-			++this.refreshLoopCount;
-			if (this.refreshLoopCount <= 6) {
-				this.refreshOffsetLoopTick();
-			}
-		}, 500);
-	}
-
-	private async refreshOffset() {
+	private async queueCheck() {
 		// Let the view compile.
 		await this.$nextTick();
 
-		if (this.shouldAffix) {
-			let prevTop = this.curOffset;
-			this.curOffset = this.getOffset();
-
-			// Only check the scroll if our top value has changed.
-			if (prevTop !== this.curOffset) {
-				this.checkScroll();
-			}
+		if (!this.disabled) {
+			this.checkScroll();
 		} else {
 			this.off();
 		}
 	}
 
 	private getOffset() {
-		// We pull from the placeholder if it's attached.
-		// If we're scrolled past, then the placeholder will have the correct position.
-		let top = 0;
+		// We pull from the placeholder if it's attached. If we're scrolled
+		// past, then the placeholder will have the correct position.
+		let elem: HTMLElement;
 		if (this.isAffixed) {
 			const placeholder = this.$refs.placeholder;
 			if (!placeholder) {
 				throw new Error(`Couldn't find placeholder.`);
 			}
-			top = Scroll.getElementOffsetFromContext(placeholder);
+			elem = placeholder;
 		} else {
-			top = Scroll.getElementOffsetFromContext(this.$refs.container);
+			elem = this.$refs.container;
+		}
+
+		let offset = 0;
+		if (this.anchor === 'top') {
+			offset = Scroll.getElementOffsetTopFromContext(elem);
+		} else if (this.anchor === 'bottom') {
+			offset = Scroll.getElementOffsetBottomFromContext(elem);
 		}
 
 		if (this.scrollOffset) {
-			top -= this.scrollOffset;
+			offset -= this.scrollOffset;
 		}
 
-		return top;
+		return offset;
 	}
 
-	private checkScroll(offset?: number) {
-		if (!this.shouldAffix) {
+	private checkScroll(offset?: number, height?: number) {
+		if (this.disabled) {
 			return;
 		}
 
 		// Pull from the correct scroll context.
-		offset = offset || Scroll.getScrollTop();
+		height = height !== undefined ? height : Scroll.getScrollWindowHeight(this.scrollContext);
+		const scrollTop = offset !== undefined ? offset : Scroll.getScrollTop(this.scrollContext);
+		const scrollBottom = scrollTop + height;
+		let curOffset = this.getOffset();
 
-		if (!this.isAffixed && offset > this.curOffset) {
+		if (this.anchor === 'bottom') {
+			curOffset += scrollTop;
+		}
+
+		const shouldAnchor =
+			(this.anchor === 'top' && scrollTop > curOffset) ||
+			(this.anchor === 'bottom' && scrollBottom < curOffset);
+
+		// console.log(
+		// 	'check scroll',
+		// 	'top',
+		// 	scrollTop,
+		// 	'height',
+		// 	height,
+		// 	'bottom',
+		// 	scrollBottom,
+		// 	'offset',
+		// 	curOffset
+		// );
+
+		if (!this.isAffixed && shouldAnchor) {
 			const width = Ruler.outerWidth(this.$refs.container);
 			const height = Ruler.outerHeight(this.$refs.container);
 
@@ -186,7 +241,7 @@ export class AppScrollAffix extends Vue {
 			this.width = width + 'px';
 
 			this.$emit('change', true);
-		} else if (offset < this.curOffset) {
+		} else if (!shouldAnchor) {
 			this.off();
 		}
 	}

@@ -6,17 +6,7 @@
 		</app-button>
 	</div>
 
-	<div v-if="username" class="modal-header">
-		<h2 class="modal-title">
-			{{displayModeTitle}}
-			<translate :translate-params="{ username: username }">
-				by @%{ username }
-			</translate>
-		</h2>
-	</div>
-
 	<div class="modal-body">
-
 		<app-comment-widget
 			:resource="resource"
 			:resource-id="resourceId"
@@ -26,19 +16,22 @@
 			@remove="onRemove"
 			@error="onError"
 			/>
-		<app-message-thread-add
-			v-if="user && !hasError"
-			hide-message-split
-			>
-			<form-comment
-				v-if="parent"
-				:resource="resource"
-				:resource-id="resourceId"
-				:parent-id="parent.id"
-				@submit="_onCommentAdd"
-				/>
-		</app-message-thread-add>
-
 	</div>
+
+	<app-message-thread-add
+		slot="footer"
+		v-if="user && !hasError"
+		class="-add"
+		hide-message-split
+		>
+		<form-comment
+			v-if="parent"
+			:resource="resource"
+			:resource-id="resourceId"
+			:parent-id="parent.id"
+			:placeholder="$gettext(`Leave a reply...`)"
+			@submit="_onCommentAdd"
+			/>
+	</app-message-thread-add>
 
 </app-modal>

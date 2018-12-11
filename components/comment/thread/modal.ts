@@ -25,10 +25,13 @@ import { AppCommentWidget } from '../widget/widget';
 export default class AppCommentThreadModal extends BaseModal {
 	@Prop(Number)
 	commentId!: number;
+
 	@Prop(String)
 	resource!: string;
+
 	@Prop(Number)
 	resourceId!: number;
+
 	@Prop(String)
 	displayMode!: DisplayMode;
 
