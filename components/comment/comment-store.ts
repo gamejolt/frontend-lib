@@ -178,11 +178,13 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	private _addComments(payload: { store: CommentStoreModel; comments: Comment[] }) {
 		const { store, comments } = payload;
 		for (const comment of comments) {
-			// Remove an old instance of the comment from the store if it already exists.
-			if (store.comments.some(c => c.id === comment.id)) {
-				arrayRemove(store.comments, c => c.id === comment.id);
+			// Replace an old instance of the comment in the store if it exists.
+			const index = store.comments.findIndex(c => c.id === comment.id);
+			if (index !== -1) {
+				store.comments[index] = comment;
+			} else {
+				store.comments.push(comment);
 			}
-			store.comments.push(comment);
 		}
 	}
 

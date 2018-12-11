@@ -7,7 +7,7 @@ import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { LikersModal } from '../../likers/modal.service';
 import { AppTooltip } from '../../tooltip/tooltip';
 import { Comment } from '../comment-model';
-import { CommentModal } from '../modal/modal.service';
+import { CommentThreadModal } from '../thread/modal.service';
 import { CommentVote } from '../vote/vote-model';
 
 @View
@@ -83,7 +83,12 @@ export class AppCommentControls extends Vue {
 	}
 
 	onReplyClick() {
-		CommentModal.show({ comment: this.comment });
+		CommentThreadModal.show({
+			resource: this.comment.resource,
+			resourceId: this.comment.resource_id,
+			commentId: this.comment.id,
+			displayMode: 'comments',
+		});
 	}
 
 	showLikers() {
