@@ -1,7 +1,7 @@
 <app-message-thread-item
 	:user="comment.user"
 	:date="comment.posted_on"
-	:is-showing-replies="isShowingReplies"
+	:is-showing-replies="shouldShowReplies"
 	:is-reply="!!parent"
 	:is-last="isLastInThread"
 	:is-active="isActive"
@@ -118,28 +118,13 @@
 			:content="comment.comment_compiled"
 			/>
 
-		<template slot="controls">
+		<app-comment-controls
+			slot="controls"
+			:comment="comment"
+			:children="children"
+			:show-reply="!parent && !showChildren"
+			/>
 
-			<app-comment-controls
-				:comment="comment"
-				:show-reply="!hideReply"
-				/>
-
-			<app-button
-				v-if="children && children.length"
-				trans
-				@click="isShowingChildren = !isShowingChildren"
-				>
-				<translate
-					:translate-n="children.length"
-					:translate-params="{ count: children.length }"
-					translate-plural="+ %{ count } replies"
-					>
-					+ %{ count } reply
-				</translate>
-			</app-button>
-
-		</template>
 	</template>
 	<template v-else>
 		<form-comment
@@ -150,7 +135,7 @@
 	</template>
 
 	<!-- Child Comments -->
-	<template v-if="isShowingChildren" slot="replies">
+	<template v-if="shouldShowReplies" slot="replies">
 		<app-comment-widget-comment
 			v-for="(child, i) of children"
 			:key="child.id"
@@ -158,7 +143,6 @@
 			:resource-id="resourceId"
 			:comment="child"
 			:parent="comment"
-			:hide-reply="hideReply"
 			:is-last-in-thread="i === children.length - 1"
 			/>
 

@@ -24,6 +24,10 @@ import { CommentVote } from '../vote/vote-model';
 export class AppCommentControls extends Vue {
 	@Prop(Comment)
 	comment!: Comment;
+
+	@Prop(Array)
+	children?: Comment[];
+
 	@Prop(Boolean)
 	showReply?: boolean;
 
@@ -82,13 +86,13 @@ export class AppCommentControls extends Vue {
 		}
 	}
 
-	onReplyClick() {
+	onReplyClick(autofocus: boolean) {
 		CommentThreadModal.show({
 			resource: this.comment.resource,
 			resourceId: this.comment.resource_id,
 			commentId: this.comment.id,
 			displayMode: 'comments',
-			autofocus: true,
+			autofocus,
 		});
 	}
 

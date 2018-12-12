@@ -177,15 +177,6 @@ export class AppCommentWidget extends Vue {
 		return !!this.threadCommentId;
 	}
 
-	get expandChildren() {
-		if (this.isThreadView && this.threadCommentId && this.storeView && this.store) {
-			const parents = this.storeView.getParents(this.store);
-			const parent = parents.find(c => c.id === this.threadCommentId);
-			return !parent;
-		}
-		return false;
-	}
-
 	async created() {
 		await this.init();
 	}

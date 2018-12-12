@@ -75,17 +75,13 @@ export class AppCommentWidgetComment extends Vue {
 	isLastInThread?: boolean;
 
 	@Prop(Boolean)
-	expandChildren?: boolean;
-
-	@Prop(Boolean)
-	hideReply?: boolean;
+	showChildren?: boolean;
 
 	@AppState
 	user!: AppStore['user'];
 
 	componentId = ++CommentNum;
 	isFollowPending = false;
-	isShowingChildren = false;
 	isEditing = false;
 
 	widget!: AppCommentWidget;
@@ -100,9 +96,6 @@ export class AppCommentWidgetComment extends Vue {
 
 	created() {
 		this.widget = findRequiredVueParent(this, AppCommentWidget);
-		if (this.expandChildren) {
-			this.isShowingChildren = true;
-		}
 	}
 
 	mounted() {
@@ -195,8 +188,8 @@ export class AppCommentWidgetComment extends Vue {
 		return !this.comment.parent_id && this.hasModPermissions;
 	}
 
-	get isShowingReplies() {
-		return this.children && this.children.length && this.isShowingChildren;
+	get shouldShowReplies() {
+		return this.children && this.children.length > 0 && this.showChildren;
 	}
 
 	get canFollow() {
