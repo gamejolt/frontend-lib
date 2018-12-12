@@ -33,7 +33,7 @@ export class Modal {
 
 	static canAddToStack(id: string | undefined) {
 		if (id) {
-			return !this.modals.some(m => m.modalId === id);
+			return !this.modals.some(i => i.modalId === id);
 		}
 		return true;
 	}
