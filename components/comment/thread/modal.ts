@@ -4,6 +4,7 @@ import {
 	CommentStore,
 } from 'game-jolt-frontend-lib/components/comment/comment-store';
 import { BaseModal } from 'game-jolt-frontend-lib/components/modal/base';
+import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
 import { AppState, AppStore } from 'game-jolt-frontend-lib/vue/services/app/app-store';
 import { Component, Prop } from 'vue-property-decorator';
 import { Analytics } from '../../analytics/analytics.service';
@@ -35,6 +36,9 @@ export default class AppCommentThreadModal extends BaseModal {
 	@Prop(String)
 	displayMode!: DisplayMode;
 
+	@Prop(Boolean)
+	autofocus?: boolean;
+
 	@AppState
 	user!: AppStore['user'];
 
@@ -45,6 +49,8 @@ export default class AppCommentThreadModal extends BaseModal {
 	onCommentAdd!: CommentStore['onCommentAdd'];
 
 	hasError = false;
+
+	readonly Screen = Screen;
 
 	get parent() {
 		const store = this.getCommentStore(this.resource, this.resourceId);

@@ -27,6 +27,9 @@ export class FormComment extends BaseForm<Comment> implements FormOnInit {
 	@Prop(String)
 	placeholder?: string;
 
+	@Prop(String)
+	maxHeight?: string;
+
 	modelClass = Comment;
 	resetOnSubmit = true;
 

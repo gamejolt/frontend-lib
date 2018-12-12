@@ -88,6 +88,7 @@ export class AppCommentControls extends Vue {
 			resourceId: this.comment.resource_id,
 			commentId: this.comment.id,
 			displayMode: 'comments',
+			autofocus: true,
 		});
 	}
 

@@ -8,11 +8,12 @@ interface CommentThreadModalOptions {
 	resourceId: number;
 	commentId: number;
 	displayMode: DisplayMode;
+	autofocus?: boolean;
 }
 
 export class CommentThreadModal {
 	static async show(options: CommentThreadModalOptions) {
-		const { resource, resourceId, commentId, displayMode } = options;
+		const { resource, resourceId, commentId, displayMode, autofocus } = options;
 
 		return await Modal.show<void>({
 			component: () =>
@@ -22,6 +23,7 @@ export class CommentThreadModal {
 				resourceId,
 				commentId,
 				displayMode,
+				autofocus: autofocus || false,
 			},
 			size: 'sm',
 		});
