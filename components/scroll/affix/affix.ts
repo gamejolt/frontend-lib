@@ -194,6 +194,10 @@ export class AppScrollAffix extends Vue {
 			offset = Scroll.getElementOffsetBottomFromContext(elem);
 		}
 
+		if (this.scrollContext !== document) {
+			offset -= Scroll.getScrollTop();
+		}
+
 		if (this.scrollOffset) {
 			offset -= this.scrollOffset;
 		}
