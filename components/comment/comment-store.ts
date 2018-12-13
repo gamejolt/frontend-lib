@@ -181,7 +181,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 			// Replace an old instance of the comment in the store if it exists.
 			const index = store.comments.findIndex(c => c.id === comment.id);
 			if (index !== -1) {
-				store.comments[index] = comment;
+				Vue.set(store.comments, index, comment);
 			} else {
 				store.comments.push(comment);
 			}
