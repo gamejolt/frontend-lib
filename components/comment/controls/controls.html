@@ -40,16 +40,32 @@
 			/>
 	</span>
 
-	&nbsp;
+	<template v-if="showReply">
+		&nbsp;
 
-	<span v-if="showReply" v-app-auth-required>
+		<span v-app-auth-required>
+			<app-button
+				icon="reply"
+				circle
+				trans
+				@click="onReplyClick(true)"
+				v-app-tooltip="$gettext( `Reply` )"
+				v-app-track-event="`comment-widget:reply-click`"
+				/>
+		</span>
+
 		<app-button
-			icon="reply"
-			circle
+			v-if="children && children.length"
 			trans
-			@click="onReplyClick()"
-			v-app-tooltip="$gettext( 'Reply' )"
-			v-app-track-event="`comment-widget:reply-click`"
-			/>
-	</span>
+			@click="onReplyClick(false)"
+			>
+			<translate
+				:translate-n="children.length"
+				:translate-params="{ count: children.length }"
+				translate-plural="+ %{ count } replies"
+				>
+				+ %{ count } reply
+			</translate>
+		</app-button>
+	</template>
 </span>

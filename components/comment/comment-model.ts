@@ -1,10 +1,10 @@
-import { Model } from '../model/model.service';
-import { CommentVideo } from './video/video-model';
-import { CommentVote } from './vote/vote-model';
-import { User } from '../user/user.model';
 import { Api } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
+import { Model } from '../model/model.service';
 import { Subscription } from '../subscription/subscription.model';
+import { User } from '../user/user.model';
+import { CommentVideo } from './video/video-model';
+import { CommentVote } from './vote/vote-model';
 
 export async function fetchComment(id: number) {
 	try {

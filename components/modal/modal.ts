@@ -1,4 +1,6 @@
 import View from '!view!./modal.html?style=./modal.styl';
+import { AppScrollAffix } from 'game-jolt-frontend-lib/components/scroll/affix/affix';
+import { AppScrollScroller } from 'game-jolt-frontend-lib/components/scroll/scroller/scroller';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../utils/vue';
@@ -15,6 +17,8 @@ import { Modal } from './modal.service';
 @Component({
 	components: {
 		AppTheme,
+		AppScrollScroller,
+		AppScrollAffix,
 	},
 })
 export class AppModal extends Vue {
@@ -31,8 +35,14 @@ export class AppModal extends Vue {
 	private beforeEachDeregister?: Function;
 	private escapeCallback?: Function;
 
+	$el!: HTMLDivElement;
+
 	get zIndex() {
 		return 1050 + this.modal.index;
+	}
+
+	get hasFooter() {
+		return !!this.$slots.footer;
 	}
 
 	created() {

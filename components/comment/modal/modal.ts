@@ -7,9 +7,7 @@ import { number } from 'game-jolt-frontend-lib/vue/filters/number';
 import { Component, Prop } from 'vue-property-decorator';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { BaseModal } from '../../modal/base';
-import { Comment } from '../comment-model';
 import { AppCommentWidget } from '../widget/widget';
-import { AppCommentModalComment } from './comment/comment';
 import { DisplayMode } from './modal.service';
 
 @View
@@ -17,7 +15,6 @@ import { DisplayMode } from './modal.service';
 	components: {
 		AppJolticon,
 		AppCommentWidget,
-		AppCommentModalComment,
 	},
 })
 export default class AppCommentModal extends BaseModal {
@@ -26,9 +23,6 @@ export default class AppCommentModal extends BaseModal {
 
 	@Prop(Number)
 	resourceId!: number;
-
-	@Prop(Comment)
-	comment?: Comment;
 
 	@Prop(String)
 	displayMode!: DisplayMode;

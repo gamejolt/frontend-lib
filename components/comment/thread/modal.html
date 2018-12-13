@@ -1,0 +1,39 @@
+<app-modal>
+
+	<div class="modal-controls">
+		<app-button @click="modal.dismiss()">
+			<translate>Close</translate>
+		</app-button>
+	</div>
+
+	<div class="modal-body">
+		<app-comment-widget
+			:resource="resource"
+			:resource-id="resourceId"
+			:thread-comment-id="commentId"
+			:show-tabs="false"
+			:show-add="false"
+			@remove="onRemove"
+			@error="onError"
+			/>
+	</div>
+
+	<app-message-thread-add
+		slot="footer"
+		v-if="user && !hasError"
+		class="-add"
+		hide-message-split
+		>
+		<form-comment
+			v-if="parent"
+			:resource="resource"
+			:resource-id="resourceId"
+			:parent-id="parent.id"
+			:placeholder="$gettext(`Leave a reply...`)"
+			:autofocus="autofocus"
+			:max-height="Screen.isXs ? '110px' : '250px'"
+			@submit="_onCommentAdd"
+			/>
+	</app-message-thread-add>
+
+</app-modal>
