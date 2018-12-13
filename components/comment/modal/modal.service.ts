@@ -32,6 +32,7 @@ export class CommentModal {
 		}
 
 		return await Modal.show<void>({
+			modalId,
 			component: () =>
 				asyncComponentLoader(import(/* webpackChunkName: "CommentModal" */ './modal')),
 			props: {
@@ -41,7 +42,6 @@ export class CommentModal {
 				displayMode,
 			},
 			size: 'sm',
-			modalId,
 		});
 	}
 

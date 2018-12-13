@@ -6,13 +6,13 @@ import { makeObservableService } from '../../utils/vue';
 type ModalComponent = typeof Vue | AsyncComponent<Vue>;
 
 export interface ModalOptions {
-	size?: 'sm' | 'lg' | 'full' | undefined;
 	component: ModalComponent;
+	modalId: string;
+	size?: 'sm' | 'lg' | 'full' | undefined;
 	props?: any;
 	noBackdrop?: boolean;
 	noBackdropClose?: boolean;
 	noEscClose?: boolean;
-	modalId?: string;
 }
 
 export class Modal {
@@ -21,11 +21,11 @@ export class Modal {
 
 	size: 'sm' | 'lg' | 'full' | undefined;
 	component: ModalComponent;
+	modalId: string;
 	props?: any;
 	noBackdrop?: boolean;
 	noBackdropClose?: boolean;
 	noEscClose?: boolean;
-	modalId?: string;
 
 	get index() {
 		return Modal.modals.findIndex(i => i === this);
