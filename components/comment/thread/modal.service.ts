@@ -16,6 +16,7 @@ export class CommentThreadModal {
 		const { resource, resourceId, commentId, displayMode, autofocus } = options;
 
 		return await Modal.show<void>({
+			modalId: 'CommentThread-' + [resource, resourceId, commentId].join('-'),
 			component: () =>
 				asyncComponentLoader(import(/* webpackChunkName: "CommentModal" */ './modal')),
 			props: {
