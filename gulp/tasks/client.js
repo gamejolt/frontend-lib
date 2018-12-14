@@ -557,7 +557,7 @@ module.exports = config => {
 			// Some more info is required for joltron's manifest.
 			// the correct host is needed for the platformURL - this tells joltron where to look for updates.
 			const gjHost = config.developmentEnv
-				? 'http://development.gamejolt.com'
+				? 'https://development.gamejolt.com'
 				: 'https://gamejolt.com';
 
 			// The executable tells joltron what is the executable file within this client build's data folder.

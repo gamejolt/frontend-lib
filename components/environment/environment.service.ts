@@ -53,18 +53,18 @@ if (GJ_ENVIRONMENT === 'development') {
 	Environment.authBaseUrl = 'http://localhost:8080';
 	Environment.checkoutBaseUrl = 'http://localhost:8080';
 
-	Environment.jamsBaseUrl = 'http://jams.development.gamejolt.com';
+	Environment.jamsBaseUrl = 'https://jams.development.gamejolt.com';
 	Environment.jamsIoBaseUrl = 'http://jams.development.gamejolt.io';
-	Environment.firesideBaseUrl = 'http://fireside.development.gamejolt.com';
-	Environment.helpBaseUrl = 'http://help.development.gamejolt.com';
-	Environment.devBaseUrl = 'http://dev.development.gamejolt.com';
-	Environment.gameserverUrl = 'http://development.gamejolt.net';
-	Environment.mediaserverUrl = 'http://media.development.gamejolt.com';
+	Environment.firesideBaseUrl = 'https://fireside.development.gamejolt.com';
+	Environment.helpBaseUrl = 'https://help.development.gamejolt.com';
+	Environment.devBaseUrl = 'https://dev.development.gamejolt.com';
+	Environment.gameserverUrl = 'https://development.gamejolt.net';
+	Environment.mediaserverUrl = 'https://media.development.gamejolt.com';
 
-	Environment.apiHost = 'http://development.gamejolt.com';
-	Environment.gameserverApiHost = 'http://development.gamejolt.com';
-	Environment.activityStreamHost = 'http://activity.development.gamejolt.com';
-	Environment.chatHost = 'http://chat.development.gamejolt.com';
+	Environment.apiHost = 'https://development.gamejolt.com';
+	Environment.gameserverApiHost = 'https://development.gamejolt.com';
+	Environment.activityStreamHost = 'https://activity.development.gamejolt.com';
+	Environment.chatHost = 'https://chat.development.gamejolt.com';
 	Environment.widgetHost = 'http://localhost:8086';
 	Environment.gridHost = 'http://localhost:4000/grid/host';
 	Environment.recaptchaSiteKey = '6LcwTkEUAAAAAHTT67TB8gkM0ft5hUzz_r_tFFaT';
