@@ -11,8 +11,9 @@
 			preview-class="comment-content"
 			preview-url="/comments/preview"
 			markdown-mode="comments"
-			:placeholder="$gettext( `Leave a comment...` )"
+			:placeholder="placeholder || $gettext( `Leave a comment...` )"
 			:autofocus="autofocus"
+			:max-height="maxHeight"
 			/>
 
 		<app-form-control-errors label="comment" />

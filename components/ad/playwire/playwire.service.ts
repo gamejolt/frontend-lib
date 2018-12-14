@@ -31,7 +31,6 @@ export class Playwire {
 			},
 		};
 
-		console.log('Attempting to load playwire.', (window as any).tyche);
 		loadScript('https://cdn.intergi.com/hera/tyche.js');
 
 		// We set up events so that we know when a route begins and when the

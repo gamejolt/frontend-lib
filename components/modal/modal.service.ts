@@ -6,8 +6,9 @@ import { makeObservableService } from '../../utils/vue';
 type ModalComponent = typeof Vue | AsyncComponent<Vue>;
 
 export interface ModalOptions {
-	size?: 'sm' | 'lg' | 'full' | undefined;
 	component: ModalComponent;
+	modalId: string;
+	size?: 'sm' | 'lg' | 'full' | undefined;
 	props?: any;
 	noBackdrop?: boolean;
 	noBackdropClose?: boolean;
@@ -20,6 +21,7 @@ export class Modal {
 
 	size: 'sm' | 'lg' | 'full' | undefined;
 	component: ModalComponent;
+	modalId: string;
 	props?: any;
 	noBackdrop?: boolean;
 	noBackdropClose?: boolean;
@@ -29,12 +31,21 @@ export class Modal {
 		return Modal.modals.findIndex(i => i === this);
 	}
 
+	static canAddToStack(id: string | undefined) {
+		if (id) {
+			return !this.modals.some(i => i.modalId === id);
+		}
+		return true;
+	}
+
 	static show<T>(options: ModalOptions) {
 		return new Promise<T | undefined>(resolve => {
-			Popper.hideAll();
-			++this.incrementer;
-			const modal = new Modal(this.incrementer, resolve, options);
-			this.modals.push(modal);
+			if (this.canAddToStack(options.modalId)) {
+				Popper.hideAll();
+				++this.incrementer;
+				const modal = new Modal(this.incrementer, resolve, options);
+				this.modals.push(modal);
+			}
 		});
 	}
 
@@ -49,6 +60,7 @@ export class Modal {
 		this.noBackdrop = options.noBackdrop;
 		this.noBackdropClose = options.noBackdropClose;
 		this.noEscClose = options.noEscClose;
+		this.modalId = options.modalId;
 	}
 
 	resolve(val?: any) {

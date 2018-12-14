@@ -73,6 +73,11 @@
 					position: relative
 					z-index: 2
 
+				// Nothing needs to be clickable or anything within the item,
+				// since all the events happen within the <a> tag.
+				& > *
+					pointer-events: none
+
 	&-centered
 		text-align: center
 		margin-left: 0

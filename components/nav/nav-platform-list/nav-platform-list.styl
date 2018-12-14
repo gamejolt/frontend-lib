@@ -49,6 +49,11 @@ nav.platform-list
 			.badge
 				margin-left: 5px
 
+			// Nothing needs to be clickable or anything within the item, since
+			// all the events happen within the <a> tag.
+			& > *
+				pointer-events: none
+
 		.jolticon
 			theme-prop('color', 'fg-muted')
 			margin-right: 10px

@@ -8,6 +8,7 @@
 	overflow: hidden
 
 .-well
+	position: relative
 	padding: 10px
 
 hr
@@ -31,6 +32,7 @@ hr
 .-avatar
 	theme-prop('background-color', 'darker')
 	theme-prop('border-color', 'darker')
+	img-circle()
 	position: relative
 	display: block
 	width: 100px
@@ -40,9 +42,17 @@ hr
 	margin-right: auto
 	border-width: 4px
 	border-style: solid
-	border-radius: 50%
 	overflow: hidden
 	z-index: 2
+
+.-follows-you
+	position: absolute
+	top: -15px
+	left: 0
+	right: 0
+	text-align: center
+	pointer-events: none
+	z-index: 3
 
 .-display-name
 	text-overflow()

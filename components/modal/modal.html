@@ -8,7 +8,7 @@
 		}"
 		@click="dismissBackdrop"
 		>
-		<div
+		<app-scroll-scroller
 			class="modal"
 			:class="{
 				'modal-sm': modal.size === 'sm',
@@ -23,7 +23,16 @@
 				@mouseout.native="isHoveringContent = false"
 				>
 				<slot />
+
+				<app-scroll-affix
+					v-if="hasFooter"
+					anchor="bottom"
+					>
+					<div class="-footer fill-offset">
+						<slot name="footer" />
+					</div>
+				</app-scroll-affix>
 			</app-theme>
-		</div>
+		</app-scroll-scroller>
 	</div>
 </transition>

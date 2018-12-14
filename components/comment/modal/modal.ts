@@ -1,27 +1,34 @@
 import View from '!view!./modal.html?style=./modal.styl';
-import { CommentState, CommentStore } from 'game-jolt-frontend-lib/components/comment/comment-store';
+import {
+	CommentState,
+	CommentStore,
+} from 'game-jolt-frontend-lib/components/comment/comment-store';
 import { number } from 'game-jolt-frontend-lib/vue/filters/number';
 import { Component, Prop } from 'vue-property-decorator';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
 import { BaseModal } from '../../modal/base';
-import { Comment } from '../comment-model';
 import { AppCommentWidget } from '../widget/widget';
-import { AppCommentModalComment } from './comment/comment';
+import { DisplayMode } from './modal.service';
 
 @View
 @Component({
 	components: {
 		AppJolticon,
 		AppCommentWidget,
-		AppCommentModalComment,
 	},
 })
 export default class AppCommentModal extends BaseModal {
-	@Prop(String) resource!: string;
-	@Prop(Number) resourceId!: number;
-	@Prop(Comment) comment?: Comment;
+	@Prop(String)
+	resource!: string;
 
-	@CommentState getCommentStore!: CommentStore['getCommentStore'];
+	@Prop(Number)
+	resourceId!: number;
+
+	@Prop(String)
+	displayMode!: DisplayMode;
+
+	@CommentState
+	getCommentStore!: CommentStore['getCommentStore'];
 
 	readonly number = number;
 

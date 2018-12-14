@@ -63,6 +63,9 @@ export class AppFormControlMarkdown extends BaseFormControl {
 	@Prop(Boolean)
 	autofocus?: boolean;
 
+	@Prop(String)
+	maxHeight?: string;
+
 	controlVal = '';
 	currentTab = 'edit';
 	editorMode = 'textarea';

@@ -18,6 +18,15 @@
 			</router-link>
 
 			<div class="-well fill-darker">
+				<div
+					v-if="user.follows_you"
+					class="-follows-you"
+					>
+					<span class="tag">
+						<translate>Follows You</translate>
+					</span>
+				</div>
+
 				<div class="-display-name">
 					<app-jolticon
 						v-if="user.is_verified"
