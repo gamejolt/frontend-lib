@@ -62,7 +62,6 @@ export class Collaborator extends Model {
 	}
 
 	$invite() {
-		// TODO(communities)
 		if (this.resource !== 'Game') {
 			throw new Error('Not supported yet');
 		}
@@ -74,7 +73,6 @@ export class Collaborator extends Model {
 	}
 
 	$accept() {
-		// TODO(communities)
 		if (this.resource !== 'Game') {
 			throw new Error('Not supported yet');
 		}
@@ -86,7 +84,6 @@ export class Collaborator extends Model {
 	}
 
 	async $remove() {
-		// TODO(communities)
 		if (this.resource !== 'Game') {
 			throw new Error('Not supported yet');
 		}
