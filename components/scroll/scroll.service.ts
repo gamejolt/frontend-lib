@@ -107,8 +107,16 @@ export class Scroll {
 	/**
 	 * Returns the element's offset from the top of the scroll context.
 	 */
-	static getElementOffsetFromContext(element: HTMLElement) {
+	static getElementOffsetTopFromContext(element: HTMLElement) {
 		return Ruler.offset(element).top - this.offsetTop;
+	}
+
+	/**
+	 * Returns the element's offset from the bottom of the scroll context.
+	 */
+	static getElementOffsetBottomFromContext(element: HTMLElement) {
+		const { top, height } = Ruler.offset(element);
+		return top + height;
 	}
 
 	/**

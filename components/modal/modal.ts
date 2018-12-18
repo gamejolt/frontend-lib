@@ -1,26 +1,32 @@
+import View from '!view!./modal.html?style=./modal.styl';
+import { AppScrollAffix } from 'game-jolt-frontend-lib/components/scroll/affix/affix';
+import { AppScrollScroller } from 'game-jolt-frontend-lib/components/scroll/scroller/scroller';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./modal.html?style=./modal.styl';
-import './modal-content.styl';
-
-import { Modal } from './modal.service';
+import { findRequiredVueParent } from '../../utils/vue';
 import { AppBackdrop } from '../backdrop/backdrop';
 import { Backdrop } from '../backdrop/backdrop.service';
-import { findRequiredVueParent } from '../../utils/vue';
-import { BaseModal } from './base';
-import { Screen } from '../screen/screen-service';
 import { EscapeStack } from '../escape-stack/escape-stack.service';
+import { Screen } from '../screen/screen-service';
 import { AppTheme } from '../theme/theme';
+import { BaseModal } from './base';
+import './modal-global.styl';
+import { Modal } from './modal.service';
 
 @View
 @Component({
 	components: {
 		AppTheme,
+		AppScrollScroller,
+		AppScrollAffix,
 	},
 })
 export class AppModal extends Vue {
-	@Prop(Number) index!: number;
-	@Prop(Object) theme?: any;
+	@Prop(Number)
+	index!: number;
+
+	@Prop(Object)
+	theme?: any;
 
 	modal: Modal = null as any;
 	isHoveringContent = false;
@@ -29,8 +35,14 @@ export class AppModal extends Vue {
 	private beforeEachDeregister?: Function;
 	private escapeCallback?: Function;
 
+	$el!: HTMLDivElement;
+
 	get zIndex() {
 		return 1050 + this.modal.index;
+	}
+
+	get hasFooter() {
+		return !!this.$slots.footer;
 	}
 
 	created() {

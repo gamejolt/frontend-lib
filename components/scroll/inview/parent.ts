@@ -1,3 +1,4 @@
+import { ScrollWatcher } from 'game-jolt-frontend-lib/components/scroll/watcher.service';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ScrollInviewContainer } from './container';
@@ -14,11 +15,22 @@ export class AppScrollInviewParent extends Vue {
 	container?: ScrollInviewContainer;
 
 	// Don't have Vue watch these.
+	_scrollWatcher!: ScrollWatcher;
 	_container!: ScrollInviewContainer;
 
+	$el!: HTMLDivElement;
+
 	mounted() {
-		this._container =
-			this.container || new ScrollInviewContainer(this.$el, this.throttle, this.velocity);
+		if (this.container) {
+			this._container = this.container;
+		} else {
+			this._scrollWatcher = new ScrollWatcher(this.$el);
+			this._container = new ScrollInviewContainer(
+				this._scrollWatcher,
+				this.throttle,
+				this.velocity
+			);
+		}
 	}
 
 	render(h: CreateElement) {

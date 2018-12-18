@@ -1,13 +1,16 @@
 @require '~styles/variables'
 @require '~styles-lib/mixins'
 
-.-container
-	position: fixed
-	overflow: hidden
+-fullscreen()
 	top: 0
 	right: 0
 	bottom: 0
 	left: 0
+
+.-container
+	-fullscreen()
+	position: fixed
+	overflow: hidden
 	-webkit-overflow-scrolling: touch
 
 	// Animation stuff.
@@ -33,13 +36,8 @@
 
 // Container that the modal scrolls within
 .modal
-	overflow: auto
-	overflow-y: scroll
+	-fullscreen()
 	position: absolute
-	top: 0
-	right: 0
-	bottom: 0
-	left: 0
 	z-index: 2
 
 	.modal-content
@@ -74,14 +72,29 @@
 
 .modal-full
 	theme-prop('background-color', 'bg')
-	overflow: hidden
 
 	.modal-content
-		width: 100%
-		height: 100%
+		-fullscreen()
+		position: absolute
+		width: auto
 		margin: 0
 		box-shadow: none
 		border-radius: 0
-		overflow: auto
-		overflow-y: scroll
 		background-color: transparent
+
+.-footer
+	padding: $modal-padding-xs
+	padding-bottom: 0
+	border-bottom-left-radius: $border-radius-base
+	border-bottom-right-radius: $border-radius-base
+
+	@media $media-sm-up
+		padding: $modal-padding
+		padding-bottom: 0
+
+>>> .gj-scroll-affixed
+	z-index: 1
+
+	.-footer
+		border-radius: 0
+		box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1)

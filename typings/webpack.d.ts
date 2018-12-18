@@ -5,7 +5,11 @@ interface WebpackRequireEnsureCallback {
 interface WebpackRequire {
 	(id: string): any;
 	(paths: string[], callback: (...modules: any[]) => void): void;
-	ensure(ids: string[], callback: WebpackRequireEnsureCallback, chunkName?: string): Promise<void>;
+	ensure(
+		ids: string[],
+		callback: WebpackRequireEnsureCallback,
+		chunkName?: string
+	): Promise<void>;
 	context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
 }
 
@@ -21,7 +25,7 @@ declare module '!file-loader!*' {
 	export = content;
 }
 
-declare module '!json-loader!*' {
+declare module '*.json' {
 	const content: any;
-	export = content;
+	export default content;
 }

@@ -1,16 +1,15 @@
-import Vue, { CreateElement } from 'vue';
 import { Subscription } from 'rxjs/Subscription';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-
-import { Scroll } from '../scroll.service';
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
+import { Scroll } from '../scroll.service';
 
 /**
  * Get's the element's top offset from the scroll context viewport.
  */
 function getElementTop(element: HTMLElement, currentTransform: number) {
-	let elementTop = Scroll.getElementOffsetFromContext(element);
+	let elementTop = Scroll.getElementOffsetTopFromContext(element);
 
 	// If we've transformed the element already, we have to remove that transformation from the result.
 	// This is because transforming changes the value returned by offset().
@@ -23,9 +22,14 @@ function getElementTop(element: HTMLElement, currentTransform: number) {
 
 @Component({})
 export class AppScrollParallax extends Vue {
-	@Prop(Number) drag?: number;
-	@Prop(Number) dim?: number;
-	@Prop(Boolean) disabled?: boolean;
+	@Prop(Number)
+	drag?: number;
+
+	@Prop(Number)
+	dim?: number;
+
+	@Prop(Boolean)
+	disabled?: boolean;
 
 	private transform = 0;
 	private opacity = 0;
@@ -40,6 +44,8 @@ export class AppScrollParallax extends Vue {
 	private elementHeight!: number;
 	private elementTop!: number;
 	private lastCalculated!: number;
+
+	$el!: HTMLDivElement;
 
 	async mounted() {
 		this.scroll$ = Scroll.watcher.changes.subscribe(() => {
@@ -151,7 +157,7 @@ export class AppScrollParallax extends Vue {
 			if (scrollDelta) {
 				this.opacity = Math.max(
 					0,
-					this.initialOpacity - scrollDelta / this.elementHeight * this.dim
+					this.initialOpacity - (scrollDelta / this.elementHeight) * this.dim
 				);
 				opacity = this.opacity + '';
 				this.dimReset = false;

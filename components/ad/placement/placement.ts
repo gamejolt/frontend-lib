@@ -1,16 +1,15 @@
+import View from '!view!./placement.html';
+import { AppAdWidget } from 'game-jolt-frontend-lib/components/ad/widget/widget';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./placement.html';
-
 import { Screen } from '../../screen/screen-service';
-import { AppAd } from '../ad';
-import { AdSlotPosValidator, AdSlotPos } from '../slot';
 import { Ads } from '../ads.service';
+import { AdSlotPos, AdSlotPosValidator } from '../slot';
 
 @View
 @Component({
 	components: {
-		AppAd,
+		AppAdWidget,
 	},
 })
 export class AppAdPlacement extends Vue {
@@ -20,13 +19,23 @@ export class AppAdPlacement extends Vue {
 	})
 	pos?: AdSlotPos;
 
-	@Prop(Boolean) hiddenXs?: boolean;
-	@Prop(Boolean) hiddenSm?: boolean;
-	@Prop(Boolean) hiddenDesktop?: boolean;
+	@Prop(Boolean)
+	hiddenXs?: boolean;
 
-	@Prop(Boolean) visibleXs?: boolean;
-	@Prop(Boolean) visibleSm?: boolean;
-	@Prop(Boolean) visibleDesktop?: boolean;
+	@Prop(Boolean)
+	hiddenSm?: boolean;
+
+	@Prop(Boolean)
+	hiddenDesktop?: boolean;
+
+	@Prop(Boolean)
+	visibleXs?: boolean;
+
+	@Prop(Boolean)
+	visibleSm?: boolean;
+
+	@Prop(Boolean)
+	visibleDesktop?: boolean;
 
 	readonly Screen = Screen;
 

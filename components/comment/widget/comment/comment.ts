@@ -1,4 +1,4 @@
-import View from '!view!./comment.html';
+import View from '!view!./comment.html?style=./comment.styl';
 import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
@@ -58,26 +58,38 @@ let CommentNum = 0;
 export class AppCommentWidgetComment extends Vue {
 	@Prop(Comment)
 	comment!: Comment;
+
 	@Prop(Array)
 	children?: Comment[];
+
 	@Prop(Comment)
 	parent?: Comment;
+
 	@Prop(String)
 	resource!: string;
+
 	@Prop(Number)
 	resourceId!: number;
+
 	@Prop(Boolean)
 	isLastInThread?: boolean;
+
+	@Prop(Boolean)
+	showChildren?: boolean;
 
 	@AppState
 	user!: AppStore['user'];
 
 	componentId = ++CommentNum;
 	isFollowPending = false;
-	isShowingChildren = false;
 	isEditing = false;
 
 	widget!: AppCommentWidget;
+
+	$el!: HTMLDivElement;
+	$refs!: {
+		scrollTarget: HTMLDivElement;
+	};
 
 	readonly date = date;
 	readonly Environment = Environment;
@@ -86,8 +98,21 @@ export class AppCommentWidgetComment extends Vue {
 		this.widget = findRequiredVueParent(this, AppCommentWidget);
 	}
 
+	mounted() {
+		// Scroll it into view if it's active.
+		if (this.isActive) {
+			setTimeout(() => {
+				this.$refs.scrollTarget.scrollIntoView({ behavior: 'smooth' });
+			}, 250);
+		}
+	}
+
 	get isChild() {
 		return !!this.parent;
+	}
+
+	get isActive() {
+		return this.widget.threadCommentId === this.comment.id;
 	}
 
 	get isOwner() {
@@ -163,8 +188,8 @@ export class AppCommentWidgetComment extends Vue {
 		return !this.comment.parent_id && this.hasModPermissions;
 	}
 
-	get isShowingReplies() {
-		return this.children && this.children.length && this.isShowingChildren;
+	get shouldShowReplies() {
+		return this.children && this.children.length > 0 && this.showChildren;
 	}
 
 	get canFollow() {

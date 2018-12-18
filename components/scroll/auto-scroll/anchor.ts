@@ -29,6 +29,8 @@ export class AppAutoscrollAnchor extends Vue {
 
 	private beforeRouteDeregister?: Function;
 
+	$el!: HTMLDivElement;
+
 	@Watch('anchorKey')
 	onAnchorKeyChange() {
 		this.keyChanged = true;

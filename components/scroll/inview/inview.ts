@@ -1,3 +1,4 @@
+import { Scroll } from 'game-jolt-frontend-lib/components/scroll/scroll.service';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { arrayRemove } from '../../../utils/array';
@@ -8,13 +9,14 @@ import { AppScrollInviewParent } from './parent';
 // This is the root container we use if there's no inview parent.
 let BaseContainer: ScrollInviewContainer;
 if (!GJ_IS_SSR) {
-	BaseContainer = new ScrollInviewContainer(document);
+	BaseContainer = new ScrollInviewContainer(Scroll.watcher);
 }
 
 @Component({})
 export class AppScrollInview extends Vue {
 	@Prop({ type: String, default: 'div' })
 	tag!: string;
+
 	@Prop({ type: Number, default: 0 })
 	extraPadding!: number;
 

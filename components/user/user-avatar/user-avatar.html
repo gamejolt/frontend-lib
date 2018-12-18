@@ -4,10 +4,5 @@
 	:href="href"
 	>
 	<app-user-avatar-img :user="user" />
-	<div class="avatar-name" v-if="showName">
-		{{ user.display_name }}
-		<br>
-		@{{ user.username }}
-	</div>
 </a>
 <app-user-avatar-img v-else />

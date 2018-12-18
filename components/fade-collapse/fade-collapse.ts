@@ -32,6 +32,8 @@ export class AppFadeCollapse extends Vue {
 	private frameRequestHandle?: number = undefined;
 	private isRequired = false;
 
+	$el!: HTMLDivElement;
+
 	@Emit('require-change')
 	emitRequireChange(_isRequired: boolean) {}
 
@@ -93,7 +95,7 @@ export class AppFadeCollapse extends Vue {
 			// We will scroll to the bottom of the element minus some extra padding.
 			// This keeps the element in view a bit.
 			const scrollTo =
-				Scroll.getElementOffsetFromContext(this.$el) +
+				Scroll.getElementOffsetTopFromContext(this.$el) +
 				this.collapseHeight -
 				ExtraCollapsePadding;
 
@@ -120,7 +122,7 @@ export class AppFadeCollapse extends Vue {
 		// Bottom of element from the scroll context top.
 		// We then subtract some padding so that they still see some of the element while scrolling.
 		const curPos =
-			Scroll.getElementOffsetFromContext(this.$el) +
+			Scroll.getElementOffsetTopFromContext(this.$el) +
 			this.$el.offsetHeight -
 			ExtraCollapsePadding;
 
