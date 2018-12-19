@@ -6,29 +6,39 @@ import { Theme } from 'game-jolt-frontend-lib/components/theme/theme.model';
 export type Perm = 'feature' | 'all';
 
 export async function $joinCommunity(community: Community) {
-	const response = await Api.sendRequest(
-		'/web/communities/join/' + community.path,
-		{},
-		{ detach: true }
-	);
-
 	community.is_member = true;
 	++community.member_count;
 
-	return response;
+	try {
+		const response = await Api.sendRequest(
+			'/web/communities/join/' + community.path,
+			{},
+			{ detach: true }
+		);
+
+		return response;
+	} catch (e) {
+		community.is_member = false;
+		--community.member_count;
+		throw e;
+	}
 }
 
 export async function $leaveCommunity(community: Community) {
-	const response = await Api.sendRequest(
-		'/web/communities/leave/' + community.path,
-		{},
-		{ detach: true }
-	);
-
 	community.is_member = false;
 	--community.member_count;
 
-	return response;
+	try {
+		const response = await Api.sendRequest(
+			'/web/communities/leave/' + community.path,
+			{},
+			{ detach: true }
+		);
+
+		return response;
+	} catch (e) {
+		throw e;
+	}
 }
 
 export class Community extends Model {

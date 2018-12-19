@@ -6,11 +6,7 @@
 	:badge="badge"
 	:disabled="isProcessing"
 	v-app-auth-required
-	v-app-tooltip.bottom="{
-		content: tooltip,
-		container: tooltipContainer,
-	}"
-	v-app-track-event="myEventLabel"
+	v-app-track-event="`community-join:${eventLabel || 'any'}:${!community.is_member ? 'join' : 'leave'}`"
 	@click="onClick"
 	>
 	<template v-if="!community.is_member">

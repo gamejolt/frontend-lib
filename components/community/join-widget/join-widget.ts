@@ -45,6 +45,12 @@ export class AppCommunityJoinWidget extends Vue {
 
 	isProcessing = false;
 
+	@Emit('join')
+	join(_community: Community) {}
+
+	@Emit('leave')
+	leave(_community: Community) {}
+
 	get badge() {
 		return !this.hideCount && this.community.member_count
 			? number(this.community.member_count)
@@ -54,26 +60,6 @@ export class AppCommunityJoinWidget extends Vue {
 	get tooltipContainer() {
 		return findTooltipContainer(this);
 	}
-
-	get tooltip() {
-		// TODO
-		return undefined;
-		// return !this.community.is_member
-		// 	? this.$gettext(`Join this community to save it !`)
-		// 	: undefined;
-	}
-
-	get myEventLabel() {
-		return `community-follow:${this.eventLabel || 'any'}:${
-			!this.community.is_member ? 'join' : 'leave'
-		}`;
-	}
-
-	@Emit('join')
-	join(_community: Community) {}
-
-	@Emit('leave')
-	leave(_community: Community) {}
 
 	async onClick() {
 		if (!this.app.user || this.isProcessing) {
