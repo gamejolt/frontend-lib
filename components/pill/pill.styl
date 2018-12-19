@@ -5,10 +5,11 @@
 	rounded-corners()
 	theme-prop('background-color', 'bg-offset')
 	theme-prop('color', 'fg')
-	display: inline-block
+	display: inline-flex
+	align-items: center
 	padding: 5px 10px
 	font-size: $font-size-small
-	pointer-events: none
+	user-select: none
 	margin-right: 5px
 	margin-bottom: 5px
 
@@ -17,10 +18,17 @@
 		theme-prop('color', 'bi-fg')
 		font-weight: bold
 
->>> a
-	& > .pill
+	a&
+		pressy()
 		cursor: pointer
 
-	&:hover > .pill
-		theme-prop('background-color', 'bi-bg')
-		theme-prop('color', 'bi-fg')
+		&:hover
+			theme-prop('background-color', 'bi-bg')
+			theme-prop('color', 'bi-fg')
+
+.-img
+	img-circle()
+	overflow: hidden
+	margin-right: 5px
+	width: 18px
+	height: 18px
