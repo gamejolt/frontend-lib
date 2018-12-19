@@ -61,7 +61,7 @@ export class FiresidePost extends Model {
 	expand_count?: number;
 
 	tags: FiresidePostTag[] = [];
-	tagged_communities: FiresidePostCommunity[] = [];
+	communities: FiresidePostCommunity[] = [];
 	media: MediaItem[] = [];
 	videos: FiresidePostVideo[] = [];
 	sketchfabs: FiresidePostSketchfab[] = [];
@@ -96,8 +96,8 @@ export class FiresidePost extends Model {
 			this.tags = FiresidePostTag.populate(data.tags);
 		}
 
-		if (data.tagged_communities) {
-			this.tagged_communities = FiresidePostCommunity.populate(data.tagged_communities);
+		if (data.communities) {
+			this.communities = FiresidePostCommunity.populate(data.communities);
 		}
 
 		if (data.media) {
@@ -203,7 +203,7 @@ export class FiresidePost extends Model {
 	}
 
 	getManageableCommunities(perms?: CommunityPerm | CommunityPerm[], either?: boolean) {
-		return this.tagged_communities.filter(tc => tc.community.hasPerms(perms, either));
+		return this.communities.filter(tc => tc.community.hasPerms(perms, either));
 	}
 
 	isManageableByUser(user?: User | null) {
@@ -299,7 +299,7 @@ export class FiresidePost extends Model {
 	}
 
 	getTaggedCommunity(community: Community) {
-		return this.tagged_communities.find(c => c.community.id === community.id);
+		return this.communities.find(c => c.community.id === community.id);
 	}
 
 	$publish() {
