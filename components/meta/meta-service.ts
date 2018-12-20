@@ -26,8 +26,7 @@ export class Meta extends MetaContainer {
 	private static _microdata = new MicrodataContainer();
 
 	private static _baseTitle: string | null = null;
-	private static _notificationCount = 0;
-	private static _chatCount = 0;
+	private static _notificationsCount = 0;
 
 	static init(router: VueRouter) {
 		router.beforeEach((_to, _from, next) => {
@@ -72,13 +71,8 @@ export class Meta extends MetaContainer {
 		this._microdata.set(microdata);
 	}
 
-	static set notificationCount(count: number) {
-		this._notificationCount = count;
-		this.updatePageTitle();
-	}
-
-	static set chatCount(count: number) {
-		this._chatCount = count;
+	static set notificationsCount(count: number) {
+		this._notificationsCount = count;
 		this.updatePageTitle();
 	}
 
@@ -91,12 +85,10 @@ export class Meta extends MetaContainer {
 			title = this._originalTitle;
 		}
 
-		let unreadCount = this._notificationCount + this._chatCount;
-		if (unreadCount > 99) {
-			unreadCount = 99;
-		}
-		if (unreadCount > 0) {
-			title = `(${unreadCount}) ${title}`;
+		if (this._notificationsCount > 0) {
+			const notificationsCount =
+				this._notificationsCount > 99 ? '99+' : this._notificationsCount + '';
+			title = `(${notificationsCount}) ${title}`;
 		}
 
 		if (title) {
