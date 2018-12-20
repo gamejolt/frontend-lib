@@ -1,18 +1,21 @@
+import { transparentize } from 'polished';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { transparentize } from 'polished';
-
-import { ThemeState, ThemeStore } from './theme.store';
 import { Theme } from './theme.model';
+import { ThemeState, ThemeStore } from './theme.store';
 
 let inc = 0;
 
 @Component({})
 export class AppTheme extends Vue {
-	@Prop(Theme) theme!: Theme | null;
+	@Prop(Theme)
+	theme!: Theme | null;
 
-	@ThemeState isDark!: ThemeStore['isDark'];
-	@ThemeState('theme') storeTheme!: ThemeStore['theme'];
+	@ThemeState
+	isDark!: ThemeStore['isDark'];
+
+	@ThemeState('theme')
+	storeTheme!: ThemeStore['theme'];
 
 	scopeId = ++inc;
 
@@ -27,6 +30,7 @@ export class AppTheme extends Vue {
 			${selector} {
 				--theme-white: #fff;
 				--theme-darkest: #${theme.darkest_};
+				--theme-darkest-subtle: #${theme.darkestSubtle_};
 				--theme-darker: #${theme.darker_};
 				--theme-dark: #${theme.dark_};
 				--theme-gray: #${theme.gray_};
@@ -38,6 +42,7 @@ export class AppTheme extends Vue {
 
 				--theme-black-trans: ${transparentize(1, '#000')};
 				--theme-darkest-trans: ${transparentize(1, '#' + theme.darkest_)};
+				--theme-darkest-subtle-trans: ${transparentize(1, '#' + theme.darkestSubtle_)};
 				--theme-darker-trans: ${transparentize(1, '#' + theme.darker_)};
 				--theme-dark-trans: ${transparentize(1, '#' + theme.dark_)};
 				--theme-gray-trans: ${transparentize(1, '#' + theme.gray_)};
