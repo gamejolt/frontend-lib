@@ -44,7 +44,6 @@ export async function $leaveCommunity(community: Community) {
 export class Community extends Model {
 	name!: string;
 	path!: string;
-	game_id?: number;
 	header_id?: number;
 	thumbnail_id?: number;
 
