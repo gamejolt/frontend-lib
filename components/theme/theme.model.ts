@@ -16,7 +16,6 @@ import { ThemePreset } from './preset/preset.model';
 
 // Sync with variables in stylus.
 const GrayDarkest = '#111111';
-const GrayDarkestSubtle = '#191919';
 const GrayDarker = '#212121';
 const GrayDark = '#292929';
 const Gray = '#363636';
@@ -265,10 +264,6 @@ export class Theme extends Model {
 
 	get darkest_() {
 		return this.tintColor(GrayDarkest, 0.02);
-	}
-
-	get darkestSubtle_() {
-		return this.tintColor(GrayDarkestSubtle, 0.04);
 	}
 
 	get darker_() {

@@ -30,7 +30,6 @@ export class AppTheme extends Vue {
 			${selector} {
 				--theme-white: #fff;
 				--theme-darkest: #${theme.darkest_};
-				--theme-darkest-subtle: #${theme.darkestSubtle_};
 				--theme-darker: #${theme.darker_};
 				--theme-dark: #${theme.dark_};
 				--theme-gray: #${theme.gray_};
@@ -42,7 +41,6 @@ export class AppTheme extends Vue {
 
 				--theme-black-trans: ${transparentize(1, '#000')};
 				--theme-darkest-trans: ${transparentize(1, '#' + theme.darkest_)};
-				--theme-darkest-subtle-trans: ${transparentize(1, '#' + theme.darkestSubtle_)};
 				--theme-darker-trans: ${transparentize(1, '#' + theme.darker_)};
 				--theme-dark-trans: ${transparentize(1, '#' + theme.dark_)};
 				--theme-gray-trans: ${transparentize(1, '#' + theme.gray_)};
