@@ -1,4 +1,8 @@
 compiled-content($font-size, $computed-line-height)
+	&, p
+		font-size: $font-size
+		line-height: $computed-line-height
+
 	img
 		@extend .img-responsive
 		// Center it if too small.
