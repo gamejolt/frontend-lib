@@ -206,6 +206,10 @@ export class FiresidePost extends Model {
 		return this.communities.filter(tc => tc.community.hasPerms(perms, either));
 	}
 
+	/**
+	 * Manageable is any permissions that would show the event-item-manage
+	 * controls.
+	 */
 	isManageableByUser(user?: User | null) {
 		return this.isEditableByUser(user) || this.manageableCommunities.length !== 0;
 	}
