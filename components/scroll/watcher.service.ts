@@ -26,7 +26,7 @@ export class ScrollWatcher {
 	private cachedScrollChange: ScrollChange | null = null;
 	private scrollStopTimeout: NodeJS.Timer | null = null;
 
-	constructor(private context: ScrollContext) {
+	constructor(public readonly context: ScrollContext) {
 		this.scrollListener = () => {
 			this.resetScrollChange();
 			this.changes.next();
@@ -52,8 +52,7 @@ export class ScrollWatcher {
 		this.context.addEventListener(
 			'scroll',
 			this.scrollListener,
-			// TODO: Fix once TS has this type def.
-			supportsPassiveEvents ? ({ passive: true } as any) : false
+			supportsPassiveEvents ? { passive: true } : false
 		);
 	}
 

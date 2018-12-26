@@ -1,10 +1,10 @@
 import VueRouter from 'vue-router';
-import { MetaContainer } from './meta-container';
-import { FbMetaContainer } from './fb-meta-container';
-import { TwitterMetaContainer } from './twitter-meta-container';
-import { MicrodataContainer } from './microdata-container';
-import { Environment } from '../environment/environment.service';
 import { makeObservableService } from '../../utils/vue';
+import { Environment } from '../environment/environment.service';
+import { FbMetaContainer } from './fb-meta-container';
+import { MetaContainer } from './meta-container';
+import { MicrodataContainer } from './microdata-container';
+import { TwitterMetaContainer } from './twitter-meta-container';
 
 export function escapeString(str: string) {
 	return String(str)
@@ -25,6 +25,9 @@ export class Meta extends MetaContainer {
 	private static _twitter = new TwitterMetaContainer();
 	private static _microdata = new MicrodataContainer();
 
+	private static _baseTitle: string | null = null;
+	private static _notificationsCount = 0;
+
 	static init(router: VueRouter) {
 		router.beforeEach((_to, _from, next) => {
 			this.clear();
@@ -33,21 +36,8 @@ export class Meta extends MetaContainer {
 	}
 
 	static set title(title: string | null) {
-		if (title) {
-			title += this.titleSuffix;
-		} else {
-			title = this._originalTitle;
-		}
-
-		if (title) {
-			if (!GJ_IS_SSR) {
-				document.title = title;
-			}
-			this._title = title;
-
-			// We escape in the template, so no need to escape here.
-			Environment.ssrContext.meta.title = title;
-		}
+		this._baseTitle = title;
+		this.updatePageTitle();
 	}
 
 	static get title() {
@@ -81,6 +71,37 @@ export class Meta extends MetaContainer {
 		this._microdata.set(microdata);
 	}
 
+	static set notificationsCount(count: number) {
+		this._notificationsCount = count;
+		this.updatePageTitle();
+	}
+
+	private static updatePageTitle() {
+		let title = this._baseTitle;
+
+		if (title) {
+			title += this.titleSuffix;
+		} else {
+			title = this._originalTitle;
+		}
+
+		if (this._notificationsCount > 0) {
+			const notificationsCount =
+				this._notificationsCount > 99 ? '99+' : this._notificationsCount + '';
+			title = `(${notificationsCount}) ${title}`;
+		}
+
+		if (title) {
+			if (!GJ_IS_SSR) {
+				document.title = title;
+			}
+			this._title = title;
+
+			// We escape in the template, so no need to escape here.
+			Environment.ssrContext.meta.title = title;
+		}
+	}
+
 	static clear() {
 		this.description = null;
 
@@ -107,7 +128,10 @@ export class Meta extends MetaContainer {
 
 	static render() {
 		return (
-			this._base.render() + this._fb.render() + this._twitter.render() + this._microdata.render()
+			this._base.render() +
+			this._fb.render() +
+			this._twitter.render() +
+			this._microdata.render()
 		);
 	}
 }

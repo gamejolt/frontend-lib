@@ -1,10 +1,9 @@
+import View from '!view!./add.html?style=./add.styl';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./add.html';
-import '../comment.styl';
-
+import { AppFormControlMarkdown } from '../../form-vue/control/markdown/markdown';
 import { BaseForm, FormOnInit } from '../../form-vue/form.service';
 import { Comment } from '../comment-model';
-import { AppFormControlMarkdown } from '../../form-vue/control/markdown/markdown';
+import '../comment.styl';
 
 @View
 @Component({
@@ -13,10 +12,23 @@ import { AppFormControlMarkdown } from '../../form-vue/control/markdown/markdown
 	},
 })
 export class FormComment extends BaseForm<Comment> implements FormOnInit {
-	@Prop(String) resource!: 'Game' | 'FiresidePost';
-	@Prop(Number) resourceId!: number;
-	@Prop(Number) parentId?: number;
-	@Prop(Boolean) autofocus?: boolean;
+	@Prop(String)
+	resource!: 'Game' | 'FiresidePost';
+
+	@Prop(Number)
+	resourceId!: number;
+
+	@Prop(Number)
+	parentId?: number;
+
+	@Prop(Boolean)
+	autofocus?: boolean;
+
+	@Prop(String)
+	placeholder?: string;
+
+	@Prop(String)
+	maxHeight?: string;
 
 	modelClass = Comment;
 	resetOnSubmit = true;

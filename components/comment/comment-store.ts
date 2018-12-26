@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { Action, Mutation, namespace, State } from 'vuex-class';
 import { arrayGroupBy, arrayRemove, numberSort } from '../../utils/array';
 import { VuexAction, VuexGetter, VuexModule, VuexMutation, VuexStore } from '../../utils/vuex';
+import { Api } from '../api/api.service';
 import { Growls } from '../growls/growls.service';
 import { Translate } from '../translate/translate.service';
 import { Comment, fetchComments } from './comment-model';
@@ -14,8 +15,9 @@ export const CommentMutation = namespace(CommentStoreNamespace, Mutation);
 export type CommentActions = {
 	'comment/lockCommentStore': { resource: string; resourceId: number };
 	'comment/fetchComments': { store: CommentStoreModel; page?: number };
-	'comment/pinComment': { store: CommentStoreModel; comment: Comment };
+	'comment/pinComment': { comment: Comment };
 	'comment/setSort': { store: CommentStoreModel; sort: string };
+	'comment/fetchThread': { store: CommentStoreModel; parentId: number };
 };
 
 export type CommentMutations = {
@@ -34,6 +36,8 @@ export class CommentStoreModel {
 	comments: Comment[] = [];
 	locks = 0;
 	sort = Comment.SORT_HOT;
+	// This flag gets set for every change (add/remove/update), that prompts the overview component owner to update the commment info
+	overviewNeedsRefresh = false;
 
 	constructor(public resource: string, public resourceId: number) {}
 
@@ -70,6 +74,10 @@ export class CommentStoreModel {
 		this.parentCount = 0;
 		this.locks = 0;
 	}
+
+	afterModification() {
+		this.overviewNeedsRefresh = true;
+	}
 }
 
 @VuexModule()
@@ -88,6 +96,24 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 		const storeId = resource + '/' + resourceId;
 		this._ensureCommentStore(payload);
 		return this.stores[storeId];
+	}
+
+	@VuexAction
+	async fetchThread(payload: CommentActions['comment/fetchThread']) {
+		const { store, parentId } = payload;
+		const response = await Api.sendRequest(`/comments/get-thread/${parentId}`, null, {
+			noErrorRedirect: true,
+		});
+
+		const parent = new Comment(response.parent);
+		const children = Comment.populate(response.children);
+
+		const comments = children;
+		comments.push(parent);
+
+		this._addComments({ store, comments });
+
+		return response;
 	}
 
 	@VuexAction
@@ -132,11 +158,12 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 
 	@VuexAction
 	async pinComment(payload: CommentActions['comment/pinComment']) {
-		const { store, comment } = payload;
-
+		const { comment } = payload;
 		await comment.$pin();
-		// clear the store's comments and prepare for reload
-		store.clear();
+		const store = this.getCommentStore(comment.resource, comment.resource_id);
+		if (store instanceof CommentStoreModel) {
+			store.afterModification();
+		}
 	}
 
 	@VuexAction
@@ -151,7 +178,11 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 	private _addComments(payload: { store: CommentStoreModel; comments: Comment[] }) {
 		const { store, comments } = payload;
 		for (const comment of comments) {
-			if (!store.contains(comment)) {
+			// Replace an old instance of the comment in the store if it exists.
+			const index = store.comments.findIndex(c => c.id === comment.id);
+			if (index !== -1) {
+				Vue.set(store.comments, index, comment);
+			} else {
 				store.comments.push(comment);
 			}
 		}
@@ -198,6 +229,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 					++store.parentCount;
 				}
 			}
+			store.afterModification();
 		}
 	}
 
@@ -211,6 +243,10 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				),
 				Translate.$gettext('Almost there...')
 			);
+		}
+		const store = this.getCommentStore(comment.resource, comment.resource_id);
+		if (store instanceof CommentStoreModel) {
+			store.afterModification();
 		}
 	}
 
@@ -227,6 +263,7 @@ export class CommentStore extends VuexStore<CommentStore, CommentActions, Commen
 				--store.count;
 			}
 			arrayRemove(store.comments, i => i.id === comment.id);
+			store.afterModification();
 		}
 	}
 

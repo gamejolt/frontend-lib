@@ -69,7 +69,6 @@ export class AppAdPlaywire extends Vue {
 	}
 
 	display() {
-		console.log('display ad');
 		this.slotId = generateSlotId();
 
 		// Log that we viewed this ad immediately.

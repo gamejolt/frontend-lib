@@ -6,7 +6,7 @@
 		</app-button>
 	</div>
 
-	<div class="modal-header" v-if="!comment">
+	<div class="modal-header">
 		<h2 class="modal-title">
 			<translate
 				v-if="displayMode === 'comments'"
@@ -29,16 +29,9 @@
 	<div class="modal-body">
 
 		<app-comment-widget
-			v-if="!comment"
 			:resource="resource"
 			:resource-id="resourceId"
 			autofocus
-			/>
-
-		<app-comment-modal-comment
-			v-else
-			:comment="comment"
-			@add="onReplyAdd()"
 			/>
 
 	</div>

@@ -53,6 +53,7 @@ make-button-size(size)
 			padding-right: $$button-horizontal-padding
 
 .button
+	pressy()
 	display: inline-block
 	text-transform: uppercase
 	font-family: $font-family-base
@@ -79,6 +80,7 @@ make-button-size(size)
 	&.-disabled, &[disabled], fieldset[disabled] &
 		cursor: not-allowed
 		opacity: 0.5
+		transform: none
 
 		.jolticon
 			cursor: not-allowed

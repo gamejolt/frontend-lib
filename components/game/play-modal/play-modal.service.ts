@@ -74,6 +74,7 @@ export class GamePlayModal {
 		const canMinimize = this.canMinimize;
 
 		await Modal.show({
+			modalId: 'GamePlay',
 			component: () =>
 				asyncComponentLoader(
 					import(/* webpackChunkName: "GamePlayModal" */ './play-modal')

@@ -7,7 +7,7 @@ import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { LikersModal } from '../../likers/modal.service';
 import { AppTooltip } from '../../tooltip/tooltip';
 import { Comment } from '../comment-model';
-import { CommentModal } from '../modal/modal.service';
+import { CommentThreadModal } from '../thread/modal.service';
 import { CommentVote } from '../vote/vote-model';
 
 @View
@@ -22,8 +22,14 @@ import { CommentVote } from '../vote/vote-model';
 	},
 })
 export class AppCommentControls extends Vue {
-	@Prop(Comment) comment!: Comment;
-	@Prop(Boolean) showReply?: boolean;
+	@Prop(Comment)
+	comment!: Comment;
+
+	@Prop(Array)
+	children?: Comment[];
+
+	@Prop(Boolean)
+	showReply?: boolean;
 
 	get votingTooltip() {
 		const userHasVoted = !!this.comment.user_vote;
@@ -80,8 +86,14 @@ export class AppCommentControls extends Vue {
 		}
 	}
 
-	onReplyClick() {
-		CommentModal.show({ comment: this.comment });
+	onReplyClick(autofocus: boolean) {
+		CommentThreadModal.show({
+			resource: this.comment.resource,
+			resourceId: this.comment.resource_id,
+			commentId: this.comment.id,
+			displayMode: 'comments',
+			autofocus,
+		});
 	}
 
 	showLikers() {

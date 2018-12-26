@@ -65,6 +65,9 @@
 			v-if="editorMode === 'textarea'"
 			:id="id"
 			class="form-control"
+			:style="{
+				maxHeight,
+			}"
 			rows="1"
 			:class="editorClass"
 			:name="group.name"
@@ -99,6 +102,9 @@
 	<div
 		v-else-if="currentTab === 'preview'"
 		class="well form-control-markdown-preview"
+		:style="{
+			maxHeight,
+		}"
 		>
 
 		<app-loading v-if="isLoadingPreview" />

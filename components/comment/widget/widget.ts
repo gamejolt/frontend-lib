@@ -6,8 +6,8 @@ import { AppState, AppStore } from '../../../vue/services/app/app-store';
 import { Analytics } from '../../analytics/analytics.service';
 import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
 import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
+import { Collaborator } from '../../collaborator/collaborator.model';
 import { Environment } from '../../environment/environment.service';
-import { GameCollaborator } from '../../game/collaborator/collaborator.model';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
 import { AppMessageThreadContent } from '../../message-thread/content/content';
 import { AppMessageThread } from '../../message-thread/message-thread';
@@ -22,6 +22,11 @@ import {
 	CommentStore,
 	CommentStoreModel,
 } from '../comment-store';
+import {
+	CommentStoreSliceView,
+	CommentStoreThreadView,
+	CommentStoreView,
+} from '../comment-store-view';
 import { AppCommentWidgetComment } from './comment/comment';
 
 let incrementer = 0;
@@ -55,6 +60,15 @@ export class AppCommentWidget extends Vue {
 	@Prop(Boolean)
 	autofocus?: boolean;
 
+	@Prop(Number)
+	threadCommentId?: number;
+
+	@Prop({ type: Boolean, default: true })
+	showAdd!: boolean;
+
+	@Prop({ type: Boolean, default: true })
+	showTabs!: boolean;
+
 	@AppState
 	user!: AppStore['user'];
 
@@ -63,6 +77,9 @@ export class AppCommentWidget extends Vue {
 
 	@CommentAction
 	fetchComments!: CommentStore['fetchComments'];
+
+	@CommentAction
+	fetchThread!: CommentStore['fetchThread'];
 
 	@CommentAction
 	lockCommentStore!: CommentStore['lockCommentStore'];
@@ -86,6 +103,7 @@ export class AppCommentWidget extends Vue {
 	onCommentRemove!: CommentStore['onCommentRemove'];
 
 	store: CommentStoreModel | null = null;
+	storeView: CommentStoreView | null = null;
 	id = ++incrementer;
 	hasBootstrapped = false;
 	hasError = false;
@@ -94,7 +112,7 @@ export class AppCommentWidget extends Vue {
 	perPage = 10;
 	currentPage = 1;
 
-	collaborators: GameCollaborator[] = [];
+	collaborators: Collaborator[] = [];
 
 	get loginUrl() {
 		return (
@@ -103,11 +121,16 @@ export class AppCommentWidget extends Vue {
 	}
 
 	get shouldShowLoadMore() {
-		return !this.isLoading && this.totalParentCount > this.currentParentCount;
+		return (
+			!this.isLoading && !this.isThreadView && this.totalParentCount > this.currentParentCount
+		);
 	}
 
 	get comments() {
-		return this.store ? this.store.parentComments : [];
+		if (this.storeView && this.store) {
+			return this.storeView.getParents(this.store);
+		}
+		return [];
 	}
 
 	get childComments() {
@@ -123,7 +146,7 @@ export class AppCommentWidget extends Vue {
 	}
 
 	get currentParentCount() {
-		return this.store ? this.store.parentComments.length : 0;
+		return this.comments.length;
 	}
 
 	get currentSort() {
@@ -148,6 +171,10 @@ export class AppCommentWidget extends Vue {
 
 	get showTopSorting() {
 		return this.resource === 'Game';
+	}
+
+	get isThreadView() {
+		return !!this.threadCommentId;
 	}
 
 	async created() {
@@ -176,6 +203,12 @@ export class AppCommentWidget extends Vue {
 			this.store = null;
 		}
 
+		if (this.isThreadView && this.threadCommentId) {
+			this.storeView = new CommentStoreThreadView(this.threadCommentId);
+		} else {
+			this.storeView = new CommentStoreSliceView();
+		}
+
 		await this._fetchComments();
 	}
 
@@ -190,7 +223,22 @@ export class AppCommentWidget extends Vue {
 				this.store = await this.lockCommentStore({ resource, resourceId });
 			}
 
-			const payload = await this.fetchComments({ store: this.store, page: this.currentPage });
+			let payload: any;
+			if (this.isThreadView && this.threadCommentId) {
+				payload = await this.fetchThread({
+					store: this.store,
+					parentId: this.threadCommentId,
+				});
+				// It's possible that the thread comment is actually a child. In that case, update the view's parent id to the returned parent id
+				if (this.storeView instanceof CommentStoreThreadView) {
+					this.storeView.parentCommentId = new Comment(payload.parent).id;
+				}
+			} else {
+				payload = await this.fetchComments({
+					store: this.store,
+					page: this.currentPage,
+				});
+			}
 
 			this.isLoading = false;
 			this.hasBootstrapped = true;
@@ -198,12 +246,19 @@ export class AppCommentWidget extends Vue {
 			this.resourceOwner = new User(payload.resourceOwner);
 			this.perPage = payload.perPage || 10;
 
+			// Display all loaded comments.
+			if (this.storeView instanceof CommentStoreSliceView) {
+				const ids = (payload.comments as any[]).map(o => o.id as number);
+				this.storeView.registerIds(ids);
+			}
+
 			this.collaborators = payload.collaborators
-				? GameCollaborator.populate(payload.collaborators)
+				? Collaborator.populate(payload.collaborators)
 				: [];
 		} catch (e) {
 			console.error(e);
 			this.hasError = true;
+			this.$emit('error', e);
 		}
 	}
 
@@ -211,8 +266,14 @@ export class AppCommentWidget extends Vue {
 		Analytics.trackEvent('comment-widget', 'add');
 		this.onCommentAdd(comment);
 		this.$emit('add', comment);
-		if (this.store && this.store.sort !== Comment.SORT_YOU) {
-			this._setSort(Comment.SORT_YOU);
+		if (this.store) {
+			if (this.store.sort !== Comment.SORT_YOU) {
+				this._setSort(Comment.SORT_YOU);
+			} else {
+				if (this.storeView instanceof CommentStoreSliceView) {
+					this.storeView.registerIds([comment.id]);
+				}
+			}
 		}
 	}
 
@@ -229,12 +290,7 @@ export class AppCommentWidget extends Vue {
 	}
 
 	async _pinComment(comment: Comment) {
-		if (this.store) {
-			this.currentPage = 1;
-			await this.pinComment({ store: this.store, comment });
-			// Scroll.to('comments'); I couldn't find where this originally tried scrolling to. Is this still needed?
-			this._fetchComments();
-		}
+		await this.pinComment({ comment });
 	}
 
 	sortHot() {
