@@ -9,6 +9,7 @@ import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import { mainSchema } from './schema';
 
 const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
 
@@ -84,6 +85,41 @@ class SelectionSizeTooltip {
 	}
 }
 
+const buttonPlugin = new Plugin({
+	view(editorView) {
+		return new EditorButton(editorView);
+	},
+});
+
+class EditorButton {
+	button: HTMLElement;
+
+	constructor(view: EditorView) {
+		this.button = document.createElement('button');
+		this.button.innerText = 'BUTTON';
+		view.dom.parentNode!.appendChild(this.button);
+		this.update(view, null);
+	}
+
+	update(view: EditorView, lastState: EditorState | null) {
+		const state = view.state;
+		const { from, to } = state.selection;
+		// These are in screen coordinates
+		const start = view.coordsAtPos(from);
+		const end = view.coordsAtPos(to);
+		const box = this.button.offsetParent.getBoundingClientRect();
+		this.button.style.left = start.left - box.left + 'px';
+		this.button.style.top = start.top - box.top + 'px';
+		this.button.style.position = 'absolute';
+
+		console.log(JSON.stringify(state.toJSON().doc.content));
+	}
+
+	destroy() {
+		this.button.remove();
+	}
+}
+
 @View
 @Component({})
 export class AppContentEditor extends Vue {
@@ -95,10 +131,11 @@ export class AppContentEditor extends Vue {
 	};
 
 	mounted() {
+		const mySchema = mainSchema;
+
 		this.state = EditorState.create({
-			schema,
-			doc: DOMParser.fromSchema(schema).parse(this.$refs.doc),
-			plugins: [keymap(ourKeymap), keymap(baseKeymap), history(), selectionSizePlugin],
+			doc: DOMParser.fromSchema(mySchema).parse(this.$refs.doc),
+			plugins: [keymap(ourKeymap), keymap(baseKeymap), history(), buttonPlugin],
 		});
 
 		this.view = new EditorView(this.$refs.doc, { state: this.state });
