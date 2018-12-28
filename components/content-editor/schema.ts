@@ -19,7 +19,12 @@ export const mainSchema = new Schema({
 					default: 'https://m.gjcdn.net/fireside-post-image/700/1532101-hk2qzijv-v3.jpg',
 				},
 			},
-			toDOM: (node: Node) => ['img', { src: node.attrs.src }],
+			toDOM: (node: Node) => [
+				'img',
+				{
+					src: node.attrs.src,
+				},
+			],
 			parseDOM: [
 				{
 					tag: 'img',
@@ -29,9 +34,38 @@ export const mainSchema = new Schema({
 				},
 			],
 		},
+		video: {
+			group: 'block',
+			marks: '',
+			draggable: false,
+			attrs: {
+				videoId: {
+					default: 'WfDS_2omcHw',
+				},
+				videoProvider: {
+					default: 'youtube',
+				},
+				thumbnail: {
+					default: 'https://i.ytimg.com/vi/WfDS_2omcHw/hqdefault.jpg',
+				},
+			},
+			toDOM: (node: Node) => ['div'],
+			parseDOM: [
+				{
+					tag: 'div',
+					getAttrs: (domNode: Element) => {
+						return {
+							videoId: domNode.getAttribute('videoId'),
+							videoProvider: domNode.getAttribute('videoProvider'),
+							thumbnail: domNode.getAttribute('thumbnail'),
+						};
+					},
+				},
+			],
+		},
 		doc: {
-			content: 'block* img{1}',
+			content: 'block+',
 		},
 	},
 	marks: basicSchema.spec.marks,
-});
+} as any);

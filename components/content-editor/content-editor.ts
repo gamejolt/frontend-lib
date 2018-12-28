@@ -1,29 +1,25 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
+import { VideoView } from 'game-jolt-frontend-lib/components/content-editor/node-views/video-view';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';
 import { history, redo, undo } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
-import { DOMParser, Schema } from 'prosemirror-model';
-import { schema as basicSchema } from 'prosemirror-schema-basic';
+import { DOMParser } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import { AppContentEditorControls } from './controls/content-editor-controls';
 import { mainSchema } from './schema';
 
 const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
 
-const schema = new Schema({
-	nodes: basicSchema.spec.nodes,
-	marks: basicSchema.spec.marks,
-});
-
 const ourKeymap: { [k: string]: any } = {
 	'Mod-z': undo,
 	'Shift-Mod-z': redo,
-	'Mod-b': toggleMark(schema.marks.strong),
-	'Mod-i': toggleMark(schema.marks.em),
-	'Mod-`': toggleMark(schema.marks.code),
+	'Mod-b': toggleMark(mainSchema.marks.strong),
+	'Mod-i': toggleMark(mainSchema.marks.em),
+	'Mod-`': toggleMark(mainSchema.marks.code),
 };
 
 if (!isMac) {
@@ -85,46 +81,34 @@ class SelectionSizeTooltip {
 	}
 }
 
-const buttonPlugin = new Plugin({
-	view(editorView) {
-		return new EditorButton(editorView);
-	},
-});
+class UpdateIncrementerPlugin {
+	view: EditorView;
+	appEditor: AppContentEditor;
 
-class EditorButton {
-	button: HTMLElement;
-
-	constructor(view: EditorView) {
-		this.button = document.createElement('button');
-		this.button.innerText = 'BUTTON';
-		view.dom.parentNode!.appendChild(this.button);
-		this.update(view, null);
+	constructor(view: EditorView, appEditor: AppContentEditor) {
+		this.view = view;
+		this.appEditor = appEditor;
 	}
 
 	update(view: EditorView, lastState: EditorState | null) {
 		const state = view.state;
-		const { from, to } = state.selection;
-		// These are in screen coordinates
-		const start = view.coordsAtPos(from);
-		const end = view.coordsAtPos(to);
-		const box = this.button.offsetParent.getBoundingClientRect();
-		this.button.style.left = start.left - box.left + 'px';
-		this.button.style.top = start.top - box.top + 'px';
-		this.button.style.position = 'absolute';
-
-		console.log(JSON.stringify(state.toJSON().doc.content));
-	}
-
-	destroy() {
-		this.button.remove();
+		if (lastState && lastState.doc.eq(state.doc) && lastState.selection.eq(state.selection)) {
+			return;
+		}
+		this.appEditor.stateCounter++;
 	}
 }
 
 @View
-@Component({})
+@Component({
+	components: {
+		AppContentEditorControls,
+	},
+})
 export class AppContentEditor extends Vue {
 	state!: EditorState;
-	view!: EditorView;
+	view: EditorView | null = null;
+	stateCounter = 0;
 
 	$refs!: {
 		doc: HTMLElement;
@@ -133,11 +117,29 @@ export class AppContentEditor extends Vue {
 	mounted() {
 		const mySchema = mainSchema;
 
-		this.state = EditorState.create({
-			doc: DOMParser.fromSchema(mySchema).parse(this.$refs.doc),
-			plugins: [keymap(ourKeymap), keymap(baseKeymap), history(), buttonPlugin],
+		// This is used to update any children with the new view.
+		// We don't want to watch the view/state objects because they are too heavy.
+		// So instead, this increments a counter every time the state changes
+		const that = this;
+		const incrementerPlugin = new Plugin({
+			view(editorView) {
+				return new UpdateIncrementerPlugin(editorView, that);
+			},
 		});
 
-		this.view = new EditorView(this.$refs.doc, { state: this.state });
+		this.state = EditorState.create({
+			doc: DOMParser.fromSchema(mySchema).parse(this.$refs.doc),
+			plugins: [keymap(ourKeymap), keymap(baseKeymap), history(), incrementerPlugin],
+		});
+
+		this.view = new EditorView(this.$refs.doc, {
+			state: this.state,
+			nodeViews: {
+				video(node, view, getPos) {
+					return new VideoView(node, view, getPos);
+				},
+			},
+		});
+		this.stateCounter++;
 	}
 }

@@ -1,0 +1,34 @@
+<div
+	ref="container"
+	class="content-editor-controls"
+	:style="{
+		'top': this.top,
+		'right': this.right,
+	}"
+	>
+	<!-- The inner div needs to exist so it can be set to invisible
+		 The container div above needs to be visible so its offsetParent property can be accessed. -->
+	<div
+		:style="{
+			'visibility': this.visibility,
+		}"
+		>
+		<app-button
+			circle
+			solid
+			icon="screenshot"
+			@click="onClickScreenshot"
+			/>
+		<app-button
+			circle
+			solid
+			icon="video"
+			@click="onClickVideo"
+			/>
+		<app-button
+			circle
+			solid
+			icon="musical-note-double"
+			/>
+	</div>
+</div>
