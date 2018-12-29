@@ -1,5 +1,4 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
-import { VideoView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/video-view';
 import { UpdateIncrementerPlugin } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/update-incrementer.plugin';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';
 import { history, redo, undo } from 'prosemirror-history';
@@ -13,6 +12,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ContentContext } from '../content-context';
 import { AppContentEditorControls } from './controls/content-editor-controls';
+import { VideoView } from './node-views/video';
 import { postSchema } from './schemas/post.schema';
 
 const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
