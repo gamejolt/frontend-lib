@@ -14,21 +14,24 @@
 		}"
 		>
 		<app-button
+			v-if="capabilities.image"
 			circle
-			solid
 			icon="screenshot"
 			@click="onClickScreenshot"
+			v-app-tooltip="$gettext('Upload Image')"
 			/>
 		<app-button
+			v-if="capabilities.embedVideo"
 			circle
-			solid
-			icon="video"
+			icon="youtube"
 			@click="onClickVideo"
+			v-app-tooltip="$gettext('Embed YouTube Video')"
 			/>
 		<app-button
+			v-if="capabilities.embedMusic"
 			circle
-			solid
 			icon="musical-note-double"
+			v-app-tooltip="$gettext('Embed SoundCloud Song')"
 			/>
 	</div>
 </div>

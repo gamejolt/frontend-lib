@@ -1,18 +1,25 @@
 import View from '!view!./content-editor-controls.html?style=./content-editor-controls.styl';
-import { Node } from 'prosemirror-model';
+import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
+import { Node, NodeType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { ContextCapabilities } from '../../content-context';
 
 @View
 @Component({
 	components: {},
+	directives: {
+		AppTooltip,
+	},
 })
 export class AppContentEditorControls extends Vue {
 	@Prop(Object)
 	view!: EditorView;
 	@Prop(Number)
 	stateCounter!: number;
+	@Prop(Object)
+	capabilities!: ContextCapabilities;
 
 	visible = true;
 	top = '0px';
@@ -94,7 +101,10 @@ export class AppContentEditorControls extends Vue {
 		const selection = this.view.state.selection;
 		const from = selection.from;
 
-		const newVideoNode = this.view.state.schema.nodes.video.create() as Node;
+		const newVideoNode = (this.view.state.schema.nodes.embed as NodeType).create({
+			embedType: 'youtube-video',
+			// embedSource: 'test',
+		}) as Node;
 		tr.insert(from - 1, newVideoNode);
 
 		this.view.focus();
