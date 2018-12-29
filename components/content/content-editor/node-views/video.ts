@@ -1,20 +1,17 @@
+import {
+	BaseNodeView,
+	GetPosFunction,
+} from 'game-jolt-frontend-lib/components/content/content-editor/node-views/base';
 import { AppVideoEmbed } from 'game-jolt-frontend-lib/components/video/embed/embed';
 import { Node } from 'prosemirror-model';
-import { EditorView, NodeView } from 'prosemirror-view';
+import { EditorView } from 'prosemirror-view';
 
-export class VideoView implements NodeView {
-	private node: Node;
-	private view: EditorView;
-	private getPos: any;
-	dom: HTMLElement;
-	insertedComponent = false;
+export class VideoView extends BaseNodeView {
+	private insertedComponent = false;
 
-	constructor(node: Node, view: EditorView, getPos: any) {
-		this.node = node;
-		this.view = view;
-		this.getPos = getPos;
+	constructor(node: Node, view: EditorView, getPos: GetPosFunction) {
+		super(node, view, getPos);
 
-		this.dom = document.createElement('div');
 		this.dom.style.backgroundColor = 'transparent';
 		this.dom.style.width = '640px';
 		this.dom.style.height = '360px';
