@@ -1,4 +1,4 @@
-import { Node } from 'prosemirror-model';
+import { Node, NodeSpec } from 'prosemirror-model';
 
 export const video = {
 	group: 'block',
@@ -28,4 +28,4 @@ export const video = {
 			},
 		},
 	],
-};
+} as NodeSpec;

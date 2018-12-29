@@ -15,4 +15,4 @@ export const postSchema = new Schema({
 		},
 	},
 	marks: basicSchema.spec.marks,
-} as any);
+});

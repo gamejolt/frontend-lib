@@ -1,4 +1,4 @@
-import { Node } from 'prosemirror-model';
+import { Node, NodeSpec } from 'prosemirror-model';
 
 export const img = {
 	group: 'block',
@@ -23,4 +23,4 @@ export const img = {
 			},
 		},
 	],
-};
+} as NodeSpec;
