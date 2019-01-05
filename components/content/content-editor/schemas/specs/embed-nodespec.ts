@@ -3,8 +3,8 @@ import { Node, NodeSpec } from 'prosemirror-model';
 export const embed = {
 	group: 'block',
 	marks: '',
-	draggable: false,
-	selectable: false,
+	draggable: true,
+	selectable: true,
 	attrs: {
 		embedType: {
 			default: 'youtube-video',

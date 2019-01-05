@@ -1,6 +1,7 @@
 <div class="content-editor">
 	<div class="-doc" ref="doc" />
 	<app-content-editor-controls
+		v-if="shouldShowControls"
 		:capabilities="capabilities"
 		:view="view"
 		:state-counter="stateCounter" />

@@ -34,6 +34,17 @@ export abstract class BaseNodeView implements NodeView {
 		// Mount the Vue instance onto an inner div to not disturb the div managed by the prosemirror editor
 		const container = document.createElement('div');
 		this.dom.appendChild(container);
+		vm.$props.isEditing = true;
 		vm.$mount(container);
+		vm.$on('removed', () => {
+			this.removeMe();
+		});
+	}
+
+	removeMe() {
+		const tr = this.view.state.tr;
+		const pos = this.view.posAtDOM(this.dom, 0);
+		tr.replace(pos, pos + 1, undefined);
+		this.view.dispatch(tr);
 	}
 }

@@ -3,23 +3,21 @@ import { Node, NodeSpec } from 'prosemirror-model';
 export const img = {
 	group: 'block',
 	marks: '',
-	draggable: false,
+	draggable: true,
+	selectable: true,
 	attrs: {
 		src: {
 			default: 'https://m.gjcdn.net/fireside-post-image/700/1532101-hk2qzijv-v3.jpg',
 		},
 	},
-	toDOM: (node: Node) => [
-		'img',
-		{
-			src: node.attrs.src,
-		},
-	],
+	toDOM: (_: Node) => ['div'],
 	parseDOM: [
 		{
-			tag: 'img',
+			tag: 'div',
 			getAttrs: (domNode: Element) => {
-				return domNode.getAttribute('src');
+				return {
+					src: domNode.getAttribute('src'),
+				};
 			},
 		},
 	],

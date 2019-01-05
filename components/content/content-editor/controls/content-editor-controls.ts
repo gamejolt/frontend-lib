@@ -24,6 +24,7 @@ export class AppContentEditorControls extends Vue {
 	visible = true;
 	top = '0px';
 	right = '0px';
+	collapsed = true;
 
 	$refs!: {
 		container: HTMLElement;
@@ -74,40 +75,54 @@ export class AppContentEditorControls extends Vue {
 						break;
 					default:
 						this.visible = false;
+						this.collapsed = true;
 						break;
 				}
 			} else {
 				this.visible = false;
+				this.collapsed = true;
 			}
 		} else {
 			this.visible = false;
+			this.collapsed = true;
 		}
 	}
 
-	onClickScreenshot() {
+	onClickExpand() {
+		this.collapsed = !this.collapsed;
+	}
+
+	private insertNewNode(newNode: Node) {
 		const tr = this.view.state.tr;
 		const selection = this.view.state.selection;
 		const from = selection.from;
 
-		const newImageNode = this.view.state.schema.nodes.img.create() as Node;
-		tr.insert(from - 1, newImageNode);
+		tr.insert(from - 1, newNode);
 
 		this.view.focus();
 		this.view.dispatch(tr);
+
+		this.collapsed = true;
+	}
+
+	onClickScreenshot() {
+		const newNode = this.view.state.schema.nodes.img.create() as Node;
+		this.insertNewNode(newNode);
 	}
 
 	onClickVideo() {
-		const tr = this.view.state.tr;
-		const selection = this.view.state.selection;
-		const from = selection.from;
-
-		const newVideoNode = (this.view.state.schema.nodes.embed as NodeType).create({
+		const newNode = (this.view.state.schema.nodes.embed as NodeType).create({
 			embedType: 'youtube-video',
 			// embedSource: 'test',
 		}) as Node;
-		tr.insert(from - 1, newVideoNode);
+		this.insertNewNode(newNode);
+	}
 
-		this.view.focus();
-		this.view.dispatch(tr);
+	onClickSoundCloudSong() {
+		const newNode = (this.view.state.schema.nodes.embed as NodeType).create({
+			embedType: 'soundcloud-song',
+			embedSource: '41863748',
+		}) as Node;
+		this.insertNewNode(newNode);
 	}
 }

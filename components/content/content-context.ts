@@ -17,6 +17,9 @@ export type ContextCapabilityType =
 export class ContextCapabilities {
 	public capabilities: ContextCapabilityType[];
 
+	get hasAny() {
+		return this.capabilities.length > 0;
+	}
 	get textBold() {
 		return this.hasCapability('text-bold');
 	}

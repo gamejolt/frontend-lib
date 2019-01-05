@@ -1,0 +1,17 @@
+<div class="base-content-component">
+
+	<div
+		v-if="isEditing"
+		class="-remove"
+		>
+		<app-button
+			circle
+			overlay
+			icon="remove"
+			@click="onRemovedClicked"
+			/>
+	</div>
+
+	<slot />
+
+</div>

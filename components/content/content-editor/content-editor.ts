@@ -9,10 +9,12 @@ import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { EditorState, Plugin } from 'prosemirror-state';
 import { Decoration, EditorView, NodeView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
+import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { AppContentEditorControls } from './controls/content-editor-controls';
+import { ImgNodeView } from './node-views/img';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
 
 const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
@@ -57,6 +59,10 @@ export class AppContentEditor extends Vue {
 		doc: HTMLElement;
 	};
 
+	get shouldShowControls() {
+		return this.capabilities.hasAny;
+	}
+
 	mounted() {
 		this.capabilities = ContextCapabilities.getForContext(this.contentContext);
 
@@ -79,11 +85,13 @@ export class AppContentEditor extends Vue {
 		// Construct node views based on capabilities
 		const nodeViews = {} as NodeViewList;
 		if (this.capabilities.embedVideo) {
-			// nodeViews.video = function video(node, view, getPos) {
-			// 	return new VideoView(node, view, getPos);
-			// };
 			nodeViews.embed = function(node, view, getPos) {
 				return new EmbedNodeView(node, view, getPos);
+			};
+		}
+		if (this.capabilities.image) {
+			nodeViews.img = function(node, view, getPos) {
+				return new ImgNodeView(node, view, getPos);
 			};
 		}
 
@@ -91,6 +99,13 @@ export class AppContentEditor extends Vue {
 			state: this.state,
 			nodeViews,
 		});
+
+		// Observe any resize events so the editor controls can be repositioned correctly
+		const ro = new ResizeObserver(() => {
+			this.stateCounter++;
+		});
+		ro.observe(this.$refs.doc);
+
 		this.stateCounter++;
 	}
 

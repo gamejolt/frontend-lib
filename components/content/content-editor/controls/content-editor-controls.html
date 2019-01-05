@@ -13,25 +13,40 @@
 			'visibility': this.visibility,
 		}"
 		>
+		<template
+			v-if="!this.collapsed"
+			>
+			<app-button
+				v-if="capabilities.image"
+				circle
+				icon="screenshot"
+				@click="onClickScreenshot"
+				v-app-tooltip="$gettext('Upload Image')"
+				/>
+			<app-button
+				v-if="capabilities.embedVideo"
+				circle
+				icon="youtube"
+				@click="onClickVideo"
+				v-app-tooltip="$gettext('Embed YouTube Video')"
+				/>
+			<app-button
+				v-if="capabilities.embedMusic"
+				circle
+				icon="musical-note-double"
+				@click="onClickSoundCloudSong"
+				v-app-tooltip="$gettext('Embed SoundCloud Song')"
+				/>
+			<span class="dot-separator"></span>
+		</template>
 		<app-button
-			v-if="capabilities.image"
+			class="-add-button"
+			:class="{
+				'-add-button-rotated': !collapsed
+			}"
 			circle
-			icon="screenshot"
-			@click="onClickScreenshot"
-			v-app-tooltip="$gettext('Upload Image')"
-			/>
-		<app-button
-			v-if="capabilities.embedVideo"
-			circle
-			icon="youtube"
-			@click="onClickVideo"
-			v-app-tooltip="$gettext('Embed YouTube Video')"
-			/>
-		<app-button
-			v-if="capabilities.embedMusic"
-			circle
-			icon="musical-note-double"
-			v-app-tooltip="$gettext('Embed SoundCloud Song')"
+			:icon="'add'"
+			@click="onClickExpand"
 			/>
 	</div>
 </div>

@@ -1,5 +1,26 @@
-<div>
+<app-base-content-component
+	:is-editing="isEditing"
+	@removed="onRemoved"
+	>
+	<!-- <div
+		v-if="isEditing"
+		class="pull-right"
+		>
+		<app-button
+			circle
+			overlay
+			icon="remove"
+			@click="onRemovedClicked"
+			/>
+	</div> -->
 	<app-video-embed
+		v-if="type === 'youtube-video'"
 		video-provider="youtube"
-		:video-id="source" />
-</div>
+		:video-id="source"
+		/>
+	<app-widget-compiler-widget-soundcloud
+		v-else-if="type === 'soundcloud-song'"
+		:track-id="source"
+		/>
+
+</app-base-content-component>
