@@ -1,12 +1,12 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/content-editor-text-controls';
+import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/content/content-editor/keymap';
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
 import { firesidePostArticleSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/fireside-post-article-schema';
-import { baseKeymap, toggleMark } from 'prosemirror-commands';
-import { history, redo, undo } from 'prosemirror-history';
+import { baseKeymap } from 'prosemirror-commands';
+import { history } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
 import { DOMParser, Node } from 'prosemirror-model';
-import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { EditorState, Plugin } from 'prosemirror-state';
 import { Decoration, EditorView, NodeView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
@@ -17,20 +17,6 @@ import { ContentContext, ContextCapabilities } from '../content-context';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { ImgNodeView } from './node-views/img';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
-
-const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
-
-const ourKeymap: { [k: string]: any } = {
-	'Mod-z': undo,
-	'Shift-Mod-z': redo,
-	'Mod-b': toggleMark(basicSchema.marks.strong),
-	'Mod-i': toggleMark(basicSchema.marks.em),
-	'Mod-`': toggleMark(basicSchema.marks.code),
-};
-
-if (!isMac) {
-	ourKeymap['Mod-y'] = redo;
-}
 
 type NodeViewList = {
 	[name: string]: (
@@ -83,6 +69,7 @@ export class AppContentEditor extends Vue {
 		});
 
 		const schema = this.getSchemaForContext();
+		const ourKeymap = getContentEditorKeymap(schema);
 		this.state = EditorState.create({
 			doc: DOMParser.fromSchema(schema).parse(this.$refs.doc),
 			plugins: [keymap(ourKeymap), keymap(baseKeymap), history(), incrementerPlugin],

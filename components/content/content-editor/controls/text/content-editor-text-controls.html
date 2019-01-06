@@ -9,7 +9,7 @@
 
 	<div
 		:style="{
-			'visibility': this.visibility,
+			'display': this.displayStyle,
 		}"
 		>
 		<app-button
@@ -39,6 +39,13 @@
 			solid
 			@click="onClickCode"
 			v-app-tooltip="$gettext('Code (Ctrl+`)')"
+			/>
+		<app-button
+			circle
+			icon="link"
+			solid
+			@click="onClickLink"
+			v-app-tooltip="$gettext('Link')"
 			/>
 	</div>
 </div>

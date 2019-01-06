@@ -4,13 +4,17 @@ import { img } from 'game-jolt-frontend-lib/components/content/content-editor/sc
 import { paragraph } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/paragraph-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
+import { hardBreak } from './specs/nodes/hard-bread-nodespec';
 
 export const firesidePostArticleSchema = new Schema({
 	nodes: {
-		text: {},
+		text: {
+			group: 'inline',
+		},
 		paragraph,
 		img,
 		embed,
+		hardBreak,
 		doc: {
 			content: 'block+',
 		},

@@ -30,11 +30,11 @@ export class AppContentEditorTextControls extends Vue {
 		container: HTMLElement;
 	};
 
-	get visibility() {
+	get displayStyle() {
 		if (!this.visible) {
-			return 'hidden';
+			return 'none';
 		} else {
-			return 'visible';
+			return 'block';
 		}
 	}
 
@@ -43,15 +43,20 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	@Watch('stateCounter')
-	private update() {
+	private async update() {
 		if (this.view instanceof EditorView) {
 			const state = this.view.state;
 
 			if (!state.selection.empty) {
 				const node = ContentEditorService.getSelectedNode(this.view);
 
-				if (node !== null && node.type.name === 'text') {
+				if (
+					node !== null &&
+					(node.type.name === 'text' || node.type.name === 'paragraph')
+				) {
 					this.visible = true;
+					// Wait here so the buttons don't jump into place weirdly.
+					await Vue.nextTick();
 
 					const { from, to } = state.selection;
 					const start = this.view.coordsAtPos(from);
@@ -91,5 +96,9 @@ export class AppContentEditorTextControls extends Vue {
 
 	onClickCode() {
 		this.dispatchMark(this.view.state.schema.marks.code);
+	}
+
+	onClickLink() {
+		this.dispatchMark(this.view.state.schema.marks.link, { href: 'https://www.gamejolt.com/' });
 	}
 }
