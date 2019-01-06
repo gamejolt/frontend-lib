@@ -1,8 +1,9 @@
-import { img } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/img-nodespec';
-import { paragraph } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/paragraph-nodespec';
+import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-nodespec';
+import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/embed-nodespec';
+import { img } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/img-nodespec';
+import { paragraph } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/paragraph-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
-import { embed } from './specs/embed-nodespec';
 
 export const firesidePostArticleSchema = new Schema({
 	nodes: {
@@ -14,5 +15,11 @@ export const firesidePostArticleSchema = new Schema({
 			content: 'block+',
 		},
 	},
-	marks: basicSchema.spec.marks,
+	marks: {
+		strong: basicSchema.marks.strong.spec,
+		em: basicSchema.marks.em.spec,
+		code: basicSchema.marks.code.spec,
+		link: basicSchema.marks.link.spec,
+		strike,
+	},
 });

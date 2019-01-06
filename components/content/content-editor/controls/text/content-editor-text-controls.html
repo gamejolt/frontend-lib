@@ -1,0 +1,44 @@
+<div
+	ref="container"
+	class="content-editor-text-controls"
+	:style="{
+		'bottom': this.bottom,
+		'left': this.left,
+	}"
+	>
+
+	<div
+		:style="{
+			'visibility': this.visibility,
+		}"
+		>
+		<app-button
+			circle
+			icon="heart"
+			solid
+			@click="onClickBold"
+			v-app-tooltip="$gettext('Bold (Ctrl+B)')"
+			/>
+		<app-button
+			circle
+			icon="heart"
+			solid
+			@click="onClickItalic"
+			v-app-tooltip="$gettext('Italic (Ctrl+I)')"
+			/>
+		<app-button
+			circle
+			icon="heart"
+			solid
+			@click="onClickStrikethrough"
+			v-app-tooltip="$gettext('Strikethrough')"
+			/>
+		<app-button
+			circle
+			icon="brackets"
+			solid
+			@click="onClickCode"
+			v-app-tooltip="$gettext('Code (Ctrl+`)')"
+			/>
+	</div>
+</div>

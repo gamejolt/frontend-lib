@@ -1,4 +1,5 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
+import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/content-editor-text-controls';
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
 import { firesidePostArticleSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/fireside-post-article-schema';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';
@@ -44,6 +45,7 @@ type NodeViewList = {
 @Component({
 	components: {
 		AppContentEditorControls,
+		AppContentEditorTextControls,
 	},
 })
 export class AppContentEditor extends Vue {
@@ -61,6 +63,10 @@ export class AppContentEditor extends Vue {
 
 	get shouldShowControls() {
 		return this.capabilities.hasAny;
+	}
+
+	get shouldShowTextControls() {
+		return this.capabilities.hasAnyText;
 	}
 
 	mounted() {

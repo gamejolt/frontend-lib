@@ -5,4 +5,9 @@
 		:capabilities="capabilities"
 		:view="view"
 		:state-counter="stateCounter" />
+	<app-content-editor-text-controls
+		v-if="shouldShowTextControls"
+		:capabilities="capabilities"
+		:view="view"
+		:state-counter="stateCounter" />
 </div>

@@ -10,6 +10,7 @@ export type ContextCapabilityType =
 	| 'text-bold'
 	| 'text-italics'
 	| 'text-underscore'
+	| 'text-link'
 	| 'image'
 	| 'embed-video'
 	| 'embed-music';
@@ -20,6 +21,9 @@ export class ContextCapabilities {
 	get hasAny() {
 		return this.capabilities.length > 0;
 	}
+	get hasAnyText() {
+		return this.textBold || this.textItalics || this.textUnderscore || this.textLink;
+	}
 	get textBold() {
 		return this.hasCapability('text-bold');
 	}
@@ -28,6 +32,9 @@ export class ContextCapabilities {
 	}
 	get textUnderscore() {
 		return this.hasCapability('text-underscore');
+	}
+	get textLink() {
+		return this.hasCapability('text-link');
 	}
 	get image() {
 		return this.hasCapability('image');
@@ -60,6 +67,7 @@ export class ContextCapabilities {
 					'text-bold',
 					'text-italics',
 					'text-underscore',
+					'text-link',
 					'image',
 					'embed-video',
 					'embed-music',

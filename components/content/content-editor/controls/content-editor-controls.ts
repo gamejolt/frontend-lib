@@ -1,4 +1,5 @@
 import View from '!view!./content-editor-controls.html?style=./content-editor-controls.styl';
+import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { Node, NodeType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
@@ -38,19 +39,6 @@ export class AppContentEditorControls extends Vue {
 		}
 	}
 
-	private getSelectedNode(view: EditorView) {
-		let selFrom = view.state.selection.from;
-		let node = view.state.doc.nodeAt(selFrom);
-		if (node === null && selFrom > 0) {
-			selFrom--;
-			node = view.state.doc.nodeAt(selFrom);
-		}
-		if (node === undefined) {
-			return null;
-		}
-		return node;
-	}
-
 	mounted() {
 		this.update();
 	}
@@ -59,7 +47,7 @@ export class AppContentEditorControls extends Vue {
 	private update() {
 		if (this.view instanceof EditorView) {
 			const state = this.view.state;
-			const node = this.getSelectedNode(this.view);
+			const node = ContentEditorService.getSelectedNode(this.view);
 
 			if (node !== null) {
 				switch (node.type.name) {
