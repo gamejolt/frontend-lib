@@ -7,11 +7,7 @@
 	}"
 	>
 
-	<div
-		:style="{
-			'display': this.displayStyle,
-		}"
-		>
+	<div v-if="visible">
 		<app-button
 			circle
 			icon="heart"

@@ -1,5 +1,5 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
-import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/content-editor-text-controls';
+import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/content/content-editor/keymap';
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
 import { firesidePostArticleSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/fireside-post-article-schema';

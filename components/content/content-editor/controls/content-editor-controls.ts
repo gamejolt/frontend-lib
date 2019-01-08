@@ -31,14 +31,6 @@ export class AppContentEditorControls extends Vue {
 		container: HTMLElement;
 	};
 
-	get visibility() {
-		if (!this.visible) {
-			return 'hidden';
-		} else {
-			return 'visible';
-		}
-	}
-
 	mounted() {
 		this.update();
 	}

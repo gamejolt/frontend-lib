@@ -1,12 +1,12 @@
-import View from '!view!./content-editor-text-controls.html?style=./content-editor-text-controls.styl';
+import View from '!view!./text-controls.html?style=./text-controls.styl';
 import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
+import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { toggleMark } from 'prosemirror-commands';
 import { MarkType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { ContentEditorService } from '../../content-editor.service';
 
 @View
 @Component({
@@ -29,14 +29,6 @@ export class AppContentEditorTextControls extends Vue {
 	$refs!: {
 		container: HTMLElement;
 	};
-
-	get displayStyle() {
-		if (!this.visible) {
-			return 'none';
-		} else {
-			return 'block';
-		}
-	}
 
 	mounted() {
 		this.update();
@@ -99,6 +91,15 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	onClickLink() {
-		this.dispatchMark(this.view.state.schema.marks.link, { href: 'https://www.gamejolt.com/' });
+		// this.dispatchMark(this.view.state.schema.marks.link, { href: 'https://www.gamejolt.com/' });
+		const emojiType = this.view.state.schema.nodes.gjEmoji;
+
+		const { $from } = this.view.state.selection;
+		const index = $from.index();
+		if ($from.parent.canReplaceWith(index, index, emojiType)) {
+			const tr = this.view.state.tr;
+			tr.replaceSelectionWith(emojiType.create({ type: 'grin' }));
+			this.view.dispatch(tr);
+		}
 	}
 }
