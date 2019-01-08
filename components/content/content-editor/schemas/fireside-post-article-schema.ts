@@ -4,6 +4,7 @@ import { img } from 'game-jolt-frontend-lib/components/content/content-editor/sc
 import { paragraph } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/paragraph-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
+import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
 import { hardBreak } from './specs/nodes/hard-bread-nodespec';
 
 export const firesidePostArticleSchema = new Schema({
@@ -15,6 +16,7 @@ export const firesidePostArticleSchema = new Schema({
 		img,
 		embed,
 		hardBreak,
+		gjEmoji,
 		doc: {
 			content: 'block+',
 		},

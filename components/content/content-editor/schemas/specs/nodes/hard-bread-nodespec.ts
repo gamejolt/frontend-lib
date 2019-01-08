@@ -5,6 +5,7 @@ export const hardBreak = {
 	group: 'inline',
 	selectable: false,
 	parseDOM: [{ tag: 'br' }],
+	marks: '',
 	toDOM() {
 		return ['br'];
 	},

@@ -40,7 +40,7 @@ export class AppContentEditorTextControls extends Vue {
 			const state = this.view.state;
 
 			if (!state.selection.empty) {
-				const node = ContentEditorService.getSelectedNode(this.view);
+				const node = ContentEditorService.getSelectedNode(this.view.state);
 
 				if (
 					node !== null &&

@@ -1,8 +1,9 @@
+import { AppContentEditor } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
 import { chainCommands, exitCode, toggleMark } from 'prosemirror-commands';
 import { redo, undo } from 'prosemirror-history';
 import { Schema } from 'prosemirror-model';
 
-export function getContentEditorKeymap(schema: Schema) {
+export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema) {
 	const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
 
 	const keymap = {
@@ -19,6 +20,11 @@ export function getContentEditorKeymap(schema: Schema) {
 			);
 			return true;
 		}),
+		'Mod-e': () => {
+			// show emoji panel
+			editor.emojiPanelVisible = true;
+			return true;
+		},
 	} as { [k: string]: any };
 
 	if (!isMac) {

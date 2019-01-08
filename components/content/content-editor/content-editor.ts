@@ -15,7 +15,9 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { AppContentEditorControls } from './controls/content-editor-controls';
+import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
 import { ImgNodeView } from './node-views/img';
+import { ShowEmojiPanelPlugin } from './plugins/show-emoji-panel-plugin';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
 
 type NodeViewList = {
@@ -32,6 +34,7 @@ type NodeViewList = {
 	components: {
 		AppContentEditorControls,
 		AppContentEditorTextControls,
+		AppContentEditorEmojiControls,
 	},
 })
 export class AppContentEditor extends Vue {
@@ -42,6 +45,7 @@ export class AppContentEditor extends Vue {
 	view: EditorView | null = null;
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
+	emojiPanelVisible = false;
 
 	$refs!: {
 		doc: HTMLElement;
@@ -52,7 +56,11 @@ export class AppContentEditor extends Vue {
 	}
 
 	get shouldShowTextControls() {
-		return this.capabilities.hasAnyText;
+		return !this.shouldShowEmojiControls && this.capabilities.hasAnyText;
+	}
+
+	get shouldShowEmojiControls() {
+		return this.emojiPanelVisible;
 	}
 
 	mounted() {
@@ -67,12 +75,23 @@ export class AppContentEditor extends Vue {
 				return new UpdateIncrementerPlugin(editorView, that);
 			},
 		});
+		const emojiPanelPlugin = new Plugin({
+			view(editorView) {
+				return new ShowEmojiPanelPlugin(editorView, that);
+			},
+		});
 
 		const schema = this.getSchemaForContext();
-		const ourKeymap = getContentEditorKeymap(schema);
+		const ourKeymap = getContentEditorKeymap(this, schema);
 		this.state = EditorState.create({
 			doc: DOMParser.fromSchema(schema).parse(this.$refs.doc),
-			plugins: [keymap(ourKeymap), keymap(baseKeymap), history(), incrementerPlugin],
+			plugins: [
+				keymap(ourKeymap),
+				keymap(baseKeymap),
+				history(),
+				incrementerPlugin,
+				emojiPanelPlugin,
+			],
 		});
 
 		// Construct node views based on capabilities
@@ -108,5 +127,9 @@ export class AppContentEditor extends Vue {
 				return firesidePostArticleSchema;
 		}
 		throw new Error('Not supported content context ' + this.contentContext);
+	}
+
+	onEmojisHide() {
+		this.emojiPanelVisible = false;
 	}
 }

@@ -10,4 +10,10 @@
 		:capabilities="capabilities"
 		:view="view"
 		:state-counter="stateCounter" />
+	<app-content-editor-emoji-controls
+		v-if="shouldShowEmojiControls"
+		:view="view"
+		:state-counter="stateCounter"
+		@hide="onEmojisHide"
+		/>
 </div>

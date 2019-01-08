@@ -39,7 +39,7 @@ export class AppContentEditorControls extends Vue {
 	private update() {
 		if (this.view instanceof EditorView) {
 			const state = this.view.state;
-			const node = ContentEditorService.getSelectedNode(this.view);
+			const node = ContentEditorService.getSelectedNode(this.view.state);
 
 			if (node !== null) {
 				switch (node.type.name) {
