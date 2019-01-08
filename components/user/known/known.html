@@ -1,0 +1,16 @@
+<div>
+	<div class="-list">
+		<div
+			class="-user"
+			v-for="user of users"
+			:key="user.id"
+			>
+			<div class="-avatar">
+				<app-user-avatar
+					:user="user"
+					v-app-tooltip="user.display_name + ' (@' + user.username + ')'"
+					/>
+			</div>
+		</div>
+	</div>
+</div>
