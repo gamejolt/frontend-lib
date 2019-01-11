@@ -2,6 +2,7 @@ import { Api } from 'game-jolt-frontend-lib/components/api/api.service';
 import { MediaItem } from 'game-jolt-frontend-lib/components/media-item/media-item-model';
 import { Model } from 'game-jolt-frontend-lib/components/model/model.service';
 import { Theme } from 'game-jolt-frontend-lib/components/theme/theme.model';
+import { Collaboratable } from '../collaborator/collaboratable';
 
 export type Perm = 'feature' | 'all';
 
@@ -41,19 +42,20 @@ export async function $leaveCommunity(community: Community) {
 	}
 }
 
-export class Community extends Model {
+export class Community extends Collaboratable(Model) {
 	name!: string;
 	path!: string;
 	header_id?: number;
 	thumbnail_id?: number;
+	published_on!: number;
+	is_hidden!: boolean;
+	is_removed!: boolean;
 
 	header?: MediaItem;
 	thumbnail?: MediaItem;
 	theme!: Theme | null;
 	member_count!: number;
 	is_member?: boolean;
-
-	perms?: Perm[];
 
 	is_unread = false;
 
@@ -73,22 +75,40 @@ export class Community extends Model {
 		}
 	}
 
-	hasPerms(required?: Perm | Perm[], either?: boolean) {
-		if (!this.perms) {
-			return false;
-		}
+	get is_published() {
+		return this.published_on && !this.is_hidden && !this.is_removed;
+	}
 
-		if (!required || this.perms.indexOf('all') !== -1) {
-			return true;
-		}
+	getUrl(_page = '') {
+		return `/c/${this.path}`;
+	}
 
-		required = Array.isArray(required) ? required : [required];
-		const missingPerms = required.filter(perm => this.perms!.indexOf(perm) === -1);
-		if (either) {
-			return missingPerms.length !== required.length;
-		} else {
-			return missingPerms.length === 0;
-		}
+	$saveThumbnail() {
+		return this.$_save(
+			'/web/dash/developer/communities/thumbnail/save/' + this.id,
+			'community',
+			{
+				file: this.file,
+				allowComplexData: ['crop'],
+			}
+		);
+	}
+
+	$saveHeader() {
+		return this.$_save('/web/dash/developer/communities/header/save/' + this.id, 'community', {
+			file: this.file,
+			allowComplexData: ['crop'],
+		});
+	}
+
+	$clearHeader() {
+		return this.$_save('/web/dash/developer/communities/header/clear/' + this.id, 'community');
+	}
+
+	$saveDesign() {
+		return this.$_save('/web/dash/developer/communities/design/save/' + this.id, 'community', {
+			allowComplexData: ['theme'],
+		});
 	}
 }
 

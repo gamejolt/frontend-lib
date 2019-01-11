@@ -3,18 +3,7 @@ import { Api } from '../api/api.service';
 import { Game } from '../game/game.model';
 import { Model } from '../model/model.service';
 import { User } from '../user/user.model';
-
-export type Perm =
-	| 'all'
-	| 'analytics'
-	| 'sales'
-	| 'details'
-	| 'media'
-	| 'devlogs'
-	| 'comments'
-	| 'ratings'
-	| 'builds'
-	| 'game-api';
+import { Perm } from './collaboratable';
 
 export type Roles = 'owner' | 'collaborator' | 'community-manager' | 'developer' | 'moderator';
 
@@ -22,14 +11,11 @@ export class Collaborator extends Model {
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_INVITE = 'invite';
 
-	// Game roles
-	static readonly ROLE_GAME_OWNER = 'owner';
-	static readonly ROLE_GAME_COLLABORATOR = 'collaborator';
-	static readonly ROLE_GAME_COMMUNITY_MANAGER = 'community-manager';
-	static readonly ROLE_GAME_DEVELOPER = 'developer';
-
-	// Community roles
-	static readonly ROLE_COMMUNITY_MODERATOR = 'moderator';
+	static readonly ROLE_OWNER = 'owner';
+	static readonly ROLE_EQUAL_COLLABORATOR = 'collaborator';
+	static readonly ROLE_COMMUNITY_MANAGER = 'community-manager';
+	static readonly ROLE_DEVELOPER = 'developer';
+	static readonly ROLE_MODERATOR = 'moderator';
 
 	resource!: 'Game' | 'Community';
 	resource_id!: number;
