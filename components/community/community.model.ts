@@ -56,7 +56,6 @@ export class Community extends Model {
 	perms?: Perm[];
 
 	is_unread = false;
-	unreadWatermark?: number = undefined;
 
 	constructor(data: any = {}) {
 		super(data);
