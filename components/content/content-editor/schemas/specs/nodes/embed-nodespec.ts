@@ -13,14 +13,20 @@ export const embed = {
 			default: 'WfDS_2omcHw',
 		},
 	},
-	toDOM: (_: Node) => ['div'],
+	toDOM: (node: Node) => [
+		'div',
+		{
+			'embed-type': node.attrs.embedType,
+			'embed-source': node.attrs.embedSource,
+		},
+	],
 	parseDOM: [
 		{
-			tag: 'div',
+			tag: 'div[embed-type]',
 			getAttrs: (domNode: Element) => {
 				return {
-					embedType: domNode.getAttribute('embedType'),
-					embedSource: domNode.getAttribute('embedSource'),
+					embedType: domNode.getAttribute('embed-type'),
+					embedSource: domNode.getAttribute('embed-source'),
 				};
 			},
 		},

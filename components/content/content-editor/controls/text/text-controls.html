@@ -9,6 +9,7 @@
 
 	<div v-if="visible">
 		<app-button
+			v-if="capabilities.textBold"
 			circle
 			icon="heart"
 			solid
@@ -16,6 +17,7 @@
 			v-app-tooltip="$gettext('Bold (Ctrl+B)')"
 			/>
 		<app-button
+			v-if="capabilities.textItalics"
 			circle
 			icon="heart"
 			solid
@@ -23,6 +25,7 @@
 			v-app-tooltip="$gettext('Italic (Ctrl+I)')"
 			/>
 		<app-button
+			v-if="capabilities.textStrike"
 			circle
 			icon="heart"
 			solid
@@ -30,6 +33,7 @@
 			v-app-tooltip="$gettext('Strikethrough')"
 			/>
 		<app-button
+			v-if="capabilities.textCode"
 			circle
 			icon="brackets"
 			solid
@@ -37,6 +41,7 @@
 			v-app-tooltip="$gettext('Code (Ctrl+`)')"
 			/>
 		<app-button
+			v-if="capabilities.textLink"
 			circle
 			icon="link"
 			solid

@@ -105,4 +105,14 @@ export class AppContentEditorControls extends Vue {
 		}) as Node;
 		this.insertNewNode(newNode);
 	}
+
+	onClickCodeBlock() {
+		const newNode = this.view.state.schema.nodes.codeBlock.create() as Node;
+		this.insertNewNode(newNode);
+	}
+
+	onClickBlockquote() {
+		const newNode = this.view.state.schema.nodes.blockquote.create() as Node;
+		this.insertNewNode(newNode);
+	}
 }

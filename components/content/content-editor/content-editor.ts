@@ -2,7 +2,7 @@ import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/content/content-editor/keymap';
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
-import { firesidePostArticleSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/fireside-post-article-schema';
+import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
 import { baseKeymap } from 'prosemirror-commands';
 import { history } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
@@ -81,7 +81,7 @@ export class AppContentEditor extends Vue {
 			},
 		});
 
-		const schema = this.getSchemaForContext();
+		const schema = generateSchema(this.capabilities);
 		const ourKeymap = getContentEditorKeymap(this, schema);
 		this.state = EditorState.create({
 			doc: DOMParser.fromSchema(schema).parse(this.$refs.doc),
@@ -90,7 +90,7 @@ export class AppContentEditor extends Vue {
 				keymap(baseKeymap),
 				history(),
 				incrementerPlugin,
-				emojiPanelPlugin,
+				// emojiPanelPlugin,
 			],
 		});
 
@@ -119,14 +119,6 @@ export class AppContentEditor extends Vue {
 		ro.observe(this.$refs.doc);
 
 		this.stateCounter++;
-	}
-
-	private getSchemaForContext() {
-		switch (this.contentContext) {
-			case 'fireside-post-article':
-				return firesidePostArticleSchema;
-		}
-		throw new Error('Not supported content context ' + this.contentContext);
 	}
 
 	onEmojisHide() {

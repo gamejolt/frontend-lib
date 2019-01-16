@@ -31,6 +31,20 @@
 				@click="onClickSoundCloudSong"
 				v-app-tooltip="$gettext('Embed SoundCloud Song')"
 				/>
+			<app-button
+				v-if="capabilities.codeBlock"
+				circle
+				icon="brackets"
+				@click="onClickCodeBlock"
+				v-app-tooltip="$gettext('Add Code Block')"
+				/>
+			<app-button
+				v-if="capabilities.blockquote"
+				circle
+				icon="heart"
+				@click="onClickBlockquote"
+				v-app-tooltip="$gettext('Add Quote')"
+				/>
 			<span class="dot-separator"></span>
 		</template>
 		<app-button

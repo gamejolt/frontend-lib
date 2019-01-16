@@ -46,21 +46,26 @@ export class AppContentEditorTextControls extends Vue {
 					node !== null &&
 					(node.type.name === 'text' || node.type.name === 'paragraph')
 				) {
-					this.visible = true;
-					// Wait here so the buttons don't jump into place weirdly.
-					await Vue.nextTick();
+					const parent = ContentEditorService.getParentNode(this.view.state, node);
 
-					const { from, to } = state.selection;
-					const start = this.view.coordsAtPos(from);
-					const end = this.view.coordsAtPos(to);
-					const box = this.$refs.container.offsetParent.getBoundingClientRect();
+					// Make sure that marks can be applied to the parent of this text
+					if (parent && parent.type.spec.marks !== '') {
+						this.visible = true;
+						// Wait here so the buttons don't jump into place weirdly.
+						await Vue.nextTick();
 
-					const left =
-						Math.max((start.left + end.left) / 2, start.left + 3) -
-						this.$refs.container.clientWidth / 2;
-					this.left = left - box.left + 'px';
-					this.bottom = box.bottom - start.top + 4 + 'px';
-					return;
+						const { from, to } = state.selection;
+						const start = this.view.coordsAtPos(from);
+						const end = this.view.coordsAtPos(to);
+						const box = this.$refs.container.offsetParent.getBoundingClientRect();
+
+						const left =
+							Math.max((start.left + end.left) / 2, start.left + 3) -
+							this.$refs.container.clientWidth / 2;
+						this.left = left - box.left + 'px';
+						this.bottom = box.bottom - start.top + 4 + 'px';
+						return;
+					}
 				}
 			}
 		}
