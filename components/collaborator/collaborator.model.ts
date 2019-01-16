@@ -48,39 +48,46 @@ export class Collaborator extends Model {
 	}
 
 	$invite() {
-		if (this.resource !== 'Game') {
-			throw new Error('Not supported yet');
+		let url = '';
+		if (this.resource === 'Game') {
+			url = '/web/dash/developer/games/collaborators/invite/' + this.resource_id;
+		} else if (this.resource === 'Community') {
+			url = '/web/dash/communities/collaborators/invite/' + this.resource_id;
+		} else {
+			throw new Error('Not supported');
 		}
 
-		return this.$_save(
-			'/web/dash/developer/games/collaborators/invite/' + this.resource_id,
-			'collaborator'
-		);
+		return this.$_save(url, 'collaborator');
 	}
 
 	$accept() {
-		if (this.resource !== 'Game') {
-			throw new Error('Not supported yet');
+		let url = '';
+		if (this.resource === 'Game') {
+			url = '/web/dash/developer/games/collaborators/accept/' + this.resource_id;
+		} else if (this.resource === 'Community') {
+			url = '/web/dash/communities/collaborators/accept/' + this.resource_id;
+		} else {
+			throw new Error('Not supported');
 		}
 
-		return this.$_save(
-			'/web/dash/developer/games/collaborators/accept/' + this.resource_id,
-			'collaborator'
-		);
+		return this.$_save(url, 'collaborator');
 	}
 
 	async $remove() {
-		if (this.resource !== 'Game') {
-			throw new Error('Not supported yet');
+		let url = '';
+		if (this.resource === 'Game') {
+			url = '/web/dash/developer/games/collaborators/remove/' + this.resource_id;
+		} else if (this.resource === 'Community') {
+			url = '/web/dash/communities/collaborators/remove/' + this.resource_id;
+		} else {
+			throw new Error('Not supported');
 		}
 
-		const response = await Api.sendRequest(
-			'/web/dash/developer/games/collaborators/remove/' + this.resource_id,
-			{
-				user_id: this.user_id,
-				role: this.role,
-			}
-		);
+		const response = await Api.sendRequest(url, {
+			user_id: this.user_id,
+			role: this.role,
+		});
+
 		return this.processRemove(response);
 	}
 }

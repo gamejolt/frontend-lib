@@ -83,30 +83,30 @@ export class Community extends Collaboratable(Model) {
 		return `/c/${this.path}`;
 	}
 
-	$saveThumbnail() {
-		return this.$_save(
-			'/web/dash/developer/communities/thumbnail/save/' + this.id,
-			'community',
-			{
-				file: this.file,
-				allowComplexData: ['crop'],
-			}
-		);
+	$save() {
+		if (this.id) {
+			return this.$_save('/web/dash/communities/save/' + this.id, 'community');
+		} else {
+			return this.$_save('/web/dash/communities/save', 'community');
+		}
 	}
 
-	$saveHeader() {
-		return this.$_save('/web/dash/developer/communities/header/save/' + this.id, 'community', {
+	$saveThumbnail() {
+		return this.$_save('/web/dash/communities/design/save-thumbnail/' + this.id, 'community', {
 			file: this.file,
 			allowComplexData: ['crop'],
 		});
 	}
 
-	$clearHeader() {
-		return this.$_save('/web/dash/developer/communities/header/clear/' + this.id, 'community');
+	$saveHeader() {
+		return this.$_save('/web/dash/communities/design/save-header/' + this.id, 'community', {
+			file: this.file,
+			allowComplexData: ['crop'],
+		});
 	}
 
 	$saveDesign() {
-		return this.$_save('/web/dash/developer/communities/design/save/' + this.id, 'community', {
+		return this.$_save('/web/dash/communities/design/save/' + this.id, 'community', {
 			allowComplexData: ['theme'],
 		});
 	}

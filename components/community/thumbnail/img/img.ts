@@ -16,7 +16,7 @@ export class AppCommunityThumbnailImg extends Vue {
 
 	get src() {
 		if (!this.community.thumbnail) {
-			return '';
+			return require('!file-loader!../default.png');
 		}
 
 		return this.community.thumbnail.mediaserver_url;
