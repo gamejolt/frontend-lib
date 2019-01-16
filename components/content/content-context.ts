@@ -1,4 +1,4 @@
-type ContentContext =
+export type ContentContext =
 	| 'fireside-post-lead'
 	| 'fireside-post-article'
 	| 'game-description'
