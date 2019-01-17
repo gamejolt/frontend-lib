@@ -20,7 +20,7 @@ import { AppTooltip } from '../../tooltip/tooltip';
 })
 export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
 	@Prop(Boolean)
-	darkVariant?: boolean;
+	overlay?: boolean;
 
 	warnOnDiscard = false;
 
