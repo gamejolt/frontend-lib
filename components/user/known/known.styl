@@ -1,0 +1,30 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
+$-size = 40px
+$-spacing = 3px
+
+.-avatar
+	theme-prop('background-color', 'bg-subtle')
+	img-circle()
+	flex: none
+	width: $-size
+	height: $-size
+	margin-right: $grid-gutter-width-xs * 0.5
+
+	@media $media-sm-up
+		margin-right: $grid-gutter-width * 0.5
+
+.-user
+	flex: none
+	width: $-size
+	height: $-size
+	margin: 0 $-spacing $-spacing
+
+.-list
+	position: relative
+	flex: 1
+	display: flex
+	flex-wrap: wrap;
+	padding-top: 4px
+	padding-bottom: 4px
