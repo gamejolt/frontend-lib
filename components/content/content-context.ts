@@ -29,6 +29,9 @@ export class ContextCapabilities {
 			this.textBold || this.textItalics || this.textLink || this.textCode || this.textStrike
 		);
 	}
+	get hasAnyEmbed() {
+		return this.embedMusic || this.embedVideo;
+	}
 	get textBold() {
 		return this.hasCapability('text-bold');
 	}

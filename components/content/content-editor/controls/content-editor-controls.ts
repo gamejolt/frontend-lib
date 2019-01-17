@@ -90,19 +90,8 @@ export class AppContentEditorControls extends Vue {
 		this.insertNewNode(newNode);
 	}
 
-	onClickVideo() {
-		const newNode = (this.view.state.schema.nodes.embed as NodeType).create({
-			embedType: 'youtube-video',
-			// embedSource: 'test',
-		}) as Node;
-		this.insertNewNode(newNode);
-	}
-
-	onClickSoundCloudSong() {
-		const newNode = (this.view.state.schema.nodes.embed as NodeType).create({
-			embedType: 'soundcloud-song',
-			embedSource: '41863748',
-		}) as Node;
+	onClickEmbed() {
+		const newNode = (this.view.state.schema.nodes.embed as NodeType).create() as Node;
 		this.insertNewNode(newNode);
 	}
 

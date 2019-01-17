@@ -1,0 +1,15 @@
+<app-modal>
+	<div class="modal-controls">
+		<app-button @click="modal.dismiss()">
+			<translate>Close</translate>
+		</app-button>
+	</div>
+
+	<div class="modal-body">
+		<form-content-editor-link
+			:model="linkData"
+			@submit="onSubmit">
+		</form-content-editor-link>
+	</div>
+
+</app-modal>

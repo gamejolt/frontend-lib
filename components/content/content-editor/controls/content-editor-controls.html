@@ -18,18 +18,11 @@
 				v-app-tooltip="$gettext('Upload Image')"
 				/>
 			<app-button
-				v-if="capabilities.embedVideo"
+				v-if="capabilities.hasAnyEmbed"
 				circle
-				icon="youtube"
-				@click="onClickVideo"
-				v-app-tooltip="$gettext('Embed YouTube Video')"
-				/>
-			<app-button
-				v-if="capabilities.embedMusic"
-				circle
-				icon="musical-note-double"
-				@click="onClickSoundCloudSong"
-				v-app-tooltip="$gettext('Embed SoundCloud Song')"
+				icon="heart"
+				@click="onClickEmbed"
+				v-app-tooltip="$gettext('Embed Content')"
 				/>
 			<app-button
 				v-if="capabilities.codeBlock"

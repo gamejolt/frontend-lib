@@ -98,7 +98,7 @@ export class AppContentEditor extends Vue {
 		const nodeViews = {} as NodeViewList;
 		if (this.capabilities.embedVideo) {
 			nodeViews.embed = function(node, view, getPos) {
-				return new EmbedNodeView(node, view, getPos);
+				return new EmbedNodeView(node, view, getPos, that.capabilities);
 			};
 		}
 		if (this.capabilities.image) {

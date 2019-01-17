@@ -1,18 +1,9 @@
 <app-base-content-component
+	v-if="hasContent"
 	:is-editing="isEditing"
 	@removed="onRemoved"
 	>
-	<!-- <div
-		v-if="isEditing"
-		class="pull-right"
-		>
-		<app-button
-			circle
-			overlay
-			icon="remove"
-			@click="onRemovedClicked"
-			/>
-	</div> -->
+
 	<app-video-embed
 		v-if="type === 'youtube-video'"
 		video-provider="youtube"
@@ -24,3 +15,16 @@
 		/>
 
 </app-base-content-component>
+<div
+	contenteditable="false"
+	@paste="onpaste"
+	v-else
+	>
+	<input
+		ref="placeholderInput"
+		class="-placeholder"
+		type="text"
+		readonly
+		:placeholder="' ' + $gettext(`Paste a link to embed content from an external site (e.g. YouTube).`)"
+		/>
+</div>

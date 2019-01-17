@@ -7,6 +7,7 @@ import { MarkType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
 
 @View
 @Component({
@@ -95,16 +96,13 @@ export class AppContentEditorTextControls extends Vue {
 		this.dispatchMark(this.view.state.schema.marks.code);
 	}
 
-	onClickLink() {
-		// this.dispatchMark(this.view.state.schema.marks.link, { href: 'https://www.gamejolt.com/' });
-		const emojiType = this.view.state.schema.nodes.gjEmoji;
-
-		const { $from } = this.view.state.selection;
-		const index = $from.index();
-		if ($from.parent.canReplaceWith(index, index, emojiType)) {
-			const tr = this.view.state.tr;
-			tr.replaceSelectionWith(emojiType.create({ type: 'grin' }));
-			this.view.dispatch(tr);
+	async onClickLink() {
+		const result = await ContentEditorLinkModal.show();
+		if (result) {
+			this.dispatchMark(this.view.state.schema.marks.link, {
+				href: result.href,
+				title: result.title,
+			});
 		}
 	}
 }

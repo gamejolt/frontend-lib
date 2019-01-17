@@ -7,14 +7,14 @@ export type GetPosFunction = () => number;
 export abstract class BaseNodeView implements NodeView {
 	protected node: Node;
 	protected view: EditorView;
-	protected getPost: GetPosFunction;
+	protected getPos: GetPosFunction;
 
 	public dom: HTMLElement;
 
 	constructor(node: Node, view: EditorView, getPos: GetPosFunction) {
 		this.node = node;
 		this.view = view;
-		this.getPost = getPos;
+		this.getPos = getPos;
 
 		this.dom = document.createElement('div');
 		// This node gets mounted in the next tick
@@ -39,12 +39,31 @@ export abstract class BaseNodeView implements NodeView {
 		vm.$on('removed', () => {
 			this.removeMe();
 		});
+		vm.$on('updateAttrs', (attrs: object) => {
+			this.updateAttrs(attrs);
+		});
 	}
 
 	removeMe() {
 		const tr = this.view.state.tr;
 		const pos = this.view.posAtDOM(this.dom, 0);
 		tr.replace(pos, pos + 1, undefined);
+		this.view.dispatch(tr);
+	}
+
+	updateAttrs(attrs: any) {
+		// Merge the old and new attribute lists
+		const newAttrs = {} as any;
+		for (const currentKey of Object.keys(this.node.attrs)) {
+			newAttrs[currentKey] = this.node.attrs[currentKey];
+		}
+		for (const newKey of Object.keys(attrs)) {
+			newAttrs[newKey] = attrs[newKey];
+		}
+
+		// Only apply changes to the node attributes
+		const tr = this.view.state.tr;
+		tr.setNodeMarkup(this.getPos(), undefined, newAttrs);
 		this.view.dispatch(tr);
 	}
 }

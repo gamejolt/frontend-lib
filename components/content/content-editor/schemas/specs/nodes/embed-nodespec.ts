@@ -4,13 +4,13 @@ export const embed = {
 	group: 'block',
 	marks: '',
 	draggable: true,
-	selectable: true,
+	selectable: false,
 	attrs: {
 		embedType: {
-			default: 'youtube-video',
+			default: '',
 		},
 		embedSource: {
-			default: 'WfDS_2omcHw',
+			default: '',
 		},
 	},
 	toDOM: (node: Node) => [
