@@ -28,7 +28,8 @@ export type FormModel = {
 export class AppAuthJoinForm extends BaseForm<FormModel>
 	implements FormOnSubmit, FormOnSubmitSuccess {
 	@Prop(Boolean)
-	darkVariant?: boolean;
+	overlay?: boolean;
+
 	@Prop(Boolean)
 	blocked?: boolean;
 

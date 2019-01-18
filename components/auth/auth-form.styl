@@ -1,6 +1,29 @@
 @require '~styles/variables'
 @require '~styles-lib/mixins'
 
+$-fb-color = #4267b2
+$-twitter-color = #38A1F3
+$-google-color = #CC3333
+$-twitch-color = #6441A4
+
+-social-button($-color)
+	background-color: $-color
+
+	&:hover
+		background-color: darken($-color, 10%) !important
+
+	&, &:hover
+		color: white !important
+
+.auth-form-overlay
+	.auth-form-container
+		@media $media-sm-up
+			rounded-corners()
+			background-color: rgba($black, 0.4)
+			padding: ($grid-gutter-width / 2)
+			margin-left: -($grid-gutter-width / 2)
+			margin-right: @margin-left
+
 .auth-form
 	// Much less vertical spacing.
 	.form-group
@@ -41,3 +64,15 @@
 		left: 50%
 		right: 0
 		margin-left: 40px
+
+.-fb
+	-social-button($-fb-color)
+
+.-twitter
+	-social-button($-twitter-color)
+
+.-google
+	-social-button($-google-color)
+
+.-twitch
+	-social-button($-twitch-color)
