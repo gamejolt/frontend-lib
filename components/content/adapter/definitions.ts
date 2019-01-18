@@ -7,6 +7,7 @@ export type GJContentFormat = {
 	createdOn: number;
 	context: ContentContext;
 	content: GJContentObject[];
+	hydration: GJHydrationDataEntry[];
 };
 
 export type GJContentObject = {
@@ -19,4 +20,9 @@ export type GJContentObject = {
 export type ProsemirrorEditorFormat = {
 	type: 'doc';
 	content: GJContentObject[];
+};
+
+export type GJHydrationDataEntry = {
+	id: string;
+	data: any;
 };
