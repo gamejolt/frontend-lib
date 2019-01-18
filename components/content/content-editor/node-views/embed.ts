@@ -21,8 +21,8 @@ export class EmbedNodeView extends BaseNodeView {
 	mounted() {
 		const vm = new AppContentEmbed({
 			propsData: {
-				type: this.node.attrs.embedType,
-				source: this.node.attrs.embedSource,
+				type: this.node.attrs.type,
+				source: this.node.attrs.source,
 				capabilities: this.capabilities,
 			},
 		});

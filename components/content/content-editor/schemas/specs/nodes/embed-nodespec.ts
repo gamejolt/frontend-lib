@@ -6,18 +6,18 @@ export const embed = {
 	draggable: true,
 	selectable: false,
 	attrs: {
-		embedType: {
+		type: {
 			default: '',
 		},
-		embedSource: {
+		source: {
 			default: '',
 		},
 	},
 	toDOM: (node: Node) => [
 		'div',
 		{
-			'embed-type': node.attrs.embedType,
-			'embed-source': node.attrs.embedSource,
+			'embed-type': node.attrs.type,
+			'embed-source': node.attrs.source,
 		},
 	],
 	parseDOM: [
@@ -25,8 +25,8 @@ export const embed = {
 			tag: 'div[embed-type]',
 			getAttrs: (domNode: Element) => {
 				return {
-					embedType: domNode.getAttribute('embed-type'),
-					embedSource: domNode.getAttribute('embed-source'),
+					type: domNode.getAttribute('embed-type'),
+					source: domNode.getAttribute('embed-source'),
 				};
 			},
 		},

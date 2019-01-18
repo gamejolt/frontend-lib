@@ -13,7 +13,10 @@ import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { ProsemirrorEditorFormat } from '../adapter/definitions';
+import { GJContentFormatAdapter } from '../adapter/gj-content-format-adapter';
 import { ContentContext, ContextCapabilities } from '../content-context';
+import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
 import { ImgNodeView } from './node-views/img';
@@ -35,6 +38,7 @@ type NodeViewList = {
 		AppContentEditorControls,
 		AppContentEditorTextControls,
 		AppContentEditorEmojiControls,
+		AppContentViewer,
 	},
 })
 export class AppContentEditor extends Vue {
@@ -61,6 +65,16 @@ export class AppContentEditor extends Vue {
 
 	get shouldShowEmojiControls() {
 		return this.emojiPanelVisible;
+	}
+
+	get viewerSource() {
+		if (this.view) {
+			return GJContentFormatAdapter.adaptOut(
+				this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
+				this.contentContext
+			);
+		}
+		return {};
 	}
 
 	mounted() {

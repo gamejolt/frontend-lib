@@ -65,8 +65,8 @@ export class AppContentEmbed extends Vue {
 
 	private emitEmbed(type: string, source: string) {
 		this.$emit('updateAttrs', {
-			embedType: type,
-			embedSource: source,
+			type,
+			source,
 		});
 	}
 
