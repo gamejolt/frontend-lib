@@ -4,16 +4,13 @@
 $-size = 40px
 $-spacing = 3px
 
-.-avatar
-	theme-prop('background-color', 'bg-subtle')
-	img-circle()
-	flex: none
-	width: $-size
-	height: $-size
-	margin-right: $grid-gutter-width-xs * 0.5
-
-	@media $media-sm-up
-		margin-right: $grid-gutter-width * 0.5
+.-list
+	position: relative
+	flex: 1
+	display: flex
+	flex-wrap: wrap
+	padding-top: 4px
+	padding-bottom: 4px
 
 .-user
 	flex: none
@@ -21,10 +18,14 @@ $-spacing = 3px
 	height: $-size
 	margin: 0 $-spacing $-spacing
 
-.-list
-	position: relative
-	flex: 1
-	display: flex
-	flex-wrap: wrap;
-	padding-top: 4px
-	padding-bottom: 4px
+.-avatar
+	img-circle()
+	theme-prop('background-color', 'bg-subtle')
+	pressy()
+	flex: none
+	width: $-size
+	height: $-size
+	margin-right: $grid-gutter-width-xs * 0.5
+
+	@media $media-sm-up
+		margin-right: $grid-gutter-width * 0.5
