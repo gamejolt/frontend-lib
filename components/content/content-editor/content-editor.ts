@@ -69,12 +69,13 @@ export class AppContentEditor extends Vue {
 
 	get viewerSource() {
 		if (this.view) {
-			return GJContentFormatAdapter.adaptOut(
-				this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
-				this.contentContext
+			return JSON.stringify(
+				GJContentFormatAdapter.adaptOut(
+					this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
+					this.contentContext
+				)
 			);
 		}
-		return {};
 	}
 
 	mounted() {

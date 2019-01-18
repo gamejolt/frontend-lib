@@ -32,7 +32,7 @@ export const gjEmoji = {
 	marks: '',
 
 	toDOM: (node: Node) => [
-		'img',
+		'span',
 		{
 			'emoji-type': node.attrs.type,
 			class: 'emoji emoji-' + node.attrs.type,
@@ -42,7 +42,7 @@ export const gjEmoji = {
 
 	parseDOM: [
 		{
-			tag: 'img[emoji-type]',
+			tag: 'span[emoji-type]',
 			getAttrs: (domNode: Element) => {
 				const type = domNode.getAttribute('emoji-type');
 				return { type };
