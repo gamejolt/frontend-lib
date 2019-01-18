@@ -1,13 +1,12 @@
+import View from '!view!./join.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./join.html';
-
-import { Connection } from '../../connection/connection-service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { FormModel, AppAuthJoinForm } from './join-form';
-import { Environment } from '../../environment/environment.service';
 import { Api } from '../../api/api.service';
+import { Connection } from '../../connection/connection-service';
+import { Environment } from '../../environment/environment.service';
 import { Navigate } from '../../navigate/navigate.service';
+import { AppAuthJoinForm, FormModel } from './join-form';
 
 @View
 @Component({
@@ -18,7 +17,7 @@ import { Navigate } from '../../navigate/navigate.service';
 })
 export class AppAuthJoin extends Vue {
 	@Prop(Boolean)
-	darkVariant?: boolean;
+	overlay?: boolean;
 
 	blocked = false;
 

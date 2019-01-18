@@ -1,7 +1,10 @@
 import View from '!view!./playwire.html';
-import { Ads } from 'game-jolt-frontend-lib/components/ad/ads.service';
+import {
+	Ads,
+	AdSlotPos,
+	AdSlotPosValidator,
+} from 'game-jolt-frontend-lib/components/ad/ads.service';
 import { Playwire } from 'game-jolt-frontend-lib/components/ad/playwire/playwire.service';
-import { AdSlotPos, AdSlotPosValidator } from 'game-jolt-frontend-lib/components/ad/slot';
 import { FiresidePost } from 'game-jolt-frontend-lib/components/fireside/post/post-model';
 import { Game } from 'game-jolt-frontend-lib/components/game/game.model';
 import { User } from 'game-jolt-frontend-lib/components/user/user.model';
@@ -10,6 +13,41 @@ import { Component, Prop } from 'vue-property-decorator';
 
 function generateSlotId() {
 	return Math.random() + '';
+}
+
+let clickTrackerBootstrapped = false;
+let focusedElem: Element | null = null;
+const clickTrackers: Map<Element, Function> = new Map();
+
+function addClickTracker(elem: Element, cb: Function) {
+	clickTrackers.set(elem, cb);
+	initClickTracking();
+}
+
+function removeClickTracker(elem: Element) {
+	clickTrackers.delete(elem);
+}
+
+function initClickTracking() {
+	if (clickTrackerBootstrapped || !Ads.shouldShow) {
+		return;
+	}
+
+	clickTrackerBootstrapped = true;
+
+	// Checking the active element in an interval seems to be the only way of tracking clicks.
+	setInterval(function() {
+		if (document.activeElement === focusedElem) {
+			return;
+		}
+
+		focusedElem = document.activeElement;
+		clickTrackers.forEach((cb, adElem) => {
+			if (focusedElem && adElem.contains(focusedElem)) {
+				cb();
+			}
+		});
+	}, 1000);
 }
 
 @View
@@ -65,7 +103,7 @@ export class AppAdPlaywire extends Vue {
 
 	beforeDestroy() {
 		Playwire.removeAd(this);
-		// removeClickTracker(this.$el);
+		removeClickTracker(this.$el);
 	}
 
 	display() {
@@ -73,12 +111,8 @@ export class AppAdPlaywire extends Vue {
 
 		// Log that we viewed this ad immediately.
 		this.sendBeacon(Ads.EVENT_VIEW);
-		// addClickTracker(this.$el, () => this.sendBeacon(Ads.EVENT_CLICK));
+		addClickTracker(this.$el, () => this.sendBeacon(Ads.EVENT_CLICK));
 	}
-
-	// onClick() {
-	// 	this.sendBeacon(Ads.EVENT_CLICK);
-	// }
 
 	private sendBeacon(event: string) {
 		Ads.sendBeacon(
