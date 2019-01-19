@@ -1,6 +1,6 @@
 import View from '!view!./content-viewer.html?style=./content-viewer.styl';
+import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { AppContentViewerBaseComponent } from 'game-jolt-frontend-lib/components/content/content-viewer/components/base-component';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-viewer/content-owner';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { GJContentFormat, GJContentObject } from '../adapter/definitions';
@@ -21,7 +21,7 @@ export class AppContentViewer extends Vue implements ContentOwner {
 	contentContext!: ContentContext;
 
 	content: GJContentObject[] = [];
-	hydrator: ContentHydrator | null = null;
+	hydrator: ContentHydrator = new ContentHydrator();
 
 	get owner() {
 		return this;
@@ -43,7 +43,7 @@ export class AppContentViewer extends Vue implements ContentOwner {
 			this.hydrator = new ContentHydrator(sourceObj.hydration);
 		} else {
 			this.content = [];
-			this.hydrator = null;
+			this.hydrator = new ContentHydrator();
 		}
 	}
 }

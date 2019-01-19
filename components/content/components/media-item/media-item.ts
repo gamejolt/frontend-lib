@@ -32,10 +32,9 @@ export class AppContentMediaItem extends Vue {
 	}
 
 	async mounted() {
-		const hydrator = this.owner.getHydrator();
-		if (hydrator) {
-			const hydratedData = await hydrator.getData('media-item', this.mediaItemId.toString());
-			this.mediaItem = new MediaItem(hydratedData);
-		}
+		const hydratedData = await this.owner
+			.getHydrator()
+			.getData('media-item', this.mediaItemId.toString());
+		this.mediaItem = new MediaItem(hydratedData);
 	}
 }

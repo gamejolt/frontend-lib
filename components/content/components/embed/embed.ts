@@ -35,11 +35,11 @@ export class AppContentEmbed extends Vue {
 	};
 
 	get capabilities() {
-		return this.owner.getCapabilities()!;
+		return this.owner.getCapabilities();
 	}
 
 	get hydrator() {
-		return this.owner.getHydrator()!;
+		return this.owner.getHydrator();
 	}
 
 	get hasContent() {
