@@ -1,3 +1,4 @@
+import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
@@ -6,7 +7,7 @@ import { Component, Prop } from 'vue-property-decorator';
 })
 export class AppContentViewerText extends Vue {
 	@Prop(Object)
-	data!: any;
+	data!: GJContentObject;
 
 	hasMark(mark: string) {
 		return this.data.marks && this.data.marks.some((m: any) => m.type === mark);

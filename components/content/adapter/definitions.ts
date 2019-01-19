@@ -1,6 +1,17 @@
 import { ContentContext } from '../content-context';
 
-export type GJContentObjectType = 'text' | 'paragraph' | 'img' | 'video' | 'table' | 'music' | 'hr';
+export type GJContentObjectType =
+	| 'text'
+	| 'paragraph'
+	| 'img'
+	| 'video'
+	| 'table'
+	| 'music'
+	| 'hr'
+	| 'codeBlock'
+	| 'gjEmoji'
+	| 'blockquote'
+	| 'hardBreak';
 
 export type GJContentFormat = {
 	version: string;
@@ -15,6 +26,7 @@ export type GJContentObject = {
 	text: string;
 	content: GJContentObject[];
 	attrs: { [key: string]: any };
+	marks: { [key: string]: any };
 };
 
 export type ProsemirrorEditorFormat = {
@@ -23,6 +35,7 @@ export type ProsemirrorEditorFormat = {
 };
 
 export type GJHydrationDataEntry = {
+	type: string;
 	id: string;
 	data: any;
 };

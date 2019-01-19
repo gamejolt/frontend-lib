@@ -31,6 +31,7 @@ export class GJContentFormatAdapter {
 			createdOn: Date.now(),
 			context,
 			content: inObj.content,
+			hydration: [],
 		} as GJContentFormat;
 
 		return outObj;

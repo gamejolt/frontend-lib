@@ -16,11 +16,11 @@ import { Component, Prop } from 'vue-property-decorator';
 import { ProsemirrorEditorFormat } from '../adapter/definitions';
 import { GJContentFormatAdapter } from '../adapter/gj-content-format-adapter';
 import { ContentContext, ContextCapabilities } from '../content-context';
+import { ContentHydrator } from '../content-hydrator';
 import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
 import { ImgNodeView } from './node-views/img';
-import { ShowEmojiPanelPlugin } from './plugins/show-emoji-panel-plugin';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
 
 type NodeViewList = {
@@ -50,6 +50,7 @@ export class AppContentEditor extends Vue {
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
 	emojiPanelVisible = false;
+	hydrator: ContentHydrator | null = null;
 
 	$refs!: {
 		doc: HTMLElement;
@@ -67,19 +68,25 @@ export class AppContentEditor extends Vue {
 		return this.emojiPanelVisible;
 	}
 
+	// DEBUG
 	get viewerSource() {
 		if (this.view) {
-			return JSON.stringify(
-				GJContentFormatAdapter.adaptOut(
-					this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
-					this.contentContext
-				)
+			const data = GJContentFormatAdapter.adaptOut(
+				this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
+				this.contentContext
 			);
+
+			if (this.hydrator) {
+				data.hydration = this.hydrator.hydration;
+			}
+
+			return JSON.stringify(data);
 		}
 	}
 
 	mounted() {
 		this.capabilities = ContextCapabilities.getForContext(this.contentContext);
+		this.hydrator = new ContentHydrator();
 
 		// This is used to update any children with the new view.
 		// We don't want to watch the view/state objects because they are too heavy.
@@ -90,11 +97,11 @@ export class AppContentEditor extends Vue {
 				return new UpdateIncrementerPlugin(editorView, that);
 			},
 		});
-		const emojiPanelPlugin = new Plugin({
-			view(editorView) {
-				return new ShowEmojiPanelPlugin(editorView, that);
-			},
-		});
+		// const emojiPanelPlugin = new Plugin({
+		// 	view(editorView) {
+		// 		return new ShowEmojiPanelPlugin(editorView, that);
+		// 	},
+		// });
 
 		const schema = generateSchema(this.capabilities);
 		const ourKeymap = getContentEditorKeymap(this, schema);
@@ -113,7 +120,7 @@ export class AppContentEditor extends Vue {
 		const nodeViews = {} as NodeViewList;
 		if (this.capabilities.embedVideo) {
 			nodeViews.embed = function(node, view, getPos) {
-				return new EmbedNodeView(node, view, getPos, that.capabilities);
+				return new EmbedNodeView(node, view, getPos, that.capabilities, that.hydrator!);
 			};
 		}
 		if (this.capabilities.image) {

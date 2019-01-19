@@ -5,6 +5,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import { AppVideoEmbed } from '../../../video/embed/embed';
+import { ContentHydrator } from '../../content-hydrator';
 import { AppBaseContentComponent } from '../base/base-content-component';
 
 @View
@@ -25,6 +26,9 @@ export class AppContentEmbed extends Vue {
 	@Prop(Object)
 	capabilities!: ContextCapabilities;
 
+	@Prop(ContentHydrator)
+	hydrator!: ContentHydrator;
+
 	@Prop(Boolean)
 	isEditing!: boolean;
 
@@ -36,10 +40,13 @@ export class AppContentEmbed extends Vue {
 		return this.type && this.source;
 	}
 
-	mounted() {
+	async mounted() {
 		// If the placeholder input is available, focus it immediately
 		if (this.$refs.placeholderInput) {
 			this.$refs.placeholderInput.focus();
+		} else {
+			// Get hydration if needed
+			// const data = await this.hydrator.getData('embed-' + this.type, this.source);
 		}
 	}
 
