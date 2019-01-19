@@ -15,6 +15,7 @@ type ContextCapabilityType =
 	| 'image'
 	| 'embed-video'
 	| 'embed-music'
+	| 'embed-game'
 	| 'code-block'
 	| 'blockquote';
 
@@ -30,7 +31,7 @@ export class ContextCapabilities {
 		);
 	}
 	get hasAnyEmbed() {
-		return this.embedMusic || this.embedVideo;
+		return this.embedMusic || this.embedVideo || this.embedGame;
 	}
 	get textBold() {
 		return this.hasCapability('text-bold');
@@ -55,6 +56,9 @@ export class ContextCapabilities {
 	}
 	get embedMusic() {
 		return this.hasCapability('embed-music');
+	}
+	get embedGame() {
+		return this.hasCapability('embed-game');
 	}
 	get codeBlock() {
 		return this.hasCapability('code-block');
@@ -89,6 +93,7 @@ export class ContextCapabilities {
 					'image',
 					'embed-video',
 					'embed-music',
+					'embed-game',
 					'code-block',
 					'blockquote',
 				]);

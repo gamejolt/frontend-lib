@@ -13,6 +13,11 @@
 		v-else-if="type === 'soundcloud-song'"
 		:track-id="source"
 		/>
+	<app-content-embed-game-embed
+		v-else-if="type === 'game-jolt-game'"
+		:game-id="source"
+		:hydrator="hydrator"
+		/>
 
 </app-base-content-component>
 <div

@@ -7,6 +7,7 @@ import { Prop } from 'vue-property-decorator';
 import { AppVideoEmbed } from '../../../video/embed/embed';
 import { ContentHydrator } from '../../content-hydrator';
 import { AppBaseContentComponent } from '../base/base-content-component';
+import { AppContentEmbedGameEmbed } from './game/game-embed';
 
 @View
 @Component({
@@ -14,6 +15,7 @@ import { AppBaseContentComponent } from '../base/base-content-component';
 		AppVideoEmbed,
 		AppBaseContentComponent,
 		AppWidgetCompilerWidgetSoundcloud,
+		AppContentEmbedGameEmbed,
 	},
 })
 export class AppContentEmbed extends Vue {
@@ -44,9 +46,6 @@ export class AppContentEmbed extends Vue {
 		// If the placeholder input is available, focus it immediately
 		if (this.$refs.placeholderInput) {
 			this.$refs.placeholderInput.focus();
-		} else {
-			// Get hydration if needed
-			// const data = await this.hydrator.getData('embed-' + this.type, this.source);
 		}
 	}
 
@@ -86,17 +85,42 @@ export class AppContentEmbed extends Vue {
 		// This also has to take capabilities into account
 
 		for (const line of lines) {
+			const gameJoltGameId = this.tryGameJoltGame(line);
+			if (gameJoltGameId) {
+				this.emitEmbed('game-jolt-game', gameJoltGameId);
+				return;
+			}
+
 			const youtubeVideoId = this.tryYouTube(line);
 			if (youtubeVideoId) {
 				this.emitEmbed('youtube-video', youtubeVideoId);
 				return;
 			}
+
 			const soundcloudSongId = this.trySoundCloud(line);
 			if (soundcloudSongId) {
 				this.emitEmbed('soundcloud-song', soundcloudSongId);
 				return;
 			}
 		}
+	}
+
+	private tryGameJoltGame(text: string) {
+		if (!this.capabilities.embedGame) {
+			return null;
+		}
+
+		// gamejolt.com/games/name/id
+		const regex = new RegExp(/gamejolt.com\/games\/.+?\/([0-9]+)/);
+		const results = regex.exec(text);
+		if (results !== null && results.length === 2) {
+			const gameId = parseInt(results[1]);
+			if (gameId !== NaN) {
+				return gameId.toString();
+			}
+		}
+
+		return null;
 	}
 
 	private tryYouTube(text: string) {

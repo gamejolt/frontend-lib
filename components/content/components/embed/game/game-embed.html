@@ -1,0 +1,19 @@
+<app-card class="game-container">
+	<template v-if="isHydrated">
+		<div class="-inner">
+			<div class="-thumbnail">
+				<app-game-thumbnail-img
+					:game="game"
+					/>
+			</div>
+			<div class="-title">
+				<strong>{{game.title}}</strong>
+				<br>
+				by {{game.developer.username}}
+			</div>
+		</div>
+	</template>
+	<template v-else>
+		<app-loading />
+	</template>
+</app-card>
