@@ -51,7 +51,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
 	emojiPanelVisible = false;
-	hydrator: ContentHydrator | null = null;
+	hydrator: ContentHydrator = new ContentHydrator();
 
 	$refs!: {
 		doc: HTMLElement;
