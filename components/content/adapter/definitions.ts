@@ -10,7 +10,8 @@ export type GJContentObjectType =
 	| 'gjEmoji'
 	| 'blockquote'
 	| 'hardBreak'
-	| 'embed';
+	| 'embed'
+	| 'mediaItem';
 
 export type GJContentFormat = {
 	version: string;

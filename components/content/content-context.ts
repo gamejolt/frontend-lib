@@ -12,7 +12,7 @@ type ContextCapabilityType =
 	| 'text-link'
 	| 'text-code'
 	| 'text-strike'
-	| 'image'
+	| 'media'
 	| 'embed-video'
 	| 'embed-music'
 	| 'embed-game'
@@ -48,8 +48,8 @@ export class ContextCapabilities {
 	get textStrike() {
 		return this.hasCapability('text-strike');
 	}
-	get image() {
-		return this.hasCapability('image');
+	get media() {
+		return this.hasCapability('media');
 	}
 	get embedVideo() {
 		return this.hasCapability('embed-video');
@@ -90,7 +90,7 @@ export class ContextCapabilities {
 					'text-link',
 					'text-code',
 					'text-strike',
-					'image',
+					'media',
 					'embed-video',
 					'embed-music',
 					'embed-game',

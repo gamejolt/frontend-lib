@@ -1,11 +1,10 @@
 import View from '!view!./embed.html?style=./embed.styl';
-import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
 import { AppWidgetCompilerWidgetSoundcloud } from 'game-jolt-frontend-lib/components/widget-compiler/widget-soundcloud/widget-soundcloud';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import { AppVideoEmbed } from '../../../video/embed/embed';
-import { ContentHydrator } from '../../content-hydrator';
+import { ContentOwner } from '../../content-owner';
 import { AppBaseContentComponent } from '../base/base-content-component';
 import { AppContentEmbedGameEmbed } from './game/game-embed';
 
@@ -26,10 +25,7 @@ export class AppContentEmbed extends Vue {
 	source!: string;
 
 	@Prop(Object)
-	capabilities!: ContextCapabilities;
-
-	@Prop(ContentHydrator)
-	hydrator!: ContentHydrator;
+	owner!: ContentOwner;
 
 	@Prop(Boolean)
 	isEditing!: boolean;
@@ -37,6 +33,14 @@ export class AppContentEmbed extends Vue {
 	$refs!: {
 		placeholderInput: HTMLElement;
 	};
+
+	get capabilities() {
+		return this.owner.getCapabilities()!;
+	}
+
+	get hydrator() {
+		return this.owner.getHydrator()!;
+	}
 
 	get hasContent() {
 		return this.type && this.source;

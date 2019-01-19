@@ -1,13 +1,13 @@
 import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-nodespec';
 import { blockquote } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/blockquote-nodespec';
 import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/embed-nodespec';
-import { img } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/img-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
 import { codeBlock } from './specs/nodes/code-block-nodespec';
 import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
 import { hardBreak } from './specs/nodes/hard-bread-nodespec';
+import { mediaItem } from './specs/nodes/media-item-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
 
 export function generateSchema(capabilities: ContextCapabilities) {
@@ -30,8 +30,8 @@ function generateNodes(capabilities: ContextCapabilities) {
 		},
 	} as any;
 
-	if (capabilities.image) {
-		nodes.img = img;
+	if (capabilities.media) {
+		nodes.mediaItem = mediaItem;
 	}
 	if (capabilities.embedMusic || capabilities.embedVideo) {
 		nodes.embed = embed;

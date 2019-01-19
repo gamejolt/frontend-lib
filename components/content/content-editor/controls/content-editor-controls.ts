@@ -85,8 +85,10 @@ export class AppContentEditorControls extends Vue {
 		this.collapsed = true;
 	}
 
-	onClickScreenshot() {
-		const newNode = this.view.state.schema.nodes.img.create() as Node;
+	onClickMedia() {
+		const newNode = this.view.state.schema.nodes.mediaItem.create({
+			id: 61,
+		}) as Node;
 		this.insertNewNode(newNode);
 	}
 

@@ -11,11 +11,11 @@
 			v-if="!this.collapsed"
 			>
 			<app-button
-				v-if="capabilities.image"
+				v-if="capabilities.media"
 				circle
 				icon="screenshot"
-				@click="onClickScreenshot"
-				v-app-tooltip="$gettext('Upload Image')"
+				@click="onClickMedia"
+				v-app-tooltip="$gettext('Upload Media')"
 				/>
 			<app-button
 				v-if="capabilities.hasAnyEmbed"

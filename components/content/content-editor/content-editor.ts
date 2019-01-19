@@ -2,6 +2,7 @@ import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/content/content-editor/keymap';
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
+import { MediaItemNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-item';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
 import { baseKeymap } from 'prosemirror-commands';
 import { history } from 'prosemirror-history';
@@ -17,10 +18,10 @@ import { ProsemirrorEditorFormat } from '../adapter/definitions';
 import { GJContentFormatAdapter } from '../adapter/gj-content-format-adapter';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { ContentHydrator } from '../content-hydrator';
+import { ContentOwner } from '../content-owner';
 import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
-import { ImgNodeView } from './node-views/img';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
 
 type NodeViewList = {
@@ -41,7 +42,7 @@ type NodeViewList = {
 		AppContentViewer,
 	},
 })
-export class AppContentEditor extends Vue {
+export class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(String)
 	contentContext!: ContentContext;
 
@@ -84,6 +85,14 @@ export class AppContentEditor extends Vue {
 		}
 	}
 
+	getHydrator() {
+		return this.hydrator;
+	}
+
+	getCapabilities() {
+		return this.capabilities;
+	}
+
 	mounted() {
 		this.capabilities = ContextCapabilities.getForContext(this.contentContext);
 		this.hydrator = new ContentHydrator();
@@ -120,12 +129,12 @@ export class AppContentEditor extends Vue {
 		const nodeViews = {} as NodeViewList;
 		if (this.capabilities.embedVideo) {
 			nodeViews.embed = function(node, view, getPos) {
-				return new EmbedNodeView(node, view, getPos, that.capabilities, that.hydrator!);
+				return new EmbedNodeView(node, view, getPos, that);
 			};
 		}
-		if (this.capabilities.image) {
-			nodeViews.img = function(node, view, getPos) {
-				return new ImgNodeView(node, view, getPos);
+		if (this.capabilities.media) {
+			nodeViews.mediaItem = function(node, view, getPos) {
+				return new MediaItemNodeView(node, view, getPos, that);
 			};
 		}
 

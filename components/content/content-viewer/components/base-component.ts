@@ -1,4 +1,5 @@
 import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
+import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { AppContentViewerBlockquote } from 'game-jolt-frontend-lib/components/content/content-viewer/components/blockquote';
 import { AppContentViewerCodeBlock } from 'game-jolt-frontend-lib/components/content/content-viewer/components/code';
 import { AppContentViewerGJEmoji } from 'game-jolt-frontend-lib/components/content/content-viewer/components/gjEmoji';
@@ -6,9 +7,9 @@ import { AppContentViewerParagraph } from 'game-jolt-frontend-lib/components/con
 import { AppContentViewerText } from 'game-jolt-frontend-lib/components/content/content-viewer/components/text';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { ContentOwner } from '../content-owner';
 import { AppContentViewerHardBreak } from './br';
 import { AppContentViewerEmbed } from './embed';
+import { AppContentViewerMediaItem } from './media-item';
 
 function getComponentType(data: GJContentObject): any {
 	switch (data.type) {
@@ -26,6 +27,8 @@ function getComponentType(data: GJContentObject): any {
 			return AppContentViewerGJEmoji;
 		case 'embed':
 			return AppContentViewerEmbed;
+		case 'mediaItem':
+			return AppContentViewerMediaItem;
 	}
 }
 

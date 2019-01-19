@@ -1,0 +1,13 @@
+<app-base-content-component
+	:is-editing="isEditing"
+	@removed="onRemoved"
+	>
+
+	<template v-if="isHydrated">
+		<img class="img-responsive" :src="mediaItem.img_url" />
+	</template>
+	<template v-else>
+		Media item is not hydrated
+	</template>
+
+</app-base-content-component>
