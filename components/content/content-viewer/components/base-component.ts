@@ -8,6 +8,7 @@ import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ContentOwner } from '../content-owner';
 import { AppContentViewerHardBreak } from './br';
+import { AppContentViewerEmbed } from './embed';
 
 function getComponentType(data: GJContentObject): any {
 	switch (data.type) {
@@ -23,6 +24,8 @@ function getComponentType(data: GJContentObject): any {
 			return AppContentViewerHardBreak;
 		case 'gjEmoji':
 			return AppContentViewerGJEmoji;
+		case 'embed':
+			return AppContentViewerEmbed;
 	}
 }
 

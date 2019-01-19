@@ -4,14 +4,13 @@ export type GJContentObjectType =
 	| 'text'
 	| 'paragraph'
 	| 'img'
-	| 'video'
 	| 'table'
-	| 'music'
 	| 'hr'
 	| 'codeBlock'
 	| 'gjEmoji'
 	| 'blockquote'
-	| 'hardBreak';
+	| 'hardBreak'
+	| 'embed';
 
 export type GJContentFormat = {
 	version: string;
