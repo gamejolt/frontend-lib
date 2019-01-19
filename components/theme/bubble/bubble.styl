@@ -15,6 +15,12 @@
 .-active
 	box-shadow: 0 0 0 2px var(--theme-bg), 0 0 0 4px var(--theme-link)
 
+.-disabled
+	box-shadow: none !important
+
+	&:hover
+		cursor: not-allowed
+
 .-highlight, .-backlight
 	position: absolute
 	width: 150%

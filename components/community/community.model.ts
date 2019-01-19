@@ -91,6 +91,10 @@ export class Community extends Collaboratable(Model) {
 		}
 	}
 
+	$publish() {
+		return this.$_save('/web/dash/communities/publish/' + this.id, 'community');
+	}
+
 	$saveThumbnail() {
 		return this.$_save('/web/dash/communities/design/save-thumbnail/' + this.id, 'community', {
 			file: this.file,

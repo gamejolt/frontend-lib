@@ -14,4 +14,7 @@ export class AppThemeBubble extends Vue {
 
 	@Prop(Boolean)
 	active?: boolean;
+
+	@Prop(Boolean)
+	disabled?: boolean;
 }

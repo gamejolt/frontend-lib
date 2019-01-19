@@ -1,12 +1,14 @@
 <div class="form-control-theme">
 	<app-popper
 		@show="onPopover()"
+		:disabled="disabled"
 		>
 		<a class="-current">
 			<app-theme-bubble
 				:highlight="highlight"
 				:backlight="backlight"
 				active
+				:disabled="disabled"
 				/>
 		</a>
 

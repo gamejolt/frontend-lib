@@ -1,16 +1,15 @@
-import { Component } from 'vue-property-decorator';
 import View from '!view!./theme.html?style=./theme.styl';
-
-import { BaseFormControl } from '../base';
-import { AppThemeBubble } from '../../../theme/bubble/bubble';
-import { AppTooltip } from '../../../tooltip/tooltip';
-import { Api } from '../../../api/api.service';
-import { ThemePreset } from '../../../theme/preset/preset.model';
-import { makeThemeFromPreset, Theme, makeThemeFromColor } from '../../../theme/theme.model';
 import { Sketch } from 'vue-color';
+import { Component, Prop } from 'vue-property-decorator';
 import { AppLoading } from '../../../../vue/components/loading/loading';
+import { Api } from '../../../api/api.service';
 import { AppButton } from '../../../button/button';
 import { AppPopper } from '../../../popper/popper';
+import { AppThemeBubble } from '../../../theme/bubble/bubble';
+import { ThemePreset } from '../../../theme/preset/preset.model';
+import { makeThemeFromColor, makeThemeFromPreset, Theme } from '../../../theme/theme.model';
+import { AppTooltip } from '../../../tooltip/tooltip';
+import { BaseFormControl } from '../base';
 
 interface VueColor {
 	hex: string | null;
@@ -30,6 +29,9 @@ interface VueColor {
 	},
 })
 export class AppFormControlTheme extends BaseFormControl {
+	@Prop(Boolean)
+	disabled!: boolean;
+
 	controlVal: Theme | null = null;
 	presets: ThemePreset[] = [];
 	activeTab: 'preset' | 'custom' = 'preset';
