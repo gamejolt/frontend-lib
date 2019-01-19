@@ -1,4 +1,5 @@
 import { GJHydrationDataEntry } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
+import { arrayRemove } from '../../utils/array';
 import { Api } from '../api/api.service';
 
 export class ContentHydrator {
@@ -26,5 +27,9 @@ export class ContentHydrator {
 		this.hydration.push(entry);
 
 		return entry.data;
+	}
+
+	dry(type: string, id: string) {
+		arrayRemove(this.hydration, i => i.type === type && i.id === id);
 	}
 }

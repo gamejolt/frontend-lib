@@ -25,13 +25,29 @@ export class AppContentEmbedGameEmbed extends Vue {
 	hydrator!: ContentHydrator;
 
 	game: Game | null = null;
+	hasError = false;
 
 	get isHydrated() {
 		return !!this.game;
 	}
 
-	async mounted() {
+	mounted() {
+		this.loadGame();
+	}
+
+	async loadGame() {
 		const hydratedData = await this.hydrator.getData('embed-game-jolt-game', this.gameId);
-		this.game = new Game(hydratedData);
+		if (hydratedData !== null) {
+			this.game = new Game(hydratedData);
+		} else {
+			this.hasError = true;
+		}
+	}
+
+	onClickRetry() {
+		this.hasError = false;
+		this.game = null;
+		this.hydrator.dry('embed-game-jolt-game', this.gameId);
+		this.loadGame();
 	}
 }

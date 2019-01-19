@@ -1,5 +1,14 @@
 <app-card class="game-container">
-	<template v-if="isHydrated">
+	<template v-if="hasError">
+		<app-jolticon icon="notice" /><translate>Failed to load game information</translate>
+		<br>
+		<app-button
+			@click="onClickRetry"
+			>
+			Retry
+		</app-button>
+	</template>
+	<template v-else-if="isHydrated">
 		<div class="-inner">
 			<div class="-thumbnail">
 				<app-game-thumbnail-img
