@@ -228,13 +228,20 @@ export class FiresidePost extends Model {
 		}
 	}
 
-	static async $create(gameId?: number) {
+	static async $create(gameId: number, communityIds: number[]) {
 		let url = `/web/posts/manage/new-post`;
+
+		const data = {} as any;
 		if (gameId) {
-			url += '/' + gameId;
+			data.game_id = gameId;
+		}
+		if (communityIds.length) {
+			data.community_ids = communityIds;
 		}
 
-		const response = await Api.sendRequest(url);
+		const response = await Api.sendRequest(url, data, {
+			allowComplexData: ['community_ids'],
+		});
 		await FiresidePost.processCreate(response, 'post');
 		return new FiresidePost(response.post);
 	}
