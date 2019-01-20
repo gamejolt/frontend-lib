@@ -27,6 +27,11 @@ import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.servi
 import { AppGamePackageCardButtons } from './buttons';
 import { GamePackageCardModel } from './card.model';
 
+export type AppGamePackageCardHook = {
+	meta?: typeof Vue;
+	buttons?: typeof Vue;
+};
+
 @View
 @Component({
 	components: {
@@ -73,10 +78,7 @@ export class AppGamePackageCard extends Vue {
 	@Prop(User)
 	partner?: User;
 
-	static hook = {
-		meta: undefined as typeof Vue | undefined,
-		buttons: undefined as typeof Vue | undefined,
-	};
+	static hook?: AppGamePackageCardHook = {};
 
 	showFullDescription = false;
 	canToggleDescription = false;
@@ -94,11 +96,11 @@ export class AppGamePackageCard extends Vue {
 	private showPaymentOptionsDeregister?: EventBusDeregister;
 
 	get metaComponent() {
-		return AppGamePackageCard.hook.meta;
+		return AppGamePackageCard.hook!.meta;
 	}
 
 	get buttonsComponent() {
-		return AppGamePackageCard.hook.buttons || AppGamePackageCardButtons;
+		return AppGamePackageCard.hook!.buttons || AppGamePackageCardButtons;
 	}
 
 	get card() {

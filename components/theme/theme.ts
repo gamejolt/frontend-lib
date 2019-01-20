@@ -117,7 +117,7 @@ export class AppTheme extends Vue {
 			{
 				domProps: { id: id },
 			},
-			[h('style', { domProps: { innerHTML: styles } }), this.$slots.default]
+			[h('style', { domProps: { innerHTML: styles } }), this.$slots.default!]
 		);
 	}
 }

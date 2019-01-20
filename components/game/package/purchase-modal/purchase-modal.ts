@@ -1,20 +1,23 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./purchase-modal.html?style=./purchase-modal.styl';
-
-import { BaseModal } from '../../../modal/base';
-import { GamePackage } from '../package.model';
-import { GameBuild } from '../../build/build.model';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { FormGamePackagePayment } from '../payment-form/payment-form';
-import { Game } from '../../game.model';
-import { Sellable } from '../../../sellable/sellable.model';
-import { Analytics } from '../../../analytics/analytics.service';
-import { GameDownloader } from '../../downloader/downloader.service';
-import { User } from '../../../user/user.model';
-import { AppLoading } from '../../../../vue/components/loading/loading';
-import { Growls } from '../../../growls/growls.service';
+import { Component, Prop } from 'vue-property-decorator';
 import { VuexStore } from '../../../../utils/vuex';
+import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import { AppLoading } from '../../../../vue/components/loading/loading';
+import { Analytics } from '../../../analytics/analytics.service';
+import { Growls } from '../../../growls/growls.service';
+import { BaseModal } from '../../../modal/base';
+import { Sellable } from '../../../sellable/sellable.model';
+import { User } from '../../../user/user.model';
+import { GameBuild } from '../../build/build.model';
+import { GameDownloader } from '../../downloader/downloader.service';
+import { Game } from '../../game.model';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
+import { GamePackage } from '../package.model';
+import { FormGamePackagePayment } from '../payment-form/payment-form';
+
+export type AppGamePackagePurchaseModalHook = {
+	downloadPackage?: (store: VuexStore, game: Game, build: GameBuild) => void;
+};
 
 @View
 @Component({
@@ -25,18 +28,20 @@ import { GamePlayModal } from '../../play-modal/play-modal.service';
 	},
 })
 export default class AppGamePackagePurchaseModal extends BaseModal {
-	@Prop(Game) game!: Game;
-	@Prop(GamePackage) package!: GamePackage;
-	@Prop(GameBuild) build!: GameBuild | null;
-	@Prop(Boolean) fromExtraSection!: boolean;
-	@Prop(String) partnerKey?: string;
-	@Prop(User) partner?: User;
+	@Prop(Game)
+	game!: Game;
+	@Prop(GamePackage)
+	package!: GamePackage;
+	@Prop(GameBuild)
+	build!: GameBuild | null;
+	@Prop(Boolean)
+	fromExtraSection!: boolean;
+	@Prop(String)
+	partnerKey?: string;
+	@Prop(User)
+	partner?: User;
 
-	static hook = {
-		downloadPackage: undefined as
-			| ((store: VuexStore, game: Game, build: GameBuild) => void)
-			| undefined,
-	};
+	static hook?: AppGamePackagePurchaseModalHook = {};
 
 	sellable: Sellable = null as any;
 
@@ -86,12 +91,9 @@ export default class AppGamePackagePurchaseModal extends BaseModal {
 		if (operation === 'play') {
 			this.showBrowserModal(this.build);
 		} else if (operation === 'download') {
-			if (AppGamePackagePurchaseModal.hook.downloadPackage) {
-				AppGamePackagePurchaseModal.hook.downloadPackage(
-					this.$store,
-					this.game,
-					this.build
-				);
+			const downloadPackage = AppGamePackagePurchaseModal.hook!.downloadPackage;
+			if (downloadPackage) {
+				downloadPackage(this.$store, this.game, this.build);
 			} else {
 				this.download(this.build);
 			}
