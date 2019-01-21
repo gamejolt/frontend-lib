@@ -1,18 +1,18 @@
 import {
-	readableColor,
-	mix,
-	parseToRgb,
-	rgb,
-	desaturate,
 	complement,
-	parseToHsl,
+	desaturate,
 	hsl,
+	mix,
+	parseToHsl,
+	parseToRgb,
+	readableColor,
+	rgb,
 	toColorString,
 } from 'polished';
-import { rgb2lab, lab2rgb } from '../../utils/color';
+import { RgbColor } from 'polished/lib/types/color';
+import { lab2rgb, rgb2lab } from '../../utils/color';
 import { Model } from '../model/model.service';
 import { ThemePreset } from './preset/preset.model';
-import { RgbColor } from 'polished/lib/types/color';
 
 // Sync with variables in stylus.
 const GrayDarkest = '#111111';

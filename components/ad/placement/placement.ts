@@ -3,8 +3,7 @@ import { AppAdWidget } from 'game-jolt-frontend-lib/components/ad/widget/widget'
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Screen } from '../../screen/screen-service';
-import { Ads } from '../ads.service';
-import { AdSlotPos, AdSlotPosValidator } from '../slot';
+import { Ads, AdSlotPos, AdSlotPosValidator } from '../ads.service';
 
 @View
 @Component({

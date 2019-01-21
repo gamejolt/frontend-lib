@@ -1,16 +1,15 @@
+import View from '!view!./follow-widget.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import View from '!view!./follow-widget.html';
-
-import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
-import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
-import { AppTooltip } from '../../tooltip/tooltip';
 import { number } from '../../../vue/filters/number';
-import { User } from '../user.model';
 import { AppStore } from '../../../vue/services/app/app-store';
+import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
+import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
 import { Growls } from '../../growls/growls.service';
 import { findTooltipContainer } from '../../tooltip/container/container';
+import { AppTooltip } from '../../tooltip/tooltip';
+import { User } from '../user.model';
 
 @View
 @Component({
@@ -21,17 +20,35 @@ import { findTooltipContainer } from '../../tooltip/container/container';
 	},
 })
 export class AppUserFollowWidget extends Vue {
-	@Prop(User) user!: User;
-	@Prop(Boolean) overlay?: boolean;
-	@Prop(Boolean) circle?: boolean;
-	@Prop(Boolean) block?: boolean;
-	@Prop(Boolean) sm?: boolean;
-	@Prop(Boolean) hideCount?: boolean;
-	@Prop(String) eventLabel?: string;
+	@Prop(User)
+	user!: User;
 
-	@State app!: AppStore;
+	@Prop(Boolean)
+	overlay?: boolean;
+
+	@Prop(Boolean)
+	circle?: boolean;
+
+	@Prop(Boolean)
+	block?: boolean;
+
+	@Prop(Boolean)
+	sm?: boolean;
+
+	@Prop(Boolean)
+	hideCount?: boolean;
+
+	@Prop(String)
+	eventLabel?: string;
+
+	@State
+	app!: AppStore;
 
 	isProcessing = false;
+
+	get shouldShow() {
+		return !this.app.user || this.app.user.id !== this.user.id;
+	}
 
 	get badge() {
 		return !this.circle && !this.hideCount && this.user.follower_count

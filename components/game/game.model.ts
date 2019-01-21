@@ -8,7 +8,6 @@ import { Site } from '../site/site-model';
 import { Theme } from '../theme/theme.model';
 import { User } from '../user/user.model';
 import { GameBuild } from './build/build.model';
-import { GameCollaborator } from './collaborator/collaborator.model';
 import { GamePackage } from './package/package.model';
 
 export interface CustomMessage {
@@ -483,19 +482,6 @@ export class Game extends Model {
 			'/web/dash/developer/games/set-canceled/' + this.id + '/' + (isCanceled ? '1' : '0'),
 			'game'
 		);
-	}
-
-	async $inviteCollaborator(username: string, role: typeof GameCollaborator.prototype.role) {
-		const response = await Api.sendRequest(
-			'/web/dash/developer/games/collaborators/invite/' + this.id,
-			{
-				username,
-				role,
-			}
-		);
-
-		await GameCollaborator.processCreate(response, 'collaborator');
-		return new GameCollaborator(response.collaborator);
 	}
 
 	$remove() {

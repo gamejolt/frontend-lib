@@ -518,9 +518,9 @@ async function getPayload(
 	// Make a default resolver that returned void if there is none set.
 	const resolverFunc = resolverOptions.resolver || (() => Promise.resolve());
 
-	function resolveStore(route: Route, payload: any, fromCache: boolean) {
+	function resolveStore(route_: Route, payload: any, fromCache: boolean) {
 		if (resolverOptions.resolveStore) {
-			const ret = resolverOptions.resolveStore({ route, payload, fromCache });
+			const ret = resolverOptions.resolveStore({ route: route_, payload, fromCache });
 			if ((ret as any) instanceof Promise) {
 				throw new Error(`resolveStore function can't be async.`);
 			}
