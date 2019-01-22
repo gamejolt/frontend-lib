@@ -156,7 +156,15 @@ export class User extends Model {
 		++this.follower_count;
 
 		try {
-			return await Api.sendRequest('/web/profile/follow/' + this.id, {}, { detach: true });
+			return await Api.sendRequest(
+				'/web/profile/follow/' + this.id,
+				{
+					data: {
+						timestamp: Date.now(),
+					},
+				},
+				{ detach: true }
+			);
 		} catch (e) {
 			this.is_following = false;
 			--this.follower_count;
@@ -169,7 +177,15 @@ export class User extends Model {
 		--this.follower_count;
 
 		try {
-			return await Api.sendRequest('/web/profile/unfollow/' + this.id, {}, { detach: true });
+			return await Api.sendRequest(
+				'/web/profile/unfollow/' + this.id,
+				{
+					data: {
+						timestamp: Date.now(),
+					},
+				},
+				{ detach: true }
+			);
 		} catch (e) {
 			this.is_following = true;
 			++this.follower_count;

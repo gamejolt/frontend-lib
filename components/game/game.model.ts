@@ -394,6 +394,7 @@ export class Game extends Model {
 				'/web/library/games/add/followed',
 				{
 					game_id: this.id,
+					timestamp: Date.now(),
 				},
 				{
 					detach: true,
@@ -411,7 +412,11 @@ export class Game extends Model {
 		--this.follower_count;
 
 		try {
-			return await this.$_remove('/web/library/games/remove/followed/' + this.id);
+			return await this.$_remove('/web/library/games/remove/followed/' + this.id, {
+				data: {
+					timestamp: Date.now(),
+				},
+			});
 		} catch (e) {
 			this.is_following = true;
 			++this.follower_count;

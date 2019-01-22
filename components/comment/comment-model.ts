@@ -81,7 +81,6 @@ export class Comment extends Model {
 	subscription?: Subscription;
 	is_pinned!: boolean;
 
-	isVotePending = false;
 	isFollowPending = false;
 
 	get permalink() {
@@ -132,10 +131,9 @@ export class Comment extends Model {
 
 	async $vote(vote: number) {
 		// Don't do anything if they are setting the same vote.
-		if (this.isVotePending || (this.user_vote && this.user_vote.vote === vote)) {
+		if (this.user_vote && this.user_vote.vote === vote) {
 			return;
 		}
-		this.isVotePending = true;
 
 		const newVote = new CommentVote({ comment_id: this.id, vote });
 
@@ -162,15 +160,12 @@ export class Comment extends Model {
 			this.user_vote = previousVote;
 			Growls.error(`Can't do that now. Try again later?`);
 		}
-
-		this.isVotePending = false;
 	}
 
 	async $removeVote() {
-		if (!this.user_vote || this.isVotePending) {
+		if (!this.user_vote) {
 			return;
 		}
-		this.isVotePending = true;
 
 		const previousVote = this.user_vote;
 
@@ -187,8 +182,6 @@ export class Comment extends Model {
 			++this.votes;
 			Growls.error(`Can't do that now. Try again later?`);
 		}
-
-		this.isVotePending = false;
 	}
 
 	async $follow() {

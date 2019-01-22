@@ -14,6 +14,10 @@ export class GameRating extends Model {
 		return this.$_save('/web/discover/games/ratings/save/' + this.game_id, 'gameRating', {
 			detach: true,
 			ignoreLoadingBar: true,
+			data: {
+				rating: this.rating,
+				timestamp: Date.now(),
+			},
 		});
 	}
 
@@ -23,6 +27,9 @@ export class GameRating extends Model {
 		return this.$_remove('/web/discover/games/ratings/clear/' + this.game_id, {
 			detach: true,
 			ignoreLoadingBar: true,
+			data: {
+				timestamp: Date.now(),
+			},
 		});
 	}
 }

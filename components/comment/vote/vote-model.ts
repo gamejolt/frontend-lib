@@ -16,14 +16,20 @@ export class CommentVote extends Model {
 			{
 				detach: true,
 				ignorePayloadUser: true,
+				data: {
+					timestamp: Date.now(),
+				},
 			}
 		);
 	}
 
 	$remove() {
-		return this.$_remove('/comments/votes/remove/' + this.id, {
+		return this.$_remove('/comments/votes/remove/' + this.comment_id, {
 			detach: true,
 			ignorePayloadUser: true,
+			data: {
+				timestamp: Date.now(),
+			},
 		});
 	}
 }

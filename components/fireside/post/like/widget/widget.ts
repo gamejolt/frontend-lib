@@ -20,14 +20,15 @@ import { FiresidePostLike } from '../like-model';
 export class AppFiresidePostLikeWidget extends Vue {
 	@Prop(FiresidePost)
 	post!: FiresidePost;
+
 	@Prop(Boolean)
 	overlay?: boolean;
+
 	@Prop(Boolean)
 	circle?: boolean;
+
 	@Prop(Boolean)
 	block?: boolean;
-
-	isProcessing = false;
 
 	// We also show circle in xs size.
 	get isCircle() {
@@ -56,12 +57,6 @@ export class AppFiresidePostLikeWidget extends Vue {
 	}
 
 	async toggleLike() {
-		if (this.isProcessing) {
-			return;
-		}
-
-		this.isProcessing = true;
-
 		const currentLike = this.post.user_like;
 		if (!currentLike) {
 			const newLike = new FiresidePostLike({
@@ -90,8 +85,6 @@ export class AppFiresidePostLikeWidget extends Vue {
 				Growls.error(`Can't do that now. Try again later?`);
 			}
 		}
-
-		this.isProcessing = false;
 	}
 
 	showLikers() {

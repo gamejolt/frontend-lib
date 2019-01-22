@@ -68,8 +68,10 @@ export class Model {
 	 * Will pull in the new values for the model as well as handling the error response.
 	 */
 	processUpdate(response: any, field: string): Promise<any> {
-		if (response.success && response[field]) {
-			this.assign(response[field]);
+		if (response.success) {
+			if (response[field] && !response.noop) {
+				this.assign(response[field]);
+			}
 			return Promise.resolve(response);
 		}
 		return Promise.reject(response);
@@ -81,7 +83,9 @@ export class Model {
 	 */
 	processRemove(response: any): Promise<any> {
 		if (response.success) {
-			this._removed = true;
+			if (!response.noop) {
+				this._removed = true;
+			}
 			return Promise.resolve(response);
 		}
 		return Promise.reject(response);
@@ -97,9 +101,13 @@ export class Model {
 		return this.processUpdate(response, field);
 	}
 
-	async $_remove(url: string, options?: RequestOptions): Promise<any> {
+	async $_remove(url: string, options?: ModelSaveRequestOptions): Promise<any> {
 		// Always force a POST (passing in an object).
-		const response = await Api.sendRequest(url, {}, options);
+		const response = await Api.sendRequest(
+			url,
+			options && options.data ? options.data : {},
+			options
+		);
 		return this.processRemove(response);
 	}
 }
