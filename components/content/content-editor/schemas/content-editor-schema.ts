@@ -1,6 +1,7 @@
 import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-nodespec';
 import { blockquote } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/blockquote-nodespec';
 import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/embed-nodespec';
+import { mediaUpload } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/media-upload-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
@@ -25,6 +26,7 @@ function generateNodes(capabilities: ContextCapabilities) {
 		paragraph,
 		hardBreak,
 		gjEmoji,
+		mediaUpload, // TODO: move
 		doc: {
 			content: 'block* paragraph',
 		},
