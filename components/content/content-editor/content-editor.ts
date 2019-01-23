@@ -4,6 +4,7 @@ import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/conten
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
 import { MediaItemNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-item';
 import { MediaUploadNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-upload';
+import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/paste-event-handler';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
 import { baseKeymap } from 'prosemirror-commands';
 import { history } from 'prosemirror-history';
@@ -145,6 +146,9 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		this.view = new EditorView(this.$refs.doc, {
 			state: this.state,
 			nodeViews,
+			handleDOMEvents: {
+				paste: pasteEventHandler,
+			},
 		});
 
 		// Observe any resize events so the editor controls can be repositioned correctly

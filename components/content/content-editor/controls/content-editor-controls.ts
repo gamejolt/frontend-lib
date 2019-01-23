@@ -73,14 +73,7 @@ export class AppContentEditorControls extends Vue {
 	}
 
 	private insertNewNode(newNode: Node) {
-		const tr = this.view.state.tr;
-		const selection = this.view.state.selection;
-		const from = selection.from;
-
-		tr.insert(from - 1, newNode);
-
-		this.view.focus();
-		this.view.dispatch(tr);
+		ContentEditorService.insertNode(this.view, newNode);
 
 		this.collapsed = true;
 	}

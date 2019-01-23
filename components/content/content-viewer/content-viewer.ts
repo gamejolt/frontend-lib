@@ -3,8 +3,8 @@ import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-
 import { AppContentViewerBaseComponent } from 'game-jolt-frontend-lib/components/content/content-viewer/components/base-component';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { GJContentFormat, GJContentObject } from '../adapter/definitions';
-import { ContentContext, ContextCapabilities } from '../content-context';
+import { GJContentFormat } from '../adapter/definitions';
+import { ContextCapabilities } from '../content-context';
 import { ContentHydrator } from '../content-hydrator';
 
 @View
@@ -17,18 +17,22 @@ export class AppContentViewer extends Vue implements ContentOwner {
 	@Prop(String)
 	source!: string;
 
-	@Prop(String)
-	contentContext!: ContentContext;
-
-	content: GJContentObject[] = [];
+	data: GJContentFormat | null = null;
 	hydrator: ContentHydrator = new ContentHydrator();
 
 	get owner() {
 		return this;
 	}
 
+	get shouldShowContent() {
+		return !!this.data;
+	}
+
 	getCapabilities() {
-		return ContextCapabilities.getForContext(this.contentContext);
+		if (this.data) {
+			return ContextCapabilities.getForContext(this.data.context);
+		}
+		return ContextCapabilities.getEmpty();
 	}
 
 	getHydrator() {
@@ -39,10 +43,10 @@ export class AppContentViewer extends Vue implements ContentOwner {
 	updatedSource() {
 		if (this.source) {
 			const sourceObj = JSON.parse(this.source) as GJContentFormat;
-			this.content = sourceObj.content;
+			this.data = sourceObj;
 			this.hydrator = new ContentHydrator(sourceObj.hydration);
 		} else {
-			this.content = [];
+			this.data = {} as GJContentFormat;
 			this.hydrator = new ContentHydrator();
 		}
 	}

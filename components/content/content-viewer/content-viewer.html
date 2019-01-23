@@ -4,7 +4,8 @@
 	<hr>
 
 	<app-content-viewer-base-component
-		:content="content"
+		v-if="shouldShowContent"
+		:content="data.content"
 		:owner="owner"
 		/>
 </div>

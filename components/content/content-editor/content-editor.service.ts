@@ -1,7 +1,19 @@
 import { Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
+import { EditorView } from 'prosemirror-view';
 
 export class ContentEditorService {
+	public static insertNode(view: EditorView, newNode: Node) {
+		const tr = view.state.tr;
+		const selection = view.state.selection;
+		const from = selection.from;
+
+		tr.insert(from - 1, newNode);
+
+		view.focus();
+		view.dispatch(tr);
+	}
+
 	public static getSelectedNode(state: EditorState) {
 		let selFrom = state.selection.from;
 		let node = state.doc.nodeAt(selFrom);
