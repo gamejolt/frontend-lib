@@ -11,7 +11,10 @@ export type GJContentObjectType =
 	| 'blockquote'
 	| 'hardBreak'
 	| 'embed'
-	| 'mediaItem';
+	| 'mediaItem'
+	| 'orderedList'
+	| 'bulletList'
+	| 'listItem';
 
 export type GJContentFormat = {
 	version: string;

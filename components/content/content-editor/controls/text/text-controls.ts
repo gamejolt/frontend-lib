@@ -4,6 +4,7 @@ import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { toggleMark } from 'prosemirror-commands';
 import { MarkType } from 'prosemirror-model';
+import { wrapInList } from 'prosemirror-schema-list';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
@@ -104,5 +105,17 @@ export class AppContentEditorTextControls extends Vue {
 				title: result.title,
 			});
 		}
+	}
+
+	onClickBulletList() {
+		const listType = this.view.state.schema.nodes.bulletList;
+		const wrapFunc = wrapInList(listType);
+		wrapFunc(this.view.state, this.view.dispatch);
+	}
+
+	onClickOrderedList() {
+		const listType = this.view.state.schema.nodes.orderedList;
+		const wrapFunc = wrapInList(listType);
+		wrapFunc(this.view.state, this.view.dispatch);
 	}
 }

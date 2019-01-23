@@ -5,10 +5,13 @@ import { mediaUpload } from 'game-jolt-frontend-lib/components/content/content-e
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
+import { bulletList } from './specs/nodes/bullet-list-nodespec';
 import { codeBlock } from './specs/nodes/code-block-nodespec';
 import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
 import { hardBreak } from './specs/nodes/hard-bread-nodespec';
+import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
+import { orderedList } from './specs/nodes/oredered-list-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
 
 export function generateSchema(capabilities: ContextCapabilities) {
@@ -25,15 +28,17 @@ function generateNodes(capabilities: ContextCapabilities) {
 		},
 		paragraph,
 		hardBreak,
-		gjEmoji,
-		mediaUpload, // TODO: move
 		doc: {
-			content: 'block* paragraph',
+			content: 'block* (paragraph | bulletList | orderedList)',
 		},
 	} as any;
 
+	if (capabilities.gjEmoji) {
+		nodes.gjEmoji = gjEmoji;
+	}
 	if (capabilities.media) {
 		nodes.mediaItem = mediaItem;
+		nodes.mediaUpload = mediaUpload;
 	}
 	if (capabilities.embedMusic || capabilities.embedVideo) {
 		nodes.embed = embed;
@@ -43,6 +48,11 @@ function generateNodes(capabilities: ContextCapabilities) {
 	}
 	if (capabilities.blockquote) {
 		nodes.blockquote = blockquote;
+	}
+	if (capabilities.lists) {
+		nodes.listItem = listItem;
+		nodes.bulletList = bulletList;
+		nodes.orderedList = orderedList;
 	}
 
 	return nodes;

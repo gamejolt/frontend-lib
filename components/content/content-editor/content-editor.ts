@@ -67,7 +67,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	get shouldShowEmojiControls() {
-		return this.emojiPanelVisible;
+		return this.capabilities.gjEmoji && this.emojiPanelVisible;
 	}
 
 	// DEBUG

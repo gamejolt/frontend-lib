@@ -48,5 +48,21 @@
 			@click="onClickLink"
 			v-app-tooltip="$gettext('Link')"
 			/>
+		<app-button
+			v-if="capabilities.lists"
+			circle
+			icon="heart"
+			solid
+			@click="onClickBulletList"
+			v-app-tooltip="$gettext('Unordered List')"
+			/>
+		<app-button
+			v-if="capabilities.lists"
+			circle
+			icon="heart"
+			solid
+			@click="onClickOrderedList"
+			v-app-tooltip="$gettext('Ordered List')"
+			/>
 	</div>
 </div>

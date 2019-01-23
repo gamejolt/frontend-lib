@@ -17,7 +17,9 @@ type ContextCapabilityType =
 	| 'embed-music'
 	| 'embed-game'
 	| 'code-block'
-	| 'blockquote';
+	| 'blockquote'
+	| 'gj-emoji'
+	| 'lists';
 
 export class ContextCapabilities {
 	public capabilities: ContextCapabilityType[];
@@ -66,6 +68,12 @@ export class ContextCapabilities {
 	get blockquote() {
 		return this.hasCapability('blockquote');
 	}
+	get gjEmoji() {
+		return this.hasCapability('gj-emoji');
+	}
+	get lists() {
+		return this.hasCapability('lists');
+	}
 
 	private constructor(capabilities: ContextCapabilityType[]) {
 		this.capabilities = capabilities;
@@ -82,7 +90,7 @@ export class ContextCapabilities {
 	public static getForContext(context: ContentContext) {
 		switch (context) {
 			case 'fireside-post-lead':
-				return new ContextCapabilities(['text-bold', 'text-italics']);
+				return new ContextCapabilities(['text-bold', 'text-italics', 'gj-emoji']);
 			case 'fireside-post-article':
 				return new ContextCapabilities([
 					'text-bold',
@@ -96,6 +104,8 @@ export class ContextCapabilities {
 					'embed-game',
 					'code-block',
 					'blockquote',
+					'gj-emoji',
+					'lists',
 				]);
 		}
 		throw new Error('Context capabilities undefined for context ' + context);
