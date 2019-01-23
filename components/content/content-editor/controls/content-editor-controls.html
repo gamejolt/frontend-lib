@@ -38,6 +38,13 @@
 				@click="onClickBlockquote"
 				v-app-tooltip="$gettext('Add Quote')"
 				/>
+			<app-button
+				v-if="capabilities.hr"
+				circle
+				icon="heart"
+				@click="onClickHr"
+				v-app-tooltip="$gettext('Add Horizontal Rule')"
+				/>
 			<span class="dot-separator"></span>
 		</template>
 		<app-button

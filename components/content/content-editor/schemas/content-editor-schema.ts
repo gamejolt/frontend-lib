@@ -11,6 +11,7 @@ import { bulletList } from './specs/nodes/bullet-list-nodespec';
 import { codeBlock } from './specs/nodes/code-block-nodespec';
 import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
 import { hardBreak } from './specs/nodes/hard-bread-nodespec';
+import { hr } from './specs/nodes/hr-nodespec';
 import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
@@ -58,6 +59,9 @@ function generateNodes(capabilities: ContextCapabilities) {
 		nodes.orderedList = orderedList;
 
 		allowedDocNodes.push('bulletList', 'orderedList');
+	}
+	if (capabilities.hr) {
+		nodes.hr = hr;
 	}
 
 	if (allowedDocNodes.length > 0) {

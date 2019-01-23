@@ -79,24 +79,29 @@ export class AppContentEditorControls extends Vue {
 	}
 
 	onClickMedia() {
-		const newNode = this.view.state.schema.nodes.mediaItem.create({
+		const newNode = (this.view.state.schema.nodes.mediaItem as NodeType).create({
 			id: 61,
-		}) as Node;
+		});
 		this.insertNewNode(newNode);
 	}
 
 	onClickEmbed() {
-		const newNode = (this.view.state.schema.nodes.embed as NodeType).create() as Node;
+		const newNode = (this.view.state.schema.nodes.embed as NodeType).create();
 		this.insertNewNode(newNode);
 	}
 
 	onClickCodeBlock() {
-		const newNode = this.view.state.schema.nodes.codeBlock.create() as Node;
+		const newNode = (this.view.state.schema.nodes.codeBlock as NodeType).create();
 		this.insertNewNode(newNode);
 	}
 
 	onClickBlockquote() {
-		const newNode = this.view.state.schema.nodes.blockquote.create() as Node;
+		const newNode = (this.view.state.schema.nodes.blockquote as NodeType).create();
+		this.insertNewNode(newNode);
+	}
+
+	onClickHr() {
+		const newNode = (this.view.state.schema.nodes.hr as NodeType).create();
 		this.insertNewNode(newNode);
 	}
 }

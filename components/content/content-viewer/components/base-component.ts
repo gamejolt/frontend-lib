@@ -9,6 +9,7 @@ import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { AppContentViewerHardBreak } from './br';
 import { AppContentViewerEmbed } from './embed';
+import { AppContentViewerHorizontalRule } from './hr';
 import { AppContentViewerList } from './list';
 import { AppContentViewerListItem } from './list-item';
 import { AppContentViewerMediaItem } from './media-item';
@@ -36,6 +37,8 @@ function getComponentType(data: GJContentObject): any {
 			return AppContentViewerList;
 		case 'listItem':
 			return AppContentViewerListItem;
+		case 'hr':
+			return AppContentViewerHorizontalRule;
 	}
 }
 
