@@ -1,7 +1,9 @@
+import { GJContentObjectType } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
 import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-nodespec';
 import { blockquote } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/blockquote-nodespec';
 import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/embed-nodespec';
 import { mediaUpload } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/media-upload-nodespec';
+import { orderedList } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/ordered-list-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
@@ -11,7 +13,6 @@ import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
 import { hardBreak } from './specs/nodes/hard-bread-nodespec';
 import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
-import { orderedList } from './specs/nodes/oredered-list-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
 
 export function generateSchema(capabilities: ContextCapabilities) {
@@ -29,9 +30,11 @@ function generateNodes(capabilities: ContextCapabilities) {
 		paragraph,
 		hardBreak,
 		doc: {
-			content: 'block* (paragraph | bulletList | orderedList)',
+			content: 'block*',
 		},
 	} as any;
+
+	const allowedDocNodes = ['paragraph'] as GJContentObjectType[];
 
 	if (capabilities.gjEmoji) {
 		nodes.gjEmoji = gjEmoji;
@@ -53,6 +56,12 @@ function generateNodes(capabilities: ContextCapabilities) {
 		nodes.listItem = listItem;
 		nodes.bulletList = bulletList;
 		nodes.orderedList = orderedList;
+
+		allowedDocNodes.push('bulletList', 'orderedList');
+	}
+
+	if (allowedDocNodes.length > 0) {
+		nodes.doc.content += ' (' + allowedDocNodes.join(' | ') + ')';
 	}
 
 	return nodes;
