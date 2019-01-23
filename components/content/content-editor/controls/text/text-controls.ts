@@ -8,6 +8,7 @@ import { wrapInList } from 'prosemirror-schema-list';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { MouseState } from '../../../../../utils/mouse';
 import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
 
 @View
@@ -28,11 +29,15 @@ export class AppContentEditorTextControls extends Vue {
 	left = '0px';
 	bottom = '0px';
 
+	isShowingOnMouseUp = false;
+	mouse: MouseState | null = null;
+
 	$refs!: {
 		container: HTMLElement;
 	};
 
 	mounted() {
+		this.mouse = new MouseState();
 		this.update();
 	}
 
@@ -52,20 +57,23 @@ export class AppContentEditorTextControls extends Vue {
 
 					// Make sure that marks can be applied to the parent of this text
 					if (parent && parent.type.spec.marks !== '') {
-						this.visible = true;
-						// Wait here so the buttons don't jump into place weirdly.
-						await Vue.nextTick();
+						// When the controls are already visible, just adjust their position
+						// This also applies for when we are waiting for the mouse button to be released
 
-						const { from, to } = state.selection;
-						const start = this.view.coordsAtPos(from);
-						const end = this.view.coordsAtPos(to);
-						const box = this.$refs.container.offsetParent.getBoundingClientRect();
+						// When the mouse button is down and the controls aren't showing, we want to wait before
+						// showing them. Otherwise, when moving the selection upwards, the controls can get in the way
+						if (this.visible || this.isShowingOnMouseUp) {
+							this.setPosition();
+							return;
+						}
 
-						const left =
-							Math.max((start.left + end.left) / 2, start.left + 3) -
-							this.$refs.container.clientWidth / 2;
-						this.left = left - box.left + 'px';
-						this.bottom = box.bottom - start.top + 4 + 'px';
+						if (this.mouse!.isButtonDown('left')) {
+							document.addEventListener('mouseup', this.mouseUpHandler);
+							this.isShowingOnMouseUp = true;
+						} else {
+							this.show();
+						}
+
 						return;
 					}
 				}
@@ -73,6 +81,35 @@ export class AppContentEditorTextControls extends Vue {
 		}
 
 		this.visible = false;
+	}
+
+	private mouseUpHandler(e: MouseEvent) {
+		if (e.button === 0) {
+			document.removeEventListener('mouseup', this.mouseUpHandler);
+			this.isShowingOnMouseUp = false;
+			this.show();
+		}
+	}
+
+	private async show() {
+		this.visible = true;
+		// Wait here so the buttons don't jump into place weirdly.
+		await Vue.nextTick();
+
+		this.setPosition();
+	}
+
+	private setPosition() {
+		const { from, to } = this.view.state.selection;
+		const start = this.view.coordsAtPos(from);
+		const end = this.view.coordsAtPos(to);
+		const box = this.$refs.container.offsetParent.getBoundingClientRect();
+
+		const left =
+			Math.max((start.left + end.left) / 2, start.left + 3) -
+			this.$refs.container.clientWidth / 2;
+		this.left = left - box.left + 'px';
+		this.bottom = box.bottom - start.top + 4 + 'px';
 	}
 
 	private dispatchMark(mark: MarkType, attrs?: { [key: string]: any }) {
