@@ -3,6 +3,7 @@ import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-
 import { renderChildren } from 'game-jolt-frontend-lib/components/content/content-viewer/components/base-component';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import './code.css';
 
 @Component({})
 export class AppContentViewerCodeBlock extends Vue {
@@ -12,6 +13,10 @@ export class AppContentViewerCodeBlock extends Vue {
 	owner!: ContentOwner;
 
 	render(h: CreateElement) {
-		return h('pre', renderChildren(h, this.owner, this.data.content));
+		return h(
+			'pre',
+			{ class: 'content-viewer-code-block' },
+			renderChildren(h, this.owner, this.data.content)
+		);
 	}
 }
