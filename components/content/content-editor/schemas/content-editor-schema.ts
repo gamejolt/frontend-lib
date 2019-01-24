@@ -1,9 +1,10 @@
 import { GJContentObjectType } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
-import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-nodespec';
+import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-markspec';
 import { blockquote } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/blockquote-nodespec';
 import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/embed-nodespec';
 import { mediaUpload } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/media-upload-nodespec';
 import { orderedList } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/ordered-list-nodespec';
+import { spoiler } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/spoiler-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
@@ -62,6 +63,11 @@ function generateNodes(capabilities: ContextCapabilities) {
 	}
 	if (capabilities.hr) {
 		nodes.hr = hr;
+	}
+	if (capabilities.spoiler) {
+		nodes.spoiler = spoiler;
+
+		allowedDocNodes.push('spoiler');
 	}
 
 	if (allowedDocNodes.length > 0) {

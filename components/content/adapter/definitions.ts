@@ -14,7 +14,8 @@ export type GJContentObjectType =
 	| 'mediaItem'
 	| 'orderedList'
 	| 'bulletList'
-	| 'listItem';
+	| 'listItem'
+	| 'spoiler';
 
 export type GJContentFormat = {
 	version: string;

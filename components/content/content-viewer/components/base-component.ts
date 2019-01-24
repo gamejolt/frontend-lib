@@ -13,6 +13,7 @@ import { AppContentViewerHorizontalRule } from './hr';
 import { AppContentViewerList } from './list';
 import { AppContentViewerListItem } from './list-item';
 import { AppContentViewerMediaItem } from './media-item';
+import { AppContentViewerSpoiler } from './spoiler';
 
 function getComponentType(data: GJContentObject): any {
 	switch (data.type) {
@@ -39,6 +40,8 @@ function getComponentType(data: GJContentObject): any {
 			return AppContentViewerListItem;
 		case 'hr':
 			return AppContentViewerHorizontalRule;
+		case 'spoiler':
+			return AppContentViewerSpoiler;
 	}
 }
 

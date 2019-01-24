@@ -2,8 +2,8 @@ import View from '!view!./text-controls.html?style=./text-controls.styl';
 import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
-import { toggleMark } from 'prosemirror-commands';
-import { Mark, MarkType, NodeType } from 'prosemirror-model';
+import { lift, toggleMark, wrapIn } from 'prosemirror-commands';
+import { Mark, MarkType, Node, NodeType } from 'prosemirror-model';
 import { liftListItem, wrapInList } from 'prosemirror-schema-list';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
@@ -36,6 +36,7 @@ export class AppContentEditorTextControls extends Vue {
 	selectionMarks: Mark[] = [];
 	canLiftListItems = false;
 	canWrapInLists = false;
+	isInSpoiler = false;
 
 	$refs!: {
 		container: HTMLElement;
@@ -70,6 +71,7 @@ export class AppContentEditorTextControls extends Vue {
 						this.canWrapInLists = this.testWrapInList(
 							this.view.state.schema.nodes.bulletList
 						);
+						this.isInSpoiler = this.testIsInSpoiler(node);
 
 						// When the controls are already visible, just adjust their position
 						// This also applies for when we are waiting for the mouse button to be released
@@ -173,19 +175,20 @@ export class AppContentEditorTextControls extends Vue {
 
 	doWrapInList(listType: NodeType) {
 		wrapInList(listType)(this.view.state, this.view.dispatch);
+		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
 	}
 
 	testLiftListItems() {
 		return liftListItem(this.view.state.schema.nodes.listItem)(this.view.state);
 	}
 
-	doListListItems() {
+	doLiftListItems() {
 		liftListItem(this.view.state.schema.nodes.listItem)(this.view.state, this.view.dispatch);
 	}
 
 	onClickBulletList() {
 		if (this.testLiftListItems()) {
-			this.doListListItems();
+			this.doLiftListItems();
 		} else {
 			this.doWrapInList(this.view.state.schema.nodes.bulletList);
 		}
@@ -193,9 +196,39 @@ export class AppContentEditorTextControls extends Vue {
 
 	onClickOrderedList() {
 		if (this.testLiftListItems()) {
-			this.doListListItems();
+			this.doLiftListItems();
 		} else {
 			this.doWrapInList(this.view.state.schema.nodes.orderedList);
+		}
+	}
+
+	testWrapSpoiler() {
+		return wrapIn(this.view.state.schema.nodes.spoiler)(this.view.state);
+	}
+
+	doWrapInSpoiler() {
+		wrapIn(this.view.state.schema.nodes.spoiler)(this.view.state, this.view.dispatch);
+	}
+
+	testIsInSpoiler(node: Node) {
+		return ContentEditorService.isContainedInNode(
+			this.view.state,
+			node,
+			this.view.state.schema.nodes.spoiler
+		);
+	}
+
+	onClickSpoiler() {
+		if (this.isInSpoiler) {
+			const node = ContentEditorService.getSelectedNode(this.view.state);
+			if (node !== null) {
+				while (this.testIsInSpoiler(node)) {
+					lift(this.view.state, this.view.dispatch);
+				}
+			}
+		} else {
+			this.doWrapInSpoiler();
+			ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
 		}
 	}
 }

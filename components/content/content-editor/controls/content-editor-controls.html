@@ -6,55 +6,59 @@
 		'right': this.right,
 	}"
 	>
-	<div v-if="visible">
-		<template
-			v-if="!this.collapsed"
-			>
+	<transition name="fade">
+		<div v-if="visible">
+			<transition name="fade">
+				<span
+					v-if="!this.collapsed"
+					>
+					<app-button
+						v-if="capabilities.media"
+						circle
+						icon="screenshot"
+						@click="onClickMedia"
+						v-app-tooltip="$gettext('Upload Media')"
+						/>
+					<app-button
+						v-if="capabilities.hasAnyEmbed"
+						circle
+						icon="heart"
+						@click="onClickEmbed"
+						v-app-tooltip="$gettext('Embed Content')"
+						/>
+					<app-button
+						v-if="capabilities.codeBlock"
+						circle
+						icon="brackets"
+						@click="onClickCodeBlock"
+						v-app-tooltip="$gettext('Add Code Block')"
+						/>
+					<app-button
+						v-if="capabilities.blockquote"
+						circle
+						icon="heart"
+						@click="onClickBlockquote"
+						v-app-tooltip="$gettext('Add Quote')"
+						/>
+					<app-button
+						v-if="capabilities.hr"
+						circle
+						icon="heart"
+						@click="onClickHr"
+						v-app-tooltip="$gettext('Add Horizontal Rule')"
+						/>
+					<span class="dot-separator"></span>
+				</span>
+			</transition>
 			<app-button
-				v-if="capabilities.media"
+				class="-add-button"
+				:class="{
+					'-add-button-rotated': !collapsed
+				}"
 				circle
-				icon="screenshot"
-				@click="onClickMedia"
-				v-app-tooltip="$gettext('Upload Media')"
+				:icon="'add'"
+				@click="onClickExpand"
 				/>
-			<app-button
-				v-if="capabilities.hasAnyEmbed"
-				circle
-				icon="heart"
-				@click="onClickEmbed"
-				v-app-tooltip="$gettext('Embed Content')"
-				/>
-			<app-button
-				v-if="capabilities.codeBlock"
-				circle
-				icon="brackets"
-				@click="onClickCodeBlock"
-				v-app-tooltip="$gettext('Add Code Block')"
-				/>
-			<app-button
-				v-if="capabilities.blockquote"
-				circle
-				icon="heart"
-				@click="onClickBlockquote"
-				v-app-tooltip="$gettext('Add Quote')"
-				/>
-			<app-button
-				v-if="capabilities.hr"
-				circle
-				icon="heart"
-				@click="onClickHr"
-				v-app-tooltip="$gettext('Add Horizontal Rule')"
-				/>
-			<span class="dot-separator"></span>
-		</template>
-		<app-button
-			class="-add-button"
-			:class="{
-				'-add-button-rotated': !collapsed
-			}"
-			circle
-			:icon="'add'"
-			@click="onClickExpand"
-			/>
-	</div>
+		</div>
+	</transition>
 </div>

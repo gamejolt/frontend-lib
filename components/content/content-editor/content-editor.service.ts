@@ -1,14 +1,28 @@
-import { Mark, Node } from 'prosemirror-model';
+import { Mark, Node, NodeType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
 export class ContentEditorService {
+	/**
+	 * Ensures that the last node in the editor doc is a specific node.
+	 */
+	public static ensureEndNode(view: EditorView, nodeType: NodeType) {
+		if (view.state.doc.lastChild && view.state.doc.lastChild.type.name !== nodeType.name) {
+			const newNode = nodeType.create();
+			this.insertNodeAt(view, newNode, view.state.doc.nodeSize - 2);
+		}
+	}
+
 	public static insertNode(view: EditorView, newNode: Node) {
-		const tr = view.state.tr;
 		const selection = view.state.selection;
 		const from = selection.from;
+		this.insertNodeAt(view, newNode, from - 1);
+	}
 
-		tr.insert(from - 1, newNode);
+	public static insertNodeAt(view: EditorView, newNode: Node, pos: number) {
+		const tr = view.state.tr;
+
+		tr.insert(pos, newNode);
 
 		view.focus();
 		view.dispatch(tr);
@@ -64,5 +78,23 @@ export class ContentEditorService {
 			}
 		);
 		return markTypes;
+	}
+
+	/**
+	 * Returns whether the given node is contained in a node of the given type.
+	 */
+	public static isContainedInNode(state: EditorState, node: Node, nodeType: NodeType) {
+		let child = node;
+		let parent = this.getParentNode(state, node);
+		while (parent !== null) {
+			if (parent.type.name === nodeType.name) {
+				return true;
+			}
+
+			// Walk up
+			child = parent;
+			parent = this.getParentNode(state, child);
+		}
+		return false;
 	}
 }

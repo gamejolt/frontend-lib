@@ -61,7 +61,7 @@
 						icon="heart"
 						solid
 						primary
-						@click="doListListItems"
+						@click="doLiftListItems"
 						v-app-tooltip="$gettext('Lift from List')"
 						/>
 				</template>
@@ -82,6 +82,15 @@
 						/>
 				</template>
 			</template>
+			<app-button
+				v-if="capabilities.spoiler"
+				circle
+				icon="inactive"
+				:primary="isInSpoiler"
+				solid
+				@click="onClickSpoiler"
+				v-app-tooltip="$gettext('Spoiler')"
+				/>
 		</div>
 	</transition>
 </div>
