@@ -2,7 +2,6 @@ import {
 	GJContentFormat,
 	ProsemirrorEditorFormat,
 } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
-import { arrayRemove } from 'game-jolt-frontend-lib/utils/array';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { GJContentObject } from './definitions';
 
@@ -53,6 +52,27 @@ export class GJContentFormatAdapter {
 			} as GJContentObject);
 		}
 
+		// Remove nodes with types not allowed in the context
+		if (capabilities instanceof ContextCapabilities) {
+			data.content = data.content.filter(
+				i =>
+					!(
+						(i.type === 'mediaItem' && !capabilities.media) ||
+						(i.type === 'embed' && !capabilities.hasAnyEmbed) ||
+						(i.type === 'codeBlock' && !capabilities.codeBlock) ||
+						(i.type === 'blockquote' && !capabilities.blockquote) ||
+						(i.type === 'gjEmoji' && !capabilities.gjEmoji) ||
+						(i.type === 'spoiler' && !capabilities.spoiler) ||
+						(i.type === 'table' && !capabilities.table) ||
+						((i.type === 'orderedList' || i.type === 'bulletList') &&
+							!capabilities.lists)
+					)
+			);
+		}
+
+		// Remove certain empty nodes
+		data.content = data.content.filter(i => !this.isEmptyObj(i));
+
 		// Remove empty paragraphs from the beginning/end of the main node, except the last one
 		while (
 			data.content.length > 1 &&
@@ -69,20 +89,23 @@ export class GJContentFormatAdapter {
 			data.content.pop();
 		}
 
-		if (capabilities instanceof ContextCapabilities) {
-			arrayRemove(
-				data.content,
-				i =>
-					(i.type === 'mediaItem' && !capabilities.media) ||
-					(i.type === 'embed' && !capabilities.hasAnyEmbed) ||
-					(i.type === 'codeBlock' && !capabilities.codeBlock) ||
-					(i.type === 'blockquote' && !capabilities.blockquote) ||
-					(i.type === 'gjEmoji' && !capabilities.gjEmoji) ||
-					(i.type === 'spoiler' && !capabilities.spoiler) ||
-					((i.type === 'orderedList' || i.type === 'bulletList') && !capabilities.lists)
-			);
+		return data;
+	}
+
+	private static isEmptyObj(obj: GJContentObject): boolean {
+		if (obj.type === 'embed') {
+			return !obj.attrs.type || !obj.attrs.source;
 		}
 
-		return data;
+		if (obj.type === 'codeBlock' || obj.type === 'blockquote' || obj.type === 'spoiler') {
+			if (obj.content === null || obj.content === undefined || obj.content === []) {
+				return true;
+			}
+			if (obj.content.length === 1) {
+				return this.isEmptyObj(obj.content[0]);
+			}
+		}
+
+		return false;
 	}
 }
