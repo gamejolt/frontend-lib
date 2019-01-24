@@ -7,62 +7,81 @@
 	}"
 	>
 
-	<div v-if="visible">
-		<app-button
-			v-if="capabilities.textBold"
-			circle
-			icon="heart"
-			solid
-			@click="onClickBold"
-			v-app-tooltip="$gettext('Bold (Ctrl+B)')"
-			/>
-		<app-button
-			v-if="capabilities.textItalics"
-			circle
-			icon="heart"
-			solid
-			@click="onClickItalic"
-			v-app-tooltip="$gettext('Italic (Ctrl+I)')"
-			/>
-		<app-button
-			v-if="capabilities.textStrike"
-			circle
-			icon="heart"
-			solid
-			@click="onClickStrikethrough"
-			v-app-tooltip="$gettext('Strikethrough')"
-			/>
-		<app-button
-			v-if="capabilities.textCode"
-			circle
-			icon="brackets"
-			solid
-			@click="onClickCode"
-			v-app-tooltip="$gettext('Code (Ctrl+`)')"
-			/>
-		<app-button
-			v-if="capabilities.textLink"
-			circle
-			icon="link"
-			solid
-			@click="onClickLink"
-			v-app-tooltip="$gettext('Link')"
-			/>
-		<app-button
-			v-if="capabilities.lists"
-			circle
-			icon="heart"
-			solid
-			@click="onClickBulletList"
-			v-app-tooltip="$gettext('Unordered List')"
-			/>
-		<app-button
-			v-if="capabilities.lists"
-			circle
-			icon="heart"
-			solid
-			@click="onClickOrderedList"
-			v-app-tooltip="$gettext('Ordered List')"
-			/>
-	</div>
+	<transition name="fade">
+		<div v-if="visible">
+			<app-button
+				v-if="capabilities.textBold"
+				circle
+				icon="heart"
+				:primary="hasMark('strong')"
+				solid
+				@click="onClickBold"
+				v-app-tooltip="$gettext('Bold (Ctrl+B)')"
+				/>
+			<app-button
+				v-if="capabilities.textItalics"
+				circle
+				icon="heart"
+				:primary="hasMark('em')"
+				solid
+				@click="onClickItalic"
+				v-app-tooltip="$gettext('Italic (Ctrl+I)')"
+				/>
+			<app-button
+				v-if="capabilities.textStrike"
+				circle
+				icon="heart"
+				:primary="hasMark('strike')"
+				solid
+				@click="onClickStrikethrough"
+				v-app-tooltip="$gettext('Strikethrough')"
+				/>
+			<app-button
+				v-if="capabilities.textCode"
+				circle
+				icon="brackets"
+				:primary="hasMark('code')"
+				solid
+				@click="onClickCode"
+				v-app-tooltip="$gettext('Code (Ctrl+`)')"
+				/>
+			<app-button
+				v-if="capabilities.textLink"
+				circle
+				icon="link"
+				:primary="hasMark('link')"
+				solid
+				@click="onClickLink"
+				v-app-tooltip="$gettext('Link')"
+				/>
+			<template v-if="capabilities.lists">
+				<template v-if="canLiftListItems">
+					<app-button
+						circle
+						icon="heart"
+						solid
+						primary
+						@click="doListListItems"
+						v-app-tooltip="$gettext('Lift from List')"
+						/>
+				</template>
+				<template v-else-if="canWrapInLists">
+					<app-button
+						circle
+						icon="heart"
+						solid
+						@click="onClickBulletList"
+						v-app-tooltip="$gettext('Unordered List')"
+						/>
+					<app-button
+						circle
+						icon="heart"
+						solid
+						@click="onClickOrderedList"
+						v-app-tooltip="$gettext('Ordered List')"
+						/>
+				</template>
+			</template>
+		</div>
+	</transition>
 </div>

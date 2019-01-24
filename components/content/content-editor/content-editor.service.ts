@@ -1,4 +1,4 @@
-import { Node } from 'prosemirror-model';
+import { Mark, Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
@@ -45,5 +45,24 @@ export class ContentEditorService {
 
 	public static getParentNode(state: EditorState, child: Node) {
 		return this.findParentNode(state.doc, child);
+	}
+
+	/**
+	 * Returns a list of all applied to any node within the selection
+	 */
+	public static getSelectionMarks(state: EditorState) {
+		const markTypes: Mark[] = [];
+		state.doc.nodesBetween(
+			state.selection.from,
+			state.selection.to,
+			(node: Node, _0: number, _1: Node, _2: number) => {
+				for (const mark of node.marks) {
+					if (!markTypes.some(m => m.type.name === mark.type.name)) {
+						markTypes.push(mark);
+					}
+				}
+			}
+		);
+		return markTypes;
 	}
 }

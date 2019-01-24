@@ -3,8 +3,8 @@ import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/c
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { toggleMark } from 'prosemirror-commands';
-import { MarkType } from 'prosemirror-model';
-import { wrapInList } from 'prosemirror-schema-list';
+import { Mark, MarkType, NodeType } from 'prosemirror-model';
+import { liftListItem, wrapInList } from 'prosemirror-schema-list';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
@@ -25,12 +25,17 @@ export class AppContentEditorTextControls extends Vue {
 	@Prop(Object)
 	capabilities!: ContextCapabilities;
 
+	// CSS and styling
 	visible = false;
 	left = '0px';
 	bottom = '0px';
 
+	// State
 	isShowingOnMouseUp = false;
 	mouse: MouseState | null = null;
+	selectionMarks: Mark[] = [];
+	canLiftListItems = false;
+	canWrapInLists = false;
 
 	$refs!: {
 		container: HTMLElement;
@@ -57,6 +62,15 @@ export class AppContentEditorTextControls extends Vue {
 
 					// Make sure that marks can be applied to the parent of this text
 					if (parent && parent.type.spec.marks !== '') {
+						this.selectionMarks = ContentEditorService.getSelectionMarks(
+							this.view.state
+						);
+						this.canLiftListItems = this.testLiftListItems();
+						// Bullet list has the same rules as ordered list
+						this.canWrapInLists = this.testWrapInList(
+							this.view.state.schema.nodes.bulletList
+						);
+
 						// When the controls are already visible, just adjust their position
 						// This also applies for when we are waiting for the mouse button to be released
 
@@ -112,6 +126,10 @@ export class AppContentEditorTextControls extends Vue {
 		this.bottom = box.bottom - start.top + 4 + 'px';
 	}
 
+	private hasMark(markType: string) {
+		return this.selectionMarks.some(m => m.type.name === markType);
+	}
+
 	private dispatchMark(mark: MarkType, attrs?: { [key: string]: any }) {
 		toggleMark(mark, attrs)(this.view.state, tr => {
 			this.view.dispatch(tr);
@@ -135,24 +153,49 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	async onClickLink() {
-		const result = await ContentEditorLinkModal.show();
-		if (result) {
-			this.dispatchMark(this.view.state.schema.marks.link, {
-				href: result.href,
-				title: result.title,
-			});
+		if (this.hasMark('link')) {
+			// Remove the link mark
+			this.dispatchMark(this.view.state.schema.marks.link);
+		} else {
+			const result = await ContentEditorLinkModal.show();
+			if (result) {
+				this.dispatchMark(this.view.state.schema.marks.link, {
+					href: result.href,
+					title: result.title,
+				});
+			}
 		}
 	}
 
+	testWrapInList(listType: NodeType) {
+		return wrapInList(listType)(this.view.state);
+	}
+
+	doWrapInList(listType: NodeType) {
+		wrapInList(listType)(this.view.state, this.view.dispatch);
+	}
+
+	testLiftListItems() {
+		return liftListItem(this.view.state.schema.nodes.listItem)(this.view.state);
+	}
+
+	doListListItems() {
+		liftListItem(this.view.state.schema.nodes.listItem)(this.view.state, this.view.dispatch);
+	}
+
 	onClickBulletList() {
-		const listType = this.view.state.schema.nodes.bulletList;
-		const wrapFunc = wrapInList(listType);
-		wrapFunc(this.view.state, this.view.dispatch);
+		if (this.testLiftListItems()) {
+			this.doListListItems();
+		} else {
+			this.doWrapInList(this.view.state.schema.nodes.bulletList);
+		}
 	}
 
 	onClickOrderedList() {
-		const listType = this.view.state.schema.nodes.orderedList;
-		const wrapFunc = wrapInList(listType);
-		wrapFunc(this.view.state, this.view.dispatch);
+		if (this.testLiftListItems()) {
+			this.doListListItems();
+		} else {
+			this.doWrapInList(this.view.state.schema.nodes.orderedList);
+		}
 	}
 }
