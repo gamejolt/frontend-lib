@@ -1,10 +1,10 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
+import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
 import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/content/content-editor/keymap';
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
 import { MediaItemNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-item';
 import { MediaUploadNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-upload';
-import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/paste-event-handler';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
 import { baseKeymap } from 'prosemirror-commands';
 import { history } from 'prosemirror-history';
@@ -24,6 +24,7 @@ import { ContentOwner } from '../content-owner';
 import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
+import { blurEventHandler, focusEventHandler } from './events/focus-event-handler';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
 
 type NodeViewList = {
@@ -54,17 +55,20 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
 	emojiPanelVisible = false;
 	hydrator: ContentHydrator = new ContentHydrator();
+	controlsVisible = false;
 
 	$refs!: {
 		doc: HTMLElement;
 	};
 
 	get shouldShowControls() {
-		return this.capabilities.hasAny;
+		return this.controlsVisible && this.capabilities.hasAny;
 	}
 
 	get shouldShowTextControls() {
-		return !this.shouldShowEmojiControls && this.capabilities.hasAnyText;
+		return (
+			this.controlsVisible && !this.shouldShowEmojiControls && this.capabilities.hasAnyText
+		);
 	}
 
 	get shouldShowEmojiControls() {
@@ -148,6 +152,8 @@ export class AppContentEditor extends Vue implements ContentOwner {
 			nodeViews,
 			handleDOMEvents: {
 				paste: pasteEventHandler,
+				focus: (_: EditorView, _0: Event) => focusEventHandler(this),
+				blur: (_: EditorView, _0: Event) => blurEventHandler(this),
 			},
 		});
 
