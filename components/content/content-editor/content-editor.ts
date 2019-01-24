@@ -24,7 +24,6 @@ import { ContentOwner } from '../content-owner';
 import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
-import { blurEventHandler, focusEventHandler } from './events/focus-event-handler';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
 
 type NodeViewList = {
@@ -55,20 +54,17 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
 	emojiPanelVisible = false;
 	hydrator: ContentHydrator = new ContentHydrator();
-	controlsVisible = false;
 
 	$refs!: {
 		doc: HTMLElement;
 	};
 
 	get shouldShowControls() {
-		return this.controlsVisible && this.capabilities.hasAny;
+		return this.capabilities.hasAny;
 	}
 
 	get shouldShowTextControls() {
-		return (
-			this.controlsVisible && !this.shouldShowEmojiControls && this.capabilities.hasAnyText
-		);
+		return !this.shouldShowEmojiControls && this.capabilities.hasAnyText;
 	}
 
 	get shouldShowEmojiControls() {
@@ -152,8 +148,6 @@ export class AppContentEditor extends Vue implements ContentOwner {
 			nodeViews,
 			handleDOMEvents: {
 				paste: pasteEventHandler,
-				focus: (_: EditorView, _0: Event) => focusEventHandler(this),
-				blur: (_: EditorView, _0: Event) => blurEventHandler(this),
 			},
 		});
 
