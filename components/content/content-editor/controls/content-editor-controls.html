@@ -47,6 +47,13 @@
 						@click="onClickHr"
 						v-app-tooltip="$gettext('Add Horizontal Rule')"
 						/>
+					<app-button
+						v-if="capabilities.table"
+						circle
+						icon="heart"
+						@click="onClickTable"
+						v-app-tooltip="$gettext('Add Table')"
+						/>
 					<span class="dot-separator"></span>
 				</span>
 			</transition>

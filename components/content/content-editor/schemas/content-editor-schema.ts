@@ -5,6 +5,7 @@ import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/
 import { mediaUpload } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/media-upload-nodespec';
 import { orderedList } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/ordered-list-nodespec';
 import { spoiler } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/spoiler-nodespec';
+import { table } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
@@ -16,6 +17,8 @@ import { hr } from './specs/nodes/hr-nodespec';
 import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
+import { tableCell } from './specs/nodes/table-cell-nodespec';
+import { tableRow } from './specs/nodes/table-row-nodespec';
 
 export function generateSchema(capabilities: ContextCapabilities) {
 	return new Schema({
@@ -68,6 +71,11 @@ function generateNodes(capabilities: ContextCapabilities) {
 		nodes.spoiler = spoiler;
 
 		allowedDocNodes.push('spoiler');
+	}
+	if (capabilities.table) {
+		nodes.table = table;
+		nodes.tableRow = tableRow;
+		nodes.tableCell = tableCell;
 	}
 
 	if (allowedDocNodes.length > 0) {

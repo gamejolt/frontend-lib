@@ -21,7 +21,8 @@ type ContextCapabilityType =
 	| 'gj-emoji'
 	| 'lists'
 	| 'hr'
-	| 'spoiler';
+	| 'spoiler'
+	| 'table';
 
 export class ContextCapabilities {
 	public capabilities: ContextCapabilityType[];
@@ -82,6 +83,9 @@ export class ContextCapabilities {
 	get spoiler() {
 		return this.hasCapability('spoiler');
 	}
+	get table() {
+		return this.hasCapability('table');
+	}
 
 	private constructor(capabilities: ContextCapabilityType[]) {
 		this.capabilities = capabilities;
@@ -116,6 +120,7 @@ export class ContextCapabilities {
 					'lists',
 					'hr',
 					'spoiler',
+					'table',
 				]);
 		}
 		throw new Error('Context capabilities undefined for context ' + context);

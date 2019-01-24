@@ -78,6 +78,7 @@ export class GJContentFormatAdapter {
 					(i.type === 'codeBlock' && !capabilities.codeBlock) ||
 					(i.type === 'blockquote' && !capabilities.blockquote) ||
 					(i.type === 'gjEmoji' && !capabilities.gjEmoji) ||
+					(i.type === 'spoiler' && !capabilities.spoiler) ||
 					((i.type === 'orderedList' || i.type === 'bulletList') && !capabilities.lists)
 			);
 		}

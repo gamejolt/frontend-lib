@@ -1,5 +1,6 @@
 import View from '!view!./content-editor-controls.html?style=./content-editor-controls.styl';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
+import { ContentTableService } from 'game-jolt-frontend-lib/components/content/content-editor/content-table.service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { Node, NodeType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
@@ -102,6 +103,11 @@ export class AppContentEditorControls extends Vue {
 
 	onClickHr() {
 		const newNode = (this.view.state.schema.nodes.hr as NodeType).create();
+		this.insertNewNode(newNode);
+	}
+
+	onClickTable() {
+		const newNode = ContentTableService.createNew(this.view.state.schema, 2, 2);
 		this.insertNewNode(newNode);
 	}
 }
