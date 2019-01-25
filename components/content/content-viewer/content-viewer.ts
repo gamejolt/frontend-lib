@@ -28,6 +28,13 @@ export class AppContentViewer extends Vue implements ContentOwner {
 		return !!this.data;
 	}
 
+	getContext() {
+		if (this.data) {
+			return this.data.context;
+		}
+		throw new Error('No context assigned to viewer');
+	}
+
 	getCapabilities() {
 		if (this.data) {
 			return ContextCapabilities.getForContext(this.data.context);

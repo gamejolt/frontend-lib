@@ -1,11 +1,13 @@
 import View from '!view!./media-upload.html?style=./media-upload.styl';
 import { Api } from 'game-jolt-frontend-lib/components/api/api.service';
+import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { MediaItem } from 'game-jolt-frontend-lib/components/media-item/media-item-model';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { makeFileFromDataUrl } from '../../../../utils/image';
 import { AppProgressBar } from '../../../progress/bar/bar';
+import { getMediaItemTypeForContext } from '../../content-context';
 
 @View
 @Component({
@@ -22,6 +24,9 @@ export class AppContentMediaUpload extends Vue {
 
 	@Prop(EditorView)
 	editorView!: EditorView;
+
+	@Prop(Object)
+	owner!: ContentOwner;
 
 	uploadProgress = 0;
 	uploadProcessing = false;
@@ -45,10 +50,11 @@ export class AppContentMediaUpload extends Vue {
 	private async uploadFile(file: File) {
 		this.uploadProgress = 0;
 		this.uploadProcessing = false;
+		const itemType = getMediaItemTypeForContext(this.owner.getContext());
 		const $payload = await Api.sendRequest(
 			'/web/dash/media-items/add',
 			{
-				type: 'fireside-post-article-image',
+				type: itemType,
 				parent_id: 1,
 			},
 			{

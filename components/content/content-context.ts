@@ -1,3 +1,4 @@
+import { MediaItem } from '../media-item/media-item-model';
 export type ContentContext =
 	| 'fireside-post-lead'
 	| 'fireside-post-article'
@@ -125,4 +126,12 @@ export class ContextCapabilities {
 		}
 		throw new Error('Context capabilities undefined for context ' + context);
 	}
+}
+
+export function getMediaItemTypeForContext(context: ContentContext) {
+	switch (context) {
+		case 'fireside-post-article':
+			return MediaItem.TYPE_FIRESIDE_POST_ARTICLE_IMAGE;
+	}
+	throw new Error('There is no matching media item type for the context ' + context);
 }

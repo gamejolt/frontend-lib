@@ -88,6 +88,10 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		}
 	}
 
+	getContext() {
+		return this.contentContext;
+	}
+
 	getHydrator() {
 		return this.hydrator;
 	}
@@ -141,7 +145,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 			};
 		}
 		nodeViews.mediaUpload = function(node, view, getPos) {
-			return new MediaUploadNodeView(node, view, getPos);
+			return new MediaUploadNodeView(node, view, getPos, that);
 		};
 
 		this.view = new EditorView(this.$refs.doc, {
