@@ -1,6 +1,8 @@
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
+import { uuidv4 } from 'game-jolt-frontend-lib/utils/uuid';
 import { NodeType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
+import { isImage } from '../../../../utils/image';
 
 const AcceptedImageMimeTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -27,11 +29,12 @@ export function pasteEventHandler(view: EditorView, e: Event) {
 function handlePastedImageBlob(view: EditorView, data: DataTransferItem) {
 	const imageFile = data.getAsFile();
 
-	if (imageFile !== null) {
+	if (imageFile !== null && isImage(imageFile)) {
 		const reader = new FileReader();
 		reader.onloadend = () => {
 			const newNode = (view.state.schema.nodes.mediaUpload as NodeType).create({
 				src: reader.result,
+				uploadId: uuidv4(),
 			});
 			ContentEditorService.insertNode(view, newNode);
 		};

@@ -6,6 +6,8 @@ export class MediaUploadNodeView extends BaseNodeView {
 		const vm = new AppContentMediaUpload({
 			propsData: {
 				src: this.node.attrs.src,
+				uploadId: this.node.attrs.uploadId,
+				editorView: this.view,
 			},
 		});
 		this.mountVue(vm);

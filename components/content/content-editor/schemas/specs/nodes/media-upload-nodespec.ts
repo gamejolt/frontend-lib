@@ -6,14 +6,16 @@ export const mediaUpload = {
 	group: 'block',
 	attrs: {
 		src: {},
+		uploadId: {},
 	},
-	toDOM: (node: Node) => ['div', node.attrs],
+	toDOM: (node: Node) => ['div', { src: node.attrs.src, uploadId: node.attrs.uploadId }],
 	parseDOM: [
 		{
 			tag: 'img[src]',
 			getAttrs: (domNode: Element) => {
 				return {
 					src: domNode.getAttribute('src'),
+					uploadId: domNode.getAttribute('uploadId'),
 				};
 			},
 		},
