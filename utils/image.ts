@@ -1,6 +1,8 @@
+export const imageMimeTypes = ['image/jpg', 'image/png', 'image/jpeg', 'image/bmp', 'image/gif'];
+
 export function isImage(file: File) {
 	const type = file.type.slice(file.type.lastIndexOf('/') + 1);
-	return ['jpg', 'png', 'jpeg', 'bmp', 'gif'].indexOf(type) !== -1;
+	return imageMimeTypes.indexOf('image/' + type) !== -1;
 }
 
 export function getImgDimensions(file: File): Promise<[number, number]> {

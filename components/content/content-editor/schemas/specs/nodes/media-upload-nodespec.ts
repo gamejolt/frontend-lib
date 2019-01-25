@@ -1,7 +1,7 @@
 import { Node, NodeSpec } from 'prosemirror-model';
 
-// When an <img> tag gets pasted into the editor, this node handles the upload to a Media Item
-// It will be replaced with a media item node after the upload is complete
+// When an image gets pasted into the editor, this node handles the upload to a Media Item
+// It will be replaced with a mediaItem node after the upload is complete
 export const mediaUpload = {
 	group: 'block',
 	attrs: {
@@ -9,15 +9,4 @@ export const mediaUpload = {
 		uploadId: {},
 	},
 	toDOM: (node: Node) => ['div', { src: node.attrs.src, uploadId: node.attrs.uploadId }],
-	parseDOM: [
-		{
-			tag: 'img[src]',
-			getAttrs: (domNode: Element) => {
-				return {
-					src: domNode.getAttribute('src'),
-					uploadId: domNode.getAttribute('uploadId'),
-				};
-			},
-		},
-	],
 } as NodeSpec;

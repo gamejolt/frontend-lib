@@ -2,25 +2,26 @@ import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/
 import { uuidv4 } from 'game-jolt-frontend-lib/utils/uuid';
 import { NodeType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import { isImage } from '../../../../utils/image';
+import { imageMimeTypes, isImage } from '../../../../utils/image';
 
-const AcceptedImageMimeTypes = ['image/png', 'image/jpg', 'image/jpeg'];
-
-// Handles pasting direct image data from e.g. Paint, GIMP, etc
-// The MediaUpload nodespec handles pasting images from the web
+// Handles pasting direct image data from e.g. Paint, GIMP or web browsers
 
 export function pasteEventHandler(view: EditorView, e: Event) {
 	if (e.type === 'paste') {
 		const pasteEvent = e as ClipboardEvent;
-		// Make sure the pasted data is a png/jpg file blob
-		if (
-			!!pasteEvent.clipboardData &&
-			!!pasteEvent.clipboardData.items &&
-			pasteEvent.clipboardData.items.length === 1 &&
-			pasteEvent.clipboardData.items[0].kind === 'file' &&
-			AcceptedImageMimeTypes.includes(pasteEvent.clipboardData.items[0].type.toLowerCase())
-		) {
-			return handlePastedImageBlob(view, pasteEvent.clipboardData.items[0]);
+
+		// Go through the pasted items and try and upload the first matching image file blob.
+		if (!!pasteEvent.clipboardData && !!pasteEvent.clipboardData.items) {
+			for (let i = 0; i < pasteEvent.clipboardData.items.length; i++) {
+				const transferItem = pasteEvent.clipboardData.items[i];
+
+				if (
+					transferItem.kind === 'file' &&
+					imageMimeTypes.includes(transferItem.type.toLowerCase())
+				) {
+					return handlePastedImageBlob(view, transferItem);
+				}
+			}
 		}
 	}
 	return false;
