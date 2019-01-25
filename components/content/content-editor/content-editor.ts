@@ -24,6 +24,7 @@ import { ContentOwner } from '../content-owner';
 import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
+import { dropEventHandler } from './events/drop-event-handler';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
 
 type NodeViewList = {
@@ -148,6 +149,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 			nodeViews,
 			handleDOMEvents: {
 				paste: pasteEventHandler,
+				drop: dropEventHandler,
 			},
 		});
 

@@ -1,3 +1,5 @@
+import { imageMimeTypes, isImage } from 'game-jolt-frontend-lib/utils/image';
+import { uuidv4 } from 'game-jolt-frontend-lib/utils/uuid';
 import { Mark, Node, NodeType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
@@ -95,6 +97,44 @@ export class ContentEditorService {
 			child = parent;
 			parent = this.getParentNode(state, child);
 		}
+		return false;
+	}
+
+	public static handleImageUploads(view: EditorView, items: DataTransferItemList) {
+		let handled = false;
+
+		for (let i = 0; i < items.length; i++) {
+			const transferItem = items[i];
+
+			if (
+				transferItem.kind === 'file' &&
+				imageMimeTypes.includes(transferItem.type.toLowerCase())
+			) {
+				const result = this.handleImageFile(view, transferItem);
+				if (result) {
+					handled = true;
+				}
+			}
+		}
+		return handled;
+	}
+
+	public static handleImageFile(view: EditorView, data: DataTransferItem) {
+		const imageFile = data.getAsFile();
+
+		if (imageFile !== null && isImage(imageFile)) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				const newNode = (view.state.schema.nodes.mediaUpload as NodeType).create({
+					src: reader.result,
+					uploadId: uuidv4(),
+				});
+				ContentEditorService.insertNode(view, newNode);
+			};
+			reader.readAsDataURL(imageFile);
+			return true;
+		}
+
 		return false;
 	}
 }
