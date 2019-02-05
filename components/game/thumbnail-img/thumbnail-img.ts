@@ -1,13 +1,12 @@
+import View from '!view!./thumbnail-img.html?style=./thumbnail-img.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./thumbnail-img.html?style=./thumbnail-img.styl';
-
-import { AppImgResponsive } from '../../img/responsive/responsive';
-import { Game } from '../game.model';
-import { Screen } from '../../screen/screen-service';
 import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppVideo } from '../../video/video';
 import { ContentFocus } from '../../content-focus/content-focus.service';
+import { AppImgResponsive } from '../../img/responsive/responsive';
+import { Screen } from '../../screen/screen-service';
+import { AppVideo } from '../../video/video';
+import { Game } from '../game.model';
 
 @View
 @Component({
@@ -18,9 +17,14 @@ import { ContentFocus } from '../../content-focus/content-focus.service';
 	},
 })
 export class AppGameThumbnailImg extends Vue {
-	@Prop(Object) game!: Game;
-	@Prop(Boolean) hideMedia?: boolean;
-	@Prop(Boolean) animate?: boolean;
+	@Prop(Object)
+	game!: Game;
+
+	@Prop(Boolean)
+	hideMedia?: boolean;
+
+	@Prop(Boolean)
+	animate?: boolean;
 
 	isThumbnailLoaded = GJ_IS_SSR;
 

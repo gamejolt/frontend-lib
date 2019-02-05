@@ -1,9 +1,8 @@
-import Vue, { CreateElement } from 'vue';
 import { Subscription } from 'rxjs/Subscription';
+import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-
-import { Screen } from '../../screen/screen-service';
 import { Ruler } from '../../ruler/ruler-service';
+import { Screen } from '../../screen/screen-service';
 import { ImgHelper } from '../helper/helper-service';
 
 const WIDTH_HEIGHT_REGEX = /\/(\d+)x(\d+)\//;
@@ -11,7 +10,8 @@ const WIDTH_REGEX = /\/(\d+)\//;
 
 @Component({})
 export class AppImgResponsive extends Vue {
-	@Prop(String) src!: string;
+	@Prop(String)
+	src!: string;
 
 	private initialized = false;
 	private processedSrc = '';

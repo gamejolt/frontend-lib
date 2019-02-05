@@ -1,10 +1,10 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./image-form.html';
-
-import { BaseForm, FormOnInit, FormOnSubmit, FormOnLoad } from '../../form-vue/form.service';
+import { Component, Prop } from 'vue-property-decorator';
+import { MaxFilesizes } from '../../../utils/file';
 import { Api } from '../../api/api.service';
 import { AppFormControlUpload } from '../../form-vue/control/upload/upload';
 import { AppForm } from '../../form-vue/form';
+import { BaseForm, FormOnInit, FormOnLoad, FormOnSubmit } from '../../form-vue/form.service';
 
 interface FormModel {
 	type: string;
@@ -24,14 +24,17 @@ export class FormThemeEditorImage extends BaseForm<FormModel>
 	resetOnSubmit = true;
 	warnOnDiscard = false;
 
-	@Prop(String) type!: string;
-	@Prop(Number) parentId!: number;
+	@Prop(String)
+	type!: string;
+
+	@Prop(Number)
+	parentId!: number;
 
 	$refs!: {
 		form: AppForm;
 	};
 
-	maxFilesize = 0;
+	maxFilesizes: MaxFilesizes = {};
 	maxWidth = 0;
 	maxHeight = 0;
 
@@ -49,7 +52,7 @@ export class FormThemeEditorImage extends BaseForm<FormModel>
 	}
 
 	onLoad(response: any) {
-		this.maxFilesize = response.maxFilesize;
+		this.maxFilesizes = response.MaxFilesizes;
 		this.maxWidth = response.maxWidth;
 		this.maxHeight = response.maxHeight;
 	}

@@ -1,27 +1,25 @@
-import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
 import View from '!view!./form.html';
 import * as VeeValidate from 'vee-validate';
-
+import Vue from 'vue';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../utils/vue';
-import { BaseForm } from './form.service';
-import { FormValidatorPattern } from './validators/pattern';
-import { FormValidatorAvailability } from './validators/availability';
+import { AppLoading } from '../../vue/components/loading/loading';
+import { AppLoadingFade } from '../loading/fade/fade';
 import { BaseFormControl } from './control/base';
-import { FormValidatorFilesize } from './validators/filesize';
-import { FormValidatorImgRatio } from './validators/img_ratio';
-import { FormValidatorMinImgRatio } from './validators/min_img_ratio';
-import { FormValidatorMaxImgRatio } from './validators/max_img_ratio';
-import { FormValidatorImgDimensions } from './validators/img_dimensions';
-import { FormValidatorMinImgDimensions } from './validators/min_img_dimensions';
-import { FormValidatorMaxImgDimensions } from './validators/max_img_dimensions';
+import { BaseForm } from './form.service';
 import { FormValidatorAccept } from './validators/accept';
+import { FormValidatorAvailability } from './validators/availability';
 import { FormValidatorCcExp } from './validators/cc_exp';
 import { FormValidatorCcExpExpired } from './validators/cc_exp_expired';
-import { AppLoading } from '../../vue/components/loading/loading';
-import { FormValidatorMinDate } from './validators/min_date';
+import { FormValidatorFilesize } from './validators/filesize';
+import { FormValidatorImgDimensions } from './validators/img_dimensions';
 import { FormValidatorMaxDate } from './validators/max_date';
-import { AppLoadingFade } from '../loading/fade/fade';
+import { FormValidatorMaxImgDimensions } from './validators/max_img_dimensions';
+import { FormValidatorMaxImgRatio } from './validators/max_img_ratio';
+import { FormValidatorMinDate } from './validators/min_date';
+import { FormValidatorMinImgDimensions } from './validators/min_img_dimensions';
+import { FormValidatorMinImgRatio } from './validators/min_img_ratio';
+import { FormValidatorPattern } from './validators/pattern';
 
 Vue.use(VeeValidate);
 
@@ -33,7 +31,8 @@ Vue.use(VeeValidate);
 	},
 })
 export class AppForm extends Vue {
-	@Prop(String) name!: string;
+	@Prop(String)
+	name!: string;
 
 	base!: BaseForm<any>;
 	controls: BaseFormControl[] = [];
@@ -80,7 +79,6 @@ export class AppForm extends Vue {
 			this.$validator.extend('availability', FormValidatorAvailability);
 			this.$validator.extend('filesize', FormValidatorFilesize);
 			this.$validator.extend('accept', FormValidatorAccept);
-			this.$validator.extend('img_ratio', FormValidatorImgRatio);
 			this.$validator.extend('min_img_ratio', FormValidatorMinImgRatio);
 			this.$validator.extend('max_img_ratio', FormValidatorMaxImgRatio);
 			this.$validator.extend('img_dimensions', FormValidatorImgDimensions);

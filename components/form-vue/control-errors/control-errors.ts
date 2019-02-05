@@ -1,11 +1,10 @@
+import View from '!view!./control-errors.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./control-errors.html';
-
 import { findRequiredVueParent } from '../../../utils/vue';
+import { number } from '../../../vue/filters/number';
 import { AppForm } from '../form';
 import { AppFormGroup } from '../group/group';
-import { number } from '../../../vue/filters/number';
 
 // These are default messages that don't need any extra validation data.
 // They are also common enough to be applied to all elements.
@@ -29,8 +28,11 @@ const ErrorMessagesBase: { [k: string]: string } = {
 @View
 @Component({})
 export class AppFormControlErrors extends Vue {
-	@Prop(String) label?: string;
-	@Prop(String) position?: string;
+	@Prop(String)
+	label?: string;
+
+	@Prop(String)
+	position?: string;
 
 	form!: AppForm;
 	group!: AppFormGroup;
@@ -105,16 +107,15 @@ export class AppFormControlErrors extends Vue {
 				break;
 
 			case 'filesize':
-				message =
-					'The chosen {} exceeds the maximum file size of ' +
-					number(data / 1024 / 1024) +
-					'MB.';
+				// TODO There might be different limitations for different file types,
+				// but we don't have the context here to say which file size limitation applies.
+				message = 'The chosen {} exceeds the maximum file size.';
 				break;
 
 			case 'img_dimensions':
 				{
-					const width = data[0];
-					const height = data[1];
+					const width = data.width;
+					const height = data.height;
 
 					if (width && height) {
 						message =
@@ -133,8 +134,8 @@ export class AppFormControlErrors extends Vue {
 
 			case 'min_img_dimensions':
 				{
-					const width = data[0];
-					const height = data[1];
+					const width = data.width;
+					const height = data.height;
 
 					if (width && height) {
 						message =
@@ -162,8 +163,8 @@ export class AppFormControlErrors extends Vue {
 
 			case 'max_img_dimensions':
 				{
-					const width = data[0];
-					const height = data[1];
+					const width = data.width;
+					const height = data.height;
 
 					if (width && height) {
 						message =
@@ -189,19 +190,11 @@ export class AppFormControlErrors extends Vue {
 				}
 				break;
 
-			case 'img_ratio':
-				message =
-					'Your {} has an incorrect aspect ratio. ' +
-					'Its width divided by height must be exactly ' +
-					number(data) +
-					'.';
-				break;
-
 			case 'min_img_ratio':
 				message =
 					'Your {} has an incorrect aspect ratio. ' +
 					'Its width divided by height must be at least ' +
-					number(data) +
+					number(data.ratio) +
 					'.';
 				break;
 
@@ -209,7 +202,7 @@ export class AppFormControlErrors extends Vue {
 				message =
 					'Your {} has an incorrect aspect ratio. ' +
 					'Its width divided by height must be no greater than ' +
-					number(data) +
+					number(data.ratio) +
 					'.';
 				break;
 		}

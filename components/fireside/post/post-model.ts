@@ -32,6 +32,7 @@ export class FiresidePost extends Model {
 	static TYPE_SKETCHFAB = 'sketchfab';
 
 	static STATUS_DRAFT = 'draft';
+	static STATUS_PROCESSING = 'processing';
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
@@ -138,6 +139,10 @@ export class FiresidePost extends Model {
 
 	get isActive() {
 		return this.status === FiresidePost.STATUS_ACTIVE;
+	}
+
+	get isProcessing() {
+		return this.status === FiresidePost.STATUS_PROCESSING;
 	}
 
 	get isDraft() {

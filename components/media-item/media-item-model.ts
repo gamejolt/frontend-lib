@@ -24,6 +24,7 @@ export class MediaItem extends Model {
 	is_animated!: boolean;
 	width!: number;
 	height!: number;
+	duration!: number;
 	filesize!: number;
 	crop_start_x!: number;
 	crop_start_y!: number;
@@ -35,6 +36,8 @@ export class MediaItem extends Model {
 	mediaserver_url_webm!: string;
 	mediaserver_url_mp4!: string;
 	mediaserver_url!: string;
+	hls_url!: string;
+	is_processing?: boolean;
 
 	post_id?: number;
 

@@ -23,6 +23,9 @@ export class AppVideo extends Vue {
 	@Prop(String)
 	mp4!: string;
 
+	@Prop({ type: Boolean, default: true })
+	muted!: boolean;
+
 	@Prop({ type: Boolean, default: false })
 	showLoading!: boolean;
 
@@ -59,21 +62,25 @@ export class AppVideo extends Vue {
 		this.video.style.width = '100%';
 		this.video.poster = this.poster;
 		this.video.loop = true;
+		this.video.muted = this.muted;
 
 		this.video.appendChild(webm);
 		this.video.appendChild(mp4);
 
 		// This event continues to spawn.
 		// Gotta remove once it fires the first time.
-		let canplaythrough = () => {
+		let canplay = () => {
 			this.isLoaded = true;
-			this.video.removeEventListener('canplaythrough', canplaythrough);
+			this.video.removeEventListener('canplay', canplay);
 			if (this.shouldPlay) {
 				this.video.play();
 			}
 		};
 
-		this.video.addEventListener('canplaythrough', canplaythrough);
+		this.video.addEventListener('canplay', canplay);
+		if (this.video.readyState > 3) {
+			canplay();
+		}
 
 		this.$el.appendChild(this.video);
 	}

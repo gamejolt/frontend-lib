@@ -1,14 +1,14 @@
-import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./media-items.html?style=./media-items.styl';
-
-import { BaseForm, FormOnInit, FormOnSubmit, FormOnLoad } from '../../../form.service';
-import { Api } from '../../../../api/api.service';
-import { MediaItem } from '../../../../media-item/media-item-model';
-import { Clipboard } from '../../../../clipboard/clipboard-service';
-import { AppFormControlUpload } from '../../upload/upload';
-import { AppForm } from '../../../form';
-import { AppTooltip } from '../../../../tooltip/tooltip';
+import { Component, Prop } from 'vue-property-decorator';
+import { MaxFilesizes } from '../../../../../utils/file';
 import { AppJolticon } from '../../../../../vue/components/jolticon/jolticon';
+import { Api } from '../../../../api/api.service';
+import { Clipboard } from '../../../../clipboard/clipboard-service';
+import { MediaItem } from '../../../../media-item/media-item-model';
+import { AppTooltip } from '../../../../tooltip/tooltip';
+import { AppForm } from '../../../form';
+import { BaseForm, FormOnInit, FormOnLoad, FormOnSubmit } from '../../../form.service';
+import { AppFormControlUpload } from '../../upload/upload';
 
 interface FormModel {
 	type: string;
@@ -29,9 +29,14 @@ interface FormModel {
 })
 export class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
 	implements FormOnInit, FormOnLoad, FormOnSubmit {
-	@Prop(String) type!: string;
-	@Prop(Number) parentId!: number;
-	@Prop(Boolean) disabled?: boolean;
+	@Prop(String)
+	type!: string;
+
+	@Prop(Number)
+	parentId!: number;
+
+	@Prop(Boolean)
+	disabled?: boolean;
 
 	resetOnSubmit = true;
 	reloadOnSubmit = true;
@@ -41,7 +46,7 @@ export class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
 	};
 
 	mediaItems: MediaItem[] = [];
-	maxFilesize = 0;
+	maxFilesizes: MaxFilesizes = {};
 	maxWidth = 0;
 	maxHeight = 0;
 
@@ -61,7 +66,7 @@ export class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
 
 	onLoad(response: any) {
 		this.mediaItems = MediaItem.populate(response.mediaItems);
-		this.maxFilesize = response.maxFilesize;
+		this.maxFilesizes = response.maxFilesizes;
 		this.maxWidth = response.maxWidth;
 		this.maxHeight = response.maxHeight;
 	}
