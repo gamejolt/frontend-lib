@@ -1,6 +1,6 @@
-import { Growls } from 'game-jolt-frontend-lib/components/growls/growls.service';
 import { Api } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
+import { Growls } from '../growls/growls.service';
 import { Model } from '../model/model.service';
 import { Subscription } from '../subscription/subscription.model';
 import { User } from '../user/user.model';
