@@ -18,6 +18,7 @@ export class User extends Model {
 	img_avatar!: string;
 	dogtag!: string;
 	shouts_enabled!: boolean;
+	completed_signup_flow!: boolean;
 
 	status!: number;
 	permission_level!: number;

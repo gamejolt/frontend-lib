@@ -386,9 +386,13 @@ export class Game extends Model {
 	}
 
 	async $follow() {
-		const response = await Api.sendRequest('/web/library/games/add/followed', {
-			game_id: this.id,
-		});
+		const response = await Api.sendRequest(
+			'/web/library/games/add/followed',
+			{
+				game_id: this.id,
+			},
+			{ noErrorRedirect: true }
+		);
 
 		this.is_following = true;
 		++this.follower_count;
