@@ -4,7 +4,6 @@ import { AppAdPlaywire } from 'game-jolt-frontend-lib/components/ad/playwire/pla
 import { EventBus } from 'game-jolt-frontend-lib/components/event-bus/event-bus.service';
 import { loadScript } from 'game-jolt-frontend-lib/utils/utils';
 import VueRouter from 'vue-router';
-import '../cmp.service';
 
 let _isInitialized = false;
 
