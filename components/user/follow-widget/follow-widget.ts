@@ -44,8 +44,6 @@ export class AppUserFollowWidget extends Vue {
 	@State
 	app!: AppStore;
 
-	isProcessing = false;
-
 	get shouldShow() {
 		return !this.app.user || this.app.user.id !== this.user.id;
 	}
@@ -75,11 +73,9 @@ export class AppUserFollowWidget extends Vue {
 	}
 
 	async onClick() {
-		if (!this.app.user || this.isProcessing) {
+		if (!this.app.user) {
 			return;
 		}
-
-		this.isProcessing = true;
 
 		if (!this.user.is_following) {
 			try {
@@ -96,7 +92,5 @@ export class AppUserFollowWidget extends Vue {
 				Growls.error(this.$gettext(`For some reason we couldn't unfollow this user.`));
 			}
 		}
-
-		this.isProcessing = false;
 	}
 }

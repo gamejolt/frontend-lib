@@ -21,13 +21,21 @@ export class FiresidePostLike extends Model {
 		}
 
 		return this.$_save('/web/posts/like/' + this.fireside_post_id, 'firesidePostLike', {
+			detach: true,
 			ignorePayloadUser: true,
+			data: {
+				timestamp: Date.now(),
+			},
 		});
 	}
 
 	$remove() {
 		return this.$_remove('/web/posts/unlike/' + this.fireside_post_id, {
+			detach: true,
 			ignorePayloadUser: true,
+			data: {
+				timestamp: Date.now(),
+			},
 		});
 	}
 }
