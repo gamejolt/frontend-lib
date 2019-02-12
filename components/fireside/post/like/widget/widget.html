@@ -7,7 +7,6 @@
 		:primary="!!post.user_like || !isCircle"
 		:solid="!!post.user_like"
 		:badge="badge"
-		:disabled="isProcessing"
 		v-app-tooltip="tooltip"
 		@click="toggleLike"
 		>

@@ -386,27 +386,42 @@ export class Game extends Model {
 	}
 
 	async $follow() {
-		const response = await Api.sendRequest(
-			'/web/library/games/add/followed',
-			{
-				game_id: this.id,
-			},
-			{ noErrorRedirect: true }
-		);
-
 		this.is_following = true;
 		++this.follower_count;
 
-		return response;
+		try {
+			return await Api.sendRequest(
+				'/web/library/games/add/followed',
+				{
+					game_id: this.id,
+					timestamp: Date.now(),
+				},
+				{
+					detach: true,
+				}
+			);
+		} catch (e) {
+			this.is_following = false;
+			--this.follower_count;
+			throw e;
+		}
 	}
 
 	async $unfollow() {
-		const response = await this.$_remove('/web/library/games/remove/followed/' + this.id);
-
 		this.is_following = false;
 		--this.follower_count;
 
-		return response;
+		try {
+			return await this.$_remove('/web/library/games/remove/followed/' + this.id, {
+				data: {
+					timestamp: Date.now(),
+				},
+			});
+		} catch (e) {
+			this.is_following = true;
+			++this.follower_count;
+			throw e;
+		}
 	}
 
 	$save() {
