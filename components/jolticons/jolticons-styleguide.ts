@@ -87,7 +87,7 @@ export class AppJolticonsStyleguide extends Vue {
 			'friends',
 			'gamejolt',
 			'game',
-			'google-plus',
+			'google',
 			'heart',
 			'help-circle',
 			'help',

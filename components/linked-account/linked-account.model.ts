@@ -28,7 +28,7 @@ export function getLinkedAccountPlatformIcon(provider: string) {
 		case LinkedAccount.PROVIDER_TWITTER:
 			return 'twitter-bird';
 		case LinkedAccount.PROVIDER_GOOGLE:
-			return 'google-plus';
+			return 'google';
 		case LinkedAccount.PROVIDER_TWITCH:
 			return 'twitch';
 		case LinkedAccount.PROVIDER_TUMBLR:
