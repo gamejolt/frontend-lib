@@ -10,6 +10,6 @@ export class Auth {
 		// This is mainly for client.
 		// It tells the intro animation that it should play the intro even if it can't find a user.
 		window.sessionStorage.setItem('client-intro-login-play', 'play');
-		Navigate.goto(Environment.wttfBaseUrl);
+		Navigate.goto(Environment.baseUrl);
 	}
 }
