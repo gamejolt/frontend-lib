@@ -17,8 +17,10 @@ $gray = #363636
 $gray-subtle = #444444
 $gray-light = #7e7e7e
 $gray-lighter = #d1d1d1
-$gray-lightest = #f3f3f3
+$gray-lightest = #f0f0f0
 $white = #ffffff
+$well-light = #fafafa
+$well-dark = #232323
 //
 // Theme vars
 // Copy out the shades of gray that we use throughout the site
@@ -30,6 +32,8 @@ $theme-gray-subtle = $gray-subtle
 $theme-light = $gray-light
 $theme-lighter = $gray-lighter
 $theme-lightest = $gray-lightest
+$theme-well-light = $well-light
+$theme-well-dark = $well-dark
 // Transparent grays
 $theme-darkest-trans = rgba($gray-darkest, 0)
 $theme-darker-trans = rgba($gray-darker, 0)
@@ -51,6 +55,8 @@ $theme-bi-fg = $theme-highlight
 // Base background color
 $theme-bg = $white
 $theme-bg-trans = rgba($theme-bg, 0)
+// Used for background wells
+$theme-bg-well = $theme-well-light
 // Slightly darker background (used for info boxes and such)
 $theme-bg-offset = $theme-lightest
 $theme-bg-offset-trans = $theme-lightest-trans
@@ -67,6 +73,7 @@ $theme-link-hover = $black
 // Dark theme vars
 $dark-theme-bg = $theme-dark
 $dark-theme-bg-trans = $theme-dark-trans
+$dark-theme-bg-well = $theme-well-dark
 $dark-theme-bg-offset = $theme-gray
 $dark-theme-bg-offset-trans = $theme-gray-trans
 $dark-theme-bg-subtle = $theme-gray-subtle
@@ -187,10 +194,10 @@ $button-md-padding-vertical = 8px
 $button-md-padding-horizontal = 16px
 $button-md-line-height = 20px + ($button-md-padding-vertical * 2)
 $button-md-icon-spacing-right = 5px
-$button-md-outline-border-size = 2px
+$button-md-outline-border-size = 1px
 $button-md-font-weight = bold
 $button-md-font-size = $font-size-small
-$button-md-border-radius = $border-radius-base
+$button-md-border-radius = $button-md-line-height
 $button-sm-padding-vertical = 3px
 $button-sm-padding-horizontal = 10px
 $button-sm-line-height = $button-icon-size + ($button-sm-padding-vertical * 2)
@@ -198,15 +205,15 @@ $button-sm-icon-spacing-right = 3px
 $button-sm-outline-border-size = 1px
 $button-sm-font-weight = normal
 $button-sm-font-size = $font-size-tiny
-$button-sm-border-radius = $border-radius-base
+$button-sm-border-radius = $button-sm-line-height
 $button-lg-padding-vertical = 18px
 $button-lg-padding-horizontal = 35px
 $button-lg-line-height = 20px + ($button-lg-padding-vertical * 2)
 $button-lg-icon-spacing-right = 8px
-$button-lg-outline-border-size = 2px
+$button-lg-outline-border-size = 1px
 $button-lg-font-weight = bold
 $button-lg-font-size = $font-size-base
-$button-lg-border-radius = $border-radius-large
+$button-lg-border-radius = $button-lg-line-height
 //
 // Tab List
 $tab-list-padding-v = 7px

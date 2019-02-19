@@ -22,7 +22,9 @@ const Gray = '#363636';
 const GraySubtle = '#444444';
 const GrayLight = '#7e7e7e';
 const GrayLighter = '#d1d1d1';
-const GrayLightest = '#f3f3f3';
+const GrayLightest = '#f0f0f0';
+const WellLight = '#fafafa';
+const WellDark = '#252525';
 
 // For clamping custom colors.
 //   ("MinLitBase" is summed with a variable portion of BlueBoost for MinLitFinal.)
@@ -292,6 +294,14 @@ export class Theme extends Model {
 
 	get lightest_() {
 		return this.tintColor(GrayLightest, 0.04);
+	}
+
+	get wellLight_() {
+		return this.tintColor(WellLight, 0.04);
+	}
+
+	get wellDark_() {
+		return this.tintColor(WellDark, 0.04);
 	}
 
 	private get readableCustomDark() {

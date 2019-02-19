@@ -13,7 +13,7 @@ make-button-size(size)
 		margin-right: lookup('$button-' + size + '-icon-spacing-right')
 
 	.-badge
-		padding: 0 (lookup('$button-' + size + '-padding-horizontal') / 2)
+		padding: 0 lookup('$button-' + size + '-padding-horizontal') * 0.75 0 lookup('$button-' + size + '-padding-horizontal') * 0.5
 		margin-right: -(lookup('$button-' + size + '-padding-horizontal'))
 		margin-left: (lookup('$button-' + size + '-padding-horizontal') / 2) * 1.5
 		font-size: lookup('$button-' + size + '-font-size')
@@ -36,6 +36,7 @@ make-button-size(size)
 			border-radius: lookup('$button-' + size + '-border-radius') !important
 
 	&.-sparse
+		img-circle()
 		$$button-horizontal-padding = ((lookup('$button-' + size + '-line-height') - $button-icon-size) / 2)
 		padding-left: $$button-horizontal-padding
 		padding-right: $$button-horizontal-padding
@@ -157,13 +158,6 @@ make-button-size(size)
 
 	&.-trans
 		border-color: transparent
-
-/**
- * Circle buttons
- * Only works for sparse buttons.
- */
-.-circle.-sparse
-	img-circle()
 
 /**
  * Block buttons

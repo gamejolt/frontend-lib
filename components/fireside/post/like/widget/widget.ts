@@ -28,6 +28,9 @@ export class AppFiresidePostLikeWidget extends Vue {
 	circle?: boolean;
 
 	@Prop(Boolean)
+	trans?: boolean;
+
+	@Prop(Boolean)
 	block?: boolean;
 
 	// We also show circle in xs size.
