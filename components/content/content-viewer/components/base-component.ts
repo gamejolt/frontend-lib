@@ -4,6 +4,7 @@ import { AppContentViewerBlockquote } from 'game-jolt-frontend-lib/components/co
 import { AppContentViewerCodeBlock } from 'game-jolt-frontend-lib/components/content/content-viewer/components/code';
 import { AppContentViewerGJEmoji } from 'game-jolt-frontend-lib/components/content/content-viewer/components/gjEmoji';
 import { AppContentViewerParagraph } from 'game-jolt-frontend-lib/components/content/content-viewer/components/paragraph';
+import { AppContentViewerTag } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tag';
 import { AppContentViewerText } from 'game-jolt-frontend-lib/components/content/content-viewer/components/text';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
@@ -42,6 +43,8 @@ function getComponentType(data: GJContentObject): any {
 			return AppContentViewerHorizontalRule;
 		case 'spoiler':
 			return AppContentViewerSpoiler;
+		case 'tag':
+			return AppContentViewerTag;
 	}
 }
 

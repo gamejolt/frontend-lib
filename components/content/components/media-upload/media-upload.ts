@@ -51,6 +51,7 @@ export class AppContentMediaUpload extends Vue {
 		this.uploadProgress = 0;
 		this.uploadProcessing = false;
 		const itemType = getMediaItemTypeForContext(this.owner.getContext());
+		// TODO: error handling
 		const $payload = await Api.sendRequest(
 			'/web/dash/media-items/add',
 			{

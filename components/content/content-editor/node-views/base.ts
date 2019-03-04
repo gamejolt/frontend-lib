@@ -16,11 +16,16 @@ export abstract class BaseNodeView implements NodeView {
 		this.view = view;
 		this.getPos = getPos;
 
-		this.dom = document.createElement('div');
+		this.dom = this.createDOM();
+
 		// This node gets mounted in the next tick
 		Vue.nextTick().then(() => {
 			this.mounted();
 		});
+	}
+
+	protected createDOM(): HTMLElement {
+		return document.createElement('div');
 	}
 
 	mounted(): void {}

@@ -2,17 +2,18 @@ import { GJContentObjectType } from 'game-jolt-frontend-lib/components/content/a
 import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-markspec';
 import { blockquote } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/blockquote-nodespec';
 import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/embed-nodespec';
+import { hardBreak } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/hard-break-nodespec';
 import { mediaUpload } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/media-upload-nodespec';
 import { orderedList } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/ordered-list-nodespec';
 import { spoiler } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/spoiler-nodespec';
 import { table } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-nodespec';
+import { tag } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/tag-nodespec';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
 import { bulletList } from './specs/nodes/bullet-list-nodespec';
 import { codeBlock } from './specs/nodes/code-block-nodespec';
 import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
-import { hardBreak } from './specs/nodes/hard-bread-nodespec';
 import { hr } from './specs/nodes/hr-nodespec';
 import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
@@ -77,6 +78,8 @@ function generateNodes(capabilities: ContextCapabilities) {
 		nodes.tableRow = tableRow;
 		nodes.tableCell = tableCell;
 	}
+
+	nodes.tag = tag;
 
 	if (allowedDocNodes.length > 0) {
 		nodes.doc.content += ' (' + allowedDocNodes.join(' | ') + ')';

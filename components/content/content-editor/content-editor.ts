@@ -5,6 +5,8 @@ import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/conten
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
 import { MediaItemNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-item';
 import { MediaUploadNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-upload';
+import { TagNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/tag';
+import { createInputRules } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/input-rules';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
 import { baseKeymap } from 'prosemirror-commands';
 import { history } from 'prosemirror-history';
@@ -128,6 +130,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 				keymap(baseKeymap),
 				history(),
 				incrementerPlugin,
+				createInputRules(this.capabilities),
 				// emojiPanelPlugin,
 			],
 		});
@@ -142,6 +145,11 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		if (this.capabilities.media) {
 			nodeViews.mediaItem = function(node, view, getPos) {
 				return new MediaItemNodeView(node, view, getPos, that);
+			};
+		}
+		if (this.capabilities.tag) {
+			nodeViews.tag = function(node, view, getPos) {
+				return new TagNodeView(node, view, getPos);
 			};
 		}
 		nodeViews.mediaUpload = function(node, view, getPos) {

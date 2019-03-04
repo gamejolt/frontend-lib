@@ -23,7 +23,8 @@ type ContextCapabilityType =
 	| 'lists'
 	| 'hr'
 	| 'spoiler'
-	| 'table';
+	| 'table'
+	| 'tag';
 
 export class ContextCapabilities {
 	public capabilities: ContextCapabilityType[];
@@ -87,6 +88,9 @@ export class ContextCapabilities {
 	get table() {
 		return this.hasCapability('table');
 	}
+	get tag() {
+		return this.hasCapability('tag');
+	}
 
 	private constructor(capabilities: ContextCapabilityType[]) {
 		this.capabilities = capabilities;
@@ -122,6 +126,7 @@ export class ContextCapabilities {
 					'hr',
 					'spoiler',
 					'table',
+					'tag',
 				]);
 		}
 		throw new Error('Context capabilities undefined for context ' + context);

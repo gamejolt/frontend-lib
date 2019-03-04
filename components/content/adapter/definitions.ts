@@ -16,7 +16,8 @@ export type GJContentObjectType =
 	| 'bulletList'
 	| 'listItem'
 	| 'spoiler'
-	| 'table';
+	| 'table'
+	| 'tag';
 
 export type GJContentFormat = {
 	version: string;
