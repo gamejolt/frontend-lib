@@ -8,13 +8,24 @@ export class GamePlaylistGame extends Model {
 	$save() {
 		return this.$_save(
 			'/web/library/games/add/playlist/' + this.game_playlist_id,
-			'gamePlaylistGame'
+			'gamePlaylistGame',
+			{
+				data: {
+					game_id: this.game_id,
+					timestamp: Date.now(),
+				},
+			}
 		);
 	}
 
 	$remove() {
 		return this.$_remove(
-			'/web/library/games/remove/playlist/' + this.game_id + '/' + this.game_playlist_id
+			'/web/library/games/remove/playlist/' + this.game_id + '/' + this.game_playlist_id,
+			{
+				data: {
+					timestamp: Date.now(),
+				},
+			}
 		);
 	}
 }

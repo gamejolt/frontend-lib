@@ -1,5 +1,6 @@
 import { Api } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
+import { Growls } from '../growls/growls.service';
 import { Model } from '../model/model.service';
 import { Subscription } from '../subscription/subscription.model';
 import { User } from '../user/user.model';
@@ -80,7 +81,6 @@ export class Comment extends Model {
 	subscription?: Subscription;
 	is_pinned!: boolean;
 
-	isVotePending = false;
 	isFollowPending = false;
 
 	get permalink() {
@@ -131,45 +131,57 @@ export class Comment extends Model {
 
 	async $vote(vote: number) {
 		// Don't do anything if they are setting the same vote.
-		if (this.isVotePending || (this.user_vote && this.user_vote.vote === vote)) {
+		if (this.user_vote && this.user_vote.vote === vote) {
 			return;
 		}
-		this.isVotePending = true;
 
 		const newVote = new CommentVote({ comment_id: this.id, vote });
-		await newVote.$save();
 
-		const hadPreviousVote = !!this.user_vote;
+		const previousVote = this.user_vote;
+		const hadPreviousVote = !!previousVote;
 		this.user_vote = newVote;
 
 		// We only show upvotes. So we only want to change when it's upvoted, or we decrement 1 if
 		// they had previously set it to upvote and are changing to downvote to signify the removal
 		// of the upvote only.
+		let operation = 0;
 		if (vote === CommentVote.VOTE_UPVOTE) {
-			++this.votes;
+			operation = 1;
 		} else if (hadPreviousVote) {
 			// Their previous vote had to be an upvote in this case.
-			--this.votes;
+			operation = -1;
 		}
+		this.votes += operation;
 
-		this.isVotePending = false;
+		try {
+			await newVote.$save();
+		} catch (e) {
+			this.votes -= operation;
+			this.user_vote = previousVote;
+			Growls.error(`Can't do that now. Try again later?`);
+		}
 	}
 
 	async $removeVote() {
-		if (!this.user_vote || this.isVotePending) {
+		if (!this.user_vote) {
 			return;
 		}
-		this.isVotePending = true;
 
-		await this.user_vote.$remove();
+		const previousVote = this.user_vote;
 
 		// Votes only show upvotes, so don't modify vote count if it was a downvote.
-		if (this.user_vote.vote === CommentVote.VOTE_UPVOTE) {
+		if (previousVote.vote === CommentVote.VOTE_UPVOTE) {
 			--this.votes;
 		}
-
 		this.user_vote = undefined;
-		this.isVotePending = false;
+
+		try {
+			await previousVote.$remove();
+		} catch (e) {
+			this.user_vote = previousVote;
+			++this.votes;
+			Growls.error(`Can't do that now. Try again later?`);
+		}
 	}
 
 	async $follow() {
