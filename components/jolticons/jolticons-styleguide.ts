@@ -120,6 +120,7 @@ export class AppJolticonsStyleguide extends Vue {
 			'musical-note-double',
 			'notice',
 			'notifications',
+			'numbered-list',
 			'offline',
 			'other-os',
 			'pause',

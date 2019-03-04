@@ -12,7 +12,7 @@
 			<app-button
 				v-if="capabilities.textBold"
 				circle
-				icon="heart"
+				icon="bold"
 				:primary="hasMark('strong')"
 				solid
 				@click="onClickBold"
@@ -21,7 +21,7 @@
 			<app-button
 				v-if="capabilities.textItalics"
 				circle
-				icon="heart"
+				icon="italic"
 				:primary="hasMark('em')"
 				solid
 				@click="onClickItalic"
@@ -30,7 +30,7 @@
 			<app-button
 				v-if="capabilities.textStrike"
 				circle
-				icon="heart"
+				icon="strikethrough"
 				:primary="hasMark('strike')"
 				solid
 				@click="onClickStrikethrough"
@@ -68,14 +68,14 @@
 				<template v-else-if="canWrapInLists">
 					<app-button
 						circle
-						icon="heart"
+						icon="bullet-list"
 						solid
 						@click="onClickBulletList"
 						v-app-tooltip="$gettext('Unordered List')"
 						/>
 					<app-button
 						circle
-						icon="heart"
+						icon="numbered-list"
 						solid
 						@click="onClickOrderedList"
 						v-app-tooltip="$gettext('Ordered List')"

@@ -22,7 +22,7 @@
 					<app-button
 						v-if="capabilities.hasAnyEmbed"
 						circle
-						icon="heart"
+						icon="embed"
 						@click="onClickEmbed"
 						v-app-tooltip="$gettext('Embed Content')"
 						/>
@@ -36,21 +36,21 @@
 					<app-button
 						v-if="capabilities.blockquote"
 						circle
-						icon="heart"
+						icon="blockquote"
 						@click="onClickBlockquote"
 						v-app-tooltip="$gettext('Add Quote')"
 						/>
 					<app-button
 						v-if="capabilities.hr"
 						circle
-						icon="heart"
+						icon="hr"
 						@click="onClickHr"
 						v-app-tooltip="$gettext('Add Horizontal Rule')"
 						/>
 					<app-button
 						v-if="capabilities.table"
 						circle
-						icon="heart"
+						icon="insert-table"
 						@click="onClickTable"
 						v-app-tooltip="$gettext('Add Table')"
 						/>
