@@ -4,11 +4,18 @@ import { EditorState } from 'prosemirror-state';
 
 export function insertTagRule() {
 	return new InputRule(
-		/#([a-z0-9]+)\s$/i,
+		/(?:^|\W)#([a-z0-9]+)\s$/i,
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
 			if (match.length === 2) {
 				const tr = state.tr;
 				const tagText = match[1];
+
+				// Make sure only the actual tag placeholder gets replaced
+				let matchWalker = 0;
+				while (!match[0].substr(matchWalker).startsWith('#')) {
+					matchWalker++;
+				}
+				start += matchWalker;
 
 				const newNode = (state.schema.nodes.tag as NodeType).create({ text: tagText });
 				tr.replaceRangeWith(start, end, newNode);
