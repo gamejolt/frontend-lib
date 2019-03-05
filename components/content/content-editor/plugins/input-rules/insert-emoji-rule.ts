@@ -15,7 +15,7 @@ export function insertEmojiRule() {
 				const emojiType = match[1];
 
 				const newNode = (state.schema.nodes.gjEmoji as NodeType).create({
-					type: emojiType,
+					type: emojiType.toLowerCase(),
 				});
 				tr.replaceRangeWith(start, end, newNode);
 
