@@ -1,5 +1,6 @@
 import { InputRule, inputRules } from 'prosemirror-inputrules';
 import { ContextCapabilities } from '../../../content-context';
+import { insertEmojiRule } from './insert-emoji-rule';
 import { insertTagRule } from './insert-tag-rule';
 
 export function createInputRules(capabilities: ContextCapabilities) {
@@ -7,6 +8,9 @@ export function createInputRules(capabilities: ContextCapabilities) {
 
 	if (capabilities.tag) {
 		rules.push(insertTagRule());
+	}
+	if (capabilities.gjEmoji) {
+		rules.push(insertEmojiRule());
 	}
 
 	return inputRules({ rules });
