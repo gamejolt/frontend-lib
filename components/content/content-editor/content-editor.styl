@@ -1,13 +1,15 @@
 @require '~styles/variables'
 
->>> .editor-spoiler
+>>> .content-editor-spoiler
 	border-color: var(--theme-bg-subtle)
 	border-width: 5px
 	border-style: dashed
+	font-size: 15px
+	padding-top: 4px
 
->>> .editor-spoiler:before
+>>> .content-editor-spoiler:before
 	content: none;
->>> .editor-spoiler:after
+>>> .content-editor-spoiler:after
 	content: none;
 
 >>> p
@@ -22,3 +24,6 @@
 	border-style: solid
 	padding: 4px
 	min-width: 2em
+
+>>> .content-editor-heading
+	margin-top: 0px

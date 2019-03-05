@@ -3,11 +3,12 @@ import { Node, NodeSpec } from 'prosemirror-model';
 export const spoiler = {
 	group: 'block',
 	content: 'block*',
+	defining: true,
 	toDOM: (_: Node) => [
 		'blockquote',
 		{
 			spoiler: 'true',
-			class: 'editor-spoiler',
+			class: 'content-editor-spoiler',
 		},
 		0,
 	],

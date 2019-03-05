@@ -83,7 +83,7 @@
 				</template>
 			</template>
 			<app-button
-				v-if="capabilities.spoiler"
+				v-if="shouldShowSpoiler"
 				circle
 				icon="inactive"
 				:primary="isInSpoiler"
@@ -91,6 +91,34 @@
 				@click="onClickSpoiler"
 				v-app-tooltip="$gettext('Spoiler')"
 				/>
+			<template v-if="capabilities.heading">
+				<template v-if="isInHeading">
+					<app-button
+						circle
+						:icon="headingLevel === 1 ? 'h1' : 'h2'"
+						solid
+						primary
+						@click="liftFromHeading"
+						v-app-tooltip="$gettext('Heading')"
+						/>
+				</template>
+				<template v-else-if="testWrapInHeading()">
+					<app-button
+						circle
+						icon="h1"
+						solid
+						@click="onClickHeading(1)"
+						v-app-tooltip="$gettext('Heading')"
+						/>
+					<app-button
+						circle
+						icon="h2"
+						solid
+						@click="onClickHeading(2)"
+						v-app-tooltip="$gettext('Heading')"
+						/>
+				</template>
+			</template>
 		</div>
 	</transition>
 </div>

@@ -17,7 +17,8 @@ export type GJContentObjectType =
 	| 'listItem'
 	| 'spoiler'
 	| 'table'
-	| 'tag';
+	| 'tag'
+	| 'heading';
 
 export type GJContentFormat = {
 	version: string;

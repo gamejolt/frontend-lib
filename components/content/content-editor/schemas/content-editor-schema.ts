@@ -14,6 +14,7 @@ import { ContextCapabilities } from '../../content-context';
 import { bulletList } from './specs/nodes/bullet-list-nodespec';
 import { codeBlock } from './specs/nodes/code-block-nodespec';
 import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
+import { heading } from './specs/nodes/heading-nodespec';
 import { hr } from './specs/nodes/hr-nodespec';
 import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
@@ -77,6 +78,11 @@ function generateNodes(capabilities: ContextCapabilities) {
 		nodes.table = table;
 		nodes.tableRow = tableRow;
 		nodes.tableCell = tableCell;
+	}
+	if (capabilities.heading) {
+		nodes.heading = heading;
+
+		allowedDocNodes.push('heading');
 	}
 
 	nodes.tag = tag;

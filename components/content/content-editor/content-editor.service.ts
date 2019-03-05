@@ -83,14 +83,15 @@ export class ContentEditorService {
 	}
 
 	/**
-	 * Returns whether the given node is contained in a node of the given type.
+	 * Indicates whether the given node is contained in a node of the given type.
+	 * Returns the parent node that matched, or `false`.
 	 */
 	public static isContainedInNode(state: EditorState, node: Node, nodeType: NodeType) {
 		let child = node;
 		let parent = this.getParentNode(state, node);
 		while (parent !== null) {
 			if (parent.type.name === nodeType.name) {
-				return true;
+				return parent;
 			}
 
 			// Walk up
@@ -136,5 +137,17 @@ export class ContentEditorService {
 		}
 
 		return false;
+	}
+
+	public static findNodePosition(state: EditorState, node: Node) {
+		let i = 0;
+		while (i < state.doc.nodeSize) {
+			const child = state.doc.nodeAt(i);
+			if (child === node) {
+				return i;
+			}
+			i++;
+		}
+		throw new Error('Node not found in document');
 	}
 }

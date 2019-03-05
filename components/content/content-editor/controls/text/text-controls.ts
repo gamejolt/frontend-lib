@@ -37,10 +37,16 @@ export class AppContentEditorTextControls extends Vue {
 	canLiftListItems = false;
 	canWrapInLists = false;
 	isInSpoiler = false;
+	isInHeading = false;
+	headingLevel = -1;
 
 	$refs!: {
 		container: HTMLElement;
 	};
+
+	get shouldShowSpoiler() {
+		return this.capabilities.spoiler && (this.isInSpoiler || this.testWrapSpoiler());
+	}
 
 	mounted() {
 		this.mouse = new MouseState();
@@ -71,7 +77,17 @@ export class AppContentEditorTextControls extends Vue {
 						this.canWrapInLists = this.testWrapInList(
 							this.view.state.schema.nodes.bulletList
 						);
-						this.isInSpoiler = this.testIsInSpoiler(node);
+						// Find if this node is inside a spoiler
+						this.isInSpoiler = this.testIsInSpoiler(node) instanceof Node;
+						// Find the parent heading level
+						const headingParentNode = this.testIsInHeading(node);
+						if (headingParentNode) {
+							this.isInHeading = true;
+							this.headingLevel = headingParentNode.attrs.level;
+						} else {
+							this.isInHeading = false;
+							this.headingLevel = -1;
+						}
 
 						// When the controls are already visible, just adjust their position
 						// This also applies for when we are waiting for the mouse button to be released
@@ -222,13 +238,48 @@ export class AppContentEditorTextControls extends Vue {
 		if (this.isInSpoiler) {
 			const node = ContentEditorService.getSelectedNode(this.view.state);
 			if (node !== null) {
-				while (this.testIsInSpoiler(node)) {
-					lift(this.view.state, this.view.dispatch);
-				}
+				let lifted;
+				do {
+					lifted = lift(this.view.state, this.view.dispatch);
+				} while (lifted && this.testIsInSpoiler(node));
 			}
 		} else {
 			this.doWrapInSpoiler();
 			ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
 		}
+	}
+
+	testWrapInHeading() {
+		return wrapIn(this.view.state.schema.nodes.heading, { level: 1 })(this.view.state);
+	}
+
+	testIsInHeading(node: Node) {
+		return ContentEditorService.isContainedInNode(
+			this.view.state,
+			node,
+			this.view.state.schema.nodes.heading
+		);
+	}
+
+	liftFromHeading() {
+		const node = ContentEditorService.getSelectedNode(this.view.state);
+		if (node !== null) {
+			let lifted;
+			do {
+				lifted = lift(this.view.state, this.view.dispatch);
+			} while (lifted && this.testIsInHeading(node));
+		}
+	}
+
+	doWrapInHeading(level: number) {
+		wrapIn(this.view.state.schema.nodes.heading, { level })(
+			this.view.state,
+			this.view.dispatch
+		);
+	}
+
+	onClickHeading(level: number) {
+		this.doWrapInHeading(level);
+		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
 	}
 }
