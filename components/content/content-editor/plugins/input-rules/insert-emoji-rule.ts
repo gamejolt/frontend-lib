@@ -1,3 +1,4 @@
+import { checkCurrentNodeIsCode } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/input-rules';
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
@@ -11,6 +12,11 @@ export function insertEmojiRule() {
 		regex,
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
 			if (match.length === 2) {
+				// We don't want to insert emojis inside code text.
+				if (checkCurrentNodeIsCode(state)) {
+					return null;
+				}
+
 				const tr = state.tr;
 				const emojiType = match[1];
 
