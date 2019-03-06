@@ -20,6 +20,12 @@ export default class AppContentEditorLinkModal extends BaseModal {
 		if (!data.title) {
 			data.title = data.href;
 		}
+
+		// Insert protocol if none given
+		if (!/^https?:\/\//i.test(data.href)) {
+			data.href = 'https://' + data.href;
+		}
+
 		this.modal.resolve(data);
 	}
 }
