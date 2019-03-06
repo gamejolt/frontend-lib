@@ -4,7 +4,7 @@ export const embed = {
 	group: 'block',
 	marks: '',
 	draggable: true,
-	selectable: false,
+	selectable: true,
 	attrs: {
 		type: {
 			default: '',
