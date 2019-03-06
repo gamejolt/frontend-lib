@@ -5,6 +5,7 @@ export class MediaItem extends Model {
 	static readonly TYPE_GAME_HEADER = 'game-header';
 	static readonly TYPE_GAME_SCREENSHOT = 'game-screenshot';
 	static readonly TYPE_GAME_TROPHY = 'game-trophy';
+	static readonly TYPE_GAME_DESCRIPTION = 'game-description';
 
 	static readonly TYPE_FIRESIDE_POST_HEADER = 'fireside-post-header';
 	static readonly TYPE_FIRESIDE_POST_IMAGE = 'fireside-post-image';

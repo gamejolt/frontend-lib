@@ -61,6 +61,7 @@ export class ContextCapabilities {
 		return this.hasCapability('text-strike');
 	}
 	get media() {
+		// for media items, also allows uploading through the media upload component
 		return this.hasCapability('media');
 	}
 	get embedVideo() {
@@ -121,7 +122,15 @@ export class ContextCapabilities {
 	public static getForContext(context: ContentContext) {
 		switch (context) {
 			case 'fireside-post-lead':
-				return new ContextCapabilities(['text-bold', 'text-italics', 'gj-emoji']);
+				return new ContextCapabilities([
+					'text-bold',
+					'text-italics',
+					'text-link',
+					'gj-emoji',
+					'tag',
+					'mention',
+				]);
+			case 'game-description':
 			case 'fireside-post-article':
 				return new ContextCapabilities([
 					'text-bold',
@@ -145,6 +154,41 @@ export class ContextCapabilities {
 					'heading',
 					'mention',
 				]);
+			case 'game-comment':
+			case 'user-comment':
+			case 'fireside-post-comment':
+				return new ContextCapabilities([
+					'text-bold',
+					'text-italics',
+					'text-link',
+					'text-code',
+					'text-strike',
+					'media',
+					'embed-video',
+					'embed-music',
+					'code-block',
+					'gj-emoji',
+					'spoiler',
+					'tag',
+					'mention',
+				]);
+			case 'user-bio':
+				return new ContextCapabilities([
+					'text-bold',
+					'text-italics',
+					'text-link',
+					'text-code',
+					'text-strike',
+					'code-block',
+					'blockquote',
+					'gj-emoji',
+					'lists',
+					'hr',
+					'spoiler',
+					'table',
+					'tag',
+					'mention',
+				]);
 		}
 		throw new Error('Context capabilities undefined for context ' + context);
 	}
@@ -154,6 +198,8 @@ export function getMediaItemTypeForContext(context: ContentContext) {
 	switch (context) {
 		case 'fireside-post-article':
 			return MediaItem.TYPE_FIRESIDE_POST_ARTICLE_IMAGE;
+		case 'game-description':
+			return MediaItem.TYPE_GAME_DESCRIPTION;
 	}
 	throw new Error('There is no matching media item type for the context ' + context);
 }

@@ -29,7 +29,7 @@ export class NodeViewBuilder {
 		const capabilities = this.owner.getCapabilities();
 		const owner = this.owner;
 
-		if (capabilities.embedVideo) {
+		if (capabilities.hasAnyEmbed) {
 			nodeViews.embed = function(node, view, getPos) {
 				return new EmbedNodeView(node, view, getPos, owner);
 			};
@@ -37,6 +37,9 @@ export class NodeViewBuilder {
 		if (capabilities.media) {
 			nodeViews.mediaItem = function(node, view, getPos) {
 				return new MediaItemNodeView(node, view, getPos, owner);
+			};
+			nodeViews.mediaUpload = function(node, view, getPos) {
+				return new MediaUploadNodeView(node, view, getPos, owner);
 			};
 		}
 		if (capabilities.tag) {
@@ -49,9 +52,6 @@ export class NodeViewBuilder {
 				return new MentionNodeView(node, view, getPos, owner);
 			};
 		}
-		nodeViews.mediaUpload = function(node, view, getPos) {
-			return new MediaUploadNodeView(node, view, getPos, owner);
-		};
 
 		return nodeViews;
 	}
