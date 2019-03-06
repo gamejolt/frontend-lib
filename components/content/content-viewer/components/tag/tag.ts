@@ -1,13 +1,20 @@
+import View from '!view!./tag.html?style=./tag.styl';
 import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
-import Vue, { CreateElement } from 'vue';
+import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
+@View
 @Component({})
 export class AppContentViewerTag extends Vue {
 	@Prop(Object)
 	data!: GJContentObject;
 
-	render(h: CreateElement) {
-		return h('span', { class: 'tag', domProps: { innerHTML: '#' + this.data.attrs.text } });
+	get text() {
+		return this.data.attrs.text;
+	}
+
+	get url() {
+		const searchTerm = encodeURIComponent(`#${this.text}`);
+		return `/search?q=${searchTerm}`;
 	}
 }

@@ -6,7 +6,7 @@ import { AppContentViewerGJEmoji } from 'game-jolt-frontend-lib/components/conte
 import { AppContentViewerHeading } from 'game-jolt-frontend-lib/components/content/content-viewer/components/heading';
 import { AppContentViewerMention } from 'game-jolt-frontend-lib/components/content/content-viewer/components/mention/mention';
 import { AppContentViewerParagraph } from 'game-jolt-frontend-lib/components/content/content-viewer/components/paragraph';
-import { AppContentViewerTag } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tag';
+import { AppContentViewerTag } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tag/tag';
 import { AppContentViewerText } from 'game-jolt-frontend-lib/components/content/content-viewer/components/text';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
