@@ -56,6 +56,7 @@ export class AppContentViewerText extends Vue {
 			if (attrs.title) {
 				domProps.title = attrs.title;
 			}
+			// TODO: figure out how to detect external links to add an "external link" icon
 			if (false) {
 				children.push(h(AppJolticon, { props: { icon: 'link' } }));
 				domProps.target = '_blank';
