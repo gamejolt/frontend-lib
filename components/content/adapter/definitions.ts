@@ -42,8 +42,10 @@ export type ProsemirrorEditorFormat = {
 	content: GJContentObject[];
 };
 
+export type HydrationType = 'media-item' | 'embed-game-jolt-game' | 'username';
+
 export type GJHydrationDataEntry = {
-	type: string;
+	type: HydrationType;
 	id: string;
 	data: any;
 };

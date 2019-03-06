@@ -9,18 +9,38 @@
 		</app-button>
 	</template>
 	<template v-else-if="isHydrated">
-		<div class="-inner">
-			<div class="-thumbnail">
-				<app-game-thumbnail-img
-					:game="game"
-					/>
+		<app-theme :theme="game.theme" force-dark>
+			<template v-if="game.header_media_item">
+				<div class="header-background">
+					<img class="header-background-img" :src="game.header_media_item.img_url" />
+				</div>
+				<div class="header-background-fade" />
+			</template>
+			<div class="-inner">
+				<router-link
+					:to="game.getUrl()"
+					>
+					<div class="-thumbnail">
+						<app-game-thumbnail-img
+							:game="game"
+							/>
+					</div>
+				</router-link>
+				<div class="-title">
+					<router-link
+						:to="game.getUrl()"
+						>
+						<strong>{{game.title}}</strong>
+					</router-link>
+					<br>
+					<translate>by</translate> <strong>{{game.developer.display_name}}</strong>
+				</div>
 			</div>
-			<div class="-title">
-				<strong>{{game.title}}</strong>
-				<br>
-				by {{game.developer.username}}
+			<div class="content">
+				<app-game-follow-widget :game="game" />
+				<app-game-compat-icons :game="game" />
 			</div>
-		</div>
+		</app-theme>
 	</template>
 	<template v-else>
 		<app-loading />

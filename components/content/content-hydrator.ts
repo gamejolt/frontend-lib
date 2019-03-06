@@ -1,4 +1,7 @@
-import { GJHydrationDataEntry } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
+import {
+	GJHydrationDataEntry,
+	HydrationType,
+} from 'game-jolt-frontend-lib/components/content/adapter/definitions';
 import { arrayRemove } from '../../utils/array';
 import { Api } from '../api/api.service';
 
@@ -9,7 +12,7 @@ export class ContentHydrator {
 		this.hydration = hydration;
 	}
 
-	async getData(type: string, id: string) {
+	async getData(type: HydrationType, id: string) {
 		// Try to find hydration in existing pool
 		// If it's dry, request hydration from the server
 
@@ -29,7 +32,7 @@ export class ContentHydrator {
 		return entry.data;
 	}
 
-	dry(type: string, id: string) {
+	dry(type: HydrationType, id: string) {
 		arrayRemove(this.hydration, i => i.type === type && i.id === id);
 	}
 }

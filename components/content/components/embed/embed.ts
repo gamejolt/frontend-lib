@@ -7,6 +7,7 @@ import { AppVideoEmbed } from '../../../video/embed/embed';
 import { ContentOwner } from '../../content-owner';
 import { AppBaseContentComponent } from '../base/base-content-component';
 import { AppContentEmbedGameEmbed } from './game/game-embed';
+import { AppContentEmbedUserEmbed } from './user/user-embed';
 
 @View
 @Component({
@@ -15,6 +16,7 @@ import { AppContentEmbedGameEmbed } from './game/game-embed';
 		AppBaseContentComponent,
 		AppWidgetCompilerWidgetSoundcloud,
 		AppContentEmbedGameEmbed,
+		AppContentEmbedUserEmbed,
 	},
 })
 export class AppContentEmbed extends Vue {
@@ -89,34 +91,54 @@ export class AppContentEmbed extends Vue {
 		// This also has to take capabilities into account
 
 		for (const line of lines) {
+			const gameJoltUsername = this.tryGameJoltUser(line);
+			if (gameJoltUsername !== false) {
+				this.emitEmbed('game-jolt-user', gameJoltUsername);
+				return;
+			}
+
 			const gameJoltGameId = this.tryGameJoltGame(line);
-			if (gameJoltGameId) {
+			if (gameJoltGameId !== false) {
 				this.emitEmbed('game-jolt-game', gameJoltGameId);
 				return;
 			}
 
 			const youtubeVideoId = this.tryYouTube(line);
-			if (youtubeVideoId) {
+			if (youtubeVideoId !== false) {
 				this.emitEmbed('youtube-video', youtubeVideoId);
 				return;
 			}
 
 			const soundcloudSongId = this.trySoundCloud(line);
-			if (soundcloudSongId) {
+			if (soundcloudSongId !== false) {
 				this.emitEmbed('soundcloud-song', soundcloudSongId);
 				return;
 			}
 		}
 	}
 
+	private tryGameJoltUser(text: string) {
+		if (!this.capabilities.embedUser) {
+			return false;
+		}
+
+		// gamejolt.com/@username
+		const results = /gamejolt.com\/@([a-z0-9]{1,30})/i.exec(text);
+		if (results !== null && results.length === 2) {
+			const username = results[1];
+			return username;
+		}
+
+		return false;
+	}
+
 	private tryGameJoltGame(text: string) {
 		if (!this.capabilities.embedGame) {
-			return null;
+			return false;
 		}
 
 		// gamejolt.com/games/name/id
-		const regex = new RegExp(/gamejolt.com\/games\/.+?\/([0-9]+)/);
-		const results = regex.exec(text);
+		const results = /gamejolt.com\/games\/.+?\/([0-9]+)/i.exec(text);
 		if (results !== null && results.length === 2) {
 			const gameId = parseInt(results[1]);
 			if (gameId !== NaN) {
@@ -124,12 +146,12 @@ export class AppContentEmbed extends Vue {
 			}
 		}
 
-		return null;
+		return false;
 	}
 
 	private tryYouTube(text: string) {
 		if (!this.capabilities.embedVideo) {
-			return null;
+			return false;
 		}
 
 		// Support:
@@ -148,17 +170,16 @@ export class AppContentEmbed extends Vue {
 			// Swallow error. new Url throws on invalid URLs, which can very well happen.
 		}
 
-		return null;
+		return false;
 	}
 
 	private trySoundCloud(text: string) {
 		if (!this.capabilities.embedMusic) {
-			return null;
+			return false;
 		}
 
 		// SoundCloud requires the user to paste the embed code because their song links don't include the song id
-		const regex = new RegExp(/api\.soundcloud\.com\/tracks\/(\d+)/);
-		const results = regex.exec(text);
+		const results = /api\.soundcloud\.com\/tracks\/(\d+)/i.exec(text);
 		if (results !== null && results.length === 2) {
 			const songId = parseInt(results[1]);
 			if (songId !== NaN) {
@@ -166,6 +187,6 @@ export class AppContentEmbed extends Vue {
 			}
 		}
 
-		return null;
+		return false;
 	}
 }

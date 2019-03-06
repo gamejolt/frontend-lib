@@ -1,10 +1,13 @@
 import View from '!view!./game-embed.html?style=./game-embed.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { AppGameCompatIcons } from '../../../../../../../app/components/game/compat-icons/compat-icons';
+import { AppGameFollowWidget } from '../../../../../../../app/components/game/follow-widget/follow-widget';
 import { AppLoading } from '../../../../../vue/components/loading/loading';
 import { AppCard } from '../../../../card/card';
 import { Game } from '../../../../game/game.model';
 import { AppGameThumbnailImg } from '../../../../game/thumbnail-img/thumbnail-img';
+import { AppTheme } from '../../../../theme/theme';
 import { AppUserAvatar } from '../../../../user/user-avatar/user-avatar';
 import { ContentHydrator } from '../../../content-hydrator';
 
@@ -15,6 +18,9 @@ import { ContentHydrator } from '../../../content-hydrator';
 		AppLoading,
 		AppGameThumbnailImg,
 		AppUserAvatar,
+		AppGameCompatIcons,
+		AppGameFollowWidget,
+		AppTheme,
 	},
 })
 export class AppContentEmbedGameEmbed extends Vue {

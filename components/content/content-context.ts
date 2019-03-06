@@ -19,6 +19,7 @@ type ContextCapabilityType =
 	| 'embed-video'
 	| 'embed-music'
 	| 'embed-game'
+	| 'embed-user'
 	| 'code-block'
 	| 'blockquote'
 	| 'gj-emoji'
@@ -42,7 +43,7 @@ export class ContextCapabilities {
 		);
 	}
 	get hasAnyEmbed() {
-		return this.embedMusic || this.embedVideo || this.embedGame;
+		return this.embedMusic || this.embedVideo || this.embedGame || this.embedUser;
 	}
 	get textBold() {
 		return this.hasCapability('text-bold');
@@ -70,6 +71,9 @@ export class ContextCapabilities {
 	}
 	get embedGame() {
 		return this.hasCapability('embed-game');
+	}
+	get embedUser() {
+		return this.hasCapability('embed-user');
 	}
 	get codeBlock() {
 		return this.hasCapability('code-block');
@@ -129,6 +133,7 @@ export class ContextCapabilities {
 					'embed-video',
 					'embed-music',
 					'embed-game',
+					'embed-user',
 					'code-block',
 					'blockquote',
 					'gj-emoji',

@@ -18,6 +18,11 @@
 		:game-id="source"
 		:hydrator="hydrator"
 		/>
+	<app-content-embed-user-embed
+		v-else-if="type === 'game-jolt-user'"
+		:username="source"
+		:hydrator="hydrator"
+		/>
 
 </app-base-content-component>
 <div
