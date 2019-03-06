@@ -1,4 +1,5 @@
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
+import { autolinkCommunityRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/autolink-community-rule';
 import { insertMentionRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/insert-mention-rule';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
 import { Node } from 'prosemirror-model';
@@ -18,6 +19,9 @@ export function createInputRules(capabilities: ContextCapabilities) {
 	}
 	if (capabilities.mention) {
 		rules.push(insertMentionRule());
+	}
+	if (capabilities.textLink) {
+		rules.push(autolinkCommunityRule());
 	}
 
 	return inputRules({ rules });
