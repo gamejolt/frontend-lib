@@ -1,6 +1,7 @@
 import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 
 @Component({
 	components: {},
@@ -48,13 +49,18 @@ export class AppContentViewerText extends Vue {
 		let vnode = h('span', { domProps: { innerText: this.text } });
 		if (this.isLink) {
 			const attrs = this.getMarkAttrs('link');
+			const children = [vnode];
 			const domProps = {
 				href: attrs.href,
 			} as any;
 			if (attrs.title) {
 				domProps.title = attrs.title;
 			}
-			vnode = h('a', { domProps }, [vnode]);
+			if (false) {
+				children.push(h(AppJolticon, { props: { icon: 'link' } }));
+				domProps.target = '_blank';
+			}
+			vnode = h('a', { domProps }, children);
 		}
 		if (this.isBold) {
 			vnode = h('strong', [vnode]);

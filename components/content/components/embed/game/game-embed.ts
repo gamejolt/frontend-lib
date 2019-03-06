@@ -42,7 +42,7 @@ export class AppContentEmbedGameEmbed extends Vue {
 	}
 
 	async loadGame() {
-		const hydratedData = await this.hydrator.getData('embed-game-jolt-game', this.gameId);
+		const hydratedData = await this.hydrator.getData('game-id', this.gameId);
 		if (hydratedData !== null) {
 			this.game = new Game(hydratedData);
 		} else {
@@ -53,7 +53,7 @@ export class AppContentEmbedGameEmbed extends Vue {
 	onClickRetry() {
 		this.hasError = false;
 		this.game = null;
-		this.hydrator.dry('embed-game-jolt-game', this.gameId);
+		this.hydrator.dry('game-id', this.gameId);
 		this.loadGame();
 	}
 }

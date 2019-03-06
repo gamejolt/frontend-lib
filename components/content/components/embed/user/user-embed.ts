@@ -34,6 +34,7 @@ export class AppContentEmbedUserEmbed extends Vue {
 		if (hydratedData !== null) {
 			this.user = new User(hydratedData);
 		} else {
+			// TODO: handle failure case
 			this.hasError = true;
 		}
 	}
