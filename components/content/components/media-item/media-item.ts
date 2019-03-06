@@ -35,6 +35,7 @@ export class AppContentMediaItem extends Vue {
 		const hydratedData = await this.owner
 			.getHydrator()
 			.getData('media-item', this.mediaItemId.toString());
+		// TODO: handle failure case
 		this.mediaItem = new MediaItem(hydratedData);
 	}
 }

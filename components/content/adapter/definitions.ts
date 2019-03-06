@@ -18,7 +18,8 @@ export type GJContentObjectType =
 	| 'spoiler'
 	| 'table'
 	| 'tag'
-	| 'heading';
+	| 'heading'
+	| 'mention';
 
 export type GJContentFormat = {
 	version: string;

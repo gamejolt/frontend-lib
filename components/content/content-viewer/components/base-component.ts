@@ -1,9 +1,10 @@
 import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { AppContentViewerBlockquote } from 'game-jolt-frontend-lib/components/content/content-viewer/components/blockquote';
-import { AppContentViewerCodeBlock } from 'game-jolt-frontend-lib/components/content/content-viewer/components/code';
+import { AppContentViewerCodeBlock } from 'game-jolt-frontend-lib/components/content/content-viewer/components/code/code';
 import { AppContentViewerGJEmoji } from 'game-jolt-frontend-lib/components/content/content-viewer/components/gjEmoji';
 import { AppContentViewerHeading } from 'game-jolt-frontend-lib/components/content/content-viewer/components/heading';
+import { AppContentViewerMention } from 'game-jolt-frontend-lib/components/content/content-viewer/components/mention/mention';
 import { AppContentViewerParagraph } from 'game-jolt-frontend-lib/components/content/content-viewer/components/paragraph';
 import { AppContentViewerTag } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tag';
 import { AppContentViewerText } from 'game-jolt-frontend-lib/components/content/content-viewer/components/text';
@@ -48,6 +49,8 @@ function getComponentType(data: GJContentObject): any {
 			return AppContentViewerTag;
 		case 'heading':
 			return AppContentViewerHeading;
+		case 'mention':
+			return AppContentViewerMention;
 	}
 }
 

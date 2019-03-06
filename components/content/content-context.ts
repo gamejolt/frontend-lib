@@ -2,9 +2,11 @@ import { MediaItem } from '../media-item/media-item-model';
 export type ContentContext =
 	| 'fireside-post-lead'
 	| 'fireside-post-article'
+	| 'fireside-post-comment'
 	| 'game-description'
+	| 'game-comment'
+	| 'user-comment'
 	| 'user-bio'
-	| 'comment'
 	| 'forum-post';
 
 type ContextCapabilityType =
@@ -25,7 +27,8 @@ type ContextCapabilityType =
 	| 'spoiler'
 	| 'table'
 	| 'tag'
-	| 'heading';
+	| 'heading'
+	| 'mention';
 
 export class ContextCapabilities {
 	public capabilities: ContextCapabilityType[];
@@ -95,6 +98,9 @@ export class ContextCapabilities {
 	get heading() {
 		return this.hasCapability('heading');
 	}
+	get mention() {
+		return this.hasCapability('mention');
+	}
 
 	private constructor(capabilities: ContextCapabilityType[]) {
 		this.capabilities = capabilities;
@@ -132,6 +138,7 @@ export class ContextCapabilities {
 					'table',
 					'tag',
 					'heading',
+					'mention',
 				]);
 		}
 		throw new Error('Context capabilities undefined for context ' + context);

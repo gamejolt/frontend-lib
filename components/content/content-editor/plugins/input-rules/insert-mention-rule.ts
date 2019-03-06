@@ -3,27 +3,30 @@ import { NodeType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { checkCurrentNodeIsCode } from './input-rules';
 
-export function insertTagRule() {
+export function insertMentionRule() {
 	return new InputRule(
-		/(?:^|\W)#([a-z0-9]+)\s$/i,
+		/(?:^|\W)@([a-z0-9]+)\s$/,
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
 			if (match.length === 2) {
-				// We don't want to insert tags inside code text.
+				// We don't want to insert mentions inside code text.
 				if (checkCurrentNodeIsCode(state)) {
 					return null;
 				}
 
 				const tr = state.tr;
 
-				// Make sure only the actual tag placeholder gets replaced
+				// Make sure only the actual mention placeholder gets replaced
 				let matchWalker = 0;
-				while (!match[0].substr(matchWalker).startsWith('#')) {
+				while (!match[0].substr(matchWalker).startsWith('@')) {
 					matchWalker++;
 				}
 				start += matchWalker;
 
-				const tagText = match[1];
-				const newNode = (state.schema.nodes.tag as NodeType).create({ text: tagText });
+				const mentionText = match[1];
+				const newNode = (state.schema.nodes.mention as NodeType).create({
+					value: mentionText,
+				});
+
 				tr.replaceRangeWith(start, end, newNode);
 
 				// We want to insert a space because it gets eaten by the input rule by default.

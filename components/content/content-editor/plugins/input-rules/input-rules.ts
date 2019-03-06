@@ -1,4 +1,5 @@
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
+import { insertMentionRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/insert-mention-rule';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
 import { Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
@@ -14,6 +15,9 @@ export function createInputRules(capabilities: ContextCapabilities) {
 	}
 	if (capabilities.gjEmoji) {
 		rules.push(insertEmojiRule());
+	}
+	if (capabilities.mention) {
+		rules.push(insertMentionRule());
 	}
 
 	return inputRules({ rules });

@@ -1,0 +1,26 @@
+<span>
+	<template v-if="user">
+		<router-link
+			:to="user.url"
+			>
+			<span
+				:title="user.display_name + ' (@' + user.username + ')'"
+				>
+				@{{user.username}}
+				<img key="user" :src="user.img_avatar" class="img-responsive mention-avatar-img" alt="">
+			</span>
+		</router-link>
+	</template>
+	<!-- Placeholder until the user data is hydrated: -->
+	<template v-else>
+		<router-link
+			:to="'@' + username"
+			>
+			<span
+				:title="'@' + username"
+				>
+				@{{username}}
+			</span>
+		</router-link>
+	</template>
+</span>

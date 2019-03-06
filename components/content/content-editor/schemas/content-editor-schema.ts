@@ -18,6 +18,7 @@ import { heading } from './specs/nodes/heading-nodespec';
 import { hr } from './specs/nodes/hr-nodespec';
 import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
+import { mention } from './specs/nodes/mention-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
 import { tableCell } from './specs/nodes/table-cell-nodespec';
 import { tableRow } from './specs/nodes/table-row-nodespec';
@@ -84,8 +85,12 @@ function generateNodes(capabilities: ContextCapabilities) {
 
 		allowedDocNodes.push('heading');
 	}
-
-	nodes.tag = tag;
+	if (capabilities.tag) {
+		nodes.tag = tag;
+	}
+	if (capabilities.mention) {
+		nodes.mention = mention;
+	}
 
 	if (allowedDocNodes.length > 0) {
 		nodes.doc.content += ' (' + allowedDocNodes.join(' | ') + ')';

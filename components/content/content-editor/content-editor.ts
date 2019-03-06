@@ -2,18 +2,14 @@ import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
 import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/content/content-editor/keymap';
-import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
-import { MediaItemNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-item';
-import { MediaUploadNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-upload';
-import { TagNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/tag';
 import { createInputRules } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/input-rules';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
 import { baseKeymap } from 'prosemirror-commands';
 import { history } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
-import { DOMParser, Node } from 'prosemirror-model';
+import { DOMParser } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
-import { Decoration, EditorView, NodeView } from 'prosemirror-view';
+import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
@@ -27,16 +23,8 @@ import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
 import { dropEventHandler } from './events/drop-event-handler';
+import { NodeViewBuilder } from './node-views/node-view-builder';
 import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
-
-type NodeViewList = {
-	[name: string]: (
-		node: Node,
-		view: EditorView<any>,
-		getPos: () => number,
-		decorations: Decoration[]
-	) => NodeView<any>;
-};
 
 @View
 @Component({
@@ -135,26 +123,8 @@ export class AppContentEditor extends Vue implements ContentOwner {
 			],
 		});
 
-		// Construct node views based on capabilities
-		const nodeViews = {} as NodeViewList;
-		if (this.capabilities.embedVideo) {
-			nodeViews.embed = function(node, view, getPos) {
-				return new EmbedNodeView(node, view, getPos, that);
-			};
-		}
-		if (this.capabilities.media) {
-			nodeViews.mediaItem = function(node, view, getPos) {
-				return new MediaItemNodeView(node, view, getPos, that);
-			};
-		}
-		if (this.capabilities.tag) {
-			nodeViews.tag = function(node, view, getPos) {
-				return new TagNodeView(node, view, getPos);
-			};
-		}
-		nodeViews.mediaUpload = function(node, view, getPos) {
-			return new MediaUploadNodeView(node, view, getPos, that);
-		};
+		const nodeViewBuilder = new NodeViewBuilder(this);
+		const nodeViews = nodeViewBuilder.build();
 
 		this.view = new EditorView(this.$refs.doc, {
 			state: this.state,
