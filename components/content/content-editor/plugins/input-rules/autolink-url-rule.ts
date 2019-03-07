@@ -3,11 +3,13 @@ import { InputRule } from 'prosemirror-inputrules';
 import { MarkType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 
-export function autolinkCommunityRule() {
+// Preface: This input rule does not accurately detect URLs based on the actual RFCs.
+// It just links http:// and then however many domain parts, and optionally a "path" (`/` and then any non-whitespace).
+export function autolinkUrlRule() {
 	return new InputRule(
-		/(?:^|\W)c\/([a-z0-9-_]{3,50})$/i, // TODO: adjust this to match our community path ruleset
+		/(?:^|\W)https?:\/\/[a-z0-9-_]{2,}(?:\.[a-z0-9-_]{2,})+(?:\/\S*)?$/i,
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
-			if (match.length === 2) {
+			if (match.length === 1) {
 				// We don't want to autolink inside code text.
 				if (checkCurrentNodeIsCode(state)) {
 					return null;
@@ -20,10 +22,10 @@ export function autolinkCommunityRule() {
 				// Removes all previous links on this text
 				tr.removeMark(start, end, state.schema.marks.link);
 
-				const communityPath = match[1];
+				const href = match[0];
 				const linkMark = (state.schema.marks.link as MarkType).create({
-					href: '/c/' + communityPath,
-					title: 'Community: ' + communityPath,
+					href,
+					title: href,
 				});
 				// Add the link mark to the text. +1 to include the new char.
 				tr.addMark(start, end + 1, linkMark);
