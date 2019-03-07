@@ -2,6 +2,7 @@ import View from '!view!./media-item.html?style=./media-item.styl';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { AppLoading } from '../../../../vue/components/loading/loading';
 import { MediaItem } from '../../../media-item/media-item-model';
 import { AppBaseContentComponent } from '../base/base-content-component';
 
@@ -9,11 +10,18 @@ import { AppBaseContentComponent } from '../base/base-content-component';
 @Component({
 	components: {
 		AppBaseContentComponent,
+		AppLoading,
 	},
 })
 export class AppContentMediaItem extends Vue {
 	@Prop(Number)
 	mediaItemId!: number;
+
+	@Prop(Number)
+	mediaItemWidth!: number;
+
+	@Prop(Number)
+	mediaItemHeight!: number;
 
 	@Prop(Object)
 	owner!: ContentOwner;
@@ -23,6 +31,14 @@ export class AppContentMediaItem extends Vue {
 
 	mediaItem: MediaItem | null = null;
 	hasError = false;
+
+	get containerWidth() {
+		return this.mediaItemWidth > 0 ? this.mediaItemWidth + 'px' : 'auto';
+	}
+
+	get containerHeight() {
+		return this.mediaItemHeight > 0 ? this.mediaItemHeight + 'px' : 'auto';
+	}
 
 	get isHydrated() {
 		return !!this.mediaItem;

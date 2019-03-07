@@ -1,0 +1,11 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
+.media-item-container
+	display: flex
+	justify-content: center
+	align-items: center
+	theme-prop('background-color', 'bg-offset')
+	rounded-corners()
+	overflow: hidden
+	margin-bottom: $line-height-computed

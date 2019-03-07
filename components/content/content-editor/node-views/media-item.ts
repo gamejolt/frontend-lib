@@ -6,6 +6,8 @@ export class MediaItemNodeView extends HydratableNodeView {
 		const vm = new AppContentMediaItem({
 			propsData: {
 				mediaItemId: this.node.attrs.id,
+				mediaItemWidth: this.node.attrs.width,
+				mediaItemHeight: this.node.attrs.height,
 				owner: this.owner,
 			},
 		});

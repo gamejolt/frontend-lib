@@ -41,6 +41,8 @@ export class AppContentMediaUpload extends Vue {
 				const tr = this.editorView.state.tr;
 				tr.setNodeMarkup(nodePos, this.editorView.state.schema.nodes.mediaItem, {
 					id: mediaItem.id,
+					width: mediaItem.width,
+					height: mediaItem.height,
 				});
 				this.editorView.dispatch(tr);
 			}
