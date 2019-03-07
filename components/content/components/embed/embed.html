@@ -23,6 +23,11 @@
 		:username="source"
 		:hydrator="hydrator"
 		/>
+	<app-content-embed-community-embed
+		v-else-if="type === 'game-jolt-community'"
+		:community-path="source"
+		:hydrator="hydrator"
+		/>
 
 </app-base-content-component>
 <div

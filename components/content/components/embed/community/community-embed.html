@@ -1,0 +1,56 @@
+<div>
+	<template v-if="hasError">
+		<app-card class="community-container">
+			<app-jolticon icon="notice" /><translate>Failed to load community information</translate>
+			<br>
+			<app-button
+				@click="onClickRetry"
+				>
+				<translate>Retry</translate>
+			</app-button>
+		</app-card>
+	</template>
+	<template v-else-if="isHydrated">
+		<app-theme :theme="community.theme" force-dark>
+			<app-card class="community-container">
+				<template v-if="community.header">
+					<div class="header-background">
+						<img class="header-background-img" :src="community.header.img_url" />
+					</div>
+					<div class="header-background-fade" />
+				</template>
+				<div class="-inner">
+					<div class="-thumbnail">
+						<router-link
+							:to="'/c/' + community.path"
+							>
+							<app-community-thumbnail-img
+								:community="community"
+								/>
+						</router-link>
+					</div>
+					<div class="-title">
+						<translate>Community</translate>
+						<br>
+						<router-link
+							:to="'/c/' + community.path"
+							>
+							<strong>{{community.name}}</strong>
+						</router-link>
+					</div>
+				</div>
+				<div class="content">
+					<app-community-join-widget
+						block
+						:community="community"
+						/>
+				</div>
+			</app-card>
+		</app-theme>
+	</template>
+	<template v-else>
+		<app-card class="community-container">
+			<app-loading />
+		</app-card>
+	</template>
+</div>

@@ -42,7 +42,7 @@ export type ProsemirrorEditorFormat = {
 	content: GJContentObject[];
 };
 
-export type HydrationType = 'media-item-id' | 'game-id' | 'username';
+export type HydrationType = 'media-item-id' | 'game-id' | 'username' | 'community-path';
 
 export type GJHydrationDataEntry = {
 	type: HydrationType;

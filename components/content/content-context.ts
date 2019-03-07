@@ -20,6 +20,7 @@ type ContextCapabilityType =
 	| 'embed-music'
 	| 'embed-game'
 	| 'embed-user'
+	| 'embed-community'
 	| 'code-block'
 	| 'blockquote'
 	| 'gj-emoji'
@@ -43,7 +44,13 @@ export class ContextCapabilities {
 		);
 	}
 	get hasAnyEmbed() {
-		return this.embedMusic || this.embedVideo || this.embedGame || this.embedUser;
+		return (
+			this.embedMusic ||
+			this.embedVideo ||
+			this.embedGame ||
+			this.embedUser ||
+			this.embedCommunity
+		);
 	}
 	get textBold() {
 		return this.hasCapability('text-bold');
@@ -75,6 +82,9 @@ export class ContextCapabilities {
 	}
 	get embedUser() {
 		return this.hasCapability('embed-user');
+	}
+	get embedCommunity() {
+		return this.hasCapability('embed-community');
 	}
 	get codeBlock() {
 		return this.hasCapability('code-block');
@@ -143,6 +153,7 @@ export class ContextCapabilities {
 					'embed-music',
 					'embed-game',
 					'embed-user',
+					'embed-community',
 					'code-block',
 					'blockquote',
 					'gj-emoji',

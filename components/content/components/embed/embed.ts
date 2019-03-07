@@ -6,6 +6,7 @@ import { Prop } from 'vue-property-decorator';
 import { AppVideoEmbed } from '../../../video/embed/embed';
 import { ContentOwner } from '../../content-owner';
 import { AppBaseContentComponent } from '../base/base-content-component';
+import { AppContentEmbedCommunityEmbed } from './community/community-embed';
 import { AppContentEmbedGameEmbed } from './game/game-embed';
 import { AppContentEmbedUserEmbed } from './user/user-embed';
 
@@ -17,6 +18,7 @@ import { AppContentEmbedUserEmbed } from './user/user-embed';
 		AppWidgetCompilerWidgetSoundcloud,
 		AppContentEmbedGameEmbed,
 		AppContentEmbedUserEmbed,
+		AppContentEmbedCommunityEmbed,
 	},
 })
 export class AppContentEmbed extends Vue {
@@ -103,6 +105,12 @@ export class AppContentEmbed extends Vue {
 				return;
 			}
 
+			const gameJoltCommunityPath = this.tryGameJoltCommunity(line);
+			if (gameJoltCommunityPath !== false) {
+				this.emitEmbed('game-jolt-community', gameJoltCommunityPath);
+				return;
+			}
+
 			const youtubeVideoId = this.tryYouTube(line);
 			if (youtubeVideoId !== false) {
 				this.emitEmbed('youtube-video', youtubeVideoId);
@@ -115,6 +123,21 @@ export class AppContentEmbed extends Vue {
 				return;
 			}
 		}
+	}
+
+	private tryGameJoltCommunity(text: string) {
+		if (!this.capabilities.embedCommunity) {
+			return false;
+		}
+
+		// gamejolt.com/c/path
+		const results = /gamejolt.com\/c\/([a-z0-9-_]{1,50})/i.exec(text);
+		if (results !== null && results.length === 2) {
+			const communityPath = results[1];
+			return communityPath;
+		}
+
+		return false;
 	}
 
 	private tryGameJoltUser(text: string) {
