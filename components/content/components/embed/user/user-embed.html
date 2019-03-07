@@ -2,4 +2,10 @@
 	<template v-if="isHydrated">
 		<app-user-card :user="user" />
 	</template>
+	<template v-else-if="hasError">
+		{{errorMessage}}
+	</template>
+	<template v-else>
+		<app-loading />
+	</template>
 </div>

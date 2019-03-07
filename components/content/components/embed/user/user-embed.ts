@@ -2,6 +2,7 @@ import View from '!view!./user-embed.html?style=./user-embed.styl';
 import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { AppLoading } from '../../../../../vue/components/loading/loading';
 import { AppUserCard } from '../../../../user/card/card';
 import { ContentHydrator } from '../../../content-hydrator';
 
@@ -9,6 +10,7 @@ import { ContentHydrator } from '../../../content-hydrator';
 @Component({
 	components: {
 		AppUserCard,
+		AppLoading,
 	},
 })
 export class AppContentEmbedUserEmbed extends Vue {
@@ -25,6 +27,13 @@ export class AppContentEmbedUserEmbed extends Vue {
 		return !!this.user;
 	}
 
+	get errorMessage() {
+		return this.$gettextInterpolate(
+			'Failed to load user information for user @%{ username }.',
+			{ username: this.username }
+		);
+	}
+
 	mounted() {
 		this.loadUser();
 	}
@@ -34,7 +43,6 @@ export class AppContentEmbedUserEmbed extends Vue {
 		if (hydratedData !== null) {
 			this.user = new User(hydratedData);
 		} else {
-			// TODO: handle failure case
 			this.hasError = true;
 		}
 	}

@@ -6,8 +6,11 @@
 	<template v-if="isHydrated">
 		<img class="img-responsive" :src="mediaItem.img_url" />
 	</template>
+	<template v-else-if="hasError">
+		<translate>Error loading media item.</translate>
+	</template>
 	<template v-else>
-		Media item is not hydrated
+		<translate>Media item is not hydrated.</translate>
 	</template>
 
 </app-base-content-component>

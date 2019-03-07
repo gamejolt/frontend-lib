@@ -22,6 +22,7 @@ export class AppContentMediaItem extends Vue {
 	isEditing!: boolean;
 
 	mediaItem: MediaItem | null = null;
+	hasError = false;
 
 	get isHydrated() {
 		return !!this.mediaItem;
@@ -35,7 +36,10 @@ export class AppContentMediaItem extends Vue {
 		const hydratedData = await this.owner
 			.getHydrator()
 			.getData('media-item-id', this.mediaItemId.toString());
-		// TODO: handle failure case
-		this.mediaItem = new MediaItem(hydratedData);
+		if (hydratedData) {
+			this.mediaItem = new MediaItem(hydratedData);
+		} else {
+			this.hasError = true;
+		}
 	}
 }
