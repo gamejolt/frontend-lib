@@ -16,7 +16,6 @@ export type GJContentObjectType =
 	| 'bulletList'
 	| 'listItem'
 	| 'spoiler'
-	| 'table'
 	| 'tag'
 	| 'heading'
 	| 'mention';
