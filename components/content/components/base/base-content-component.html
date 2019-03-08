@@ -6,13 +6,22 @@
 
 	<div
 		v-if="isEditing"
-		class="-remove"
+		class="-controls"
 		>
+		<app-button
+			v-if="showEdit"
+			circle
+			overlay
+			icon="edit"
+			@click="onEditClicked"
+			v-app-tooltip="$gettext('Edit')"
+			/>
 		<app-button
 			circle
 			overlay
 			icon="remove"
 			@click="onRemovedClicked"
+			v-app-tooltip="$gettext('Remove')"
 			/>
 	</div>
 

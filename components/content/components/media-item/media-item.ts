@@ -23,6 +23,12 @@ export class AppContentMediaItem extends Vue {
 	@Prop(Number)
 	mediaItemHeight!: number;
 
+	@Prop(String)
+	caption!: string;
+
+	@Prop(String)
+	align!: string;
+
 	@Prop(Object)
 	owner!: ContentOwner;
 
@@ -31,6 +37,20 @@ export class AppContentMediaItem extends Vue {
 
 	mediaItem: MediaItem | null = null;
 	hasError = false;
+
+	get title() {
+		if (this.hasCaption) {
+			return this.caption;
+		}
+		if (this.mediaItem instanceof MediaItem) {
+			return this.mediaItem.filename;
+		}
+		return '';
+	}
+
+	get hasCaption() {
+		return this.isHydrated && this.caption;
+	}
 
 	get containerWidth() {
 		return this.mediaItemWidth > 0 ? this.mediaItemWidth + 'px' : 'auto';
@@ -44,8 +64,14 @@ export class AppContentMediaItem extends Vue {
 		return !!this.mediaItem;
 	}
 
-	onRemoved() {
-		this.$emit('removed');
+	get itemAlignment() {
+		switch (this.align) {
+			case 'left':
+				return 'flex-start';
+			case 'right':
+				return 'flex-end';
+		}
+		return 'center';
 	}
 
 	async mounted() {
@@ -57,5 +83,9 @@ export class AppContentMediaItem extends Vue {
 		} else {
 			this.hasError = true;
 		}
+	}
+
+	onRemoved() {
+		this.$emit('removed');
 	}
 }

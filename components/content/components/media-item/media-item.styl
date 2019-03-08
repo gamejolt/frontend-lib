@@ -1,6 +1,12 @@
 @require '~styles/variables'
 @require '~styles-lib/mixins'
 
+.media-item
+	width: 100%
+	display: flex
+	flex-direction: column
+	margin-bottom: $line-height-computed
+
 .media-item-container
 	display: flex
 	justify-content: center
@@ -8,4 +14,7 @@
 	theme-prop('background-color', 'bg-offset')
 	rounded-corners()
 	overflow: hidden
-	margin-bottom: $line-height-computed
+
+.caption-placeholder
+	cursor: pointer
+	pressy()

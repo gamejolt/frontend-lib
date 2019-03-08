@@ -8,6 +8,8 @@ export class MediaItemNodeView extends HydratableNodeView {
 				mediaItemId: this.node.attrs.id,
 				mediaItemWidth: this.node.attrs.width,
 				mediaItemHeight: this.node.attrs.height,
+				caption: this.node.attrs.caption,
+				align: this.node.attrs.align,
 				owner: this.owner,
 			},
 		});

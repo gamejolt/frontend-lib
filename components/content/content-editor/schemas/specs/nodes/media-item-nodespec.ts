@@ -15,6 +15,12 @@ export const mediaItem = {
 		height: {
 			default: 0,
 		},
+		caption: {
+			default: '',
+		},
+		align: {
+			default: 'center',
+		},
 	},
 	toDOM: (node: Node) => [
 		'div',
@@ -22,6 +28,8 @@ export const mediaItem = {
 			'media-item-id': node.attrs.id,
 			'media-item-width': node.attrs.width,
 			'media-item-height': node.attrs.height,
+			'media-item-caption': node.attrs.caption,
+			'media-item-align': node.attrs.align,
 		},
 	],
 	parseDOM: [
@@ -32,6 +40,8 @@ export const mediaItem = {
 					id: domNode.getAttribute('media-item-id'),
 					width: domNode.getAttribute('media-item-width'),
 					height: domNode.getAttribute('media-item-height'),
+					caption: domNode.getAttribute('media-item-caption'),
+					align: domNode.getAttribute('media-item-align'),
 				};
 			},
 		},

@@ -1,29 +1,43 @@
 <app-base-content-component
 	:is-editing="isEditing"
 	@removed="onRemoved"
+	@edit="onEdit"
 	>
 
 	<div
-		class="media-item-container"
+		class="media-item"
 		:style="{
-			width: containerWidth,
-			height: containerHeight,
+			'align-items': itemAlignment,
 		}"
 		>
-		<template v-if="isHydrated">
-			<img
-				class="img-responsive"
-				:src="mediaItem.img_url"
-				:alt="mediaItem.filename"
-				:title="mediaItem.filename"
-				/>
-		</template>
-		<template v-else-if="hasError">
-			<translate>Error loading media item.</translate>
-		</template>
-		<template v-else>
-			<app-loading />
-		</template>
+		<div
+			class="media-item-container"
+			:style="{
+				width: containerWidth,
+				height: containerHeight,
+			}"
+			>
+			<template v-if="isHydrated">
+				<img
+					class="img-responsive"
+					:src="mediaItem.img_url"
+					:alt="title"
+					:title="title"
+					/>
+			</template>
+			<template v-else-if="hasError">
+				<translate>Error loading media item.</translate>
+			</template>
+			<template v-else>
+				<app-loading />
+			</template>
+		</div>
+		<span
+			v-if="hasCaption"
+			class="text-muted"
+			>
+			<em>{{caption}}</em>
+		</span>
 	</div>
 
 </app-base-content-component>

@@ -43,6 +43,8 @@ export class AppContentMediaUpload extends Vue {
 					id: mediaItem.id,
 					width: mediaItem.width,
 					height: mediaItem.height,
+					align: 'center',
+					caption: '',
 				});
 				this.editorView.dispatch(tr);
 			}
