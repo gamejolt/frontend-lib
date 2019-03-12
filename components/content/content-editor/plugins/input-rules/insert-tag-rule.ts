@@ -5,7 +5,7 @@ import { checkCurrentNodeIsCode } from './input-rules';
 
 export function insertTagRule() {
 	return new InputRule(
-		/(?:^|\W)#([a-z0-9]+)\s$/i,
+		/(?:^|\W)#([a-z0-9_-]+)\s$/i,
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
 			if (match.length === 2) {
 				// We don't want to insert tags inside code text.

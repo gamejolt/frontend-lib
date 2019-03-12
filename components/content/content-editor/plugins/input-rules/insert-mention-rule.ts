@@ -5,7 +5,7 @@ import { checkCurrentNodeIsCode } from './input-rules';
 
 export function insertMentionRule() {
 	return new InputRule(
-		/(?:^|\W)@([a-z0-9]+)\s$/,
+		/(?:^|\W)@([a-z0-9_-]+)\s$/,
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
 			if (match.length === 2) {
 				// We don't want to insert mentions inside code text.
