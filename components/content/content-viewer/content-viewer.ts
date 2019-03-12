@@ -57,4 +57,8 @@ export class AppContentViewer extends Vue implements ContentOwner {
 			this.hydrator = new ContentHydrator();
 		}
 	}
+
+	onClickCopy() {
+		(navigator as any).clipboard.writeText(this.source);
+	}
 }
