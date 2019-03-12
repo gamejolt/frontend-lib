@@ -97,7 +97,11 @@ export class AppContentEditorControls extends Vue {
 	}
 
 	onClickBlockquote() {
-		const newNode = (this.view.state.schema.nodes.blockquote as NodeType).create();
+		const contentNode = (this.view.state.schema.nodes.paragraph as NodeType).create();
+		const newNode = (this.view.state.schema.nodes.blockquote as NodeType).create(
+			{},
+			contentNode
+		);
 		this.insertNewNode(newNode);
 	}
 
