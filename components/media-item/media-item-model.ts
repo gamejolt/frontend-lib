@@ -13,6 +13,10 @@ export class MediaItem extends Model {
 
 	static readonly TYPE_FEATURED_HEADER = 'featured-header';
 
+	static readonly TYPE_COMMENT = 'comment';
+
+	static readonly TYPE_FORUM_POST = 'forum-post';
+
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_REMOVED = 'removed';
 	static readonly STATUS_INACTIVE = 'inactive';

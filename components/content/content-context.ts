@@ -211,6 +211,12 @@ export function getMediaItemTypeForContext(context: ContentContext) {
 			return MediaItem.TYPE_FIRESIDE_POST_ARTICLE_IMAGE;
 		case 'game-description':
 			return MediaItem.TYPE_GAME_DESCRIPTION;
+		case 'fireside-post-comment':
+		case 'game-comment':
+		case 'user-comment':
+			return MediaItem.TYPE_COMMENT;
+		case 'forum-post':
+			return MediaItem.TYPE_FORUM_POST;
 	}
 	throw new Error('There is no matching media item type for the context ' + context);
 }
