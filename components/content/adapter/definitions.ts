@@ -3,7 +3,6 @@ import { ContentContext } from '../content-context';
 export type GJContentObjectType =
 	| 'text'
 	| 'paragraph'
-	| 'img'
 	| 'table'
 	| 'hr'
 	| 'codeBlock'
