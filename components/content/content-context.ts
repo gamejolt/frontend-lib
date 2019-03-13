@@ -140,8 +140,8 @@ export class ContextCapabilities {
 					'tag',
 					'mention',
 				]);
-			case 'game-description':
 			case 'fireside-post-article':
+			case 'forum-post':
 				return new ContextCapabilities([
 					'text-bold',
 					'text-italics',
@@ -165,6 +165,7 @@ export class ContextCapabilities {
 					'heading',
 					'mention',
 				]);
+			case 'game-description':
 			case 'game-comment':
 			case 'user-comment':
 			case 'fireside-post-comment':
@@ -175,12 +176,15 @@ export class ContextCapabilities {
 					'text-code',
 					'text-strike',
 					'media',
-					'embed-video',
-					'embed-music',
 					'code-block',
+					'blockquote',
 					'gj-emoji',
+					'lists',
+					'hr',
 					'spoiler',
+					'table',
 					'tag',
+					'heading',
 					'mention',
 				]);
 			case 'user-bio':
