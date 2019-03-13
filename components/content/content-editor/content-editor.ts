@@ -19,7 +19,7 @@ import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
 import { dropEventHandler } from './events/drop-event-handler';
-import { NodeViewBuilder } from './node-views/node-view-builder';
+import { buildNodeViews } from './node-views/node-view-builder';
 
 @View
 @Component({
@@ -96,9 +96,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 			plugins,
 		});
 
-		const nodeViewBuilder = new NodeViewBuilder(this);
-		const nodeViews = nodeViewBuilder.build();
-
+		const nodeViews = buildNodeViews(this);
 		this.view = new EditorView(this.$refs.doc, {
 			state: this.state,
 			nodeViews,
