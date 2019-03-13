@@ -23,8 +23,6 @@ export function createInputRules(capabilities: ContextCapabilities) {
 	}
 	if (capabilities.textLink) {
 		rules.push(autolinkCommunityRule());
-	}
-	if (capabilities.textLink) {
 		rules.push(autolinkUrlRule());
 	}
 
