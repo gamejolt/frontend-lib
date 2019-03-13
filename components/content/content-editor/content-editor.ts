@@ -1,14 +1,10 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
-import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/content/content-editor/keymap';
-import { createInputRules } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/input-rules';
+import { createPlugins } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/plugins';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
-import { baseKeymap } from 'prosemirror-commands';
-import { history } from 'prosemirror-history';
-import { keymap } from 'prosemirror-keymap';
 import { DOMParser } from 'prosemirror-model';
-import { EditorState, Plugin } from 'prosemirror-state';
+import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
@@ -24,7 +20,6 @@ import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
 import { dropEventHandler } from './events/drop-event-handler';
 import { NodeViewBuilder } from './node-views/node-view-builder';
-import { UpdateIncrementerPlugin } from './plugins/update-incrementer-plugin';
 
 @View
 @Component({
@@ -94,33 +89,11 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		this.capabilities = ContextCapabilities.getForContext(this.contentContext);
 		this.hydrator = new ContentHydrator();
 
-		// This is used to update any children with the new view.
-		// We don't want to watch the view/state objects because they are too heavy.
-		// So instead, this increments a counter every time the state changes
-		const that = this;
-		const incrementerPlugin = new Plugin({
-			view(editorView) {
-				return new UpdateIncrementerPlugin(editorView, that);
-			},
-		});
-		// const emojiPanelPlugin = new Plugin({
-		// 	view(editorView) {
-		// 		return new ShowEmojiPanelPlugin(editorView, that);
-		// 	},
-		// });
-
 		const schema = generateSchema(this.capabilities);
-		const ourKeymap = getContentEditorKeymap(this, schema);
+		const plugins = createPlugins(this, schema);
 		this.state = EditorState.create({
 			doc: DOMParser.fromSchema(schema).parse(this.$refs.doc),
-			plugins: [
-				keymap(ourKeymap),
-				keymap(baseKeymap),
-				history(),
-				incrementerPlugin,
-				createInputRules(this.capabilities),
-				// emojiPanelPlugin,
-			],
+			plugins,
 		});
 
 		const nodeViewBuilder = new NodeViewBuilder(this);
