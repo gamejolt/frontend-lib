@@ -37,9 +37,6 @@ export class FiresidePost extends Model {
 
 	type!: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
 	hash!: string;
-	lead!: string;
-	lead_compiled!: string;
-	lead_snippet!: string;
 	header?: MediaItem;
 	status!: string;
 	added_on!: number;
@@ -55,10 +52,16 @@ export class FiresidePost extends Model {
 	slug!: string;
 	subline!: string;
 	url!: string;
-	content_compiled!: string;
-	content_markdown?: string;
 	view_count?: number;
 	expand_count?: number;
+
+	lead!: string;
+	lead_compiled!: string;
+	lead_snippet!: string;
+	lead_content!: string;
+	content_compiled!: string;
+	content_markdown?: string;
+	article_content!: string;
 
 	tags: FiresidePostTag[] = [];
 	communities: FiresidePostCommunity[] = [];

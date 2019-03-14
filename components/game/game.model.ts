@@ -121,6 +121,7 @@ export class Game extends Model {
 	// Description settings
 	description_markdown?: string;
 	description_compiled?: string;
+	description_content!: string;
 
 	// Manage settings
 	ads_enabled?: boolean;

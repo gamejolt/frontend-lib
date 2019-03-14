@@ -69,8 +69,6 @@ export class Comment extends Model {
 	resource!: 'Game' | 'FiresidePost';
 	resource_id!: number;
 	user!: User;
-	comment?: string;
-	comment_compiled!: string;
 	votes!: number;
 	user_vote?: CommentVote;
 	status!: number;
@@ -80,6 +78,10 @@ export class Comment extends Model {
 	videos: CommentVideo[] = [];
 	subscription?: Subscription;
 	is_pinned!: boolean;
+
+	comment?: string;
+	comment_compiled!: string;
+	comment_content!: string;
 
 	isFollowPending = false;
 

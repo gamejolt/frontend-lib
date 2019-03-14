@@ -60,6 +60,7 @@ export class User extends Model {
 
 	description_compiled?: string;
 	description_markdown?: string;
+	bio_content!: string;
 
 	// Notifications settings.
 	newsletter?: boolean;

@@ -1,9 +1,9 @@
-import { Model } from '../../model/model.service';
-import { User } from '../../user/user.model';
-import { Notification } from '../../notification/notification-model';
-import { ForumTopic } from '../topic/topic.model';
 import { Api } from '../../api/api.service';
 import { Environment } from '../../environment/environment.service';
+import { Model } from '../../model/model.service';
+import { Notification } from '../../notification/notification-model';
+import { User } from '../../user/user.model';
+import { ForumTopic } from '../topic/topic.model';
 
 export class ForumPost extends Model {
 	static readonly STATUS_ACTIVE = 'active';
@@ -14,8 +14,6 @@ export class ForumPost extends Model {
 	user!: User;
 	topic_id!: number;
 	parent_post_id!: number;
-	content_markdown!: string;
-	content_compiled!: string;
 	status!: string;
 	posted_on!: number;
 	replied_to?: User;
@@ -23,6 +21,10 @@ export class ForumPost extends Model {
 	modified_by?: number;
 	modified_by_user?: User;
 	modified_on?: number;
+
+	content_markdown!: string;
+	content_compiled!: string;
+	text_content!: string;
 
 	notification?: Notification;
 	topic!: ForumTopic;
