@@ -28,6 +28,10 @@ export class AppContentViewer extends Vue implements ContentOwner {
 		return !!this.data;
 	}
 
+	mounted() {
+		this.updatedSource();
+	}
+
 	getContext() {
 		if (this.data) {
 			return this.data.context;
