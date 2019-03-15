@@ -3,6 +3,10 @@ import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/
 import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
 import { createPlugins } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/plugins';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
+import {
+	ContentFormatAdapter,
+	ProsemirrorEditorFormat,
+} from 'game-jolt-frontend-lib/components/content/content-format-adapter';
 import { DOMParser } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
@@ -10,8 +14,6 @@ import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { ProsemirrorEditorFormat } from '../adapter/definitions';
-import { GJContentFormatAdapter } from '../adapter/gj-content-format-adapter';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
@@ -60,7 +62,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	// DEBUG
 	get viewerSource() {
 		if (this.view) {
-			const data = GJContentFormatAdapter.adaptOut(
+			const data = ContentFormatAdapter.adaptOut(
 				this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
 				this.contentContext
 			);

@@ -1,4 +1,4 @@
-import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
+import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { AppContentViewerBlockquote } from 'game-jolt-frontend-lib/components/content/content-viewer/components/blockquote';
 import { AppContentViewerCodeBlock } from 'game-jolt-frontend-lib/components/content/content-viewer/components/code/code';
@@ -18,7 +18,7 @@ import { AppContentViewerListItem } from './list-item';
 import { AppContentViewerMediaItem } from './media-item';
 import { AppContentViewerSpoiler } from './spoiler';
 
-function getComponentType(data: GJContentObject): any {
+function getComponentType(data: ContentObject): any {
 	switch (data.type) {
 		case 'paragraph':
 			return AppContentViewerParagraph;
@@ -57,7 +57,7 @@ function getComponentType(data: GJContentObject): any {
 export function renderChildren(
 	h: CreateElement,
 	owner: ContentOwner,
-	childObjects: GJContentObject[]
+	childObjects: ContentObject[]
 ) {
 	const children = [];
 	if (childObjects) {
@@ -72,7 +72,7 @@ export function renderChildren(
 @Component({})
 export class AppContentViewerBaseComponent extends Vue {
 	@Prop(Array)
-	content!: GJContentObject[];
+	content!: ContentObject[];
 	@Prop(Object)
 	owner!: ContentOwner;
 

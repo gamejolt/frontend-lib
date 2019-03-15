@@ -1,18 +1,22 @@
-import {
-	GJHydrationDataEntry,
-	HydrationType,
-} from 'game-jolt-frontend-lib/components/content/adapter/definitions';
 import { arrayRemove } from '../../utils/array';
 import { Api } from '../api/api.service';
 
-export class ContentHydrator {
-	public hydration: GJHydrationDataEntry[];
+export type ContentHydrationType = 'media-item-id' | 'game-id' | 'username' | 'community-path';
 
-	constructor(hydration: GJHydrationDataEntry[] = []) {
+export type ContentHydrationDataEntry = {
+	type: ContentHydrationType;
+	id: string;
+	data: any;
+};
+
+export class ContentHydrator {
+	public hydration: ContentHydrationDataEntry[];
+
+	constructor(hydration: ContentHydrationDataEntry[] = []) {
 		this.hydration = hydration;
 	}
 
-	async getData(type: HydrationType, id: string) {
+	async getData(type: ContentHydrationType, id: string) {
 		// Try to find hydration in existing pool
 		// If it's dry, request hydration from the server
 
@@ -26,13 +30,13 @@ export class ContentHydrator {
 			type,
 			id,
 			data: result.data,
-		} as GJHydrationDataEntry;
+		} as ContentHydrationDataEntry;
 		this.hydration.push(entry);
 
 		return entry.data;
 	}
 
-	dry(type: HydrationType, id: string) {
+	dry(type: ContentHydrationType, id: string) {
 		arrayRemove(this.hydration, i => i.type === type && i.id === id);
 	}
 }

@@ -1,5 +1,5 @@
 import View from '!view!./mention.html?style=./mention.styl';
-import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
+import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { AppUserCardHover } from 'game-jolt-frontend-lib/components/user/card/hover/hover';
 import { User } from 'game-jolt-frontend-lib/components/user/user.model';
@@ -15,8 +15,8 @@ import { Component, Prop } from 'vue-property-decorator';
 	},
 })
 export class AppContentViewerMention extends Vue {
-	@Prop(Object)
-	data!: GJContentObject;
+	@Prop(ContentObject)
+	data!: ContentObject;
 	@Prop(Object)
 	owner!: ContentOwner;
 

@@ -1,4 +1,3 @@
-import { GJContentObjectType } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
 import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-markspec';
 import { blockquote } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/blockquote-nodespec';
 import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/embed-nodespec';
@@ -8,6 +7,7 @@ import { orderedList } from 'game-jolt-frontend-lib/components/content/content-e
 import { spoiler } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/spoiler-nodespec';
 import { table } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-nodespec';
 import { tag } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/tag-nodespec';
+import { ContentObjectType } from 'game-jolt-frontend-lib/components/content/content-object';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
@@ -42,7 +42,7 @@ function generateNodes(capabilities: ContextCapabilities) {
 		},
 	} as any;
 
-	const allowedDocNodes = ['paragraph'] as GJContentObjectType[];
+	const allowedDocNodes = ['paragraph'] as ContentObjectType[];
 
 	if (capabilities.gjEmoji) {
 		nodes.gjEmoji = gjEmoji;

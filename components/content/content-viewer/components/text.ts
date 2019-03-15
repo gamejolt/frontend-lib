@@ -1,4 +1,4 @@
-import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
+import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
@@ -7,16 +7,16 @@ import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 	components: {},
 })
 export class AppContentViewerText extends Vue {
-	@Prop(Object)
-	data!: GJContentObject;
+	@Prop(ContentObject)
+	data!: ContentObject;
 
 	hasMark(mark: string) {
-		return this.data.marks && this.data.marks.some((m: any) => m.type === mark);
+		return this.data.marks && this.data.marks.some(m => m.type === mark);
 	}
 
 	getMarkAttrs(mark: string) {
 		if (this.hasMark(mark)) {
-			return this.data.marks.find((m: any) => m.type === mark).attrs;
+			return this.data.marks.find(m => m.type === mark)!.attrs;
 		}
 		return [];
 	}

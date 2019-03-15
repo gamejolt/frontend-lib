@@ -1,20 +1,23 @@
+import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import {
-	GJContentFormat,
-	ProsemirrorEditorFormat,
-} from 'game-jolt-frontend-lib/components/content/adapter/definitions';
-import { ContentContext, ContextCapabilities } from '../content-context';
-import { GJContentObject } from './definitions';
+	ContentContext,
+	ContextCapabilities,
+} from 'game-jolt-frontend-lib/components/content/content-context';
+import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 
-const GJ_FORMAT_VERSION = '1.0.0';
+export type ProsemirrorEditorFormat = {
+	type: 'doc';
+	content: ContentObject[];
+};
 
 /**
  * Adapts the GJ Content Format to the format the prosemirror content editor needs
  */
-export class GJContentFormatAdapter {
+export class ContentFormatAdapter {
 	/**
 	 * Converts from the GJ Content Format to the editor format
 	 */
-	public static adaptIn(inObj: GJContentFormat) {
+	public static adaptIn(inObj: ContentContainer) {
 		const outObj = {
 			type: 'doc',
 			content: inObj.content,
@@ -27,13 +30,7 @@ export class GJContentFormatAdapter {
 	 * Converts from the editor format to the GJ Content format
 	 */
 	public static adaptOut(inObj: ProsemirrorEditorFormat, context: ContentContext) {
-		let outObj = {
-			version: GJ_FORMAT_VERSION,
-			createdOn: Date.now(),
-			context,
-			content: inObj.content,
-			hydration: [],
-		} as GJContentFormat;
+		let outObj = new ContentContainer(context, inObj.content);
 
 		const capabilities = ContextCapabilities.getForContext(context);
 		outObj = this.validate(outObj, capabilities);
@@ -44,12 +41,15 @@ export class GJContentFormatAdapter {
 	/**
 	 * Validates GJ Content Format data by removing incorrect/empty nodes
 	 */
-	public static validate(data: GJContentFormat, capabilities: ContextCapabilities | null = null) {
+	public static validate(
+		data: ContentContainer,
+		capabilities: ContextCapabilities | null = null
+	) {
 		// If the content is completely empty, we add one empty paragraph
 		if (data.content.length === 0) {
 			data.content.push({
 				type: 'paragraph',
-			} as GJContentObject);
+			} as ContentObject);
 		}
 
 		// Remove nodes with types not allowed in the context
@@ -92,7 +92,7 @@ export class GJContentFormatAdapter {
 		return data;
 	}
 
-	private static isEmptyObj(obj: GJContentObject): boolean {
+	private static isEmptyObj(obj: ContentObject): boolean {
 		if (obj.type === 'embed') {
 			return !obj.attrs.type || !obj.attrs.source;
 		}

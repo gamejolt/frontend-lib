@@ -1,11 +1,11 @@
-import { GJContentObject } from 'game-jolt-frontend-lib/components/content/adapter/definitions';
+import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export class AppContentViewerGJEmoji extends Vue {
 	@Prop(Object)
-	data!: GJContentObject;
+	data!: ContentObject;
 
 	render(h: CreateElement) {
 		return h('span', {

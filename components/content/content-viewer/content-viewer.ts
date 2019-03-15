@@ -1,9 +1,9 @@
 import View from '!view!./content-viewer.html?style=./content-viewer.styl';
+import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { AppContentViewerBaseComponent } from 'game-jolt-frontend-lib/components/content/content-viewer/components/base-component';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { GJContentFormat } from '../adapter/definitions';
 import { ContextCapabilities } from '../content-context';
 import { ContentHydrator } from '../content-hydrator';
 
@@ -20,7 +20,7 @@ export class AppContentViewer extends Vue implements ContentOwner {
 	@Prop({ type: Boolean, default: false })
 	showSource!: boolean;
 
-	data: GJContentFormat | null = null;
+	data: ContentContainer | null = null;
 	hydrator: ContentHydrator = new ContentHydrator();
 
 	get owner() {
@@ -56,11 +56,11 @@ export class AppContentViewer extends Vue implements ContentOwner {
 	@Watch('source')
 	updatedSource() {
 		if (this.source) {
-			const sourceObj = JSON.parse(this.source) as GJContentFormat;
+			const sourceObj = ContentContainer.fromJson(this.source);
 			this.data = sourceObj;
 			this.hydrator = new ContentHydrator(sourceObj.hydration);
 		} else {
-			this.data = {} as GJContentFormat;
+			this.data = {} as ContentContainer;
 			this.hydrator = new ContentHydrator();
 		}
 	}
