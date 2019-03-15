@@ -17,6 +17,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 class ServerMiniCssExtractPlugin extends MiniCssExtractPlugin {
 	getCssChunkObject(mainChunk) {
@@ -92,7 +93,7 @@ module.exports = function(config) {
 		devtool = 'eval-source-map';
 	}
 
-	function stylesLoader() {
+	function stylesLoader(withStylusLoader) {
 		const loaders = [
 			{
 				loader: 'css-loader',
@@ -113,6 +114,19 @@ module.exports = function(config) {
 				loader: 'vue-style-loader',
 				options: {
 					shadowMode: false,
+				},
+			});
+		}
+
+		if (withStylusLoader) {
+			loaders.push({
+				loader: 'stylus-loader',
+				options: {
+					use: [],
+					paths: ['src/'],
+					'resolve url': true,
+					'include css': true,
+					preferPathResolver: 'webpack',
 				},
 			});
 		}
@@ -195,34 +209,26 @@ module.exports = function(config) {
 				libraryTarget: libraryTarget,
 			},
 			resolve: {
-				extensions: ['.tsx', '.ts', '.js', '.styl'],
+				extensions: ['.tsx', '.ts', '.js', '.styl', '.vue'],
 				modules: [path.resolve(base, 'src/vendor'), 'node_modules'],
 				alias: {
 					// Always "app" base img.
 					img: path.resolve(base, 'src/app/img'),
 					styles: path.resolve(base, 'src/' + section + '/styles'),
 					'styles-lib': path.resolve(config.gjLibDir, 'stylus/common'),
-					// 'game-jolt-frontend-lib': path.resolve(config.gjLibDir),
+					vue$: 'vue/dist/vue.esm.js',
 				},
 			},
 			externals: externals,
-			resolveLoader: {
-				alias: {
-					view:
-						'vue-template-loader?' +
-						JSON.stringify({
-							scoped: true,
-							transformAssetUrls: {
-								img: 'src',
-								'app-theme-svg': 'src',
-							},
-						}),
-				},
-			},
 			module: {
 				rules: [
 					{
+						test: /\.vue$/,
+						loader: 'vue-loader',
+					},
+					{
 						test: /\.ts$/,
+						exclude: /node_modules/,
 						use: [
 							{
 								loader: 'cache-loader',
@@ -234,34 +240,20 @@ module.exports = function(config) {
 								loader: 'ts-loader',
 								options: {
 									transpileOnly: true,
+									appendTsSuffixTo: [/\.vue$/],
 								},
 							},
 						],
 					},
 					{
+						// enforce: 'post',
 						test: /\.styl$/,
-						use: [
-							{
-								loader: 'stylus-loader',
-								options: {
-									use: [],
-									paths: ['src/'],
-									'resolve url': true,
-									'include css': true,
-									preferPathResolver: 'webpack',
-								},
-							},
-						],
+						use: stylesLoader(true),
 					},
 					{
-						enforce: 'post',
-						test: /\.styl$/,
-						use: stylesLoader(),
-					},
-					{
-						enforce: 'post',
+						// enforce: 'post',
 						test: /\.css$/,
-						use: stylesLoader(),
+						use: stylesLoader(false),
 					},
 					{
 						test: /\.md$/,
@@ -315,6 +307,7 @@ module.exports = function(config) {
 					  }
 					: undefined,
 			plugins: [
+				new VueLoaderPlugin(),
 				prodNoop || new webpack.ProgressPlugin(),
 				new webpack.DefinePlugin({
 					GJ_SECTION: JSON.stringify(section),
