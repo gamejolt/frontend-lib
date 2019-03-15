@@ -1,5 +1,14 @@
 <div class="content-editor">
-	<div class="-doc" ref="doc" />
+	<div class="content-container">
+		<div class="-doc" ref="doc" />
+		<span
+			v-if="shouldShowPlaceholder"
+			class="content-placeholder text-muted"
+			>
+			{{placeholder}}
+		</span>
+	</div>
+
 	<app-content-editor-controls
 		v-if="shouldShowControls"
 		:capabilities="capabilities"

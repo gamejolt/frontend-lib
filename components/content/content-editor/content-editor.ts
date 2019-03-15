@@ -36,6 +36,9 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(String)
 	contentContext!: ContentContext;
 
+	@Prop(String)
+	placeholder: string = '';
+
 	state!: EditorState;
 	view: EditorView | null = null;
 	stateCounter = 0;
@@ -57,6 +60,17 @@ export class AppContentEditor extends Vue implements ContentOwner {
 
 	get shouldShowEmojiControls() {
 		return this.capabilities.gjEmoji && this.emojiPanelVisible;
+	}
+
+	get isEmpty() {
+		if (this.view) {
+			return this.view.state.doc.toString().trim() === 'doc(paragraph)';
+		}
+		return false;
+	}
+
+	get shouldShowPlaceholder() {
+		return this.placeholder.length > 0 && this.isEmpty;
 	}
 
 	// DEBUG
