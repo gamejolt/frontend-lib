@@ -88,4 +88,8 @@ export class AppContentMediaItem extends Vue {
 	onRemoved() {
 		this.$emit('removed');
 	}
+
+	onEdit() {
+		// Placeholder until we want the edit function
+	}
 }
