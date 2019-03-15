@@ -1,4 +1,5 @@
 @require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .content-container
 	position: relative
@@ -9,6 +10,14 @@
 	position: absolute
 	font-style: italic
 	pointer-events: none
+
+// Do not show dotted selection outline
+>>> .ProseMirror
+	outline: 0px solid transparent !important
+
+// Override prosemirror selection border around selected nodes
+>>> .ProseMirror-selectednode
+	theme-prop('outline-color', 'highlight') !important
 
 >>> .content-editor-spoiler
 	border-color: var(--theme-bg-subtle)

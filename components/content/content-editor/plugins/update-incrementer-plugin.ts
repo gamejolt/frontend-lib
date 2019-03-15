@@ -17,5 +17,8 @@ export class UpdateIncrementerPlugin {
 			return;
 		}
 		this.appEditor.stateCounter++;
+		if (!lastState || !lastState.doc.eq(state.doc)) {
+			this.appEditor.$emit('update');
+		}
 	}
 }

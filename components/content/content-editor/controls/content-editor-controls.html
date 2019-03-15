@@ -17,6 +17,7 @@
 						circle
 						icon="screenshot"
 						@click="onClickMedia"
+						@click.prevent
 						v-app-tooltip="$gettext('Upload Media')"
 						/>
 					<app-button
@@ -24,6 +25,7 @@
 						circle
 						icon="embed"
 						@click="onClickEmbed"
+						@click.prevent
 						v-app-tooltip="$gettext('Embed Content')"
 						/>
 					<app-button
@@ -31,6 +33,7 @@
 						circle
 						icon="brackets"
 						@click="onClickCodeBlock"
+						@click.prevent
 						v-app-tooltip="$gettext('Add Code Block')"
 						/>
 					<app-button
@@ -38,6 +41,7 @@
 						circle
 						icon="blockquote"
 						@click="onClickBlockquote"
+						@click.prevent
 						v-app-tooltip="$gettext('Add Quote')"
 						/>
 					<app-button
@@ -45,6 +49,7 @@
 						circle
 						icon="hr"
 						@click="onClickHr"
+						@click.prevent
 						v-app-tooltip="$gettext('Add Horizontal Rule')"
 						/>
 					<app-button
@@ -52,6 +57,7 @@
 						circle
 						icon="insert-table"
 						@click="onClickTable"
+						@click.prevent
 						v-app-tooltip="$gettext('Add Table')"
 						/>
 					<span class="dot-separator"></span>
@@ -64,6 +70,7 @@
 				}"
 				circle
 				:icon="'add'"
+				@click.prevent
 				@click="onClickExpand"
 				/>
 		</div>

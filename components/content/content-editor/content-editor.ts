@@ -23,6 +23,9 @@ import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
 import { dropEventHandler } from './events/drop-event-handler';
 import { buildNodeViews } from './node-views/node-view-builder';
 
+/**
+ * @emits update
+ */
 @View
 @Component({
 	components: {
@@ -36,8 +39,11 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(String)
 	contentContext!: ContentContext;
 
-	@Prop(String)
-	placeholder: string = '';
+	@Prop(Boolean)
+	showViewer!: boolean;
+
+	@Prop({ type: String, default: '' })
+	placeholder!: string;
 
 	state!: EditorState;
 	view: EditorView | null = null;
@@ -133,5 +139,24 @@ export class AppContentEditor extends Vue implements ContentOwner {
 
 	onEmojisHide() {
 		this.emojiPanelVisible = false;
+	}
+
+	public getContentContainer() {
+		if (this.view) {
+			const data = ContentFormatAdapter.adaptOut(
+				this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
+				this.contentContext
+			);
+			return data;
+		}
+		return null;
+	}
+
+	public onFocus() {
+		// Focus the content editable when the outer doc gets focused.
+		const child = this.$refs.doc.firstChild;
+		if (child instanceof HTMLElement) {
+			child.focus();
+		}
 	}
 }

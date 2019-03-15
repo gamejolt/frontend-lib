@@ -1,4 +1,4 @@
-<div class="content-editor">
+<div class="content-editor" @focus="onFocus" tabindex="1">
 	<div class="content-container">
 		<div class="-doc" ref="doc" />
 		<span
@@ -13,12 +13,14 @@
 		v-if="shouldShowControls"
 		:capabilities="capabilities"
 		:view="view"
-		:state-counter="stateCounter" />
+		:state-counter="stateCounter"
+		/>
 	<app-content-editor-text-controls
 		v-if="shouldShowTextControls"
 		:capabilities="capabilities"
 		:view="view"
-		:state-counter="stateCounter" />
+		:state-counter="stateCounter"
+		/>
 	<app-content-editor-emoji-controls
 		v-if="shouldShowEmojiControls"
 		:view="view"
@@ -27,6 +29,7 @@
 		/>
 
 	<app-content-viewer
+		v-if="showViewer"
 		show-source
 		:source="viewerSource" />
 
