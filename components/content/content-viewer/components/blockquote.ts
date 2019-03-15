@@ -6,7 +6,7 @@ import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export class AppContentViewerBlockquote extends Vue {
-	@Prop(ContentObject)
+	@Prop(Object)
 	data!: ContentObject;
 	@Prop(Object)
 	owner!: ContentOwner;

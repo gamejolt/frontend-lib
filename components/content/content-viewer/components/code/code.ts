@@ -7,7 +7,7 @@ import './code.css';
 
 @Component({})
 export class AppContentViewerCodeBlock extends Vue {
-	@Prop(ContentObject)
+	@Prop(Object)
 	data!: ContentObject;
 	@Prop(Object)
 	owner!: ContentOwner;

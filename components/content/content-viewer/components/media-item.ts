@@ -6,7 +6,7 @@ import { AppContentMediaItem } from '../../components/media-item/media-item';
 
 @Component({})
 export class AppContentViewerMediaItem extends Vue {
-	@Prop(ContentObject)
+	@Prop(Object)
 	data!: ContentObject;
 	@Prop(Object)
 	owner!: ContentOwner;

@@ -6,7 +6,7 @@ import { Component, Prop } from 'vue-property-decorator';
 @View
 @Component({})
 export class AppContentViewerTag extends Vue {
-	@Prop(ContentObject)
+	@Prop(Object)
 	data!: ContentObject;
 
 	get text() {

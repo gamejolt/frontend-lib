@@ -7,7 +7,7 @@ import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 	components: {},
 })
 export class AppContentViewerText extends Vue {
-	@Prop(ContentObject)
+	@Prop(Object)
 	data!: ContentObject;
 
 	hasMark(mark: string) {
