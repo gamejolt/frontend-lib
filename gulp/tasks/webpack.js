@@ -18,6 +18,12 @@ const OfflinePlugin = require('offline-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 
+class ServerMiniCssExtractPlugin extends MiniCssExtractPlugin {
+	getCssChunkObject(mainChunk) {
+		return {};
+	}
+}
+
 module.exports = function(config) {
 	let base = path.resolve(config.projectBase);
 
@@ -29,7 +35,9 @@ module.exports = function(config) {
 	let shouldUseHMR = !config.ssr && !config.production;
 
 	// We only extract css for client SSR or prod builds.
-	let shouldExtractCss = config.ssr === 'client' || config.production;
+	let shouldExtractCss = config.ssr || config.production;
+	let cssExtractorClass =
+		config.ssr === 'client' ? MiniCssExtractPlugin : ServerMiniCssExtractPlugin;
 
 	let externals = {};
 	if (!config.client) {
@@ -99,7 +107,7 @@ module.exports = function(config) {
 		];
 
 		if (shouldExtractCss) {
-			loaders.unshift(MiniCssExtractPlugin.loader);
+			loaders.unshift(cssExtractorClass.loader);
 		} else {
 			loaders.unshift({
 				loader: 'vue-style-loader',
@@ -362,7 +370,7 @@ module.exports = function(config) {
 				!shouldUseHMR ? noop : new webpack.HotModuleReplacementPlugin(),
 				!shouldExtractCss
 					? noop
-					: new MiniCssExtractPlugin({
+					: new cssExtractorClass({
 							filename: section + '.[name].[contenthash:8].css',
 							chunkFilename: section + '.[name].[contenthash:8].css',
 					  }),
