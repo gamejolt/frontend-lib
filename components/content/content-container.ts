@@ -1,6 +1,9 @@
 import { ContentContext } from 'game-jolt-frontend-lib/components/content/content-context';
 import { ContentHydrationDataEntry } from 'game-jolt-frontend-lib/components/content/content-hydrator';
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
+import {
+	ContentObject,
+	ContentObjectType,
+} from 'game-jolt-frontend-lib/components/content/content-object';
 
 const GJ_FORMAT_VERSION = '1.0.0';
 
@@ -21,5 +24,17 @@ export class ContentContainer {
 
 	public static fromJson(json: string): ContentContainer {
 		return JSON.parse(json) as ContentContainer;
+	}
+
+	public getObjectsByType(type: ContentObjectType): ContentObject[] {
+		const objs = [] as ContentObject[];
+		for (const contentObj of this.content) {
+			const subObjs = contentObj.getObjectsByType(type);
+			objs.push(...subObjs);
+			if (contentObj.type === type) {
+				objs.push(contentObj);
+			}
+		}
+		return objs;
 	}
 }
