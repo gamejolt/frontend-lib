@@ -16,6 +16,9 @@ import { ContentHydrator } from '../content-hydrator';
 export class AppContentViewer extends Vue implements ContentOwner {
 	@Prop(String)
 	source!: string;
+	// DEBUG
+	@Prop({ type: Boolean, default: false })
+	showSource!: boolean;
 
 	data: GJContentFormat | null = null;
 	hydrator: ContentHydrator = new ContentHydrator();
