@@ -18,15 +18,21 @@ export class AppFormControlContent extends BaseFormControl {
 	@Prop({ type: String, default: '' })
 	placeholder!: string;
 
+	controlVal = '';
+
 	$refs!: {
 		editor: AppContentEditor;
 	};
+
+	mounted() {
+		const container = ContentContainer.fromJson(this.controlVal);
+		this.$refs.editor.setContent(container);
+	}
 
 	onUpdate() {
 		const container = this.$refs.editor.getContentContainer();
 		if (container instanceof ContentContainer) {
 			const jsonValue = container.toJson();
-			console.log('set json value');
 			this.applyValue(jsonValue);
 		}
 	}

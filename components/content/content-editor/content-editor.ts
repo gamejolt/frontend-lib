@@ -1,4 +1,5 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
+import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
 import { createPlugins } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/plugins';
@@ -7,8 +8,8 @@ import {
 	ContentFormatAdapter,
 	ProsemirrorEditorFormat,
 } from 'game-jolt-frontend-lib/components/content/content-format-adapter';
-import { DOMParser } from 'prosemirror-model';
-import { EditorState } from 'prosemirror-state';
+import { DOMParser, Node, Schema } from 'prosemirror-model';
+import { EditorState, Plugin } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
@@ -51,6 +52,8 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
 	emojiPanelVisible = false;
 	hydrator: ContentHydrator = new ContentHydrator();
+	schema: Schema | null = null;
+	plugins: Plugin[] | null = null;
 
 	$refs!: {
 		doc: HTMLElement;
@@ -111,12 +114,29 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		this.capabilities = ContextCapabilities.getForContext(this.contentContext);
 		this.hydrator = new ContentHydrator();
 
-		const schema = generateSchema(this.capabilities);
-		const plugins = createPlugins(this, schema);
+		this.schema = generateSchema(this.capabilities);
+		this.plugins = createPlugins(this, this.schema);
 		this.state = EditorState.create({
-			doc: DOMParser.fromSchema(schema).parse(this.$refs.doc),
-			plugins,
+			doc: DOMParser.fromSchema(this.schema).parse(this.$refs.doc),
+			schema: this.schema,
+			plugins: this.plugins,
 		});
+
+		this.updateView();
+
+		// Observe any resize events so the editor controls can be repositioned correctly
+		const ro = new ResizeObserver(() => {
+			this.stateCounter++;
+		});
+		ro.observe(this.$refs.doc);
+
+		this.stateCounter++;
+	}
+
+	private updateView() {
+		if (this.view) {
+			this.view.destroy();
+		}
 
 		const nodeViews = buildNodeViews(this);
 		this.view = new EditorView(this.$refs.doc, {
@@ -127,14 +147,6 @@ export class AppContentEditor extends Vue implements ContentOwner {
 				drop: dropEventHandler,
 			},
 		});
-
-		// Observe any resize events so the editor controls can be repositioned correctly
-		const ro = new ResizeObserver(() => {
-			this.stateCounter++;
-		});
-		ro.observe(this.$refs.doc);
-
-		this.stateCounter++;
 	}
 
 	onEmojisHide() {
@@ -150,6 +162,18 @@ export class AppContentEditor extends Vue implements ContentOwner {
 			return data;
 		}
 		return null;
+	}
+
+	public setContent(container: ContentContainer) {
+		if (this.schema) {
+			const jsonObj = ContentFormatAdapter.adaptIn(container);
+			this.state = EditorState.create({
+				doc: Node.fromJSON(this.schema, jsonObj),
+				schema: this.schema,
+				plugins: this.plugins,
+			});
+			this.updateView();
+		}
 	}
 
 	public onFocus() {
