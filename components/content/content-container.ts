@@ -26,6 +26,17 @@ export class ContentContainer {
 		return JSON.parse(json) as ContentContainer;
 	}
 
+	public toJson() {
+		const data = {
+			version: this.version,
+			createdOn: this.createdOn,
+			context: this.context,
+			content: this.content,
+			hydration: [],
+		};
+		return JSON.stringify(data);
+	}
+
 	public getObjectsByType(type: ContentObjectType): ContentObject[] {
 		const objs = [] as ContentObject[];
 		for (const contentObj of this.content) {
