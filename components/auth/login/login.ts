@@ -1,21 +1,19 @@
-import View from '!view!./login.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
 import { Connection } from '../../connection/connection-service';
 import { Environment } from '../../environment/environment.service';
 import { Navigate } from '../../navigate/navigate.service';
 import { Auth } from '../auth.service';
-import { AppAuthLoginForm } from './login-form';
+import AppAuthLoginForm from './login-form.vue';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
 		AppAuthLoginForm,
 	},
 })
-export class AppAuthLogin extends Vue {
+export default class AppAuthLogin extends Vue {
 	@Prop(Boolean)
 	overlay?: boolean;
 

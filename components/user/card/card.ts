@@ -1,20 +1,18 @@
-import View from '!view!./card.html?style=./card.styl';
-import { number } from 'game-jolt-frontend-lib/vue/filters/number';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { Store } from '../../../../../app/store/index';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
+import AppLoading from '../../../vue/components/loading/loading.vue';
+import { number } from '../../../vue/filters/number';
 import { AppTheme } from '../../theme/theme';
 import { AppTooltipContainer } from '../../tooltip/container/container';
 import { AppTooltip } from '../../tooltip/tooltip';
-import { AppUserFollowWidget } from '../follow-widget/follow-widget';
-import { AppUserAvatarImg } from '../user-avatar/img/img';
+import AppUserFollowWidget from '../follow-widget/follow-widget.vue';
+import AppUserAvatarImg from '../user-avatar/img/img.vue';
 import { User } from '../user.model';
-import { AppLoading } from './../../../vue/components/loading/loading';
 import './card-global.styl';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -31,7 +29,7 @@ import './card-global.styl';
 		number,
 	},
 })
-export class AppUserCard extends Vue {
+export default class AppUserCard extends Vue {
 	@Prop(User)
 	user!: User;
 

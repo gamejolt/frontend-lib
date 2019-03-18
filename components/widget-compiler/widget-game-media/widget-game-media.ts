@@ -1,17 +1,15 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./widget-game-media.html';
 
-import { AppMediaBar } from '../../media-bar/media-bar';
+import AppMediaBar from '../../media-bar/media-bar.vue';
 import { MediaItem } from '../../media-item/media-item-model';
 
-@View
 @Component({
 	components: {
 		AppMediaBar,
 	},
 })
-export class AppWidgetCompilerWidgetGameMedia extends Vue {
+export default class AppWidgetCompilerWidgetGameMedia extends Vue {
 	@Prop(Array) items!: MediaItem[];
 	@Prop(Number) num!: number;
 

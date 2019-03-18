@@ -1,9 +1,9 @@
+import Vue from 'vue';
 import {
 	RouteResolverOptions,
 	RouteStoreResolveCallback,
-} from 'game-jolt-frontend-lib/components/route/route-component';
-import { RouteStoreOptions } from 'game-jolt-frontend-lib/components/route/route-store';
-import Vue from 'vue';
+} from '../../components/route/route-component';
+import { RouteStoreOptions } from '../../components/route/route-store';
 
 declare module 'vue/types/options' {
 	interface ComponentOptions<V extends Vue> {

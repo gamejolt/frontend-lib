@@ -1,6 +1,6 @@
-import { ScrollWatcher } from 'game-jolt-frontend-lib/components/scroll/watcher.service';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { ScrollWatcher } from '../../../components/scroll/watcher.service';
 import { ScrollInviewContainer } from './container';
 
 @Component({})

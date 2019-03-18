@@ -1,19 +1,16 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./add.html?style=./add.styl';
-
-import { AppExpand } from '../../../expand/expand';
-import { AppCardList } from '../list';
-import { Screen } from '../../../screen/screen-service';
 import { findRequiredVueParent } from '../../../../utils/vue';
+import AppExpand from '../../../expand/expand.vue';
+import { Screen } from '../../../screen/screen-service';
+import AppCardList from '../list';
 
-@View
 @Component({
 	components: {
 		AppExpand,
 	},
 })
-export class AppCardListAdd extends Vue {
+export default class AppCardListAdd extends Vue {
 	@Prop(String) label!: string;
 
 	list: AppCardList = null as any;

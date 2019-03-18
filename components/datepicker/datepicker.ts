@@ -2,9 +2,9 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import View from '!view!./datepicker.html';
 import './datepicker.styl';
-import { AppDatepickerDay } from './day';
+import AppDatepickerDay from './day.vue'
 import { date as dateFilter } from '../../vue/filters/date';
-import { AppDatepickerMonth } from './month';
+import AppDatepickerMonth from './month.vue'
 
 type DateMode = 'day' | 'month';
 

@@ -1,10 +1,8 @@
-import View from '!view!./suggestion.html?style=./suggestion.styl';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 
-@View
 @Component({})
-export class AppTagSuggestion extends Vue {
+export default class AppTagSuggestion extends Vue {
 	@Prop(Array)
 	tags!: string[];
 
@@ -57,8 +55,7 @@ export class AppTagSuggestion extends Vue {
 
 		return this.tags.filter(
 			t =>
-				recommended!.indexOf(t) === -1 &&
-				this.lcText.split('#' + t.toLowerCase()).length - 1 === 0
+				recommended!.indexOf(t) === -1 && this.lcText.split('#' + t.toLowerCase()).length - 1 === 0
 		);
 	}
 }

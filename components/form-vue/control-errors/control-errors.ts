@@ -1,11 +1,9 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./control-errors.html';
-
 import { findRequiredVueParent } from '../../../utils/vue';
-import { AppForm } from '../form';
-import { AppFormGroup } from '../group/group';
 import { number } from '../../../vue/filters/number';
+import AppForm from '../form';
+import AppFormGroup from '../group/group';
 
 // These are default messages that don't need any extra validation data.
 // They are also common enough to be applied to all elements.
@@ -26,9 +24,8 @@ const ErrorMessagesBase: { [k: string]: string } = {
 	max_date: `The time you selected is too late.`,
 };
 
-@View
 @Component({})
-export class AppFormControlErrors extends Vue {
+export default class AppFormControlErrors extends Vue {
 	@Prop(String) label?: string;
 	@Prop(String) position?: string;
 
@@ -38,8 +35,9 @@ export class AppFormControlErrors extends Vue {
 	private errorMessageOverrides: { [k: string]: string } = {};
 
 	created() {
-		this.form = findRequiredVueParent(this, require('../form').AppForm);
-		this.group = findRequiredVueParent(this, require('../group/group').AppFormGroup);
+		// TODO: should be require('../form.vue') and require('../group/group.vue') ?
+		this.form = findRequiredVueParent(this, require('../form'));
+		this.group = findRequiredVueParent(this, require('../group/group'));
 	}
 
 	get _label() {

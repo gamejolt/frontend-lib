@@ -1,5 +1,6 @@
 import { arrayRemove } from '../../utils/array';
-import { AppBackdrop } from './backdrop';
+import AppBackdropTS from './backdrop';
+import AppBackdrop from './backdrop.vue';
 
 export interface BackdropOptions {
 	context?: HTMLElement;
@@ -7,7 +8,7 @@ export interface BackdropOptions {
 }
 
 export class Backdrop {
-	private static backdrops: AppBackdrop[] = [];
+	private static backdrops: AppBackdropTS[] = [];
 
 	static push(options: BackdropOptions = {}) {
 		const el = document.createElement('div');
@@ -18,7 +19,7 @@ export class Backdrop {
 			options.context.appendChild(el);
 		}
 
-		const backdrop = new AppBackdrop({
+		const backdrop: AppBackdropTS = new AppBackdrop({
 			propsData: {
 				className: options.className,
 			},

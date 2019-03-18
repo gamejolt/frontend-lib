@@ -1,16 +1,13 @@
+import { ErrorBag } from 'vee-validate';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./group.html';
-
-import { AppForm } from '../form';
-import { findRequiredVueParent } from '../../../utils/vue';
 import { titleCase } from '../../../utils/string';
-import { ErrorBag } from 'vee-validate';
-import { BaseFormControl } from '../control/base';
+import { findRequiredVueParent } from '../../../utils/vue';
+import BaseFormControl from '../control/base';
+import AppForm from '../form';
 
-@View
 @Component({})
-export class AppFormGroup extends Vue {
+export default class AppFormGroup extends Vue {
 	@Prop(String) name!: string;
 	@Prop(String) label?: string;
 	@Prop(Boolean) optional?: boolean;
@@ -43,6 +40,7 @@ export class AppFormGroup extends Vue {
 	}
 
 	created() {
-		this.form = findRequiredVueParent(this, require('../form').AppForm);
+		// TODO should be require('../form.vue') ?
+		this.form = findRequiredVueParent(this, require('../form'));
 	}
 }

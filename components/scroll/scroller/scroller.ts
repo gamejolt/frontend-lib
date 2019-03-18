@@ -1,19 +1,17 @@
-import View from '!view!./scroller.html?style=./scroller.styl';
-import { ScrollInviewContainer } from 'game-jolt-frontend-lib/components/scroll/inview/container';
-import { AppScrollInviewParent } from 'game-jolt-frontend-lib/components/scroll/inview/parent';
-import { ScrollWatcher } from 'game-jolt-frontend-lib/components/scroll/watcher.service';
 import SimpleBar from 'simplebar';
 import 'simplebar/dist/simplebar.css';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { ScrollInviewContainer } from '../../../components/scroll/inview/container';
+import { AppScrollInviewParent } from '../../../components/scroll/inview/parent';
+import { ScrollWatcher } from '../../../components/scroll/watcher.service';
 
-@View
 @Component({
 	components: {
 		AppScrollInviewParent,
 	},
 })
-export class AppScrollScroller extends Vue {
+export default class AppScrollScroller extends Vue {
 	@Prop(Boolean)
 	overlay?: boolean;
 

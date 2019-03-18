@@ -1,4 +1,3 @@
-import View from '!view!./follow-widget.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
@@ -11,7 +10,6 @@ import { findTooltipContainer } from '../../tooltip/container/container';
 import { AppTooltip } from '../../tooltip/tooltip';
 import { User } from '../user.model';
 
-@View
 @Component({
 	directives: {
 		AppAuthRequired,
@@ -19,7 +17,7 @@ import { User } from '../user.model';
 		AppTooltip,
 	},
 })
-export class AppUserFollowWidget extends Vue {
+export default class AppUserFollowWidget extends Vue {
 	@Prop(User)
 	user!: User;
 
@@ -81,9 +79,7 @@ export class AppUserFollowWidget extends Vue {
 			try {
 				await this.user.$follow();
 			} catch (e) {
-				Growls.error(
-					this.$gettext(`Something has prevented you from following this user.`)
-				);
+				Growls.error(this.$gettext(`Something has prevented you from following this user.`));
 			}
 		} else {
 			try {

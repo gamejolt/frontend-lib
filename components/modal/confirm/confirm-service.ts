@@ -7,7 +7,9 @@ export class ModalConfirm {
 			modalId: 'Confirm',
 			size: 'sm',
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "ModalConfirm" */ './confirm')),
+				asyncComponentLoader(
+					import(/* webpackChunkName: "ModalConfirm" */ './confirm.vue')
+				),
 			props: { message, title, buttonType },
 		});
 	}

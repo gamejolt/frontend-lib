@@ -1,24 +1,22 @@
-import View from '!view!./modal.html?style=./modal.styl';
-import { AppUserCardHover } from 'game-jolt-frontend-lib/components/user/card/hover/hover';
+import AppUserCardHover from '../../../user/card/hover/hover.vue'
 import { Component, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import { AppGameThumbnail } from '../../../../../../_common/game/thumbnail/thumbnail';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import AppGameThumbnail from '../../../../../../_common/game/thumbnail/thumbnail.vue';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue'
 import { number } from '../../../../vue/filters/number';
 import { AppStore } from '../../../../vue/services/app/app-store';
 import { AppTrackEvent } from '../../../analytics/track-event.directive';
-import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
+import AppFadeCollapse from '../../../fade-collapse/fade-collapse.vue'
 import { BaseModal } from '../../../modal/base';
 import { AppResponsiveDimensions } from '../../../responsive-dimensions/responsive-dimensions';
 import { Screen } from '../../../screen/screen-service';
-import { AppUserFollowWidget } from '../../../user/follow-widget/follow-widget';
-import { AppUserAvatar } from '../../../user/user-avatar/user-avatar';
-import { AppVideoEmbed } from '../../../video/embed/embed';
+import AppUserFollowWidget from '../../../user/follow-widget/follow-widget.vue'
+import AppUserAvatar from '../../../user/user-avatar/user-avatar.vue'
+import AppVideoEmbed from '../../../video/embed/embed.vue'
 import { CommentVote } from '../../vote/vote-model';
-import { AppCommentVideoLikeWidget } from '../like-widget/like-widget';
+import AppCommentVideoLikeWidget from '../like-widget/like-widget.vue';
 import { CommentVideo } from '../video-model';
 
-@View
 @Component({
 	components: {
 		AppJolticon,

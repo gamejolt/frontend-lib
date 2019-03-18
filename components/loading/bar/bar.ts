@@ -1,4 +1,3 @@
-import View from '!view!./bar.html?style=./bar.styl';
 import Axios from 'axios';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
@@ -14,9 +13,8 @@ const ShowDelay = 500;
  */
 const HideDelay = 200;
 
-@View
 @Component({})
-export class AppLoadingBar extends Vue {
+export default class AppLoadingBar extends Vue {
 	routeChanging = false;
 	requestCount = 0;
 	completedCount = 0;

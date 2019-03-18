@@ -1,21 +1,19 @@
-import View from '!view!./join.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
 import { Api } from '../../api/api.service';
 import { Connection } from '../../connection/connection-service';
 import { Environment } from '../../environment/environment.service';
 import { Navigate } from '../../navigate/navigate.service';
 import { AppAuthJoinForm, FormModel } from './join-form';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
 		AppAuthJoinForm,
 	},
 })
-export class AppAuthJoin extends Vue {
+export default class AppAuthJoin extends Vue {
 	@Prop(Boolean)
 	overlay?: boolean;
 

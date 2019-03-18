@@ -1,16 +1,14 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./item.html?style=./item.styl';
 
 import { User } from '../../user/user.model';
 import { date } from '../../../vue/filters/date';
 import { AppTimeAgo } from '../../time/ago/ago';
-import { AppUserAvatar } from '../../user/user-avatar/user-avatar';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppTimelineListItem } from '../../timeline-list/item/item';
-import { AppUserCardHover } from '../../user/card/hover/hover';
+import AppUserAvatar from '../../user/user-avatar/user-avatar.vue'
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
+import AppTimelineListItem from '../../timeline-list/item/item.vue'
+import AppUserCardHover from '../../user/card/hover/hover.vue'
 
-@View
 @Component({
 	components: {
 		AppTimelineListItem,
@@ -20,7 +18,7 @@ import { AppUserCardHover } from '../../user/card/hover/hover';
 		AppJolticon,
 	},
 })
-export class AppMessageThreadItem extends Vue {
+export default class AppMessageThreadItem extends Vue {
 	@Prop(User) user!: User;
 	@Prop(User) repliedTo?: User;
 	@Prop(Number) date!: number;

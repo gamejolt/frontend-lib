@@ -1,10 +1,8 @@
-import View from '!view!./pill.html?style=./pill.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
-@View
 @Component({})
-export class AppPill extends Vue {
+export default class AppPill extends Vue {
 	@Prop(Object)
 	to?: any;
 

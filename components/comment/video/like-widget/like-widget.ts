@@ -1,7 +1,6 @@
-import View from '!view!./like-widget.html';
-import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { AppTooltip } from '../../../../components/tooltip/tooltip';
 import { number } from '../../../../vue/filters/number';
 import { AppAuthRequired } from '../../../auth/auth-required-directive';
 import { LikersModal } from '../../../likers/modal.service';
@@ -9,14 +8,13 @@ import { Screen } from '../../../screen/screen-service';
 import { CommentVote } from '../../vote/vote-model';
 import { CommentVideo } from '../video-model';
 
-@View
 @Component({
 	directives: {
 		AppAuthRequired,
 		AppTooltip,
 	},
 })
-export class AppCommentVideoLikeWidget extends Vue {
+export default class AppCommentVideoLikeWidget extends Vue {
 	@Prop(CommentVideo)
 	video!: CommentVideo;
 	@Prop(Boolean)

@@ -1,7 +1,7 @@
 import View from '!view!./join-form.html?style=./join-form.styl';
-import { Provider } from 'game-jolt-frontend-lib/components/linked-account/linked-account.model';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppLoading } from '../../../vue/components/loading/loading';
+import { Provider } from '../../../components/linked-account/linked-account.model';
+import AppLoading from '../../../vue/components/loading/loading.vue';
 import { Api } from '../../api/api.service';
 import { Connection } from '../../connection/connection-service';
 import { Environment } from '../../environment/environment.service';

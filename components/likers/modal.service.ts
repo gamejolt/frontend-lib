@@ -18,7 +18,7 @@ export class LikersModal {
 		return await Modal.show<void>({
 			modalId: 'Likers',
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "LikersModal" */ './modal')),
+				asyncComponentLoader(import(/* webpackChunkName: "LikersModal" */ './modal.vue')),
 			props: {
 				count,
 				resource,

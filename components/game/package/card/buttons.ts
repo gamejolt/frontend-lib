@@ -1,16 +1,14 @@
-import View from '!view!./buttons.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { filesize } from '../../../../vue/filters/filesize';
 import { AppTrackEvent } from '../../../analytics/track-event.directive';
-import { AppPopper } from '../../../popper/popper';
+import AppPopper from '../../../popper/popper.vue'
 import { Screen } from '../../../screen/screen-service';
 import { GameBuild } from '../../build/build.model';
 import { GamePackage } from '../package.model';
 import { GamePackageCardModel } from './card.model';
-import { AppGamePackageCardMoreOptions } from './more-options';
+import AppGamePackageCardMoreOptions from './more-options.vue'
 
-@View
 @Component({
 	components: {
 		AppPopper,
@@ -23,7 +21,7 @@ import { AppGamePackageCardMoreOptions } from './more-options';
 		filesize,
 	},
 })
-export class AppGamePackageCardButtons extends Vue {
+export default class AppGamePackageCardButtons extends Vue {
 	@Prop(GamePackage) package!: GamePackage;
 	@Prop(GamePackageCardModel) card!: GamePackageCardModel;
 

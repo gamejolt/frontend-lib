@@ -1,18 +1,16 @@
-import View from '!view!./markdown.html?style=./markdown.styl';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { AppLoading } from '../../../../vue/components/loading/loading';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
+import AppLoading from '../../../../vue/components/loading/loading.vue';
 import { Api } from '../../../api/api.service';
-import { AppCodemirror } from '../../../codemirror/codemirror';
+import AppCodemirror from '../../../codemirror/codemirror.vue';
 import { Environment } from '../../../environment/environment.service';
 import { Screen } from '../../../screen/screen-service';
 import { AppTooltip } from '../../../tooltip/tooltip';
 import { AppFormAutosize, AutosizeBootstrap } from '../../autosize.directive';
 import { AppFocusWhen } from '../../focus-when.directive';
-import { BaseFormControl } from '../base';
-import { AppFormControlMarkdownMediaItems } from './media-items/media-items';
+import BaseFormControl from '../base';
+import AppFormControlMarkdownMediaItems from './media-items/media-items.vue';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -26,7 +24,7 @@ import { AppFormControlMarkdownMediaItems } from './media-items/media-items';
 		AppFocusWhen,
 	},
 })
-export class AppFormControlMarkdown extends BaseFormControl {
+export default class AppFormControlMarkdown extends BaseFormControl {
 	@Prop(String)
 	editorClass?: string;
 

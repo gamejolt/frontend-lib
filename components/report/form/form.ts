@@ -1,12 +1,10 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./form.html';
 
 import { FormOnSubmit, BaseForm } from '../../form-vue/form.service';
 import { Api } from '../../api/api.service';
 
-@View
 @Component({})
-export class AppReportForm extends BaseForm<any> implements FormOnSubmit {
+export default class AppReportForm extends BaseForm<any> implements FormOnSubmit {
 	@Prop(String) type!: string;
 	@Prop(Object) resource!: any;
 

@@ -1,19 +1,17 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./widget-game-list.html?style=./widget-game-list.styl';
 
 import { Game } from '../../game/game.model';
-import { AppGameThumbnailImg } from '../../game/thumbnail-img/thumbnail-img';
+import AppGameThumbnailImg from '../../game/thumbnail-img/thumbnail-img.vue';
 import { Environment } from '../../environment/environment.service';
 import { WidgetCompiler } from '../widget-compiler.service';
 
-@View
 @Component({
 	components: {
 		AppGameThumbnailImg,
 	},
 })
-export class AppWidgetCompilerWidgetGameList extends Vue {
+export default class AppWidgetCompilerWidgetGameList extends Vue {
 	@Prop({ type: Array, default: () => [] })
 	games!: Game[];
 

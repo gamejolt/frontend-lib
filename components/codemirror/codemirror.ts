@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./codemirror.html';
 
 import './codemirror.styl';
 
@@ -11,9 +10,8 @@ const defaultOptions = {
 	indentWithTabs: true,
 };
 
-@View
 @Component({})
-export class AppCodemirror extends Vue {
+export default class AppCodemirror extends Vue {
 	$el!: HTMLTextAreaElement;
 
 	@Prop(String) value!: string;

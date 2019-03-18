@@ -1,13 +1,11 @@
-import View from '!view!./tumblr-blog-selector-modal.html';
 import { Component, Prop } from 'vue-property-decorator';
 import { stringSort } from '../../../utils/array';
-import { AppLoading } from '../../../vue/components/loading/loading';
+import AppLoading from '../../../vue/components/loading/loading.vue'
 import { Api } from '../../api/api.service';
 import { BaseModal } from '../../modal/base';
-import { AppLinkedAccount } from '../linked-account';
+import AppLinkedAccount from '../linked-account.vue';
 import { LinkedAccount, TumblrBlog } from '../linked-account.model';
 
-@View
 @Component({
 	components: {
 		AppLinkedAccount,
@@ -46,9 +44,7 @@ export default class AppModalTumblrBlogSelector extends BaseModal {
 
 		const payload = await Api.sendRequest(url, null, { detach: true });
 
-		this.blogs = payload.blogs.sort((a: TumblrBlog, b: TumblrBlog) =>
-			stringSort(a.name, b.name)
-		);
+		this.blogs = payload.blogs.sort((a: TumblrBlog, b: TumblrBlog) => stringSort(a.name, b.name));
 
 		if (this.account.tumblrSelectedBlog) {
 			this.selectedBlog = this.account.tumblrSelectedBlog;

@@ -1,16 +1,15 @@
 import Vue from 'vue';
 import { Prop, Component } from 'vue-property-decorator';
-
-import { AppForm } from './form';
-import { AppFormControl } from './control/control';
-import { AppFormGroup } from './group/group';
-import { AppFormControlErrors } from './control-errors/control-errors';
+import AppForm from './form.vue'
+import AppFormControl from './control/control.vue'
+import AppFormGroup from './group/group.vue'
+import AppFormControlErrors from './control-errors/control-errors.vue'
 import { AppFormControlError } from './control-errors/control-error';
-import { AppFormButton } from './button/button';
-import { AppFormControlSelect } from './control/select/select';
-import { AppFormControlTextarea } from './control/textarea/textarea';
-import { AppFormControlRadio } from './control/radio/radio';
-import { AppFormControlCheckbox } from './control/checkbox/checkbox';
+import AppFormButton from './button/button.vue'
+import AppFormControlSelect from './control/select/select.vue'
+import AppFormControlTextarea from './control/textarea/textarea.vue'
+import AppFormControlRadio from './control/radio/radio.vue'
+import AppFormControlCheckbox from './control/checkbox/checkbox.vue'
 import { Api } from '../api/api.service';
 import { arrayUnique, arrayRemove } from '../../utils/array';
 

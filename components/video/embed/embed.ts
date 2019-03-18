@@ -1,16 +1,14 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Subscription } from 'rxjs/Subscription';
-import View from '!view!./embed.html?style=./embed.styl';
 
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
 
 const VIDEO_RATIO = 0.5625; // 16:9
 
-@View
 @Component({})
-export class AppVideoEmbed extends Vue {
+export default class AppVideoEmbed extends Vue {
 	@Prop(String) videoProvider!: 'youtube' | 'vimeo';
 	@Prop(String) videoId!: string;
 	@Prop(Number) maxVideoHeight!: number;
@@ -62,9 +60,9 @@ export class AppVideoEmbed extends Vue {
 	async recalculateDimensions() {
 		await this.$nextTick();
 
-		this.width = Ruler.width(
-			this.$el.getElementsByClassName('video-embed-inner')[0] as HTMLElement
-		);
+		this.width = Ruler.width(this.$el.getElementsByClassName(
+			'video-embed-inner'
+		)[0] as HTMLElement);
 
 		if (this.maxVideoWidth) {
 			this.width = Math.min(this.maxVideoWidth, this.width);

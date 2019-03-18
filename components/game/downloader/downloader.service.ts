@@ -1,5 +1,5 @@
-import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import VueRouter from 'vue-router';
+import { Popper } from '../../../components/popper/popper.service';
 import { Analytics } from '../../analytics/analytics.service';
 import { Environment } from '../../environment/environment.service';
 import { Growls } from '../../growls/growls.service';

@@ -1,20 +1,18 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./video.html?style=./video.styl';
 
 import { Environment } from '../../../../components/environment/environment.service';
 import { Analytics } from '../../../../components/analytics/analytics.service';
 import { Ads } from '../../../../components/ad/ads.service';
 import { time } from '../../../filters/time';
 import { loadScript } from '../../../../utils/utils';
-import { AppLoading } from '../../loading/loading';
-import { AppJolticon } from '../../jolticon/jolticon';
+import AppLoading from '../../loading/loading.vue'
+import AppJolticon from '../../jolticon/jolticon.vue'
 
 const ImaScriptSrc = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
 const AdSlotWidth = 910;
 const AdSlotHeight = 512;
 
-@View
 @Component({
 	filters: {
 		time,
@@ -24,7 +22,7 @@ const AdSlotHeight = 512;
 		AppJolticon,
 	},
 })
-export class AppAdVideo extends Vue {
+export default class AppAdVideo extends Vue {
 	@Prop(String) resource!: string;
 	@Prop(Number) resourceId!: number;
 	@Prop({ type: String, default: 'game' })

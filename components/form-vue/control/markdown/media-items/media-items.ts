@@ -1,14 +1,12 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./media-items.html?style=./media-items.styl';
-
-import { BaseForm, FormOnInit, FormOnSubmit, FormOnLoad } from '../../../form.service';
+import AppJolticon from '../../../../../vue/components/jolticon/jolticon.vue';
 import { Api } from '../../../../api/api.service';
-import { MediaItem } from '../../../../media-item/media-item-model';
 import { Clipboard } from '../../../../clipboard/clipboard-service';
-import { AppFormControlUpload } from '../../upload/upload';
-import { AppForm } from '../../../form';
+import { MediaItem } from '../../../../media-item/media-item-model';
 import { AppTooltip } from '../../../../tooltip/tooltip';
-import { AppJolticon } from '../../../../../vue/components/jolticon/jolticon';
+import AppForm from '../../../form';
+import { BaseForm, FormOnInit, FormOnLoad, FormOnSubmit } from '../../../form.service';
+import AppFormControlUpload from '../../upload/upload.vue';
 
 interface FormModel {
 	type: string;
@@ -17,7 +15,6 @@ interface FormModel {
 	_progress: ProgressEvent | null;
 }
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -27,7 +24,7 @@ interface FormModel {
 		AppTooltip,
 	},
 })
-export class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
+export default class AppFormControlMarkdownMediaItems extends BaseForm<FormModel>
 	implements FormOnInit, FormOnLoad, FormOnSubmit {
 	@Prop(String) type!: string;
 	@Prop(Number) parentId!: number;

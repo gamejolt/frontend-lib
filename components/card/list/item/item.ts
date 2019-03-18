@@ -1,15 +1,12 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./item.html?style=./item.styl';
-
-import { AppCardList } from '../list';
 import { findRequiredVueParent } from '../../../../utils/vue';
-import { AppExpand } from '../../../expand/expand';
-import { AppCard } from '../../card';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
+import AppExpand from '../../../expand/expand.vue';
 import { Screen } from '../../../screen/screen-service';
+import AppCard from '../../card.vue';
+import AppCardList from '../list';
 
-@View
 @Component({
 	components: {
 		AppExpand,
@@ -17,7 +14,7 @@ import { Screen } from '../../../screen/screen-service';
 		AppJolticon,
 	},
 })
-export class AppCardListItem extends Vue {
+export default class AppCardListItem extends Vue {
 	@Prop() item!: any;
 	@Prop(Boolean) forceActive?: boolean;
 

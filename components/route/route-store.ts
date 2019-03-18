@@ -1,6 +1,6 @@
-import { VuexStore } from 'game-jolt-frontend-lib/utils/vuex';
 import { createDecorator } from 'vue-class-component';
 import { Route } from 'vue-router';
+import { VuexStore } from '../../utils/vuex';
 
 export interface RouteStoreOptions {
 	/** The global app store, needed so we can set the store module on it */

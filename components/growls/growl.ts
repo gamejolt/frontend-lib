@@ -1,22 +1,20 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./growl.html?style=./growl.styl';
 
 import { Growl } from './growls.service';
 import { Screen } from '../screen/screen-service';
-import { AppJolticon } from '../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../vue/components/jolticon/jolticon.vue'
 import { AppGrowlDynamic } from './growl-dynamic';
 
 require('./growl-content.styl');
 
-@View
 @Component({
 	components: {
 		AppJolticon,
 		AppGrowlDynamic,
 	},
 })
-export class AppGrowl extends Vue {
+export default class AppGrowl extends Vue {
 	@Prop(Number) index!: number;
 	@Prop(Object) growl!: Growl;
 

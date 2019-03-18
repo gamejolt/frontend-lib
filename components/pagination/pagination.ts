@@ -1,4 +1,3 @@
-import View from '!view!./pagination.html?style=./pagination.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Screen } from '../screen/screen-service';
@@ -6,13 +5,12 @@ import { AppNoAutoscroll } from '../scroll/auto-scroll/no-autoscroll.directive';
 
 const MaxPagesShown = 5;
 
-@View
 @Component({
 	directives: {
 		AppNoAutoscroll,
 	},
 })
-export class AppPagination extends Vue {
+export default class AppPagination extends Vue {
 	@Prop(Number) totalItems!: number;
 	@Prop(Number) itemsPerPage!: number;
 	@Prop(Number) currentPage!: number;

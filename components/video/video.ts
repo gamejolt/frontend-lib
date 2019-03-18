@@ -1,19 +1,17 @@
-import View from '!view!./video.html?style=./video.styl';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { AppLoading } from '../../vue/components/loading/loading';
+import AppLoading from '../../vue/components/loading/loading.vue'
 
 // We have to not use Vue for video embed stuff!
 // https://forum.ionicframework.com/t/ionic-2-video-video-memory-leak-garbage-collection-solved/52333
 // Massive memory leaks if we don't keep this out of Vue and finely tuned.
 
-@View
 @Component({
 	components: {
 		AppLoading,
 	},
 })
-export class AppVideo extends Vue {
+export default class AppVideo extends Vue {
 	@Prop(String)
 	poster!: string;
 

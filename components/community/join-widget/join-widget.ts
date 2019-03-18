@@ -1,22 +1,20 @@
-import View from '!view!./join-widget.html';
-import { AppTrackEvent } from 'game-jolt-frontend-lib/components/analytics/track-event.directive';
-import { AppAuthRequired } from 'game-jolt-frontend-lib/components/auth/auth-required-directive';
-import {
-	$joinCommunity,
-	$leaveCommunity,
-	Community,
-} from 'game-jolt-frontend-lib/components/community/community.model';
-import { Growls } from 'game-jolt-frontend-lib/components/growls/growls.service';
-import { findTooltipContainer } from 'game-jolt-frontend-lib/components/tooltip/container/container';
-import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
-import { number } from 'game-jolt-frontend-lib/vue/filters/number';
-import { AppStore } from 'game-jolt-frontend-lib/vue/services/app/app-store';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { GridClient } from '../../../../../app/components/grid/client.service';
+import { AppTrackEvent } from '../../../components/analytics/track-event.directive';
+import { AppAuthRequired } from '../../../components/auth/auth-required-directive';
+import {
+	$joinCommunity,
+	$leaveCommunity,
+	Community,
+} from '../../../components/community/community.model';
+import { Growls } from '../../../components/growls/growls.service';
+import { findTooltipContainer } from '../../../components/tooltip/container/container';
+import { AppTooltip } from '../../../components/tooltip/tooltip';
+import { number } from '../../../vue/filters/number';
+import { AppStore } from '../../../vue/services/app/app-store';
 
-@View
 @Component({
 	directives: {
 		AppAuthRequired,
@@ -24,7 +22,7 @@ import { GridClient } from '../../../../../app/components/grid/client.service';
 		AppTooltip,
 	},
 })
-export class AppCommunityJoinWidget extends Vue {
+export default class AppCommunityJoinWidget extends Vue {
 	@Prop(Community)
 	community!: Community;
 

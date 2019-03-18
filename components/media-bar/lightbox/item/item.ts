@@ -1,17 +1,15 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Subscription } from 'rxjs/Subscription';
-import View from '!view!./item.html?style=./item.styl';
 
 import { MediaBarLightboxConfig, AppMediaBarLightbox } from '../lightbox';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue'
 import { AppImgResponsive } from '../../../img/responsive/responsive';
-import { AppVideoEmbed } from '../../../video/embed/embed';
-import { AppSketchfabEmbed } from '../../../sketchfab/embed/embed';
+import AppVideoEmbed from '../../../video/embed/embed.vue'
+import AppSketchfabEmbed from '../../../sketchfab/embed/embed.vue'
 import { findRequiredVueParent } from '../../../../utils/vue';
 import { Screen } from '../../../screen/screen-service';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -20,7 +18,7 @@ import { Screen } from '../../../screen/screen-service';
 		AppImgResponsive,
 	},
 })
-export class AppMediaBarLightboxItem extends Vue {
+export default class AppMediaBarLightboxItem extends Vue {
 	@Prop(Object) item!: any;
 	@Prop(Number) itemIndex!: number;
 	@Prop(Number) activeIndex!: number;

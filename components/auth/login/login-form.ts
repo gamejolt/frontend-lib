@@ -1,15 +1,13 @@
-import View from '!view!./login-form.html?style=./login-form.styl';
-import { Provider } from 'game-jolt-frontend-lib/components/linked-account/linked-account.model';
-import { LinkedAccounts } from 'game-jolt-frontend-lib/components/linked-account/linked-accounts.service';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppLoading } from '../../../vue/components/loading/loading';
+import { Provider } from '../../../components/linked-account/linked-account.model';
+import { LinkedAccounts } from '../../../components/linked-account/linked-accounts.service';
+import AppLoading from '../../../vue/components/loading/loading.vue';
 import { Api } from '../../api/api.service';
 import { Connection } from '../../connection/connection-service';
 import { Environment } from '../../environment/environment.service';
 import { BaseForm, FormOnSubmit } from '../../form-vue/form.service';
 import { AppTooltip } from '../../tooltip/tooltip';
 
-@View
 @Component({
 	components: {
 		AppLoading,
@@ -18,7 +16,7 @@ import { AppTooltip } from '../../tooltip/tooltip';
 		AppTooltip,
 	},
 })
-export class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
+export default class AppAuthLoginForm extends BaseForm<any> implements FormOnSubmit {
 	@Prop(Boolean)
 	overlay?: boolean;
 

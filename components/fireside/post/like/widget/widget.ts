@@ -1,4 +1,3 @@
-import View from '!view!./widget.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { number } from '../../../../../vue/filters/number';
@@ -10,14 +9,13 @@ import { AppTooltip } from '../../../../tooltip/tooltip';
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
 
-@View
 @Component({
 	directives: {
 		AppAuthRequired,
 		AppTooltip,
 	},
 })
-export class AppFiresidePostLikeWidget extends Vue {
+export default class AppFiresidePostLikeWidget extends Vue {
 	@Prop(FiresidePost)
 	post!: FiresidePost;
 

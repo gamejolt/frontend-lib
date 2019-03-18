@@ -1,11 +1,8 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./checkbox.html';
+import BaseFormControl from '../base';
 
-import { BaseFormControl } from '../base';
-
-@View
 @Component({})
-export class AppFormControlCheckbox extends BaseFormControl {
+export default class AppFormControlCheckbox extends BaseFormControl {
 	@Prop() value!: any;
 
 	multi = true;

@@ -1,16 +1,14 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Subscription } from 'rxjs/Subscription';
-import View from '!view!./embed.html';
 
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
 
 const RATIO = 0.5625; // 16:9
 
-@View
 @Component({})
-export class AppSketchfabEmbed extends Vue {
+export default class AppSketchfabEmbed extends Vue {
 	@Prop(String) sketchfabId!: string;
 	@Prop(Number) maxWidth!: number;
 	@Prop(Number) maxHeight!: number;
@@ -53,9 +51,9 @@ export class AppSketchfabEmbed extends Vue {
 	async recalculateDimensions() {
 		await this.$nextTick();
 
-		this.width = Ruler.width(
-			this.$el.getElementsByClassName('sketchfab-embed-inner')[0] as HTMLElement
-		);
+		this.width = Ruler.width(this.$el.getElementsByClassName(
+			'sketchfab-embed-inner'
+		)[0] as HTMLElement);
 
 		if (this.maxWidth) {
 			this.width = Math.min(this.maxWidth, this.width);

@@ -1,0 +1,29 @@
+<template>
+	<span class="fireside-post-like-widget" v-app-auth-required>
+		<app-button
+			:icon="isCircle ? 'heart' : undefined"
+			:circle="isCircle"
+			:overlay="overlay"
+			:block="block"
+			:primary="!!post.user_like || !isCircle"
+			:solid="!!post.user_like"
+			:badge="badge"
+			v-app-tooltip="tooltip"
+			@click="toggleLike"
+		>
+			<span v-if="!isCircle">
+				<translate v-if="!post.user_like">Like This Post</translate>
+				<translate v-else>Liked</translate>
+			</span>
+		</app-button>
+
+		<a @click="showLikers()" v-app-tooltip="$gettext(`View all people that liked this post`)">
+			<span class="blip filled" v-if="blip">
+				<span class="blip-caret"></span>
+				<span class="blip-count">{{ blip }}</span>
+			</span>
+		</a>
+	</span>
+</template>
+
+<script lang="ts" src="./widget" />

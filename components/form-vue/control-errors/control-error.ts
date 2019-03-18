@@ -1,8 +1,7 @@
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-
 import { findRequiredVueParent } from '../../../utils/vue';
-import { AppFormControlErrors } from './control-errors';
+import AppFormControlErrors from './control-errors.vue';
 
 @Component({})
 export class AppFormControlError extends Vue {
@@ -19,6 +18,7 @@ export class AppFormControlError extends Vue {
 	}
 
 	private setOverride() {
+		// TODO: should be require('./control-errors.vue') ?
 		const errors = findRequiredVueParent(this, require('./control-errors')
 			.AppFormControlErrors as typeof AppFormControlErrors);
 		errors.setMessageOverride(this.when, this.message);

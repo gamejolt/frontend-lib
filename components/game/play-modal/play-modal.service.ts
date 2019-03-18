@@ -1,4 +1,4 @@
-import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
+import { Popper } from '../../../components/popper/popper.service';
 import { asyncComponentLoader } from '../../../utils/utils';
 import { Analytics } from '../../analytics/analytics.service';
 import { Device } from '../../device/device.service';
@@ -77,7 +77,7 @@ export class GamePlayModal {
 			modalId: 'GamePlay',
 			component: () =>
 				asyncComponentLoader(
-					import(/* webpackChunkName: "GamePlayModal" */ './play-modal')
+					import(/* webpackChunkName: "GamePlayModal" */ './play-modal.vue')
 				),
 			props: { game, build, url, canMinimize },
 			noBackdrop: true,

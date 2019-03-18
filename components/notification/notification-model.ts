@@ -1,5 +1,5 @@
-import { EventItem } from 'game-jolt-frontend-lib/components/event-item/event-item.model';
 import VueRouter, { RawLocation } from 'vue-router';
+import { EventItem } from '../../components/event-item/event-item.model';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
 import { Api } from '../api/api.service';

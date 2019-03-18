@@ -1,19 +1,18 @@
-import View from '!view!./widget.html';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { AppLoading } from '../../../vue/components/loading/loading';
+import AppLoading from '../../../vue/components/loading/loading.vue'
 import { AppState, AppStore } from '../../../vue/services/app/app-store';
 import { Analytics } from '../../analytics/analytics.service';
 import { AppTrackEvent } from '../../analytics/track-event.directive';
 import { AppAuthRequired } from '../../auth/auth-required-directive';
 import { Collaborator } from '../../collaborator/collaborator.model';
 import { Environment } from '../../environment/environment.service';
-import { AppMessageThreadAdd } from '../../message-thread/add/add';
-import { AppMessageThreadContent } from '../../message-thread/content/content';
-import { AppMessageThread } from '../../message-thread/message-thread';
+import AppMessageThreadAdd from '../../message-thread/add/add.vue'
+import AppMessageThreadContent from '../../message-thread/content/content.vue'
+import AppMessageThread from '../../message-thread/message-thread.vue'
 import { AppNavTabList } from '../../nav/tab-list/tab-list';
 import { User } from '../../user/user.model';
-import { FormComment } from '../add/add';
+import FormComment from '../add/add.vue';
 import { Comment } from '../comment-model';
 import {
 	CommentAction,
@@ -27,11 +26,10 @@ import {
 	CommentStoreThreadView,
 	CommentStoreView,
 } from '../comment-store-view';
-import { AppCommentWidgetComment } from './comment/comment';
+import AppCommentWidgetComment from './comment/comment.vue';
 
 let incrementer = 0;
 
-@View
 @Component({
 	components: {
 		AppLoading,
@@ -47,7 +45,7 @@ let incrementer = 0;
 		AppTrackEvent,
 	},
 })
-export class AppCommentWidget extends Vue {
+export default class AppCommentWidget extends Vue {
 	@Prop(String)
 	resource!: string;
 
@@ -115,15 +113,11 @@ export class AppCommentWidget extends Vue {
 	collaborators: Collaborator[] = [];
 
 	get loginUrl() {
-		return (
-			Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent(this.$route.fullPath)
-		);
+		return Environment.authBaseUrl + '/login?redirect=' + encodeURIComponent(this.$route.fullPath);
 	}
 
 	get shouldShowLoadMore() {
-		return (
-			!this.isLoading && !this.isThreadView && this.totalParentCount > this.currentParentCount
-		);
+		return !this.isLoading && !this.isThreadView && this.totalParentCount > this.currentParentCount;
 	}
 
 	get comments() {

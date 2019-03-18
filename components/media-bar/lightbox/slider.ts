@@ -1,15 +1,12 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import View from '!view!./slider.html';
-
-import { AppMediaBarLightbox } from './lightbox';
 import { findRequiredVueParent } from '../../../utils/vue';
+import { AppMediaBarLightbox } from './lightbox';
 
-@View
 @Component({})
-export class AppMediaBarLightboxSlider extends Vue {
+export default class AppMediaBarLightboxSlider extends Vue {
 	mounted() {
 		const mediaBar = findRequiredVueParent(this, AppMediaBarLightbox);
-		mediaBar.setSlider(this.$el);
+		mediaBar.setSlider(this.$el as HTMLElement);
 	}
 }

@@ -1,21 +1,16 @@
-import View from '!view!./modal.html';
-import {
-	CommentState,
-	CommentStore,
-} from 'game-jolt-frontend-lib/components/comment/comment-store';
-import { BaseModal } from 'game-jolt-frontend-lib/components/modal/base';
-import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
-import { AppState, AppStore } from 'game-jolt-frontend-lib/vue/services/app/app-store';
 import { Component, Prop } from 'vue-property-decorator';
+import { CommentState, CommentStore } from '../../../components/comment/comment-store';
+import { BaseModal } from '../../../components/modal/base';
+import { Screen } from '../../../components/screen/screen-service';
+import { AppState, AppStore } from '../../../vue/services/app/app-store';
 import { Analytics } from '../../analytics/analytics.service';
-import { AppMessageThreadAdd } from '../../message-thread/add/add';
-import { FormComment } from '../add/add';
+import AppMessageThreadAdd from '../../message-thread/add/add.vue';
+import FormComment from '../add/add.vue';
 import { Comment } from '../comment-model';
 import { CommentMutation } from '../comment-store';
 import { DisplayMode } from '../modal/modal.service';
-import { AppCommentWidget } from '../widget/widget';
+import AppCommentWidget from '../widget/widget.vue';
 
-@View
 @Component({
 	components: {
 		AppCommentWidget,

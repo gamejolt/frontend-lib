@@ -1,4 +1,3 @@
-import View from '!view!./controls.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { number } from '../../../vue/filters/number';
@@ -10,7 +9,6 @@ import { Comment } from '../comment-model';
 import { CommentThreadModal } from '../thread/modal.service';
 import { CommentVote } from '../vote/vote-model';
 
-@View
 @Component({
 	directives: {
 		AppAuthRequired,
@@ -21,7 +19,7 @@ import { CommentVote } from '../vote/vote-model';
 		number,
 	},
 })
-export class AppCommentControls extends Vue {
+export default class AppCommentControls extends Vue {
 	@Prop(Comment)
 	comment!: Comment;
 

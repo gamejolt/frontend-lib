@@ -1,12 +1,9 @@
-import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./control.html';
-
-import { BaseFormControl } from './base';
 import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';
+import { Component, Prop } from 'vue-property-decorator';
+import BaseFormControl from './base';
 
-@View
 @Component({})
-export class AppFormControl extends BaseFormControl {
+export default class AppFormControl extends BaseFormControl {
 	@Prop({ type: String, default: 'text' })
 	type!: string;
 
