@@ -216,6 +216,18 @@ module.exports = function(config) {
 				},
 			},
 			externals: externals,
+			resolveLoader: {
+				alias: {
+					view: 'vue-template-loader?' +
+						JSON.stringify({
+							scoped: true,
+							transformAssetUrls: {
+								img: 'src',
+								'app-theme-svg': 'src',
+							},
+						}),
+				},
+			},
 			module: {
 				rules: [
 					{
