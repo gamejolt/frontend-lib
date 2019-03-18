@@ -32,6 +32,17 @@ module.exports = function(config) {
 	// We only extract css for client SSR or prod builds.
 	let shouldExtractCss = config.ssr || config.production;
 
+	let stylusLoader = {
+		loader: 'stylus-loader',
+		options: {
+			use: [],
+			paths: ['src/'],
+			'resolve url': true,
+			'include css': true,
+			preferPathResolver: 'webpack',
+		},
+	};
+
 	let externals = {};
 	if (!config.client) {
 		// When building for site, we don't want any of these imports accidentally being pulled in.
@@ -115,16 +126,7 @@ module.exports = function(config) {
 		}
 
 		if (withStylusLoader) {
-			loaders.push({
-				loader: 'stylus-loader',
-				options: {
-					use: [],
-					paths: ['src/'],
-					'resolve url': true,
-					'include css': true,
-					preferPathResolver: 'webpack',
-				},
-			});
+			loaders.push(stylusLoader);
 		}
 
 		return loaders;
@@ -218,7 +220,8 @@ module.exports = function(config) {
 			externals: externals,
 			resolveLoader: {
 				alias: {
-					view: 'vue-template-loader?' +
+					view:
+						'vue-template-loader?' +
 						JSON.stringify({
 							scoped: true,
 							transformAssetUrls: {
@@ -254,12 +257,28 @@ module.exports = function(config) {
 						],
 					},
 					{
-						// enforce: 'post',
+						// resource: {
+						// 	and: [
+						// 		{ test: /\.styl$/ },
+						// 		function() {
+						// 			return !config.ssr;
+						// 		},
+						// 	],
+						// },
 						test: /\.styl$/,
-						use: stylesLoader(true),
+						enforce: 'pre',
+						use: [stylusLoader],
 					},
 					{
-						// enforce: 'post',
+						// enforce: config.ssr ? 'pre' : 'post',
+						enforce: 'post',
+						test: /\.styl$/,
+						// use: stylesLoader(!!config.ssr),
+						use: stylesLoader(false),
+					},
+					{
+						// enforce: config.ssr ? 'pre' : 'post',
+						enforce: 'post',
 						test: /\.css$/,
 						use: stylesLoader(false),
 					},
