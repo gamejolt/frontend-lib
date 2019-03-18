@@ -13,7 +13,6 @@ import { Screen } from '../../../screen/screen-service';
 import { Game } from '../../game.model';
 import { GameSong } from '../../song/song.model';
 
-
 @View
 @Component({
 	components: {

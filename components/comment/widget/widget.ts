@@ -15,8 +15,18 @@ import { AppNavTabList } from '../../nav/tab-list/tab-list';
 import { User } from '../../user/user.model';
 import { FormComment } from '../add/add';
 import { Comment } from '../comment-model';
-import { CommentAction, CommentMutation, CommentState, CommentStore, CommentStoreModel } from '../comment-store';
-import { CommentStoreSliceView, CommentStoreThreadView, CommentStoreView } from '../comment-store-view';
+import {
+	CommentAction,
+	CommentMutation,
+	CommentState,
+	CommentStore,
+	CommentStoreModel,
+} from '../comment-store';
+import {
+	CommentStoreSliceView,
+	CommentStoreThreadView,
+	CommentStoreView,
+} from '../comment-store-view';
 import { AppCommentWidgetComment } from './comment/comment';
 
 let incrementer = 0;

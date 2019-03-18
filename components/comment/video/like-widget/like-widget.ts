@@ -9,7 +9,6 @@ import { Screen } from '../../../screen/screen-service';
 import { CommentVote } from '../../vote/vote-model';
 import { CommentVideo } from '../video-model';
 
-
 @View
 @Component({
 	directives: {

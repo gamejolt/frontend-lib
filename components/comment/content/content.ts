@@ -8,7 +8,6 @@ import { Comment } from '../comment-model';
 import '../comment.styl';
 import { AppCommentVideoThumbnail } from '../video/thumbnail/thumbnail';
 
-
 @View
 @Component({
 	components: {

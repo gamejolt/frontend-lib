@@ -6,7 +6,6 @@ import { AppTrackEvent } from '../../../analytics/track-event.directive';
 import { GameBuild } from '../../build/build.model';
 import { GamePackageCardModel } from './card.model';
 
-
 @View
 @Component({
 	directives: {

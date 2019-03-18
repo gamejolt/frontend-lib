@@ -11,7 +11,6 @@ import { CommentVideoModal } from '../modal/modal.service';
 import { CommentVideo } from '../video-model';
 import './thumbnail-content.styl';
 
-
 @View
 @Component({
 	components: {

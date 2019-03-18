@@ -10,7 +10,6 @@ import { GamePackage } from '../package.model';
 import { GamePackageCardModel } from './card.model';
 import { AppGamePackageCardMoreOptions } from './more-options';
 
-
 @View
 @Component({
 	components: {

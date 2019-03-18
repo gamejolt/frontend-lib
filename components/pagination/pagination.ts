@@ -4,7 +4,6 @@ import { Component, Prop } from 'vue-property-decorator';
 import { Screen } from '../screen/screen-service';
 import { AppNoAutoscroll } from '../scroll/auto-scroll/no-autoscroll.directive';
 
-
 const MaxPagesShown = 5;
 
 @View
