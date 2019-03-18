@@ -6,7 +6,7 @@ import { AppGameThumbnail } from '../../../../../../_common/game/thumbnail/thumb
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { number } from '../../../../vue/filters/number';
 import { AppStore } from '../../../../vue/services/app/app-store';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppTrackEvent } from '../../../analytics/track-event.directive';
 import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
 import { BaseModal } from '../../../modal/base';
 import { AppResponsiveDimensions } from '../../../responsive-dimensions/responsive-dimensions';

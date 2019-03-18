@@ -1,9 +1,9 @@
+import View from '!view!./pagination.html?style=./pagination.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./pagination.html?style=./pagination.styl';
-
 import { Screen } from '../screen/screen-service';
-import { AppNoAutoscroll } from '../scroll/auto-scroll/no-autoscroll.directive.vue';
+import { AppNoAutoscroll } from '../scroll/auto-scroll/no-autoscroll.directive';
+
 
 const MaxPagesShown = 5;
 

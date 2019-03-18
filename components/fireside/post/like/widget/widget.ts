@@ -2,7 +2,7 @@ import View from '!view!./widget.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { number } from '../../../../../vue/filters/number';
-import { AppAuthRequired } from '../../../../auth/auth-required-directive.vue';
+import { AppAuthRequired } from '../../../../auth/auth-required-directive';
 import { Growls } from '../../../../growls/growls.service';
 import { LikersModal } from '../../../../likers/modal.service';
 import { Screen } from '../../../../screen/screen-service';

@@ -1,13 +1,13 @@
+import View from '!view!./content.html?style=./content.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./content.html?style=./content.styl';
-import '../comment.styl';
-
-import { Comment } from '../comment-model';
-import { AppFadeCollapse } from '../../fade-collapse/fade-collapse';
-import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
 import { date } from '../../../vue/filters/date';
+import { AppTrackEvent } from '../../analytics/track-event.directive';
+import { AppFadeCollapse } from '../../fade-collapse/fade-collapse';
+import { Comment } from '../comment-model';
+import '../comment.styl';
 import { AppCommentVideoThumbnail } from '../video/thumbnail/thumbnail';
+
 
 @View
 @Component({

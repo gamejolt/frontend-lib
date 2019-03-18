@@ -2,7 +2,7 @@ import View from '!view!./playlist.html?style=./playlist.styl';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 import { time } from '../../../vue/filters/time';
-import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
+import { AppTrackEvent } from '../../analytics/track-event.directive';
 import { GameSong } from '../../game/song/song.model';
 import { AppAudioPlayer } from '../player/player';
 import { AppAudioScrubber } from '../scrubber/scrubber';

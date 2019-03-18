@@ -4,8 +4,8 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import { AppLoading } from '../../../vue/components/loading/loading';
 import { AppState, AppStore } from '../../../vue/services/app/app-store';
 import { Analytics } from '../../analytics/analytics.service';
-import { AppTrackEvent } from '../../analytics/track-event.directive.vue';
-import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
+import { AppTrackEvent } from '../../analytics/track-event.directive';
+import { AppAuthRequired } from '../../auth/auth-required-directive';
 import { Collaborator } from '../../collaborator/collaborator.model';
 import { Environment } from '../../environment/environment.service';
 import { AppMessageThreadAdd } from '../../message-thread/add/add';
@@ -15,18 +15,8 @@ import { AppNavTabList } from '../../nav/tab-list/tab-list';
 import { User } from '../../user/user.model';
 import { FormComment } from '../add/add';
 import { Comment } from '../comment-model';
-import {
-	CommentAction,
-	CommentMutation,
-	CommentState,
-	CommentStore,
-	CommentStoreModel,
-} from '../comment-store';
-import {
-	CommentStoreSliceView,
-	CommentStoreThreadView,
-	CommentStoreView,
-} from '../comment-store-view';
+import { CommentAction, CommentMutation, CommentState, CommentStore, CommentStoreModel } from '../comment-store';
+import { CommentStoreSliceView, CommentStoreThreadView, CommentStoreView } from '../comment-store-view';
 import { AppCommentWidgetComment } from './comment/comment';
 
 let incrementer = 0;

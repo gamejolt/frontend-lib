@@ -1,14 +1,14 @@
+import View from '!view!./like-widget.html';
+import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./like-widget.html';
-
-import { CommentVideo } from '../video-model';
-import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
 import { number } from '../../../../vue/filters/number';
+import { AppAuthRequired } from '../../../auth/auth-required-directive';
+import { LikersModal } from '../../../likers/modal.service';
 import { Screen } from '../../../screen/screen-service';
 import { CommentVote } from '../../vote/vote-model';
-import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
-import { LikersModal } from '../../../likers/modal.service';
+import { CommentVideo } from '../video-model';
+
 
 @View
 @Component({

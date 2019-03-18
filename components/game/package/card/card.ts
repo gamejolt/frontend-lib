@@ -4,7 +4,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { currency } from '../../../../vue/filters/currency';
 import { filesize } from '../../../../vue/filters/filesize';
 import { Analytics } from '../../../analytics/analytics.service';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppTrackEvent } from '../../../analytics/track-event.directive';
 import { AppCard } from '../../../card/card';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 import { AppCountdown } from '../../../countdown/countdown';

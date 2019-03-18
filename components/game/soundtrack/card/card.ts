@@ -3,7 +3,7 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
 import { number } from '../../../../vue/filters/number';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppTrackEvent } from '../../../analytics/track-event.directive';
 import { AppAudioPlaylist } from '../../../audio/playlist/playlist';
 import { AppCard } from '../../../card/card';
 import { Environment } from '../../../environment/environment.service';

@@ -3,7 +3,7 @@ import { Navigate } from 'game-jolt-frontend-lib/components/navigate/navigate.se
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Analytics } from '../../../analytics/analytics.service';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppTrackEvent } from '../../../analytics/track-event.directive';
 import { AppCard } from '../../../card/card';
 import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
 import { AppTooltip } from '../../../tooltip/tooltip';

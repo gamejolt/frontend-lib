@@ -1,15 +1,15 @@
+import View from '!view!./buttons.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./buttons.html';
-
-import { GamePackageCardModel } from './card.model';
-import { GamePackage } from '../package.model';
-import { GameBuild } from '../../build/build.model';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 import { filesize } from '../../../../vue/filters/filesize';
-import { AppGamePackageCardMoreOptions } from './more-options';
-import { Screen } from '../../../screen/screen-service';
+import { AppTrackEvent } from '../../../analytics/track-event.directive';
 import { AppPopper } from '../../../popper/popper';
+import { Screen } from '../../../screen/screen-service';
+import { GameBuild } from '../../build/build.model';
+import { GamePackage } from '../package.model';
+import { GamePackageCardModel } from './card.model';
+import { AppGamePackageCardMoreOptions } from './more-options';
+
 
 @View
 @Component({

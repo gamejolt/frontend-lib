@@ -1,11 +1,7 @@
 import View from '!view!./join-widget.html';
-import { AppTrackEvent } from 'game-jolt-frontend-lib/components/analytics/track-event.directive.vue';
-import { AppAuthRequired } from 'game-jolt-frontend-lib/components/auth/auth-required-directive.vue';
-import {
-	$joinCommunity,
-	$leaveCommunity,
-	Community,
-} from 'game-jolt-frontend-lib/components/community/community.model';
+import { AppTrackEvent } from 'game-jolt-frontend-lib/components/analytics/track-event.directive';
+import { AppAuthRequired } from 'game-jolt-frontend-lib/components/auth/auth-required-directive';
+import { $joinCommunity, $leaveCommunity, Community } from 'game-jolt-frontend-lib/components/community/community.model';
 import { Growls } from 'game-jolt-frontend-lib/components/growls/growls.service';
 import { findTooltipContainer } from 'game-jolt-frontend-lib/components/tooltip/container/container';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
