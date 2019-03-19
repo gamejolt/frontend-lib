@@ -5,7 +5,6 @@ import { titleCase } from '../../../utils/string';
 import { findRequiredVueParent } from '../../../utils/vue';
 import BaseFormControl from '../control/base';
 import AppFormTS from '../form';
-import AppForm from '../form.vue';
 
 @Component({})
 export default class AppFormGroup extends Vue {
@@ -41,6 +40,6 @@ export default class AppFormGroup extends Vue {
 	}
 
 	created() {
-		this.form = findRequiredVueParent(this, AppForm) as AppFormTS;
+		this.form = findRequiredVueParent(this, require('../form.vue')) as AppFormTS;
 	}
 }

@@ -3,9 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../../utils/vue';
 import { number } from '../../../vue/filters/number';
 import AppFormTS from '../form';
-import AppForm from '../form.vue';
 import AppFormGroupTS from '../group/group';
-import AppFormGroup from '../group/group.vue';
 
 // These are default messages that don't need any extra validation data.
 // They are also common enough to be applied to all elements.
@@ -37,8 +35,8 @@ export default class AppFormControlErrors extends Vue {
 	private errorMessageOverrides: { [k: string]: string } = {};
 
 	created() {
-		this.form = findRequiredVueParent(this, AppForm) as AppFormTS;
-		this.group = findRequiredVueParent(this, AppFormGroup) as AppFormGroupTS;
+		this.form = findRequiredVueParent(this, require('../form.vue')) as AppFormTS;
+		this.group = findRequiredVueParent(this, require('../group/group.vue')) as AppFormGroupTS;
 	}
 
 	get _label() {
