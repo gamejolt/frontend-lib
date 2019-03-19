@@ -25,12 +25,14 @@ export class AppFormControlContent extends BaseFormControl {
 	};
 
 	mounted() {
-		const container = ContentContainer.fromJson(this.controlVal);
-		this.$refs.editor.setContent(container);
+		if (this.controlVal) {
+			const container = ContentContainer.fromJson(this.controlVal);
+			this.$refs.editor.setContent(container);
+		}
 	}
 
 	onUpdate() {
-		const container = this.$refs.editor.getContentContainer();
+		const container = this.$refs.editor.getContent();
 		if (container instanceof ContentContainer) {
 			const jsonValue = container.toJson();
 			this.applyValue(jsonValue);

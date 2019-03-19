@@ -1,9 +1,7 @@
 <div class="content-editor"
 	@focus="onFocus"
 	ref="editor"
-	:style="{
-		userSelect: isFocused ? null : 'none'
-	}"
+	tabindex="0"
 	>
 	<div class="content-container">
 		<div class="-doc" ref="doc" />

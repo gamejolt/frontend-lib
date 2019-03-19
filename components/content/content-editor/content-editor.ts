@@ -166,7 +166,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		this.emojiPanelVisible = false;
 	}
 
-	public getContentContainer() {
+	public getContent() {
 		if (this.view) {
 			const data = ContentFormatAdapter.adaptOut(
 				this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
@@ -178,6 +178,9 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	public setContent(container: ContentContainer) {
+		if (container.context !== this.contentContext) {
+			throw new Error('The passed in content context is invalid.');
+		}
 		if (this.schema) {
 			const jsonObj = ContentFormatAdapter.adaptIn(container);
 			this.state = EditorState.create({

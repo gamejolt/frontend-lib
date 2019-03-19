@@ -23,7 +23,27 @@ export class ContentContainer {
 	}
 
 	public static fromJson(json: string): ContentContainer {
-		return JSON.parse(json) as ContentContainer;
+		if (!json) {
+			throw new Error('Empty json provided.');
+		}
+
+		const jsonObj = JSON.parse(json);
+
+		const context = jsonObj.context;
+		const content = [];
+		if (Array.isArray(jsonObj.content)) {
+			for (const subJsonObj of jsonObj.content) {
+				content.push(ContentObject.fromJsonObj(subJsonObj));
+			}
+		}
+
+		const obj = new ContentContainer(context, content);
+
+		obj.version = jsonObj.version;
+		obj.hydration = [];
+		obj.createdOn = jsonObj.createdOn;
+
+		return obj;
 	}
 
 	public toJson() {
@@ -31,7 +51,7 @@ export class ContentContainer {
 			version: this.version,
 			createdOn: this.createdOn,
 			context: this.context,
-			content: this.content,
+			content: this.content.map(i => i.toJsonObj()),
 			hydration: [],
 		};
 		return JSON.stringify(data);

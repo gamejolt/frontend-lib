@@ -28,7 +28,7 @@ export class AppContentViewer extends Vue implements ContentOwner {
 	}
 
 	get shouldShowContent() {
-		return !!this.data;
+		return this.data instanceof ContentContainer;
 	}
 
 	mounted() {
@@ -53,15 +53,22 @@ export class AppContentViewer extends Vue implements ContentOwner {
 		return this.hydrator;
 	}
 
+	getContent() {
+		return this.data;
+	}
+
+	setContent(content: ContentContainer) {
+		this.data = content;
+		this.hydrator = new ContentHydrator(content.hydration);
+	}
+
 	@Watch('source')
 	updatedSource() {
 		if (this.source) {
 			const sourceObj = ContentContainer.fromJson(this.source);
-			this.data = sourceObj;
-			this.hydrator = new ContentHydrator(sourceObj.hydration);
+			this.setContent(sourceObj);
 		} else {
-			this.data = {} as ContentContainer;
-			this.hydrator = new ContentHydrator();
+			this.data = null;
 		}
 	}
 

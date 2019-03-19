@@ -30,7 +30,10 @@ export class ContentFormatAdapter {
 	 * Converts from the editor format to the GJ Content format
 	 */
 	public static adaptOut(inObj: ProsemirrorEditorFormat, context: ContentContext) {
-		let outObj = new ContentContainer(context, inObj.content);
+		let outObj = new ContentContainer(
+			context,
+			inObj.content.map(i => ContentObject.fromJsonObj(i))
+		);
 
 		const capabilities = ContextCapabilities.getForContext(context);
 		outObj = this.validate(outObj, capabilities);
@@ -45,13 +48,6 @@ export class ContentFormatAdapter {
 		data: ContentContainer,
 		capabilities: ContextCapabilities | null = null
 	) {
-		// If the content is completely empty, we add one empty paragraph
-		if (data.content.length === 0) {
-			data.content.push({
-				type: 'paragraph',
-			} as ContentObject);
-		}
-
 		// Remove nodes with types not allowed in the context
 		if (capabilities instanceof ContextCapabilities) {
 			data.content = data.content.filter(
@@ -87,6 +83,13 @@ export class ContentFormatAdapter {
 			!data.content[data.content.length - 1].content
 		) {
 			data.content.pop();
+		}
+
+		// If the content is completely empty, we add one empty paragraph
+		if (data.content.length === 0) {
+			data.content.push({
+				type: 'paragraph',
+			} as ContentObject);
 		}
 
 		return data;
