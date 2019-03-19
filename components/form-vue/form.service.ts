@@ -1,17 +1,17 @@
 import Vue from 'vue';
-import { Prop, Component } from 'vue-property-decorator';
-import AppForm from './form.vue'
-import AppFormControl from './control/control.vue'
-import AppFormGroup from './group/group.vue'
-import AppFormControlErrors from './control-errors/control-errors.vue'
-import { AppFormControlError } from './control-errors/control-error';
-import AppFormButton from './button/button.vue'
-import AppFormControlSelect from './control/select/select.vue'
-import AppFormControlTextarea from './control/textarea/textarea.vue'
-import AppFormControlRadio from './control/radio/radio.vue'
-import AppFormControlCheckbox from './control/checkbox/checkbox.vue'
+import { Component, Prop } from 'vue-property-decorator';
+import { arrayRemove, arrayUnique } from '../../utils/array';
 import { Api } from '../api/api.service';
-import { arrayUnique, arrayRemove } from '../../utils/array';
+import AppFormButton from './button/button.vue';
+import { AppFormControlError } from './control-errors/control-error';
+import AppFormControlErrors from './control-errors/control-errors.vue';
+import AppFormControlCheckbox from './control/checkbox/checkbox.vue';
+import AppFormControl from './control/control.vue';
+import AppFormControlRadio from './control/radio/radio.vue';
+import AppFormControlSelect from './control/select/select.vue';
+import AppFormControlTextarea from './control/textarea/textarea.vue';
+import AppForm from './form.vue';
+import AppFormGroup from './group/group.vue';
 
 export interface FormOnInit {
 	onInit(): void;

@@ -32,10 +32,11 @@
 </template>
 
 <style lang="stylus" scoped>
-@require '~styles/variables'
+@require '~styles/variables';
 
->>> .form-group
-	margin-bottom: 10px
+>>> .form-group {
+  margin-bottom: 10px;
+}
 </style>
 
 <script lang="ts" src="./add" />

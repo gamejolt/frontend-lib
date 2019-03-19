@@ -37,10 +37,13 @@ export default class BaseFormControl extends Vue {
 	}
 
 	created() {
-		this.form = findRequiredVueParent(this, require('../form.vue')) as AppFormTS;
+		this.form = findRequiredVueParent(this, require('../form.vue').default) as AppFormTS;
 		this.form.controls.push(this);
 
-		this.group = findRequiredVueParent(this, require('../group/group.vue')) as AppFormGroupTS;
+		this.group = findRequiredVueParent(
+			this,
+			require('../group/group.vue').default
+		) as AppFormGroupTS;
 		this.group.inputErrors = this.$validator.errorBag;
 		this.group.control = this;
 

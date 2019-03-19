@@ -35,8 +35,11 @@ export default class AppFormControlErrors extends Vue {
 	private errorMessageOverrides: { [k: string]: string } = {};
 
 	created() {
-		this.form = findRequiredVueParent(this, require('../form.vue')) as AppFormTS;
-		this.group = findRequiredVueParent(this, require('../group/group.vue')) as AppFormGroupTS;
+		this.form = findRequiredVueParent(this, require('../form.vue').default) as AppFormTS;
+		this.group = findRequiredVueParent(
+			this,
+			require('../group/group.vue').default
+		) as AppFormGroupTS;
 	}
 
 	get _label() {

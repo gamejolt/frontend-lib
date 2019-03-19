@@ -40,6 +40,6 @@ export default class AppFormGroup extends Vue {
 	}
 
 	created() {
-		this.form = findRequiredVueParent(this, require('../form.vue')) as AppFormTS;
+		this.form = findRequiredVueParent(this, require('../form.vue').default) as AppFormTS;
 	}
 }
