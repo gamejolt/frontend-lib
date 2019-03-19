@@ -2,6 +2,7 @@ import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
+import { FocusWatcher } from 'game-jolt-frontend-lib/components/content/content-editor/focus-watcher';
 import { createPlugins } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/plugins';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
 import {
@@ -54,21 +55,24 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	hydrator: ContentHydrator = new ContentHydrator();
 	schema: Schema | null = null;
 	plugins: Plugin[] | null = null;
+	isFocused = false;
+	focusWatcher: FocusWatcher | null = null;
 
 	$refs!: {
+		editor: HTMLElement;
 		doc: HTMLElement;
 	};
 
 	get shouldShowControls() {
-		return this.capabilities.hasAny;
+		return this.isFocused && this.capabilities.hasAny;
 	}
 
 	get shouldShowTextControls() {
-		return !this.shouldShowEmojiControls && this.capabilities.hasAnyText;
+		return this.isFocused && !this.shouldShowEmojiControls && this.capabilities.hasAnyText;
 	}
 
 	get shouldShowEmojiControls() {
-		return this.capabilities.gjEmoji && this.emojiPanelVisible;
+		return this.isFocused && this.capabilities.gjEmoji && this.emojiPanelVisible;
 	}
 
 	get isEmpty() {
@@ -131,6 +135,15 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		ro.observe(this.$refs.doc);
 
 		this.stateCounter++;
+
+		this.focusWatcher = new FocusWatcher(this.$refs.editor, this.onFocusIn, this.onFocusOut);
+		this.focusWatcher.start();
+	}
+
+	beforeDestroy() {
+		if (this.focusWatcher instanceof FocusWatcher) {
+			this.focusWatcher!.destroy();
+		}
 	}
 
 	private updateView() {
@@ -182,5 +195,13 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		if (child instanceof HTMLElement) {
 			child.focus();
 		}
+	}
+
+	private onFocusIn() {
+		this.isFocused = true;
+	}
+
+	private onFocusOut() {
+		this.isFocused = false;
 	}
 }

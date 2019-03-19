@@ -23,7 +23,7 @@ export class AppContentEditorControls extends Vue {
 	@Prop(Object)
 	capabilities!: ContextCapabilities;
 
-	visible = true;
+	visible = false;
 	top = '0px';
 	right = '0px';
 	collapsed = true;
