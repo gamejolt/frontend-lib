@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
 import { Api } from '../../api/api.service';
 import { Connection } from '../../connection/connection-service';
 import { Environment } from '../../environment/environment.service';
 import { Navigate } from '../../navigate/navigate.service';
-import { AppAuthJoinForm, FormModel } from './join-form';
+import { FormModel } from './join-form';
+import AppAuthJoinForm from './join-form.vue';
 
 @Component({
 	components: {

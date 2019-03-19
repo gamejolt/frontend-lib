@@ -15,6 +15,6 @@
 	</div>
 </template>
 
-<style src="./loading.styl" scoped />
+<style lang="stylus" src="./loading.styl" scoped />
 
 <script lang="ts" src="./loading" />

@@ -113,6 +113,6 @@
 	</div>
 </template>
 
-<style src="./markdown.styl" scoped />
+<style lang="stylus" src="./markdown.styl" scoped />
 
 <script lang="ts" src="./markdown" />

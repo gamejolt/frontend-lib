@@ -35,7 +35,6 @@ module.exports = function(config) {
 	let stylusLoader = {
 		loader: 'stylus-loader',
 		options: {
-			use: [],
 			paths: ['src/'],
 			'resolve url': true,
 			'include css': true,
@@ -102,7 +101,7 @@ module.exports = function(config) {
 				loader: 'css-loader',
 				options: {
 					// How many loaders run before this.
-					importLoaders: 2,
+					importLoaders: 2, // withStylusLoader ? 2 : 1,
 				},
 			},
 			{
@@ -218,19 +217,6 @@ module.exports = function(config) {
 				},
 			},
 			externals: externals,
-			resolveLoader: {
-				alias: {
-					view:
-						'vue-template-loader?' +
-						JSON.stringify({
-							scoped: true,
-							transformAssetUrls: {
-								img: 'src',
-								'app-theme-svg': 'src',
-							},
-						}),
-				},
-			},
 			module: {
 				rules: [
 					{
@@ -257,28 +243,10 @@ module.exports = function(config) {
 						],
 					},
 					{
-						// resource: {
-						// 	and: [
-						// 		{ test: /\.styl$/ },
-						// 		function() {
-						// 			return !config.ssr;
-						// 		},
-						// 	],
-						// },
-						test: /\.styl$/,
-						enforce: 'pre',
-						use: [stylusLoader],
+						test: /\.styl(us)?$/,
+						use: stylesLoader(true),
 					},
 					{
-						// enforce: config.ssr ? 'pre' : 'post',
-						enforce: 'post',
-						test: /\.styl$/,
-						// use: stylesLoader(!!config.ssr),
-						use: stylesLoader(false),
-					},
-					{
-						// enforce: config.ssr ? 'pre' : 'post',
-						enforce: 'post',
 						test: /\.css$/,
 						use: stylesLoader(false),
 					},

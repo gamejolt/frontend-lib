@@ -43,6 +43,6 @@
 	</transition>
 </template>
 
-<style src="./growl.styl" scoped />
+<style lang="stylus" src="./growl.styl" scoped />
 
 <script lang="ts" src="./growl" />

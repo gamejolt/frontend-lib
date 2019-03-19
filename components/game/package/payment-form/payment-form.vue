@@ -363,6 +363,6 @@
 	</app-form>
 </template>
 
-<style src="./payment-form.styl" scoped />
+<style lang="stylus" src="./payment-form.styl" scoped />
 
 <script lang="ts" src="./payment-form" />

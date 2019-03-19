@@ -76,6 +76,6 @@
 	</div>
 </template>
 
-<style src="./playlist.styl" scoped />
+<style lang="stylus" src="./playlist.styl" scoped />
 
 <script lang="ts" src="./playlist" />

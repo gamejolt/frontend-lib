@@ -1,19 +1,17 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./item.html?style=./item.styl';
-import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
 import { AppImgResponsive } from '../../img/responsive/responsive';
 
 export const MediaBarItemMaxHeight = 150;
 
-@View
 @Component({
 	components: {
 		AppJolticon,
 		AppImgResponsive,
 	},
 })
-export class AppMediaBarItem extends Vue {
+export default class AppMediaBarItem extends Vue {
 	@Prop(Object) item!: any;
 
 	width = 'auto';

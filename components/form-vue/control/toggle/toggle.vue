@@ -16,6 +16,6 @@
 	</span>
 </template>
 
-<style src="./toggle.styl" scoped />
+<style lang="stylus" src="./toggle.styl" scoped />
 
 <script lang="ts" src="./toggle" />

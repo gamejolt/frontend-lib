@@ -1,14 +1,14 @@
+import { Subscription } from 'rxjs/Subscription';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { Subscription } from 'rxjs/Subscription';
-
-import { MediaBarLightboxConfig, AppMediaBarLightbox } from '../lightbox';
-import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue'
-import { AppImgResponsive } from '../../../img/responsive/responsive';
-import AppVideoEmbed from '../../../video/embed/embed.vue'
-import AppSketchfabEmbed from '../../../sketchfab/embed/embed.vue'
 import { findRequiredVueParent } from '../../../../utils/vue';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
+import { AppImgResponsive } from '../../../img/responsive/responsive';
 import { Screen } from '../../../screen/screen-service';
+import AppSketchfabEmbed from '../../../sketchfab/embed/embed.vue';
+import AppVideoEmbed from '../../../video/embed/embed.vue';
+import AppMediaBarLightboxTS, { MediaBarLightboxConfig } from '../lightbox';
+import AppMediaBarLightbox from '../lightbox.vue';
 
 @Component({
 	components: {
@@ -23,7 +23,7 @@ export default class AppMediaBarLightboxItem extends Vue {
 	@Prop(Number) itemIndex!: number;
 	@Prop(Number) activeIndex!: number;
 
-	lightbox!: AppMediaBarLightbox;
+	lightbox!: AppMediaBarLightboxTS;
 
 	isActive = false;
 	isNext = false;
@@ -39,7 +39,7 @@ export default class AppMediaBarLightboxItem extends Vue {
 	};
 
 	mounted() {
-		this.lightbox = findRequiredVueParent(this, AppMediaBarLightbox);
+		this.lightbox = findRequiredVueParent(this, AppMediaBarLightbox) as AppMediaBarLightboxTS;
 		this.calcActive();
 		this.calcDimensions();
 

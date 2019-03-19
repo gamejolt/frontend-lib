@@ -54,6 +54,6 @@
 	</div>
 </template>
 
-<style src="./media-items.styl" scoped />
+<style lang="stylus" src="./media-items.styl" scoped />
 
 <script lang="ts" src="./media-items" />

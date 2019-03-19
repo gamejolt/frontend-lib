@@ -13,6 +13,6 @@
 	</div>
 </template>
 
-<style src="./fade-collapse.styl" scoped />
+<style lang="stylus" src="./fade-collapse.styl" scoped />
 
 <script lang="ts" src="./fade-collapse" />

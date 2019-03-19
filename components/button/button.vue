@@ -25,6 +25,6 @@
 	</component>
 </template>
 
-<style src="./button.styl" scoped />
+<style lang="stylus" src="./button.styl" scoped />
 
 <script lang="ts" src="./button" />

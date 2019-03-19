@@ -1,4 +1,3 @@
-import View from '!view!./join-form.html?style=./join-form.styl';
 import { Component, Prop } from 'vue-property-decorator';
 import { Provider } from '../../../components/linked-account/linked-account.model';
 import AppLoading from '../../../vue/components/loading/loading.vue';
@@ -16,7 +15,6 @@ export type FormModel = {
 	token: string;
 };
 
-@View
 @Component({
 	components: {
 		AppLoading,
@@ -25,7 +23,7 @@ export type FormModel = {
 		AppTooltip,
 	},
 })
-export class AppAuthJoinForm extends BaseForm<FormModel>
+export default class AppAuthJoinForm extends BaseForm<FormModel>
 	implements FormOnSubmit, FormOnSubmitSuccess {
 	@Prop(Boolean)
 	overlay?: boolean;

@@ -1,4 +1,3 @@
-import View from '!view!./lightbox.html?style=./lightbox.styl';
 import { Subscription } from 'rxjs/Subscription';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
@@ -27,7 +26,6 @@ export const MediaBarLightboxConfig = {
 
 bootstrapShortkey();
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -35,7 +33,7 @@ bootstrapShortkey();
 		AppMediaBarLightboxItem,
 	},
 })
-export class AppMediaBarLightbox extends Vue {
+export default class AppMediaBarLightbox extends Vue {
 	@Prop(Object)
 	mediaBar!: AppMediaBar;
 

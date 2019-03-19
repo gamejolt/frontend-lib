@@ -143,6 +143,6 @@
 	</app-theme>
 </template>
 
-<style src="./card.styl" scoped />
+<style lang="stylus" src="./card.styl" scoped />
 
 <script lang="ts" src="./card" />

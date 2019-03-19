@@ -18,6 +18,6 @@
 	</v-touch>
 </template>
 
-<style src="./scrubber.styl" scoped />
+<style lang="stylus" src="./scrubber.styl" scoped />
 
 <script lang="ts" src="./scrubber" />
