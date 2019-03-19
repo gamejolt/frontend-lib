@@ -65,8 +65,7 @@ export default class AppForm extends Vue {
 	}
 
 	created() {
-		// TODO might be broken, need to see if to reference the base.vue or base.ts file
-		this.base = findRequiredVueParent(this, require('./form.service').BaseForm);
+		this.base = findRequiredVueParent(this, BaseForm);
 
 		// We gotta make sure that the initial values are correct.
 		this.base.hasFormErrors = this.hasErrors;

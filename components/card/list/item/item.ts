@@ -5,7 +5,8 @@ import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
 import AppExpand from '../../../expand/expand.vue';
 import { Screen } from '../../../screen/screen-service';
 import AppCard from '../../card.vue';
-import AppCardList from '../list';
+import AppCardListTS from '../list';
+import AppCardList from '../list.vue';
 
 @Component({
 	components: {
@@ -18,7 +19,7 @@ export default class AppCardListItem extends Vue {
 	@Prop() item!: any;
 	@Prop(Boolean) forceActive?: boolean;
 
-	list: AppCardList = null as any;
+	list: AppCardListTS = null as any;
 
 	readonly Screen = Screen;
 
@@ -35,7 +36,7 @@ export default class AppCardListItem extends Vue {
 	}
 
 	created() {
-		this.list = findRequiredVueParent(this, AppCardList);
+		this.list = findRequiredVueParent(this, AppCardList) as AppCardListTS;
 	}
 
 	onClick() {

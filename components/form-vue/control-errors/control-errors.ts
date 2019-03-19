@@ -2,8 +2,10 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../../utils/vue';
 import { number } from '../../../vue/filters/number';
-import AppForm from '../form';
-import AppFormGroup from '../group/group';
+import AppFormTS from '../form';
+import AppForm from '../form.vue';
+import AppFormGroupTS from '../group/group';
+import AppFormGroup from '../group/group.vue';
 
 // These are default messages that don't need any extra validation data.
 // They are also common enough to be applied to all elements.
@@ -29,15 +31,14 @@ export default class AppFormControlErrors extends Vue {
 	@Prop(String) label?: string;
 	@Prop(String) position?: string;
 
-	form!: AppForm;
-	group!: AppFormGroup;
+	form!: AppFormTS;
+	group!: AppFormGroupTS;
 
 	private errorMessageOverrides: { [k: string]: string } = {};
 
 	created() {
-		// TODO: should be require('../form.vue') and require('../group/group.vue') ?
-		this.form = findRequiredVueParent(this, require('../form'));
-		this.group = findRequiredVueParent(this, require('../group/group'));
+		this.form = findRequiredVueParent(this, AppForm) as AppFormTS;
+		this.group = findRequiredVueParent(this, AppFormGroup) as AppFormGroupTS;
 	}
 
 	get _label() {

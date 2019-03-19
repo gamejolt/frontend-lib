@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../../../utils/vue';
-import AppCardList from '../list';
+import AppCardListTS from '../list';
+import AppCardList from '../list.vue';
 
 const draggable = require('vuedraggable');
 
@@ -13,7 +14,7 @@ const draggable = require('vuedraggable');
 export default class AppCardListDraggable extends Vue {
 	@Prop(Boolean) disabled?: boolean;
 
-	list: AppCardList = null as any;
+	list: AppCardListTS = null as any;
 
 	get items() {
 		return this.list.items;
@@ -24,7 +25,7 @@ export default class AppCardListDraggable extends Vue {
 	}
 
 	created() {
-		this.list = findRequiredVueParent(this, AppCardList);
+		this.list = findRequiredVueParent(this, AppCardList) as AppCardListTS;
 		this.list.isDraggable = !this.disabled;
 	}
 

@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../../utils/vue';
-import AppForm from '../form';
+import AppFormTS from '../form';
+import AppForm from '../form.vue';
 
 @Component({})
 export default class AppFormButton extends Vue {
@@ -9,7 +10,7 @@ export default class AppFormButton extends Vue {
 	@Prop(Boolean) block!: boolean;
 	@Prop(Boolean) lg!: boolean;
 
-	form!: AppForm;
+	form!: AppFormTS;
 
 	get shouldShow() {
 		if (!this.showWhenValid) {
@@ -20,7 +21,6 @@ export default class AppFormButton extends Vue {
 	}
 
 	created() {
-		// TODO: should be require('../form.vue') ?
-		this.form = findRequiredVueParent(this, require('../form'));
+		this.form = findRequiredVueParent(this, AppForm) as AppFormTS;
 	}
 }

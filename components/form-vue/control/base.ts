@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../../utils/vue';
-import AppForm from '../form';
-import AppFormGroup from '../group/group';
+import AppFormTS from '../form';
+import AppForm from '../form.vue';
+import AppFormGroupTS from '../group/group';
+import AppFormGroup from '../group/group.vue';
 
 @Component({})
 export default class BaseFormControl extends Vue {
@@ -17,8 +19,8 @@ export default class BaseFormControl extends Vue {
 	 */
 	multi = false;
 
-	form!: AppForm;
-	group!: AppFormGroup;
+	form!: AppFormTS;
+	group!: AppFormGroupTS;
 
 	get id() {
 		const id = this.form.name + '-' + this.group.name;
@@ -37,12 +39,10 @@ export default class BaseFormControl extends Vue {
 	}
 
 	created() {
-		// TODO should be require('../form.vue') ?
-		this.form = findRequiredVueParent(this, require('../form').AppForm);
+		this.form = findRequiredVueParent(this, AppForm) as AppFormTS;
 		this.form.controls.push(this);
 
-		// TODO should be require('../group/group.vue') ?
-		this.group = findRequiredVueParent(this, require('../group/group').AppFormGroup);
+		this.group = findRequiredVueParent(this, AppFormGroup) as AppFormGroupTS;
 		this.group.inputErrors = this.$validator.errorBag;
 		this.group.control = this;
 

@@ -3,7 +3,8 @@ import { Component, Prop } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../../../utils/vue';
 import AppExpand from '../../../expand/expand.vue';
 import { Screen } from '../../../screen/screen-service';
-import AppCardList from '../list';
+import AppCardListTS from '../list';
+import AppCardList from '../list.vue';
 
 @Component({
 	components: {
@@ -13,7 +14,7 @@ import AppCardList from '../list';
 export default class AppCardListAdd extends Vue {
 	@Prop(String) label!: string;
 
-	list: AppCardList = null as any;
+	list: AppCardListTS = null as any;
 
 	readonly Screen = Screen;
 
@@ -22,7 +23,7 @@ export default class AppCardListAdd extends Vue {
 	}
 
 	created() {
-		this.list = findRequiredVueParent(this, AppCardList);
+		this.list = findRequiredVueParent(this, AppCardList) as AppCardListTS;
 	}
 
 	toggle() {

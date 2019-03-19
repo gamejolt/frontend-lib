@@ -4,7 +4,8 @@ import { Component, Prop } from 'vue-property-decorator';
 import { titleCase } from '../../../utils/string';
 import { findRequiredVueParent } from '../../../utils/vue';
 import BaseFormControl from '../control/base';
-import AppForm from '../form';
+import AppFormTS from '../form';
+import AppForm from '../form.vue';
 
 @Component({})
 export default class AppFormGroup extends Vue {
@@ -14,7 +15,7 @@ export default class AppFormGroup extends Vue {
 	@Prop(Boolean) hideLabel?: boolean;
 	@Prop(String) labelClass?: string;
 
-	form!: AppForm;
+	form!: AppFormTS;
 	control!: BaseFormControl;
 	inputErrors: ErrorBag | null = null;
 	changed = false;
@@ -40,7 +41,6 @@ export default class AppFormGroup extends Vue {
 	}
 
 	created() {
-		// TODO should be require('../form.vue') ?
-		this.form = findRequiredVueParent(this, require('../form'));
+		this.form = findRequiredVueParent(this, AppForm) as AppFormTS;
 	}
 }

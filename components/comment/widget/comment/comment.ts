@@ -23,7 +23,8 @@ import FormComment from '../../add/add.vue';
 import { Comment } from '../../comment-model';
 import AppCommentContent from '../../content/content.vue';
 import AppCommentControls from '../../controls/controls.vue';
-import AppCommentWidget from '../widget';
+import AppCommentWidgetTS from '../widget';
+import AppCommentWidget from '../widget.vue';
 
 let CommentNum = 0;
 
@@ -82,7 +83,7 @@ export default class AppCommentWidgetComment extends Vue {
 	isFollowPending = false;
 	isEditing = false;
 
-	widget!: AppCommentWidget;
+	widget!: AppCommentWidgetTS;
 
 	$el!: HTMLDivElement;
 	$refs!: {
@@ -93,7 +94,7 @@ export default class AppCommentWidgetComment extends Vue {
 	readonly Environment = Environment;
 
 	created() {
-		this.widget = findRequiredVueParent(this, AppCommentWidget);
+		this.widget = findRequiredVueParent(this, AppCommentWidget) as AppCommentWidgetTS;
 	}
 
 	mounted() {
