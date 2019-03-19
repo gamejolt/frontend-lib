@@ -59,6 +59,7 @@
 
 			<app-jolticon
 				v-for="supportKey of card.platformSupport"
+				:key="supportKey"
 				:icon="card.platformSupportInfo[supportKey].icon"
 				v-app-tooltip="card.platformSupportInfo[supportKey].tooltip"
 			/>

@@ -9,6 +9,7 @@
 		<div class="card-meta card-meta-sm" v-if="platforms.length">
 			<app-jolticon
 				v-for="platform of platforms"
+				:key="platform"
 				:icon="GameBuild.platformSupportInfo[platform].icon"
 				v-app-tooltip="GameBuild.platformSupportInfo[platform].tooltip"
 			/>
@@ -46,18 +47,22 @@
 </template>
 
 <style lang="stylus" scoped>
-@require '~styles/variables'
-@require '~styles-lib/mixins'
+@require '~styles/variables';
+@require '~styles-lib/mixins';
 
-.game-external-package-card
-	.card
-		padding-bottom: 0
+.game-external-package-card {
+  .card {
+    padding-bottom: 0;
+  }
 
-	.card-controls
-		margin-bottom: 10px
+  .card-controls {
+    margin-bottom: 10px;
 
-		small
-			margin-left: 5px
+    small {
+      margin-left: 5px;
+    }
+  }
+}
 </style>
 
 <script lang="ts" src="./card" />
