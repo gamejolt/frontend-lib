@@ -1,15 +1,17 @@
-<span>
+<div class="user-mention">
 	<template v-if="user">
-		<router-link
-			:to="user.url"
+		<app-user-card-hover
+			:user="user"
 			>
-			<span
-				:title="user.display_name + ' (@' + user.username + ')'"
+			<router-link
+				:to="user.url"
 				>
-				@{{user.username}}
-				<img key="user" :src="user.img_avatar" class="img-responsive mention-avatar-img" alt="">
-			</span>
-		</router-link>
+				<span>
+					@{{user.username}}
+					<img key="user" :src="user.img_avatar" class="img-responsive mention-avatar-img" alt="">
+				</span>
+			</router-link>
+		</app-user-card-hover>
 	</template>
 	<!-- Placeholder until the user data is hydrated: -->
 	<template v-else>
@@ -23,4 +25,4 @@
 			</span>
 		</router-link>
 	</template>
-</span>
+</div>
