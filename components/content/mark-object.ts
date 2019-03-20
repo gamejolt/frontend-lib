@@ -3,7 +3,17 @@ export class MarkObject {
 	public attrs!: { [key: string]: any };
 
 	public static fromJsonObj(jsonObj: any): MarkObject {
-		return jsonObj as MarkObject;
+		const obj = new MarkObject();
+
+		obj.type = jsonObj.type;
+
+		if (jsonObj.attrs === undefined) {
+			obj.attrs = {};
+		} else {
+			obj.attrs = jsonObj.attrs;
+		}
+
+		return obj;
 	}
 
 	public toJsonObj(): any {
