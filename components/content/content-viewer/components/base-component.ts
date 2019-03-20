@@ -57,7 +57,7 @@ function getComponentType(data: ContentObject): any {
 export function renderChildren(
 	h: CreateElement,
 	owner: ContentOwner,
-	childObjects: ContentObject[]
+	childObjects: ReadonlyArray<ContentObject>
 ) {
 	const children = [];
 	if (childObjects) {

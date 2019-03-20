@@ -8,7 +8,7 @@ export default class ContentWriter {
 		this._container = container;
 	}
 
-	private ensureParagraph(): ContentObject {
+	public ensureParagraph(): ContentObject {
 		let p: ContentObject;
 
 		if (

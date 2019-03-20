@@ -52,10 +52,10 @@ export class ContentObject extends ContentNode {
 			obj.attrs = jsonObj.attrs;
 		}
 
-		obj.content = [];
+		obj._content = [];
 		if (Array.isArray(jsonObj.content)) {
 			for (const subJsonObj of jsonObj.content) {
-				obj.content.push(ContentObject.fromJsonObj(subJsonObj));
+				obj.appendChild(ContentObject.fromJsonObj(subJsonObj));
 			}
 		}
 

@@ -4,17 +4,25 @@ import {
 } from 'game-jolt-frontend-lib/components/content/content-object';
 
 export abstract class ContentNode {
-	public content: ContentObject[];
+	protected _content: ContentObject[];
+
+	get content(): ReadonlyArray<ContentObject> {
+		return this._content;
+	}
+
+	get hasChildren() {
+		return this.content.length > 0;
+	}
 
 	get lastChild() {
-		if (this.content.length === 0) {
+		if (!this.hasChildren) {
 			return null;
 		}
 		return this.content[this.content.length - 1];
 	}
 
 	constructor(content: ContentObject[] = []) {
-		this.content = content;
+		this._content = content;
 	}
 
 	public getChildrenByType(type: ContentObjectType): ContentObject[] {
@@ -30,6 +38,6 @@ export abstract class ContentNode {
 	}
 
 	public appendChild(child: ContentObject) {
-		this.content.push(child);
+		this._content.push(child);
 	}
 }
