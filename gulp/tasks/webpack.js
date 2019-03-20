@@ -32,16 +32,6 @@ module.exports = function(config) {
 	// We only extract css for client SSR or prod builds.
 	let shouldExtractCss = config.ssr || config.production;
 
-	let stylusLoader = {
-		loader: 'stylus-loader',
-		options: {
-			paths: ['src/'],
-			'resolve url': true,
-			'include css': true,
-			preferPathResolver: 'webpack',
-		},
-	};
-
 	let externals = {};
 	if (!config.client) {
 		// When building for site, we don't want any of these imports accidentally being pulled in.
@@ -96,36 +86,34 @@ module.exports = function(config) {
 	}
 
 	function stylesLoader(withStylusLoader) {
-		const loaders = [
-			{
-				loader: 'css-loader',
-				options: {
-					// How many loaders run before this.
-					importLoaders: 2, // withStylusLoader ? 2 : 1,
-				},
-			},
-			{
-				loader: 'postcss-loader',
-			},
-		];
+		const loaders = ['css-loader', 'postcss-loader'];
 
 		if (shouldExtractCss) {
-			if (config.ssr === 'client') {
+			if (config.ssr !== 'server') {
 				loaders.unshift(MiniCssExtractPlugin.loader);
 			} else {
 				loaders.unshift('null-loader');
 			}
-		} else {
-			loaders.unshift({
-				loader: 'vue-style-loader',
-				options: {
-					shadowMode: false,
-				},
-			});
 		}
+		// else {
+		// 	loaders.unshift({
+		// 		loader: 'vue-style-loader',
+		// 		options: {
+		// 			shadowMode: false,
+		// 		},
+		// 	});
+		// }
 
 		if (withStylusLoader) {
-			loaders.push(stylusLoader);
+			loaders.push({
+				loader: 'stylus-loader',
+				options: {
+					paths: ['src/'],
+					'resolve url': true,
+					'include css': true,
+					preferPathResolver: 'webpack',
+				},
+			});
 		}
 
 		return loaders;

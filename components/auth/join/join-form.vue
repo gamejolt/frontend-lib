@@ -134,4 +134,4 @@
 }
 </style>
 
-<script lang="ts" src="./join" />
+<script lang="ts" src="./join-form" />
