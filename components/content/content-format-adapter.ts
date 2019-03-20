@@ -16,6 +16,12 @@ export class ContentFormatAdapter {
 	 * Converts from the GJ Content Format to the editor format
 	 */
 	public static adaptIn(inObj: ContentContainer) {
+		// Make sure there is at least one child.
+		if (!inObj.hasChildren) {
+			const p = new ContentObject('paragraph');
+			inObj.appendChild(p);
+		}
+
 		const outObj = {
 			type: 'doc',
 			content: inObj.content,
