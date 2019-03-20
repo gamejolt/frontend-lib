@@ -94,15 +94,14 @@ module.exports = function(config) {
 			} else {
 				loaders.unshift('null-loader');
 			}
+		} else {
+			loaders.unshift({
+				loader: 'vue-style-loader',
+				options: {
+					shadowMode: false,
+				},
+			});
 		}
-		// else {
-		// 	loaders.unshift({
-		// 		loader: 'vue-style-loader',
-		// 		options: {
-		// 			shadowMode: false,
-		// 		},
-		// 	});
-		// }
 
 		if (withStylusLoader) {
 			loaders.push({
