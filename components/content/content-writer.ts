@@ -30,6 +30,16 @@ export default class ContentWriter {
 		tagObj.attrs.text = tag;
 
 		const parentParagraph = this.ensureParagraph();
+		if (parentParagraph.lastChild instanceof ContentObject) {
+			if (parentParagraph.lastChild.type === 'text') {
+				parentParagraph.lastChild.text += ' ';
+			} else {
+				const t = new ContentObject('text');
+				t.text = ' ';
+				parentParagraph.appendChild(t);
+			}
+		}
+
 		parentParagraph.appendChild(tagObj);
 	}
 }
