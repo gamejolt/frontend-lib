@@ -15,7 +15,7 @@ import { Component, Prop } from 'vue-property-decorator';
 	},
 })
 export class AppContentViewerMention extends Vue {
-	@Prop(Object)
+	@Prop(ContentObject)
 	data!: ContentObject;
 	@Prop(Object)
 	owner!: ContentOwner;

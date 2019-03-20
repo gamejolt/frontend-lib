@@ -4,7 +4,7 @@ import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export class AppContentViewerGJEmoji extends Vue {
-	@Prop(Object)
+	@Prop(ContentObject)
 	data!: ContentObject;
 
 	render(h: CreateElement) {

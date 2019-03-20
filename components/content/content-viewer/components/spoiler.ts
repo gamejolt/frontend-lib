@@ -6,7 +6,7 @@ import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export class AppContentViewerSpoiler extends Vue {
-	@Prop(Object)
+	@Prop(ContentObject)
 	data!: ContentObject;
 	@Prop(Object)
 	owner!: ContentOwner;
