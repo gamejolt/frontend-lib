@@ -1,3 +1,4 @@
+import { ContentNode } from 'game-jolt-frontend-lib/components/content/content-node';
 import { MarkObject } from 'game-jolt-frontend-lib/components/content/mark-object';
 
 export type ContentObjectType =
@@ -19,18 +20,18 @@ export type ContentObjectType =
 	| 'heading'
 	| 'mention';
 
-export class ContentObject {
+export class ContentObject extends ContentNode {
 	public type!: ContentObjectType;
 	public text!: string | null;
-	public content!: ContentObject[];
 	public attrs!: { [key: string]: any };
 	public marks!: MarkObject[];
 
 	constructor(type: ContentObjectType) {
+		super();
+
 		this.type = type;
 
 		this.text = null;
-		this.content = [];
 		this.attrs = {};
 		this.marks = [];
 	}
@@ -90,17 +91,5 @@ export class ContentObject {
 		}
 
 		return jsonObj;
-	}
-
-	public getObjectsByType(type: ContentObjectType): ContentObject[] {
-		const objs = [] as ContentObject[];
-		for (const contentObj of this.content) {
-			const subObjs = contentObj.getObjectsByType(type);
-			objs.push(...subObjs);
-			if (contentObj.type === type) {
-				objs.push(contentObj);
-			}
-		}
-		return objs;
 	}
 }

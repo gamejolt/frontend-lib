@@ -1,15 +1,15 @@
+import View from '!view!./control.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./control.html';
-
+import { findRequiredVueParent } from '../../../utils/vue';
 import { AppForm } from '../form';
 import { AppFormGroup } from '../group/group';
-import { findRequiredVueParent } from '../../../utils/vue';
 
 @View
 @Component({})
 export class BaseFormControl extends Vue {
-	@Prop() rules!: any;
+	@Prop()
+	rules!: any;
 
 	controlVal: any;
 	changed = false;
@@ -54,7 +54,12 @@ export class BaseFormControl extends Vue {
 			// Watch the form model for changes and sync to our control.
 			this.$watch(
 				() => this.form.base.formModel[this.group.name],
-				newVal => (this.controlVal = newVal)
+				newVal => {
+					if (this.controlVal !== newVal) {
+						this.controlVal = newVal;
+						this.onFieldChanged();
+					}
+				}
 			);
 		}
 	}
@@ -79,4 +84,6 @@ export class BaseFormControl extends Vue {
 		this.$emit('changed', value);
 		this.form.onChange();
 	}
+
+	onFieldChanged() {}
 }

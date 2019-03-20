@@ -1,4 +1,5 @@
 import View from '!view!./suggestion.html?style=./suggestion.styl';
+import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 
@@ -11,6 +12,9 @@ export class AppTagSuggestion extends Vue {
 	@Prop(String)
 	text!: string;
 
+	@Prop(ContentContainer)
+	content!: ContentContainer;
+
 	@Emit('tag')
 	emitTag(_tag: string) {}
 
@@ -19,7 +23,19 @@ export class AppTagSuggestion extends Vue {
 	}
 
 	get lcText() {
-		return this.text.toLowerCase();
+		let text = '';
+		if (this.text) {
+			text += this.text.toLowerCase();
+		}
+		if (this.content instanceof ContentContainer) {
+			text += this.content
+				.getChildrenByType('text')
+				.map(i => i.text)
+				.join(' ')
+				.toLowerCase();
+		}
+
+		return text;
 	}
 
 	get recommendedTags() {
@@ -30,7 +46,15 @@ export class AppTagSuggestion extends Vue {
 		return this.tags
 			.map(t => {
 				const count = this.lcText.split(t.toLowerCase()).length - 1;
-				const hashtagCount = this.lcText.split('#' + t.toLowerCase()).length - 1;
+				let hashtagCount = 0;
+				if (this.content instanceof ContentContainer) {
+					hashtagCount = this.content
+						.getChildrenByType('tag')
+						.map(i => i.attrs.text as string)
+						.filter(i => i.toLowerCase() === t.toLowerCase()).length;
+				} else {
+					hashtagCount = this.lcText.split('#' + t.toLowerCase()).length - 1;
+				}
 				return {
 					tag: t,
 					count: hashtagCount > 0 ? -1 : count,
@@ -55,10 +79,17 @@ export class AppTagSuggestion extends Vue {
 
 		const recommended = this.recommendedTags;
 
-		return this.tags.filter(
-			t =>
-				recommended!.indexOf(t) === -1 &&
-				this.lcText.split('#' + t.toLowerCase()).length - 1 === 0
-		);
+		if (this.content instanceof ContentContainer) {
+			const contentTags = this.content.getChildrenByType('tag').map(i => i.attrs.text);
+			return this.tags.filter(
+				t => recommended!.indexOf(t) === -1 && contentTags!.indexOf(t) === -1
+			);
+		} else {
+			return this.tags.filter(
+				t =>
+					recommended!.indexOf(t) === -1 &&
+					this.lcText.split('#' + t.toLowerCase()).length - 1 === 0
+			);
+		}
 	}
 }
