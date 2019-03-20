@@ -7,7 +7,7 @@ import { Mark, MarkType, Node, NodeType } from 'prosemirror-model';
 import { liftListItem, wrapInList } from 'prosemirror-schema-list';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Emit, Prop, Watch } from 'vue-property-decorator';
 import { MouseState } from '../../../../../utils/mouse';
 import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
 
@@ -47,6 +47,9 @@ export class AppContentEditorTextControls extends Vue {
 	get shouldShowSpoiler() {
 		return this.capabilities.spoiler && (this.isInSpoiler || this.testWrapSpoiler());
 	}
+
+	@Emit('click')
+	emitClicked() {}
 
 	mounted() {
 		this.mouse = new MouseState();
@@ -156,18 +159,22 @@ export class AppContentEditorTextControls extends Vue {
 
 	onClickBold() {
 		this.dispatchMark(this.view.state.schema.marks.strong);
+		this.emitClicked();
 	}
 
 	onClickItalic() {
 		this.dispatchMark(this.view.state.schema.marks.em);
+		this.emitClicked();
 	}
 
 	onClickStrikethrough() {
 		this.dispatchMark(this.view.state.schema.marks.strike);
+		this.emitClicked();
 	}
 
 	onClickCode() {
 		this.dispatchMark(this.view.state.schema.marks.code);
+		this.emitClicked();
 	}
 
 	async onClickLink() {
@@ -183,6 +190,7 @@ export class AppContentEditorTextControls extends Vue {
 				});
 			}
 		}
+		this.emitClicked();
 	}
 
 	testWrapInList(listType: NodeType) {
@@ -200,6 +208,7 @@ export class AppContentEditorTextControls extends Vue {
 
 	doLiftListItems() {
 		liftListItem(this.view.state.schema.nodes.listItem)(this.view.state, this.view.dispatch);
+		this.emitClicked();
 	}
 
 	onClickBulletList() {
@@ -207,6 +216,7 @@ export class AppContentEditorTextControls extends Vue {
 			this.doLiftListItems();
 		} else {
 			this.doWrapInList(this.view.state.schema.nodes.bulletList);
+			this.emitClicked();
 		}
 	}
 
@@ -215,6 +225,7 @@ export class AppContentEditorTextControls extends Vue {
 			this.doLiftListItems();
 		} else {
 			this.doWrapInList(this.view.state.schema.nodes.orderedList);
+			this.emitClicked();
 		}
 	}
 
@@ -247,6 +258,7 @@ export class AppContentEditorTextControls extends Vue {
 			this.doWrapInSpoiler();
 			ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
 		}
+		this.emitClicked();
 	}
 
 	testWrapInHeading() {
@@ -269,6 +281,7 @@ export class AppContentEditorTextControls extends Vue {
 				lifted = lift(this.view.state, this.view.dispatch);
 			} while (lifted && this.testIsInHeading(node));
 		}
+		this.emitClicked();
 	}
 
 	doWrapInHeading(level: number) {
@@ -281,5 +294,6 @@ export class AppContentEditorTextControls extends Vue {
 	onClickHeading(level: number) {
 		this.doWrapInHeading(level);
 		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
+		this.emitClicked();
 	}
 }

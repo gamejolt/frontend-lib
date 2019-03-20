@@ -47,7 +47,6 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	@Prop({ type: String, default: '' })
 	placeholder!: string;
 
-	state!: EditorState;
 	view: EditorView | null = null;
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
@@ -120,13 +119,13 @@ export class AppContentEditor extends Vue implements ContentOwner {
 
 		this.schema = generateSchema(this.capabilities);
 		this.plugins = createPlugins(this, this.schema);
-		this.state = EditorState.create({
+		const state = EditorState.create({
 			doc: DOMParser.fromSchema(this.schema).parse(this.$refs.doc),
 			schema: this.schema,
 			plugins: this.plugins,
 		});
 
-		this.updateView();
+		this.updateView(state);
 
 		// Observe any resize events so the editor controls can be repositioned correctly
 		const ro = new ResizeObserver(() => {
@@ -146,14 +145,14 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		}
 	}
 
-	private updateView() {
+	private updateView(state: EditorState) {
 		if (this.view) {
 			this.view.destroy();
 		}
 
 		const nodeViews = buildNodeViews(this);
 		this.view = new EditorView(this.$refs.doc, {
-			state: this.state,
+			state,
 			nodeViews,
 			handleDOMEvents: {
 				paste: pasteEventHandler,
@@ -164,6 +163,24 @@ export class AppContentEditor extends Vue implements ContentOwner {
 
 	onEmojisHide() {
 		this.emojiPanelVisible = false;
+	}
+
+	async onTextControlClicked() {
+		// When a text control got clicked, store the previous selection,
+		// focus the editor and then apply the selection.
+		// We do this so the focused text doesn't visibly lose focus after the text control
+		// button assumed focus.
+		const prevSelection = this.view!.state.selection;
+
+		this.$refs.editor.focus();
+
+		const tr = this.view!.state.tr;
+		tr.setSelection(prevSelection);
+		this.view!.dispatch(tr);
+
+		// Wait a tick for the editor's doc to update, then force an update to reposition the controls.
+		await Vue.nextTick();
+		this.stateCounter++;
 	}
 
 	public getContent() {
@@ -183,12 +200,12 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		}
 		if (this.schema) {
 			const jsonObj = ContentFormatAdapter.adaptIn(container);
-			this.state = EditorState.create({
+			const state = EditorState.create({
 				doc: Node.fromJSON(this.schema, jsonObj),
 				schema: this.schema,
 				plugins: this.plugins,
 			});
-			this.updateView();
+			this.updateView(state);
 		}
 	}
 
