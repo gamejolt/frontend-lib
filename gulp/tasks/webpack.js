@@ -209,6 +209,12 @@ module.exports = function(config) {
 					{
 						test: /\.vue$/,
 						loader: 'vue-loader',
+						options: {
+							transformAssetUrls: {
+								img: 'src',
+								'app-theme-svg': 'src',
+							},
+						},
 					},
 					{
 						test: /\.ts$/,
