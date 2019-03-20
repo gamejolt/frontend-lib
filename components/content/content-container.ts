@@ -38,8 +38,13 @@ export class ContentContainer extends ContentNode {
 		const obj = new ContentContainer(context, content);
 
 		obj.version = jsonObj.version;
-		obj.hydration = [];
 		obj.createdOn = jsonObj.createdOn;
+
+		if (Array.isArray(jsonObj.hydration)) {
+			obj.hydration = jsonObj.hydration;
+		} else {
+			obj.hydration = [];
+		}
 
 		return obj;
 	}
