@@ -1,16 +1,13 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./date.html';
+import AppDatetimePicker from '../../../datetime-picker/datetime-picker.vue';
+import BaseFormControl from '../base';
 
-import { BaseFormControl } from '../base';
-import { AppDatetimePicker } from '../../../datetime-picker/datetime-picker';
-
-@View
 @Component({
 	components: {
 		AppDatetimePicker,
 	},
 })
-export class AppFormControlDate extends BaseFormControl {
+export default class AppFormControlDate extends BaseFormControl {
 	@Prop(Number) timezoneOffset!: number;
 
 	controlVal = Date.now();

@@ -1,10 +1,8 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./datepicker.html';
-import './datepicker.styl';
-import { AppDatepickerDay } from './day';
 import { date as dateFilter } from '../../vue/filters/date';
-import { AppDatepickerMonth } from './month';
+import AppDatepickerDay from './day.vue';
+import AppDatepickerMonth from './month.vue';
 
 type DateMode = 'day' | 'month';
 
@@ -72,14 +70,13 @@ export class DatepickerDate {
 	}
 }
 
-@View
 @Component({
 	components: {
 		AppDatepickerDay,
 		AppDatepickerMonth,
 	},
 })
-export class AppDatepicker extends Vue {
+export default class AppDatepicker extends Vue {
 	@Prop(Date) value!: Date;
 	@Prop({ type: Date, default: null })
 	minDate!: Date | null;

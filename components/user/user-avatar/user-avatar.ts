@@ -1,17 +1,15 @@
-import View from '!view!./user-avatar.html?style=./user-avatar.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Environment } from '../../environment/environment.service';
 import { User } from '../user.model';
-import { AppUserAvatarImg } from './img/img';
+import AppUserAvatarImg from './img/img.vue';
 
-@View
 @Component({
 	components: {
 		AppUserAvatarImg,
 	},
 })
-export class AppUserAvatar extends Vue {
+export default class AppUserAvatar extends Vue {
 	@Prop(Object)
 	user!: User;
 

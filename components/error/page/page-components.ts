@@ -1,40 +1,14 @@
-import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
-import View400 from '!view!./page-400.html';
-import View403 from '!view!./page-403.html';
-import View500 from '!view!./page-500.html';
-import View404 from '!view!./page-404.html';
-import ViewOffline from '!view!./page-offline.html';
-import { Navigate } from '../../navigate/navigate.service';
+import Vue, { VueConstructor } from 'vue';
+import ErrorPage400 from './page-400.vue';
+import ErrorPage403 from './page-403.vue';
+import ErrorPage404 from './page-404.vue';
+import ErrorPage500 from './page-500.vue';
+import ErrorPageOffline from './page-offline.vue';
 
-@View400
-@Component({})
-export class AppErrorPage400 extends Vue {}
-
-@View403
-@Component({})
-export class AppErrorPage403 extends Vue {}
-
-@View404
-@Component({})
-export class AppErrorPage404 extends Vue {}
-
-@View500
-@Component({})
-export class AppErrorPage500 extends Vue {}
-
-@ViewOffline
-@Component({})
-export class AppErrorPageOffline extends Vue {
-	retry() {
-		Navigate.reload();
-	}
-}
-
-export const ErrorPages: any = {
-	400: AppErrorPage400,
-	403: AppErrorPage403,
-	404: AppErrorPage404,
-	500: AppErrorPage500,
-	offline: AppErrorPageOffline,
+export const ErrorPages: { [id: string]: VueConstructor<Vue> } = {
+	400: ErrorPage400,
+	403: ErrorPage403,
+	404: ErrorPage404,
+	500: ErrorPage500,
+	offline: ErrorPageOffline,
 };

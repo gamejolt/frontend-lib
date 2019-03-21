@@ -21,7 +21,7 @@ export class GamePackagePurchaseModal {
 			modalId: 'GamePackagePurchase',
 			component: () =>
 				asyncComponentLoader(
-					import(/* webpackChunkName: "GamePackagePurchaseModal" */ './purchase-modal')
+					import(/* webpackChunkName: "GamePackagePurchaseModal" */ './purchase-modal.vue')
 				),
 			size: 'sm',
 			props: options,

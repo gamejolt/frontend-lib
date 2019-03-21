@@ -1,11 +1,8 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./select.html';
+import BaseFormControl from '../base';
 
-import { BaseFormControl } from '../base';
-
-@View
 @Component({})
-export class AppFormControlSelect extends BaseFormControl {
+export default class AppFormControlSelect extends BaseFormControl {
 	@Prop(Array) validateOn!: string[];
 	@Prop(Number) validateDelay!: number;
 

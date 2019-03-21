@@ -1,18 +1,15 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./card.html';
-
-import { AppJolticon } from '../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../vue/components/jolticon/jolticon.vue'
 
 require('./card.styl');
 
-@View
 @Component({
 	components: {
 		AppJolticon,
 	},
 })
-export class AppCard extends Vue {
+export default class AppCard extends Vue {
 	@Prop({ type: Boolean, default: false })
 	isDraggable!: boolean;
 	@Prop({ type: Boolean, default: false })

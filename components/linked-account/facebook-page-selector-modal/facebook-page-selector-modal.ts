@@ -1,13 +1,11 @@
-import View from '!view!./facebook-page-selector-modal.html';
 import { Component, Prop } from 'vue-property-decorator';
 import { stringSort } from '../../../utils/array';
-import { AppLoading } from '../../../vue/components/loading/loading';
+import AppLoading from '../../../vue/components/loading/loading.vue'
 import { Api } from '../../api/api.service';
 import { BaseModal } from '../../modal/base';
-import { AppLinkedAccount } from '../linked-account';
+import AppLinkedAccount from '../linked-account.vue'
 import { FacebookPage, LinkedAccount } from '../linked-account.model';
 
-@View
 @Component({
 	components: {
 		AppLinkedAccount,
@@ -38,10 +36,7 @@ export default class AppModalFacebookPageSelector extends BaseModal {
 
 	async created() {
 		const payload = await Api.sendRequest(
-			'/web/dash/linked-accounts/facebook-pages/' +
-				this.account.game_id +
-				'/' +
-				this.account.id,
+			'/web/dash/linked-accounts/facebook-pages/' + this.account.game_id + '/' + this.account.id,
 			null,
 			{ detach: true }
 		);

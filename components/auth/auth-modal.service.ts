@@ -6,7 +6,9 @@ export class AuthModal {
 		return await Modal.show<void>({
 			modalId: 'Auth',
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "AuthModal" */ './auth-modal')),
+				asyncComponentLoader(
+					import(/* webpackChunkName: "AuthModal" */ './auth-modal.vue')
+				),
 			size: 'sm',
 			props: {},
 		});

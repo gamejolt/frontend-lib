@@ -1,4 +1,4 @@
-import { UserAddress } from 'game-jolt-frontend-lib/components/user/address/address.model';
+import { UserAddress } from '../../components/user/address/address.model';
 import { Model } from '../model/model.service';
 
 export class PaymentSource extends Model {

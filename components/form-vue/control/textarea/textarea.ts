@@ -1,10 +1,8 @@
-import View from '!view!./textarea.html';
 import { Component, Emit, Prop } from 'vue-property-decorator';
-import { BaseFormControl } from '../base';
+import BaseFormControl from '../base';
 
-@View
 @Component({})
-export class AppFormControlTextarea extends BaseFormControl {
+export default class AppFormControlTextarea extends BaseFormControl {
 	@Prop(Array)
 	validateOn!: string[];
 	@Prop(Number)

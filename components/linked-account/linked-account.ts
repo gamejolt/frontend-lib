@@ -1,8 +1,7 @@
-import View from '!view!./linked-account.html?style=./linked-account.styl';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
-import { AppJolticon } from '../../vue/components/jolticon/jolticon';
-import { AppCard } from '../card/card';
+import AppJolticon from '../../vue/components/jolticon/jolticon.vue'
+import AppCard from '../card/card.vue';
 import {
 	getLinkedAccountPlatformIcon,
 	getLinkedAccountProviderDisplayName,
@@ -11,11 +10,10 @@ import {
 } from './linked-account.model';
 import { ModalTumblrBlogSelector } from './tumblr-blog-selector-modal/tumblr-blog-selector-modal-service';
 
-@View
 @Component({
 	components: { AppJolticon, AppCard },
 })
-export class AppLinkedAccount extends Vue {
+export default class AppLinkedAccount extends Vue {
 	@Prop(LinkedAccount)
 	account!: LinkedAccount | null;
 

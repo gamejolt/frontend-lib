@@ -1,18 +1,15 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./datetime-picker.html?style=./datetime-picker.styl';
+import AppDatepicker from '../datepicker/datepicker.vue';
+import AppTimepicker from '../timepicker/timepicker.vue';
 
-import { AppDatepicker } from '../datepicker/datepicker';
-import { AppTimepicker } from '../timepicker/timepicker';
-
-@View
 @Component({
 	components: {
 		AppDatepicker,
 		AppTimepicker,
 	},
 })
-export class AppDatetimePicker extends Vue {
+export default class AppDatetimePicker extends Vue {
 	@Prop(Number) value!: number;
 	@Prop(Number) timezoneOffset!: number;
 	@Prop(Number) minDate?: number;

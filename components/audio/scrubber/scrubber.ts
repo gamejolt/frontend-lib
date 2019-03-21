@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./scrubber.html?style=./scrubber.styl';
 
 import { Ruler } from '../../ruler/ruler-service';
 
@@ -9,9 +8,8 @@ if (!GJ_IS_SSR) {
 	Vue.use(VueTouch);
 }
 
-@View
 @Component({})
-export class AppAudioScrubber extends Vue {
+export default class AppAudioScrubber extends Vue {
 	@Prop(Number) currentTime!: number;
 	@Prop(Number) duration!: number;
 
@@ -30,7 +28,7 @@ export class AppAudioScrubber extends Vue {
 			return 'auto';
 		}
 
-		return 100 - this.currentTime / this.duration * 100 + '%';
+		return 100 - (this.currentTime / this.duration) * 100 + '%';
 	}
 
 	/**

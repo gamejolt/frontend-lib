@@ -1,12 +1,10 @@
-import View from '!view!./list.html?style=./list.styl';
-import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import { AppTooltip } from '../../../../components/tooltip/tooltip';
 import { User } from '../../user.model';
-import { AppUserAvatar } from '../user-avatar';
+import AppUserAvatar from '../user-avatar.vue';
 
-@View
 @Component({
 	components: {
 		AppUserAvatar,
@@ -15,7 +13,7 @@ import { AppUserAvatar } from '../user-avatar';
 		AppTooltip,
 	},
 })
-export class AppUserAvatarList extends Vue {
+export default class AppUserAvatarList extends Vue {
 	@Prop(Array)
 	users!: User[];
 }

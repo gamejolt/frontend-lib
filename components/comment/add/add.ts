@@ -1,17 +1,15 @@
-import View from '!view!./add.html?style=./add.styl';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppFormControlMarkdown } from '../../form-vue/control/markdown/markdown';
+import AppFormControlMarkdown from '../../form-vue/control/markdown/markdown.vue'
 import { BaseForm, FormOnInit } from '../../form-vue/form.service';
 import { Comment } from '../comment-model';
 import '../comment.styl';
 
-@View
 @Component({
 	components: {
 		AppFormControlMarkdown,
 	},
 })
-export class FormComment extends BaseForm<Comment> implements FormOnInit {
+export default class FormComment extends BaseForm<Comment> implements FormOnInit {
 	@Prop(String)
 	resource!: 'Game' | 'FiresidePost';
 

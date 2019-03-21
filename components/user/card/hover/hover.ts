@@ -1,20 +1,18 @@
-import View from '!view!./hover.html?style=./hover.styl';
-import { Api } from 'game-jolt-frontend-lib/components/api/api.service';
-import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { AppPopper } from '../../../popper/popper';
+import { Api } from '../../../../components/api/api.service';
+import { Screen } from '../../../../components/screen/screen-service';
+import AppPopper from '../../../popper/popper.vue';
 import { User } from '../../user.model';
-import { AppUserCard } from '../card';
+import AppUserCard from '../card.vue';
 
-@View
 @Component({
 	components: {
 		AppPopper,
 		AppUserCard,
 	},
 })
-export class AppUserCardHover extends Vue {
+export default class AppUserCardHover extends Vue {
 	@Prop(User)
 	user?: User;
 

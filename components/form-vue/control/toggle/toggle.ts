@@ -1,11 +1,8 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./toggle.html?style=./toggle.styl';
+import BaseFormControl from '../base';
 
-import { BaseFormControl } from '../base';
-
-@View
 @Component({})
-export class AppFormControlToggle extends BaseFormControl {
+export default class AppFormControlToggle extends BaseFormControl {
 	@Prop(Boolean) disabled?: boolean;
 
 	controlVal = false;

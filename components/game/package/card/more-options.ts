@@ -1,13 +1,10 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./more-options.html';
-
-import { GamePackageCardModel } from './card.model';
-import { GameBuild } from '../../build/build.model';
 import { filesize } from '../../../../vue/filters/filesize';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
+import { AppTrackEvent } from '../../../analytics/track-event.directive';
+import { GameBuild } from '../../build/build.model';
+import { GamePackageCardModel } from './card.model';
 
-@View
 @Component({
 	directives: {
 		AppTrackEvent,
@@ -16,7 +13,7 @@ import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
 		filesize,
 	},
 })
-export class AppGamePackageCardMoreOptions extends Vue {
+export default class AppGamePackageCardMoreOptions extends Vue {
 	@Prop(GamePackageCardModel) card!: GamePackageCardModel;
 
 	emulatorInfo = GameBuild.emulatorInfo;

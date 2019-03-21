@@ -1,4 +1,4 @@
-import { appStore } from 'game-jolt-frontend-lib/vue/services/app/app-store';
+import { appStore } from '../../vue/services/app/app-store';
 
 type CmpCommand = 'getConsentData' | 'getVendorConsents' | 'ping';
 

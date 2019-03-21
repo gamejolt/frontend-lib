@@ -1,23 +1,21 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./month.html';
-
-import { findRequiredVueParent } from '../../utils/vue';
-import { AppDatepicker, DatepickerDate } from './datepicker';
-import { date as dateFilter } from '../../vue/filters/date';
 import { arrayChunk } from '../../utils/array';
-import { AppJolticon } from '../../vue/components/jolticon/jolticon';
+import { findRequiredVueParent } from '../../utils/vue';
+import AppJolticon from '../../vue/components/jolticon/jolticon.vue';
+import { date as dateFilter } from '../../vue/filters/date';
+import AppDatepickerTS, { DatepickerDate } from './datepicker';
+import AppDatepicker from './datepicker.vue';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
 	},
 })
-export class AppDatepickerMonth extends Vue {
+export default class AppDatepickerMonth extends Vue {
 	@Prop(Date) value!: Date;
 
-	parent: AppDatepicker = null as any;
+	parent: AppDatepickerTS = null as any;
 
 	get title() {
 		return dateFilter(this.value, this.parent.formatMonthTitle);
@@ -35,7 +33,7 @@ export class AppDatepickerMonth extends Vue {
 	}
 
 	created() {
-		this.parent = findRequiredVueParent(this, AppDatepicker);
+		this.parent = findRequiredVueParent(this, AppDatepicker) as AppDatepickerTS;
 	}
 
 	move(direction: number) {

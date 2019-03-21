@@ -1,18 +1,16 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./editor.html';
 
 import { SiteContentBlock } from '../../site/content-block/content-block-model';
 import { Environment } from '../../environment/environment.service';
 import { Api } from '../../api/api.service';
 import { Site } from '../../site/site-model';
-import { FormContentBlockEditor } from './editor-form';
-import { AppLoading } from '../../../vue/components/loading/loading';
+import FormContentBlockEditor from './editor-form.vue';
+import AppLoading from '../../../vue/components/loading/loading.vue'
 import { AppTooltip } from '../../tooltip/tooltip';
 
 const PreviewDebounce = 3000;
 
-@View
 @Component({
 	components: {
 		AppLoading,
@@ -22,7 +20,7 @@ const PreviewDebounce = 3000;
 		AppTooltip,
 	},
 })
-export class AppContentBlockEditor extends Vue {
+export default class AppContentBlockEditor extends Vue {
 	@Prop(Site) site!: Site;
 	@Prop(String) windowId!: string;
 	@Prop(SiteContentBlock) contentBlock!: SiteContentBlock;
@@ -100,7 +98,9 @@ export class AppContentBlockEditor extends Vue {
 		const br =
 			txtarea.selectionStart || txtarea.selectionStart === 0
 				? 'ff'
-				: (document as any).selection ? 'ie' : false;
+				: (document as any).selection
+				? 'ie'
+				: false;
 
 		if (br === 'ie') {
 			txtarea.focus();

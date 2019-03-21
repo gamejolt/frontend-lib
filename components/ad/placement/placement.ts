@@ -1,17 +1,15 @@
-import View from '!view!./placement.html';
-import { AppAdWidget } from 'game-jolt-frontend-lib/components/ad/widget/widget';
+import AppAdWidget from '../widget/widget.vue'
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Screen } from '../../screen/screen-service';
 import { Ads, AdSlotPos, AdSlotPosValidator } from '../ads.service';
 
-@View
 @Component({
 	components: {
 		AppAdWidget,
 	},
 })
-export class AppAdPlacement extends Vue {
+export default class AppAdPlacement extends Vue {
 	@Prop({
 		type: String,
 		validator: AdSlotPosValidator,

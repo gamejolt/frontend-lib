@@ -1,13 +1,11 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./upload.html?style=./upload.styl';
-
-import { BaseFormControl } from '../base';
-import { AppProgressBar } from '../../../progress/bar/bar';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
 import { number } from '../../../../vue/filters/number';
-import { AppFormControlUploadFile } from './file';
+import AppProgressBar from '../../../progress/bar/bar.vue';
+import BaseFormControl from '../base';
+import AppFormControlUploadFileTS from './file';
+import AppFormControlUploadFile from './file.vue';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -18,7 +16,7 @@ import { AppFormControlUploadFile } from './file';
 		number,
 	},
 })
-export class AppFormControlUpload extends BaseFormControl {
+export default class AppFormControlUpload extends BaseFormControl {
 	@Prop(Boolean) multiple?: boolean;
 	@Prop(String) uploadLinkLabel?: string;
 	@Prop(String) accept?: string;
@@ -27,7 +25,7 @@ export class AppFormControlUpload extends BaseFormControl {
 	@Prop(Number) validateDelay!: number;
 
 	$refs!: {
-		input: AppFormControlUploadFile;
+		input: AppFormControlUploadFileTS;
 	};
 
 	controlVal: File | File[] | null = [];
@@ -67,7 +65,11 @@ export class AppFormControlUpload extends BaseFormControl {
 
 	dragOver(e: DragEvent) {
 		// Don't do anything if not a file drop.
-		if (!e.dataTransfer.items.length || e.dataTransfer.items[0].kind !== 'file') {
+		if (
+			!e.dataTransfer ||
+			!e.dataTransfer.items.length ||
+			e.dataTransfer.items[0].kind !== 'file'
+		) {
 			return;
 		}
 
@@ -82,7 +84,11 @@ export class AppFormControlUpload extends BaseFormControl {
 	// File select resulting from a drop onto the input.
 	async drop(e: DragEvent) {
 		// Don't do anything if not a file drop.
-		if (!e.dataTransfer.items.length || e.dataTransfer.items[0].kind !== 'file') {
+		if (
+			!e.dataTransfer ||
+			!e.dataTransfer.items.length ||
+			e.dataTransfer.items[0].kind !== 'file'
+		) {
 			return;
 		}
 
@@ -149,7 +155,11 @@ function traverseFileTree(files: File[], entry: any, path = ''): Promise<void> {
 					const promises = [];
 					for (let i = 0; i < entries.length; ++i) {
 						promises.push(
-							traverseFileTree(files, entries[i], (path ? path : '') + entry.name + '/')
+							traverseFileTree(
+								files,
+								entries[i],
+								(path ? path : '') + entry.name + '/'
+							)
 						);
 					}
 
@@ -181,7 +191,7 @@ async function getFiles(e: DragEvent) {
 	let promises: Promise<any>[] = [];
 	let files: File[] = [];
 
-	const items = e.dataTransfer.items;
+	const items = e.dataTransfer ? e.dataTransfer.items : null;
 	if (items && items.length > 0 && items[0].webkitGetAsEntry) {
 		const num = items.length;
 		for (let i = 0; i < num; ++i) {
@@ -200,7 +210,7 @@ async function getFiles(e: DragEvent) {
 			}
 		}
 	} else {
-		const fileList = e.dataTransfer.files;
+		const fileList = e.dataTransfer ? e.dataTransfer.files : null;
 		if (fileList) {
 			for (let i = 0; i < fileList.length; ++i) {
 				files.push(fileList.item(i)!);

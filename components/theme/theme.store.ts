@@ -1,12 +1,12 @@
-import { namespace, State, Action, Mutation } from 'vuex-class';
+import { namespace } from 'vuex-class';
 import { VuexModule, VuexMutation, VuexStore } from '../../utils/vuex';
-import { Theme } from './theme.model';
 import { appStore } from '../../vue/services/app/app-store';
+import { Theme } from './theme.model';
 
 export const ThemeStoreNamespace = 'theme';
-export const ThemeState = namespace(ThemeStoreNamespace, State);
-export const ThemeAction = namespace(ThemeStoreNamespace, Action);
-export const ThemeMutation = namespace(ThemeStoreNamespace, Mutation);
+export const { State: ThemeState, Action: ThemeAction, Mutation: ThemeMutation } = namespace(
+	ThemeStoreNamespace
+);
 
 export type ThemeActions = {};
 

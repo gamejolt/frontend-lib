@@ -1,11 +1,9 @@
 import { Component } from 'vue-property-decorator';
-import View from '!view!./auth-modal.html';
 
 import { BaseModal } from '../modal/base';
-import { AppAuthJoin } from './join/join';
-import { AppJolticon } from '../../vue/components/jolticon/jolticon';
+import AppAuthJoin from './join/join.vue'
+import AppJolticon from '../../vue/components/jolticon/jolticon.vue'
 
-@View
 @Component({
 	components: {
 		AppJolticon,

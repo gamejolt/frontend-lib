@@ -1,0 +1,42 @@
+<template>
+	<app-form name="commentAddForm">
+		<app-form-group
+			:class="{ 'sans-margin-bottom': (!changed || !valid) && method !== 'edit' }"
+			name="comment"
+			:label="$gettext('Leave a Comment')"
+			hide-label
+		>
+			<app-form-control-markdown
+				preview-class="comment-content"
+				preview-url="/comments/preview"
+				markdown-mode="comments"
+				:placeholder="placeholder || $gettext(`Leave a comment...`)"
+				:autofocus="autofocus"
+				:max-height="maxHeight"
+			/>
+
+			<app-form-control-errors label="comment" />
+		</app-form-group>
+
+		<div class="text-right">
+			<app-form-button show-when-valid>
+				<translate v-if="method === 'add'">Add Comment</translate>
+				<translate v-else-if="method === 'edit'">Save</translate>
+			</app-form-button>
+
+			<app-button v-if="method === 'edit'" trans @click.prevent="onCancel">
+				<translate>Cancel</translate>
+			</app-button>
+		</div>
+	</app-form>
+</template>
+
+<style lang="stylus" scoped>
+@require '~styles/variables';
+
+>>> .form-group {
+  margin-bottom: 10px;
+}
+</style>
+
+<script lang="ts" src="./add" />

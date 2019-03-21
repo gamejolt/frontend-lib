@@ -1,19 +1,17 @@
-import View from '!view!./selector.html';
-import { AppPopper } from 'game-jolt-frontend-lib/components/popper/popper';
-import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
-import { AppJolticon } from 'game-jolt-frontend-lib/vue/components/jolticon/jolticon';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Popper } from '../../../components/popper/popper.service';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
+import AppPopper from '../../popper/popper.vue';
 import { SiteTemplate } from '../../site/template/template-model';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
 		AppPopper,
 	},
 })
-export class AppThemeSelector extends Vue {
+export default class AppThemeSelector extends Vue {
 	@Prop(Array)
 	templates!: SiteTemplate[];
 

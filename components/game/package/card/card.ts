@@ -1,16 +1,15 @@
-import View from '!view!./card.html?style=./card.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { currency } from '../../../../vue/filters/currency';
 import { filesize } from '../../../../vue/filters/filesize';
 import { Analytics } from '../../../analytics/analytics.service';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
-import { AppCard } from '../../../card/card';
+import { AppTrackEvent } from '../../../analytics/track-event.directive';
+import AppCard from '../../../card/card.vue';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 import { AppCountdown } from '../../../countdown/countdown';
 import { EventBus, EventBusDeregister } from '../../../event-bus/event-bus.service';
-import { AppExpand } from '../../../expand/expand';
-import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
+import AppExpand from '../../../expand/expand.vue';
+import AppFadeCollapse from '../../../fade-collapse/fade-collapse.vue';
 import { LinkedKey } from '../../../linked-key/linked-key.model';
 import { SellablePricing } from '../../../sellable/pricing/pricing.model';
 import { Sellable } from '../../../sellable/sellable.model';
@@ -24,10 +23,9 @@ import { GamePlayModal } from '../../play-modal/play-modal.service';
 import { GameRelease } from '../../release/release.model';
 import { GamePackage } from '../package.model';
 import { GamePackagePurchaseModal } from '../purchase-modal/purchase-modal.service';
-import { AppGamePackageCardButtons } from './buttons';
+import AppGamePackageCardButtons from './buttons.vue';
 import { GamePackageCardModel } from './card.model';
 
-@View
 @Component({
 	components: {
 		AppCard,
@@ -45,7 +43,7 @@ import { GamePackageCardModel } from './card.model';
 		filesize,
 	},
 })
-export class AppGamePackageCard extends Vue {
+export default class AppGamePackageCard extends Vue {
 	@Prop(Game)
 	game!: Game;
 
@@ -138,8 +136,7 @@ export class AppGamePackageCard extends Vue {
 				this.saleOldPricing = this.sellable.pricings[1];
 				this.sale = true;
 				this.salePercentageOff = (
-					((this.saleOldPricing.amount - this.pricing.amount) /
-						this.saleOldPricing.amount) *
+					((this.saleOldPricing.amount - this.pricing.amount) / this.saleOldPricing.amount) *
 					100
 				).toFixed(0);
 			}
@@ -152,10 +149,7 @@ export class AppGamePackageCard extends Vue {
 				// Ensure that the payment well opens with the correct build
 				// for "skip paying".
 				if (this.package.id === pkg.id) {
-					this.showPayment(
-						this.card.downloadableBuild ? this.card.downloadableBuild : null,
-						false
-					);
+					this.showPayment(this.card.downloadableBuild ? this.card.downloadableBuild : null, false);
 				}
 			}
 		);

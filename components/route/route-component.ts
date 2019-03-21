@@ -1,10 +1,10 @@
-import { asyncComponentLoader } from 'game-jolt-frontend-lib/utils/utils';
 import Vue, { ComponentOptions } from 'vue';
 import { createDecorator } from 'vue-class-component';
 import { Component } from 'vue-property-decorator';
 import VueRouter, { RawLocation, Route } from 'vue-router';
 import { arrayRemove } from '../../utils/array';
 import { LocationRedirect } from '../../utils/router';
+import { asyncComponentLoader } from '../../utils/utils';
 import { EventBus } from '../event-bus/event-bus.service';
 import { HistoryCache } from '../history/cache/cache.service';
 import { Meta } from '../meta/meta-service';
@@ -27,9 +27,11 @@ export interface RouteResolverOptions {
 	resolveStore?: (data: { route: Route; payload: any; fromCache: boolean }) => void;
 }
 
-export type RouteStoreResolveCallback = (
-	data: { route: Route; payload: any; fromCache: boolean }
-) => void;
+export type RouteStoreResolveCallback = (data: {
+	route: Route;
+	payload: any;
+	fromCache: boolean;
+}) => void;
 
 /**
  * Takes 2 objects as input, and returns any keys that are either new, deleted,

@@ -1,4 +1,4 @@
-import { Sellable } from 'game-jolt-frontend-lib/components/sellable/sellable.model';
+import { Sellable } from '../../../../components/sellable/sellable.model';
 import { arrayUnique } from '../../../../utils/array';
 import { Device } from '../../../device/device.service';
 import { LinkedKey } from '../../../linked-key/linked-key.model';

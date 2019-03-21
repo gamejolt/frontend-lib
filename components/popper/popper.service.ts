@@ -1,5 +1,5 @@
-import { AppPopper } from 'game-jolt-frontend-lib/components/popper/popper';
-import { arrayRemove } from 'game-jolt-frontend-lib/utils/array';
+import { arrayRemove } from '../../utils/array';
+import AppPopper from './popper';
 
 export class Popper {
 	static poppers: AppPopper[] = [];

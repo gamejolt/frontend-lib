@@ -1,7 +1,7 @@
 import { CreateElement } from 'vue';
 import { WidgetCompilerWidget } from '../widget';
 import { WidgetCompilerContext } from '../widget-compiler.service';
-import { AppVideoEmbed } from '../../video/embed/embed';
+import AppVideoEmbed from '../../video/embed/embed.vue'
 
 export class WidgetCompilerWidgetVimeo extends WidgetCompilerWidget {
 	readonly name = 'vimeo';

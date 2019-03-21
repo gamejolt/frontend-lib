@@ -1,15 +1,13 @@
-import View from '!view!./legend.html?style=./legend.styl';
-import { AppButton } from 'game-jolt-frontend-lib/components/button/button';
+import AppButton from '../../button/button.vue';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 
-@View
 @Component({
 	components: {
 		AppButton,
 	},
 })
-export class AppFormLegend extends Vue {
+export default class AppFormLegend extends Vue {
 	@Prop(Boolean)
 	compact?: boolean;
 

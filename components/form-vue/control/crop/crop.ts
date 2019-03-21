@@ -1,15 +1,13 @@
-import View from '!view!./crop.html';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppImgCrop } from '../../../img/crop/crop';
-import { BaseFormControl } from '../base';
+import AppImgCrop from '../../../img/crop/crop.vue';
+import BaseFormControl from '../base';
 
-@View
 @Component({
 	components: {
 		AppImgCrop,
 	},
 })
-export class AppFormControlCrop extends BaseFormControl {
+export default class AppFormControlCrop extends BaseFormControl {
 	@Prop(String)
 	src!: string;
 

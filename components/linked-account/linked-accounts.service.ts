@@ -1,5 +1,5 @@
-import { Navigate } from 'game-jolt-frontend-lib/components/navigate/navigate.service';
 import VueRouter from 'vue-router';
+import { Navigate } from '../../components/navigate/navigate.service';
 import { Api } from '../api/api.service';
 import { Provider } from './linked-account.model';
 

@@ -1,19 +1,17 @@
-import View from '!view!./modal.html?style=./modal.styl';
-import { AppScrollAffix } from 'game-jolt-frontend-lib/components/scroll/affix/affix';
-import { AppScrollScroller } from 'game-jolt-frontend-lib/components/scroll/scroller/scroller';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { findRequiredVueParent } from '../../utils/vue';
-import { AppBackdrop } from '../backdrop/backdrop';
+import AppBackdrop from '../backdrop/backdrop';
 import { Backdrop } from '../backdrop/backdrop.service';
 import { EscapeStack } from '../escape-stack/escape-stack.service';
 import { Screen } from '../screen/screen-service';
+import AppScrollAffix from '../scroll/affix/affix.vue';
+import AppScrollScroller from '../scroll/scroller/scroller.vue';
 import { AppTheme } from '../theme/theme';
 import { BaseModal } from './base';
 import './modal-global.styl';
 import { Modal } from './modal.service';
 
-@View
 @Component({
 	components: {
 		AppTheme,
@@ -21,7 +19,7 @@ import { Modal } from './modal.service';
 		AppScrollAffix,
 	},
 })
-export class AppModal extends Vue {
+export default class AppModal extends Vue {
 	@Prop(Number)
 	index!: number;
 

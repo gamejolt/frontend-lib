@@ -1,22 +1,19 @@
-import { Component } from 'vue-property-decorator';
-import View from '!view!./theme.html?style=./theme.styl';
-
-import { BaseFormControl } from '../base';
-import { AppThemeBubble } from '../../../theme/bubble/bubble';
-import { AppTooltip } from '../../../tooltip/tooltip';
-import { Api } from '../../../api/api.service';
-import { ThemePreset } from '../../../theme/preset/preset.model';
-import { makeThemeFromPreset, Theme, makeThemeFromColor } from '../../../theme/theme.model';
 import { Sketch } from 'vue-color';
-import { AppLoading } from '../../../../vue/components/loading/loading';
-import { AppButton } from '../../../button/button';
-import { AppPopper } from '../../../popper/popper';
+import { Component } from 'vue-property-decorator';
+import AppLoading from '../../../../vue/components/loading/loading.vue';
+import { Api } from '../../../api/api.service';
+import AppButton from '../../../button/button.vue';
+import AppPopper from '../../../popper/popper.vue';
+import AppThemeBubble from '../../../theme/bubble/bubble.vue';
+import { ThemePreset } from '../../../theme/preset/preset.model';
+import { makeThemeFromColor, makeThemeFromPreset, Theme } from '../../../theme/theme.model';
+import { AppTooltip } from '../../../tooltip/tooltip';
+import BaseFormControl from '../base';
 
 interface VueColor {
 	hex: string | null;
 }
 
-@View
 @Component({
 	components: {
 		AppLoading,
@@ -29,7 +26,7 @@ interface VueColor {
 		AppTooltip,
 	},
 })
-export class AppFormControlTheme extends BaseFormControl {
+export default class AppFormControlTheme extends BaseFormControl {
 	controlVal: Theme | null = null;
 	presets: ThemePreset[] = [];
 	activeTab: 'preset' | 'custom' = 'preset';

@@ -1,34 +1,33 @@
-import View from '!view!./comment.html?style=./comment.styl';
-import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { Popper } from '../../../../components/popper/popper.service';
 import { findRequiredVueParent } from '../../../../utils/vue';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
 import { date } from '../../../../vue/filters/date';
 import { number } from '../../../../vue/filters/number';
 import { AppState, AppStore } from '../../../../vue/services/app/app-store';
-import { AppTrackEvent } from '../../../analytics/track-event.directive.vue';
-import { AppAuthRequired } from '../../../auth/auth-required-directive.vue';
+import { AppTrackEvent } from '../../../analytics/track-event.directive';
+import { AppAuthRequired } from '../../../auth/auth-required-directive';
 import { Clipboard } from '../../../clipboard/clipboard-service';
 import { Environment } from '../../../environment/environment.service';
-import { AppExpand } from '../../../expand/expand';
-import { AppFadeCollapse } from '../../../fade-collapse/fade-collapse';
-import { AppMessageThreadAdd } from '../../../message-thread/add/add';
-import { AppMessageThreadItem } from '../../../message-thread/item/item';
-import { AppMessageThread } from '../../../message-thread/message-thread';
+import AppExpand from '../../../expand/expand.vue';
+import AppFadeCollapse from '../../../fade-collapse/fade-collapse.vue';
+import AppMessageThreadAdd from '../../../message-thread/add/add.vue';
+import AppMessageThreadItem from '../../../message-thread/item/item.vue';
+import AppMessageThread from '../../../message-thread/message-thread.vue';
 import { ModalConfirm } from '../../../modal/confirm/confirm-service';
-import { AppPopper } from '../../../popper/popper';
+import AppPopper from '../../../popper/popper.vue';
 import { ReportModal } from '../../../report/modal/modal.service';
 import { AppTooltip } from '../../../tooltip/tooltip';
-import { FormComment } from '../../add/add';
+import FormComment from '../../add/add.vue';
 import { Comment } from '../../comment-model';
-import { AppCommentContent } from '../../content/content';
-import { AppCommentControls } from '../../controls/controls';
-import { AppCommentWidget } from '../widget';
+import AppCommentContent from '../../content/content.vue';
+import AppCommentControls from '../../controls/controls.vue';
+import AppCommentWidgetTS from '../widget';
+import AppCommentWidget from '../widget.vue';
 
 let CommentNum = 0;
 
-@View
 @Component({
 	components: {
 		AppCommentControls,
@@ -55,7 +54,7 @@ let CommentNum = 0;
 		date,
 	},
 })
-export class AppCommentWidgetComment extends Vue {
+export default class AppCommentWidgetComment extends Vue {
 	@Prop(Comment)
 	comment!: Comment;
 
@@ -84,7 +83,7 @@ export class AppCommentWidgetComment extends Vue {
 	isFollowPending = false;
 	isEditing = false;
 
-	widget!: AppCommentWidget;
+	widget!: AppCommentWidgetTS;
 
 	$el!: HTMLDivElement;
 	$refs!: {
@@ -95,7 +94,7 @@ export class AppCommentWidgetComment extends Vue {
 	readonly Environment = Environment;
 
 	created() {
-		this.widget = findRequiredVueParent(this, AppCommentWidget);
+		this.widget = findRequiredVueParent(this, AppCommentWidget) as AppCommentWidgetTS;
 	}
 
 	mounted() {

@@ -1,21 +1,19 @@
-import View from '!view!./rating-growl.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import {
-	AppRatingWidget,
 	RatingWidgetOnChange,
 	RatingWidgetOnChangePayload,
 } from '../../../../../app/components/rating/widget/widget';
+import AppRatingWidget from '../../../../../app/components/rating/widget/widget.vue';
 import { EventBus, EventBusDeregister } from '../../event-bus/event-bus.service';
 import { Game } from '../game.model';
 
-@View
 @Component({
 	components: {
 		AppRatingWidget,
 	},
 })
-export class AppGameRatingGrowl extends Vue {
+export default class AppGameRatingGrowl extends Vue {
 	@Prop(Game)
 	game!: Game;
 

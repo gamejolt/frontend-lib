@@ -1,22 +1,20 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./purchase-modal.html?style=./purchase-modal.styl';
 
 import { BaseModal } from '../../../modal/base';
 import { GamePackage } from '../package.model';
 import { GameBuild } from '../../build/build.model';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { FormGamePackagePayment } from '../payment-form/payment-form';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue'
+import FormGamePackagePayment from '../payment-form/payment-form.vue';
 import { Game } from '../../game.model';
 import { Sellable } from '../../../sellable/sellable.model';
 import { Analytics } from '../../../analytics/analytics.service';
 import { GameDownloader } from '../../downloader/downloader.service';
 import { User } from '../../../user/user.model';
-import { AppLoading } from '../../../../vue/components/loading/loading';
+import AppLoading from '../../../../vue/components/loading/loading.vue'
 import { Growls } from '../../../growls/growls.service';
 import { VuexStore } from '../../../../utils/vuex';
 import { GamePlayModal } from '../../play-modal/play-modal.service';
 
-@View
 @Component({
 	components: {
 		AppLoading,
@@ -87,11 +85,7 @@ export default class AppGamePackagePurchaseModal extends BaseModal {
 			this.showBrowserModal(this.build);
 		} else if (operation === 'download') {
 			if (AppGamePackagePurchaseModal.hook.downloadPackage) {
-				AppGamePackagePurchaseModal.hook.downloadPackage(
-					this.$store,
-					this.game,
-					this.build
-				);
+				AppGamePackagePurchaseModal.hook.downloadPackage(this.$store, this.game, this.build);
 			} else {
 				this.download(this.build);
 			}

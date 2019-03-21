@@ -1,8 +1,7 @@
-import View from '!view!./modal.html';
-import { number } from 'game-jolt-frontend-lib/vue/filters/number';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppUserList } from '../../../../app/components/user/list/list';
-import { AppLoading } from '../../vue/components/loading/loading';
+import AppUserList from '../../../../app/components/user/list/list.vue';
+import AppLoading from '../../vue/components/loading/loading.vue';
+import { number } from '../../vue/filters/number';
 import { Api } from '../api/api.service';
 import { Comment } from '../comment/comment-model';
 import { FiresidePost } from '../fireside/post/post-model';
@@ -13,7 +12,6 @@ import { LikersResource } from './modal.service';
 
 const UsersPerPage = 20;
 
-@View
 @Component({
 	components: {
 		AppLoading,

@@ -1,14 +1,13 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./theme-editor.html?style=./theme-editor.styl';
 
 import { SiteTemplate } from '../../site/template/template-model';
 import { Api } from '../../api/api.service';
-import { AppCodemirror } from '../../codemirror/codemirror';
-import { AppLoading } from '../../../vue/components/loading/loading';
-import { AppThemeEditorFontSelector } from './font-selector';
-import { AppThemeEditorImage } from './image';
-import { AppColorpicker } from '../../colorpicker/colorpicker';
+import AppCodemirror from '../../codemirror/codemirror.vue';
+import AppLoading from '../../../vue/components/loading/loading.vue'
+import AppThemeEditorFontSelector from './font-selector.vue';
+import AppThemeEditorImage from './image.vue';
+import AppColorpicker from '../../colorpicker/colorpicker.vue';
 
 interface StyleGroup {
 	name: string;
@@ -18,7 +17,6 @@ interface StyleGroup {
 	}[];
 }
 
-@View
 @Component({
 	components: {
 		AppLoading,
@@ -28,7 +26,7 @@ interface StyleGroup {
 		AppColorpicker,
 	},
 })
-export class AppThemeEditor extends Vue {
+export default class AppThemeEditor extends Vue {
 	@Prop(String) windowId!: string;
 	@Prop(Number) template!: number;
 	@Prop(Object) theme!: any;

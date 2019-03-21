@@ -1,12 +1,10 @@
-import View from '!view!./colorpicker.html?style=./colorpicker.styl';
-import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue from 'vue';
 import { Sketch } from 'vue-color';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { AppJolticon } from '../../vue/components/jolticon/jolticon';
-import { AppPopper } from '../popper/popper';
+import { Popper } from '../../components/popper/popper.service';
+import AppJolticon from '../../vue/components/jolticon/jolticon.vue';
+import AppPopper from '../popper/popper.vue';
 
-@View
 @Component({
 	components: {
 		picker: Sketch,
@@ -14,7 +12,7 @@ import { AppPopper } from '../popper/popper';
 		AppJolticon,
 	},
 })
-export class AppColorpicker extends Vue {
+export default class AppColorpicker extends Vue {
 	@Prop(String)
 	value!: string;
 

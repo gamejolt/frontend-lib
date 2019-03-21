@@ -1,10 +1,8 @@
-import View from '!view!./bar.html?style=./bar.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
-@View
 @Component({})
-export class AppProgressBar extends Vue {
+export default class AppProgressBar extends Vue {
 	@Prop(Number)
 	percent!: number;
 

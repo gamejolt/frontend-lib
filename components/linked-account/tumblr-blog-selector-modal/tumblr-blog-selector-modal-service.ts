@@ -9,7 +9,7 @@ export class ModalTumblrBlogSelector {
 			size: 'sm',
 			component: () =>
 				asyncComponentLoader(
-					import(/* webpackChunkName: "ModalTumblrBlogSelector" */ './tumblr-blog-selector-modal')
+					import(/* webpackChunkName: "ModalTumblrBlogSelector" */ './tumblr-blog-selector-modal.vue')
 				),
 			props: { account, title },
 		});

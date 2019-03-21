@@ -7,7 +7,9 @@ export class CommentVideoModal {
 		return await Modal.show<void>({
 			modalId: 'CommentVideo-' + video.id,
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "CommentVideoModal" */ './modal')),
+				asyncComponentLoader(
+					import(/* webpackChunkName: "CommentVideoModal" */ './modal.vue')
+				),
 			props: { video },
 		});
 	}
