@@ -283,7 +283,7 @@ module.exports = function(config) {
 			},
 			devtool,
 			optimization:
-				config.production || config.ssr === 'client'
+				(config.production && !config.ssr) || config.ssr === 'client'
 					? {
 							splitChunks: {
 								// Does chunk splitting logic for entry point chunks as well.
@@ -347,7 +347,7 @@ module.exports = function(config) {
 								to: 'update-hook.js',
 							},
 					  ]),
-				devNoop || new ImageminPlugin(),
+				// devNoop || new ImageminPlugin(),
 				!shouldUseHMR ? noop : new webpack.HotModuleReplacementPlugin(),
 				!shouldExtractCss
 					? noop
