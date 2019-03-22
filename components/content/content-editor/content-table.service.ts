@@ -165,4 +165,29 @@ export class ContentTableService {
 
 		view.dispatch(tr);
 	}
+
+	public static toggleHeader(view: EditorView, table: Node) {
+		if (!(table.firstChild instanceof Node)) {
+			return;
+		}
+
+		const tr = view.state.tr;
+
+		const row = table.firstChild;
+		let isHeader = false;
+		for (let i = 0; i < row.childCount; i++) {
+			if (row.child(i).attrs.isHeader) {
+				isHeader = true;
+				break;
+			}
+		}
+
+		for (let i = 0; i < row.childCount; i++) {
+			const cell = row.child(i);
+			const pos = ContentEditorService.findNodePosition(view.state, cell);
+			tr.setNodeMarkup(pos, undefined, { isHeader: !isHeader });
+		}
+
+		view.dispatch(tr);
+	}
 }

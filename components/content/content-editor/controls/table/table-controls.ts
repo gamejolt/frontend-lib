@@ -36,4 +36,7 @@ export default class AppContentEditorTableControls extends Vue {
 
 	@Emit('removeTable')
 	onClickRemoveTable() {}
+
+	@Emit('toggleHeader')
+	onClickToggleHeader() {}
 }

@@ -30,22 +30,24 @@ export class TableNodeView extends BaseNodeView {
 	}
 
 	mounted() {
-		const onInsertRowAbove = this.onInsertRowAbove.bind(this);
-		const onInsertRowBelow = this.onInsertRowBelow.bind(this);
-		const onInsertColumnLeft = this.onInsertColumnLeft.bind(this);
-		const onInsertColumnRight = this.onInsertColumnRight.bind(this);
-		const onRemoveRow = this.onRemoveRow.bind(this);
-		const onRemoveColumn = this.onRemoveColumn.bind(this);
-		const onRemoveTable = this.onRemoveTable.bind(this);
+		const insertRowAbove = this.onInsertRowAbove.bind(this);
+		const insertRowBelow = this.onInsertRowBelow.bind(this);
+		const insertColumnLeft = this.onInsertColumnLeft.bind(this);
+		const insertColumnRight = this.onInsertColumnRight.bind(this);
+		const removeRow = this.onRemoveRow.bind(this);
+		const removeColumn = this.onRemoveColumn.bind(this);
+		const toggleHeader = this.onToggleHeader.bind(this);
+		const removeTable = this.onRemoveTable.bind(this);
 
 		const vm = new AppContentEditorTableControls();
-		vm.$on('insertRowAbove', onInsertRowAbove);
-		vm.$on('insertRowBelow', onInsertRowBelow);
-		vm.$on('insertColumnLeft', onInsertColumnLeft);
-		vm.$on('insertColumnRight', onInsertColumnRight);
-		vm.$on('removeRow', onRemoveRow);
-		vm.$on('removeColumn', onRemoveColumn);
-		vm.$on('removeTable', onRemoveTable);
+		vm.$on('insertRowAbove', insertRowAbove);
+		vm.$on('insertRowBelow', insertRowBelow);
+		vm.$on('insertColumnLeft', insertColumnLeft);
+		vm.$on('insertColumnRight', insertColumnRight);
+		vm.$on('removeRow', removeRow);
+		vm.$on('removeColumn', removeColumn);
+		vm.$on('toggleHeader', toggleHeader);
+		vm.$on('removeTable', removeTable);
 		this.mountVue(vm);
 	}
 
@@ -139,6 +141,10 @@ export class TableNodeView extends BaseNodeView {
 				ContentTableService.removeColumn(this.view, this.node, selectedColumnIndex);
 			}
 		}
+	}
+
+	private onToggleHeader() {
+		ContentTableService.toggleHeader(this.view, this.node);
 	}
 
 	private onRemoveTable() {

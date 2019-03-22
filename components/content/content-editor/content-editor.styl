@@ -57,6 +57,10 @@
 	table-layout: fixed
 	width: 100%
 
+	& > tr:first-child
+		& > td, & > th
+			border-top-width: 0
+
 	& > tr > th
 		border-width: 0 1px 2px 0
 		border-bottom-style: solid
