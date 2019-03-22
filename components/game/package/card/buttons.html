@@ -2,6 +2,7 @@
 
 	<app-button
 		primary
+		solid
 		v-if="card.browserBuild"
 		@click="click( card.browserBuild )"
 		>
@@ -11,6 +12,7 @@
 
 	<app-button
 		:primary="!card.browserBuild"
+		:solid="!card.browserBuild"
 		v-if="card.downloadableBuild"
 		@click="click( card.downloadableBuild )"
 		>
