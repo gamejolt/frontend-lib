@@ -5,7 +5,9 @@ import { hardBreak } from 'game-jolt-frontend-lib/components/content/content-edi
 import { mediaUpload } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/media-upload-nodespec';
 import { orderedList } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/ordered-list-nodespec';
 import { spoiler } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/spoiler-nodespec';
+import { tableCell } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-cell-nodespec';
 import { table } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-nodespec';
+import { tableRow } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-row-nodespec';
 import { tag } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/tag-nodespec';
 import { ContentObjectType } from 'game-jolt-frontend-lib/components/content/content-object';
 import { Schema } from 'prosemirror-model';
@@ -20,8 +22,6 @@ import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
 import { mention } from './specs/nodes/mention-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
-import { tableCell } from './specs/nodes/table-cell-nodespec';
-import { tableRow } from './specs/nodes/table-row-nodespec';
 
 export function generateSchema(capabilities: ContextCapabilities) {
 	return new Schema({

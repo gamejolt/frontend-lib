@@ -111,7 +111,7 @@ export class AppContentEditorControls extends Vue {
 	}
 
 	onClickTable() {
-		const newNode = ContentTableService.createNew(this.view.state.schema, 2, 2);
+		const newNode = ContentTableService.createNew(this.view.state.schema, 3, 2);
 		this.insertNewNode(newNode);
 	}
 }

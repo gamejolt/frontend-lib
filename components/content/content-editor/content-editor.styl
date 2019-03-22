@@ -52,3 +52,25 @@
 
 >>> blockquote::after
 	white-space: normal
+
+>>> .content-table > table
+	table-layout: fixed
+	width: 100%
+
+	& > tr > th
+		border-width: 0 1px 2px 0
+		border-bottom-style: solid
+		border-right-style: dashed
+		theme-prop('border-color', 'fg-muted')
+
+	& > tr > th:last-child
+		border-right-width: 0
+
+	& > tr > td
+		border-width: 1px 1px 0 0
+		border-top-style: solid
+		border-right-style: dashed
+		theme-prop('border-color', 'fg-muted')
+
+	& > tr > td:last-child
+		border-right-width: 0

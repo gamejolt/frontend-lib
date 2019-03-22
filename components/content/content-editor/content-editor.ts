@@ -97,7 +97,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 				data.hydration = this.hydrator.hydration;
 			}
 
-			return JSON.stringify(data);
+			return data.toJson();
 		}
 	}
 
@@ -210,6 +210,10 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	public onFocus() {
+		// DEBUG: Don't do this when the viewer is showing
+		if (this.showViewer) {
+			return;
+		}
 		// Focus the content editable when the outer doc gets focused.
 		const child = this.$refs.doc.firstChild;
 		if (child instanceof HTMLElement) {

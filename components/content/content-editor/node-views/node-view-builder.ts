@@ -1,6 +1,7 @@
 import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
 import { MediaItemNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-item';
 import { MediaUploadNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-upload';
+import { TableNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/table';
 import { TagNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/tag';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { Node } from 'prosemirror-model';
@@ -42,6 +43,11 @@ export function buildNodeViews(owner: ContentOwner): NodeViewList {
 	if (capabilities.mention) {
 		nodeViews.mention = function(node, view, getPos) {
 			return new MentionNodeView(node, view, getPos, owner);
+		};
+	}
+	if (capabilities.table) {
+		nodeViews.table = function(node, view, getPos) {
+			return new TableNodeView(node, view, getPos);
 		};
 	}
 

@@ -18,7 +18,7 @@ export abstract class BaseNodeView implements NodeView {
 
 		this.dom = this.createDOM();
 
-		// This node gets mounted in the next tick
+		// Mount component in the next tick, after it got mounted to the DOM.
 		Vue.nextTick().then(() => {
 			this.mounted();
 		});
@@ -26,6 +26,12 @@ export abstract class BaseNodeView implements NodeView {
 
 	protected createDOM(): HTMLElement {
 		return document.createElement('div');
+	}
+
+	protected createVueMountDOM(): HTMLElement {
+		const container = document.createElement('div');
+		this.dom.appendChild(container);
+		return container;
 	}
 
 	mounted(): void {}
@@ -37,9 +43,10 @@ export abstract class BaseNodeView implements NodeView {
 
 	protected mountVue(vm: Vue) {
 		// Mount the Vue instance onto an inner div to not disturb the div managed by the prosemirror editor
-		const container = document.createElement('div');
-		this.dom.appendChild(container);
-		vm.$props.isEditing = true;
+		const container = this.createVueMountDOM();
+		if (vm.$props !== undefined) {
+			vm.$props.isEditing = true;
+		}
 		vm.$mount(container);
 		vm.$on('removed', () => {
 			this.removeMe();
