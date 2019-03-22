@@ -49,14 +49,20 @@ export class ContentContainer extends ContentNode {
 		return obj;
 	}
 
-	public toJson() {
+	// DEBUG: remove include hydration
+	public toJson(includeHydration = false) {
 		const data = {
 			version: this.version,
 			createdOn: this.createdOn,
 			context: this.context,
 			content: this.content.map(i => i.toJsonObj()),
-			hydration: [],
+			hydration: [] as ContentHydrationDataEntry[],
 		};
+
+		if (includeHydration) {
+			data.hydration = this.hydration;
+		}
+
 		return JSON.stringify(data);
 	}
 }
