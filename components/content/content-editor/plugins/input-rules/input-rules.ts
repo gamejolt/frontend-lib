@@ -1,7 +1,9 @@
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { autolinkCommunityRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/autolink-community-rule';
 import { autolinkUrlRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/autolink-url-rule';
+import { insertBulletListRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/insert-bullet-list-rule';
 import { insertMentionRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/insert-mention-rule';
+import { insertOrderedListRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/insert-ordered-list-rule';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
 import { Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
@@ -24,6 +26,10 @@ export function createInputRules(capabilities: ContextCapabilities) {
 	if (capabilities.textLink) {
 		rules.push(autolinkCommunityRule());
 		rules.push(autolinkUrlRule());
+	}
+	if (capabilities.lists) {
+		rules.push(insertOrderedListRule());
+		rules.push(insertBulletListRule());
 	}
 
 	return inputRules({ rules });
