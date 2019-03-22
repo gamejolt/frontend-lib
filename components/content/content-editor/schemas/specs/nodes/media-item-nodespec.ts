@@ -21,6 +21,9 @@ export const mediaItem = {
 		align: {
 			default: 'center',
 		},
+		href: {
+			default: '',
+		},
 	},
 	toDOM: (node: Node) => [
 		'div',
@@ -30,6 +33,7 @@ export const mediaItem = {
 			'media-item-height': node.attrs.height,
 			'media-item-caption': node.attrs.caption,
 			'media-item-align': node.attrs.align,
+			'media-item-href': node.attrs.href,
 		},
 	],
 	parseDOM: [
@@ -42,6 +46,7 @@ export const mediaItem = {
 					height: domNode.getAttribute('media-item-height'),
 					caption: domNode.getAttribute('media-item-caption'),
 					align: domNode.getAttribute('media-item-align'),
+					href: domNode.getAttribute('media-item-href'),
 				};
 			},
 		},

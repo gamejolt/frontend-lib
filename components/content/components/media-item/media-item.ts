@@ -29,6 +29,9 @@ export class AppContentMediaItem extends Vue {
 	@Prop(String)
 	align!: string;
 
+	@Prop(String)
+	href!: string;
+
 	@Prop(Object)
 	owner!: ContentOwner;
 
@@ -72,6 +75,10 @@ export class AppContentMediaItem extends Vue {
 				return 'flex-end';
 		}
 		return 'center';
+	}
+
+	get hasLink() {
+		return typeof this.href === 'string' && this.href.length > 0;
 	}
 
 	async mounted() {

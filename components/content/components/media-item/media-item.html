@@ -18,12 +18,17 @@
 			}"
 			>
 			<template v-if="isHydrated">
-				<img
-					class="img-responsive"
-					:src="mediaItem.img_url"
-					:alt="title"
-					:title="title"
-					/>
+				<component
+					:is="hasLink ? 'a' : 'span'"
+					:href="hasLink ? href : undefined"
+					>
+					<img
+						class="img-responsive"
+						:src="mediaItem.img_url"
+						:alt="title"
+						:title="title"
+						/>
+				</component>
 			</template>
 			<template v-else-if="hasError">
 				<translate>Error loading media item.</translate>

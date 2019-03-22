@@ -19,6 +19,7 @@ export class AppContentViewerMediaItem extends Vue {
 				mediaItemHeight: this.data.attrs.height,
 				caption: this.data.attrs.caption,
 				align: this.data.attrs.align,
+				href: this.data.attrs.href,
 				isEditing: false,
 				owner: this.owner,
 			},
