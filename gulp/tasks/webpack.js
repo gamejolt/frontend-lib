@@ -210,6 +210,9 @@ module.exports = function(config) {
 						test: /\.vue$/,
 						loader: 'vue-loader',
 						options: {
+							compilerOptions: {
+								whitespace: 'condense',
+							},
 							transformAssetUrls: {
 								img: 'src',
 								'app-theme-svg': 'src',
