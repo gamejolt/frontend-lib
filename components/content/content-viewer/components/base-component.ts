@@ -6,6 +6,9 @@ import { AppContentViewerGJEmoji } from 'game-jolt-frontend-lib/components/conte
 import { AppContentViewerHeading } from 'game-jolt-frontend-lib/components/content/content-viewer/components/heading';
 import { AppContentViewerMention } from 'game-jolt-frontend-lib/components/content/content-viewer/components/mention/mention';
 import { AppContentViewerParagraph } from 'game-jolt-frontend-lib/components/content/content-viewer/components/paragraph';
+import { AppContentViewerTable } from 'game-jolt-frontend-lib/components/content/content-viewer/components/table';
+import { AppContentViewerTableCell } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tableCell';
+import { AppContentViewerTableRow } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tableRow';
 import { AppContentViewerTag } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tag/tag';
 import { AppContentViewerText } from 'game-jolt-frontend-lib/components/content/content-viewer/components/text';
 import Vue, { CreateElement } from 'vue';
@@ -51,6 +54,12 @@ function getComponentType(data: ContentObject): any {
 			return AppContentViewerHeading;
 		case 'mention':
 			return AppContentViewerMention;
+		case 'table':
+			return AppContentViewerTable;
+		case 'tableRow':
+			return AppContentViewerTableRow;
+		case 'tableCell':
+			return AppContentViewerTableCell;
 	}
 }
 

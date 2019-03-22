@@ -5,6 +5,8 @@ export type ContentObjectType =
 	| 'text'
 	| 'paragraph'
 	| 'table'
+	| 'tableRow'
+	| 'tableCell'
 	| 'hr'
 	| 'codeBlock'
 	| 'gjEmoji'

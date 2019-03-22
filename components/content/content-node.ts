@@ -21,6 +21,13 @@ export abstract class ContentNode {
 		return this.content[this.content.length - 1];
 	}
 
+	get firstChild() {
+		if (!this.hasChildren) {
+			return null;
+		}
+		return this.content[0];
+	}
+
 	constructor(content: ContentObject[] = []) {
 		this._content = content;
 	}

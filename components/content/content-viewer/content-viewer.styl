@@ -1,6 +1,31 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
 .source-view
 	display: flex
 	align-items: center
 
 >>> .content-viewer-heading
 	margin-top: 0px
+
+>>> .content-viewer-table
+	table-layout: fixed
+	width: 100%
+
+	& > thead
+
+		& > tr:first-child
+			& > td, & > th
+				border-top-width: 0
+
+		& > tr > th
+			border-width: 0 0 2px 0
+			border-bottom-style: solid
+			theme-prop('border-color', 'fg-muted')
+
+	& > tbody
+
+		& > tr > td
+			border-width: 1px 0 0 0
+			border-top-style: solid
+			theme-prop('border-color', 'fg-muted')
