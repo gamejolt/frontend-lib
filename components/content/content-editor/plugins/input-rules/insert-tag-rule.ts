@@ -5,9 +5,9 @@ import { checkCurrentNodeIsCode } from './input-rules';
 
 export function insertTagRule() {
 	return new InputRule(
-		/(?:^|\W)#([a-z0-9_-]+)\s$/i,
+		/(?:^|\W)#([a-z0-9_-]+)([\s!?\.,;:"'\)}\]])$/i,
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
-			if (match.length === 2) {
+			if (match.length === 3) {
 				// We don't want to insert tags inside code text.
 				if (checkCurrentNodeIsCode(state)) {
 					return null;
@@ -27,7 +27,7 @@ export function insertTagRule() {
 				tr.replaceRangeWith(start, end, newNode);
 
 				// We want to insert a space because it gets eaten by the input rule by default.
-				tr.insertText(' ', start + 1);
+				tr.insertText(match[2], start + 1);
 
 				return tr;
 			}
