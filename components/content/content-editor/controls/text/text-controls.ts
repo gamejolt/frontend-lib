@@ -194,6 +194,9 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	testWrapInList(listType: NodeType) {
+		if (!this.capabilities.lists) {
+			return false;
+		}
 		return wrapInList(listType)(this.view.state);
 	}
 
@@ -203,6 +206,9 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	testLiftListItems() {
+		if (!this.capabilities.lists) {
+			return false;
+		}
 		return liftListItem(this.view.state.schema.nodes.listItem)(this.view.state);
 	}
 
@@ -238,6 +244,9 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	testIsInSpoiler(node: Node) {
+		if (!this.capabilities.spoiler) {
+			return false;
+		}
 		return ContentEditorService.isContainedInNode(
 			this.view.state,
 			node,
@@ -266,6 +275,9 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	testIsInHeading(node: Node) {
+		if (!this.capabilities.heading) {
+			return false;
+		}
 		return ContentEditorService.isContainedInNode(
 			this.view.state,
 			node,
