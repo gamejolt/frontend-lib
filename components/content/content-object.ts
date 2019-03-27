@@ -38,6 +38,29 @@ export class ContentObject extends ContentNode {
 		this.marks = [];
 	}
 
+	public get hasContent() {
+		// hr and hard break do not count as "content".
+		switch (this.type) {
+			case 'text':
+				return typeof this.text === 'string' && this.text.length > 0;
+			// The following types are automatically considered content:
+			case 'mention':
+			case 'tag':
+			case 'gjEmoji':
+			case 'embed':
+			case 'mediaItem':
+				return true;
+		}
+
+		for (const child of this.content) {
+			if (child.hasContent) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public static fromJsonObj(jsonObj: any): ContentObject {
 		const type = jsonObj.type as ContentObjectType;
 		const obj = new ContentObject(type);

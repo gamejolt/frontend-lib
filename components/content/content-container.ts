@@ -65,4 +65,17 @@ export class ContentContainer extends ContentNode {
 
 		return JSON.stringify(data);
 	}
+
+	/**
+	 * Determines whether there is any "content" in this container.
+	 * This discards empty objects like paragraphs with only empty text nodes or list items with empty paragraphs.
+	 */
+	public get hasContent() {
+		for (const child of this.content) {
+			if (child.hasContent) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
