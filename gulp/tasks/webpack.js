@@ -142,6 +142,9 @@ module.exports = function(config) {
 		}
 
 		let publicPath = '/';
+
+		// If we need to test prod ssr build locally we should comment out this bit,
+		// otherwise it'll attempt to fetch the chunks from our cdn.
 		if (!config.client && config.production) {
 			publicPath = config.staticCdn + publicPath;
 		} else if (config.client && !config.watching) {
@@ -286,12 +289,18 @@ module.exports = function(config) {
 			},
 			devtool,
 			optimization:
-				(config.production && !config.ssr) || config.ssr === 'client'
+				// In ssr, we only want to do chunk splitting in the client bundle,
+				// otherwise, we only want to do chunk splitting when doing a prod build.
+				config.ssr === 'client' || (!config.ssr && config.production)
 					? {
 							splitChunks: {
 								// Does chunk splitting logic for entry point chunks as well.
 								// https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
-								chunks: 'all',
+								//
+								// When building for ssr it fails splitting css chunks when using 'all' or 'async'.
+								// The chunk is split correctly but isnt loaded into the initial page. instead of being included as a 'preload',
+								// it includes it as a 'prefetch'. Not sure where the issue is, so at the moment we just resort to 'initial'.
+								chunks: config.ssr ? 'initial' : 'all',
 							},
 							// Splits the runtime into its own chunk for long-term caching.
 							runtimeChunk: 'single',
@@ -392,7 +401,9 @@ module.exports = function(config) {
 					  }),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
-				config.ssr === 'client' && !config.client
+				// Make the client bundle for both normal prod builds or client ssr builds.
+				// We want to compare the manifests from the two builds.
+				(config.ssr === 'client' || config.production) && !config.client
 					? new VueSSRClientPlugin({
 							filename: 'vue-ssr-client-manifest-' + section + '.json',
 					  })
