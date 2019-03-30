@@ -1,10 +1,20 @@
+.content-well
+	rounded-corners()
+	raise()
+	theme-prop('background-color', 'bg')
+	theme-prop('border-color', 'bg-offset')
+	padding: ($grid-gutter-width / 2)
+	// margin-bottom: $line-height-computed
+	// border-width: 1px
+	// border-style: solid
+
 .well
 	rounded-corners()
-	padding: ($grid-gutter-width / 2)
 	margin-bottom: $line-height-computed
+	padding: ($grid-gutter-width-xs / 2)
 
-	@media $media-xs
-		padding: ($grid-gutter-width-xs / 2)
+	@media $media-sm-up
+		padding: ($grid-gutter-width / 2)
 
 	&.sans-margin
 		border-radius: 0
@@ -12,10 +22,10 @@
 		margin-bottom: 0
 
 .well-row
-	padding-top: $grid-gutter-width
-	padding-bottom: $grid-gutter-width
+	padding-top: $grid-gutter-width-xs
+	padding-bottom: $grid-gutter-width-xs
 	border-radius: 0
 
-	@media $media-xs
-		padding-top: $grid-gutter-width-xs
-		padding-bottom: $grid-gutter-width-xs
+	@media $media-sm-up
+		padding-top: $grid-gutter-width
+		padding-bottom: $grid-gutter-width
