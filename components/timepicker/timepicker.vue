@@ -7,7 +7,7 @@
 						<app-jolticon icon="chevron-up" big />
 					</a>
 				</td>
-				<td>&nbsp;</td>
+				<td><nbsp /></td>
 				<td>
 					<a @click="addMinutes(1)" class="timepicker-link">
 						<app-jolticon icon="chevron-up" big />
@@ -55,7 +55,7 @@
 						<app-jolticon icon="chevron-down" big />
 					</a>
 				</td>
-				<td>&nbsp;</td>
+				<td><nbsp /></td>
 				<td>
 					<a @click="addMinutes(-1)" class="timepicker-link">
 						<app-jolticon icon="chevron-down" big />
