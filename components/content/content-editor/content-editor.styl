@@ -20,14 +20,21 @@
 	theme-prop('outline-color', 'highlight') !important
 
 >>> .content-editor-spoiler
-	border-color: var(--theme-bg-subtle)
-	border-width: 5px
-	border-style: dashed
+	theme-prop('background-color', 'bg-offset')
 	font-size: 15px
-	padding-top: 4px
+	padding-top: 8px
+	border-width: 0
+	rounded-corners()
 
->>> .content-editor-spoiler:before
-	content: none;
+	&::before
+		theme-prop('color', 'fg-muted')
+		content: 'Spoiler'
+		position: absolute
+		top: 2px
+		right: 5px
+		font-size: $font-size-tiny
+		text-transform: uppercase
+
 >>> .content-editor-spoiler:after
 	content: none;
 
