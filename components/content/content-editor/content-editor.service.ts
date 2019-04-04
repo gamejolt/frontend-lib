@@ -1,7 +1,7 @@
 import { imageMimeTypes, isImage } from 'game-jolt-frontend-lib/utils/image';
 import { uuidv4 } from 'game-jolt-frontend-lib/utils/uuid';
 import { Mark, Node, NodeType } from 'prosemirror-model';
-import { EditorState } from 'prosemirror-state';
+import { EditorState, Selection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
 export class ContentEditorService {
@@ -25,6 +25,9 @@ export class ContentEditorService {
 		const tr = view.state.tr;
 
 		tr.insert(pos, newNode);
+		const resolvedCursorPos = view.state.doc.resolve(pos + 1);
+		const selection = Selection.near(resolvedCursorPos);
+		tr.setSelection(selection);
 
 		view.focus();
 		view.dispatch(tr);

@@ -1,6 +1,7 @@
 import View from '!view!./text-controls.html?style=./text-controls.styl';
 import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
+import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { lift, toggleMark, wrapIn } from 'prosemirror-commands';
 import { Mark, MarkType, Node, NodeType } from 'prosemirror-model';
@@ -36,16 +37,17 @@ export class AppContentEditorTextControls extends Vue {
 	selectionMarks: Mark[] = [];
 	canLiftListItems = false;
 	canWrapInLists = false;
-	isInSpoiler = false;
 	isInHeading = false;
 	headingLevel = -1;
+
+	readonly Screen = Screen;
 
 	$refs!: {
 		container: HTMLElement;
 	};
 
-	get shouldShowSpoiler() {
-		return this.capabilities.spoiler && (this.isInSpoiler || this.testWrapSpoiler());
+	get shouldShowHeading() {
+		return this.capabilities.heading && (this.isInHeading || this.testWrapInHeading());
 	}
 
 	@Emit('click')
@@ -80,8 +82,6 @@ export class AppContentEditorTextControls extends Vue {
 						this.canWrapInLists = this.testWrapInList(
 							this.view.state.schema.nodes.bulletList
 						);
-						// Find if this node is inside a spoiler
-						this.isInSpoiler = this.testIsInSpoiler(node) instanceof Node;
 						// Find the parent heading level
 						const headingParentNode = this.testIsInHeading(node);
 						if (headingParentNode) {
@@ -143,8 +143,9 @@ export class AppContentEditorTextControls extends Vue {
 		const left =
 			Math.max((start.left + end.left) / 2, start.left + 3) -
 			this.$refs.container.clientWidth / 2;
+
 		this.left = left - box.left + 'px';
-		this.bottom = box.bottom - start.top + 4 + 'px';
+		this.bottom = box.bottom - start.top + 16 + 'px';
 	}
 
 	private hasMark(markType: string) {
@@ -235,41 +236,6 @@ export class AppContentEditorTextControls extends Vue {
 		}
 	}
 
-	testWrapSpoiler() {
-		return wrapIn(this.view.state.schema.nodes.spoiler)(this.view.state);
-	}
-
-	doWrapInSpoiler() {
-		wrapIn(this.view.state.schema.nodes.spoiler)(this.view.state, this.view.dispatch);
-	}
-
-	testIsInSpoiler(node: Node) {
-		if (!this.capabilities.spoiler) {
-			return false;
-		}
-		return ContentEditorService.isContainedInNode(
-			this.view.state,
-			node,
-			this.view.state.schema.nodes.spoiler
-		);
-	}
-
-	onClickSpoiler() {
-		if (this.isInSpoiler) {
-			const node = ContentEditorService.getSelectedNode(this.view.state);
-			if (node !== null) {
-				let lifted;
-				do {
-					lifted = lift(this.view.state, this.view.dispatch);
-				} while (lifted && this.testIsInSpoiler(node));
-			}
-		} else {
-			this.doWrapInSpoiler();
-			ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
-		}
-		this.emitClicked();
-	}
-
 	testWrapInHeading() {
 		return wrapIn(this.view.state.schema.nodes.heading, { level: 1 })(this.view.state);
 	}
@@ -304,7 +270,28 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	onClickHeading(level: number) {
-		this.doWrapInHeading(level);
+		if (this.isInHeading) {
+			if (level === this.headingLevel) {
+				this.liftFromHeading();
+			} else {
+				const node = ContentEditorService.getSelectedNode(this.view.state);
+				if (node instanceof Node) {
+					const headingParentNode = this.testIsInHeading(node);
+					if (headingParentNode instanceof Node) {
+						const nodePos = ContentEditorService.findNodePosition(
+							this.view.state,
+							headingParentNode
+						);
+						const tr = this.view.state.tr;
+						tr.setNodeMarkup(nodePos, undefined, { level });
+						this.view.dispatch(tr);
+					}
+				}
+			}
+		} else {
+			this.doWrapInHeading(level);
+		}
+
 		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
 		this.emitClicked();
 	}

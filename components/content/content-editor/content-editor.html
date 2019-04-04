@@ -13,19 +13,23 @@
 		</span>
 	</div>
 
-	<app-content-editor-controls
-		v-if="shouldShowControls"
-		:capabilities="capabilities"
-		:view="view"
-		:state-counter="stateCounter"
-		/>
-	<app-content-editor-text-controls
-		v-if="shouldShowTextControls"
-		:capabilities="capabilities"
-		:view="view"
-		:state-counter="stateCounter"
-		@click="onTextControlClicked"
-		/>
+	<transition name="fade">
+		<app-content-editor-controls
+			v-if="shouldShowControls"
+			:capabilities="capabilities"
+			:view="view"
+			:state-counter="stateCounter"
+			/>
+	</transition>
+	<transition name="fade">
+		<app-content-editor-text-controls
+			v-if="shouldShowTextControls"
+			:capabilities="capabilities"
+			:view="view"
+			:state-counter="stateCounter"
+			@click="onTextControlClicked"
+			/>
+	</transition>
 	<app-content-editor-emoji-controls
 		v-if="shouldShowEmojiControls"
 		:view="view"

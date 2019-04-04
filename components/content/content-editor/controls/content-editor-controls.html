@@ -15,6 +15,7 @@
 					<app-button
 						v-if="capabilities.media"
 						circle
+						solid
 						icon="screenshot"
 						@click="onClickMedia"
 						@click.prevent
@@ -23,6 +24,7 @@
 					<app-button
 						v-if="capabilities.hasAnyEmbed"
 						circle
+						solid
 						icon="embed"
 						@click="onClickEmbed"
 						@click.prevent
@@ -31,6 +33,7 @@
 					<app-button
 						v-if="capabilities.codeBlock"
 						circle
+						solid
 						icon="brackets"
 						@click="onClickCodeBlock"
 						@click.prevent
@@ -39,22 +42,34 @@
 					<app-button
 						v-if="capabilities.blockquote"
 						circle
+						solid
 						icon="blockquote"
 						@click="onClickBlockquote"
 						@click.prevent
 						v-app-tooltip="$gettext('Add Quote')"
 						/>
 					<app-button
+						v-if="capabilities.spoiler"
+						circle
+						solid
+						icon="inactive"
+						@click="onClickSpoiler"
+						@click.prevent
+						v-app-tooltip="$gettext('Add Spoiler')"
+						/>
+					<app-button
 						v-if="capabilities.hr"
 						circle
+						solid
 						icon="hr"
 						@click="onClickHr"
 						@click.prevent
-						v-app-tooltip="$gettext('Add Horizontal Rule')"
+						v-app-tooltip="$gettext('Add Separator')"
 						/>
 					<app-button
 						v-if="capabilities.table"
 						circle
+						solid
 						icon="insert-table"
 						@click="onClickTable"
 						@click.prevent
@@ -69,6 +84,7 @@
 					'-add-button-rotated': !collapsed
 				}"
 				circle
+				solid
 				:icon="'add'"
 				@click.prevent
 				@click="onClickExpand"

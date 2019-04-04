@@ -5,131 +5,94 @@
 		'bottom': this.bottom,
 		'left': this.left,
 	}"
+	:class="{
+		'controls-desktop': !Screen.isXs,
+		'controls-mobile': Screen.isXs,
+	}"
 	>
-
 	<transition name="fade">
 		<div v-if="visible">
-			<app-button
-				v-if="capabilities.textBold"
-				circle
-				icon="bold"
-				:primary="hasMark('strong')"
-				solid
-				@click="onClickBold"
-				@click.prevent
+			<button
+				v-if="capabilities.textBold && !isInHeading"
+				class="control-button"
+				@click.prevent="onClickBold"
+				:class="{
+					'control-button-active': hasMark('strong')
+				}"
 				v-app-tooltip="$gettext('Bold (Ctrl+B)')"
-				/>
-			<app-button
+				>
+				<app-jolticon icon="bold" />
+			</button>
+			<button
 				v-if="capabilities.textItalics"
-				circle
-				icon="italic"
-				:primary="hasMark('em')"
-				solid
-				@click="onClickItalic"
-				@click.prevent
+				class="control-button"
+				@click.prevent="onClickItalic"
+				:class="{
+					'control-button-active': hasMark('em')
+				}"
 				v-app-tooltip="$gettext('Italic (Ctrl+I)')"
-				/>
-			<app-button
+				>
+				<app-jolticon icon="italic" />
+			</button>
+			<button
 				v-if="capabilities.textStrike"
-				circle
-				icon="strikethrough"
-				:primary="hasMark('strike')"
-				solid
-				@click="onClickStrikethrough"
-				@click.prevent
+				class="control-button"
+				@click.prevent="onClickStrikethrough"
+				:class="{
+					'control-button-active': hasMark('strike')
+				}"
 				v-app-tooltip="$gettext('Strikethrough')"
-				/>
-			<app-button
+				>
+				<app-jolticon icon="strikethrough" />
+			</button>
+
+			<span v-if="capabilities.textCode || capabilities.textLink" class="control-separator" />
+
+			<button
 				v-if="capabilities.textCode"
-				circle
-				icon="brackets"
-				:primary="hasMark('code')"
-				solid
-				@click="onClickCode"
-				@click.prevent
+				class="control-button"
+				@click.prevent="onClickCode"
+				:class="{
+					'control-button-active': hasMark('code')
+				}"
 				v-app-tooltip="$gettext('Code (Ctrl+`)')"
-				/>
-			<app-button
+				>
+				<app-jolticon icon="brackets" />
+			</button>
+			<button
 				v-if="capabilities.textLink"
-				circle
-				icon="link"
-				:primary="hasMark('link')"
-				solid
-				@click="onClickLink"
-				@click.prevent
+				class="control-button"
+				@click.prevent="onClickLink"
+				:class="{
+					'control-button-active': hasMark('link')
+				}"
 				v-app-tooltip="$gettext('Link')"
-				/>
-			<template v-if="capabilities.lists">
-				<template v-if="canLiftListItems">
-					<app-button
-						circle
-						icon="heart"
-						solid
-						primary
-						@click="doLiftListItems"
-						@click.prevent
-						v-app-tooltip="$gettext('Lift from List')"
-						/>
-				</template>
-				<template v-else-if="canWrapInLists">
-					<app-button
-						circle
-						icon="bullet-list"
-						solid
-						@click="onClickBulletList"
-						@click.prevent
-						v-app-tooltip="$gettext('Bullet List')"
-						/>
-					<app-button
-						circle
-						icon="numbered-list"
-						solid
-						@click="onClickOrderedList"
-						@click.prevent
-						v-app-tooltip="$gettext('Numbered List')"
-						/>
-				</template>
-			</template>
-			<app-button
-				v-if="shouldShowSpoiler"
-				circle
-				icon="inactive"
-				:primary="isInSpoiler"
-				solid
-				@click="onClickSpoiler"
-				@click.prevent
-				v-app-tooltip="$gettext('Spoiler')"
-				/>
-			<template v-if="capabilities.heading">
-				<template v-if="isInHeading">
-					<app-button
-						circle
-						:icon="headingLevel === 1 ? 'h1' : 'h2'"
-						solid
-						primary
-						@click="liftFromHeading"
-						@click.prevent
-						v-app-tooltip="$gettext('Heading')"
-						/>
-				</template>
-				<template v-else-if="testWrapInHeading()">
-					<app-button
-						circle
-						icon="h1"
-						solid
-						@click="onClickHeading(1)"
-						@click.prevent
-						v-app-tooltip="$gettext('Heading')"
-						/>
-					<app-button
-						circle
-						icon="h2"
-						solid
-						@click="onClickHeading(2)"
-						@click.prevent
-						v-app-tooltip="$gettext('Heading')"
-						/>
-				</template>
+				>
+				<app-jolticon icon="link" />
+			</button>
+
+			<template v-if="shouldShowHeading">
+				<span class="control-separator" />
+				<button
+					class="control-button"
+					@click.prevent="onClickHeading(1)"
+					:class="{
+						'control-button-active': headingLevel === 1
+					}"
+					v-app-tooltip="$gettext('Heading Level 1')"
+					>
+					<app-jolticon icon="h1" />
+				</button>
+				<button
+					class="control-button"
+					@click.prevent="onClickHeading(2)"
+					:class="{
+						'control-button-active': headingLevel === 2
+					}"
+					v-app-tooltip="$gettext('Heading Level 2')"
+					>
+					<app-jolticon icon="h2" />
+				</button>
 			</template>
 		</div>
 	</transition>

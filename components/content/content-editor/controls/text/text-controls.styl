@@ -1,12 +1,78 @@
-.content-editor-text-controls
-	position: absolute
-	z-index: 10
-
-	& > div
-		display: flex
+@require '~styles/variables'
+@require '~styles-lib/mixins'
 
 .fade-enter-active, .fade-leave-active
 	transition: opacity 0.05s
 
 .fade-enter, .fade-leave-to
 	opacity: 0
+
+.content-editor-text-controls
+	z-index: 101
+
+.controls-mobile
+	position: fixed
+	bottom: 0 !important
+	left: 0 !important
+	right: 0 !important
+
+	& > div
+		display: flex
+		justify-content: flex-start
+		align-items: center
+		theme-prop('background-color', 'bg-offset')
+		theme-prop('border-color', 'bi-bg')
+		border-top-width: 4px
+		border-top-style: solid
+		padding-left: 4px
+		padding-right: 4px
+
+		& > .control-button > span
+			margin-top: 16px
+			margin-bottom: 16px
+			margin-left: 1px
+			margin-right: 1px
+			font-size: 20px !important
+
+		& > .control-button-active > span
+			theme-prop('color', 'bi-bg', true)
+
+.controls-desktop
+	position: absolute
+
+	& > div
+		display: flex
+		justify-content: flex-start
+		align-items: center
+		theme-prop('background-color', 'darkest')
+		padding: 10px 8px 8px 8px
+		rounded-corners()
+		box-shadow: 0 0 2px 2px var(--theme-darkest)
+
+		&:before
+			caret(color: var(--theme-darkest), direction: 'down', size: 8px)
+			content: ''
+			display: block
+
+		& > .control-button > span
+			theme-prop('color', 'lighter')
+			font-size: 20px !important
+
+		& > .control-button-active > span
+			theme-prop('color', 'highlight', true)
+
+.control-button
+	cursor: pointer
+	display: inline-block
+	pressy()
+	background-color: transparent
+	border-style: none
+
+.control-separator
+	display: inline-block
+	theme-prop('background-color', 'lighter')
+	width: 2px
+	height: 20px
+	line-height: 20px
+	vertical-align: middle
+	margin: 0 10px

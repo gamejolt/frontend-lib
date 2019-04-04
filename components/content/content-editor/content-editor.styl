@@ -25,6 +25,7 @@
 	padding-top: 8px
 	border-width: 0
 	rounded-corners()
+	position: relative
 
 	&::before
 		theme-prop('color', 'fg-muted')
@@ -85,3 +86,9 @@
 
 	& > tr > td:last-child
 		border-right-width: 0
+
+.fade-enter-active, .fade-leave-active
+	transition: opacity 0.05s
+
+.fade-enter, .fade-leave-to
+	opacity: 0
