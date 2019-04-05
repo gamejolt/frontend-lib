@@ -25,7 +25,7 @@ export class ContentEditorService {
 		const tr = view.state.tr;
 
 		tr.insert(pos, newNode);
-		const resolvedCursorPos = view.state.doc.resolve(pos + 1);
+		const resolvedCursorPos = tr.doc.resolve(pos + 1);
 		const selection = Selection.near(resolvedCursorPos);
 		tr.setSelection(selection);
 
