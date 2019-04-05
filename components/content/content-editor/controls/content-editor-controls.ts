@@ -1,6 +1,7 @@
 import View from '!view!./content-editor-controls.html?style=./content-editor-controls.styl';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { ContentTableService } from 'game-jolt-frontend-lib/components/content/content-editor/content-table.service';
+import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { Node, NodeType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
@@ -25,8 +26,10 @@ export class AppContentEditorControls extends Vue {
 
 	visible = false;
 	top = '0px';
-	right = '0px';
+	left = '0px';
 	collapsed = true;
+
+	readonly Screen = Screen;
 
 	$refs!: {
 		container: HTMLElement;
@@ -50,8 +53,12 @@ export class AppContentEditorControls extends Vue {
 
 							const start = this.view.coordsAtPos(state.selection.from);
 							const box = this.$refs.container.offsetParent.getBoundingClientRect();
-							this.top = start.top - box.top - 8 + 'px';
-							this.right = '16px';
+							this.top = start.top - box.top - 10 + 'px';
+							if (this.Screen.isXs) {
+								this.left = '32px';
+							} else {
+								this.left = '-32px';
+							}
 						}
 						break;
 					default:
@@ -118,6 +125,32 @@ export class AppContentEditorControls extends Vue {
 	onClickSpoiler() {
 		const contentNode = (this.view.state.schema.nodes.paragraph as NodeType).create();
 		const newNode = (this.view.state.schema.nodes.spoiler as NodeType).create({}, contentNode);
+		this.insertNewNode(newNode);
+	}
+
+	onClickBulletList() {
+		const contentNode = (this.view.state.schema.nodes.paragraph as NodeType).create();
+		const listItemNode = (this.view.state.schema.nodes.listItem as NodeType).create(
+			{},
+			contentNode
+		);
+		const newNode = (this.view.state.schema.nodes.bulletList as NodeType).create(
+			{},
+			listItemNode
+		);
+		this.insertNewNode(newNode);
+	}
+
+	onClickOrderedList() {
+		const contentNode = (this.view.state.schema.nodes.paragraph as NodeType).create();
+		const listItemNode = (this.view.state.schema.nodes.listItem as NodeType).create(
+			{},
+			contentNode
+		);
+		const newNode = (this.view.state.schema.nodes.orderedList as NodeType).create(
+			{},
+			listItemNode
+		);
 		this.insertNewNode(newNode);
 	}
 }
