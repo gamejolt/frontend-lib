@@ -77,6 +77,7 @@ export class TableNodeView extends BaseNodeView {
 		}
 
 		ContentTableService.insertRow(this.view, this.node, selectedRowIndex);
+		this.setSelection(); // update selected cell because its isHeader property might have changed.
 	}
 
 	private onInsertRowBelow() {
