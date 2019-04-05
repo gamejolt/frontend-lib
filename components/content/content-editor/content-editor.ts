@@ -1,5 +1,6 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
+import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
 import { FocusWatcher } from 'game-jolt-frontend-lib/components/content/content-editor/focus-watcher';
@@ -159,6 +160,9 @@ export class AppContentEditor extends Vue implements ContentOwner {
 				drop: dropEventHandler,
 			},
 		});
+
+		// Make sure we have a paragraph when loading in a new state
+		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
 	}
 
 	onEmojisHide() {
