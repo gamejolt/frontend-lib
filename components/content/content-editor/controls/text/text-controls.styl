@@ -18,14 +18,15 @@
 
 	& > div
 		display: flex
-		justify-content: flex-start
+		justify-content: center
 		align-items: center
 		theme-prop('background-color', 'bg-offset')
-		theme-prop('border-color', 'bi-bg')
-		border-top-width: 4px
+		theme-prop('border-color', 'bg-subtle')
+		border-top-width: 1px
 		border-top-style: solid
 		padding-left: 4px
 		padding-right: 4px
+		box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1)
 
 		& > .control-button > span
 			margin-top: 16px
@@ -47,16 +48,20 @@
 		theme-prop('background-color', 'darkest')
 		padding: 10px 8px 8px 8px
 		rounded-corners()
-		box-shadow: 0 0 2px 2px var(--theme-darkest)
+		box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
 
 		&:before
 			caret(color: var(--theme-darkest), direction: 'down', size: 8px)
 			content: ''
 			display: block
 
-		& > .control-button > span
-			theme-prop('color', 'lighter')
-			font-size: 20px !important
+		& > .control-button
+			padding-left: 2px
+			padding-right: 2px
+
+			& > span
+				theme-prop('color', 'lighter')
+				font-size: 20px !important
 
 		& > .control-button-active > span
 			theme-prop('color', 'highlight', true)
@@ -70,9 +75,8 @@
 
 .control-separator
 	display: inline-block
-	theme-prop('background-color', 'lighter')
+	theme-prop('background-color', 'bg-subtle')
 	width: 2px
 	height: 20px
 	line-height: 20px
-	vertical-align: middle
 	margin: 0 10px

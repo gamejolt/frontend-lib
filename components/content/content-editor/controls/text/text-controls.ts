@@ -4,8 +4,7 @@ import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/
 import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { lift, toggleMark, wrapIn } from 'prosemirror-commands';
-import { Mark, MarkType, Node, NodeType } from 'prosemirror-model';
-import { liftListItem, wrapInList } from 'prosemirror-schema-list';
+import { Mark, MarkType, Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Emit, Prop, Watch } from 'vue-property-decorator';
@@ -35,8 +34,6 @@ export class AppContentEditorTextControls extends Vue {
 	isShowingOnMouseUp = false;
 	mouse: MouseState | null = null;
 	selectionMarks: Mark[] = [];
-	canLiftListItems = false;
-	canWrapInLists = false;
 	isInHeading = false;
 	headingLevel = -1;
 
@@ -76,11 +73,6 @@ export class AppContentEditorTextControls extends Vue {
 					if (parent && parent.type.spec.marks !== '') {
 						this.selectionMarks = ContentEditorService.getSelectionMarks(
 							this.view.state
-						);
-						this.canLiftListItems = this.testLiftListItems();
-						// Bullet list has the same rules as ordered list
-						this.canWrapInLists = this.testWrapInList(
-							this.view.state.schema.nodes.bulletList
 						);
 						// Find the parent heading level
 						const headingParentNode = this.testIsInHeading(node);
@@ -192,48 +184,6 @@ export class AppContentEditorTextControls extends Vue {
 			}
 		}
 		this.emitClicked();
-	}
-
-	testWrapInList(listType: NodeType) {
-		if (!this.capabilities.lists) {
-			return false;
-		}
-		return wrapInList(listType)(this.view.state);
-	}
-
-	doWrapInList(listType: NodeType) {
-		wrapInList(listType)(this.view.state, this.view.dispatch);
-		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
-	}
-
-	testLiftListItems() {
-		if (!this.capabilities.lists) {
-			return false;
-		}
-		return liftListItem(this.view.state.schema.nodes.listItem)(this.view.state);
-	}
-
-	doLiftListItems() {
-		liftListItem(this.view.state.schema.nodes.listItem)(this.view.state, this.view.dispatch);
-		this.emitClicked();
-	}
-
-	onClickBulletList() {
-		if (this.testLiftListItems()) {
-			this.doLiftListItems();
-		} else {
-			this.doWrapInList(this.view.state.schema.nodes.bulletList);
-			this.emitClicked();
-		}
-	}
-
-	onClickOrderedList() {
-		if (this.testLiftListItems()) {
-			this.doLiftListItems();
-		} else {
-			this.doWrapInList(this.view.state.schema.nodes.orderedList);
-			this.emitClicked();
-		}
 	}
 
 	testWrapInHeading() {
