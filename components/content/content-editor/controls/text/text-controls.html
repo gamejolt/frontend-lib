@@ -13,7 +13,7 @@
 	<transition name="fade">
 		<div v-if="visible">
 			<button
-				v-if="capabilities.textBold && !isInHeading"
+				v-if="capabilities.textBold && !isInHeading && !isInTableHeader"
 				class="control-button"
 				@click.prevent="onClickBold"
 				:class="{

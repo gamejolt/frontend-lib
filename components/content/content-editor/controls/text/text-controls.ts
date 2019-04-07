@@ -36,6 +36,7 @@ export class AppContentEditorTextControls extends Vue {
 	selectionMarks: Mark[] = [];
 	isInHeading = false;
 	headingLevel = -1;
+	isInTableHeader = false;
 
 	readonly Screen = Screen;
 
@@ -76,12 +77,14 @@ export class AppContentEditorTextControls extends Vue {
 						);
 						// Find the parent heading level
 						const headingParentNode = this.testIsInHeading(node);
-						if (headingParentNode) {
+						if (headingParentNode instanceof Node) {
 							this.isInHeading = true;
 							this.headingLevel = headingParentNode.attrs.level;
 						} else {
 							this.isInHeading = false;
 							this.headingLevel = -1;
+
+							this.isInTableHeader = this.testIsInTableHeader(node);
 						}
 
 						// When the controls are already visible, just adjust their position
@@ -244,5 +247,20 @@ export class AppContentEditorTextControls extends Vue {
 
 		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
 		this.emitClicked();
+	}
+
+	testIsInTableHeader(node: Node) {
+		if (!this.capabilities.table) {
+			return false;
+		}
+		const cell = ContentEditorService.isContainedInNode(
+			this.view.state,
+			node,
+			this.view.state.schema.nodes.tableCell
+		);
+		if (cell instanceof Node) {
+			return cell.attrs.isHeader;
+		}
+		return false;
 	}
 }
