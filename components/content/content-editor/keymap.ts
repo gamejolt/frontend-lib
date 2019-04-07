@@ -1,8 +1,9 @@
 import { AppContentEditor } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
+import { ContentListService } from 'game-jolt-frontend-lib/components/content/content-editor/content-list.service';
 import { chainCommands, exitCode, toggleMark } from 'prosemirror-commands';
 import { redo, undo } from 'prosemirror-history';
 import { Schema } from 'prosemirror-model';
-import { liftListItem, sinkListItem, splitListItem } from 'prosemirror-schema-list';
+import { sinkListItem, splitListItem } from 'prosemirror-schema-list';
 
 export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema) {
 	const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
@@ -32,7 +33,7 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 
 	if (editor.capabilities.lists) {
 		keymap['Enter'] = splitListItem(schema.nodes.listItem);
-		keymap['Shift-Tab'] = liftListItem(schema.nodes.listItem);
+		keymap['Shift-Tab'] = ContentListService.liftListItem(schema.nodes.listItem);
 		keymap['Tab'] = sinkListItem(schema.nodes.listItem);
 	}
 
