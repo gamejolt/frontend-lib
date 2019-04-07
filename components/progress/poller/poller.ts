@@ -1,16 +1,27 @@
 import Vue, { CreateElement } from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
-
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import { Api } from '../../api/api.service';
 
 const PollInterval = 5000;
 
 @Component({})
 export class AppProgressPoller extends Vue {
-	@Prop(String) url!: string;
-	@Prop(Number) interval?: number;
+	@Prop(String)
+	url!: string;
+
+	@Prop(Number)
+	interval?: number;
 
 	intervalHandle?: NodeJS.Timer;
+
+	@Emit('progress')
+	emitProgress(_response: unknown, _progress: number, _indeterminate: boolean) {}
+
+	@Emit('complete')
+	emitComplete(_response: unknown) {}
+
+	@Emit('error')
+	emitError(_response: unknown) {}
 
 	mounted() {
 		this.intervalHandle = setInterval(async () => {
@@ -23,11 +34,18 @@ export class AppProgressPoller extends Vue {
 					detach: true,
 				});
 
+				if (response.status === 'progress') {
+					const indeterminate = typeof response.progress !== 'number';
+					const progress = indeterminate ? 100 : response.progress;
+					this.emitProgress(response, progress, indeterminate);
+					return;
+				}
+
 				if (response.status === 'complete' || response.status === 'error') {
 					if (response.status === 'complete') {
-						this.$emit('complete', response);
+						this.emitComplete(response);
 					} else if (response.status === 'error') {
-						this.$emit('error', response);
+						this.emitError(response);
 					}
 
 					this.clearInterval();

@@ -29,6 +29,9 @@ export class GameBuild extends Model {
 
 	static readonly ERROR_MISSING_FIELDS = 'missing-fields';
 	static readonly ERROR_LAUNCH_OPTIONS = 'launch-options';
+	static readonly ERROR_INVALID_ARCHIVE = 'invalid-archive';
+	static readonly ERROR_PASSWORD_ARCHIVE = 'password-archive';
+	static readonly ERROR_NOT_HTML_ARCHIVE = 'not-html-archive';
 
 	static readonly browserTypes = [
 		GameBuild.TYPE_HTML,
