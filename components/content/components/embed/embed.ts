@@ -1,8 +1,10 @@
 import View from '!view!./embed.html?style=./embed.styl';
-import { AppWidgetCompilerWidgetSoundcloud } from 'game-jolt-frontend-lib/components/widget-compiler/widget-soundcloud/widget-soundcloud';
+import { AppContentEmbedSoundcloudEmbed } from 'game-jolt-frontend-lib/components/content/components/embed/soundcloud/soundcloud-embed';
+import { ContentEmbedService } from 'game-jolt-frontend-lib/components/content/content-editor/content-embed.service';
+import { AppLoading } from 'game-jolt-frontend-lib/vue/components/loading/loading';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 import { AppVideoEmbed } from '../../../video/embed/embed';
 import { ContentOwner } from '../../content-owner';
 import { AppBaseContentComponent } from '../base/base-content-component';
@@ -15,10 +17,11 @@ import { AppContentEmbedUserEmbed } from './user/user-embed';
 	components: {
 		AppVideoEmbed,
 		AppBaseContentComponent,
-		AppWidgetCompilerWidgetSoundcloud,
 		AppContentEmbedGameEmbed,
 		AppContentEmbedUserEmbed,
 		AppContentEmbedCommunityEmbed,
+		AppContentEmbedSoundcloudEmbed,
+		AppLoading,
 	},
 })
 export class AppContentEmbed extends Vue {
@@ -34,8 +37,14 @@ export class AppContentEmbed extends Vue {
 	@Prop(Boolean)
 	isEditing!: boolean;
 
+	@Prop(String)
+	inputValue!: string;
+
+	sourceUrl: string = '';
+	loading = false;
+
 	$refs!: {
-		placeholderInput: HTMLElement;
+		inputElement: HTMLInputElement;
 	};
 
 	get capabilities() {
@@ -50,166 +59,71 @@ export class AppContentEmbed extends Vue {
 		return this.type && this.source;
 	}
 
-	async mounted() {
+	get shouldShowOverlay() {
+		return this.isEditing && ['youtube-video', 'soundcloud-song'].includes(this.type);
+	}
+
+	get hasSourceUrl() {
+		return this.sourceUrl.length > 0;
+	}
+
+	mounted() {
 		// If the placeholder input is available, focus it immediately
-		if (this.$refs.placeholderInput) {
-			this.$refs.placeholderInput.focus();
+		if (this.$refs.inputElement) {
+			this.$refs.inputElement.focus();
 		}
+
+		this.onTypeChange();
 	}
 
 	onRemoved() {
 		this.$emit('removed');
 	}
 
-	onpaste(e: ClipboardEvent) {
-		// Make a 200% sure this event does not get propagated
-		e.preventDefault();
-		e.stopPropagation();
-
-		const clipboardData = e.clipboardData;
-		if (!clipboardData) {
-			return;
-		}
-
-		const pastedText = clipboardData.getData('Text');
-		if (pastedText) {
-			this.handlePastedText(pastedText);
+	onInput(e: Event) {
+		if (e.target instanceof HTMLInputElement) {
+			this.$emit('updateAttrs', { source: e.target.value });
 		}
 	}
 
-	private emitEmbed(type: string, source: string) {
-		this.$emit('updateAttrs', {
-			type,
-			source,
-		});
-	}
-
-	private handlePastedText(text: string) {
-		text = text.trim();
-		const lines = text.split(/\r?\n/);
-
-		// Figure out what kind of link/embed has been pasted
-		// Go through all lines of pasted content individually
-		// This also has to take capabilities into account
-
-		for (const line of lines) {
-			const gameJoltUsername = this.tryGameJoltUser(line);
-			if (gameJoltUsername !== false) {
-				this.emitEmbed('game-jolt-user', gameJoltUsername);
-				return;
-			}
-
-			const gameJoltGameId = this.tryGameJoltGame(line);
-			if (gameJoltGameId !== false) {
-				this.emitEmbed('game-jolt-game', gameJoltGameId);
-				return;
-			}
-
-			const gameJoltCommunityPath = this.tryGameJoltCommunity(line);
-			if (gameJoltCommunityPath !== false) {
-				this.emitEmbed('game-jolt-community', gameJoltCommunityPath);
-				return;
-			}
-
-			const youtubeVideoId = this.tryYouTube(line);
-			if (youtubeVideoId !== false) {
-				this.emitEmbed('youtube-video', youtubeVideoId);
-				return;
-			}
-
-			const soundcloudSongId = this.trySoundCloud(line);
-			if (soundcloudSongId !== false) {
-				this.emitEmbed('soundcloud-song', soundcloudSongId);
-				return;
-			}
-		}
-	}
-
-	private tryGameJoltCommunity(text: string) {
-		if (!this.capabilities.embedCommunity) {
-			return false;
-		}
-
-		// gamejolt.com/c/path
-		const results = /gamejolt.com\/c\/([a-z0-9-_]{1,50})/i.exec(text);
-		if (results !== null && results.length === 2) {
-			const communityPath = results[1];
-			return communityPath;
-		}
-
-		return false;
-	}
-
-	private tryGameJoltUser(text: string) {
-		if (!this.capabilities.embedUser) {
-			return false;
-		}
-
-		// gamejolt.com/@username
-		const results = /gamejolt.com\/@([a-z0-9]{1,30})/i.exec(text);
-		if (results !== null && results.length === 2) {
-			const username = results[1];
-			return username;
-		}
-
-		return false;
-	}
-
-	private tryGameJoltGame(text: string) {
-		if (!this.capabilities.embedGame) {
-			return false;
-		}
-
-		// gamejolt.com/games/name/id
-		const results = /gamejolt.com\/games\/.+?\/([0-9]+)/i.exec(text);
-		if (results !== null && results.length === 2) {
-			const gameId = parseInt(results[1]);
-			if (gameId !== NaN) {
-				return gameId.toString();
-			}
-		}
-
-		return false;
-	}
-
-	private tryYouTube(text: string) {
-		if (!this.capabilities.embedVideo) {
-			return false;
-		}
-
-		// Support:
-		// youtube.com/watch -> v=id
-		// m.youtube.com/watch -> v=id
-
-		try {
-			const url = new URL(text);
-			if (/(.+\.)?youtube\.com/i.test(url.hostname)) {
-				const videoId = url.searchParams.get('v');
-				if (videoId !== null && videoId.length === 11) {
-					return videoId;
+	async onKeydown(e: KeyboardEvent) {
+		switch (e.keyCode) {
+			case 8: // 8 => Backspace
+				// remove this node if backspace was pressed at the start of the input element.
+				if (
+					this.$refs.inputElement.selectionStart === 0 &&
+					this.$refs.inputElement.selectionEnd === 0
+				) {
+					this.$emit('removed');
 				}
-			}
-		} catch (error) {
-			// Swallow error. new Url throws on invalid URLs, which can very well happen.
+				break;
+			case 13: // 13 => Enter
+				this.loading = true;
+				const data = await ContentEmbedService.getEmbedData(
+					this.owner,
+					this.$refs.inputElement.value
+				);
+				if (data !== undefined) {
+					this.$emit('updateAttrs', data);
+				}
+				this.loading = false;
+				break;
 		}
-
-		return false;
 	}
 
-	private trySoundCloud(text: string) {
-		if (!this.capabilities.embedMusic) {
-			return false;
-		}
-
-		// SoundCloud requires the user to paste the embed code because their song links don't include the song id
-		const results = /api\.soundcloud\.com\/tracks\/(\d+)/i.exec(text);
-		if (results !== null && results.length === 2) {
-			const songId = parseInt(results[1]);
-			if (songId !== NaN) {
-				return songId.toString();
+	@Watch('type')
+	async onTypeChange() {
+		if (this.isEditing) {
+			const url = await ContentEmbedService.getSourceUrl(
+				this.type,
+				this.source,
+				this.owner.getHydrator()
+			);
+			if (url !== undefined) {
+				this.sourceUrl = url;
+			} else {
+				this.sourceUrl = '';
 			}
 		}
-
-		return false;
 	}
 }

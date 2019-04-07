@@ -1,11 +1,17 @@
 import { arrayRemove } from '../../utils/array';
 import { Api } from '../api/api.service';
 
-export type ContentHydrationType = 'media-item-id' | 'game-id' | 'username' | 'community-path';
+export type ContentHydrationType =
+	| 'media-item-id'
+	| 'game-id'
+	| 'username'
+	| 'community-path'
+	| 'soundcloud-track-url'
+	| 'soundcloud-track-id';
 
 export type ContentHydrationDataEntry = {
 	type: ContentHydrationType;
-	id: string;
+	source: string;
 	data: any;
 };
 
@@ -16,19 +22,20 @@ export class ContentHydrator {
 		this.hydration = hydration;
 	}
 
-	async getData(type: ContentHydrationType, id: string) {
+	async getData(type: ContentHydrationType, source: string) {
 		// Try to find hydration in existing pool
 		// If it's dry, request hydration from the server
 
-		const existingEntry = this.hydration.find(i => i.type === type && i.id === id);
+		const existingEntry = this.hydration.find(i => i.type === type && i.source === source);
 		if (existingEntry) {
 			return existingEntry.data;
 		}
 
-		const result = await Api.sendRequest(`/web/content/hydrate/${type}/${id}`);
+		const encodedId = encodeURIComponent(source);
+		const result = await Api.sendRequest(`/web/content/hydrate/${type}/${encodedId}`);
 		const entry = {
 			type,
-			id,
+			source,
 			data: result.data,
 		} as ContentHydrationDataEntry;
 		this.hydration.push(entry);
@@ -37,6 +44,6 @@ export class ContentHydrator {
 	}
 
 	dry(type: ContentHydrationType, id: string) {
-		arrayRemove(this.hydration, i => i.type === type && i.id === id);
+		arrayRemove(this.hydration, i => i.type === type && i.source === id);
 	}
 }

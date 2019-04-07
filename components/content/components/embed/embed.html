@@ -2,44 +2,80 @@
 	v-if="hasContent"
 	:is-editing="isEditing"
 	@removed="onRemoved"
+	class="embed-main"
 	>
 
-	<app-video-embed
-		v-if="type === 'youtube-video'"
-		video-provider="youtube"
-		:video-id="source"
-		/>
-	<app-widget-compiler-widget-soundcloud
-		v-else-if="type === 'soundcloud-song'"
-		:track-id="source"
-		/>
-	<app-content-embed-game-embed
-		v-else-if="type === 'game-jolt-game'"
-		:game-id="source"
-		:hydrator="hydrator"
-		/>
-	<app-content-embed-user-embed
-		v-else-if="type === 'game-jolt-user'"
-		:username="source"
-		:hydrator="hydrator"
-		/>
-	<app-content-embed-community-embed
-		v-else-if="type === 'game-jolt-community'"
-		:community-path="source"
-		:hydrator="hydrator"
-		/>
+	<div class="embed-container">
+		<app-video-embed
+			v-if="type === 'youtube-video'"
+			video-provider="youtube"
+			:video-id="source"
+			/>
+		<app-content-embed-soundcloud-embed
+			v-else-if="type === 'soundcloud-song'"
+			:track-id="source"
+			/>
+		<app-content-embed-game-embed
+			v-else-if="type === 'game-jolt-game'"
+			:game-id="source"
+			:hydrator="hydrator"
+			/>
+		<app-content-embed-user-embed
+			v-else-if="type === 'game-jolt-user'"
+			:username="source"
+			:hydrator="hydrator"
+			/>
+		<app-content-embed-community-embed
+			v-else-if="type === 'game-jolt-community'"
+			:community-path="source"
+			:hydrator="hydrator"
+			/>
+
+		<div
+			v-if="shouldShowOverlay"
+			class="embed-overlay"
+		>
+			<div class="embed-overlay-img" />
+			<div class="embed-overlay-controls">
+				<app-button
+					v-if="!hasSourceUrl"
+					overlay
+					disabled
+					>
+					<translate>Go to source</translate>
+				</app-button>
+				<a
+					v-else
+					target="_blank"
+					:href="sourceUrl"
+					>
+					<app-button overlay>
+						<translate>Go to source</translate>
+					</app-button>
+				</a>
+			</div>
+		</div>
+	</div>
 
 </app-base-content-component>
 <div
-	contenteditable="false"
-	@paste="onpaste"
 	v-else
+	contenteditable="false"
+	class="input-container"
 	>
 	<input
-		ref="placeholderInput"
-		class="-placeholder"
+		ref="inputElement"
+		class="-input"
 		type="text"
-		readonly
+		:value="source"
+		:disabled="loading"
+		@input="onInput"
+		@keydown="onKeydown"
 		:placeholder="' ' + $gettext(`Paste a link to embed content from Game Jolt or an external site (e.g. YouTube).`)"
 		/>
+	<div
+		v-if="loading"
+		class="input-overlay">
+		<app-loading hide-label />
+	</div>
 </div>

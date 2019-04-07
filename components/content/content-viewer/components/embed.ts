@@ -12,6 +12,9 @@ export class AppContentViewerEmbed extends Vue {
 	owner!: ContentOwner;
 
 	render(h: CreateElement) {
+		if (!this.data.attrs.type || !this.data.attrs.source) {
+			return null;
+		}
 		return h(AppContentEmbed, {
 			props: {
 				type: this.data.attrs.type,

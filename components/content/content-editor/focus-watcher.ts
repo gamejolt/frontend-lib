@@ -1,3 +1,5 @@
+import { isChildElement } from 'game-jolt-frontend-lib/utils/dom';
+
 /**
  * The purpose of this class is to watch the focus events regarding the content editor.
  * Editor controls only appear when the editor is focused.
@@ -70,23 +72,15 @@ export class FocusWatcher {
 	}
 
 	private focusInHandler(e: Event) {
-		if (e.target instanceof HTMLElement && this.isChildElement(e.target)) {
+		if (
+			e.target instanceof HTMLElement &&
+			!(e.target instanceof HTMLInputElement) && // child input elements don't count as editor focus
+			isChildElement(this._editorElement, e.target)
+		) {
 			this._hasFocus = true;
 		} else {
 			this._isSkipping = true;
 			this._hasFocus = false;
 		}
-	}
-
-	private isChildElement(e: HTMLElement): boolean {
-		do {
-			if (e === this._editorElement) {
-				return true;
-			}
-			if (e.parentElement !== null) {
-				e = e.parentElement;
-			}
-		} while (e.parentElement !== null);
-		return false;
 	}
 }
