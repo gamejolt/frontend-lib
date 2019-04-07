@@ -76,7 +76,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	get isEmpty() {
-		if (this.view) {
+		if (this.view instanceof EditorView) {
 			return this.view.state.doc.toString().trim() === 'doc(paragraph)';
 		}
 		return false;
@@ -84,6 +84,13 @@ export class AppContentEditor extends Vue implements ContentOwner {
 
 	get shouldShowPlaceholder() {
 		return this.placeholder.length > 0 && this.isEmpty;
+	}
+
+	get length() {
+		if (this.view instanceof EditorView) {
+			return ContentEditorService.getLength(this.view.state);
+		}
+		return 0;
 	}
 
 	// DEBUG
@@ -147,7 +154,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	private updateView(state: EditorState) {
-		if (this.view) {
+		if (this.view instanceof EditorView) {
 			this.view.destroy();
 		}
 
@@ -188,7 +195,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	public getContent() {
-		if (this.view) {
+		if (this.view instanceof EditorView) {
 			const data = ContentFormatAdapter.adaptOut(
 				this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
 				this.contentContext
@@ -202,7 +209,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		if (container.context !== this.contentContext) {
 			throw new Error('The passed in content context is invalid.');
 		}
-		if (this.schema) {
+		if (this.schema instanceof Schema) {
 			const jsonObj = ContentFormatAdapter.adaptIn(container);
 			const state = EditorState.create({
 				doc: Node.fromJSON(this.schema, jsonObj),

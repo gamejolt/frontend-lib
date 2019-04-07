@@ -153,4 +153,45 @@ export class ContentEditorService {
 		}
 		throw new Error('Node not found in document');
 	}
+
+	public static getLength(state: EditorState): number {
+		return this.getNodeLength(state.doc);
+	}
+
+	private static getNodeLength(node: Node): number {
+		let length = 0;
+
+		switch (node.type.name) {
+			case 'text':
+				if (node.text) {
+					length += node.text.length;
+				}
+				break;
+			case 'listItem': // Include a char for the 1./* at the beginning
+			case 'gjEmoji':
+			case 'hardBreak':
+			case 'hr':
+				length++;
+				break;
+			case 'embed':
+				length += node.attrs.source.length;
+				break;
+			case 'mediaItem':
+				length += node.attrs.caption.length + 1;
+				break;
+			case 'mention':
+				length += node.attrs.value.length;
+				break;
+			case 'tag':
+				length += node.attrs.text.length;
+				break;
+		}
+
+		for (let i = 0; i < node.childCount; i++) {
+			const child = node.child(i);
+			length += this.getNodeLength(child);
+		}
+
+		return length;
+	}
 }
