@@ -2,7 +2,7 @@ import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
-import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
+import buildEvents from 'game-jolt-frontend-lib/components/content/content-editor/events/build-events';
 import { FocusWatcher } from 'game-jolt-frontend-lib/components/content/content-editor/focus-watcher';
 import { createPlugins } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/plugins';
 import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
@@ -24,7 +24,6 @@ import { ContentOwner } from '../content-owner';
 import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
 import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
-import { dropEventHandler } from './events/drop-event-handler';
 import { buildNodeViews } from './node-views/node-view-builder';
 
 /**
@@ -52,7 +51,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(Boolean)
 	autofocus!: boolean;
 
-	@Prop({ type: Boolean, default: true })
+	@Prop({ type: Boolean, default: false })
 	disabled!: boolean;
 
 	view: EditorView | null = null;
@@ -178,13 +177,11 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		}
 
 		const nodeViews = buildNodeViews(this);
+		const eventHandlers = buildEvents(this.capabilities);
 		this.view = new EditorView(this.$refs.doc, {
 			state,
 			nodeViews,
-			handleDOMEvents: {
-				paste: pasteEventHandler,
-				drop: dropEventHandler,
-			},
+			handleDOMEvents: eventHandlers,
 			editable: () => !this.disabled,
 		});
 
