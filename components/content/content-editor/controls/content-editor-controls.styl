@@ -51,3 +51,8 @@
 	pressy()
 	background-color: transparent
 	border-style: none
+
+.btn-stagger
+	for i in 2..40
+		&:nth-child({i})
+			animation-delay: (20ms * i)
