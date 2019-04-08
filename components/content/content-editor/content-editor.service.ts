@@ -1,36 +1,19 @@
 import { imageMimeTypes, isImage } from 'game-jolt-frontend-lib/utils/image';
 import { uuidv4 } from 'game-jolt-frontend-lib/utils/uuid';
 import { Mark, Node, NodeType } from 'prosemirror-model';
-import { EditorState, Selection } from 'prosemirror-state';
+import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
 export class ContentEditorService {
 	/**
 	 * Ensures that the last node in the editor doc is a specific node.
 	 */
-	public static ensureEndNode(view: EditorView, nodeType: NodeType) {
-		if (view.state.doc.lastChild && view.state.doc.lastChild.type.name !== nodeType.name) {
+	public static ensureEndNode(tr: Transaction, nodeType: NodeType) {
+		if (tr.doc.lastChild && tr.doc.lastChild.type.name !== nodeType.name) {
 			const newNode = nodeType.create();
-			this.insertNodeAt(view, newNode, view.state.doc.nodeSize - 2);
+			return tr.insert(tr.doc.nodeSize - 2, newNode);
 		}
-	}
-
-	public static insertNode(view: EditorView, newNode: Node) {
-		const selection = view.state.selection;
-		const from = selection.from;
-		this.insertNodeAt(view, newNode, from - 1);
-	}
-
-	public static insertNodeAt(view: EditorView, newNode: Node, pos: number) {
-		const tr = view.state.tr;
-
-		tr.insert(pos, newNode);
-		const resolvedCursorPos = tr.doc.resolve(pos + 1);
-		const selection = Selection.near(resolvedCursorPos);
-		tr.setSelection(selection);
-
-		view.focus();
-		view.dispatch(tr);
+		return undefined;
 	}
 
 	public static getSelectedNode(state: EditorState) {
@@ -133,7 +116,9 @@ export class ContentEditorService {
 					src: reader.result,
 					uploadId: uuidv4(),
 				});
-				ContentEditorService.insertNode(view, newNode);
+				const tr = view.state.tr.replaceSelectionWith(newNode);
+				view.focus();
+				view.dispatch(tr);
 			};
 			reader.readAsDataURL(imageFile);
 			return true;

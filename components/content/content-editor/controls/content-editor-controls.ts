@@ -4,6 +4,7 @@ import { ContentTableService } from 'game-jolt-frontend-lib/components/content/c
 import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { Node, NodeType } from 'prosemirror-model';
+import { Selection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
@@ -81,7 +82,20 @@ export class AppContentEditorControls extends Vue {
 	}
 
 	private insertNewNode(newNode: Node) {
-		ContentEditorService.insertNode(this.view, newNode);
+		const tr = this.view.state.tr;
+		tr.replaceWith(
+			this.view.state.selection.from - 1,
+			this.view.state.selection.to + 1,
+			newNode
+		);
+
+		const resolvedCursorPos = tr.doc.resolve(this.view.state.selection.from);
+		const selection = Selection.near(resolvedCursorPos);
+		tr.setSelection(selection);
+		ContentEditorService.ensureEndNode(tr, this.view.state.schema.nodes.paragraph);
+
+		this.view.focus();
+		this.view.dispatch(tr);
 
 		this.collapsed = true;
 	}

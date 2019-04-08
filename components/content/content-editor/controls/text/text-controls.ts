@@ -223,6 +223,7 @@ export class AppContentEditorTextControls extends Vue {
 	}
 
 	onClickHeading(level: number) {
+		const tr = this.view.state.tr;
 		if (this.isInHeading) {
 			if (level === this.headingLevel) {
 				this.liftFromHeading();
@@ -235,9 +236,7 @@ export class AppContentEditorTextControls extends Vue {
 							this.view.state,
 							headingParentNode
 						);
-						const tr = this.view.state.tr;
 						tr.setNodeMarkup(nodePos, undefined, { level });
-						this.view.dispatch(tr);
 					}
 				}
 			}
@@ -245,7 +244,11 @@ export class AppContentEditorTextControls extends Vue {
 			this.doWrapInHeading(level);
 		}
 
-		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
+		ContentEditorService.ensureEndNode(tr, this.view.state.schema.nodes.paragraph);
+		if (tr.docChanged) {
+			this.view.dispatch(tr);
+		}
+
 		this.emitClicked();
 	}
 

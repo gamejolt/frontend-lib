@@ -10,8 +10,9 @@ import {
 	ContentFormatAdapter,
 	ProsemirrorEditorFormat,
 } from 'game-jolt-frontend-lib/components/content/content-format-adapter';
+import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
 import { DOMParser, Node, Schema } from 'prosemirror-model';
-import { EditorState, Plugin } from 'prosemirror-state';
+import { EditorState, Plugin, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
@@ -47,6 +48,9 @@ export class AppContentEditor extends Vue implements ContentOwner {
 
 	@Prop({ type: String, default: '' })
 	placeholder!: string;
+
+	@Prop(Boolean)
+	autofocus!: boolean;
 
 	view: EditorView | null = null;
 	stateCounter = 0;
@@ -145,6 +149,11 @@ export class AppContentEditor extends Vue implements ContentOwner {
 
 		this.focusWatcher = new FocusWatcher(this.$refs.editor, this.onFocusIn, this.onFocusOut);
 		this.focusWatcher.start();
+
+		if (this.view instanceof EditorView && this.autofocus && !Screen.isMobile) {
+			this.$refs.editor.focus();
+			this.view.focus();
+		}
 	}
 
 	beforeDestroy() {
@@ -169,7 +178,13 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		});
 
 		// Make sure we have a paragraph when loading in a new state
-		ContentEditorService.ensureEndNode(this.view, this.view.state.schema.nodes.paragraph);
+		const tr = ContentEditorService.ensureEndNode(
+			this.view.state.tr,
+			this.view.state.schema.nodes.paragraph
+		);
+		if (tr instanceof Transaction) {
+			this.view.dispatch(tr);
+		}
 	}
 
 	onEmojisHide() {
