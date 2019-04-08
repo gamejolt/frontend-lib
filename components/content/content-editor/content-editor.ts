@@ -1,6 +1,7 @@
 import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
+import { AppContentEditorControlsEmojiPanel } from 'game-jolt-frontend-lib/components/content/content-editor/controls/emoji/panel/panel';
 import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
 import buildEvents from 'game-jolt-frontend-lib/components/content/content-editor/events/build-events';
 import { FocusWatcher } from 'game-jolt-frontend-lib/components/content/content-editor/focus-watcher';
@@ -36,6 +37,7 @@ import { buildNodeViews } from './node-views/node-view-builder';
 		AppContentEditorTextControls,
 		AppContentEditorEmojiControls,
 		AppContentViewer,
+		AppContentEditorControlsEmojiPanel,
 	},
 })
 export class AppContentEditor extends Vue implements ContentOwner {
@@ -80,6 +82,16 @@ export class AppContentEditor extends Vue implements ContentOwner {
 			!this.shouldShowEmojiControls &&
 			this.capabilities.hasAnyText
 		);
+	}
+
+	get shouldShowEmojiPanel() {
+		return !this.disabled && this.capabilities.gjEmoji && this.isFocused;
+	}
+
+	get couldShowEmojiPanel() {
+		if (this.capabilities) {
+			return this.capabilities.gjEmoji;
+		}
 	}
 
 	get shouldShowEmojiControls() {
