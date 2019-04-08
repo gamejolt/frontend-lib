@@ -55,11 +55,7 @@ export class AppContentEditorControls extends Vue {
 							const start = this.view.coordsAtPos(state.selection.from);
 							const box = this.$refs.container.offsetParent.getBoundingClientRect();
 							this.top = start.top - box.top - 10 + 'px';
-							if (this.Screen.isXs) {
-								this.left = '32px';
-							} else {
-								this.left = '-32px';
-							}
+							this.left = '-32px';
 						}
 						break;
 					default:

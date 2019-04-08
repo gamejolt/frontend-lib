@@ -7,7 +7,7 @@ import { EditorState } from 'prosemirror-state';
 // It just links http:// and then however many domain parts, and optionally a "path" (`/` and then any non-whitespace).
 export function autolinkUrlRule() {
 	return new InputRule(
-		/(?:^|\W)https?:\/\/[a-z0-9-_]{2,}(?:\.[a-z0-9-_]{2,})+(?:\/\S*)?$/i,
+		/(?:^|\W)https?:\/\/[a-z0-9-_]{2,}(?:\.[a-z0-9-_]{2,})+(?:\/\S*)?\s?$/i,
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
 			if (match.length === 1) {
 				// We don't want to autolink inside code text.
@@ -22,7 +22,7 @@ export function autolinkUrlRule() {
 				// Removes all previous links on this text
 				tr.removeMark(start, end, state.schema.marks.link);
 
-				const href = match[0];
+				const href = match[0].trim();
 				const linkMark = (state.schema.marks.link as MarkType).create({
 					href,
 					title: href,
