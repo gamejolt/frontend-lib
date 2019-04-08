@@ -9,6 +9,7 @@
 			circle
 			overlay
 			icon="edit"
+			:disabled="isDisabled"
 			@click="onEditClicked"
 			v-app-tooltip="$gettext('Edit')"
 			/>
@@ -16,6 +17,7 @@
 			circle
 			overlay
 			icon="remove"
+			:disabled="isDisabled"
 			@click="onRemovedClicked"
 			v-app-tooltip="$gettext('Remove')"
 			/>

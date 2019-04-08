@@ -4,7 +4,7 @@ import { EditorView } from 'prosemirror-view';
 // Handles dropping image files into the content editor
 
 export function dropEventHandler(view: EditorView, e: Event) {
-	if (e.type === 'drop') {
+	if (!ContentEditorService.isDisabled(view) && e.type === 'drop') {
 		const dropEvent = e as DragEvent;
 		if (!!dropEvent.dataTransfer && dropEvent.dataTransfer.items) {
 			return ContentEditorService.handleImageUploads(view, dropEvent.dataTransfer.items);

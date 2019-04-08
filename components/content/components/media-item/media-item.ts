@@ -38,6 +38,9 @@ export class AppContentMediaItem extends Vue {
 	@Prop(Boolean)
 	isEditing!: boolean;
 
+	@Prop(Boolean)
+	isDisabled!: boolean;
+
 	mediaItem: MediaItem | null = null;
 	hasError = false;
 

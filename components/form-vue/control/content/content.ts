@@ -18,6 +18,9 @@ export class AppFormControlContent extends BaseFormControl {
 	@Prop({ type: String, default: '' })
 	placeholder!: string;
 
+	@Prop(Boolean)
+	disabled!: boolean;
+
 	controlVal = '';
 
 	$refs!: {

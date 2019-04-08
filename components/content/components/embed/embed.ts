@@ -37,6 +37,9 @@ export class AppContentEmbed extends Vue {
 	@Prop(Boolean)
 	isEditing!: boolean;
 
+	@Prop(Boolean)
+	isDisabled!: boolean;
+
 	@Prop(String)
 	inputValue!: string;
 

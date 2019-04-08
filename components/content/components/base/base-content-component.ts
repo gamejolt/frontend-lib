@@ -11,16 +11,23 @@ import { Component, Prop } from 'vue-property-decorator';
 })
 export class AppBaseContentComponent extends Vue {
 	@Prop(Boolean)
-	isEditing!: Boolean;
+	isEditing!: boolean;
 
 	@Prop(Boolean)
-	showEdit!: Boolean;
+	showEdit!: boolean;
+
+	@Prop(Boolean)
+	isDisabled!: boolean;
 
 	onRemovedClicked() {
-		this.$emit('removed');
+		if (!this.isDisabled) {
+			this.$emit('removed');
+		}
 	}
 
 	onEditClicked() {
-		this.$emit('edit');
+		if (!this.isDisabled) {
+			this.$emit('edit');
+		}
 	}
 }

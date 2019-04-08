@@ -1,3 +1,4 @@
+import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { isChildElement } from 'game-jolt-frontend-lib/utils/dom';
 import { Node } from 'prosemirror-model';
 import { store } from '../../../../../../app/store';
@@ -33,6 +34,7 @@ export class EmbedNodeView extends HydratableNodeView {
 				type: this.node.attrs.type,
 				source: this.node.attrs.source,
 				owner: this.owner,
+				isDisabled: ContentEditorService.isDisabled(this.view),
 			},
 		});
 		this.mountVue(this.vueComponent);

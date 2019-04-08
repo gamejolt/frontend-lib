@@ -179,4 +179,8 @@ export class ContentEditorService {
 
 		return length;
 	}
+
+	public static isDisabled(view: EditorView) {
+		return !!view.props.editable && !view.props.editable(view.state);
+	}
 }

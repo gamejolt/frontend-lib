@@ -1,6 +1,7 @@
 <app-base-content-component
 	v-if="hasContent"
 	:is-editing="isEditing"
+	:is-disabled="isDisabled"
 	@removed="onRemoved"
 	class="embed-main"
 	>
@@ -68,7 +69,7 @@
 		class="-input"
 		type="text"
 		:value="source"
-		:disabled="loading"
+		:disabled="loading || isDisabled"
 		@input="onInput"
 		@keydown="onKeydown"
 		:placeholder="' ' + $gettext(`Paste a link to embed content from Game Jolt or an external site (e.g. YouTube).`)"

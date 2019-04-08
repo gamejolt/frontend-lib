@@ -52,6 +52,9 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(Boolean)
 	autofocus!: boolean;
 
+	@Prop({ type: Boolean, default: true })
+	disabled!: boolean;
+
 	view: EditorView | null = null;
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
@@ -68,15 +71,22 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	};
 
 	get shouldShowControls() {
-		return this.isFocused && this.capabilities.hasAny;
+		return !this.disabled && this.isFocused && this.capabilities.hasAny;
 	}
 
 	get shouldShowTextControls() {
-		return this.isFocused && !this.shouldShowEmojiControls && this.capabilities.hasAnyText;
+		return (
+			!this.disabled &&
+			this.isFocused &&
+			!this.shouldShowEmojiControls &&
+			this.capabilities.hasAnyText
+		);
 	}
 
 	get shouldShowEmojiControls() {
-		return this.isFocused && this.capabilities.gjEmoji && this.emojiPanelVisible;
+		return (
+			!this.disabled && this.isFocused && this.capabilities.gjEmoji && this.emojiPanelVisible
+		);
 	}
 
 	get isEmpty() {
@@ -175,15 +185,18 @@ export class AppContentEditor extends Vue implements ContentOwner {
 				paste: pasteEventHandler,
 				drop: dropEventHandler,
 			},
+			editable: () => !this.disabled,
 		});
 
 		// Make sure we have a paragraph when loading in a new state
-		const tr = ContentEditorService.ensureEndNode(
-			this.view.state.tr,
-			this.view.state.schema.nodes.paragraph
-		);
-		if (tr instanceof Transaction) {
-			this.view.dispatch(tr);
+		if (!this.disabled || this.view.state.doc.childCount === 0) {
+			const tr = ContentEditorService.ensureEndNode(
+				this.view.state.tr,
+				this.view.state.schema.nodes.paragraph
+			);
+			if (tr instanceof Transaction) {
+				this.view.dispatch(tr);
+			}
 		}
 	}
 

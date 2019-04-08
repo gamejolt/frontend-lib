@@ -1,3 +1,4 @@
+import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { AppContentMediaItem } from '../../components/media-item/media-item';
 import { HydratableNodeView } from './hydratable';
 
@@ -12,6 +13,7 @@ export class MediaItemNodeView extends HydratableNodeView {
 				align: this.node.attrs.align,
 				href: this.node.attrs.href,
 				owner: this.owner,
+				isDisabled: ContentEditorService.isDisabled(this.view),
 			},
 		});
 		this.mountVue(vm);
