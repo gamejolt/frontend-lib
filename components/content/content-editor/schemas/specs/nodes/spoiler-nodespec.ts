@@ -2,7 +2,7 @@ import { Node, NodeSpec } from 'prosemirror-model';
 
 export const spoiler = {
 	group: 'block',
-	content: 'block*',
+	content: 'block+',
 	defining: true,
 	toDOM: (_: Node) => [
 		'blockquote',
