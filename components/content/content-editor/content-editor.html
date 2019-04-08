@@ -21,8 +21,10 @@
 		<transition name="fade">
 			<app-content-editor-controls-emoji-panel
 				v-if="shouldShowEmojiPanel"
+				ref="emojiPanel"
 				:view="view"
 				:state-counter="stateCounter"
+				@visibilityChanged="onEmojiPanelVisibilityChanged"
 				/>
 		</transition>
 	</div>
@@ -44,12 +46,6 @@
 			@click="onTextControlClicked"
 			/>
 	</transition>
-	<app-content-editor-emoji-controls
-		v-if="shouldShowEmojiControls"
-		:view="view"
-		:state-counter="stateCounter"
-		@hide="onEmojisHide"
-		/>
 
 	<app-content-viewer
 		v-if="showViewer"

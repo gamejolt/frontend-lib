@@ -20,8 +20,8 @@ export class AppContentEditorControlsEmojiPanel extends Vue {
 
 	top = '0px';
 	emoji = 'huh'; // gets set to a random one at mounted
-	panelVisible = false;
 	visible = false;
+	panelVisible = false;
 
 	clickedWithPanelVisible = false;
 
@@ -40,6 +40,13 @@ export class AppContentEditorControlsEmojiPanel extends Vue {
 
 	get emojis() {
 		return GJ_EMOJIS;
+	}
+
+	private setPanelVisibility(visible: boolean) {
+		if (this.panelVisible !== visible) {
+			this.panelVisible = visible;
+			this.$emit('visibilityChanged', visible);
+		}
 	}
 
 	@Watch('stateCounter')
@@ -79,22 +86,20 @@ export class AppContentEditorControlsEmojiPanel extends Vue {
 		this.clickedWithPanelVisible = this.panelVisible;
 	}
 
-	async onButtonClick() {
+	onButtonClick() {
 		if (this.clickedWithPanelVisible) {
-			this.panelVisible = false;
+			this.setPanelVisibility(false);
 		} else {
-			this.panelVisible = true;
-			await Vue.nextTick();
-			this.$refs.panel.focus();
+			this.show();
 		}
 	}
 
 	onPanelFocus() {
-		this.panelVisible = true;
+		this.setPanelVisibility(true);
 	}
 
 	onPanelBlur() {
-		this.panelVisible = false;
+		this.setPanelVisibility(false);
 	}
 
 	private canInsertEmoji() {
@@ -113,5 +118,11 @@ export class AppContentEditorControlsEmojiPanel extends Vue {
 			this.view.dispatch(tr);
 			this.view.focus();
 		}
+	}
+
+	public async show() {
+		this.setPanelVisibility(true);
+		await Vue.nextTick();
+		this.$refs.panel.focus();
 	}
 }

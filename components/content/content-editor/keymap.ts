@@ -25,7 +25,7 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 		'Mod-e': () => {
 			if (editor.capabilities.gjEmoji) {
 				// Show emoji panel
-				editor.emojiPanelVisible = true;
+				editor.showEmojiPanel();
 			}
 			return true;
 		},

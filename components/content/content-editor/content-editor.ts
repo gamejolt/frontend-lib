@@ -24,7 +24,6 @@ import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
 import { AppContentViewer } from '../content-viewer/content-viewer';
 import { AppContentEditorControls } from './controls/content-editor-controls';
-import { AppContentEditorEmojiControls } from './controls/emoji/emoji-controls';
 import { buildNodeViews } from './node-views/node-view-builder';
 
 /**
@@ -35,7 +34,6 @@ import { buildNodeViews } from './node-views/node-view-builder';
 	components: {
 		AppContentEditorControls,
 		AppContentEditorTextControls,
-		AppContentEditorEmojiControls,
 		AppContentViewer,
 		AppContentEditorControlsEmojiPanel,
 	},
@@ -59,16 +57,17 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	view: EditorView | null = null;
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
-	emojiPanelVisible = false;
 	hydrator: ContentHydrator = new ContentHydrator();
 	schema: Schema | null = null;
 	plugins: Plugin[] | null = null;
 	isFocused = false;
 	focusWatcher: FocusWatcher | null = null;
+	emojiPanelVisible = false;
 
 	$refs!: {
 		editor: HTMLElement;
 		doc: HTMLElement;
+		emojiPanel: AppContentEditorControlsEmojiPanel;
 	};
 
 	get shouldShowControls() {
@@ -79,8 +78,8 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		return (
 			!this.disabled &&
 			this.isFocused &&
-			!this.shouldShowEmojiControls &&
-			this.capabilities.hasAnyText
+			this.capabilities.hasAnyText &&
+			!this.emojiPanelVisible
 		);
 	}
 
@@ -92,12 +91,6 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		if (this.capabilities) {
 			return this.capabilities.gjEmoji;
 		}
-	}
-
-	get shouldShowEmojiControls() {
-		return (
-			!this.disabled && this.isFocused && this.capabilities.gjEmoji && this.emojiPanelVisible
-		);
 	}
 
 	get isEmpty() {
@@ -209,28 +202,6 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		}
 	}
 
-	onEmojisHide() {
-		this.emojiPanelVisible = false;
-	}
-
-	async onTextControlClicked() {
-		// When a text control got clicked, store the previous selection,
-		// focus the editor and then apply the selection.
-		// We do this so the focused text doesn't visibly lose focus after the text control
-		// button assumed focus.
-		const prevSelection = this.view!.state.selection;
-
-		this.$refs.editor.focus();
-
-		const tr = this.view!.state.tr;
-		tr.setSelection(prevSelection);
-		this.view!.dispatch(tr);
-
-		// Wait a tick for the editor's doc to update, then force an update to reposition the controls.
-		await Vue.nextTick();
-		this.stateCounter++;
-	}
-
 	public getContent() {
 		if (this.view instanceof EditorView) {
 			const data = ContentFormatAdapter.adaptOut(
@@ -275,5 +246,41 @@ export class AppContentEditor extends Vue implements ContentOwner {
 
 	private onFocusOut() {
 		this.isFocused = false;
+	}
+
+	private async highlightCurrentSelection() {
+		// When an outside control got clicked, store the previous selection,
+		// focus the editor and then apply the selection.
+		// We do this so the focused text doesn't visibly lose focus after the outside control
+		// button assumed focus.
+
+		const prevSelection = this.view!.state.selection;
+
+		this.$refs.editor.focus();
+
+		const tr = this.view!.state.tr;
+		tr.setSelection(prevSelection);
+		this.view!.dispatch(tr);
+
+		// Wait a tick for the editor's doc to update, then force an update to reposition the controls.
+		await Vue.nextTick();
+		this.stateCounter++;
+	}
+
+	onTextControlClicked() {
+		this.highlightCurrentSelection();
+	}
+
+	public showEmojiPanel() {
+		if (this.$refs.emojiPanel instanceof AppContentEditorControlsEmojiPanel) {
+			this.$refs.emojiPanel.show();
+		}
+	}
+
+	onEmojiPanelVisibilityChanged(visible: boolean) {
+		this.emojiPanelVisible = visible;
+		if (this.emojiPanelVisible) {
+			this.highlightCurrentSelection();
+		}
 	}
 }
