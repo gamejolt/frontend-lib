@@ -63,6 +63,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	isFocused = false;
 	focusWatcher: FocusWatcher | null = null;
 	emojiPanelVisible = false;
+	controlsCollapsed = true;
 
 	$refs!: {
 		editor: HTMLElement;
@@ -101,7 +102,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	get shouldShowPlaceholder() {
-		return this.placeholder.length > 0 && this.isEmpty;
+		return this.placeholder.length > 0 && this.isEmpty && this.controlsCollapsed;
 	}
 
 	get length() {
@@ -282,5 +283,9 @@ export class AppContentEditor extends Vue implements ContentOwner {
 		if (this.emojiPanelVisible) {
 			this.highlightCurrentSelection();
 		}
+	}
+
+	onControlsCollapsedChanged(collapsed: boolean) {
+		this.controlsCollapsed = collapsed;
 	}
 }

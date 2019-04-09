@@ -12,12 +12,14 @@
 		}"
 		>
 		<div class="-doc" ref="doc" />
-		<span
-			v-if="shouldShowPlaceholder"
-			class="content-placeholder text-muted"
-			>
-			{{placeholder}}
-		</span>
+		<transition name="fade">
+			<span
+				v-if="shouldShowPlaceholder"
+				class="content-placeholder text-muted"
+				>
+				{{placeholder}}
+			</span>
+		</transition>
 		<transition name="fade">
 			<app-content-editor-controls-emoji-panel
 				v-if="shouldShowEmojiPanel"
@@ -35,6 +37,7 @@
 			:capabilities="capabilities"
 			:view="view"
 			:state-counter="stateCounter"
+			@collapsedChanged="onControlsCollapsedChanged"
 			/>
 	</transition>
 	<transition name="fade">

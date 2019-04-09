@@ -46,35 +46,28 @@ export class AppContentEditorControls extends Vue {
 			const state = this.view.state;
 			const node = ContentEditorService.getSelectedNode(this.view.state);
 
-			if (node !== null) {
-				switch (node.type.name) {
-					case 'paragraph':
-						if (state.selection.empty) {
-							this.visible = true;
+			if (node !== null && node.type.name === 'paragraph' && state.selection.empty) {
+				this.visible = true;
 
-							const start = this.view.coordsAtPos(state.selection.from);
-							const box = this.$refs.container.offsetParent.getBoundingClientRect();
-							this.top = start.top - box.top - 10 + 'px';
-							this.left = '-32px';
-						}
-						break;
-					default:
-						this.visible = false;
-						this.collapsed = true;
-						break;
-				}
-			} else {
-				this.visible = false;
-				this.collapsed = true;
+				const start = this.view.coordsAtPos(state.selection.from);
+				const box = this.$refs.container.offsetParent.getBoundingClientRect();
+				this.top = start.top - box.top - 10 + 'px';
+				this.left = '-32px';
+
+				return;
 			}
-		} else {
-			this.visible = false;
-			this.collapsed = true;
 		}
+		this.visible = false;
+		this.setCollapsed(true);
+	}
+
+	private setCollapsed(value: boolean) {
+		this.collapsed = value;
+		this.$emit('collapsedChanged', value);
 	}
 
 	onClickExpand() {
-		this.collapsed = !this.collapsed;
+		this.setCollapsed(!this.collapsed);
 	}
 
 	private insertNewNode(newNode: Node) {
@@ -93,7 +86,7 @@ export class AppContentEditorControls extends Vue {
 		this.view.focus();
 		this.view.dispatch(tr);
 
-		this.collapsed = true;
+		this.setCollapsed(true);
 	}
 
 	onClickMedia() {
