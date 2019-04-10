@@ -136,4 +136,4 @@
 @require '../auth-form'
 </style>
 
-<script lang="ts" src="./login-form" />
+<script lang="ts" src="./login-form"></script>

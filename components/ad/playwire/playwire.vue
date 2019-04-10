@@ -7,4 +7,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./playwire" />
+<script lang="ts" src="./playwire"></script>

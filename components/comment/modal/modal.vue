@@ -45,4 +45,4 @@
 	overflow: hidden
 </style>
 
-<script lang="ts" src="./modal" />
+<script lang="ts" src="./modal"></script>

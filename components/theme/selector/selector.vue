@@ -40,4 +40,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./selector" />
+<script lang="ts" src="./selector"></script>

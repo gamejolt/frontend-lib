@@ -9,4 +9,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./placement" />
+<script lang="ts" src="./placement"></script>

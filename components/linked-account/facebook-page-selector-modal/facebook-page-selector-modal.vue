@@ -51,4 +51,4 @@
 	</app-modal>
 </template>
 
-<script lang="ts" src="./facebook-page-selector-modal" />
+<script lang="ts" src="./facebook-page-selector-modal"></script>

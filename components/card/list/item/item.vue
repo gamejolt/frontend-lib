@@ -24,4 +24,4 @@
 
 <style lang="stylus" src="../list-common.styl" scoped />
 
-<script lang="ts" src="./item" />
+<script lang="ts" src="./item"></script>

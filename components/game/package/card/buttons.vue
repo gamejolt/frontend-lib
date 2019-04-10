@@ -48,4 +48,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./buttons" />
+<script lang="ts" src="./buttons"></script>

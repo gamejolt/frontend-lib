@@ -67,4 +67,4 @@
 	margin-bottom: $line-height-computed !important
 </style>
 
-<script lang="ts" src="./content" />
+<script lang="ts" src="./content"></script>

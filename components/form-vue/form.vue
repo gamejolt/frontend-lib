@@ -12,4 +12,4 @@
 	</form>
 </template>
 
-<script lang="ts" src="./form" />
+<script lang="ts" src="./form"></script>

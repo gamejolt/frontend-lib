@@ -45,4 +45,4 @@
 	z-index: 2
 </style>
 
-<script lang="ts" src="./bubble" />
+<script lang="ts" src="./bubble"></script>

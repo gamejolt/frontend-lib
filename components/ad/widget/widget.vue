@@ -34,4 +34,4 @@
 		min-height: 250px
 </style>
 
-<script lang="ts" src="./widget" />
+<script lang="ts" src="./widget"></script>

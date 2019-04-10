@@ -16,4 +16,4 @@
 
 <style lang="stylus" src="../list-common.styl" scoped />
 
-<script lang="ts" src="./add" />
+<script lang="ts" src="./add"></script>

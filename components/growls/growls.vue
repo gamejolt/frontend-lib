@@ -19,4 +19,4 @@
 		width: $growl-width
 </style>
 
-<script lang="ts" src="./growls" />
+<script lang="ts" src="./growls"></script>

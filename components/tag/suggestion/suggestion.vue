@@ -21,4 +21,4 @@
 	margin-right: 4px
 </style>
 
-<script lang="ts" src="./suggestion" />
+<script lang="ts" src="./suggestion"></script>

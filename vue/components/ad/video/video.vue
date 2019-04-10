@@ -67,4 +67,4 @@
 		z-index: 2
 </style>
 
-<script lang="ts" src="./video" />
+<script lang="ts" src="./video"></script>

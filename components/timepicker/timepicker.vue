@@ -67,6 +67,6 @@
 	</table>
 </template>
 
-<style lang="stylus" src="./timepicker.styl" scoped />
+<style lang="stylus" src="./timepicker.styl" scoped></style>
 
-<script lang="ts" src="./timepicker" />
+<script lang="ts" src="./timepicker"></script>

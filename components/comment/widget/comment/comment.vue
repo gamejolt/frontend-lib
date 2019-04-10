@@ -134,4 +134,4 @@
 	top: -100px
 </style>
 
-<script lang="ts" src="./comment" />
+<script lang="ts" src="./comment"></script>

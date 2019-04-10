@@ -11,4 +11,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./add" />
+<script lang="ts" src="./add"></script>

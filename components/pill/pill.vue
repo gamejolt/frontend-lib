@@ -45,4 +45,4 @@
 	height: 18px
 </style>
 
-<script lang="ts" src="./pill" />
+<script lang="ts" src="./pill"></script>

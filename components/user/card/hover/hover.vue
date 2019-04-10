@@ -14,4 +14,4 @@
 	margin: 0 !important
 </style>
 
-<script lang="ts" src="./hover" />
+<script lang="ts" src="./hover"></script>

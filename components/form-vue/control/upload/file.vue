@@ -9,4 +9,4 @@
 	/>
 </template>
 
-<script lang="ts" src="./file" />
+<script lang="ts" src="./file"></script>

@@ -12,4 +12,4 @@
 	/>
 </template>
 
-<script lang="ts" src="./control" />
+<script lang="ts" src="./control"></script>

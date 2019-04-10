@@ -20,4 +20,4 @@
 	</select>
 </template>
 
-<script lang="ts" src="./select" />
+<script lang="ts" src="./select"></script>

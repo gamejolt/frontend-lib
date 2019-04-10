@@ -14,4 +14,4 @@
 	position: relative
 </style>
 
-<script lang="ts" src="./user-avatar" />
+<script lang="ts" src="./user-avatar"></script>

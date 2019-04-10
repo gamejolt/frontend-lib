@@ -9,4 +9,4 @@ img
 	max-width: 100%
 </style>
 
-<script lang="ts" src="./crop" />
+<script lang="ts" src="./crop"></script>

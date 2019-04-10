@@ -38,4 +38,4 @@
 	margin-bottom: 10px
 </style>
 
-<script lang="ts" src="./add" />
+<script lang="ts" src="./add"></script>

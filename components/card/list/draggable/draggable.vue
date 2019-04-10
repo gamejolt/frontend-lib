@@ -4,4 +4,4 @@
 	</draggable>
 </template>
 
-<script lang="ts" src="./draggable" />
+<script lang="ts" src="./draggable"></script>

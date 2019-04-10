@@ -25,4 +25,4 @@
 	</span>
 </template>
 
-<script lang="ts" src="./like-widget" />
+<script lang="ts" src="./like-widget"></script>

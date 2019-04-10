@@ -35,4 +35,4 @@
 			margin-top: $line-height-computed
 </style>
 
-<script lang="ts" src="./datetime-picker" />
+<script lang="ts" src="./datetime-picker"></script>

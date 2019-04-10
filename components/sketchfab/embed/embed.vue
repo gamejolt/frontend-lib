@@ -17,4 +17,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./embed" />
+<script lang="ts" src="./embed"></script>

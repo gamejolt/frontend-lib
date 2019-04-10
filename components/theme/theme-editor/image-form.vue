@@ -16,4 +16,4 @@
 	</app-form>
 </template>
 
-<script lang="ts" src="./image-form" />
+<script lang="ts" src="./image-form"></script>

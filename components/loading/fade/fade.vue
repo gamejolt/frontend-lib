@@ -29,4 +29,4 @@
 			pointer-events: none
 </style>
 
-<script lang="ts" src="./fade" />
+<script lang="ts" src="./fade"></script>

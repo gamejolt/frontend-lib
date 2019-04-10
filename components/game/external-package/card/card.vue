@@ -61,4 +61,4 @@
 			margin-left: 5px
 </style>
 
-<script lang="ts" src="./card" />
+<script lang="ts" src="./card"></script>

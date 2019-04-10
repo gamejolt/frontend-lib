@@ -115,4 +115,4 @@
 		margin-bottom: 0
 </style>
 
-<script lang="ts" src="./modal" />
+<script lang="ts" src="./modal"></script>

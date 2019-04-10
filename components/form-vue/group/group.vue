@@ -13,4 +13,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./group" />
+<script lang="ts" src="./group"></script>

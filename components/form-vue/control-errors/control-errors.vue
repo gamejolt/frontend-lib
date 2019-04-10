@@ -12,4 +12,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./control-errors" />
+<script lang="ts" src="./control-errors"></script>

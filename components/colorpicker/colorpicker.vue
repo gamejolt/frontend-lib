@@ -70,4 +70,4 @@
 		box-shadow: none
 </style>
 
-<script lang="ts" src="./colorpicker" />
+<script lang="ts" src="./colorpicker"></script>

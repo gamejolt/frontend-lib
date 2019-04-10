@@ -15,4 +15,4 @@
 	/>
 </template>
 
-<script lang="ts" src="./crop" />
+<script lang="ts" src="./crop"></script>

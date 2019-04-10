@@ -59,4 +59,4 @@
 	flex: auto
 </style>
 
-<script lang="ts" src="./popper" />
+<script lang="ts" src="./popper"></script>

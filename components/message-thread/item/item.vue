@@ -110,4 +110,4 @@
 			vertical-align: middle
 </style>
 
-<script lang="ts" src="./item" />
+<script lang="ts" src="./item"></script>

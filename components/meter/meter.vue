@@ -61,4 +61,4 @@ for i in 1 .. $meter-blip-count
 				height: 10px
 </style>
 
-<script lang="ts" src="./meter" />
+<script lang="ts" src="./meter"></script>

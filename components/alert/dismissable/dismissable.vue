@@ -12,4 +12,4 @@
 	</app-expand>
 </template>
 
-<script lang="ts" src="./dismissable" />
+<script lang="ts" src="./dismissable"></script>

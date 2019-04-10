@@ -4,4 +4,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./widget-game-media" />
+<script lang="ts" src="./widget-game-media"></script>

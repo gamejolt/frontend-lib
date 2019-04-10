@@ -24,4 +24,4 @@
 		margin-bottom: $line-height-computed
 </style>
 
-<script lang="ts" src="./widget-game-packages" />
+<script lang="ts" src="./widget-game-packages"></script>

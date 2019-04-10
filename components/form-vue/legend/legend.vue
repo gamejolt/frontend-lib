@@ -56,4 +56,4 @@
 	margin-left: 20px
 </style>
 
-<script lang="ts" src="./legend" />
+<script lang="ts" src="./legend"></script>

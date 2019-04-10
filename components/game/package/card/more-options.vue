@@ -54,4 +54,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./more-options" />
+<script lang="ts" src="./more-options"></script>

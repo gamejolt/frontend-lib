@@ -156,4 +156,4 @@
 			float: right
 </style>
 
-<script lang="ts" src="./pagination" />
+<script lang="ts" src="./pagination"></script>

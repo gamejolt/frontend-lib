@@ -34,4 +34,4 @@
 	text-align: center
 </style>
 
-<script lang="ts" src="./media-bar" />
+<script lang="ts" src="./media-bar"></script>

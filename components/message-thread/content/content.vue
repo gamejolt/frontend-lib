@@ -4,4 +4,4 @@
 	</app-timeline-list-item>
 </template>
 
-<script lang="ts" src="./content" />
+<script lang="ts" src="./content"></script>

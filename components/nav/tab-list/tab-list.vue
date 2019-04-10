@@ -32,6 +32,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./tab-list.styl" />
+<style lang="stylus" src="./tab-list.styl"></style>
 
-<script lang="ts" src="./tab-list" />
+<script lang="ts" src="./tab-list"></script>

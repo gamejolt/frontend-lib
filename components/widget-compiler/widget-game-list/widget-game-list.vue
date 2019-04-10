@@ -40,4 +40,4 @@
 	font-size: 1.1em
 </style>
 
-<script lang="ts" src="./widget-game-list" />
+<script lang="ts" src="./widget-game-list"></script>

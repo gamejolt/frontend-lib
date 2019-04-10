@@ -15,4 +15,4 @@
 	</app-form>
 </template>
 
-<script lang="ts" src="./editor-form" />
+<script lang="ts" src="./editor-form"></script>

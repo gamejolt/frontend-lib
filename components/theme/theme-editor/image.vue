@@ -35,4 +35,4 @@
 		margin-bottom: $line-height-computed
 </style>
 
-<script lang="ts" src="./image" />
+<script lang="ts" src="./image"></script>

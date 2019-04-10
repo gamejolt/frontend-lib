@@ -17,4 +17,4 @@
 		height: 0
 </style>
 
-<script lang="ts" src="./expand" />
+<script lang="ts" src="./expand"></script>

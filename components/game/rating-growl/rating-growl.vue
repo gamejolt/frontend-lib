@@ -20,4 +20,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./rating-growl" />
+<script lang="ts" src="./rating-growl"></script>

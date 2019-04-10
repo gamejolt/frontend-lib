@@ -39,4 +39,4 @@
 	</section>
 </template>
 
-<script lang="ts" src="./bar-styleguide" />
+<script lang="ts" src="./bar-styleguide"></script>

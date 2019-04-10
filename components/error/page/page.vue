@@ -31,4 +31,4 @@
 			margin: 0 auto
 </style>
 
-<script lang="ts" src="./page" />
+<script lang="ts" src="./page"></script>

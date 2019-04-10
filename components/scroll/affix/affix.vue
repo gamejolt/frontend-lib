@@ -24,4 +24,4 @@
 	bottom: 0
 </style>
 
-<script lang="ts" src="./affix" />
+<script lang="ts" src="./affix"></script>

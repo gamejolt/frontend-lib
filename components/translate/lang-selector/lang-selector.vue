@@ -25,4 +25,4 @@
 		margin: 0
 </style>
 
-<script lang="ts" src="./lang-selector" />
+<script lang="ts" src="./lang-selector"></script>

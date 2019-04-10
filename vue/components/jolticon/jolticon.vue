@@ -10,4 +10,4 @@
 	></span>
 </template>
 
-<script lang="ts" src="./jolticon" />
+<script lang="ts" src="./jolticon"></script>

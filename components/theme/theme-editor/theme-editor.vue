@@ -138,6 +138,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./theme-editor.styl" scoped />
+<style lang="stylus" src="./theme-editor.styl" scoped></style>
 
-<script lang="ts" src="./theme-editor" />
+<script lang="ts" src="./theme-editor"></script>

@@ -21,4 +21,4 @@
 	</app-button>
 </template>
 
-<script lang="ts" src="./join-widget" />
+<script lang="ts" src="./join-widget"></script>

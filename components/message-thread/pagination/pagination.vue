@@ -15,4 +15,4 @@
 	</app-timeline-list-item>
 </template>
 
-<script lang="ts" src="./pagination" />
+<script lang="ts" src="./pagination"></script>

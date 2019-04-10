@@ -90,4 +90,4 @@
 	margin-bottom: 0
 </style>
 
-<script lang="ts" src="./upload" />
+<script lang="ts" src="./upload"></script>

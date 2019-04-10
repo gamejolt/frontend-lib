@@ -15,4 +15,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./page-offline" />
+<script lang="ts" src="./page-offline"></script>

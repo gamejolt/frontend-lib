@@ -30,4 +30,4 @@
 		width: 0
 </style>
 
-<script lang="ts" src="./button" />
+<script lang="ts" src="./button"></script>

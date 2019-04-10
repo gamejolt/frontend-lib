@@ -18,4 +18,4 @@
 		img-circle()
 </style>
 
-<script lang="ts" src="./img" />
+<script lang="ts" src="./img"></script>

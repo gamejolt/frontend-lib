@@ -58,4 +58,4 @@
 	height: 100%
 </style>
 
-<script lang="ts" src="./play-modal" />
+<script lang="ts" src="./play-modal"></script>

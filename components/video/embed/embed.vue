@@ -37,4 +37,4 @@
 		display: block
 </style>
 
-<script lang="ts" src="./embed" />
+<script lang="ts" src="./embed"></script>

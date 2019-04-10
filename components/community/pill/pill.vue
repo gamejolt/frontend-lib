@@ -6,4 +6,4 @@
 	</app-pill>
 </template>
 
-<script lang="ts" src="./pill" />
+<script lang="ts" src="./pill"></script>

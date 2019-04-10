@@ -56,4 +56,4 @@
 	</table>
 </template>
 
-<script lang="ts" src="./month" />
+<script lang="ts" src="./month"></script>

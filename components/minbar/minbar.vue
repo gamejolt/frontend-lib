@@ -63,4 +63,4 @@
 		max-height: 50px
 </style>
 
-<script lang="ts" src="./minbar" />
+<script lang="ts" src="./minbar"></script>

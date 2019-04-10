@@ -26,4 +26,4 @@
 @require './pie'
 </style>
 
-<script lang="ts" src="./graph" />
+<script lang="ts" src="./graph"></script>

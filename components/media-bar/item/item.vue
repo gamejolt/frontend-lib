@@ -23,6 +23,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./item.styl" scoped />
+<style lang="stylus" src="./item.styl" scoped></style>
 
-<script lang="ts" src="./item" />
+<script lang="ts" src="./item"></script>

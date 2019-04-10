@@ -50,4 +50,4 @@
 	</app-modal>
 </template>
 
-<script lang="ts" src="./tumblr-blog-selector-modal" />
+<script lang="ts" src="./tumblr-blog-selector-modal"></script>

@@ -78,4 +78,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./widget" />
+<script lang="ts" src="./widget"></script>

@@ -13,4 +13,4 @@
 	display: none
 </style>
 
-<script lang="ts" src="./message-thread" />
+<script lang="ts" src="./message-thread"></script>

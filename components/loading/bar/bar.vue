@@ -26,4 +26,4 @@
 		will-change: width
 </style>
 
-<script lang="ts" src="./bar" />
+<script lang="ts" src="./bar"></script>

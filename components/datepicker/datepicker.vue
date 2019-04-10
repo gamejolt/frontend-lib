@@ -11,4 +11,4 @@
 @require './datepicker-tables'
 </style>
 
-<script lang="ts" src="./datepicker" />
+<script lang="ts" src="./datepicker"></script>

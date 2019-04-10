@@ -15,4 +15,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./card" />
+<script lang="ts" src="./card"></script>

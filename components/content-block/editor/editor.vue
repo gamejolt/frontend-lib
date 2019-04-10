@@ -80,4 +80,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./editor" />
+<script lang="ts" src="./editor"></script>

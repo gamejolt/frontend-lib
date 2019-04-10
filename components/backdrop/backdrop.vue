@@ -33,4 +33,4 @@
 		opacity: 1
 </style>
 
-<script lang="ts" src="./backdrop" />
+<script lang="ts" src="./backdrop"></script>

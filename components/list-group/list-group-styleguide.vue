@@ -253,4 +253,4 @@
 	</section>
 </template>
 
-<script lang="ts" src="./list-group-styleguide" />
+<script lang="ts" src="./list-group-styleguide"></script>

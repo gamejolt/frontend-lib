@@ -28,4 +28,4 @@
 	</section>
 </template>
 
-<script lang="ts" src="./jolticons-styleguide" />
+<script lang="ts" src="./jolticons-styleguide"></script>

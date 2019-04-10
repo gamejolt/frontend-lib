@@ -12,4 +12,4 @@
 	z-index: $zindex-modal
 </style>
 
-<script lang="ts" src="./modals" />
+<script lang="ts" src="./modals"></script>

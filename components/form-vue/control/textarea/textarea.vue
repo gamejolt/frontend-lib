@@ -12,4 +12,4 @@
 	></textarea>
 </template>
 
-<script lang="ts" src="./textarea" />
+<script lang="ts" src="./textarea"></script>

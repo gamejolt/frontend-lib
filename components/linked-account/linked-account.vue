@@ -100,4 +100,4 @@
 		font-weight: bold
 </style>
 
-<script lang="ts" src="./linked-account" />
+<script lang="ts" src="./linked-account"></script>

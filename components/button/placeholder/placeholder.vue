@@ -25,4 +25,4 @@
 		width: 100%
 </style>
 
-<script lang="ts" src="./placeholder" />
+<script lang="ts" src="./placeholder"></script>

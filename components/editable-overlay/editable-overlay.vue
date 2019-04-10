@@ -55,4 +55,4 @@
 		display: block
 </style>
 
-<script lang="ts" src="./editable-overlay" />
+<script lang="ts" src="./editable-overlay"></script>

@@ -59,6 +59,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./theme.styl" scoped />
+<style lang="stylus" src="./theme.styl" scoped></style>
 
-<script lang="ts" src="./theme" />
+<script lang="ts" src="./theme"></script>

@@ -69,4 +69,4 @@ $-thumb-border-radius = $-track-width
 	display: none
 </style>
 
-<script lang="ts" src="./scroller" />
+<script lang="ts" src="./scroller"></script>

@@ -67,4 +67,4 @@
 	</table>
 </template>
 
-<script lang="ts" src="./day" />
+<script lang="ts" src="./day"></script>

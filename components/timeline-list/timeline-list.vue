@@ -4,4 +4,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./timeline-list" />
+<script lang="ts" src="./timeline-list"></script>

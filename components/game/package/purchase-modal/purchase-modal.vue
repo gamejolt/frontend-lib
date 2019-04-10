@@ -28,4 +28,4 @@
 	</app-modal>
 </template>
 
-<script lang="ts" src="./purchase-modal" />
+<script lang="ts" src="./purchase-modal"></script>

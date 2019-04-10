@@ -46,4 +46,4 @@ $-spacing = 3px
 		margin-right: $grid-gutter-width * 0.5
 </style>
 
-<script lang="ts" src="./list" />
+<script lang="ts" src="./list"></script>

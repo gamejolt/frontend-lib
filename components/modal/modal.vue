@@ -36,6 +36,6 @@
 	</transition>
 </template>
 
-<style lang="stylus" src="./modal.styl" scoped />
+<style lang="stylus" src="./modal.styl" scoped></style>
 
-<script lang="ts" src="./modal" />
+<script lang="ts" src="./modal"></script>

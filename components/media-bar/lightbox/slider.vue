@@ -4,4 +4,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./slider" />
+<script lang="ts" src="./slider"></script>

@@ -95,4 +95,4 @@
 		padding: 10px 15px
 </style>
 
-<script lang="ts" src="./font-selector" />
+<script lang="ts" src="./font-selector"></script>

@@ -76,4 +76,4 @@
 	</section>
 </template>
 
-<script lang="ts" src="./button-styleguide" />
+<script lang="ts" src="./button-styleguide"></script>

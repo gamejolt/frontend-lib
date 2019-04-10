@@ -54,4 +54,4 @@
 		margin-top: 7px // Blah, stupid hardcoded
 </style>
 
-<script lang="ts" src="./user-bar" />
+<script lang="ts" src="./user-bar"></script>

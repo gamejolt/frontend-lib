@@ -19,4 +19,4 @@
 	</div>
 </template>
 
-<script lang="ts" src="./date" />
+<script lang="ts" src="./date"></script>

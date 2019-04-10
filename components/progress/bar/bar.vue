@@ -16,6 +16,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./bar.styl" scoped />
+<style lang="stylus" src="./bar.styl" scoped></style>
 
-<script lang="ts" src="./bar" />
+<script lang="ts" src="./bar"></script>

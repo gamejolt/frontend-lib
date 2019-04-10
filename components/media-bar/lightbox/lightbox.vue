@@ -52,6 +52,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./lightbox.styl" scoped />
+<style lang="stylus" src="./lightbox.styl" scoped></style>
 
-<script lang="ts" src="./lightbox" />
+<script lang="ts" src="./lightbox"></script>

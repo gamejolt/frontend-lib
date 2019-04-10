@@ -2,4 +2,4 @@
 	<textarea></textarea>
 </template>
 
-<script lang="ts" src="./codemirror" />
+<script lang="ts" src="./codemirror"></script>
