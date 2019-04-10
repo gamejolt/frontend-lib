@@ -28,6 +28,4 @@
 	</app-modal>
 </template>
 
-<style lang="stylus" scoped></style>
-
 <script lang="ts" src="./purchase-modal" />

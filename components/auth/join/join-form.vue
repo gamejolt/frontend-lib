@@ -129,9 +129,9 @@
 <style lang="stylus" scoped>
 @require '../auth-form';
 
-.-blocked-message {
-  margin-top: 5px;
-}
+.-blocked-message
+	margin-top: 5px;
+
 </style>
 
 <script lang="ts" src="./join-form" />

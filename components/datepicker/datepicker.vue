@@ -7,8 +7,8 @@
 </template>
 
 <style lang="stylus" scoped>
-@require './datepicker-buttons';
-@require './datepicker-tables';
+@require './datepicker-buttons'
+@require './datepicker-tables'
 </style>
 
 <script lang="ts" src="./datepicker" />
