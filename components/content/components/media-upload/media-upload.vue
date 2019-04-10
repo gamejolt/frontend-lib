@@ -1,3 +1,21 @@
+<template>
+	<div class="media-upload-container">
+		<div class="media-upload">
+			<img :src="src" class="-placeholder" />
+			<div class="-progress-container">
+				<app-progress-bar
+					class="-progress"
+					thin
+					:percent="uploadProgress * 100.0"
+					:indeterminate="uploadProcessing"
+					:active="uploadProcessing"
+				/>
+			</div>
+		</div>
+	</div>
+</template>
+
+<style lang="stylus" scoped>
 .media-upload-container
 	width: 100%
 	display: flex
@@ -28,3 +46,6 @@
 	margin-right: auto
 	padding-left: 10px
 	padding-right: 10px
+</style>
+
+<script lang="ts" src="./media-upload"></script>

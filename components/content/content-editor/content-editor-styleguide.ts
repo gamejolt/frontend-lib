@@ -1,12 +1,10 @@
-import View from '!view!./content-editor-styleguide.html';
-import { AppContentEditor } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
+import AppContentEditor from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.vue';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 
-@View
 @Component({
 	components: {
 		AppContentEditor,
 	},
 })
-export class AppContentEditorStyleguide extends Vue {}
+export default class AppContentEditorStyleguide extends Vue {}

@@ -1,4 +1,3 @@
-import View from '!view!./content-viewer.html?style=./content-viewer.styl';
 import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { AppContentViewerBaseComponent } from 'game-jolt-frontend-lib/components/content/content-viewer/components/base-component';
@@ -7,13 +6,12 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import { ContextCapabilities } from '../content-context';
 import { ContentHydrator } from '../content-hydrator';
 
-@View
 @Component({
 	components: {
 		AppContentViewerBaseComponent,
 	},
 })
-export class AppContentViewer extends Vue implements ContentOwner {
+export default class AppContentViewer extends Vue implements ContentOwner {
 	@Prop(String)
 	source!: string;
 	// DEBUG

@@ -1,4 +1,4 @@
-import { AppContentEmbed } from 'game-jolt-frontend-lib/components/content/components/embed/embed';
+import AppContentEmbed from 'game-jolt-frontend-lib/components/content/components/embed/embed.vue';
 import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import Vue, { CreateElement } from 'vue';

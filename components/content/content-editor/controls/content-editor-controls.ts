@@ -1,4 +1,3 @@
-import View from '!view!./content-editor-controls.html?style=./content-editor-controls.styl';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { ContentTableService } from 'game-jolt-frontend-lib/components/content/content-editor/content-table.service';
 import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
@@ -10,14 +9,13 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { ContextCapabilities } from '../../content-context';
 
-@View
 @Component({
 	components: {},
 	directives: {
 		AppTooltip,
 	},
 })
-export class AppContentEditorControls extends Vue {
+export default class AppContentEditorControls extends Vue {
 	@Prop(Object)
 	view!: EditorView;
 	@Prop(Number)

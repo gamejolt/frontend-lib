@@ -1,8 +1,8 @@
+import AppContentMediaItem from 'game-jolt-frontend-lib/components/content/components/media-item/media-item.vue';
 import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppContentMediaItem } from '../../components/media-item/media-item';
 
 @Component({})
 export class AppContentViewerMediaItem extends Vue {

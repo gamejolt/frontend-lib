@@ -1,19 +1,17 @@
-import View from '!view!./media-item.html?style=./media-item.styl';
+import AppBaseContentComponent from 'game-jolt-frontend-lib/components/content/components/base/base-content-component.vue';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
+import { MediaItem } from 'game-jolt-frontend-lib/components/media-item/media-item-model';
+import AppLoading from 'game-jolt-frontend-lib/vue/components/loading/loading.vue';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppLoading } from '../../../../vue/components/loading/loading';
-import { MediaItem } from '../../../media-item/media-item-model';
-import { AppBaseContentComponent } from '../base/base-content-component';
 
-@View
 @Component({
 	components: {
 		AppBaseContentComponent,
 		AppLoading,
 	},
 })
-export class AppContentMediaItem extends Vue {
+export default class AppContentMediaItem extends Vue {
 	@Prop(Number)
 	mediaItemId!: number;
 

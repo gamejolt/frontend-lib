@@ -1,15 +1,13 @@
-import View from '!view!./community-embed.html?style=./community-embed.styl';
+import AppCard from 'game-jolt-frontend-lib/components/card/card.vue';
+import { Community } from 'game-jolt-frontend-lib/components/community/community.model';
+import AppCommunityJoinWidget from 'game-jolt-frontend-lib/components/community/join-widget/join-widget.vue';
+import AppCommunityThumbnailImg from 'game-jolt-frontend-lib/components/community/thumbnail/img/img.vue';
 import { ContentHydrator } from 'game-jolt-frontend-lib/components/content/content-hydrator';
+import { AppTheme } from 'game-jolt-frontend-lib/components/theme/theme';
+import AppLoading from 'game-jolt-frontend-lib/vue/components/loading/loading.vue';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppLoading } from '../../../../../vue/components/loading/loading';
-import { AppCard } from '../../../../card/card';
-import { Community } from '../../../../community/community.model';
-import { AppCommunityJoinWidget } from '../../../../community/join-widget/join-widget';
-import { AppCommunityThumbnailImg } from '../../../../community/thumbnail/img/img';
-import { AppTheme } from '../../../../theme/theme';
 
-@View
 @Component({
 	components: {
 		AppCard,
@@ -19,7 +17,7 @@ import { AppTheme } from '../../../../theme/theme';
 		AppCommunityJoinWidget,
 	},
 })
-export class AppContentEmbedCommunityEmbed extends Vue {
+export default class AppContentEmbedCommunityEmbed extends Vue {
 	@Prop(String)
 	communityPath!: string;
 

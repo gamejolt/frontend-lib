@@ -1,30 +1,28 @@
-import View from '!view!./embed.html?style=./embed.styl';
-import { AppContentEmbedSoundcloudEmbed } from 'game-jolt-frontend-lib/components/content/components/embed/soundcloud/soundcloud-embed';
+import AppBaseContentComponent from 'game-jolt-frontend-lib/components/content/components/base/base-content-component.vue';
+import AppContentEmbedCommunityEmbed from 'game-jolt-frontend-lib/components/content/components/embed/community/community-embed.vue';
+import AppContentEmbedGameEmbed from 'game-jolt-frontend-lib/components/content/components/embed/game/game-embed.vue';
+import AppContentEmbedSoundcloudEmbed from 'game-jolt-frontend-lib/components/content/components/embed/soundcloud/soundcloud-embed.vue';
+import AppContentEmbedUserEmbed from 'game-jolt-frontend-lib/components/content/components/embed/user/user-embed.vue';
 import { ContentEmbedService } from 'game-jolt-frontend-lib/components/content/content-editor/content-embed.service';
-import { AppLoading } from 'game-jolt-frontend-lib/vue/components/loading/loading';
+import AppVideoEmbed from 'game-jolt-frontend-lib/components/video/embed/embed.vue';
+import AppLoading from 'game-jolt-frontend-lib/vue/components/loading/loading.vue';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-import { AppVideoEmbed } from '../../../video/embed/embed';
 import { ContentOwner } from '../../content-owner';
-import { AppBaseContentComponent } from '../base/base-content-component';
-import { AppContentEmbedCommunityEmbed } from './community/community-embed';
-import { AppContentEmbedGameEmbed } from './game/game-embed';
-import { AppContentEmbedUserEmbed } from './user/user-embed';
 
-@View
 @Component({
 	components: {
 		AppVideoEmbed,
+		AppContentEmbedSoundcloudEmbed,
 		AppBaseContentComponent,
 		AppContentEmbedGameEmbed,
 		AppContentEmbedUserEmbed,
 		AppContentEmbedCommunityEmbed,
-		AppContentEmbedSoundcloudEmbed,
 		AppLoading,
 	},
 })
-export class AppContentEmbed extends Vue {
+export default class AppContentEmbed extends Vue {
 	@Prop(String)
 	type!: string;
 

@@ -4,12 +4,12 @@ import { AppContentViewerBlockquote } from 'game-jolt-frontend-lib/components/co
 import { AppContentViewerCodeBlock } from 'game-jolt-frontend-lib/components/content/content-viewer/components/code/code';
 import { AppContentViewerGJEmoji } from 'game-jolt-frontend-lib/components/content/content-viewer/components/gjEmoji';
 import { AppContentViewerHeading } from 'game-jolt-frontend-lib/components/content/content-viewer/components/heading';
-import { AppContentViewerMention } from 'game-jolt-frontend-lib/components/content/content-viewer/components/mention/mention';
+import AppContentViewerMention from 'game-jolt-frontend-lib/components/content/content-viewer/components/mention/mention.vue';
 import { AppContentViewerParagraph } from 'game-jolt-frontend-lib/components/content/content-viewer/components/paragraph';
 import { AppContentViewerTable } from 'game-jolt-frontend-lib/components/content/content-viewer/components/table';
 import { AppContentViewerTableCell } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tableCell';
 import { AppContentViewerTableRow } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tableRow';
-import { AppContentViewerTag } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tag/tag';
+import AppContentViewerTag from 'game-jolt-frontend-lib/components/content/content-viewer/components/tag/tag.vue';
 import { AppContentViewerText } from 'game-jolt-frontend-lib/components/content/content-viewer/components/text';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';

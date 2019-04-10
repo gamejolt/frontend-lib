@@ -1,11 +1,9 @@
-import View from '!view!./tag.html?style=./tag.styl';
 import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
-@View
 @Component({})
-export class AppContentViewerTag extends Vue {
+export default class AppContentViewerTag extends Vue {
 	@Prop(ContentObject)
 	data!: ContentObject;
 

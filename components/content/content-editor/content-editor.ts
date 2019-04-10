@@ -1,8 +1,8 @@
-import View from '!view!./content-editor.html?style=./content-editor.styl';
 import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
-import { AppContentEditorControlsEmojiPanel } from 'game-jolt-frontend-lib/components/content/content-editor/controls/emoji/panel/panel';
-import { AppContentEditorTextControls } from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls';
+import AppContentEditorControlsEmojiPanelTS from 'game-jolt-frontend-lib/components/content/content-editor/controls/emoji/panel/panel';
+import AppContentEditorControlsEmojiPanel from 'game-jolt-frontend-lib/components/content/content-editor/controls/emoji/panel/panel.vue';
+import AppContentEditorTextControls from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls.vue';
 import buildEvents from 'game-jolt-frontend-lib/components/content/content-editor/events/build-events';
 import { FocusWatcher } from 'game-jolt-frontend-lib/components/content/content-editor/focus-watcher';
 import { createPlugins } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/plugins';
@@ -22,14 +22,13 @@ import { Component, Prop } from 'vue-property-decorator';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
-import { AppContentViewer } from '../content-viewer/content-viewer';
-import { AppContentEditorControls } from './controls/content-editor-controls';
+import AppContentViewer from '../content-viewer/content-viewer.vue';
+import AppContentEditorControls from './controls/content-editor-controls.vue';
 import { buildNodeViews } from './node-views/node-view-builder';
 
 /**
  * @emits update
  */
-@View
 @Component({
 	components: {
 		AppContentEditorControls,
@@ -38,7 +37,7 @@ import { buildNodeViews } from './node-views/node-view-builder';
 		AppContentEditorControlsEmojiPanel,
 	},
 })
-export class AppContentEditor extends Vue implements ContentOwner {
+export default class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(String)
 	contentContext!: ContentContext;
 
@@ -68,7 +67,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	$refs!: {
 		editor: HTMLElement;
 		doc: HTMLElement;
-		emojiPanel: AppContentEditorControlsEmojiPanel;
+		emojiPanel: AppContentEditorControlsEmojiPanelTS;
 	};
 
 	get shouldShowControls() {
@@ -273,7 +272,7 @@ export class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	public showEmojiPanel() {
-		if (this.$refs.emojiPanel instanceof AppContentEditorControlsEmojiPanel) {
+		if (this.$refs.emojiPanel instanceof AppContentEditorControlsEmojiPanelTS) {
 			this.$refs.emojiPanel.show();
 		}
 	}

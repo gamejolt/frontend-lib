@@ -1,17 +1,16 @@
-import View from '!view!./content.html?style=./content.styl';
 import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import { ContentContext } from 'game-jolt-frontend-lib/components/content/content-context';
-import { AppContentEditor } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
-import { BaseFormControl } from 'game-jolt-frontend-lib/components/form-vue/control/base';
+import AppContentEditorTS from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
+import AppContentEditor from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.vue';
+import BaseFormControlTS from 'game-jolt-frontend-lib/components/form-vue/control/base';
 import { Component, Prop } from 'vue-property-decorator';
 
-@View
 @Component({
 	components: {
 		AppContentEditor,
 	},
 })
-export class AppFormControlContent extends BaseFormControl {
+export default class AppFormControlContent extends BaseFormControlTS {
 	@Prop(String)
 	contentContext!: ContentContext;
 
@@ -24,7 +23,7 @@ export class AppFormControlContent extends BaseFormControl {
 	controlVal = '';
 
 	$refs!: {
-		editor: AppContentEditor;
+		editor: AppContentEditorTS;
 	};
 
 	mounted() {

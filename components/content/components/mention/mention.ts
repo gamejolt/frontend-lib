@@ -1,12 +1,10 @@
-import View from '!view!./mention.html?style=./mention.styl';
 import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
+import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { User } from '../../../user/user.model';
 
-@View
 @Component({})
-export class AppContentMention extends Vue {
+export default class AppContentMention extends Vue {
 	@Prop(String)
 	username!: string;
 

@@ -1,4 +1,3 @@
-import View from '!view!./text-controls.html?style=./text-controls.styl';
 import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
@@ -11,13 +10,12 @@ import { Component, Emit, Prop, Watch } from 'vue-property-decorator';
 import { MouseState } from '../../../../../utils/mouse';
 import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
 
-@View
 @Component({
 	directives: {
 		AppTooltip,
 	},
 })
-export class AppContentEditorTextControls extends Vue {
+export default class AppContentEditorTextControls extends Vue {
 	@Prop(Object)
 	view!: EditorView;
 	@Prop(Number)

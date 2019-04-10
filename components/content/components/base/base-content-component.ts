@@ -1,15 +1,13 @@
-import View from '!view!./base-content-component.html?style=./base-content-component.styl';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
-@View
 @Component({
 	directives: {
 		AppTooltip,
 	},
 })
-export class AppBaseContentComponent extends Vue {
+export default class AppBaseContentComponent extends Vue {
 	@Prop(Boolean)
 	isEditing!: boolean;
 

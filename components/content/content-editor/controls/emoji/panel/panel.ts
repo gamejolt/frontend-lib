@@ -1,4 +1,3 @@
-import View from '!view!./panel.html?style=./panel.styl';
 import { GJ_EMOJIS } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/gj-emoji-nodespec';
 import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { NodeType } from 'prosemirror-model';
@@ -6,13 +5,12 @@ import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 
-@View
 @Component({
 	directives: {
 		AppTooltip,
 	},
 })
-export class AppContentEditorControlsEmojiPanel extends Vue {
+export default class AppContentEditorControlsEmojiPanel extends Vue {
 	@Prop(EditorView)
 	view!: EditorView;
 	@Prop(Number)

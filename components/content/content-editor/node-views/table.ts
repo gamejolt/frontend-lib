@@ -1,6 +1,6 @@
 import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { ContentTableService } from 'game-jolt-frontend-lib/components/content/content-editor/content-table.service';
-import AppContentEditorTableControls from 'game-jolt-frontend-lib/components/content/content-editor/controls/table/table-controls';
+import AppContentEditorTableControls from 'game-jolt-frontend-lib/components/content/content-editor/controls/table/table-controls.vue';
 import { BaseNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/base';
 import { Node } from 'prosemirror-model';
 import { Decoration } from 'prosemirror-view';

@@ -1,10 +1,8 @@
-import View from '!view!./soundcloud-embed.html?style=./soundcloud-embed.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
-@View
 @Component({})
-export class AppContentEmbedSoundcloudEmbed extends Vue {
+export default class AppContentEmbedSoundcloudEmbed extends Vue {
 	@Prop(String)
 	trackId!: string;
 

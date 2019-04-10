@@ -1,13 +1,11 @@
-import View from '!view!./link-modal.html?style=./link-modal.styl';
+import AppFormContentEditorLink from 'game-jolt-frontend-lib/components/content/content-editor/modals/link/form/link-form.vue';
 import { LinkData } from 'game-jolt-frontend-lib/components/content/content-editor/modals/link/link-modal.service';
 import { Component } from 'vue-property-decorator';
 import { BaseModal } from '../../../../modal/base';
-import { FormContentEditorLink } from './form/link-form';
 
-@View
 @Component({
 	components: {
-		FormContentEditorLink,
+		AppFormContentEditorLink,
 	},
 })
 export default class AppContentEditorLinkModal extends BaseModal {
