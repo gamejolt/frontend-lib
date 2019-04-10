@@ -22,35 +22,6 @@
 	</div>
 </template>
 
-<style lang="stylus" scoped>
-@require '~styles/variables'
-@require '~styles-lib/mixins'
-@require './../../../well/well.styl'
-
-.card-list-item
-	&-body
-		position: relative
-		margin-top: -17px
-
-		.card-list-add &
-			margin-top: 5px
-
-		&:before
-			caret(color: var(--theme-bg-offset), direction: 'up', size: 10px)
-			content: ''
-			opacity: 0
-			pointer-events: none
-			transition: opacity 400ms
-
-		~/.active &:before
-			opacity: 1
-
-	>>> form
-		@extend .well
-		theme-prop('background-color', 'bg')
-
-		&:last-child
-			margin-bottom: 0
-</style>
+<style lang="stylus" src="../list-common.styl" scoped />
 
 <script lang="ts" src="./item" />

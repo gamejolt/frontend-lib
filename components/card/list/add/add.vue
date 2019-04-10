@@ -14,8 +14,6 @@
 	</div>
 </template>
 
-<style lang="stylus" scoped>
-@require '../item/item'
-</style>
+<style lang="stylus" src="../list-common.styl" scoped />
 
 <script lang="ts" src="./add" />
