@@ -1,5 +1,5 @@
-import { Modal } from 'game-jolt-frontend-lib/components/modal/modal.service';
 import { VueRouter } from 'vue-router/types/router';
+import { Modal } from '../../../components/modal/modal.service';
 import { asyncComponentLoader } from '../../../utils/utils';
 import { DisplayMode } from '../modal/modal.service';
 
@@ -18,7 +18,7 @@ export class CommentThreadModal {
 		return await Modal.show<void>({
 			modalId: 'CommentThread-' + [resource, resourceId, commentId].join('-'),
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "CommentModal" */ './modal')),
+				asyncComponentLoader(import(/* webpackChunkName: "CommentModal" */ './modal.vue')),
 			props: {
 				resource,
 				resourceId,

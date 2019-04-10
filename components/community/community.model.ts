@@ -1,7 +1,7 @@
-import { Api } from 'game-jolt-frontend-lib/components/api/api.service';
-import { MediaItem } from 'game-jolt-frontend-lib/components/media-item/media-item-model';
-import { Model } from 'game-jolt-frontend-lib/components/model/model.service';
-import { Theme } from 'game-jolt-frontend-lib/components/theme/theme.model';
+import { Api } from '../../components/api/api.service';
+import { MediaItem } from '../../components/media-item/media-item-model';
+import { Model } from '../../components/model/model.service';
+import { Theme } from '../../components/theme/theme.model';
 
 export type Perm = 'feature' | 'all';
 

@@ -1,11 +1,9 @@
-import View from '!view!./suggestion.html?style=./suggestion.styl';
 import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
 
-@View
 @Component({})
-export class AppTagSuggestion extends Vue {
+export default class AppTagSuggestion extends Vue {
 	@Prop(Array)
 	tags!: string[];
 

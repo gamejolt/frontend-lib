@@ -1,18 +1,16 @@
-import View from '!view!./pill.html';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppPill } from '../../pill/pill';
+import AppPill from '../../pill/pill.vue'
 import { Community } from '../community.model';
-import { AppCommunityThumbnailImg } from '../thumbnail/img/img';
+import AppCommunityThumbnailImg from '../thumbnail/img/img.vue'
 
-@View
 @Component({
 	components: {
 		AppPill,
 		AppCommunityThumbnailImg,
 	},
 })
-export class AppCommunityPill extends Vue {
+export default class AppCommunityPill extends Vue {
 	@Prop(Community)
 	community!: Community;
 

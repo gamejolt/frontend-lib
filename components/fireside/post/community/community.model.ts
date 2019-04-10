@@ -1,4 +1,4 @@
-import { Community } from 'game-jolt-frontend-lib/components/community/community.model';
+import { Community } from '../../../../components/community/community.model';
 import { Model } from '../../../model/model.service';
 
 export class FiresidePostCommunity extends Model {

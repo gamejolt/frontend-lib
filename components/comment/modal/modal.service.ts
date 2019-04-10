@@ -16,7 +16,7 @@ export class CommentModal {
 		return await Modal.show<void>({
 			modalId: 'Comment-' + [resource, resourceId].join('-'),
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "CommentModal" */ './modal')),
+				asyncComponentLoader(import(/* webpackChunkName: "CommentModal" */ './modal.vue')),
 			props: {
 				resource,
 				resourceId,

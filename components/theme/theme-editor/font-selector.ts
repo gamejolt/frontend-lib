@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./font-selector.html?style=./font-selector.styl';
 
 import { Api } from '../../api/api.service';
 import { AppThemeEditorFontSelectorStyleInjector } from './font-selector-style-injector';
@@ -12,13 +11,12 @@ interface FontDefinition {
 	};
 }
 
-@View
 @Component({
 	components: {
 		AppThemeEditorFontSelectorStyleInjector,
 	},
 })
-export class AppThemeEditorFontSelector extends Vue {
+export default class AppThemeEditorFontSelector extends Vue {
 	@Prop(Object) value?: FontDefinition;
 
 	$refs!: {

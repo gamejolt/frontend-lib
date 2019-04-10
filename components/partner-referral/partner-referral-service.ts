@@ -6,7 +6,7 @@ export class PartnerReferral {
 			return;
 		}
 
-		const ref = route.query.ref;
+		const ref = route.query.ref as string;
 		if (ref) {
 			window.sessionStorage.setItem(`partner-ref:${resource}:${resourceId}`, ref);
 		}

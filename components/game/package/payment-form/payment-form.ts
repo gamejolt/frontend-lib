@@ -1,16 +1,15 @@
-import View from '!view!./payment-form.html?style=./payment-form.styl';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { arrayIndexBy } from '../../../../utils/array';
-import { AppLoading } from '../../../../vue/components/loading/loading';
+import AppLoading from '../../../../vue/components/loading/loading.vue';
 import { currency } from '../../../../vue/filters/currency';
 import { AppStore } from '../../../../vue/services/app/app-store';
 import { Api } from '../../../api/api.service';
 import { Device } from '../../../device/device.service';
 import { Environment } from '../../../environment/environment.service';
-import { AppExpand } from '../../../expand/expand';
+import AppExpand from '../../../expand/expand.vue';
 import { AppFocusWhen } from '../../../form-vue/focus-when.directive';
-import { AppForm } from '../../../form-vue/form';
+import AppForm from '../../../form-vue/form';
 import {
 	BaseForm,
 	FormOnInit,
@@ -21,10 +20,10 @@ import {
 import { Geo, Region } from '../../../geo/geo.service';
 import { Growls } from '../../../growls/growls.service';
 import { HistoryTick } from '../../../history-tick/history-tick-service';
-import { AppLoadingFade } from '../../../loading/fade/fade';
+import AppLoadingFade from '../../../loading/fade/fade.vue';
 import { Navigate } from '../../../navigate/navigate.service';
 import { OrderPayment } from '../../../order/payment/payment.model';
-import { AppPopper } from '../../../popper/popper';
+import AppPopper from '../../../popper/popper.vue';
 import { Screen } from '../../../screen/screen-service';
 import { Sellable } from '../../../sellable/sellable.model';
 import { AppTooltip } from '../../../tooltip/tooltip';
@@ -35,7 +34,6 @@ import { GamePackage } from '../package.model';
 
 type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 
-@View
 @Component({
 	components: {
 		AppLoading,
@@ -51,7 +49,7 @@ type CheckoutType = 'cc-stripe' | 'paypal' | 'wallet';
 		currency,
 	},
 })
-export class FormGamePackagePayment extends BaseForm<any>
+export default class FormGamePackagePayment extends BaseForm<any>
 	implements FormOnInit, FormOnSubmit, FormOnSubmitSuccess, FormOnSubmitError {
 	@Prop(Game)
 	game!: Game;

@@ -1,12 +1,10 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./loading.html?style=./loading.styl';
 
 import { importContext } from '../../../utils/utils';
 
-@View
 @Component({})
-export class AppLoading extends Vue {
+export default class AppLoading extends Vue {
 	@Prop({ type: String, default: 'Loading...' })
 	label!: string;
 	@Prop(Boolean) hideLabel!: boolean;

@@ -1,21 +1,15 @@
-import View from '!view!./widget.html?style=./widget.styl';
-import {
-	Ads,
-	AdSlotPos,
-	AdSlotPosValidator,
-} from 'game-jolt-frontend-lib/components/ad/ads.service';
-import { AppAdPlaywire } from 'game-jolt-frontend-lib/components/ad/playwire/playwire';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { Ads, AdSlotPos, AdSlotPosValidator } from '../../../components/ad/ads.service';
+import AppAdPlaywire from '../playwire/playwire.vue';
 import './widget-content.styl';
 
-@View
 @Component({
 	components: {
 		AppAdPlaywire,
 	},
 })
-export class AppAdWidget extends Vue {
+export default class AppAdWidget extends Vue {
 	@Prop({ type: String, default: 'rectangle' })
 	size!: 'rectangle' | 'leaderboard';
 

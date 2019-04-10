@@ -1,17 +1,15 @@
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./editor-form.html';
 
 import { BaseForm } from '../../form-vue/form.service';
 import { SiteContentBlock } from '../../site/content-block/content-block-model';
-import { AppFormControlMarkdown } from '../../form-vue/control/markdown/markdown';
+import AppFormControlMarkdown from '../../form-vue/control/markdown/markdown.vue'
 
-@View
 @Component({
 	components: {
 		AppFormControlMarkdown,
 	},
 })
-export class FormContentBlockEditor extends BaseForm<SiteContentBlock> {
+export default class FormContentBlockEditor extends BaseForm<SiteContentBlock> {
 	modelClass = SiteContentBlock;
 	warnOnDiscard = false;
 

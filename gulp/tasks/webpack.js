@@ -6,7 +6,7 @@ const os = require('os');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackDevServer = require('webpack-dev-server');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const WriteFilePlugin = require('write-file-webpack-plugin');
@@ -17,19 +17,20 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
-module.exports = function (config) {
+module.exports = function(config) {
 	let base = path.resolve(config.projectBase);
 
-	let noop = function () {};
+	let noop = function() {};
 	let devNoop = !config.production ? noop : undefined;
 	let prodNoop = config.production ? noop : undefined;
 
-	let browserNoop = !config.server ? noop : undefined;
-	let serverNoop = config.server ? noop : undefined;
+	// We support hot module reloading only for non ssr, non prod builds.
+	let shouldUseHMR = !config.ssr && !config.production;
 
-	let clientNoop = config.client ? noop : undefined;
-	let siteNoop = !config.client ? noop : undefined;
+	// We only extract css for client SSR or prod builds.
+	let shouldExtractCss = config.ssr || config.production;
 
 	let externals = {};
 	if (!config.client) {
@@ -59,48 +60,58 @@ module.exports = function (config) {
 	}
 
 	let webpackTarget = 'web';
-	if (config.server) {
+	if (config.ssr === 'server') {
 		webpackTarget = 'node';
 	} else if (config.client) {
 		webpackTarget = 'node-webkit';
 	}
 
 	let libraryTarget = 'var';
-	if (config.server) {
+	if (config.ssr === 'server') {
 		libraryTarget = 'commonjs2';
 	}
 
+	// In prod and ssr we use source-map
 	let devtool = 'source-map';
-	if (!config.production) {
-		if (!config.server) {
-			// Seemed to be the fastest.
-			devtool = 'eval-source-map';
-		}
-	} else if (config.client) {
+
+	// In prod client we disable the devtool.
+	if (config.production && config.client) {
 		devtool = false;
 	}
 
-	function stylesLoader() {
-		const loaders = [{
-				loader: 'css-loader',
-				options: {
-					// How many loaders run before this.
-					importLoaders: 2
-				}
-			},
-			{
-				loader: 'postcss-loader',
-			},
-		];
+	// When watching for changes (in development and not doing ssr)
+	// we want the fastest which seems to be this.
+	if (!config.production && !config.ssr) {
+		devtool = 'eval-source-map';
+	}
 
-		if (config.production && !config.server) {
-			loaders.unshift(MiniCssExtractPlugin.loader);
+	function stylesLoader(withStylusLoader) {
+		const loaders = ['css-loader', 'postcss-loader'];
+
+		if (shouldExtractCss) {
+			if (config.ssr !== 'server') {
+				loaders.unshift(MiniCssExtractPlugin.loader);
+			} else {
+				loaders.unshift('null-loader');
+			}
 		} else {
 			loaders.unshift({
 				loader: 'vue-style-loader',
 				options: {
-					shadowMode: false
-				}
+					shadowMode: false,
+				},
+			});
+		}
+
+		if (withStylusLoader) {
+			loaders.push({
+				loader: 'stylus-loader',
+				options: {
+					paths: ['src/'],
+					'resolve url': true,
+					'include css': true,
+					preferPathResolver: 'webpack',
+				},
 			});
 		}
 
@@ -109,13 +120,13 @@ module.exports = function (config) {
 
 	let webpackSectionConfigs = {};
 	let webpackSectionTasks = [];
-	Object.keys(config.sections).forEach(function (section) {
+	Object.keys(config.sections).forEach(function(section) {
 		const sectionConfig = config.sections[section];
 
 		let appEntries = ['./' + section + '/main.ts'];
 		let indexHtml = section === 'app' ? 'index.html' : section + '.html';
 
-		if (!config.production) {
+		if (shouldUseHMR) {
 			appEntries.push('webpack-dev-server/client?http://localhost:' + config.port + '/');
 			appEntries.push('webpack/hot/dev-server');
 		}
@@ -124,13 +135,16 @@ module.exports = function (config) {
 			app: appEntries,
 		};
 
-		if (config.server) {
+		if (config.ssr === 'server') {
 			entry = {
 				server: ['./' + section + '/server.ts'],
 			};
 		}
 
 		let publicPath = '/';
+
+		// If we need to test prod ssr build locally we should comment out this bit,
+		// otherwise it'll attempt to fetch the chunks from our cdn.
 		if (!config.client && config.production) {
 			publicPath = config.staticCdn + publicPath;
 		} else if (config.client && !config.watching) {
@@ -141,7 +155,7 @@ module.exports = function (config) {
 		}
 
 		let webAppManifest = undefined;
-		if (!config.server && !config.client && sectionConfig.webAppManifest) {
+		if (config.ssr !== 'server' && !config.client && sectionConfig.webAppManifest) {
 			webAppManifest = sectionConfig.webAppManifest;
 
 			for (const icon of webAppManifest.icons) {
@@ -149,7 +163,8 @@ module.exports = function (config) {
 			}
 		}
 
-		let hasOfflineSupport = !config.server && !config.client && config.production && sectionConfig.offline;
+		let hasOfflineSupport =
+			config.ssr !== 'server' && !config.client && config.production && sectionConfig.offline;
 
 		webpackSectionConfigs[section] = {
 			mode: config.production ? 'production' : 'development',
@@ -166,75 +181,73 @@ module.exports = function (config) {
 			output: {
 				publicPath: publicPath,
 				path: path.resolve(base, config.buildDir),
-				filename: config.production ? section + '.[contenthash:8].js' : section + '.[name].js',
-				chunkFilename: config.production ? section + '.[contenthash:8].js' : section + '.[name].js',
-				sourceMapFilename: config.production ? 'maps/[contenthash:8].map' : 'maps/[name].map',
+				filename:
+					config.production || config.ssr
+						? section + '.[name].[contenthash:8].js'
+						: section + '.[name].js',
+				chunkFilename:
+					config.production || config.ssr
+						? section + '.[name].[contenthash:8].js'
+						: section + '.[name].js',
+				sourceMapFilename:
+					config.production || config.ssr
+						? 'maps/[name].[contenthash:8].map'
+						: 'maps/[name].map',
 				libraryTarget: libraryTarget,
 			},
 			resolve: {
-				extensions: ['.tsx', '.ts', '.js', '.styl'],
+				extensions: ['.tsx', '.ts', '.js', '.styl', '.vue'],
 				modules: [path.resolve(base, 'src/vendor'), 'node_modules'],
 				alias: {
 					// Always "app" base img.
 					img: path.resolve(base, 'src/app/img'),
 					styles: path.resolve(base, 'src/' + section + '/styles'),
 					'styles-lib': path.resolve(config.gjLibDir, 'stylus/common'),
+					vue$: 'vue/dist/vue.esm.js',
 				},
 			},
 			externals: externals,
-			resolveLoader: {
-				alias: {
-					view: 'vue-template-loader?' +
-						JSON.stringify({
-							scoped: true,
+			module: {
+				rules: [
+					{
+						test: /\.vue$/,
+						loader: 'vue-loader',
+						options: {
+							compilerOptions: {
+								whitespace: 'condense',
+							},
 							transformAssetUrls: {
 								img: 'src',
 								'app-theme-svg': 'src',
 							},
-						}),
-				},
-			},
-			module: {
-				rules: [{
+						},
+					},
+					{
 						test: /\.ts$/,
-						use: [{
+						exclude: /node_modules/,
+						use: [
+							{
 								loader: 'cache-loader',
 								options: {
 									cacheDirectory: path.resolve(base, '.cache/ts-loader'),
-								}
+								},
 							},
 							{
 								loader: 'ts-loader',
 								options: {
 									transpileOnly: true,
+									appendTsSuffixTo: [/\.vue$/],
 								},
 							},
 						],
 					},
 					{
-						test: /\.styl$/,
-						use: [{
-							loader: 'stylus-loader',
-							options: {
-								use: [],
-								paths: [
-									'src/',
-								],
-								'resolve url': true,
-								'include css': true,
-								preferPathResolver: 'webpack',
-							}
-						}]
+						test: /\.styl(us)?$/,
+						use: stylesLoader(true),
 					},
 					{
-						enforce: 'post',
-						test: /\.styl$/,
-						use: stylesLoader(),
-					},
-					{
-						enforce: 'post',
 						test: /\.css$/,
-						use: stylesLoader(),
+						use: stylesLoader(false),
 					},
 					{
 						test: /\.md$/,
@@ -242,22 +255,26 @@ module.exports = function (config) {
 					},
 					{
 						test: /\.(png|jpe?g|gif|svg|ogg|mp4)(\?.*)?$/,
-						use: [{
-							loader: 'file-loader',
-							options: {
-								name: 'assets/[name].[hash:8].[ext]',
-							}
-						}],
+						use: [
+							{
+								loader: 'file-loader',
+								options: {
+									name: 'assets/[name].[hash:8].[ext]',
+								},
+							},
+						],
 						exclude: /node_modules/,
 					},
 					{
 						test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-						use: [{
-							loader: 'file-loader',
-							options: {
-								name: 'assets/[name].[hash:8].[ext]',
-							}
-						}]
+						use: [
+							{
+								loader: 'file-loader',
+								options: {
+									name: 'assets/[name].[hash:8].[ext]',
+								},
+							},
+						],
 					},
 					{
 						test: /\.json$/,
@@ -266,21 +283,31 @@ module.exports = function (config) {
 						type: 'javascript/auto',
 						options: {
 							name: 'assets/[name].[hash:8].[ext]',
-						}
+						},
 					},
 				],
 			},
 			devtool,
-			optimization: config.production && !config.server ? {
-				splitChunks: {
-					// Does chunk splitting logic for entry point chunks as well.
-					// https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
-					chunks: 'all',
-				},
-				// Splits the runtime into its own chunk for long-term caching.
-				runtimeChunk: 'single',
-			} : undefined,
+			optimization:
+				// In ssr, we only want to do chunk splitting in the client bundle,
+				// otherwise, we only want to do chunk splitting when doing a prod build.
+				config.ssr === 'client' || (!config.ssr && config.production)
+					? {
+							splitChunks: {
+								// Does chunk splitting logic for entry point chunks as well.
+								// https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+								//
+								// When building for ssr it fails splitting css chunks when using 'all' or 'async'.
+								// The chunk is split correctly but isnt loaded into the initial page. instead of being included as a 'preload',
+								// it includes it as a 'prefetch'. Not sure where the issue is, so at the moment we just resort to 'initial'.
+								chunks: config.ssr ? 'initial' : 'all',
+							},
+							// Splits the runtime into its own chunk for long-term caching.
+							runtimeChunk: 'single',
+					  }
+					: undefined,
 			plugins: [
+				new VueLoaderPlugin(),
 				prodNoop || new webpack.ProgressPlugin(),
 				new webpack.DefinePlugin({
 					GJ_SECTION: JSON.stringify(section),
@@ -289,7 +316,7 @@ module.exports = function (config) {
 					),
 					GJ_BUILD_TYPE: JSON.stringify(config.production ? 'production' : 'development'),
 					GJ_IS_CLIENT: JSON.stringify(!!config.client),
-					GJ_IS_SSR: JSON.stringify(config.server),
+					GJ_IS_SSR: JSON.stringify(config.ssr === 'server'),
 					GJ_VERSION: JSON.stringify(
 						require(path.resolve(process.cwd(), 'package.json')).version
 					),
@@ -301,91 +328,110 @@ module.exports = function (config) {
 					),
 					GJ_IS_WATCHING: JSON.stringify(config.watching),
 				}),
-				new CopyWebpackPlugin([{
-					context: path.resolve(base, 'src/static-assets'),
-					from: '**/*',
-					to: 'static-assets',
-				}, ]),
-				// Copy over stupid client stuff that's needed.
-				siteNoop || new CopyWebpackPlugin([{
-						from: path.join(base, 'package.json'),
-						to: 'package.json',
-						transform: (content, _path) => {
-							const pkg = JSON.parse(content);
-
-							// We don't want to install dev/optional deps into the client build.
-							// We only need those when building the client, not for runtime.
-							delete pkg.devDependencies;
-							delete pkg.optionalDependencies;
-							delete pkg.scripts;
-
-							return JSON.stringify(pkg);
-						},
-					},
+				new CopyWebpackPlugin([
 					{
-						from: 'update-hook.js',
-						to: 'update-hook.js',
+						context: path.resolve(base, 'src/static-assets'),
+						from: '**/*',
+						to: 'static-assets',
 					},
 				]),
-				devNoop || serverNoop || new ImageminPlugin(),
-				prodNoop || serverNoop || new webpack.HotModuleReplacementPlugin(),
-				devNoop || serverNoop || new MiniCssExtractPlugin({
-					filename: section + '.[contenthash:8].css',
-					chunkFilename: section + '.[contenthash:8].css',
-				}),
-				devNoop || new OptimizeCssnanoPlugin({
-					cssnanoOptions: {
-						preset: [
-							'default',
+				// Copy over stupid client stuff that's needed.
+				!config.client
+					? noop
+					: new CopyWebpackPlugin([
 							{
-								mergeLonghand: false,
-								cssDeclarationSorter: false
-							}
-						]
-					}
-				}),
-				serverNoop || new HtmlWebpackPlugin({
-					filename: indexHtml,
-					template: 'index.html',
-					favicon: 'app/img/favicon.png',
-					inject: true,
-					chunksSortMode: 'none',
+								from: path.join(base, 'package.json'),
+								to: 'package.json',
+								transform: (content, _path) => {
+									const pkg = JSON.parse(content);
 
-					// Our own vars for injection into template.
-					templateParameters: {
-						_section: section,
-						_isClient: config.client,
-						_title: sectionConfig.title,
-						_crawl: sectionConfig.crawl,
-						_scripts: sectionConfig.scripts,
-						_bodyClass: sectionConfig.bodyClass || '',
-					}
-				}),
+									// We don't want to install dev/optional deps into the client build.
+									// We only need those when building the client, not for runtime.
+									delete pkg.devDependencies;
+									delete pkg.optionalDependencies;
+									delete pkg.scripts;
+
+									return JSON.stringify(pkg);
+								},
+							},
+							{
+								from: 'update-hook.js',
+								to: 'update-hook.js',
+							},
+					  ]),
+				// devNoop || new ImageminPlugin(),
+				!shouldUseHMR ? noop : new webpack.HotModuleReplacementPlugin(),
+				!shouldExtractCss
+					? noop
+					: new MiniCssExtractPlugin({
+							filename: section + '.[name].[contenthash:8].css',
+							chunkFilename: section + '.[name].[contenthash:8].css',
+					  }),
+				!shouldExtractCss
+					? noop
+					: new OptimizeCssnanoPlugin({
+							cssnanoOptions: {
+								preset: [
+									'default',
+									{
+										mergeLonghand: false,
+										cssDeclarationSorter: false,
+									},
+								],
+							},
+					  }),
+				config.ssr === 'server'
+					? noop
+					: new HtmlWebpackPlugin({
+							filename: indexHtml,
+							template: 'index.html',
+							favicon: 'app/img/favicon.png',
+							inject: true,
+							chunksSortMode: 'none',
+
+							// Our own vars for injection into template.
+							templateParameters: {
+								_section: section,
+								_isClient: config.client,
+								_title: sectionConfig.title,
+								_crawl: sectionConfig.crawl,
+								_scripts: sectionConfig.scripts,
+								_bodyClass: sectionConfig.bodyClass || '',
+							},
+					  }),
 				webAppManifest ? new WebpackPwaManifest(webAppManifest) : noop,
 				prodNoop || new FriendlyErrorsWebpackPlugin(),
-				serverNoop || clientNoop || new VueSSRClientPlugin({
-					filename: 'vue-ssr-client-manifest-' + section + '.json',
-				}),
-				browserNoop || clientNoop || new VueSSRServerPlugin({
-					filename: 'vue-ssr-server-bundle-' + section + '.json',
-				}),
-				hasOfflineSupport ? new OfflinePlugin({
-					excludes: ['**/.*', '**/*.map', 'vue-ssr-*', '**/*gameApiDocContent*'],
-					ServiceWorker: {
-						events: true,
-						output: 'sjw.js',
-						publicPath: 'https://gamejolt.com/sjw.js',
-					},
-				}) : noop,
+				// Make the client bundle for both normal prod builds or client ssr builds.
+				// We want to compare the manifests from the two builds.
+				(config.ssr === 'client' || config.production) && !config.client
+					? new VueSSRClientPlugin({
+							filename: 'vue-ssr-client-manifest-' + section + '.json',
+					  })
+					: noop,
+				config.ssr === 'server' && !config.client
+					? new VueSSRServerPlugin({
+							filename: 'vue-ssr-server-bundle-' + section + '.json',
+					  })
+					: noop,
+				hasOfflineSupport
+					? new OfflinePlugin({
+							excludes: ['**/.*', '**/*.map', 'vue-ssr-*', '**/*gameApiDocContent*'],
+							ServiceWorker: {
+								events: true,
+								output: 'sjw.js',
+								publicPath: 'https://gamejolt.com/sjw.js',
+							},
+					  })
+					: noop,
 				devNoop || new webpack.HashedModuleIdsPlugin(),
 				config.write ? new WriteFilePlugin() : noop,
 				config.analyze ? new BundleAnalyzerPlugin() : noop,
 			],
 		};
 
-		gulp.task('compile:' + section, function (cb) {
+		gulp.task('compile:' + section, function(cb) {
 			let compiler = webpack(webpackSectionConfigs[section]);
-			compiler.run(function (err, stats) {
+			compiler.run(function(err, stats) {
 				if (err) {
 					throw new gutil.PluginError('webpack:build', err);
 				}
@@ -407,7 +453,7 @@ module.exports = function (config) {
 
 	gulp.task(
 		'watch',
-		gulp.series('clean', function (cb) {
+		gulp.series('clean', function(cb) {
 			const buildSections = config.buildSection.split(',');
 			let port = parseInt(config.port),
 				portOffset = 0;
@@ -418,18 +464,22 @@ module.exports = function (config) {
 
 				let server = new WebpackDevServer(compiler, {
 					historyApiFallback: {
-						rewrites: [{
-							from: /./,
-							to: buildSection === 'app' ?
-								'/index.html' : '/' + buildSection + '.html',
-						}, ],
+						rewrites: [
+							{
+								from: /./,
+								to:
+									buildSection === 'app'
+										? '/index.html'
+										: '/' + buildSection + '.html',
+							},
+						],
 					},
 					public: 'development.gamejolt.com',
 					quiet: true,
-					hot: !config.server,
+					hot: shouldUseHMR,
 				});
 
-				if (!config.server) {
+				if (config.ssr !== 'server') {
 					server.listen(port + portOffset, 'localhost');
 				}
 				portOffset += 1;

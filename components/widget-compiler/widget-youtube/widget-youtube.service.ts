@@ -1,6 +1,6 @@
 import { CreateElement } from 'vue';
 import { WidgetCompilerWidget } from '../widget';
-import { AppVideoEmbed } from '../../video/embed/embed';
+import AppVideoEmbed from '../../video/embed/embed.vue'
 import { WidgetCompilerContext } from '../widget-compiler.service';
 
 export class WidgetCompilerWidgetYoutube extends WidgetCompilerWidget {

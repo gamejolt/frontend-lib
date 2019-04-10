@@ -1,6 +1,6 @@
-import { Scroll } from 'game-jolt-frontend-lib/components/scroll/scroll.service';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Scroll } from '../../../components/scroll/scroll.service';
 import { arrayRemove } from '../../../utils/array';
 import { findVueParent } from '../../../utils/vue';
 import { ScrollInviewContainer } from './container';

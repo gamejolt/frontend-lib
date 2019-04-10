@@ -1,10 +1,8 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./file.html';
 
-@View
 @Component({})
-export class AppFormControlUploadFile extends Vue {
+export default class AppFormControlUploadFile extends Vue {
 	@Prop() id!: any;
 	@Prop() name!: any;
 	@Prop() value!: File | File[] | null;

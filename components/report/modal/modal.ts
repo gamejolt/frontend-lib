@@ -1,17 +1,15 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./modal.html';
 
 import { Comment } from '../../comment/comment-model';
 import { User } from '../../user/user.model';
 import { Game } from '../../game/game.model';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
 import { Growls } from '../../growls/growls.service';
-import { AppReportForm } from '../form/form';
+import AppReportForm from '../form/form.vue';
 import { ForumTopic } from '../../forum/topic/topic.model';
 import { ForumPost } from '../../forum/post/post.model';
 import { BaseModal } from '../../modal/base';
 
-@View
 @Component({
 	components: {
 		AppJolticon,

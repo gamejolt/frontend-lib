@@ -1,10 +1,8 @@
-import View from '!view!./jolticons-styleguide.html';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { AppJolticon } from '../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../vue/components/jolticon/jolticon.vue'
 import { AppTooltip } from '../tooltip/tooltip';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -13,7 +11,7 @@ import { AppTooltip } from '../tooltip/tooltip';
 		AppTooltip,
 	},
 })
-export class AppJolticonsStyleguide extends Vue {
+export default class AppJolticonsStyleguide extends Vue {
 	filter = '';
 
 	get filteredIcons() {

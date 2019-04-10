@@ -1,9 +1,9 @@
 // Load in the CMP stuff.
-import { AdsDisabledDev } from 'game-jolt-frontend-lib/components/ad/ads.service';
-import { AppAdPlaywire } from 'game-jolt-frontend-lib/components/ad/playwire/playwire';
-import { EventBus } from 'game-jolt-frontend-lib/components/event-bus/event-bus.service';
-import { loadScript } from 'game-jolt-frontend-lib/utils/utils';
 import VueRouter from 'vue-router';
+import { AdsDisabledDev } from '../../../components/ad/ads.service';
+import { EventBus } from '../../../components/event-bus/event-bus.service';
+import { loadScript } from '../../../utils/utils';
+import AppAdPlaywire from './playwire';
 
 let _isInitialized = false;
 

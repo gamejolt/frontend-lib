@@ -1,15 +1,10 @@
-import View from '!view!./playwire.html';
-import {
-	Ads,
-	AdSlotPos,
-	AdSlotPosValidator,
-} from 'game-jolt-frontend-lib/components/ad/ads.service';
-import { Playwire } from 'game-jolt-frontend-lib/components/ad/playwire/playwire.service';
-import { FiresidePost } from 'game-jolt-frontend-lib/components/fireside/post/post-model';
-import { Game } from 'game-jolt-frontend-lib/components/game/game.model';
-import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { Ads, AdSlotPos, AdSlotPosValidator } from '../../../components/ad/ads.service';
+import { Playwire } from '../../../components/ad/playwire/playwire.service';
+import { FiresidePost } from '../../../components/fireside/post/post-model';
+import { Game } from '../../../components/game/game.model';
+import { User } from '../../../components/user/user.model';
 
 function generateSlotId() {
 	return Math.random() + '';
@@ -50,9 +45,8 @@ function initClickTracking() {
 	}, 1000);
 }
 
-@View
 @Component({})
-export class AppAdPlaywire extends Vue {
+export default class AppAdPlaywire extends Vue {
 	@Prop({ type: String, default: 'rectangle' })
 	size!: 'rectangle' | 'leaderboard';
 

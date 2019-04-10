@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import * as Chart from 'chart.js';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import View from '!view!./graph.html?style=./graph.styl';
 
 import { date } from '../../vue/filters/date';
 import { ThemeState, ThemeStore } from '../theme/theme.store';
@@ -88,9 +87,8 @@ const backgroundVariantChartOptions: any = {
 	},
 };
 
-@View
 @Component({})
-export class AppGraph extends Vue {
+export default class AppGraph extends Vue {
 	@Prop(Array) dataset!: any[];
 	@Prop({ type: String, default: 'line' })
 	type!: string;
@@ -107,13 +105,7 @@ export class AppGraph extends Vue {
 		let colors = ['#ffffff', '#ccff00', '#31d6ff', '#ff3fac', '#2f7f6f'];
 		if (this.theme) {
 			if (this.theme.custom) {
-				colors = [
-					'#ffffff',
-					'#' + this.theme.darkHighlight_,
-					'#31d6ff',
-					'#ff3fac',
-					'#2f7f6f',
-				];
+				colors = ['#ffffff', '#' + this.theme.darkHighlight_, '#31d6ff', '#ff3fac', '#2f7f6f'];
 			} else {
 				colors = [
 					'#ffffff',

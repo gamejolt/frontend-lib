@@ -1,11 +1,11 @@
-import View from '!view!./popper.html?style=./popper-content.styl';
-import { AppBackdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop';
-import { Backdrop } from 'game-jolt-frontend-lib/components/backdrop/backdrop.service';
-import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
-import { AppScrollScroller } from 'game-jolt-frontend-lib/components/scroll/scroller/scroller';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
+import { Backdrop } from '../../components/backdrop/backdrop.service';
+import { Popper } from '../../components/popper/popper.service';
+import AppBackdrop from '../backdrop/backdrop.vue';
 import { Screen } from '../screen/screen-service';
+import AppScrollScrollerTS from '../scroll/scroller/scroller';
+import AppScrollScroller from '../scroll/scroller/scroller.vue';
 import './popper.styl';
 
 const mod: any = require('v-tooltip');
@@ -15,14 +15,13 @@ const TransitionTime = 200;
 
 let PopperIndex = 0;
 
-@View
 @Component({
 	components: {
 		VPopover: mod.VPopover,
 		AppScrollScroller,
 	},
 })
-export class AppPopper extends Vue {
+export default class AppPopper extends Vue {
 	@Prop({ type: String, default: 'bottom' })
 	placement!: 'top' | 'right' | 'bottom' | 'left';
 
@@ -72,7 +71,7 @@ export class AppPopper extends Vue {
 
 	$refs!: {
 		popover: any;
-		scroller: AppScrollScroller;
+		scroller: AppScrollScrollerTS;
 	};
 
 	isVisible = false;

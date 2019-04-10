@@ -1,7 +1,7 @@
 import { CreateElement } from 'vue';
 import { WidgetCompilerWidget } from '../widget';
 import { WidgetCompilerContext } from '../widget-compiler.service';
-import { AppWidgetCompilerWidgetSoundcloud } from './widget-soundcloud';
+import AppWidgetCompilerWidgetSoundcloud from './widget-soundcloud.vue'
 
 export class WidgetCompilerWidgetSoundcloud extends WidgetCompilerWidget {
 	readonly name = 'soundcloud';

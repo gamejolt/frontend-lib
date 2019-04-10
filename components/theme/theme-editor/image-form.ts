@@ -1,10 +1,8 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./image-form.html';
-
-import { BaseForm, FormOnInit, FormOnSubmit, FormOnLoad } from '../../form-vue/form.service';
 import { Api } from '../../api/api.service';
-import { AppFormControlUpload } from '../../form-vue/control/upload/upload';
-import { AppForm } from '../../form-vue/form';
+import AppFormControlUpload from '../../form-vue/control/upload/upload.vue';
+import AppForm from '../../form-vue/form';
+import { BaseForm, FormOnInit, FormOnLoad, FormOnSubmit } from '../../form-vue/form.service';
 
 interface FormModel {
 	type: string;
@@ -13,13 +11,12 @@ interface FormModel {
 	_progress: ProgressEvent | null;
 }
 
-@View
 @Component({
 	components: {
 		AppFormControlUpload,
 	},
 })
-export class FormThemeEditorImage extends BaseForm<FormModel>
+export default class FormThemeEditorImage extends BaseForm<FormModel>
 	implements FormOnInit, FormOnLoad, FormOnSubmit {
 	resetOnSubmit = true;
 	warnOnDiscard = false;

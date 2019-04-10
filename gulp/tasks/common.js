@@ -24,7 +24,7 @@ module.exports = (config, projectBase) => {
 	config.watching = argv._.indexOf('watch') !== -1 ? 'initial' : false;
 	config.write = argv.fs || false;
 	config.analyze = argv.analyze || false;
-	config.server = argv.server || false;
+	config.ssr = argv.ssr || false; // 'client' | 'server' | false
 	config.client = argv.client || false;
 	config.noGjPush = argv.noGjPush || false;
 	config.noClean = argv.noClean || false;
@@ -40,7 +40,7 @@ module.exports = (config, projectBase) => {
 	config.translationSections = config.translationSections || [];
 	config.buildSection = argv['section'] || 'app';
 
-	if (config.server) {
+	if (config.ssr === 'server') {
 		config.sections = filterSections(i => i.server);
 	} else if (config.client) {
 		config.sections = filterSections(i => i.client);
@@ -64,11 +64,13 @@ module.exports = (config, projectBase) => {
 	config.gjLibDir = 'src/lib/gj-lib-client/';
 	config.bowerDir = 'src/bower-lib/';
 
-	if (config.server) {
+	if (config.client || config.ssr) {
 		config.write = true;
+	}
+
+	if (config.ssr === 'server') {
 		config.buildDir += '-server';
 	} else if (config.client) {
-		config.write = true;
 		config.buildDir += '-client';
 		config.clientBuildDir = config.buildDir + '-build';
 		config.clientBuildCacheDir = config.buildDir + '-cache';

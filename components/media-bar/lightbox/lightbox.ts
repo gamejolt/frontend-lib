@@ -1,16 +1,15 @@
-import View from '!view!./lightbox.html?style=./lightbox.styl';
 import { Subscription } from 'rxjs/Subscription';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
 import { bootstrapShortkey } from '../../../vue/shortkey';
 import { Analytics } from '../../analytics/analytics.service';
 import { EscapeStack } from '../../escape-stack/escape-stack.service';
 import { Screen } from '../../screen/screen-service';
-import { AppMediaBar } from '../media-bar';
-import { AppMediaBarLightboxItem } from './item/item';
+import AppMediaBar from '../media-bar';
+import AppMediaBarLightboxItem from './item/item.vue';
 import './lightbox-global.styl';
-import { AppMediaBarLightboxSlider } from './slider';
+import AppMediaBarLightboxSlider from './slider.vue';
 
 if (!GJ_IS_SSR) {
 	const VueTouch = require('vue-touch');
@@ -27,7 +26,6 @@ export const MediaBarLightboxConfig = {
 
 bootstrapShortkey();
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -35,7 +33,7 @@ bootstrapShortkey();
 		AppMediaBarLightboxItem,
 	},
 })
-export class AppMediaBarLightbox extends Vue {
+export default class AppMediaBarLightbox extends Vue {
 	@Prop(Object)
 	mediaBar!: AppMediaBar;
 

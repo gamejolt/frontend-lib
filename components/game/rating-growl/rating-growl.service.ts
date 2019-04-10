@@ -2,7 +2,7 @@ import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
 import { Growls } from '../../growls/growls.service';
 import { Game } from '../game.model';
-import { AppGameRatingGrowl } from './rating-growl';
+import AppGameRatingGrowl from './rating-growl.vue'
 
 export class GameRatingGrowl {
 	static async show(game: Game) {

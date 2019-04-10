@@ -1,16 +1,11 @@
-import View from '!view!./modal.html?style=./modal.styl';
-import {
-	CommentState,
-	CommentStore,
-} from 'game-jolt-frontend-lib/components/comment/comment-store';
-import { number } from 'game-jolt-frontend-lib/vue/filters/number';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import { CommentState, CommentStore } from '../../../components/comment/comment-store';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
+import { number } from '../../../vue/filters/number';
 import { BaseModal } from '../../modal/base';
-import { AppCommentWidget } from '../widget/widget';
+import AppCommentWidget from '../widget/widget.vue';
 import { DisplayMode } from './modal.service';
 
-@View
 @Component({
 	components: {
 		AppJolticon,

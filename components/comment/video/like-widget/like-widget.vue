@@ -1,0 +1,28 @@
+<template>
+	<span v-app-auth-required>
+		<app-button
+			:icon="isCircle ? 'heart' : undefined"
+			:circle="isCircle"
+			:overlay="overlay"
+			:block="block"
+			:primary="!!comment.user_vote || !isCircle"
+			:solid="!!comment.user_vote"
+			:badge="badge"
+			:disabled="isProcessing"
+			@click="toggle"
+		>
+			<span v-if="!isCircle">
+				<translate v-if="!comment.user_vote">Like</translate>
+				<translate v-else>Liked</translate>
+			</span>
+		</app-button>
+		<a @click="showLikers()" v-app-tooltip="$gettext(`View all people that liked this video`)">
+			<span class="blip filled" v-if="blip">
+				<span class="blip-caret"></span>
+				<span class="blip-count">{{ blip }}</span>
+			</span>
+		</a>
+	</span>
+</template>
+
+<script lang="ts" src="./like-widget"></script>

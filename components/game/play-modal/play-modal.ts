@@ -1,13 +1,11 @@
-import View from '!view!./play-modal.html?style=./play-modal.styl';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
 import { Minbar } from '../../minbar/minbar.service';
 import { BaseModal } from '../../modal/base';
 import { Game } from '../game.model';
 import { GameRatingGrowl } from '../rating-growl/rating-growl.service';
 import './play-modal-global.styl';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -42,7 +40,7 @@ export default class AppGamePlayModal extends BaseModal {
 		// We basically animate it out but keep it in the DOM.
 		// This is so we don't lose the game when closing it.
 		document.body.classList.remove('game-play-modal-open');
-		this.$el.style.display = 'none';
+		(this.$el as HTMLElement).style.display = 'none';
 
 		// When this minbar item is clicked, it basically shows this modal again.
 		const minbarItem = Minbar.add({
@@ -62,7 +60,7 @@ export default class AppGamePlayModal extends BaseModal {
 	private maximize() {
 		// Add everything back in!
 		document.body.classList.add('game-play-modal-open');
-		this.$el.style.display = 'block';
+		(this.$el as HTMLElement).style.display = 'block';
 	}
 
 	close() {

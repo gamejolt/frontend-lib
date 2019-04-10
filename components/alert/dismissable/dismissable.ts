@@ -1,19 +1,18 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./dismissable.html';
-import { AppExpand } from '../../expand/expand';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
+
+import AppExpand from '../../expand/expand.vue'
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
 
 const STORAGE_KEY_PREFIX = 'dismiss-alert:';
 
-@View
 @Component({
 	components: {
 		AppExpand,
 		AppJolticon,
 	},
 })
-export class AppAlertDismissable extends Vue {
+export default class AppAlertDismissable extends Vue {
 	@Prop(String) alertType!: string;
 	@Prop(String) dismissKey!: string;
 	@Prop(Boolean) noMargin?: boolean;

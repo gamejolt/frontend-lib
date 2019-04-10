@@ -1,11 +1,8 @@
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./radio.html';
+import BaseFormControl from '../base';
 
-import { BaseFormControl } from '../base';
-
-@View
 @Component({})
-export class AppFormControlRadio extends BaseFormControl {
+export default class AppFormControlRadio extends BaseFormControl {
 	@Prop() value!: any;
 
 	multi = true;

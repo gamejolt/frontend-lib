@@ -1,17 +1,15 @@
-import View from '!view!./modals.html?style=./modals.styl';
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
 import { AppModalWrapper } from './modal-wrapper';
 import { Modal } from './modal.service';
 import './modals-global.styl';
 
-@View
 @Component({
 	components: {
 		AppModalWrapper,
 	},
 })
-export class AppModals extends Vue {
+export default class AppModals extends Vue {
 	readonly Modal = Modal;
 
 	get activeModals() {

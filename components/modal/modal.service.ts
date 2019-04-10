@@ -1,5 +1,5 @@
-import { Popper } from 'game-jolt-frontend-lib/components/popper/popper.service';
 import Vue, { AsyncComponent } from 'vue';
+import { Popper } from '../../components/popper/popper.service';
 import { arrayRemove } from '../../utils/array';
 import { makeObservableService } from '../../utils/vue';
 

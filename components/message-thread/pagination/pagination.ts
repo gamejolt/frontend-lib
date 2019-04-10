@@ -1,18 +1,15 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./pagination.html';
+import AppPagination from '../../pagination/pagination.vue'
+import AppTimelineListItem from '../../timeline-list/item/item.vue'
 
-import { AppPagination } from '../../pagination/pagination';
-import { AppTimelineListItem } from '../../timeline-list/item/item';
-
-@View
 @Component({
 	components: {
 		AppTimelineListItem,
 		AppPagination,
 	},
 })
-export class AppMessageThreadPagination extends Vue {
+export default class AppMessageThreadPagination extends Vue {
 	@Prop(Number) itemsPerPage!: number;
 	@Prop(Number) totalItems!: number;
 	@Prop(Number) currentPage!: number;

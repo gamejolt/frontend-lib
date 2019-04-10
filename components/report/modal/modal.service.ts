@@ -8,7 +8,7 @@ export class ReportModal {
 			modalId: 'Report',
 			size: 'sm',
 			component: () =>
-				asyncComponentLoader(import(/* webpackChunkName: "ReportModal" */ './modal')),
+				asyncComponentLoader(import(/* webpackChunkName: "ReportModal" */ './modal.vue')),
 			props: { resource },
 		});
 	}

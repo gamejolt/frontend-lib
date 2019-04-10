@@ -1,16 +1,14 @@
-import View from '!view!./add-button.html?style=./add-button.styl';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppAuthRequired } from '../../auth/auth-required-directive.vue';
+import { AppAuthRequired } from '../../auth/auth-required-directive';
 import { CommentModal, DisplayMode } from '../modal/modal.service';
 
-@View
 @Component({
 	directives: {
 		AppAuthRequired,
 	},
 })
-export class AppCommentAddButton extends Vue {
+export default class AppCommentAddButton extends Vue {
 	@Prop(String)
 	resource!: string;
 

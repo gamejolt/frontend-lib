@@ -1,22 +1,20 @@
-import View from '!view!./affix.html?style=./affix.styl';
-import { AppScrollScroller } from 'game-jolt-frontend-lib/components/scroll/scroller/scroller';
-import { findVueParent } from 'game-jolt-frontend-lib/utils/vue';
 import 'rxjs/add/operator/sampleTime';
 import { Subscription } from 'rxjs/Subscription';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { findVueParent } from '../../../utils/vue';
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
 import { Scroll } from '../scroll.service';
+import AppScrollScroller from '../scroller/scroller';
 
 /**
  * Wait this long between scroll checks.
  */
 const ScrollSampleTime = 100;
 
-@View
 @Component({})
-export class AppScrollAffix extends Vue {
+export default class AppScrollAffix extends Vue {
 	@Prop({ type: String, default: 'gj-scroll-affixed' })
 	className!: string;
 

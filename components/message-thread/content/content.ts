@@ -1,13 +1,10 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import View from '!view!./content.html';
+import AppTimelineListItem from '../../timeline-list/item/item.vue'
 
-import { AppTimelineListItem } from '../../timeline-list/item/item';
-
-@View
 @Component({
 	components: {
 		AppTimelineListItem,
 	},
 })
-export class AppMessageThreadContent extends Vue {}
+export default class AppMessageThreadContent extends Vue {}

@@ -1,15 +1,13 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import View from '!view!./thumbnail-img.html?style=./thumbnail-img.styl';
 
 import { AppImgResponsive } from '../../img/responsive/responsive';
 import { Game } from '../game.model';
 import { Screen } from '../../screen/screen-service';
-import { AppJolticon } from '../../../vue/components/jolticon/jolticon';
-import { AppVideo } from '../../video/video';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
+import AppVideo from '../../video/video.vue'
 import { ContentFocus } from '../../content-focus/content-focus.service';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -17,7 +15,7 @@ import { ContentFocus } from '../../content-focus/content-focus.service';
 		AppVideo,
 	},
 })
-export class AppGameThumbnailImg extends Vue {
+export default class AppGameThumbnailImg extends Vue {
 	@Prop(Object) game!: Game;
 	@Prop(Boolean) hideMedia?: boolean;
 	@Prop(Boolean) animate?: boolean;
@@ -30,11 +28,7 @@ export class AppGameThumbnailImg extends Vue {
 
 	get hasVideo() {
 		return (
-			this.mediaItem &&
-			this.mediaItem.is_animated &&
-			Screen.isDesktop &&
-			!GJ_IS_SSR &&
-			this.animate
+			this.mediaItem && this.mediaItem.is_animated && Screen.isDesktop && !GJ_IS_SSR && this.animate
 		);
 	}
 

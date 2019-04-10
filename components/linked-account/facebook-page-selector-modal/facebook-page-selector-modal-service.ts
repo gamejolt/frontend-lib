@@ -9,7 +9,7 @@ export class ModalFacebookPageSelector {
 			size: 'sm',
 			component: () =>
 				asyncComponentLoader(
-					import(/* webpackChunkName: "ModalFacebookPageSelector" */ './facebook-page-selector-modal')
+					import(/* webpackChunkName: "ModalFacebookPageSelector" */ './facebook-page-selector-modal.vue')
 				),
 			props: { message, account, title },
 		});

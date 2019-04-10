@@ -1,17 +1,15 @@
+import { Subscription } from 'rxjs/Subscription';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { Subscription } from 'rxjs/Subscription';
-import View from '!view!./item.html?style=./item.styl';
-
-import { MediaBarLightboxConfig, AppMediaBarLightbox } from '../lightbox';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
-import { AppImgResponsive } from '../../../img/responsive/responsive';
-import { AppVideoEmbed } from '../../../video/embed/embed';
-import { AppSketchfabEmbed } from '../../../sketchfab/embed/embed';
 import { findRequiredVueParent } from '../../../../utils/vue';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
+import { AppImgResponsive } from '../../../img/responsive/responsive';
 import { Screen } from '../../../screen/screen-service';
+import AppSketchfabEmbed from '../../../sketchfab/embed/embed.vue';
+import AppVideoEmbed from '../../../video/embed/embed.vue';
+import AppMediaBarLightboxTS, { MediaBarLightboxConfig } from '../lightbox';
+import AppMediaBarLightbox from '../lightbox.vue';
 
-@View
 @Component({
 	components: {
 		AppJolticon,
@@ -20,12 +18,12 @@ import { Screen } from '../../../screen/screen-service';
 		AppImgResponsive,
 	},
 })
-export class AppMediaBarLightboxItem extends Vue {
+export default class AppMediaBarLightboxItem extends Vue {
 	@Prop(Object) item!: any;
 	@Prop(Number) itemIndex!: number;
 	@Prop(Number) activeIndex!: number;
 
-	lightbox!: AppMediaBarLightbox;
+	lightbox!: AppMediaBarLightboxTS;
 
 	isActive = false;
 	isNext = false;
@@ -41,7 +39,7 @@ export class AppMediaBarLightboxItem extends Vue {
 	};
 
 	mounted() {
-		this.lightbox = findRequiredVueParent(this, AppMediaBarLightbox);
+		this.lightbox = findRequiredVueParent(this, AppMediaBarLightbox) as AppMediaBarLightboxTS;
 		this.calcActive();
 		this.calcDimensions();
 
