@@ -13,6 +13,15 @@
 		// the var so they all use the "bg" color instead.
 		--theme-bg-offset: var(--theme-bg)
 
+.fill-offset-back
+	theme-prop('background-color', 'bg-offset-back')
+
+	// Select all children
+	*
+		// Since a bunch of elements use the "bg-offset" color, we want to set
+		// the var so they all use the "bg" color instead.
+		--theme-bg-offset-back: var(--theme-bg)
+
 .fill-highlight
 	theme-prop('background-color', 'bi-bg')
 	theme-prop('color', 'bi-fg')

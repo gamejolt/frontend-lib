@@ -1,4 +1,14 @@
-import { complement, desaturate, hsl, mix, parseToHsl, parseToRgb, readableColor, rgb, toColorString } from 'polished';
+import {
+	complement,
+	desaturate,
+	hsl,
+	mix,
+	parseToHsl,
+	parseToRgb,
+	readableColor,
+	rgb,
+	toColorString,
+} from 'polished';
 import { RgbColor } from 'polished/lib/types/color';
 import { lab2rgb, rgb2lab } from '../../utils/color';
 import { Model } from '../model/model.service';
@@ -15,6 +25,7 @@ const GrayLighter = '#d1d1d1';
 const GrayLightest = '#f0f0f0';
 const WellLight = '#fafafa';
 const WellDark = '#232323';
+const BgOffsetBack = '#1d1d1d';
 
 // For clamping custom colors.
 //   ("MinLitBase" is summed with a variable portion of BlueBoost for MinLitFinal.)
@@ -252,6 +263,10 @@ export class Theme extends Model {
 
 	get darkBiFg_() {
 		return this.highlightFg_;
+	}
+
+	get darkBgOffsetBack_() {
+		return this.tintColor(BgOffsetBack, 0.04);
 	}
 
 	get darkest_() {

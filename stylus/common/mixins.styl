@@ -21,6 +21,7 @@ theme-dark()
 	--theme-bg-offset-trans-base: var(--dark-theme-bg-offset-trans-base)
 	--theme-bg-offset: var(--dark-theme-bg-offset)
 	--theme-bg-offset-trans: var(--dark-theme-bg-offset-trans)
+	--theme-bg-offset-back: var(--dark-theme-bg-offset-back)
 	--theme-bg-subtle: var(--dark-theme-bg-subtle)
 	--theme-fg: var(--dark-theme-fg)
 	--theme-fg-muted: var(--dark-theme-fg-muted)
@@ -260,7 +261,7 @@ spacer()
 input-placeholder-button()
 	theme-prop('border-color', 'bg-subtle')
 	theme-prop('color', 'fg-muted')
-	theme-prop('background-color', 'bg')
+	theme-prop('background-color', 'bg-offset-back')
 	height: $input-height-base * 1.5
 	line-height: $input-height-base * 1.5
 	padding-left: $padding-base-horizontal
