@@ -22,6 +22,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="../list-common.styl" scoped />
+<style lang="stylus" src="../list-common.styl" scoped></style>
 
 <script lang="ts" src="./item"></script>
