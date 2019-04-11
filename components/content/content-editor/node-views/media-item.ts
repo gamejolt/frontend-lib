@@ -1,4 +1,4 @@
-import AppContentMediaItem from '../../components/media-item/media-item';
+import AppContentMediaItem from '../../components/media-item/media-item.vue';
 import { ContentEditorService } from '../content-editor.service';
 import { HydratableNodeView } from './hydratable';
 

@@ -1,5 +1,6 @@
 <template>
 	<div class="content-viewer">
+		<!-- DEBUG: Remove -->
 		<template v-if="showSource">
 			<h2>Content Viewer</h2>
 			<div class="source-view">

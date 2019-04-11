@@ -1,4 +1,4 @@
-import AppContentMention from '../../components/mention/mention';
+import AppContentMention from '../../components/mention/mention.vue';
 import { HydratableNodeView } from './hydratable';
 
 export class MentionNodeView extends HydratableNodeView {
