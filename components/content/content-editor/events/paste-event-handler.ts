@@ -1,5 +1,5 @@
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { EditorView } from 'prosemirror-view';
+import { ContentEditorService } from '../content-editor.service';
 
 // Handles pasting direct image data from e.g. Paint, GIMP or web browsers
 

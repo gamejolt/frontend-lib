@@ -1,17 +1,3 @@
-import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
-import AppContentEditorControlsEmojiPanelTS from 'game-jolt-frontend-lib/components/content/content-editor/controls/emoji/panel/panel';
-import AppContentEditorControlsEmojiPanel from 'game-jolt-frontend-lib/components/content/content-editor/controls/emoji/panel/panel.vue';
-import AppContentEditorTextControls from 'game-jolt-frontend-lib/components/content/content-editor/controls/text/text-controls.vue';
-import buildEvents from 'game-jolt-frontend-lib/components/content/content-editor/events/build-events';
-import { FocusWatcher } from 'game-jolt-frontend-lib/components/content/content-editor/focus-watcher';
-import { createPlugins } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/plugins';
-import { generateSchema } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/content-editor-schema';
-import {
-	ContentFormatAdapter,
-	ProsemirrorEditorFormat,
-} from 'game-jolt-frontend-lib/components/content/content-format-adapter';
-import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
 import { DOMParser, Node, Schema } from 'prosemirror-model';
 import { EditorState, Plugin, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
@@ -19,12 +5,23 @@ import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { Screen } from '../../screen/screen-service';
+import { ContentContainer } from '../content-container';
 import { ContentContext, ContextCapabilities } from '../content-context';
+import { ContentFormatAdapter, ProsemirrorEditorFormat } from '../content-format-adapter';
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
 import AppContentViewer from '../content-viewer/content-viewer.vue';
+import { ContentEditorService } from './content-editor.service';
 import AppContentEditorControls from './controls/content-editor-controls.vue';
+import AppContentEditorControlsEmojiPanelTS from './controls/emoji/panel/panel';
+import AppContentEditorControlsEmojiPanel from './controls/emoji/panel/panel.vue';
+import AppContentEditorTextControls from './controls/text/text-controls.vue';
+import buildEvents from './events/build-events';
+import { FocusWatcher } from './focus-watcher';
 import { buildNodeViews } from './node-views/node-view-builder';
+import { createPlugins } from './plugins/plugins';
+import { generateSchema } from './schemas/content-editor-schema';
 
 /**
  * @emits update
@@ -272,7 +269,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	public showEmojiPanel() {
-		if (this.$refs.emojiPanel instanceof AppContentEditorControlsEmojiPanelTS) {
+		if (this.$refs.emojiPanel instanceof AppContentEditorControlsEmojiPanel) {
 			this.$refs.emojiPanel.show();
 		}
 	}

@@ -1,6 +1,6 @@
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { ContentObject } from '../../content-object';
 
 @Component({})
 export class AppContentViewerGJEmoji extends Vue {

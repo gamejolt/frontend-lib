@@ -1,9 +1,9 @@
-import AppBaseContentComponent from 'game-jolt-frontend-lib/components/content/components/base/base-content-component.vue';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
-import { MediaItem } from 'game-jolt-frontend-lib/components/media-item/media-item-model';
-import AppLoading from 'game-jolt-frontend-lib/vue/components/loading/loading.vue';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import AppLoading from '../../../../vue/components/loading/loading.vue';
+import { MediaItem } from '../../../media-item/media-item-model';
+import { ContentOwner } from '../../content-owner';
+import AppBaseContentComponent from '../base/base-content-component.vue';
 
 @Component({
 	components: {

@@ -1,6 +1,6 @@
-import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
+import { ContentContainer } from '../../content/content-container';
 
 @Component({})
 export default class AppTagSuggestion extends Vue {

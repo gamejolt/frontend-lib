@@ -1,12 +1,12 @@
-import { AppContentEditor } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
-import { ContentListService } from 'game-jolt-frontend-lib/components/content/content-editor/content-list.service';
-import { ContentEditorLinkModal } from 'game-jolt-frontend-lib/components/content/content-editor/modals/link/link-modal.service';
 import { chainCommands, exitCode, toggleMark } from 'prosemirror-commands';
 import { redo, undo } from 'prosemirror-history';
 import { Schema } from 'prosemirror-model';
 import { sinkListItem, splitListItem } from 'prosemirror-schema-list';
 import { EditorState, Transaction } from 'prosemirror-state';
+import AppContentEditor from './content-editor';
+import { ContentEditorService } from './content-editor.service';
+import { ContentListService } from './content-list.service';
+import { ContentEditorLinkModal } from './modals/link/link-modal.service';
 
 export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema) {
 	const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
@@ -33,7 +33,7 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 			return true;
 		},
 		// Add/remove link
-		'Mod-k': async (state: EditorState, dispatch: ((tr: Transaction) => void)) => {
+		'Mod-k': async (state: EditorState, dispatch: (tr: Transaction) => void) => {
 			const selectionMarks = ContentEditorService.getSelectionMarks(state);
 			if (selectionMarks.some(m => m.type.name === 'link')) {
 				toggleMark(schema.marks.link);

@@ -1,7 +1,7 @@
-import { ContentContext } from 'game-jolt-frontend-lib/components/content/content-context';
-import { ContentHydrationDataEntry } from 'game-jolt-frontend-lib/components/content/content-hydrator';
-import { ContentNode } from 'game-jolt-frontend-lib/components/content/content-node';
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
+import { ContentContext } from './content-context';
+import { ContentHydrationDataEntry } from './content-hydrator';
+import { ContentNode } from './content-node';
+import { ContentObject } from './content-object';
 
 const GJ_FORMAT_VERSION = '1.0.0';
 

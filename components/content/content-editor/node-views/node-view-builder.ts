@@ -1,12 +1,12 @@
-import { EmbedNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/embed';
-import { MediaItemNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-item';
-import { MediaUploadNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/media-upload';
-import { TableNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/table';
-import { TagNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/tag';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import { Node } from 'prosemirror-model';
 import { Decoration, EditorView, NodeView } from 'prosemirror-view';
+import { ContentOwner } from '../../content-owner';
+import { EmbedNodeView } from './embed';
+import { MediaItemNodeView } from './media-item';
+import { MediaUploadNodeView } from './media-upload';
 import { MentionNodeView } from './mention';
+import { TableNodeView } from './table';
+import { TagNodeView } from './tag';
 
 type NodeViewList = {
 	[name: string]: (

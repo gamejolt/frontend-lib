@@ -1,6 +1,6 @@
-import AppContentEditor from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.vue';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import AppContentEditor from './content-editor.vue';
 
 @Component({
 	components: {

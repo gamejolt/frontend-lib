@@ -1,14 +1,14 @@
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
-import { autolinkCommunityRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/autolink-community-rule';
-import { autolinkUrlRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/autolink-url-rule';
-import { insertBulletListRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/insert-bullet-list-rule';
-import { insertMentionRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/insert-mention-rule';
-import { insertOrderedListRule } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/insert-ordered-list-rule';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
 import { Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { ContextCapabilities } from '../../../content-context';
+import { ContentEditorService } from '../../content-editor.service';
+import { autolinkCommunityRule } from './autolink-community-rule';
+import { autolinkUrlRule } from './autolink-url-rule';
+import { insertBulletListRule } from './insert-bullet-list-rule';
 import { insertEmojiRule } from './insert-emoji-rule';
+import { insertMentionRule } from './insert-mention-rule';
+import { insertOrderedListRule } from './insert-ordered-list-rule';
 import { insertTagRule } from './insert-tag-rule';
 
 export function createInputRules(capabilities: ContextCapabilities) {

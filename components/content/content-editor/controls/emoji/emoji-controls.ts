@@ -1,9 +1,9 @@
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
-import { GJ_EMOJIS } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/gj-emoji-nodespec';
-import AppPopper from 'game-jolt-frontend-lib/components/popper/popper.vue';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import AppPopper from '../../../../popper/popper.vue';
+import { ContentEditorService } from '../../content-editor.service';
+import { GJ_EMOJIS } from '../../schemas/specs/nodes/gj-emoji-nodespec';
 
 @Component({
 	components: {

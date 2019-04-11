@@ -1,6 +1,6 @@
-import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { AppTooltip } from '../../../tooltip/tooltip';
 
 @Component({
 	directives: {

@@ -1,9 +1,9 @@
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
-import AppUserCardHover from 'game-jolt-frontend-lib/components/user/card/hover/hover.vue';
-import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import AppUserCardHover from '../../../../user/card/hover/hover.vue';
+import { User } from '../../../../user/user.model';
+import { ContentObject } from '../../../content-object';
+import { ContentOwner } from '../../../content-owner';
 
 // We have to build a separate view component for mentions and cannot reuse AppContentMention
 // because we want to use the router-link to link to the user, which is unavailable in the editor.

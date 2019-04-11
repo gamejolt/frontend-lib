@@ -1,7 +1,7 @@
-import { AppContentEditor } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import AppContentEditor from '../content-editor';
+import { ContentEditorService } from '../content-editor.service';
 
 export class ShowEmojiPanelPlugin {
 	view: EditorView;

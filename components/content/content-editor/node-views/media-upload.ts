@@ -1,5 +1,5 @@
-import AppContentMediaUpload from 'game-jolt-frontend-lib/components/content/components/media-upload/media-upload.vue';
-import { HydratableNodeView } from 'game-jolt-frontend-lib/components/content/content-editor/node-views/hydratable';
+import AppContentMediaUpload from '../../components/media-upload/media-upload';
+import { HydratableNodeView } from './hydratable';
 
 export class MediaUploadNodeView extends HydratableNodeView {
 	mounted() {

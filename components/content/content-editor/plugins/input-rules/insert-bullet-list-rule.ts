@@ -1,7 +1,7 @@
-import { checkCurrentNodeIsCode } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/input-rules';
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
+import { checkCurrentNodeIsCode } from './input-rules';
 
 export function insertBulletListRule() {
 	return new InputRule(

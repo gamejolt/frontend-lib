@@ -1,14 +1,14 @@
-import AppCard from 'game-jolt-frontend-lib/components/card/card.vue';
-import { ContentHydrator } from 'game-jolt-frontend-lib/components/content/content-hydrator';
-import { Game } from 'game-jolt-frontend-lib/components/game/game.model';
-import AppGameThumbnailImg from 'game-jolt-frontend-lib/components/game/thumbnail-img/thumbnail-img.vue';
-import { AppTheme } from 'game-jolt-frontend-lib/components/theme/theme';
-import AppUserAvatar from 'game-jolt-frontend-lib/components/user/user-avatar/user-avatar.vue';
-import AppLoading from 'game-jolt-frontend-lib/vue/components/loading/loading.vue';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import AppGameCompatIcons from '../../../../../../../app/components/game/compat-icons/compat-icons.vue';
 import AppGameFollowWidget from '../../../../../../../app/components/game/follow-widget/follow-widget.vue';
+import AppLoading from '../../../../../vue/components/loading/loading.vue';
+import AppCard from '../../../../card/card.vue';
+import { Game } from '../../../../game/game.model';
+import AppGameThumbnailImg from '../../../../game/thumbnail-img/thumbnail-img.vue';
+import { AppTheme } from '../../../../theme/theme';
+import AppUserAvatar from '../../../../user/user-avatar/user-avatar.vue';
+import { ContentHydrator } from '../../../content-hydrator';
 
 @Component({
 	components: {

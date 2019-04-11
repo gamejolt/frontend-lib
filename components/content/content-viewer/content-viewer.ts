@@ -1,10 +1,10 @@
-import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
-import { AppContentViewerBaseComponent } from 'game-jolt-frontend-lib/components/content/content-viewer/components/base-component';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { ContentContainer } from '../content-container';
 import { ContextCapabilities } from '../content-context';
 import { ContentHydrator } from '../content-hydrator';
+import { ContentOwner } from '../content-owner';
+import { AppContentViewerBaseComponent } from './components/base-component';
 
 @Component({
 	components: {

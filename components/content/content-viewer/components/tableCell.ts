@@ -1,8 +1,8 @@
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
-import { renderChildren } from 'game-jolt-frontend-lib/components/content/content-viewer/components/base-component';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { ContentObject } from '../../content-object';
+import { ContentOwner } from '../../content-owner';
+import { renderChildren } from './base-component';
 
 @Component({})
 export class AppContentViewerTableCell extends Vue {

@@ -1,7 +1,7 @@
-import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
-import { ContentContext } from 'game-jolt-frontend-lib/components/content/content-context';
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
-import ContentWriter from 'game-jolt-frontend-lib/components/content/content-writer';
+import { ContentContainer } from './content-container';
+import { ContentContext } from './content-context';
+import { ContentObject } from './content-object';
+import { ContentWriter } from './content-writer';
 
 export type ProsemirrorEditorFormat = {
 	type: 'doc';

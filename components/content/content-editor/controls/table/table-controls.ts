@@ -1,7 +1,7 @@
-import AppPopper from 'game-jolt-frontend-lib/components/popper/popper.vue';
-import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import Vue from 'vue';
 import { Component, Emit } from 'vue-property-decorator';
+import AppPopper from '../../../../popper/popper.vue';
+import { AppTooltip } from '../../../../tooltip/tooltip';
 
 @Component({
 	components: {

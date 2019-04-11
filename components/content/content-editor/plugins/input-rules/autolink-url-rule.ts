@@ -1,7 +1,7 @@
-import { checkCurrentNodeIsCode } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/input-rules';
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
+import { checkCurrentNodeIsCode } from './input-rules';
 
 // Preface: This input rule does not accurately detect URLs based on the actual RFCs.
 // It just links http:// and then however many domain parts, and optionally a "path" (`/` and then any non-whitespace).

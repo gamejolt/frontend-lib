@@ -1,7 +1,7 @@
-import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
+import { ContentContainer } from './content-container';
+import { ContentObject } from './content-object';
 
-export default class ContentWriter {
+export class ContentWriter {
 	private _container: ContentContainer;
 
 	constructor(container: ContentContainer) {

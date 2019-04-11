@@ -1,15 +1,15 @@
-import AppBaseContentComponent from 'game-jolt-frontend-lib/components/content/components/base/base-content-component.vue';
-import AppContentEmbedCommunityEmbed from 'game-jolt-frontend-lib/components/content/components/embed/community/community-embed.vue';
-import AppContentEmbedGameEmbed from 'game-jolt-frontend-lib/components/content/components/embed/game/game-embed.vue';
-import AppContentEmbedSoundcloudEmbed from 'game-jolt-frontend-lib/components/content/components/embed/soundcloud/soundcloud-embed.vue';
-import AppContentEmbedUserEmbed from 'game-jolt-frontend-lib/components/content/components/embed/user/user-embed.vue';
-import { ContentEmbedService } from 'game-jolt-frontend-lib/components/content/content-editor/content-embed.service';
-import AppVideoEmbed from 'game-jolt-frontend-lib/components/video/embed/embed.vue';
-import AppLoading from 'game-jolt-frontend-lib/vue/components/loading/loading.vue';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
+import AppLoading from '../../../../vue/components/loading/loading.vue';
+import AppVideoEmbed from '../../../video/embed/embed.vue';
+import { ContentEmbedService } from '../../content-editor/content-embed.service';
 import { ContentOwner } from '../../content-owner';
+import AppBaseContentComponent from '../base/base-content-component.vue';
+import AppContentEmbedCommunityEmbed from './community/community-embed.vue';
+import AppContentEmbedGameEmbed from './game/game-embed.vue';
+import AppContentEmbedSoundcloudEmbed from './soundcloud/soundcloud-embed.vue';
+import AppContentEmbedUserEmbed from './user/user-embed.vue';
 
 @Component({
 	components: {

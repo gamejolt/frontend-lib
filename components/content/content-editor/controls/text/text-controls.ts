@@ -1,13 +1,12 @@
-import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
-import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
-import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { lift, toggleMark, wrapIn } from 'prosemirror-commands';
 import { Mark, MarkType, Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Emit, Prop, Watch } from 'vue-property-decorator';
 import { MouseState } from '../../../../../utils/mouse';
+import { AppTooltip } from '../../../../tooltip/tooltip';
+import { ContextCapabilities } from '../../../content-context';
+import { ContentEditorService } from '../../content-editor.service';
 import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
 
 @Component({

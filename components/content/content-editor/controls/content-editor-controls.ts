@@ -1,13 +1,12 @@
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
-import { ContentTableService } from 'game-jolt-frontend-lib/components/content/content-editor/content-table.service';
-import { Screen } from 'game-jolt-frontend-lib/components/screen/screen-service';
-import { AppTooltip } from 'game-jolt-frontend-lib/components/tooltip/tooltip';
 import { Node, NodeType } from 'prosemirror-model';
 import { Selection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
+import { AppTooltip } from '../../../../components/tooltip/tooltip';
 import { ContextCapabilities } from '../../content-context';
+import { ContentEditorService } from '../content-editor.service';
+import { ContentTableService } from '../content-table.service';
 
 @Component({
 	components: {},

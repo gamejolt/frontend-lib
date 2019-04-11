@@ -1,8 +1,8 @@
-import AppContentEmbed from 'game-jolt-frontend-lib/components/content/components/embed/embed.vue';
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import AppContentEmbed from '../../components/embed/embed.vue';
+import { ContentObject } from '../../content-object';
+import { ContentOwner } from '../../content-owner';
 
 @Component({})
 export class AppContentViewerEmbed extends Vue {

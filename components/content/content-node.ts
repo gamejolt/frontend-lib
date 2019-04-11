@@ -1,7 +1,4 @@
-import {
-	ContentObject,
-	ContentObjectType,
-} from 'game-jolt-frontend-lib/components/content/content-object';
+import { ContentObject, ContentObjectType } from './content-object';
 
 export abstract class ContentNode {
 	protected _content: ContentObject[];

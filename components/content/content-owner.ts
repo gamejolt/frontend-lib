@@ -1,7 +1,6 @@
-import { ContentContainer } from 'game-jolt-frontend-lib/components/content/content-container';
-import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
-import { ContentHydrator } from 'game-jolt-frontend-lib/components/content/content-hydrator';
-import { ContentContext } from './content-context';
+import { ContentContainer } from './content-container';
+import { ContentContext, ContextCapabilities } from './content-context';
+import { ContentHydrator } from './content-hydrator';
 
 export interface ContentOwner {
 	getHydrator(): ContentHydrator;

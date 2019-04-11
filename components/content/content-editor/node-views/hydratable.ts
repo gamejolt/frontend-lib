@@ -1,10 +1,7 @@
-import {
-	BaseNodeView,
-	GetPosFunction,
-} from 'game-jolt-frontend-lib/components/content/content-editor/node-views/base';
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { ContentOwner } from '../../content-owner';
+import { BaseNodeView, GetPosFunction } from './base';
 
 export abstract class HydratableNodeView extends BaseNodeView {
 	protected owner: ContentOwner;

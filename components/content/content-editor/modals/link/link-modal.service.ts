@@ -1,5 +1,5 @@
-import { Modal } from 'game-jolt-frontend-lib/components/modal/modal.service';
 import { asyncComponentLoader } from '../../../../../utils/utils';
+import { Modal } from '../../../../modal/modal.service';
 
 export type LinkData = {
 	href: string;

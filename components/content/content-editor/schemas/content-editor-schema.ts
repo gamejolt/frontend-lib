@@ -1,27 +1,27 @@
-import { strike } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/marks/strike-markspec';
-import { blockquote } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/blockquote-nodespec';
-import { embed } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/embed-nodespec';
-import { hardBreak } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/hard-break-nodespec';
-import { mediaUpload } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/media-upload-nodespec';
-import { orderedList } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/ordered-list-nodespec';
-import { spoiler } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/spoiler-nodespec';
-import { tableCell } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-cell-nodespec';
-import { table } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-nodespec';
-import { tableRow } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/table-row-nodespec';
-import { tag } from 'game-jolt-frontend-lib/components/content/content-editor/schemas/specs/nodes/tag-nodespec';
-import { ContentObjectType } from 'game-jolt-frontend-lib/components/content/content-object';
 import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
+import { ContentObjectType } from '../../content-object';
+import { strike } from './specs/marks/strike-markspec';
+import { blockquote } from './specs/nodes/blockquote-nodespec';
 import { bulletList } from './specs/nodes/bullet-list-nodespec';
 import { codeBlock } from './specs/nodes/code-block-nodespec';
+import { embed } from './specs/nodes/embed-nodespec';
 import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
+import { hardBreak } from './specs/nodes/hard-break-nodespec';
 import { heading } from './specs/nodes/heading-nodespec';
 import { hr } from './specs/nodes/hr-nodespec';
 import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
+import { mediaUpload } from './specs/nodes/media-upload-nodespec';
 import { mention } from './specs/nodes/mention-nodespec';
+import { orderedList } from './specs/nodes/ordered-list-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
+import { spoiler } from './specs/nodes/spoiler-nodespec';
+import { tableCell } from './specs/nodes/table-cell-nodespec';
+import { table } from './specs/nodes/table-nodespec';
+import { tableRow } from './specs/nodes/table-row-nodespec';
+import { tag } from './specs/nodes/tag-nodespec';
 
 export function generateSchema(capabilities: ContextCapabilities) {
 	return new Schema({

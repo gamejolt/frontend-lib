@@ -1,6 +1,6 @@
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
 import { Node, NodeType, Schema } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
+import { ContentEditorService } from './content-editor.service';
 
 export class ContentTableService {
 	private static createCell(schema: Schema, isHeader: boolean, text: string = '') {

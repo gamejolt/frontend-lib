@@ -1,7 +1,7 @@
-import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
-import { dropEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/drop-event-handler';
-import { pasteEventHandler } from 'game-jolt-frontend-lib/components/content/content-editor/events/paste-event-handler';
 import { EditorView } from 'prosemirror-view';
+import { ContextCapabilities } from '../../content-context';
+import { dropEventHandler } from './drop-event-handler';
+import { pasteEventHandler } from './paste-event-handler';
 
 type EventHandlers = {
 	[name: string]: (view: EditorView<any>, event: Event) => boolean;

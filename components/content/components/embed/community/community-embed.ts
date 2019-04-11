@@ -1,12 +1,12 @@
-import AppCard from 'game-jolt-frontend-lib/components/card/card.vue';
-import { Community } from 'game-jolt-frontend-lib/components/community/community.model';
-import AppCommunityJoinWidget from 'game-jolt-frontend-lib/components/community/join-widget/join-widget.vue';
-import AppCommunityThumbnailImg from 'game-jolt-frontend-lib/components/community/thumbnail/img/img.vue';
-import { ContentHydrator } from 'game-jolt-frontend-lib/components/content/content-hydrator';
-import { AppTheme } from 'game-jolt-frontend-lib/components/theme/theme';
-import AppLoading from 'game-jolt-frontend-lib/vue/components/loading/loading.vue';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import AppLoading from '../../../../../vue/components/loading/loading.vue';
+import AppCard from '../../../../card/card.vue';
+import { Community } from '../../../../community/community.model';
+import AppCommunityJoinWidget from '../../../../community/join-widget/join-widget.vue';
+import AppCommunityThumbnailImg from '../../../../community/thumbnail/img/img.vue';
+import { AppTheme } from '../../../../theme/theme';
+import { ContentHydrator } from '../../../content-hydrator';
 
 @Component({
 	components: {

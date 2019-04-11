@@ -1,8 +1,8 @@
-import { imageMimeTypes, isImage } from 'game-jolt-frontend-lib/utils/image';
-import { uuidv4 } from 'game-jolt-frontend-lib/utils/uuid';
 import { Mark, Node, NodeType } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import { imageMimeTypes, isImage } from '../../../utils/image';
+import { uuidv4 } from '../../../utils/uuid';
 
 export class ContentEditorService {
 	/**

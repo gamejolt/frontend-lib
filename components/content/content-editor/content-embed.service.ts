@@ -1,7 +1,7 @@
-import { ContextCapabilities } from 'game-jolt-frontend-lib/components/content/content-context';
-import { ContentHydrator } from 'game-jolt-frontend-lib/components/content/content-hydrator';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
-import { Environment } from 'game-jolt-frontend-lib/components/environment/environment.service';
+import { Environment } from '../../environment/environment.service';
+import { ContextCapabilities } from '../content-context';
+import { ContentHydrator } from '../content-hydrator';
+import { ContentOwner } from '../content-owner';
 
 type EmbedData = {
 	type: EmbedType;

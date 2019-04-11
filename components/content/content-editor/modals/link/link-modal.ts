@@ -1,7 +1,7 @@
-import AppFormContentEditorLink from 'game-jolt-frontend-lib/components/content/content-editor/modals/link/form/link-form.vue';
-import { LinkData } from 'game-jolt-frontend-lib/components/content/content-editor/modals/link/link-modal.service';
 import { Component } from 'vue-property-decorator';
 import { BaseModal } from '../../../../modal/base';
+import AppFormContentEditorLink from './form/link-form.vue';
+import { LinkData } from './link-modal.service';
 
 @Component({
 	components: {

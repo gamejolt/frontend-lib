@@ -1,5 +1,5 @@
-import { ContentNode } from 'game-jolt-frontend-lib/components/content/content-node';
-import { MarkObject } from 'game-jolt-frontend-lib/components/content/mark-object';
+import { ContentNode } from './content-node';
+import { MarkObject } from './mark-object';
 
 export type ContentObjectType =
 	| 'text'

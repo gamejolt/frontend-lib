@@ -1,12 +1,12 @@
-import { Api } from 'game-jolt-frontend-lib/components/api/api.service';
-import { getMediaItemTypeForContext } from 'game-jolt-frontend-lib/components/content/content-context';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
-import { MediaItem } from 'game-jolt-frontend-lib/components/media-item/media-item-model';
-import AppProgressBar from 'game-jolt-frontend-lib/components/progress/bar/bar.vue';
-import { makeFileFromDataUrl } from 'game-jolt-frontend-lib/utils/image';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { makeFileFromDataUrl } from '../../../../utils/image';
+import { Api } from '../../../api/api.service';
+import { MediaItem } from '../../../media-item/media-item-model';
+import AppProgressBar from '../../../progress/bar/bar.vue';
+import { getMediaItemTypeForContext } from '../../content-context';
+import { ContentOwner } from '../../content-owner';
 
 @Component({
 	components: {

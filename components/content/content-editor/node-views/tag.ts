@@ -1,4 +1,4 @@
-import AppContentTag from 'game-jolt-frontend-lib/components/content/components/tag/tag.vue';
+import AppContentTag from '../../components/tag/tag.vue';
 import { BaseNodeView } from './base';
 
 export class TagNodeView extends BaseNodeView {

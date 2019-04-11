@@ -1,12 +1,12 @@
-import { AppContentEditor } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
-import { getContentEditorKeymap } from 'game-jolt-frontend-lib/components/content/content-editor/keymap';
-import { createInputRules } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/input-rules';
-import { UpdateIncrementerPlugin } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/update-incrementer-plugin';
 import { baseKeymap } from 'prosemirror-commands';
 import { history } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
 import { Schema } from 'prosemirror-model';
 import { Plugin } from 'prosemirror-state';
+import AppContentEditor from '../content-editor';
+import { getContentEditorKeymap } from '../keymap';
+import { createInputRules } from './input-rules/input-rules';
+import { UpdateIncrementerPlugin } from './update-incrementer-plugin';
 
 export function createPlugins(editor: AppContentEditor, schema: Schema): Plugin[] {
 	// This is used to update any children with the new view.

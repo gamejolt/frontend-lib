@@ -1,25 +1,25 @@
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
-import { AppContentViewerBlockquote } from 'game-jolt-frontend-lib/components/content/content-viewer/components/blockquote';
-import { AppContentViewerCodeBlock } from 'game-jolt-frontend-lib/components/content/content-viewer/components/code/code';
-import { AppContentViewerGJEmoji } from 'game-jolt-frontend-lib/components/content/content-viewer/components/gjEmoji';
-import { AppContentViewerHeading } from 'game-jolt-frontend-lib/components/content/content-viewer/components/heading';
-import AppContentViewerMention from 'game-jolt-frontend-lib/components/content/content-viewer/components/mention/mention.vue';
-import { AppContentViewerParagraph } from 'game-jolt-frontend-lib/components/content/content-viewer/components/paragraph';
-import { AppContentViewerTable } from 'game-jolt-frontend-lib/components/content/content-viewer/components/table';
-import { AppContentViewerTableCell } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tableCell';
-import { AppContentViewerTableRow } from 'game-jolt-frontend-lib/components/content/content-viewer/components/tableRow';
-import AppContentViewerTag from 'game-jolt-frontend-lib/components/content/content-viewer/components/tag/tag.vue';
-import { AppContentViewerText } from 'game-jolt-frontend-lib/components/content/content-viewer/components/text';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { ContentObject } from '../../content-object';
+import { ContentOwner } from '../../content-owner';
+import { AppContentViewerBlockquote } from './blockquote';
 import { AppContentViewerHardBreak } from './br';
+import { AppContentViewerCodeBlock } from './code/code';
 import { AppContentViewerEmbed } from './embed';
+import { AppContentViewerGJEmoji } from './gjEmoji';
+import { AppContentViewerHeading } from './heading';
 import { AppContentViewerHorizontalRule } from './hr';
 import { AppContentViewerList } from './list';
 import { AppContentViewerListItem } from './list-item';
 import { AppContentViewerMediaItem } from './media-item';
+import AppContentViewerMention from './mention/mention.vue';
+import { AppContentViewerParagraph } from './paragraph';
 import { AppContentViewerSpoiler } from './spoiler';
+import { AppContentViewerTable } from './table';
+import { AppContentViewerTableCell } from './tableCell';
+import { AppContentViewerTableRow } from './tableRow';
+import AppContentViewerTag from './tag/tag.vue';
+import { AppContentViewerText } from './text';
 
 function getComponentType(data: ContentObject): any {
 	switch (data.type) {

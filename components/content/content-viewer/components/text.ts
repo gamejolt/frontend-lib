@@ -1,7 +1,7 @@
-import { ContentObject } from 'game-jolt-frontend-lib/components/content/content-object';
 import Vue, { CreateElement } from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { AppJolticon } from '../../../../vue/components/jolticon/jolticon';
+import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
+import { ContentObject } from '../../content-object';
 
 @Component({
 	components: {},

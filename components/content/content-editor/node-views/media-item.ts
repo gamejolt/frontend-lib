@@ -1,5 +1,5 @@
-import AppContentMediaItem from 'game-jolt-frontend-lib/components/content/components/media-item/media-item.vue';
-import { ContentEditorService } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor.service';
+import AppContentMediaItem from '../../components/media-item/media-item';
+import { ContentEditorService } from '../content-editor.service';
 import { HydratableNodeView } from './hydratable';
 
 export class MediaItemNodeView extends HydratableNodeView {

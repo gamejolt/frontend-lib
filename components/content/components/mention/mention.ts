@@ -1,7 +1,7 @@
-import { ContentOwner } from 'game-jolt-frontend-lib/components/content/content-owner';
-import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { User } from '../../../user/user.model';
+import { ContentOwner } from '../../content-owner';
 
 @Component({})
 export default class AppContentMention extends Vue {

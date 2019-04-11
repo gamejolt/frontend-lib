@@ -1,7 +1,7 @@
-import { checkCurrentNodeIsCode } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/input-rules/input-rules';
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
+import { checkCurrentNodeIsCode } from './input-rules';
 
 export function autolinkCommunityRule() {
 	return new InputRule(

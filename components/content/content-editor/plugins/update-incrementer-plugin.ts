@@ -1,6 +1,6 @@
-import { AppContentEditor } from 'game-jolt-frontend-lib/components/content/content-editor/content-editor';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import AppContentEditor from '../content-editor';
 
 export class UpdateIncrementerPlugin {
 	view: EditorView;
