@@ -26,7 +26,7 @@
 
 .mention-avatar-img
 	display: inline
-	height: 1.5em
+	height: 1.25em
 	img-circle()
 </style>
 

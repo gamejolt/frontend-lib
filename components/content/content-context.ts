@@ -1,4 +1,5 @@
 import { MediaItem } from '../media-item/media-item-model';
+
 export type ContentContext =
 	| 'fireside-post-lead'
 	| 'fireside-post-article'

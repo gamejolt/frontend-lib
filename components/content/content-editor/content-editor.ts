@@ -215,6 +215,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 			throw new Error('The passed in content context is invalid.');
 		}
 		if (this.schema instanceof Schema) {
+			this.hydrator = new ContentHydrator(container.hydration);
 			const jsonObj = ContentFormatAdapter.adaptIn(container);
 			const state = EditorState.create({
 				doc: Node.fromJSON(this.schema, jsonObj),
