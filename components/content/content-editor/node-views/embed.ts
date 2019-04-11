@@ -22,9 +22,7 @@ export class EmbedNodeView extends HydratableNodeView {
 			this.vueComponent.$props.type = this.node.attrs.type;
 		}
 		// don't handle updates to this node, so it doesn't get redrawn.
-		if (!node.attrs.type) {
-			return true;
-		}
+		return !node.attrs.type;
 	}
 
 	mounted() {
