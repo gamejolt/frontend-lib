@@ -1,5 +1,5 @@
 <template>
-	<span class="fireside-post-like-widget inline-margins" v-app-auth-required>
+	<span class="fireside-post-like-widget" v-app-auth-required>
 		<app-button
 			:icon="isCircle ? 'heart' : undefined"
 			:circle="isCircle"
