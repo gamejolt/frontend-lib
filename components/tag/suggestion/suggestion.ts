@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'vue-property-decorator';
-import { ContentContainer } from '../../content/content-container';
+import { ContentDocument } from '../../content/content-document';
 
 @Component({})
 export default class AppTagSuggestion extends Vue {
@@ -10,8 +10,8 @@ export default class AppTagSuggestion extends Vue {
 	@Prop(String)
 	text!: string;
 
-	@Prop(ContentContainer)
-	content!: ContentContainer;
+	@Prop(ContentDocument)
+	content!: ContentDocument;
 
 	@Emit('tag')
 	emitTag(_tag: string) {}
@@ -25,7 +25,7 @@ export default class AppTagSuggestion extends Vue {
 		if (this.text) {
 			text += this.text.toLowerCase();
 		}
-		if (this.content instanceof ContentContainer) {
+		if (this.content instanceof ContentDocument) {
 			text += this.content
 				.getChildrenByType('text')
 				.map(i => i.text)
@@ -45,7 +45,7 @@ export default class AppTagSuggestion extends Vue {
 			.map(t => {
 				const count = this.lcText.split(t.toLowerCase()).length - 1;
 				let hashtagCount = 0;
-				if (this.content instanceof ContentContainer) {
+				if (this.content instanceof ContentDocument) {
 					hashtagCount = this.content
 						.getChildrenByType('tag')
 						.map(i => i.attrs.text as string)
@@ -77,7 +77,7 @@ export default class AppTagSuggestion extends Vue {
 
 		const recommended = this.recommendedTags;
 
-		if (this.content instanceof ContentContainer) {
+		if (this.content instanceof ContentDocument) {
 			const contentTags = this.content.getChildrenByType('tag').map(i => i.attrs.text);
 			return this.tags.filter(
 				t => recommended!.indexOf(t) === -1 && contentTags!.indexOf(t) === -1

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { ContentContainer } from '../content-container';
+import { ContentDocument } from '../content-document';
 import { ContextCapabilities } from '../content-context';
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
@@ -18,7 +18,7 @@ export default class AppContentViewer extends Vue implements ContentOwner {
 	@Prop({ type: Boolean, default: false })
 	showSource!: boolean;
 
-	data: ContentContainer | null = null;
+	data: ContentDocument | null = null;
 	hydrator: ContentHydrator = new ContentHydrator();
 
 	get owner() {
@@ -26,7 +26,7 @@ export default class AppContentViewer extends Vue implements ContentOwner {
 	}
 
 	get shouldShowContent() {
-		return this.data instanceof ContentContainer;
+		return this.data instanceof ContentDocument;
 	}
 
 	mounted() {
@@ -55,7 +55,7 @@ export default class AppContentViewer extends Vue implements ContentOwner {
 		return this.data;
 	}
 
-	setContent(content: ContentContainer) {
+	setContent(content: ContentDocument) {
 		this.data = content;
 		this.hydrator = new ContentHydrator(content.hydration);
 	}
@@ -63,8 +63,8 @@ export default class AppContentViewer extends Vue implements ContentOwner {
 	@Watch('source')
 	updatedSource() {
 		if (this.source) {
-			const sourceObj = ContentContainer.fromJson(this.source);
-			this.setContent(sourceObj);
+			const sourceDoc = ContentDocument.fromJson(this.source);
+			this.setContent(sourceDoc);
 		} else {
 			this.data = null;
 		}

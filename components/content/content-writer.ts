@@ -1,25 +1,25 @@
-import { ContentContainer } from './content-container';
+import { ContentDocument } from './content-document';
 import { ContentObject } from './content-object';
 
 export class ContentWriter {
-	private _container: ContentContainer;
+	private _doc: ContentDocument;
 
-	constructor(container: ContentContainer) {
-		this._container = container;
+	constructor(doc: ContentDocument) {
+		this._doc = doc;
 	}
 
 	public ensureParagraph(): ContentObject {
 		let p: ContentObject;
 
 		if (
-			this._container.lastChild === null ||
-			(this._container.lastChild instanceof ContentObject &&
-				this._container.lastChild.type !== 'paragraph')
+			this._doc.lastChild === null ||
+			(this._doc.lastChild instanceof ContentObject &&
+				this._doc.lastChild.type !== 'paragraph')
 		) {
 			p = new ContentObject('paragraph');
-			this._container.appendChild(p);
+			this._doc.appendChild(p);
 		} else {
-			p = this._container.lastChild!;
+			p = this._doc.lastChild!;
 		}
 
 		return p;

@@ -6,7 +6,7 @@ import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Screen } from '../../screen/screen-service';
-import { ContentContainer } from '../content-container';
+import { ContentDocument } from '../content-document';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { ContentFormatAdapter, ProsemirrorEditorFormat } from '../content-format-adapter';
 import { ContentHydrator } from '../content-hydrator';
@@ -214,13 +214,15 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		return null;
 	}
 
-	public setContent(container: ContentContainer) {
-		if (container.context !== this.contentContext) {
-			throw new Error('The passed in content context is invalid.');
+	public setContent(doc: ContentDocument) {
+		if (doc.context !== this.contentContext) {
+			throw new Error(
+				`The passed in content context is invalid. ${doc.context} != ${this.contentContext}`
+			);
 		}
 		if (this.schema instanceof Schema) {
-			this.hydrator = new ContentHydrator(container.hydration);
-			const jsonObj = ContentFormatAdapter.adaptIn(container);
+			this.hydrator = new ContentHydrator(doc.hydration);
+			const jsonObj = ContentFormatAdapter.adaptIn(doc);
 			const state = EditorState.create({
 				doc: Node.fromJSON(this.schema, jsonObj),
 				schema: this.schema,

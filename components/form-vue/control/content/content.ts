@@ -1,5 +1,5 @@
 import { Component, Prop } from 'vue-property-decorator';
-import { ContentContainer } from '../../../content/content-container';
+import { ContentDocument } from '../../../content/content-document';
 import { ContentContext } from '../../../content/content-context';
 import AppContentEditorTS from '../../../content/content-editor/content-editor';
 import AppContentEditor from '../../../content/content-editor/content-editor.vue';
@@ -36,15 +36,15 @@ export default class AppFormControlContent extends BaseFormControlTS {
 
 	applyToEditor() {
 		if (this.controlVal) {
-			const container = ContentContainer.fromJson(this.controlVal);
-			this.$refs.editor.setContent(container);
+			const doc = ContentDocument.fromJson(this.controlVal);
+			this.$refs.editor.setContent(doc);
 		}
 	}
 
 	onUpdate() {
-		const container = this.$refs.editor.getContent();
-		if (container instanceof ContentContainer) {
-			const jsonValue = container.toJson();
+		const doc = this.$refs.editor.getContent();
+		if (doc instanceof ContentDocument) {
+			const jsonValue = doc.toJson();
 			this.applyValue(jsonValue);
 		}
 	}

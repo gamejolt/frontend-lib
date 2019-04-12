@@ -5,7 +5,7 @@ import { ContentObject } from './content-object';
 
 const GJ_FORMAT_VERSION = '1.0.0';
 
-export class ContentContainer extends ContentNode {
+export class ContentDocument extends ContentNode {
 	public version: string;
 	public createdOn: number;
 	public context: ContentContext;
@@ -20,7 +20,7 @@ export class ContentContainer extends ContentNode {
 		this.hydration = [];
 	}
 
-	public static fromJson(json: string): ContentContainer {
+	public static fromJson(json: string): ContentDocument {
 		if (!json) {
 			throw new Error('Empty json provided.');
 		}
@@ -35,18 +35,18 @@ export class ContentContainer extends ContentNode {
 			}
 		}
 
-		const obj = new ContentContainer(context, content);
+		const doc = new ContentDocument(context, content);
 
-		obj.version = jsonObj.version;
-		obj.createdOn = jsonObj.createdOn;
+		doc.version = jsonObj.version;
+		doc.createdOn = jsonObj.createdOn;
 
 		if (Array.isArray(jsonObj.hydration)) {
-			obj.hydration = jsonObj.hydration;
+			doc.hydration = jsonObj.hydration;
 		} else {
-			obj.hydration = [];
+			doc.hydration = [];
 		}
 
-		return obj;
+		return doc;
 	}
 
 	// DEBUG: remove include hydration
@@ -67,7 +67,7 @@ export class ContentContainer extends ContentNode {
 	}
 
 	/**
-	 * Determines whether there is any "content" in this container.
+	 * Determines whether there is any "content" in this document.
 	 * This discards empty objects like paragraphs with only empty text nodes or list items with empty paragraphs.
 	 */
 	public get hasContent() {

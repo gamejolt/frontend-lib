@@ -1,4 +1,4 @@
-import { ContentContainer } from './content-container';
+import { ContentDocument } from './content-document';
 import { ContentContext } from './content-context';
 import { ContentObject } from './content-object';
 import { ContentWriter } from './content-writer';
@@ -15,16 +15,16 @@ export class ContentFormatAdapter {
 	/**
 	 * Converts from the GJ Content Format to the editor format
 	 */
-	public static adaptIn(inObj: ContentContainer) {
+	public static adaptIn(inDoc: ContentDocument) {
 		// Make sure there is at least one child.
-		if (!inObj.hasChildren) {
+		if (!inDoc.hasChildren) {
 			const p = new ContentObject('paragraph');
-			inObj.appendChild(p);
+			inDoc.appendChild(p);
 		}
 
 		const outObj = {
 			type: 'doc',
-			content: inObj.content,
+			content: inDoc.content,
 		} as ProsemirrorEditorFormat;
 
 		return outObj;
@@ -34,17 +34,17 @@ export class ContentFormatAdapter {
 	 * Converts from the editor format to the GJ Content format
 	 */
 	public static adaptOut(inObj: ProsemirrorEditorFormat, context: ContentContext) {
-		let outObj = new ContentContainer(
+		let outDoc = new ContentDocument(
 			context,
 			inObj.content.map(i => ContentObject.fromJsonObj(i))
 		);
 
 		// Make sure we always have at least one paragraph node
-		if (!outObj.hasChildren) {
-			const writer = new ContentWriter(outObj);
+		if (!outDoc.hasChildren) {
+			const writer = new ContentWriter(outDoc);
 			writer.ensureParagraph();
 		}
 
-		return outObj;
+		return outDoc;
 	}
 }

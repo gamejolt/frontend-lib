@@ -1,4 +1,4 @@
-import { ContentContainer } from './content-container';
+import { ContentDocument } from './content-document';
 import { ContentContext, ContextCapabilities } from './content-context';
 import { ContentHydrator } from './content-hydrator';
 
@@ -7,6 +7,6 @@ export interface ContentOwner {
 	getCapabilities(): ContextCapabilities;
 	getContext(): ContentContext;
 
-	getContent(): ContentContainer | null;
-	setContent(content: ContentContainer): void;
+	getContent(): ContentDocument | null;
+	setContent(content: ContentDocument): void;
 }

@@ -1,5 +1,8 @@
 import { RawLocation } from 'vue-router';
 import { Api } from '../api/api.service';
+import { ContentContainerModel } from '../content/content-container-model';
+import { ContentContext } from '../content/content-context';
+import { ContentSetCache } from '../content/content-set-cache';
 import { MediaItem } from '../media-item/media-item-model';
 import { Model } from '../model/model.service';
 import { Registry } from '../registry/registry.service';
@@ -46,7 +49,7 @@ function pluckBuilds(packages: GamePackage[], func: (build: GameBuild) => boolea
 	return pluckedBuilds;
 }
 
-export class Game extends Model {
+export class Game extends Model implements ContentContainerModel {
 	static readonly CREATION_TOOL_OTHER = 'Other';
 
 	static readonly STATUS_HIDDEN = 0;
@@ -57,6 +60,8 @@ export class Game extends Model {
 	static readonly DEVELOPMENT_STATUS_WIP = 2;
 	static readonly DEVELOPMENT_STATUS_CANCELED = 3;
 	static readonly DEVELOPMENT_STATUS_DEVLOG = 4;
+
+	private _contentSetCache: ContentSetCache | undefined;
 
 	developer!: User;
 	thumbnail_media_item?: MediaItem;
@@ -119,8 +124,6 @@ export class Game extends Model {
 	tigrs_gambling?: number;
 
 	// Description settings
-	description_markdown?: string;
-	description_compiled?: string;
 	description_content!: string;
 
 	// Manage settings
@@ -219,6 +222,20 @@ export class Game extends Model {
 			name: 'discover.games.view.overview',
 			params: this.getSrefParams(),
 		};
+	}
+
+	get hasDescription() {
+		if (this._contentSetCache === undefined) {
+			this._contentSetCache = new ContentSetCache(this, 'game-description');
+		}
+		return this._contentSetCache.hasContent;
+	}
+
+	getContent(context: ContentContext) {
+		if (context === 'game-description') {
+			return this.description_content;
+		}
+		throw new Error(`Context ${context} is not defined for Game.`);
 	}
 
 	getSref(page = '', includeParams = false) {
