@@ -98,7 +98,11 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	get shouldShowPlaceholder() {
-		return this.placeholder.length > 0 && this.isEmpty && this.controlsCollapsed;
+		return (
+			this.placeholder.length > 0 &&
+			this.isEmpty &&
+			(!this.shouldShowControls || this.controlsCollapsed)
+		);
 	}
 
 	get length() {
