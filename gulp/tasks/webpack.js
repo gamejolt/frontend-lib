@@ -214,7 +214,7 @@ module.exports = function(config) {
 						loader: 'vue-loader',
 						options: {
 							compilerOptions: {
-								whitespace: 'condense',
+								whitespace: 'preserve',
 							},
 							transformAssetUrls: {
 								img: 'src',
