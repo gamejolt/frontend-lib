@@ -47,6 +47,17 @@ export default class AppContentEditorControls extends Vue {
 				this.visible = true;
 
 				const start = this.view.coordsAtPos(state.selection.from);
+
+				// Offset the controls if there's a heading node.
+				const headingNode = this.testIsInHeading(node);
+				if (headingNode instanceof Node) {
+					if (headingNode.attrs.level === 1) {
+						start.top += 8;
+					} else {
+						start.top += 6;
+					}
+				}
+
 				const box = this.$refs.container.offsetParent.getBoundingClientRect();
 				this.top = start.top - box.top - 10 + 'px';
 				this.left = '-32px';
@@ -56,6 +67,17 @@ export default class AppContentEditorControls extends Vue {
 		}
 		this.visible = false;
 		this.setCollapsed(true);
+	}
+
+	testIsInHeading(node: Node) {
+		if (!this.capabilities.heading) {
+			return false;
+		}
+		return ContentEditorService.isContainedInNode(
+			this.view.state,
+			node,
+			this.view.state.schema.nodes.heading
+		);
 	}
 
 	private setCollapsed(value: boolean) {
