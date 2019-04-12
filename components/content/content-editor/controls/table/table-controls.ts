@@ -12,8 +12,6 @@ import { AppTooltip } from '../../../../tooltip/tooltip';
 	},
 })
 export default class AppContentEditorTableControls extends Vue {
-	remove() {}
-
 	@Emit('insertRowAbove')
 	onClickInsertRowAbove() {}
 

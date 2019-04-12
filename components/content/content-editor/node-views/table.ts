@@ -128,6 +128,7 @@ export class TableNodeView extends BaseNodeView {
 				ContentTableService.removeRow(this.view, this.node, selectedRowIndex);
 			}
 		}
+		this.setSelection();
 	}
 
 	private onRemoveColumn() {
@@ -144,6 +145,7 @@ export class TableNodeView extends BaseNodeView {
 				ContentTableService.removeColumn(this.view, this.node, selectedColumnIndex);
 			}
 		}
+		this.setSelection();
 	}
 
 	private onToggleHeader() {
