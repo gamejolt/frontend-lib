@@ -6,6 +6,7 @@ export class GameBuildFile extends Model {
 	filesize!: string;
 	java_include_archive!: boolean;
 	is_archive!: boolean;
+	is_archive_ready!: boolean;
 }
 
 Model.create(GameBuildFile);
