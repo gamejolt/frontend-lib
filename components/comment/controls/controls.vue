@@ -25,7 +25,7 @@
 				</span>
 			</a>
 
-			<nbsp />
+			&nbsp;
 
 			<app-button
 				icon="thumbs-down"
@@ -39,7 +39,7 @@
 		</span>
 
 		<template v-if="showReply">
-			<nbsp />
+			&nbsp;
 
 			<span v-app-auth-required>
 				<app-button

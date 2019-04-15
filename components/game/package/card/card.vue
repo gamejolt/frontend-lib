@@ -158,7 +158,7 @@
 
 				<div class="clearfix" v-for="linkedKey of linkedKeys" :key="linkedKey.key">
 					<div class="pull-right">
-						<nbsp />
+						&nbsp;
 						<app-button @click="copyProviderKey(linkedKey)">
 							<translate>Copy</translate>
 						</app-button>

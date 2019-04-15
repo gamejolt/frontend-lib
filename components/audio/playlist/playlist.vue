@@ -39,7 +39,7 @@
 						{{ (duration || 0) | time }}
 					</span>
 					<span v-else key="placeholder">
-						<nbsp />
+						&nbsp;
 					</span>
 				</div>
 			</div>
