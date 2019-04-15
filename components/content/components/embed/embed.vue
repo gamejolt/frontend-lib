@@ -35,10 +35,10 @@
 			<div v-if="shouldShowOverlay" class="embed-overlay">
 				<div class="embed-overlay-img" />
 				<div class="embed-overlay-controls">
-					<app-button v-if="!hasSourceUrl" overlay disabled>
+					<app-button v-if="!hasSourceUrl" overlay disabled @click.prevent>
 						<translate>Go to source</translate>
 					</app-button>
-					<a v-else target="_blank" :href="sourceUrl">
+					<a v-else target="_blank" :href="sourceUrl" @click.prevent>
 						<app-button overlay>
 							<translate>Go to source</translate>
 						</app-button>

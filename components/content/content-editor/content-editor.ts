@@ -6,8 +6,8 @@ import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Screen } from '../../screen/screen-service';
-import { ContentDocument } from '../content-document';
 import { ContentContext, ContextCapabilities } from '../content-context';
+import { ContentDocument } from '../content-document';
 import { ContentFormatAdapter, ProsemirrorEditorFormat } from '../content-format-adapter';
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
@@ -68,7 +68,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	};
 
 	get shouldShowControls() {
-		return !this.disabled && this.isFocused && this.capabilities.hasAny;
+		return !this.disabled && this.isFocused && this.capabilities.hasAnyBlock;
 	}
 
 	get shouldShowTextControls() {
@@ -103,13 +103,6 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 			this.isEmpty &&
 			(!this.shouldShowControls || this.controlsCollapsed)
 		);
-	}
-
-	get length() {
-		if (this.view instanceof EditorView) {
-			return ContentEditorService.getLength(this.view.state);
-		}
-		return 0;
 	}
 
 	// DEBUG

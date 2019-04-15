@@ -2,6 +2,9 @@ import { RawLocation } from 'vue-router';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
 import { Community, Perm as CommunityPerm } from '../../community/community.model';
+import { ContentContainerModel } from '../../content/content-container-model';
+import { ContentContext } from '../../content/content-context';
+import { ContentSetCache } from '../../content/content-set-cache';
 import { EventItem } from '../../event-item/event-item.model';
 import { Game } from '../../game/game.model';
 import { HistoryTick } from '../../history-tick/history-tick-service';
@@ -25,7 +28,7 @@ interface FiresidePostPublishedPlatform {
 	url: string;
 }
 
-export class FiresidePost extends Model {
+export class FiresidePost extends Model implements ContentContainerModel {
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';
 	static TYPE_VIDEO = 'video';
@@ -34,6 +37,9 @@ export class FiresidePost extends Model {
 	static STATUS_DRAFT = 'draft';
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
+
+	private _articleSetCache: ContentSetCache | undefined;
+	private _leadSetCache: ContentSetCache | undefined;
 
 	type!: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
 	hash!: string;
@@ -57,12 +63,6 @@ export class FiresidePost extends Model {
 	lead_snippet!: string;
 	lead_content!: string;
 	article_content!: string;
-
-	// TODO: remove
-	lead!: string;
-	lead_compiled!: string;
-	content_compiled!: string;
-	content_markdown?: string;
 
 	tags: FiresidePostTag[] = [];
 	communities: FiresidePostCommunity[] = [];
@@ -161,7 +161,24 @@ export class FiresidePost extends Model {
 	}
 
 	get hasArticle() {
-		return !!this.content_compiled;
+		if (this._articleSetCache === undefined) {
+			this._articleSetCache = new ContentSetCache(this, 'fireside-post-article');
+		}
+		return this._articleSetCache.hasContent;
+	}
+
+	get hasLead() {
+		if (this._leadSetCache === undefined) {
+			this._leadSetCache = new ContentSetCache(this, 'fireside-post-lead');
+		}
+		return this._leadSetCache.hasContent;
+	}
+
+	get leadLength() {
+		if (this._leadSetCache === undefined) {
+			this._leadSetCache = new ContentSetCache(this, 'fireside-post-lead');
+		}
+		return this._leadSetCache.length;
 	}
 
 	get hasPoll() {
@@ -200,6 +217,15 @@ export class FiresidePost extends Model {
 
 	get manageableCommunities() {
 		return this.getManageableCommunities();
+	}
+
+	getContent(context: ContentContext) {
+		if (context === 'fireside-post-lead') {
+			return this.lead_content;
+		} else if (context === 'fireside-post-article') {
+			return this.article_content;
+		}
+		throw new Error(`Context ${context} is not defined for Fireside Post.`);
 	}
 
 	getManageableCommunities(perms?: CommunityPerm | CommunityPerm[], either?: boolean) {

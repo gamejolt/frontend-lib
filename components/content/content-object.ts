@@ -117,4 +117,37 @@ export class ContentObject extends ContentNode {
 
 		return jsonObj;
 	}
+
+	public getLength() {
+		let length = 0;
+
+		switch (this.type) {
+			case 'text':
+				if (this.text) {
+					length += this.text.length;
+				}
+				break;
+			case 'listItem': // Include a char for the 1./* at the beginning
+			case 'gjEmoji':
+			case 'hardBreak':
+			case 'hr':
+				length++;
+				break;
+			case 'embed':
+				length += this.attrs.source.length;
+				break;
+			case 'mediaItem':
+				length += this.attrs.caption.length + 1;
+				break;
+			case 'mention':
+				length += this.attrs.value.length + 1;
+				break;
+			case 'tag':
+				length += this.attrs.text.length + 1;
+				break;
+		}
+
+		length += super.getLength();
+		return length;
+	}
 }

@@ -44,4 +44,14 @@ export abstract class ContentNode {
 	public appendChild(child: ContentObject) {
 		this._content.push(child);
 	}
+
+	public getLength() {
+		let length = 0;
+
+		for (const contentObj of this._content) {
+			length += contentObj.getLength();
+		}
+
+		return length;
+	}
 }

@@ -6,6 +6,7 @@
 			:content-context="contentContext"
 			:placeholder="placeholder"
 			:disabled="disabled"
+			:autofocus="autofocus"
 			@update="onUpdate"
 		/>
 	</div>

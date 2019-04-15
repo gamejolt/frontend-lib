@@ -1,6 +1,6 @@
 import { Component, Prop } from 'vue-property-decorator';
-import { ContentDocument } from '../../../content/content-document';
 import { ContentContext } from '../../../content/content-context';
+import { ContentDocument } from '../../../content/content-document';
 import AppContentEditorTS from '../../../content/content-editor/content-editor';
 import AppContentEditor from '../../../content/content-editor/content-editor.vue';
 import BaseFormControlTS from '../../../form-vue/control/base';
@@ -19,6 +19,9 @@ export default class AppFormControlContent extends BaseFormControlTS {
 
 	@Prop(Boolean)
 	disabled!: boolean;
+
+	@Prop(Boolean)
+	autofocus!: boolean;
 
 	controlVal = '';
 

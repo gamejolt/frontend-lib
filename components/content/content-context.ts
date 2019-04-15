@@ -36,8 +36,17 @@ type ContextCapabilityType =
 export class ContextCapabilities {
 	public capabilities: ContextCapabilityType[];
 
-	get hasAny() {
-		return this.capabilities.length > 0;
+	get hasAnyBlock() {
+		return (
+			this.hasAnyEmbed ||
+			this.media ||
+			this.codeBlock ||
+			this.blockquote ||
+			this.lists ||
+			this.hr ||
+			this.spoiler ||
+			this.table
+		);
 	}
 	get hasAnyText() {
 		return (
