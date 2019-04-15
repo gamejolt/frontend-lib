@@ -37,7 +37,6 @@ export class FiresidePost extends Model {
 
 	type!: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
 	hash!: string;
-	header?: MediaItem;
 	status!: string;
 	added_on!: number;
 	updated_on!: number;
@@ -55,13 +54,15 @@ export class FiresidePost extends Model {
 	view_count?: number;
 	expand_count?: number;
 
-	lead!: string;
-	lead_compiled!: string;
 	lead_snippet!: string;
 	lead_content!: string;
+	article_content!: string;
+
+	// TODO: remove
+	lead!: string;
+	lead_compiled!: string;
 	content_compiled!: string;
 	content_markdown?: string;
-	article_content!: string;
 
 	tags: FiresidePostTag[] = [];
 	communities: FiresidePostCommunity[] = [];
@@ -82,10 +83,6 @@ export class FiresidePost extends Model {
 
 	constructor(data: any = {}) {
 		super(data);
-
-		if (data.header) {
-			this.header = new MediaItem(data.header);
-		}
 
 		if (data.user) {
 			this.user = new User(data.user);
