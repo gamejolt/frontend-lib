@@ -62,6 +62,7 @@ export class FiresidePost extends Model implements ContentContainerModel {
 
 	lead_snippet!: string;
 	lead_content!: string;
+	leadStr!: string;
 	article_content!: string;
 
 	tags: FiresidePostTag[] = [];
