@@ -4,6 +4,7 @@ import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Emit, Prop, Watch } from 'vue-property-decorator';
 import { MouseState } from '../../../../../utils/mouse';
+import { Screen } from '../../../../screen/screen-service';
 import { AppTooltip } from '../../../../tooltip/tooltip';
 import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
