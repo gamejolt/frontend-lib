@@ -2,20 +2,17 @@
 	<app-form name="commentAddForm">
 		<app-form-group
 			:class="{ 'sans-margin-bottom': (!changed || !valid) && method !== 'edit' }"
-			name="comment"
+			name="comment_content"
 			:label="$gettext('Leave a Comment')"
 			hide-label
 		>
-			<app-form-control-markdown
-				preview-class="comment-content"
-				preview-url="/comments/preview"
-				markdown-mode="comments"
+			<app-form-control-content
 				:placeholder="placeholder || $gettext(`Leave a comment...`)"
+				:content-context="contentContext"
 				:autofocus="autofocus"
-				:max-height="maxHeight"
 			/>
 
-			<app-form-control-errors label="comment" />
+			<app-form-control-errors label="comment_content" />
 		</app-form-group>
 
 		<div class="text-right">

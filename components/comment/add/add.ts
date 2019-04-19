@@ -1,17 +1,18 @@
 import { Component, Prop } from 'vue-property-decorator';
-import AppFormControlMarkdown from '../../form-vue/control/markdown/markdown.vue'
+import { ContentContext } from '../../content/content-context';
+import AppFormControlContent from '../../form-vue/control/content/content.vue';
 import { BaseForm, FormOnInit } from '../../form-vue/form.service';
 import { Comment } from '../comment-model';
 import '../comment.styl';
 
 @Component({
 	components: {
-		AppFormControlMarkdown,
+		AppFormControlContent,
 	},
 })
 export default class FormComment extends BaseForm<Comment> implements FormOnInit {
 	@Prop(String)
-	resource!: 'Game' | 'FiresidePost';
+	resource!: 'Game' | 'FiresidePost' | 'User';
 
 	@Prop(Number)
 	resourceId!: number;
@@ -31,9 +32,20 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 	modelClass = Comment;
 	resetOnSubmit = true;
 
+	get contentContext(): ContentContext {
+		switch (this.resource) {
+			case 'FiresidePost':
+				return 'fireside-post-comment';
+			case 'Game':
+				return 'game-comment';
+			case 'User':
+				return 'user-comment';
+		}
+	}
+
 	onInit() {
 		if (!this.model) {
-			this.setField('comment', '');
+			this.setField('comment_content', '');
 			this.setField('resource', this.resource);
 			this.setField('resource_id', this.resourceId);
 

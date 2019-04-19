@@ -64,7 +64,7 @@
 						@require-change="canToggleDescription = $event"
 						@expand="showFullDescription = true"
 					>
-						<div class="comment-content" v-html="comment.comment_compiled"></div>
+						<app-content-viewer :source="comment.comment_content" />
 					</app-fade-collapse>
 
 					<a

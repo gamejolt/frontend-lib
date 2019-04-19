@@ -66,7 +66,7 @@ export class Comment extends Model {
 	static readonly SORT_YOU = 'you';
 
 	parent_id!: number;
-	resource!: 'Game' | 'FiresidePost';
+	resource!: 'Game' | 'FiresidePost' | 'User';
 	resource_id!: number;
 	user!: User;
 	votes!: number;
@@ -78,9 +78,6 @@ export class Comment extends Model {
 	videos: CommentVideo[] = [];
 	subscription?: Subscription;
 	is_pinned!: boolean;
-
-	comment?: string;
-	comment_compiled!: string;
 	comment_content!: string;
 
 	isFollowPending = false;

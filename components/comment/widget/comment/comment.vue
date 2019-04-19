@@ -100,7 +100,7 @@
 		</template>
 
 		<template v-if="!isEditing">
-			<app-comment-content :comment="comment" :content="comment.comment_compiled" />
+			<app-comment-content :comment="comment" :content="comment.comment_content" />
 
 			<app-comment-controls
 				slot="controls"
