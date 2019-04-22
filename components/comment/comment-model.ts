@@ -66,7 +66,7 @@ export class Comment extends Model {
 	static readonly SORT_YOU = 'you';
 
 	parent_id!: number;
-	resource!: 'Game' | 'FiresidePost' | 'User';
+	resource!: 'Game' | 'Fireside_Post' | 'User';
 	resource_id!: number;
 	user!: User;
 	votes!: number;

@@ -12,7 +12,7 @@ import '../comment.styl';
 })
 export default class FormComment extends BaseForm<Comment> implements FormOnInit {
 	@Prop(String)
-	resource!: 'Game' | 'FiresidePost' | 'User';
+	resource!: 'Game' | 'Fireside_Post' | 'User';
 
 	@Prop(Number)
 	resourceId!: number;
@@ -34,7 +34,7 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 
 	get contentContext(): ContentContext {
 		switch (this.resource) {
-			case 'FiresidePost':
+			case 'Fireside_Post':
 				return 'fireside-post-comment';
 			case 'Game':
 				return 'game-comment';
