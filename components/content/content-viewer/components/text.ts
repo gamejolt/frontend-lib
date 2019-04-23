@@ -52,6 +52,7 @@ export class AppContentViewerText extends Vue {
 			const children = [vnode];
 			const domProps = {
 				href: attrs.href,
+				rel: 'nofollow noopener',
 			} as any;
 			if (attrs.title) {
 				domProps.title = attrs.title;
