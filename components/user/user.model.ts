@@ -32,25 +32,12 @@ export class User extends Model implements ContentContainerModel {
 	created_on!: number;
 	last_logged_on!: number;
 
-	twitter_id?: string;
-	twitter_screenname?: string;
-
-	twitch_id?: string;
-	twitch_name?: string;
-
-	google_id?: string;
-	google_nickname?: string;
-
 	theme!: Theme | null;
 	follower_count!: number;
 	following_count!: number;
 	comment_count!: number;
 	is_following?: boolean;
 	follows_you?: boolean;
-
-	// Manage linked accounts settings - fb is only returned in the profile pages
-	facebook_id?: string;
-	facebook_name?: string;
 
 	// exp settings.
 	level?: number;
