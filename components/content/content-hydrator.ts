@@ -1,6 +1,9 @@
 import { arrayRemove } from '../../utils/array';
 import { Api } from '../api/api.service';
 
+/**
+ * The type of source passed into the hydrator, not what the resulting hydration data will be.
+ */
 export type ContentHydrationType =
 	| 'media-item-id'
 	| 'game-id'

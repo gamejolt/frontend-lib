@@ -53,7 +53,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	view: EditorView | null = null;
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
-	hydrator: ContentHydrator = new ContentHydrator();
+	hydrator!: ContentHydrator;
 	schema: Schema | null = null;
 	plugins: Plugin[] | null = null;
 	isFocused = false;
@@ -166,7 +166,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	beforeDestroy() {
 		if (this.focusWatcher instanceof FocusWatcher) {
-			this.focusWatcher!.destroy();
+			this.focusWatcher.destroy();
 		}
 	}
 
