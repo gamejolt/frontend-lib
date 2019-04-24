@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { ContentDocument } from '../content-document';
 import { ContextCapabilities } from '../content-context';
+import { ContentDocument } from '../content-document';
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
 import { AppContentViewerBaseComponent } from './components/base-component';
@@ -27,6 +27,13 @@ export default class AppContentViewer extends Vue implements ContentOwner {
 
 	get shouldShowContent() {
 		return this.data instanceof ContentDocument;
+	}
+
+	get viewerStyleClass() {
+		if (!this.data) {
+			return '';
+		}
+		return this.getContext() + '-content';
 	}
 
 	mounted() {

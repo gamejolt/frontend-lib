@@ -1,5 +1,5 @@
 <template>
-	<div class="content-viewer">
+	<div class="content-viewer" :class="viewerStyleClass">
 		<!-- DEBUG: Remove -->
 		<template v-if="showSource">
 			<h2>Content Viewer</h2>
