@@ -4,6 +4,7 @@ import { Environment } from '../environment/environment.service';
 import { FbMetaContainer } from './fb-meta-container';
 import { MetaContainer } from './meta-container';
 import { MicrodataContainer } from './microdata-container';
+import { SeoMetaContainer } from './seo-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
 
 export function escapeString(str: string) {
@@ -24,6 +25,7 @@ export class Meta extends MetaContainer {
 	private static _fb = new FbMetaContainer();
 	private static _twitter = new TwitterMetaContainer();
 	private static _microdata = new MicrodataContainer();
+	private static _seo = new SeoMetaContainer();
 
 	private static _baseTitle: string | null = null;
 	private static _notificationsCount = 0;
@@ -69,6 +71,10 @@ export class Meta extends MetaContainer {
 
 	static set microdata(microdata: Object) {
 		this._microdata.set(microdata);
+	}
+
+	static get seo() {
+		return this._seo;
 	}
 
 	static set notificationsCount(count: number) {
@@ -131,7 +137,8 @@ export class Meta extends MetaContainer {
 			this._base.render() +
 			this._fb.render() +
 			this._twitter.render() +
-			this._microdata.render()
+			this._microdata.render() +
+			this._seo.render()
 		);
 	}
 }
