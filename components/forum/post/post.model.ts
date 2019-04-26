@@ -22,8 +22,6 @@ export class ForumPost extends Model {
 	modified_by_user?: User;
 	modified_on?: number;
 
-	content_markdown!: string;
-	content_compiled!: string;
 	text_content!: string;
 
 	notification?: Notification;

@@ -1,6 +1,6 @@
+import { Api } from '../../api/api.service';
 import { Model } from '../../model/model.service';
 import { User } from '../../user/user.model';
-import { Api } from '../../api/api.service';
 import { ForumPost } from '../post/post.model';
 
 export class ForumTopic extends Model {
@@ -29,7 +29,7 @@ export class ForumTopic extends Model {
 	latest_post?: ForumPost;
 
 	// When saving.
-	content_markdown?: string;
+	text_content?: string;
 
 	constructor(data: any = {}) {
 		super(data);
