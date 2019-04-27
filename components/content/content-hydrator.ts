@@ -22,7 +22,12 @@ export class ContentHydrator {
 	public hydration: ContentHydrationDataEntry[];
 
 	constructor(hydration: ContentHydrationDataEntry[] = []) {
-		this.hydration = hydration;
+		this.hydration = [];
+		for (const entry of hydration) {
+			if (entry.data) {
+				this.hydration.push(entry);
+			}
+		}
 	}
 
 	async getData(type: ContentHydrationType, source: string) {
