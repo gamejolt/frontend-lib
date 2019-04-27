@@ -11,7 +11,6 @@ import { ContentDocument } from '../content-document';
 import { ContentFormatAdapter, ProsemirrorEditorFormat } from '../content-format-adapter';
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
-import AppContentViewer from '../content-viewer/content-viewer.vue';
 import { ContentEditorService } from './content-editor.service';
 import AppContentEditorControls from './controls/content-editor-controls.vue';
 import AppContentEditorControlsEmojiPanelTS from './controls/emoji/panel/panel';
@@ -30,16 +29,12 @@ import { generateSchema } from './schemas/content-editor-schema';
 	components: {
 		AppContentEditorControls,
 		AppContentEditorTextControls,
-		AppContentViewer,
 		AppContentEditorControlsEmojiPanel,
 	},
 })
 export default class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(String)
 	contentContext!: ContentContext;
-
-	@Prop(Boolean)
-	showViewer!: boolean;
 
 	@Prop({ type: String, default: '' })
 	placeholder!: string;
@@ -106,22 +101,6 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 			this.isEmpty &&
 			(!this.shouldShowControls || this.controlsCollapsed)
 		);
-	}
-
-	// DEBUG
-	get viewerSource() {
-		if (this.view) {
-			const data = ContentFormatAdapter.adaptOut(
-				this.view.state.doc.toJSON() as ProsemirrorEditorFormat,
-				this.contentContext
-			);
-
-			if (this.hydrator) {
-				data.hydration = this.hydrator.hydration;
-			}
-
-			return data.toJson();
-		}
 	}
 
 	getContext() {
@@ -235,10 +214,6 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	public onFocus() {
-		// DEBUG: Don't do this when the viewer is showing
-		if (this.showViewer) {
-			return;
-		}
 		// Focus the content editable when the outer doc gets focused.
 		const child = this.$refs.doc.firstChild;
 		if (child instanceof HTMLElement) {

@@ -49,8 +49,7 @@ export class ContentDocument extends ContentNode {
 		return doc;
 	}
 
-	// DEBUG: remove include hydration
-	public toJson(includeHydration = false) {
+	public toJson() {
 		const data = {
 			version: this.version,
 			createdOn: this.createdOn,
@@ -58,10 +57,6 @@ export class ContentDocument extends ContentNode {
 			content: this.content.map(i => i.toJsonObj()),
 			hydration: [] as ContentHydrationDataEntry[],
 		};
-
-		if (includeHydration) {
-			data.hydration = this.hydration;
-		}
 
 		return JSON.stringify(data);
 	}

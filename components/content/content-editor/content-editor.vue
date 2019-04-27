@@ -42,8 +42,6 @@
 				@click="onTextControlClicked"
 			/>
 		</transition>
-
-		<app-content-viewer v-if="showViewer" show-source :source="viewerSource" />
 	</div>
 </template>
 

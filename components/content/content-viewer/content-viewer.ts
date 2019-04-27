@@ -14,9 +14,6 @@ import { AppContentViewerBaseComponent } from './components/base-component';
 export default class AppContentViewer extends Vue implements ContentOwner {
 	@Prop(String)
 	source!: string;
-	// DEBUG
-	@Prop({ type: Boolean, default: false })
-	showSource!: boolean;
 
 	data: ContentDocument | null = null;
 	hydrator: ContentHydrator = new ContentHydrator();
