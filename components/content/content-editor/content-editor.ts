@@ -50,6 +50,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	@Prop({ type: Boolean, default: false })
 	disabled!: boolean;
 
+	@Prop(String)
+	initialContent!: string;
+
 	view: EditorView | null = null;
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
@@ -139,13 +142,19 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 		this.schema = generateSchema(this.capabilities);
 		this.plugins = createPlugins(this, this.schema);
-		const state = EditorState.create({
-			doc: DOMParser.fromSchema(this.schema).parse(this.$refs.doc),
-			schema: this.schema,
-			plugins: this.plugins,
-		});
 
-		this.updateView(state);
+		if (this.initialContent) {
+			const doc = ContentDocument.fromJson(this.initialContent);
+			this.setContent(doc);
+		} else {
+			const state = EditorState.create({
+				doc: DOMParser.fromSchema(this.schema).parse(this.$refs.doc),
+				schema: this.schema,
+				plugins: this.plugins,
+			});
+
+			this.updateView(state);
+		}
 
 		// Observe any resize events so the editor controls can be repositioned correctly
 		const ro = new ResizeObserver(() => {
