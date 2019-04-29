@@ -1,0 +1,10 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
+// Override code styling to always have the default code block background color
+.content-viewer-code-block
+	theme-prop('background-color', 'darkest', true)
+
+	& *::selection {
+		theme-prop('background', 'gray', true)
+	}
