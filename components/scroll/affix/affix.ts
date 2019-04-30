@@ -6,7 +6,8 @@ import { findVueParent } from '../../../utils/vue';
 import { Ruler } from '../../ruler/ruler-service';
 import { Screen } from '../../screen/screen-service';
 import { Scroll } from '../scroll.service';
-import AppScrollScroller from '../scroller/scroller';
+import AppScrollScrollerTS from '../scroller/scroller';
+import AppScrollScroller from '../scroller/scroller.vue';
 
 /**
  * Wait this long between scroll checks.
@@ -66,7 +67,7 @@ export default class AppScrollAffix extends Vue {
 	private get scrollWatcher() {
 		// We use any parent scrollers if there are any, otherwise use the root
 		// scroll watcher.
-		const scroller = findVueParent(this, AppScrollScroller);
+		const scroller = findVueParent(this, AppScrollScroller) as AppScrollScrollerTS;
 		return scroller ? scroller._scrollWatcher : Scroll.watcher;
 	}
 
