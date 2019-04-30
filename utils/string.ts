@@ -4,16 +4,66 @@ export function kebabCase(name: string) {
 	return name.replace(KebabCaseRegex, (letter, pos) => (pos ? '-' : '') + letter.toLowerCase());
 }
 
-export function titleCase(str: string) {
-	// Hyphen and underscore.
-	str = str.replace(/(\-|_)/g, ' ');
+export type TitleCaseOptions = Partial<{
+	dropHyphens: boolean;
+	dropUnderscores: boolean;
+	expandCamelCase: boolean;
+	keepLcWords: boolean;
+}>;
 
-	// camelCase.
-	str = str.replace(/([a-z])([A-Z])/g, '$1 $2');
+// Common articles, coordinating conjunctions and prepositions that should normally be lowercased in titles.
+const lcWords = [
+	'A',
+	'An',
+	'The',
+	'And',
+	'But',
+	'For',
+	'Nor',
+	'Or',
+	'So',
+	'Yet',
+	'As',
+	'At',
+	'But',
+	'By',
+	'Etc',
+	'For',
+	'From',
+	'In',
+	'Into',
+	'Of',
+	'On',
+	'Onto',
+	'Than',
+	'To',
+	'Upon',
+	'Via',
+	'With',
+];
+
+export function titleCase(str: string, options?: TitleCaseOptions) {
+	options = options || {};
+
+	if (options.dropHyphens) {
+		str = str.replace('-', ' ');
+	}
+
+	if (options.dropUnderscores) {
+		str = str.replace('_', ' ');
+	}
+
+	if (options.expandCamelCase) {
+		str = str.replace(/([a-z])([A-Z])/g, '$1 $2');
+	}
 
 	// Uppercase words.
 	return str.replace(/\w\S*/g, txt => {
-		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+		let word = txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+		if (!options!.keepLcWords && lcWords.indexOf(word) !== -1) {
+			word = word.toLowerCase();
+		}
+		return word;
 	});
 }
 

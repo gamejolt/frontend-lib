@@ -23,7 +23,12 @@ export default class AppFormGroup extends Vue {
 		const name = this.name;
 
 		if (!this.label) {
-			return titleCase(name);
+			return titleCase(name, {
+				dropHyphens: true,
+				dropUnderscores: true,
+				expandCamelCase: true,
+				keepLcWords: true,
+			});
 		}
 
 		return this.label;

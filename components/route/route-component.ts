@@ -208,6 +208,8 @@ export class BaseRouteComponent extends Vue {
 	isRouteLoading = false;
 	isRouteBootstrapped = false;
 
+	disableRouteTitleSuffix = false;
+
 	get routeTitle(): null | string {
 		return null;
 	}
@@ -241,14 +243,17 @@ export class BaseRouteComponent extends Vue {
 
 		// Set up to watch the route title change.
 		if (this.routeTitle) {
-			Meta.title = this.routeTitle;
+			Meta.setTitle(this.routeTitle, this.disableRouteTitleSuffix);
 		}
 
 		this.$watch('routeTitle', (title: string | null) => {
 			if (title) {
-				Meta.title = title;
+				Meta.setTitle(title, this.disableRouteTitleSuffix);
 			}
 		});
+
+		// TODO: should I watch disableRouteTitleSuffix?
+		// optimally we'd only be modifying it from within routeTitle anyways.
 
 		if (GJ_IS_SSR) {
 			// In SSR we have to store the resolver for each route component
@@ -357,6 +362,9 @@ export class BaseRouteComponent extends Vue {
 			const resolver = Resolver.startResolve(this.$options, to);
 			this.isRouteLoading = true;
 
+			// TODO: do we want to reset title suffix on route reload?
+			this.disableRouteTitleSuffix = false;
+
 			const { fromCache, payload } = await getPayload(this.$options, to, useCache);
 			resolver.payload = payload;
 
@@ -429,7 +437,7 @@ export class BaseRouteComponent extends Vue {
 		// do this outside the watcher that we set up in "created()" so that SSR
 		// also gets updated.
 		if (this.routeTitle) {
-			Meta.title = this.routeTitle;
+			Meta.setTitle(this.routeTitle, this.disableRouteTitleSuffix);
 		}
 
 		// We only want to emit the routeChangeAfter event once during a route
