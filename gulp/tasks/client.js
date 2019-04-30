@@ -39,9 +39,9 @@ module.exports = config => {
 	];
 
 	const gjpushVersion = 'v0.2.0';
-	const gjGameId = config.developmentEnv ? 2 : 362412;
-	const gjGamePackageId = config.developmentEnv ? 4 : 376715;
-	const gjGameInstallerPackageId = config.developmentEnv ? 5 : 376713;
+	const gjGameId = config.developmentEnv ? 1000 : 362412;
+	const gjGamePackageId = config.developmentEnv ? 1001 : 376715;
+	const gjGameInstallerPackageId = config.developmentEnv ? 1000 : 376713;
 	const nwjsVersion = '0.35.5';
 
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
