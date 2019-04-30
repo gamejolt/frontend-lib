@@ -3,6 +3,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { makeFileFromDataUrl } from '../../../../utils/image';
 import { Api } from '../../../api/api.service';
+import { Growls } from '../../../growls/growls.service';
 import { MediaItem } from '../../../media-item/media-item-model';
 import AppProgressBar from '../../../progress/bar/bar.vue';
 import { getMediaItemTypeForContext } from '../../content-context';
@@ -32,20 +33,35 @@ export default class AppContentMediaUpload extends Vue {
 	async mounted() {
 		// Start uploading media item
 		const file = makeFileFromDataUrl(this.src, 'pasted_image.png');
-		const mediaItem = await this.uploadFile(file);
-		if (mediaItem instanceof MediaItem) {
+
+		try {
+			const mediaItem = await this.uploadFile(file);
+			if (mediaItem instanceof MediaItem) {
+				const nodePos = this.findTargetNodePos();
+				if (nodePos !== -1) {
+					const tr = this.editorView.state.tr;
+					tr.setNodeMarkup(nodePos, this.editorView.state.schema.nodes.mediaItem, {
+						id: mediaItem.id,
+						width: mediaItem.width,
+						height: mediaItem.height,
+						align: 'center',
+						caption: '',
+					});
+					this.editorView.dispatch(tr);
+				}
+			}
+		} catch (error) {
 			const nodePos = this.findTargetNodePos();
 			if (nodePos !== -1) {
 				const tr = this.editorView.state.tr;
-				tr.setNodeMarkup(nodePos, this.editorView.state.schema.nodes.mediaItem, {
-					id: mediaItem.id,
-					width: mediaItem.width,
-					height: mediaItem.height,
-					align: 'center',
-					caption: '',
-				});
+				tr.delete(nodePos, nodePos + 1);
 				this.editorView.dispatch(tr);
 			}
+
+			Growls.error({
+				title: 'Oh no!',
+				message: 'Something went wrong while uploading your image.',
+			});
 		}
 	}
 
@@ -53,7 +69,6 @@ export default class AppContentMediaUpload extends Vue {
 		this.uploadProgress = 0;
 		this.uploadProcessing = false;
 		const itemType = getMediaItemTypeForContext(this.owner.getContext());
-		// TODO: error handling
 		const $payload = await Api.sendRequest(
 			'/web/dash/media-items/add',
 			{
