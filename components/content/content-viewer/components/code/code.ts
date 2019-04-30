@@ -35,6 +35,8 @@ export class AppContentViewerCodeBlock extends Vue {
 	isPrismLoaded = false;
 
 	async mounted() {
+		// Lazy load in the Prism library first, then our custom code style.
+		// These two imports HAVE to run in that order for the style to apply properly.
 		await Promise.all([
 			import(/* webpackChunkName: "prismjs" */ 'prismjs'),
 			import(/* webpackChunkName: "prismjs" */ 'prismjs/themes/prism.css' as any),
