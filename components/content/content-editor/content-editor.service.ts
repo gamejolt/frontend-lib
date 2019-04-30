@@ -142,4 +142,38 @@ export class ContentEditorService {
 	public static isDisabled(view: EditorView) {
 		return !!view.props.editable && !view.props.editable(view.state);
 	}
+
+	public static getSelectedText(state: EditorState): string {
+		if (state.selection.empty) {
+			return '';
+		}
+
+		const selectionContent = state.selection.content().content;
+		const textNodes = [];
+		for (let i = 0; i < selectionContent.childCount; i++) {
+			const child = selectionContent.child(i);
+			textNodes.push(...this.getTextNodes(child));
+		}
+
+		let text = '';
+		for (const textNode of textNodes) {
+			text += textNode.text;
+		}
+		return text;
+	}
+
+	private static getTextNodes(node: Node): Node[] {
+		const nodes = [];
+
+		for (let i = 0; i < node.childCount; i++) {
+			const child = node.child(i);
+			if (child.isText) {
+				nodes.push(child);
+			} else {
+				nodes.push(...this.getTextNodes(child));
+			}
+		}
+
+		return nodes;
+	}
 }

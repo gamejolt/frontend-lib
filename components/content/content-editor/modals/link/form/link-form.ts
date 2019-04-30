@@ -10,11 +10,12 @@ import { LinkData } from '../link-modal.service';
 })
 export default class AppFormContentEditorLink extends BaseForm<LinkData> implements FormOnInit {
 	get valid() {
-		return this.formModel.href.length > 0;
+		// Matches something.something
+		return this.formModel.href.length > 0 && !!this.formModel.href.match(/.+\..+/);
 	}
 
 	onInit() {
-		this.setField('href', '');
-		this.setField('title', '');
+		this.setField('href', this.formModel.href || '');
+		this.setField('title', this.formModel.title || '');
 	}
 }

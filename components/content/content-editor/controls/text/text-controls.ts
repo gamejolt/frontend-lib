@@ -176,7 +176,8 @@ export default class AppContentEditorTextControls extends Vue {
 			// Remove the link mark
 			this.dispatchMark(this.view.state.schema.marks.link);
 		} else {
-			const result = await ContentEditorLinkModal.show();
+			const selectedText = ContentEditorService.getSelectedText(this.view.state);
+			const result = await ContentEditorLinkModal.show(selectedText);
 			if (result) {
 				this.dispatchMark(this.view.state.schema.marks.link, {
 					href: result.href,
