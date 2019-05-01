@@ -69,11 +69,12 @@ export default class AppContentMediaUpload extends Vue {
 		this.uploadProgress = 0;
 		this.uploadProcessing = false;
 		const itemType = getMediaItemTypeForContext(this.owner.getContext());
+		const parentId = await this.owner.getModelId();
 		const $payload = await Api.sendRequest(
 			'/web/dash/media-items/add',
 			{
 				type: itemType,
-				parent_id: 1,
+				parent_id: parentId,
 			},
 			{
 				file,

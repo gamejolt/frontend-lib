@@ -23,6 +23,9 @@ export default class AppFormControlContent extends BaseFormControlTS {
 	@Prop(Boolean)
 	autofocus!: boolean;
 
+	@Prop({ type: Number, default: null })
+	modelId!: number;
+
 	controlVal = '';
 
 	$refs!: {

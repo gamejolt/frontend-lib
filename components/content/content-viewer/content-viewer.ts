@@ -59,6 +59,10 @@ export default class AppContentViewer extends Vue implements ContentOwner {
 		return this.data;
 	}
 
+	async getModelId() {
+		return 0; // Don't need this in content viewer.
+	}
+
 	setContent(content: ContentDocument) {
 		this.data = content;
 		this.hydrator = new ContentHydrator(content.hydration);

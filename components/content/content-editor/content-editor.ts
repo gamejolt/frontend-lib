@@ -12,6 +12,7 @@ import { ContentFormatAdapter, ProsemirrorEditorFormat } from '../content-format
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
 import { ContentEditorService } from './content-editor.service';
+import { ContentTempResource } from './content-temp-resource.service';
 import AppContentEditorControls from './controls/content-editor-controls.vue';
 import AppContentEditorControlsEmojiPanelTS from './controls/emoji/panel/panel';
 import AppContentEditorControlsEmojiPanel from './controls/emoji/panel/panel.vue';
@@ -48,6 +49,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(String)
 	initialContent!: string;
 
+	@Prop({ type: Number, default: null })
+	modelId!: number;
+
 	view: EditorView | null = null;
 	stateCounter = 0;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
@@ -58,6 +62,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	focusWatcher: FocusWatcher | null = null;
 	emojiPanelVisible = false;
 	controlsCollapsed = true;
+	_tempModelId: number | null = null; // If no model id if gets passed in, we store a temp model's id here
 
 	$refs!: {
 		editor: HTMLElement;
@@ -113,6 +118,17 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	getCapabilities() {
 		return this.capabilities;
+	}
+
+	async getModelId() {
+		if (this.modelId === null) {
+			if (!this._tempModelId) {
+				this._tempModelId = await ContentTempResource.getTempModelId(this.contentContext);
+			}
+			return this._tempModelId;
+		} else {
+			return this.modelId;
+		}
 	}
 
 	mounted() {

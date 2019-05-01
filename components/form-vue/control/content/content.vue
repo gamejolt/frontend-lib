@@ -7,6 +7,7 @@
 			:placeholder="placeholder"
 			:disabled="disabled"
 			:autofocus="autofocus"
+			:model-id="modelId"
 			@update="onUpdate"
 		/>
 	</div>
