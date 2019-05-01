@@ -2,10 +2,11 @@
 @require '~styles-lib/mixins'
 
 .fade-enter-active, .fade-leave-active
-	transition: opacity 0.05s
+	transition: opacity 0.05s, transform 0.05s
 
 .fade-enter, .fade-leave-to
 	opacity: 0
+	transform: translateY(20px) scale(0.5)
 
 .content-editor-text-controls
 	z-index: $zindex-content-editor
