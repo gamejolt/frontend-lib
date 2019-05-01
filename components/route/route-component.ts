@@ -252,9 +252,6 @@ export class BaseRouteComponent extends Vue {
 			}
 		});
 
-		// TODO: should I watch disableRouteTitleSuffix?
-		// optimally we'd only be modifying it from within routeTitle anyways.
-
 		if (GJ_IS_SSR) {
 			// In SSR we have to store the resolver for each route component
 			// somewhere. Since we don't have an instance we instead put it into
@@ -361,8 +358,6 @@ export class BaseRouteComponent extends Vue {
 		if (options.hasResolver) {
 			const resolver = Resolver.startResolve(this.$options, to);
 			this.isRouteLoading = true;
-
-			// TODO: do we want to reset title suffix on route reload?
 			this.disableRouteTitleSuffix = false;
 
 			const { fromCache, payload } = await getPayload(this.$options, to, useCache);
