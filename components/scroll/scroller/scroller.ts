@@ -2,9 +2,9 @@ import SimpleBar from 'simplebar';
 import 'simplebar/dist/simplebar.css';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { ScrollInviewContainer } from '../../../components/scroll/inview/container';
-import { AppScrollInviewParent } from '../../../components/scroll/inview/parent';
-import { ScrollWatcher } from '../../../components/scroll/watcher.service';
+import { ScrollInviewContainer } from '../inview/container';
+import { AppScrollInviewParent } from '../inview/parent';
+import { ScrollWatcher } from '../watcher.service';
 
 @Component({
 	components: {
