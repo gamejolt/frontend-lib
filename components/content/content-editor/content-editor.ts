@@ -4,7 +4,7 @@ import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Screen } from '../../screen/screen-service';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { ContentDocument } from '../content-document';
@@ -47,7 +47,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	disabled!: boolean;
 
 	@Prop(String)
-	initialContent!: string;
+	source!: string;
 
 	@Prop({ type: Number, default: null })
 	modelId!: number;
@@ -62,7 +62,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	focusWatcher: FocusWatcher | null = null;
 	emojiPanelVisible = false;
 	controlsCollapsed = true;
+
 	_tempModelId: number | null = null; // If no model id if gets passed in, we store a temp model's id here
+	_sourceControlVal: string | null = null; // Keep a copy of the json version of the doc, to only set the content if the external source changed.
 
 	$refs!: {
 		editor: HTMLElement;
@@ -131,6 +133,35 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		}
 	}
 
+	@Watch('source')
+	public onSourceUpdated() {
+		if (this._sourceControlVal !== this.source) {
+			this._sourceControlVal = this.source;
+			// If we receive an empty string, we assume the form gets reset.
+			if (this.source === '') {
+				this.reset();
+			} else {
+				const doc = ContentDocument.fromJson(this.source);
+				this.setContent(doc);
+			}
+		}
+	}
+
+	public onUpdate(state: EditorState) {
+		const source = ContentFormatAdapter.adaptOut(
+			state.doc.toJSON() as ProsemirrorEditorFormat,
+			this.contentContext
+		).toJson();
+		this._sourceControlVal = source;
+		this.$emit('update', source);
+	}
+
+	private reset() {
+		this._tempModelId = null;
+		const doc = new ContentDocument(this.contentContext, []);
+		this.setContent(doc);
+	}
+
 	mounted() {
 		this.capabilities = ContextCapabilities.getForContext(this.contentContext);
 		this.hydrator = new ContentHydrator();
@@ -138,8 +169,8 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		this.schema = generateSchema(this.capabilities);
 		this.plugins = createPlugins(this, this.schema);
 
-		if (this.initialContent) {
-			const doc = ContentDocument.fromJson(this.initialContent);
+		if (this.source) {
+			const doc = ContentDocument.fromJson(this.source);
 			this.setContent(doc);
 		} else {
 			const state = EditorState.create({

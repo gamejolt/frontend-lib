@@ -2,12 +2,12 @@
 	<div>
 		<app-content-editor
 			class="form-control content-editor-form-control"
-			ref="editor"
 			:content-context="contentContext"
 			:placeholder="placeholder"
 			:disabled="disabled"
 			:autofocus="autofocus"
 			:model-id="modelId"
+			:source="controlVal"
 			@update="onUpdate"
 		/>
 	</div>

@@ -55,12 +55,7 @@ export default class BaseFormControl extends Vue {
 			// Watch the form model for changes and sync to our control.
 			this.$watch(
 				() => this.form.base.formModel[this.group.name],
-				newVal => {
-					if (this.controlVal !== newVal) {
-						this.controlVal = newVal;
-						this.onFieldChanged();
-					}
-				}
+				newVal => (this.controlVal = newVal)
 			);
 		}
 	}
@@ -85,6 +80,4 @@ export default class BaseFormControl extends Vue {
 		this.$emit('changed', value);
 		this.form.onChange();
 	}
-
-	onFieldChanged() {}
 }
