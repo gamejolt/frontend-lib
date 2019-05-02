@@ -31,3 +31,9 @@ export function makeFileFromDataUrl(dataUrl: string, fileName: string) {
 	}
 	return new File([u8arr], fileName, { type: mime });
 }
+
+/**
+ * Base64 data of a 1x1 pixel transparent gif.
+ */
+export const emptyGif =
+	'data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';

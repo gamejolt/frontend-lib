@@ -1,4 +1,5 @@
 import { Node, NodeSpec } from 'prosemirror-model';
+import { emptyGif } from '../../../../../../utils/image';
 
 export const GJ_EMOJIS = [
 	'sleeping',
@@ -31,18 +32,21 @@ export const gjEmoji = {
 	selectable: true,
 	marks: '',
 
+	// The emoji is rendered as an img to make it selectable without content.
+	// The src is set to a transparent gif to remove weird borders that show up when the img tag is left without src.
 	toDOM: (node: Node) => [
-		'span',
+		'img',
 		{
 			'emoji-type': node.attrs.type,
 			class: 'emoji emoji-' + node.attrs.type,
 			title: ':' + node.attrs.type + ':',
+			src: emptyGif,
 		},
 	],
 
 	parseDOM: [
 		{
-			tag: 'span[emoji-type]',
+			tag: 'img[emoji-type]',
 			getAttrs: (domNode: Element) => {
 				const type = domNode.getAttribute('emoji-type');
 				return { type };
