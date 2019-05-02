@@ -4,6 +4,7 @@ import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { AppTooltip } from '../../../../components/tooltip/tooltip';
+import { Growls } from '../../../growls/growls.service';
 import { Screen } from '../../../screen/screen-service';
 import { ContextCapabilities } from '../../content-context';
 import { ContentEditorService } from '../content-editor.service';
@@ -110,10 +111,33 @@ export default class AppContentEditorControls extends Vue {
 	}
 
 	onClickMedia() {
-		const newNode = (this.view.state.schema.nodes.mediaItem as NodeType).create({
-			id: 61,
-		});
-		this.insertNewNode(newNode);
+		const input = document.createElement('input');
+		input.type = 'file';
+		input.accept = '.png,.jpg,.jpeg,.gif,.bmp';
+		input.multiple = true;
+
+		input.onchange = e => {
+			if (e.target instanceof HTMLInputElement) {
+				const files = e.target.files;
+				if (files !== null) {
+					for (let i = 0; i < files.length; i++) {
+						const file = files[i];
+						const result = ContentEditorService.handleImageFile(this.view, file);
+						if (!result) {
+							Growls.error({
+								title: this.$gettext('Invalid file selected'),
+								message: this.$gettextInterpolate(
+									'"%{ filename }" is not a valid image file.',
+									{ filename: file.name }
+								),
+							});
+						}
+					}
+				}
+			}
+		};
+
+		input.click();
 	}
 
 	onClickEmbed() {

@@ -97,7 +97,7 @@ export class ContentEditorService {
 				transferItem.kind === 'file' &&
 				imageMimeTypes.includes(transferItem.type.toLowerCase())
 			) {
-				const result = this.handleImageFile(view, transferItem);
+				const result = this.handleImageFile(view, transferItem.getAsFile());
 				if (result) {
 					handled = true;
 				}
@@ -106,10 +106,8 @@ export class ContentEditorService {
 		return handled;
 	}
 
-	public static handleImageFile(view: EditorView, data: DataTransferItem) {
-		const imageFile = data.getAsFile();
-
-		if (imageFile !== null && isImage(imageFile)) {
+	public static handleImageFile(view: EditorView, file: File | null) {
+		if (file !== null && isImage(file)) {
 			const reader = new FileReader();
 			reader.onloadend = () => {
 				const newNode = (view.state.schema.nodes.mediaUpload as NodeType).create({
@@ -120,7 +118,7 @@ export class ContentEditorService {
 				view.focus();
 				view.dispatch(tr);
 			};
-			reader.readAsDataURL(imageFile);
+			reader.readAsDataURL(file);
 			return true;
 		}
 
