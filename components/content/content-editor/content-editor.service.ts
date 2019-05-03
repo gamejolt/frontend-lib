@@ -73,6 +73,10 @@ export class ContentEditorService {
 	 * Returns the parent node that matched, or `false`.
 	 */
 	public static isContainedInNode(state: EditorState, node: Node, nodeType: NodeType) {
+		if (node.type.name === nodeType.name) {
+			return node;
+		}
+
 		let child = node;
 		let parent = this.getParentNode(state, node);
 		while (parent !== null) {
