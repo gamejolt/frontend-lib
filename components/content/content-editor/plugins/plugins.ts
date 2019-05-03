@@ -4,7 +4,7 @@ import { keymap } from 'prosemirror-keymap';
 import { Schema } from 'prosemirror-model';
 import { Plugin } from 'prosemirror-state';
 import AppContentEditor from '../content-editor';
-import { getContentEditorKeymap } from '../keymap';
+import { getContentEditorKeymap } from './commands/keymap';
 import { createInputRules } from './input-rules/input-rules';
 import { UpdateIncrementerPlugin } from './update-incrementer-plugin';
 

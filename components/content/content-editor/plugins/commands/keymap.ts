@@ -1,12 +1,16 @@
+import { onBackspace } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/commands/on-backspace-command';
 import { chainCommands, exitCode, toggleMark } from 'prosemirror-commands';
 import { redo, undo } from 'prosemirror-history';
 import { Schema } from 'prosemirror-model';
 import { sinkListItem, splitListItem } from 'prosemirror-schema-list';
 import { EditorState, Transaction } from 'prosemirror-state';
-import AppContentEditor from './content-editor';
-import { ContentEditorService } from './content-editor.service';
-import { ContentListService } from './content-list.service';
-import { ContentEditorLinkModal } from './modals/link/link-modal.service';
+import AppContentEditor from '../../content-editor';
+import { ContentListService } from '../../content-list.service';
+import { showLinkModal } from './link-modal-command';
+import { onEnter } from './on-enter-command';
+
+export type PMDispatch = (tr: Transaction) => void;
+export type PMKeymapCommand = (state: EditorState, tr: PMDispatch | undefined) => boolean;
 
 export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema) {
 	const isMac = typeof navigator != 'undefined' ? /Mac/.test(navigator.platform) : false;
@@ -17,7 +21,7 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 		'Mod-b': toggleMark(schema.marks.strong),
 		'Mod-i': toggleMark(schema.marks.em),
 		'Mod-`': toggleMark(schema.marks.code),
-		'Shift-Enter': chainCommands(exitCode, (state, dispatch) => {
+		'Shift-Enter': chainCommands(exitCode, onEnter(editor.capabilities), (state, dispatch) => {
 			dispatch!(
 				state.tr
 					.replaceSelectionWith(state.schema.nodes.hardBreak.create())
@@ -33,28 +37,20 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 			return true;
 		},
 		// Add/remove link
-		'Mod-k': async (state: EditorState, dispatch: (tr: Transaction) => void) => {
-			const selectionMarks = ContentEditorService.getSelectionMarks(state);
-			if (selectionMarks.some(m => m.type.name === 'link')) {
-				toggleMark(schema.marks.link);
-			} else {
-				const result = await ContentEditorLinkModal.show();
-				if (result) {
-					toggleMark(schema.marks.link, {
-						href: result.href,
-						title: result.title,
-					})(state, dispatch);
-				}
-			}
-			return true;
-		},
+		'Mod-k': showLinkModal(schema),
+		Backspace: onBackspace(),
 	} as { [k: string]: any };
 
+	const enterCommands = [] as PMKeymapCommand[];
+	enterCommands.push(onEnter(editor.capabilities));
+
 	if (editor.capabilities.lists) {
-		keymap['Enter'] = splitListItem(schema.nodes.listItem);
+		enterCommands.push(splitListItem(schema.nodes.listItem));
 		keymap['Shift-Tab'] = ContentListService.liftListItem(schema.nodes.listItem);
 		keymap['Tab'] = sinkListItem(schema.nodes.listItem);
 	}
+
+	keymap['Enter'] = chainCommands(...enterCommands);
 
 	if (!isMac) {
 		keymap['Mod-y'] = redo;

@@ -1,4 +1,4 @@
-import { Mark, Node, NodeType } from 'prosemirror-model';
+import { Fragment, Mark, Node, NodeType } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { imageMimeTypes, isImage } from '../../../utils/image';
@@ -147,9 +147,13 @@ export class ContentEditorService {
 		}
 
 		const selectionContent = state.selection.content().content;
+		return this.getFragmentText(selectionContent);
+	}
+
+	public static getFragmentText(frag: Fragment): string {
 		const textNodes = [];
-		for (let i = 0; i < selectionContent.childCount; i++) {
-			const child = selectionContent.child(i);
+		for (let i = 0; i < frag.childCount; i++) {
+			const child = frag.child(i);
 			textNodes.push(...this.getTextNodes(child));
 		}
 
