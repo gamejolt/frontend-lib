@@ -1,4 +1,4 @@
-import { Node, NodeType } from 'prosemirror-model';
+import { Node, NodeType, Slice } from 'prosemirror-model';
 import { EditorState, Selection } from 'prosemirror-state';
 import { ContentEditorService } from '../../content-editor.service';
 import { PMDispatch } from './keymap';
@@ -31,12 +31,13 @@ export function splitHeading() {
 					// Create paragraph node and insert
 					const newNode = (state.schema.nodes.paragraph as NodeType).create();
 					tr.insert(finalPosition, newNode);
+					tr.replaceSelection(Slice.empty);
 
 					// Resolve its position and set the selection.
 					const resolvedPos = tr.doc.resolve(tr.selection.to + 2);
 					const selection = Selection.findFrom(resolvedPos, 1);
 					if (selection instanceof Selection) {
-						tr.setSelection(selection);
+						tr.setSelection(selection).scrollIntoView();
 					}
 
 					dispatch(tr);

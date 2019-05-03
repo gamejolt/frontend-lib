@@ -40,12 +40,12 @@ function replaceMention(state: EditorState, tr: Transaction, child: Node) {
 	let mentionText = child.attrs.value as string;
 	mentionText = mentionText.substr(0, mentionText.length - 1);
 	const textNode = state.schema.text('@' + mentionText);
-	tr.replaceWith(state.selection.to - 1, state.selection.to, textNode);
+	tr.replaceWith(state.selection.to - 1, state.selection.to, textNode).scrollIntoView();
 }
 
 function replaceTag(state: EditorState, tr: Transaction, child: Node) {
 	let tagText = child.attrs.text as string;
 	tagText = tagText.substr(0, tagText.length - 1);
 	const textNode = state.schema.text('#' + tagText);
-	tr.replaceWith(state.selection.to - 1, state.selection.to, textNode);
+	tr.replaceWith(state.selection.to - 1, state.selection.to, textNode).scrollIntoView();
 }

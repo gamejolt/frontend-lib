@@ -14,7 +14,7 @@ export function onEnter(capabilities: ContextCapabilities) {
 		const slice = state.doc.slice(0, state.selection.to);
 		const text = ContentEditorService.getFragmentText(slice.content);
 
-		if (dispatch) {
+		if (dispatch && state.selection.empty) {
 			const tr = state.tr;
 
 			if (capabilities.mention && !tr.docChanged) {
@@ -44,7 +44,7 @@ function replaceMentionText(state: EditorState, tr: Transaction, text: string) {
 
 		const to = state.selection.to;
 		const from = state.selection.to - 1 - mentionText.length;
-		tr.replaceRangeWith(from, to, newNode);
+		tr.replaceRangeWith(from, to, newNode).scrollIntoView();
 	}
 }
 
@@ -58,6 +58,6 @@ function replaceTagText(state: EditorState, tr: Transaction, text: string) {
 
 		const to = state.selection.to;
 		const from = state.selection.to - 1 - tagText.length;
-		tr.replaceRangeWith(from, to, newNode);
+		tr.replaceRangeWith(from, to, newNode).scrollIntoView();
 	}
 }

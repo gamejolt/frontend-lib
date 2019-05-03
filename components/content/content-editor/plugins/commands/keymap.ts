@@ -6,6 +6,8 @@ import { sinkListItem, splitListItem } from 'prosemirror-schema-list';
 import { EditorState, Transaction } from 'prosemirror-state';
 import AppContentEditor from '../../content-editor';
 import { ContentListService } from '../../content-list.service';
+import { exitCodeStart } from './exit-code-start-command';
+import { insertHardBreak } from './insert-hard-break-command';
 import { showLinkModal } from './link-modal-command';
 import { onEnter } from './on-enter-command';
 import { splitHeading } from './split-heading-command';
@@ -22,14 +24,12 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 		'Mod-b': toggleMark(schema.marks.strong),
 		'Mod-i': toggleMark(schema.marks.em),
 		'Mod-`': toggleMark(schema.marks.code),
-		'Shift-Enter': chainCommands(exitCode, onEnter(editor.capabilities), (state, dispatch) => {
-			dispatch!(
-				state.tr
-					.replaceSelectionWith(state.schema.nodes.hardBreak.create())
-					.scrollIntoView()
-			);
-			return true;
-		}),
+		'Shift-Enter': chainCommands(
+			exitCodeStart(editor.capabilities),
+			exitCode,
+			onEnter(editor.capabilities),
+			insertHardBreak
+		),
 		// open emoji panel
 		'Mod-e': () => {
 			if (editor.capabilities.gjEmoji) {
