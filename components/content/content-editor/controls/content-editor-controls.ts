@@ -23,11 +23,12 @@ export default class AppContentEditorControls extends Vue {
 	stateCounter!: number;
 	@Prop(Object)
 	capabilities!: ContextCapabilities;
+	@Prop(Boolean)
+	collapsed!: boolean;
 
 	visible = false;
 	top = '0px';
 	left = '0px';
-	collapsed = true;
 
 	readonly Screen = Screen;
 
@@ -83,7 +84,6 @@ export default class AppContentEditorControls extends Vue {
 	}
 
 	private setCollapsed(value: boolean) {
-		this.collapsed = value;
 		this.$emit('collapsedChanged', value);
 	}
 

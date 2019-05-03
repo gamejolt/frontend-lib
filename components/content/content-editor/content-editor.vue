@@ -30,6 +30,7 @@
 				:capabilities="capabilities"
 				:view="view"
 				:state-counter="stateCounter"
+				:collapsed="controlsCollapsed"
 				@collapsedChanged="onControlsCollapsedChanged"
 			/>
 		</transition>

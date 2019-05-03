@@ -12,10 +12,6 @@ export class AppContentViewerHeading extends Vue {
 	owner!: ContentOwner;
 
 	render(h: CreateElement) {
-		return h(
-			'h' + this.data.attrs.level,
-			{ class: 'content-viewer-heading' },
-			renderChildren(h, this.owner, this.data.content)
-		);
+		return h('h' + this.data.attrs.level, renderChildren(h, this.owner, this.data.content));
 	}
 }

@@ -20,7 +20,12 @@
 			>
 				<template v-if="isHydrated">
 					<component :is="hasLink ? 'a' : 'span'" :href="hasLink ? href : undefined">
-						<img class="img-responsive" :src="mediaItem.img_url" :alt="title" :title="title" />
+						<img
+							class="img-responsive content-image"
+							:src="mediaItem.img_url"
+							:alt="title"
+							:title="title"
+						/>
 					</component>
 				</template>
 				<template v-else-if="hasError">
@@ -54,10 +59,16 @@
 	theme-prop('background-color', 'bg-offset')
 	rounded-corners()
 	overflow: hidden
+	max-width: 100%
 
 .caption-placeholder
 	cursor: pointer
 	pressy()
+
+.content-image
+	display: block
+	margin-bottom: 0
+	max-width: 100%
 </style>
 
 <script lang="ts" src="./media-item"></script>

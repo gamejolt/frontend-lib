@@ -53,13 +53,16 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	modelId!: number;
 
 	view: EditorView | null = null;
-	stateCounter = 0;
-	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
-	hydrator!: ContentHydrator;
 	schema: Schema | null = null;
 	plugins: Plugin[] | null = null;
-	isFocused = false;
+	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
+	hydrator!: ContentHydrator;
+
 	focusWatcher: FocusWatcher | null = null;
+	resizeObserver: ResizeObserver | null = null;
+
+	stateCounter = 0;
+	isFocused = false;
 	emojiPanelVisible = false;
 	controlsCollapsed = true;
 
@@ -183,10 +186,10 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		}
 
 		// Observe any resize events so the editor controls can be repositioned correctly
-		const ro = new ResizeObserver(() => {
+		this.resizeObserver = new ResizeObserver(() => {
 			this.stateCounter++;
 		});
-		ro.observe(this.$refs.doc);
+		this.resizeObserver.observe(this.$refs.doc);
 
 		this.stateCounter++;
 
@@ -203,6 +206,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		if (this.focusWatcher instanceof FocusWatcher) {
 			this.focusWatcher.destroy();
 		}
+		if (this.resizeObserver instanceof ResizeObserver) {
+			this.resizeObserver.disconnect();
+		}
 	}
 
 	private updateView(state: EditorState) {
@@ -211,7 +217,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		}
 
 		const nodeViews = buildNodeViews(this);
-		const eventHandlers = buildEvents(this.capabilities);
+		const eventHandlers = buildEvents(this);
 		this.view = new EditorView(this.$refs.doc, {
 			state,
 			nodeViews,
