@@ -14,7 +14,6 @@ export class AppContentViewerTableCell extends Vue {
 	render(h: CreateElement) {
 		return h(
 			this.data.attrs.isHeader ? 'th' : 'td',
-			{ domProps: { style: 'text-align: center;' } },
 			renderChildren(h, this.owner, this.data.content)
 		);
 	}

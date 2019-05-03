@@ -8,6 +8,7 @@ import AppContentEditor from '../../content-editor';
 import { ContentListService } from '../../content-list.service';
 import { exitCodeStart } from './exit-code-start-command';
 import { insertHardBreak } from './insert-hard-break-command';
+import { insertHardBreakTable } from './insert-hard-break-table-command';
 import { showLinkModal } from './link-modal-command';
 import { onEnter } from './on-enter-command';
 import { splitHeading } from './split-heading-command';
@@ -47,6 +48,9 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 
 	if (editor.capabilities.heading) {
 		enterCommands.push(splitHeading());
+	}
+	if (editor.capabilities.table) {
+		enterCommands.push(insertHardBreakTable());
 	}
 
 	if (editor.capabilities.lists) {

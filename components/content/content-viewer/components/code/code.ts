@@ -48,11 +48,13 @@ export class AppContentViewerCodeBlock extends Vue {
 	}
 
 	render(h: CreateElement) {
+		let node;
 		if (this.isPrismLoaded) {
-			return this.renderPrism(h);
+			node = this.renderPrism(h);
 		} else {
-			return this.renderDefault(h);
+			node = this.renderDefault(h);
 		}
+		return node;
 	}
 
 	private renderPrism(h: CreateElement) {
