@@ -8,3 +8,11 @@
 	& *::selection {
 		theme-prop('background', 'gray', true)
 	}
+
+	&:before
+		content: attr(data-annotation)
+		position: absolute
+		top: 8px
+		right: 10px
+		font-size: 14px
+		font-style: italic

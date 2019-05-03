@@ -23,6 +23,8 @@ const LANGUAGE_MAP = {
 	csharp: 'clike',
 	'c++': 'clike',
 	java: 'clike',
+
+	nocode: 'nocode',
 } as any;
 
 @Component({})
@@ -49,11 +51,7 @@ export class AppContentViewerCodeBlock extends Vue {
 		if (this.isPrismLoaded) {
 			return this.renderPrism(h);
 		} else {
-			return h(
-				'pre',
-				{ class: 'content-viewer-code-block' },
-				renderChildren(h, this.owner, this.data.content)
-			);
+			return this.renderDefault(h);
 		}
 	}
 
@@ -65,24 +63,43 @@ export class AppContentViewerCodeBlock extends Vue {
 			text = this.data.content[0].text || '';
 		}
 
+		// Try and find a language annotation.
+		// If found, remove it from the text.
 		const annotation = this.getLanguageAnnotation(text);
+		let annotationAttr = '';
 		if (annotation !== undefined) {
 			const annotatedLanguage = LANGUAGE_MAP[annotation];
 			if (annotatedLanguage !== undefined) {
 				language = annotatedLanguage;
 				text = text.slice(annotation.length + 2); // + 2 to remove the # and new line
+				annotationAttr = '#' + annotation;
 			}
+		}
+
+		if (language === 'nocode') {
+			return h('pre', { class: 'content-viewer-code-block' }, text);
 		}
 
 		return h(
 			Prism,
 			{
 				class: 'content-viewer-code-block',
+				attrs: {
+					'data-annotation': annotationAttr,
+				},
 				props: {
 					language,
 				},
 			},
 			text
+		);
+	}
+
+	private renderDefault(h: CreateElement) {
+		return h(
+			'pre',
+			{ class: 'content-viewer-code-block' },
+			renderChildren(h, this.owner, this.data.content)
 		);
 	}
 
