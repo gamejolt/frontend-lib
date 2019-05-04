@@ -1,7 +1,7 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
-import { checkCurrentNodeIsCode } from './input-rules';
+import { checkCurrentNodeIsCode } from '../plugins';
 
 export function insertBulletListRule() {
 	return new InputRule(

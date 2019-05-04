@@ -2,6 +2,7 @@ import { NodeType } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
+import { checkCurrentNodeIsCode } from '../plugins';
 import { PMDispatch } from './keymap';
 
 /**
@@ -14,7 +15,7 @@ export function onEnter(capabilities: ContextCapabilities) {
 		const slice = state.doc.slice(0, state.selection.to);
 		const text = ContentEditorService.getFragmentText(slice.content);
 
-		if (dispatch && state.selection.empty) {
+		if (dispatch && state.selection.empty && !checkCurrentNodeIsCode(state)) {
 			const tr = state.tr;
 
 			if (capabilities.mention && !tr.docChanged) {
@@ -29,7 +30,7 @@ export function onEnter(capabilities: ContextCapabilities) {
 			}
 		}
 
-		// Always return false, we want the editor to still execute all their other commands.
+		// Always return false, we want the editor to still execute all other commands.
 		return false;
 	};
 }

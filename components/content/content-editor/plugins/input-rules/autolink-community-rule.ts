@@ -1,7 +1,7 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
-import { checkCurrentNodeIsCode } from './input-rules';
+import { checkCurrentNodeIsCode } from '../plugins';
 
 export function autolinkCommunityRule() {
 	return new InputRule(
