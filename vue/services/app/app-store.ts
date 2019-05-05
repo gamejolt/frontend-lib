@@ -1,8 +1,8 @@
-import { User } from '../../../components/user/user.model';
-import { VuexStore, VuexModule, VuexMutation } from '../../../utils/vuex';
-import { namespace, State, Action, Mutation } from 'vuex-class';
+import { Action, Mutation, namespace, State } from 'vuex-class';
 import { Environment } from '../../../components/environment/environment.service';
 import { Navigate } from '../../../components/navigate/navigate.service';
+import { User } from '../../../components/user/user.model';
+import { VuexModule, VuexMutation, VuexStore } from '../../../utils/vuex';
 
 export const AppState = namespace('app', State);
 export const AppAction = namespace('app', Action);

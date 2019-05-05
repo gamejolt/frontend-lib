@@ -2,6 +2,14 @@ import { Environment } from '../environment/environment.service';
 import { Navigate } from '../navigate/navigate.service';
 
 export class Auth {
+	static redirectOnboarding() {
+		if (GJ_IS_SSR) {
+			return;
+		}
+
+		Navigate.goto(Environment.wttfBaseUrl + '/welcome');
+	}
+
 	static redirectDashboard() {
 		if (GJ_IS_SSR) {
 			return;
