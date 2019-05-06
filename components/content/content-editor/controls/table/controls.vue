@@ -81,4 +81,4 @@
 	margin-left: 12px
 </style>
 
-<script lang="ts" src="./table-controls"></script>
+<script lang="ts" src="./controls"></script>

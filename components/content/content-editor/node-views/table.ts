@@ -2,7 +2,7 @@ import { Node } from 'prosemirror-model';
 import { Decoration } from 'prosemirror-view';
 import { ContentEditorService } from '../content-editor.service';
 import { ContentTableService } from '../content-table.service';
-import AppContentEditorTableControls from '../controls/table/table-controls.vue';
+import AppContentEditorTableControls from '../controls/table/controls.vue';
 import { BaseNodeView } from './base';
 
 export class TableNodeView extends BaseNodeView {
