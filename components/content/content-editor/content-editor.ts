@@ -52,6 +52,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	@Prop({ type: Number, default: null })
 	modelId!: number;
 
+	@Prop(Number)
+	minHeight!: number;
+
 	view: EditorView | null = null;
 	schema: Schema | null = null;
 	plugins: Plugin[] | null = null;
@@ -115,6 +118,13 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	get editorStyleClass() {
 		return this.contentContext + '-content';
+	}
+
+	get containerMinHeight() {
+		if (!this.minHeight) {
+			return 'auto';
+		}
+		return this.minHeight + 'px';
 	}
 
 	getContext() {

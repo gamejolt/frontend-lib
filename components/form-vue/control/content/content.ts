@@ -24,6 +24,9 @@ export default class AppFormControlContent extends BaseFormControlTS {
 	@Prop({ type: Number, default: null })
 	modelId!: number;
 
+	@Prop(Number)
+	minHeight!: number;
+
 	controlVal = '';
 
 	onUpdate(source: string) {

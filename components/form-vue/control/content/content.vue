@@ -8,6 +8,7 @@
 			:autofocus="autofocus"
 			:model-id="modelId"
 			:source="controlVal"
+			:min-height="minHeight"
 			@update="onUpdate"
 		/>
 	</div>

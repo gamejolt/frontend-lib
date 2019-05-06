@@ -6,6 +6,9 @@
 				disabled: disabled,
 				'content-container-emoji': couldShowEmojiPanel,
 			}"
+			:style="{
+				minHeight: containerMinHeight,
+			}"
 		>
 			<div class="-doc" :class="editorStyleClass" ref="doc" />
 			<transition name="fade">
