@@ -1,10 +1,24 @@
 import { Environment } from '../environment/environment.service';
 import { Navigate } from '../navigate/navigate.service';
+import Onboarding from '../onboarding/onboarding.service';
 
 export class Auth {
+	static redirectOnboarding() {
+		if (GJ_IS_SSR) {
+			return;
+		}
+
+		Onboarding.start();
+		Navigate.goto(Environment.wttfBaseUrl + '/welcome');
+	}
+
 	static redirectDashboard() {
 		if (GJ_IS_SSR) {
 			return;
+		}
+
+		if (Onboarding.isOnboarding) {
+			Onboarding.end();
 		}
 
 		// This is mainly for client.
