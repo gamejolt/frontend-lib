@@ -13,6 +13,7 @@
 		>
 			<div
 				class="media-item-container"
+				ref="container"
 				:style="{
 					width: containerWidth,
 					height: containerHeight,

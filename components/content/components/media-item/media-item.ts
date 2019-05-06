@@ -1,3 +1,4 @@
+import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import AppLoading from '../../../../vue/components/loading/loading.vue';
@@ -41,6 +42,12 @@ export default class AppContentMediaItem extends Vue {
 
 	mediaItem: MediaItem | null = null;
 	hasError = false;
+	resizeObserver!: ResizeObserver;
+	computedHeight = this.mediaItemHeight;
+
+	$refs!: {
+		container: HTMLDivElement;
+	};
 
 	get title() {
 		if (this.hasCaption) {
@@ -61,7 +68,7 @@ export default class AppContentMediaItem extends Vue {
 	}
 
 	get containerHeight() {
-		return this.mediaItemHeight > 0 ? this.mediaItemHeight + 'px' : 'auto';
+		return this.computedHeight > 0 ? this.computedHeight + 'px' : 'auto';
 	}
 
 	get isHydrated() {
@@ -83,6 +90,13 @@ export default class AppContentMediaItem extends Vue {
 	}
 
 	async mounted() {
+		// Observe the change to the width property, the be able to instantly recompute the height.
+		// We compute the height property of the element based on the computed width to be able to set a proper placeholder.
+		this.resizeObserver = new ResizeObserver(() => {
+			this.setHeight();
+		});
+		this.resizeObserver.observe(this.$refs.container);
+
 		const hydratedData = await this.owner
 			.getHydrator()
 			.getData('media-item-id', this.mediaItemId.toString());
@@ -99,5 +113,15 @@ export default class AppContentMediaItem extends Vue {
 
 	onEdit() {
 		// Placeholder until we want the edit function
+	}
+
+	beforeDestroy() {
+		this.resizeObserver.disconnect();
+	}
+
+	setHeight() {
+		const width = this.$refs.container.clientWidth;
+		const relWidth = width / this.mediaItemWidth;
+		this.computedHeight = this.mediaItemHeight * relWidth;
 	}
 }
