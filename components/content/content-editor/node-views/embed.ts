@@ -1,6 +1,4 @@
 import { Node } from 'prosemirror-model';
-import { store } from '../../../../../../app/store';
-import { router } from '../../../../../../app/views';
 import { isChildElement } from '../../../../utils/dom';
 import AppContentEmbed from '../../components/embed/embed.vue';
 import { ContentEditorService } from '../content-editor.service';
@@ -26,8 +24,8 @@ export class EmbedNodeView extends HydratableNodeView {
 
 	mounted() {
 		this.vueComponent = new AppContentEmbed({
-			store,
-			router,
+			// store,
+			// router,
 			propsData: {
 				type: this.node.attrs.type,
 				source: this.node.attrs.source,
