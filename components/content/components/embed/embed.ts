@@ -6,19 +6,16 @@ import AppVideoEmbed from '../../../video/embed/embed.vue';
 import { ContentEmbedService } from '../../content-editor/content-embed.service';
 import { ContentOwner } from '../../content-owner';
 import AppBaseContentComponent from '../base/base-content-component.vue';
-import AppContentEmbedCommunityEmbed from './community/community-embed.vue';
-import AppContentEmbedGameEmbed from './game/game-embed.vue';
 import AppContentEmbedSoundcloudEmbed from './soundcloud/soundcloud-embed.vue';
-import AppContentEmbedUserEmbed from './user/user-embed.vue';
 
 @Component({
 	components: {
 		AppVideoEmbed,
 		AppContentEmbedSoundcloudEmbed,
 		AppBaseContentComponent,
-		AppContentEmbedGameEmbed,
-		AppContentEmbedUserEmbed,
-		AppContentEmbedCommunityEmbed,
+		// AppContentEmbedGameEmbed,
+		// AppContentEmbedUserEmbed,
+		// AppContentEmbedCommunityEmbed,
 		AppLoading,
 	},
 })
