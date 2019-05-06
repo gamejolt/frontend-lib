@@ -1,5 +1,5 @@
 <template>
-	<a rel="nofollow noopener">
+	<a rel="nofollow noopener" :target="target">
 		<slot />
 	</a>
 </template>
