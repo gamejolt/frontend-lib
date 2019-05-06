@@ -52,6 +52,8 @@
 	display: flex
 	flex-direction: column
 	margin-bottom: $line-height-computed
+	cursor: default
+	min-height: 44px // make sure the X button fits properly, usually not a problem unless the image is super wide
 
 .media-item-container
 	display: flex
