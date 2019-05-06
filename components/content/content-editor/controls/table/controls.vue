@@ -5,10 +5,10 @@
 		</span>
 
 		<span class="control-container">
-			<app-popper placement="top">
+			<app-popper placement="top" @show="isMenuShown = true" @hide="isMenuShown = false">
 				<app-button icon="ellipsis-v" sparse circle trans @click.prevent />
 
-				<div slot="popover" clas="fill-darkest">
+				<div v-if="isMenuShown" slot="popover" class="fill-darkest">
 					<div class="list-group list-group-dark">
 						<a class="list-group-item" @click.stop="onClickInsertRowAbove()">
 							<translate>Insert Row above</translate>

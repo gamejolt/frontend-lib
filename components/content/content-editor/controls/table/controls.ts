@@ -12,27 +12,45 @@ import { AppTooltip } from '../../../../tooltip/tooltip';
 	},
 })
 export default class AppContentEditorTableControls extends Vue {
+	isMenuShown = false;
+
 	@Emit('insertRowAbove')
-	onClickInsertRowAbove() {}
+	onClickInsertRowAbove() {
+		this.isMenuShown = false;
+	}
 
 	@Emit('insertRowBelow')
-	onClickInsertRowBelow() {}
+	onClickInsertRowBelow() {
+		this.isMenuShown = false;
+	}
 
 	@Emit('insertColumnLeft')
-	onClickInsertColumnLeft() {}
+	onClickInsertColumnLeft() {
+		this.isMenuShown = false;
+	}
 
 	@Emit('insertColumnRight')
-	onClickInsertColumnRight() {}
+	onClickInsertColumnRight() {
+		this.isMenuShown = false;
+	}
 
 	@Emit('removeRow')
-	onClickRemoveRow() {}
+	onClickRemoveRow() {
+		this.isMenuShown = false;
+	}
 
 	@Emit('removeColumn')
-	onClickRemoveColumn() {}
+	onClickRemoveColumn() {
+		this.isMenuShown = false;
+	}
 
 	@Emit('removeTable')
-	onClickRemoveTable() {}
+	onClickRemoveTable() {
+		this.isMenuShown = false;
+	}
 
 	@Emit('toggleHeader')
-	onClickToggleHeader() {}
+	onClickToggleHeader() {
+		this.isMenuShown = false;
+	}
 }
