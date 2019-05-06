@@ -22,7 +22,7 @@ export function insertHardBreakTable() {
 			selectedNode,
 			state.schema.nodes.table
 		);
-		if (tableNode === null) {
+		if (tableNode === false) {
 			return false;
 		}
 

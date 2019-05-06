@@ -18,12 +18,10 @@ export class AppContentViewerTable extends Vue {
 			if (firstRow.hasChildren && firstRow.firstChild!.attrs.isHeader) {
 				const thead = h('thead', renderChildren(h, this.owner, [firstRow]));
 				const tbody = h('tbody', renderChildren(h, this.owner, rows));
-				return h('table', { class: 'content-viewer-table meme' }, [thead, tbody]);
+				return h('table', [thead, tbody]);
 			}
 		}
 
-		return h('table', { class: 'content-viewer-table' }, [
-			h('tbody', renderChildren(h, this.owner, this.data.content)),
-		]);
+		return h('table', [h('tbody', renderChildren(h, this.owner, this.data.content))]);
 	}
 }

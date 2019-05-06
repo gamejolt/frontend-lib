@@ -8,6 +8,4 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./content-viewer.styl" scoped></style>
-
 <script lang="ts" src="./content-viewer"></script>

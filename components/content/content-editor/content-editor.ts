@@ -113,6 +113,10 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		);
 	}
 
+	get editorStyleClass() {
+		return this.contentContext + '-content';
+	}
+
 	getContext() {
 		return this.contentContext;
 	}

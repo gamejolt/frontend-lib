@@ -7,9 +7,13 @@
 				'content-container-emoji': couldShowEmojiPanel,
 			}"
 		>
-			<div class="-doc" ref="doc" />
+			<div class="-doc" :class="editorStyleClass" ref="doc" />
 			<transition name="fade">
-				<span v-if="shouldShowPlaceholder" class="content-placeholder text-muted">
+				<span
+					v-if="shouldShowPlaceholder"
+					class="content-placeholder text-muted"
+					:class="editorStyleClass"
+				>
 					{{ placeholder }}
 				</span>
 			</transition>
