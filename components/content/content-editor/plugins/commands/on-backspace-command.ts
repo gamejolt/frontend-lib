@@ -7,7 +7,7 @@ import { PMDispatch } from './keymap';
  */
 export function onBackspace() {
 	return function(state: EditorState, dispatch: PMDispatch | undefined) {
-		if (!dispatch) {
+		if (!dispatch || !state.selection.empty) {
 			return false;
 		}
 
