@@ -16,7 +16,7 @@ import { ContentTempResource } from './content-temp-resource.service';
 import AppContentEditorControls from './controls/content-editor-controls.vue';
 import AppContentEditorControlsEmojiPanelTS from './controls/emoji/panel';
 import AppContentEditorControlsEmojiPanel from './controls/emoji/panel.vue';
-import AppContentEditorTextControls from './controls/text/text-controls.vue';
+import AppContentEditorTextControls from './controls/text/controls.vue';
 import buildEvents from './events/build-events';
 import { FocusWatcher } from './focus-watcher';
 import { buildNodeViews } from './node-views/node-view-builder';

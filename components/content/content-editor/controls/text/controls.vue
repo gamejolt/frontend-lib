@@ -97,6 +97,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./text-controls.styl" scoped></style>
+<style lang="stylus" src="./controls.styl" scoped></style>
 
-<script lang="ts" src="./text-controls"></script>
+<script lang="ts" src="./controls"></script>
