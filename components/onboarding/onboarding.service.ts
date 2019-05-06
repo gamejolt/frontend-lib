@@ -1,5 +1,4 @@
 import { Analytics } from '../analytics/analytics.service';
-
 export type OnboardingStep = 'profile';
 
 export default abstract class Onboarding {
@@ -18,22 +17,22 @@ export default abstract class Onboarding {
 		const onboardStartedOn = parseInt(localStorage.getItem('onboarding-start') || '0', 10);
 		if (onboardStartedOn) {
 			localStorage.removeItem('onboarding-start');
-			this.trackTiming('flow:all', 'took', Date.now() - onboardStartedOn);
+			this.trackTiming('flow:all:took', Date.now() - onboardStartedOn);
 		}
 	}
 
 	static startStep(step: OnboardingStep) {
-		Onboarding.trackEvent(`flow:${step}`, 'start');
+		Onboarding.trackEvent(`flow:${step}:start`);
 
 		this._currentStep = step;
 		this._currentStepStartedOn = Date.now();
 	}
 
 	static endStep(skipped: boolean) {
-		Onboarding.trackEvent(`flow:${this._currentStep}`, skipped ? 'skip' : 'next');
+		const operation = skipped ? 'skip' : 'next';
+		Onboarding.trackEvent(`flow:${this._currentStep}:${operation}`);
 		Onboarding.trackTiming(
-			`flow:${this._currentStep}`,
-			'took',
+			`flow:${this._currentStep}:took`,
 			Date.now() - this._currentStepStartedOn
 		);
 
@@ -41,21 +40,21 @@ export default abstract class Onboarding {
 		this._currentStepStartedOn = 0;
 	}
 
-	static trackEvent(category: string, action: string, value?: string) {
+	static trackEvent(action: string, label?: string, value?: string) {
 		// Skip tracking if already onboarded.
 		// This may happen if the onboard tab is open twice.
 		// Currently the only place this happens is in non social registrations.
 		if (this.isOnboarding) {
-			Analytics.trackEvent(category, action, 'onboarding', value);
+			Analytics.trackEvent('onboarding', action, label, value);
 		}
 	}
 
-	static trackTiming(category: string, timingVar: string, value: number) {
+	static trackTiming(timingVar: string, value: number, label?: string) {
 		// Skip tracking if already onboarded.
 		// This may happen if the onboard tab is open twice.
 		// Currently the only place this happens is in non social registrations.
 		if (this.isOnboarding) {
-			Analytics.trackTiming(category, timingVar, value, 'onboarding');
+			Analytics.trackTiming('onboarding', timingVar, value, label);
 		}
 	}
 }
