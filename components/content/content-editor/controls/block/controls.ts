@@ -3,12 +3,12 @@ import { Selection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { AppTooltip } from '../../../../components/tooltip/tooltip';
-import { Growls } from '../../../growls/growls.service';
-import { Screen } from '../../../screen/screen-service';
-import { ContextCapabilities } from '../../content-context';
-import { ContentEditorService } from '../content-editor.service';
-import { ContentTableService } from '../content-table.service';
+import { AppTooltip } from '../../../../../components/tooltip/tooltip';
+import { Growls } from '../../../../growls/growls.service';
+import { Screen } from '../../../../screen/screen-service';
+import { ContextCapabilities } from '../../../content-context';
+import { ContentEditorService } from '../../content-editor.service';
+import { ContentTableService } from '../../content-table.service';
 
 @Component({
 	components: {},
@@ -16,7 +16,7 @@ import { ContentTableService } from '../content-table.service';
 		AppTooltip,
 	},
 })
-export default class AppContentEditorControls extends Vue {
+export default class AppContentEditorBlockControls extends Vue {
 	@Prop(Object)
 	view!: EditorView;
 	@Prop(Number)

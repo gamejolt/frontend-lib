@@ -191,6 +191,6 @@
 	</div>
 </template>
 
-<style lang="stylus" src="./content-editor-controls.styl" scoped></style>
+<style lang="stylus" src="./controls.styl" scoped></style>
 
-<script lang="ts" src="./content-editor-controls"></script>
+<script lang="ts" src="./controls"></script>

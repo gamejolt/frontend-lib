@@ -13,7 +13,7 @@ import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
 import { ContentEditorService } from './content-editor.service';
 import { ContentTempResource } from './content-temp-resource.service';
-import AppContentEditorControls from './controls/content-editor-controls.vue';
+import AppContentEditorBlockControls from './controls/block/controls.vue';
 import AppContentEditorControlsEmojiPanelTS from './controls/emoji/panel';
 import AppContentEditorControlsEmojiPanel from './controls/emoji/panel.vue';
 import AppContentEditorTextControls from './controls/text/controls.vue';
@@ -28,7 +28,7 @@ import { generateSchema } from './schemas/content-editor-schema';
  */
 @Component({
 	components: {
-		AppContentEditorControls,
+		AppContentEditorBlockControls,
 		AppContentEditorTextControls,
 		AppContentEditorControlsEmojiPanel,
 	},

@@ -29,7 +29,7 @@
 		</div>
 
 		<transition name="fade">
-			<app-content-editor-controls
+			<app-content-editor-block-controls
 				v-if="shouldShowControls"
 				:capabilities="capabilities"
 				:view="view"
