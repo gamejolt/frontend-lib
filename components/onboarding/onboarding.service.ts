@@ -42,10 +42,20 @@ export default abstract class Onboarding {
 	}
 
 	static trackEvent(category: string, action: string, value?: string) {
-		Analytics.trackEvent(category, action, 'onboarding', value);
+		// Skip tracking if already onboarded.
+		// This may happen if the onboard tab is open twice.
+		// Currently the only place this happens is in non social registrations.
+		if (this.isOnboarding) {
+			Analytics.trackEvent(category, action, 'onboarding', value);
+		}
 	}
 
 	static trackTiming(category: string, timingVar: string, value: number) {
-		Analytics.trackTiming(category, timingVar, value, 'onboarding');
+		// Skip tracking if already onboarded.
+		// This may happen if the onboard tab is open twice.
+		// Currently the only place this happens is in non social registrations.
+		if (this.isOnboarding) {
+			Analytics.trackTiming(category, timingVar, value, 'onboarding');
+		}
 	}
 }
