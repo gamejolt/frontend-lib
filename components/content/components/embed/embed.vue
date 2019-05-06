@@ -36,7 +36,7 @@
 				<div class="embed-overlay-img" />
 				<div class="embed-overlay-controls">
 					<translate v-if="!hasSourceUrl">Go to source</translate>
-					<a v-else target="_blank" :href="sourceUrl">
+					<a v-else target="_blank" :href="sourceUrl" rel="nofollow noopener">
 						<translate>Go to source</translate>
 					</a>
 				</div>
