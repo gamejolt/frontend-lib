@@ -17,12 +17,12 @@ export default abstract class Onboarding {
 		const onboardStartedOn = parseInt(localStorage.getItem('onboarding-start') || '0', 10);
 		if (onboardStartedOn) {
 			localStorage.removeItem('onboarding-start');
-			this.trackTiming('flow:all:took', Date.now() - onboardStartedOn);
+			this.trackTiming('flow-all-took', Date.now() - onboardStartedOn);
 		}
 	}
 
 	static startStep(step: OnboardingStep) {
-		Onboarding.trackEvent(`flow:${step}:start`);
+		Onboarding.trackEvent(`flow-${step}-start`);
 
 		this._currentStep = step;
 		this._currentStepStartedOn = Date.now();
@@ -30,9 +30,9 @@ export default abstract class Onboarding {
 
 	static endStep(skipped: boolean) {
 		const operation = skipped ? 'skip' : 'next';
-		Onboarding.trackEvent(`flow:${this._currentStep}:${operation}`);
+		Onboarding.trackEvent(`flow-${this._currentStep}-${operation}`);
 		Onboarding.trackTiming(
-			`flow:${this._currentStep}:took`,
+			`flow-${this._currentStep}-took`,
 			Date.now() - this._currentStepStartedOn
 		);
 
