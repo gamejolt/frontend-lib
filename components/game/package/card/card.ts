@@ -91,6 +91,8 @@ export default class AppGamePackageCard extends Vue {
 
 	private showPaymentOptionsDeregister?: EventBusDeregister;
 
+	readonly AppGamePackageCard = AppGamePackageCard;
+
 	get metaComponent() {
 		return AppGamePackageCard.hook.meta;
 	}
@@ -136,7 +138,8 @@ export default class AppGamePackageCard extends Vue {
 				this.saleOldPricing = this.sellable.pricings[1];
 				this.sale = true;
 				this.salePercentageOff = (
-					((this.saleOldPricing.amount - this.pricing.amount) / this.saleOldPricing.amount) *
+					((this.saleOldPricing.amount - this.pricing.amount) /
+						this.saleOldPricing.amount) *
 					100
 				).toFixed(0);
 			}
@@ -149,7 +152,10 @@ export default class AppGamePackageCard extends Vue {
 				// Ensure that the payment well opens with the correct build
 				// for "skip paying".
 				if (this.package.id === pkg.id) {
-					this.showPayment(this.card.downloadableBuild ? this.card.downloadableBuild : null, false);
+					this.showPayment(
+						this.card.downloadableBuild ? this.card.downloadableBuild : null,
+						false
+					);
 				}
 			}
 		);

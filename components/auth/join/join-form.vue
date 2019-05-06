@@ -127,10 +127,10 @@
 </template>
 
 <style lang="stylus" scoped>
-@require '../auth-form';
+@require '../auth-form'
 
 .-blocked-message
-	margin-top: 5px;
+	margin-top: 5px
 
 </style>
 

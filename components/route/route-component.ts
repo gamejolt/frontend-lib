@@ -208,6 +208,8 @@ export class BaseRouteComponent extends Vue {
 	isRouteLoading = false;
 	isRouteBootstrapped = false;
 
+	disableRouteTitleSuffix = false;
+
 	get routeTitle(): null | string {
 		return null;
 	}
@@ -241,12 +243,12 @@ export class BaseRouteComponent extends Vue {
 
 		// Set up to watch the route title change.
 		if (this.routeTitle) {
-			Meta.title = this.routeTitle;
+			Meta.setTitle(this.routeTitle, this.disableRouteTitleSuffix);
 		}
 
 		this.$watch('routeTitle', (title: string | null) => {
 			if (title) {
-				Meta.title = title;
+				Meta.setTitle(title, this.disableRouteTitleSuffix);
 			}
 		});
 
@@ -356,6 +358,7 @@ export class BaseRouteComponent extends Vue {
 		if (options.hasResolver) {
 			const resolver = Resolver.startResolve(this.$options, to);
 			this.isRouteLoading = true;
+			this.disableRouteTitleSuffix = false;
 
 			const { fromCache, payload } = await getPayload(this.$options, to, useCache);
 			resolver.payload = payload;
@@ -429,7 +432,7 @@ export class BaseRouteComponent extends Vue {
 		// do this outside the watcher that we set up in "created()" so that SSR
 		// also gets updated.
 		if (this.routeTitle) {
-			Meta.title = this.routeTitle;
+			Meta.setTitle(this.routeTitle, this.disableRouteTitleSuffix);
 		}
 
 		// We only want to emit the routeChangeAfter event once during a route

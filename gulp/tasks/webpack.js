@@ -394,7 +394,7 @@ module.exports = function(config) {
 								_section: section,
 								_isClient: config.client,
 								_title: sectionConfig.title,
-								_crawl: sectionConfig.crawl,
+								_crawl: !!sectionConfig.crawl,
 								_scripts: sectionConfig.scripts,
 								_bodyClass: sectionConfig.bodyClass || '',
 							},

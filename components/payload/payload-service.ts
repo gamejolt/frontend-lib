@@ -3,6 +3,7 @@ import { VuexStore } from '../../utils/vuex';
 import { Analytics } from '../analytics/analytics.service';
 import { RequestOptions } from '../api/api.service';
 import { Environment } from '../environment/environment.service';
+import { Seo } from '../seo/seo.service';
 
 export class PayloadError {
 	static readonly ERROR_NEW_VERSION = 'payload-new-version';
@@ -60,6 +61,7 @@ export class Payload {
 			...(<RequestOptions>{
 				ignorePayloadUser: false,
 				ignorePayloadVersion: false,
+				ignorePayloadSeo: false,
 				noErrorRedirect: false,
 			}),
 			...options,
@@ -85,6 +87,7 @@ export class Payload {
 			this.checkPayloadUser(response, options);
 			this.checkPayloadConsents(response);
 			this.checkPayloadVersion(data, options);
+			this.checkPayloadSeo(data, options);
 			this.checkAnalyticsExperiments(response, options);
 
 			return data.payload;
@@ -147,6 +150,14 @@ export class Payload {
 				this.store.commit('app/setUser', new User(data.user));
 			}
 		}
+	}
+
+	private static checkPayloadSeo(data: any, options: RequestOptions) {
+		if (!data || !data.meta || !data.meta.seo || options.ignorePayloadSeo) {
+			return;
+		}
+
+		Seo.processPayloadDirectives(data.meta.seo);
 	}
 
 	private static checkPayloadConsents(response: any) {

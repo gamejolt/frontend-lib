@@ -52,6 +52,11 @@ export interface RequestOptions {
 	ignorePayloadVersion?: boolean;
 
 	/**
+	 * Whether or not we pass the seo metadata we received to the seo service.
+	 */
+	ignorePayloadSeo?: boolean;
+
+	/**
 	 * Whether or not we should redirect to an error page if there was an error.
 	 */
 	noErrorRedirect?: boolean;

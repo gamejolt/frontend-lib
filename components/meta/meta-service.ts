@@ -4,6 +4,7 @@ import { Environment } from '../environment/environment.service';
 import { FbMetaContainer } from './fb-meta-container';
 import { MetaContainer } from './meta-container';
 import { MicrodataContainer } from './microdata-container';
+import { SeoMetaContainer } from './seo-meta-container';
 import { TwitterMetaContainer } from './twitter-meta-container';
 
 export function escapeString(str: string) {
@@ -15,8 +16,10 @@ export function escapeString(str: string) {
 		.replace(/'/g, '&#x27;');
 }
 
+const originalSuffix = ' - Game Jolt';
+
 export class Meta extends MetaContainer {
-	static titleSuffix = GJ_IS_CLIENT ? ' - Game Jolt' : ' on Game Jolt';
+	private static titleSuffix = originalSuffix;
 
 	private static _title = '';
 	private static _originalTitle = !GJ_IS_SSR ? document.title : null;
@@ -24,6 +27,7 @@ export class Meta extends MetaContainer {
 	private static _fb = new FbMetaContainer();
 	private static _twitter = new TwitterMetaContainer();
 	private static _microdata = new MicrodataContainer();
+	private static _seo = new SeoMetaContainer();
 
 	private static _baseTitle: string | null = null;
 	private static _notificationsCount = 0;
@@ -36,7 +40,18 @@ export class Meta extends MetaContainer {
 	}
 
 	static set title(title: string | null) {
+		this.setTitle(title);
+	}
+
+	static setTitle(title: string | null, withoutSuffix?: boolean) {
 		this._baseTitle = title;
+
+		if (withoutSuffix) {
+			this.titleSuffix = '';
+		} else {
+			this.titleSuffix = originalSuffix;
+		}
+
 		this.updatePageTitle();
 	}
 
@@ -69,6 +84,10 @@ export class Meta extends MetaContainer {
 
 	static set microdata(microdata: Object) {
 		this._microdata.set(microdata);
+	}
+
+	static get seo() {
+		return this._seo;
 	}
 
 	static set notificationsCount(count: number) {
@@ -131,7 +150,8 @@ export class Meta extends MetaContainer {
 			this._base.render() +
 			this._fb.render() +
 			this._twitter.render() +
-			this._microdata.render()
+			this._microdata.render() +
+			this._seo.render()
 		);
 	}
 }
