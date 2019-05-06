@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="content-control">
 		<app-content-editor
 			class="form-control content-editor-form-control"
 			:content-context="contentContext"
@@ -16,6 +16,9 @@
 <style lang="stylus" scoped>
 @require '~styles/variables'
 @require '~styles-lib/mixins'
+
+.content-control
+	cursor: text
 
 .content-editor-form-control
 	height: auto
