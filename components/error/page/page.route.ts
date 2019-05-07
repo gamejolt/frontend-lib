@@ -1,10 +1,14 @@
 import Vue, { CreateElement } from 'vue';
-import { RouteConfig } from 'vue-router';
 import { Component } from 'vue-property-decorator';
-import { AppStore, AppMutation } from '../../../vue/services/app/app-store';
+import { RouteConfig } from 'vue-router';
+import { AppMutation, AppStore } from '../../../vue/services/app/app-store';
 
 // Just a placeholder that sets the 404 error state.
-@Component({})
+@Component({
+	// Explicitly set the name since we rely on it when checking if a route is known by a section router.
+	// If it returns a route whose name is RouteError404 the url is not considered to be part of the router.
+	name: 'RouteError404',
+})
 export class RouteError404 extends Vue {
 	@AppMutation setError!: AppStore['setError'];
 
