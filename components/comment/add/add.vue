@@ -11,7 +11,7 @@
 				:content-context="contentContext"
 				:autofocus="autofocus"
 				:rules="{
-					content_required,
+					content_required: [],
 				}"
 				:validate-on="['blur']"
 			/>
