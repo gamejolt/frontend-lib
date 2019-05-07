@@ -237,6 +237,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 			nodeViews,
 			handleDOMEvents: eventHandlers,
 			editable: () => !this.disabled,
+			attributes: {
+				'data-prevent-shortkey': '',
+			},
 		});
 
 		// Make sure we have a paragraph when loading in a new state
