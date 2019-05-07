@@ -29,7 +29,7 @@ export default class AppFormControlContent extends BaseFormControlTS {
 
 	controlVal = '';
 
-	onUpdate(source: string) {
+	onChange(source: string) {
 		this.applyValue(source);
 	}
 }

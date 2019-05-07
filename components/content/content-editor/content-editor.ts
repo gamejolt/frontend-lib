@@ -24,7 +24,7 @@ import { createPlugins } from './plugins/plugins';
 import { generateSchema } from './schemas/content-editor-schema';
 
 /**
- * @emits update
+ * @emits input
  */
 @Component({
 	components: {
@@ -47,13 +47,21 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	disabled!: boolean;
 
 	@Prop(String)
-	source!: string;
+	value!: string;
 
 	@Prop({ type: Number, default: null })
 	modelId!: number;
 
 	@Prop(Number)
 	minHeight!: number;
+
+	@Prop(String)
+	name!: string;
+
+	$_veeValidate = {
+		value: () => this.value,
+		name: () => 'app-content-editor',
+	};
 
 	view: EditorView | null = null;
 	schema: Schema | null = null;
@@ -152,13 +160,13 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	@Watch('source')
 	public onSourceUpdated() {
-		if (this._sourceControlVal !== this.source) {
-			this._sourceControlVal = this.source;
+		if (this._sourceControlVal !== this.value) {
+			this._sourceControlVal = this.value;
 			// If we receive an empty string, we assume the form gets reset.
-			if (this.source === '') {
+			if (this.value === '') {
 				this.reset();
 			} else {
-				const doc = ContentDocument.fromJson(this.source);
+				const doc = ContentDocument.fromJson(this.value);
 				this.setContent(doc);
 			}
 		}
@@ -170,7 +178,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 			this.contentContext
 		).toJson();
 		this._sourceControlVal = source;
-		this.$emit('update', source);
+		this.$emit('input', source);
 	}
 
 	private reset() {
@@ -186,8 +194,8 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		this.schema = generateSchema(this.capabilities);
 		this.plugins = createPlugins(this, this.schema);
 
-		if (this.source) {
-			const doc = ContentDocument.fromJson(this.source);
+		if (this.value) {
+			const doc = ContentDocument.fromJson(this.value);
 			this.setContent(doc);
 		} else {
 			const state = EditorState.create({

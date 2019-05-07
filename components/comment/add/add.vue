@@ -10,6 +10,9 @@
 				:placeholder="placeholder || $gettext(`Leave a comment...`)"
 				:content-context="contentContext"
 				:autofocus="autofocus"
+				:rules="{
+					content_required,
+				}"
 			/>
 
 			<app-form-control-errors label="comment_content" />

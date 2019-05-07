@@ -2,14 +2,17 @@
 	<div class="content-control">
 		<app-content-editor
 			class="form-control content-editor-form-control"
+			:name="group.name"
+			:id="id"
 			:content-context="contentContext"
 			:placeholder="placeholder"
 			:disabled="disabled"
 			:autofocus="autofocus"
 			:model-id="modelId"
-			:source="controlVal"
+			:value="controlVal"
 			:min-height="minHeight"
-			@update="onUpdate"
+			v-validate="{ rules: validationRules }"
+			@input="onChange"
 		/>
 	</div>
 </template>
