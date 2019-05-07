@@ -71,47 +71,50 @@ export class Navigate {
 	 * even if it can be redirected in the same route without reloading the entire SPA.
 	 */
 	static goto(href: string, forceHardRedirect?: boolean) {
-		if (forceHardRedirect || !this.router) {
-			this.gotoHard(href);
-			return;
-		}
+		this.gotoHard(href);
+		return;
 
-		const current = window.location.href;
+		// if (forceHardRedirect || !this.router) {
+		// 	this.gotoHard(href);
+		// 	return;
+		// }
 
-		// This should never happen, if it does it's an error but we'll
-		// redirect anyways and let the browser try handling this.
-		if (!current.endsWith(this.router.currentRoute.fullPath)) {
-			this.gotoHard(href);
-			return;
-		}
+		// const current = window.location.href;
 
-		// Find the base url by removing the current route's fullPath from it.
-		// We should be left with the base url without the trailing /
-		const baseUrl = current.substring(
-			0,
-			current.length - this.router.currentRoute.fullPath.length
-		);
+		// // This should never happen, if it does it's an error but we'll
+		// // redirect anyways and let the browser try handling this.
+		// if (!current.endsWith(this.router.currentRoute.fullPath)) {
+		// 	this.gotoHard(href);
+		// 	return;
+		// }
 
-		// If the url we're going to isn't under our base url - hard redirect.
-		if (!href.startsWith(baseUrl)) {
-			this.gotoHard(href);
-			return;
-		}
+		// // Find the base url by removing the current route's fullPath from it.
+		// // We should be left with the base url without the trailing /
+		// const baseUrl = current.substring(
+		// 	0,
+		// 	current.length - this.router.currentRoute.fullPath.length
+		// );
 
-		const routeHref = href.substring(baseUrl.length);
+		// // If the url we're going to isn't under our base url - hard redirect.
+		// if (!href.startsWith(baseUrl)) {
+		// 	this.gotoHard(href);
+		// 	return;
+		// }
 
-		// If our router doesn't know how to resolve this url, let the browser try.
-		const matched = this.router.getMatchedComponents(routeHref);
-		if (matched.length === 0 || matched[0].name === 'RouteError404') {
-			this.gotoHard(href);
-			return;
-		}
+		// const routeHref = href.substring(baseUrl.length);
 
-		console.log('Soft redirecting to ' + routeHref);
+		// // If our router doesn't know how to resolve this url, let the browser try.
+		// const matched = this.router.getMatchedComponents(routeHref);
+		// if (matched.length === 0 || matched[0].name === 'RouteError404') {
+		// 	this.gotoHard(href);
+		// 	return;
+		// }
 
-		// If the url we're given is exactly the base url, routeHref will end up being an empty string.
-		// To resolve to the correct route in this case, we need to pass /
-		this.router.push(routeHref || '/');
+		// console.log('Soft redirecting to ' + routeHref);
+
+		// // If the url we're given is exactly the base url, routeHref will end up being an empty string.
+		// // To resolve to the correct route in this case, we need to pass /
+		// this.router.push(routeHref || '/');
 	}
 
 	static gotoExternal(href: string) {
