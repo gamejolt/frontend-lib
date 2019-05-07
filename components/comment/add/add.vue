@@ -13,6 +13,7 @@
 				:rules="{
 					content_required,
 				}"
+				:validate-on="['blur']"
 			/>
 
 			<app-form-control-errors label="comment_content" />
