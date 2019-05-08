@@ -27,9 +27,6 @@ export default class AppFormControlContent extends BaseFormControlTS {
 	@Prop(Number)
 	minHeight!: number;
 
-	@Prop(Array) validateOn!: string[];
-	@Prop(Number) validateDelay!: number;
-
 	controlVal = '';
 
 	onChange(source: string) {
