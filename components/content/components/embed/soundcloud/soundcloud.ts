@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
-export default class AppContentEmbedSoundcloudEmbed extends Vue {
+export default class AppContentEmbedSoundcloud extends Vue {
 	@Prop(String)
 	trackId!: string;
 

@@ -3,7 +3,7 @@ import { Node, NodeSpec } from 'prosemirror-model';
 export const embed = {
 	group: 'block',
 	marks: '',
-	draggable: true,
+	draggable: false,
 	selectable: true,
 	attrs: {
 		type: {

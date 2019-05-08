@@ -48,12 +48,15 @@
 
 .input-container
 	position: relative
+	white-space: normal
+	margin-bottom: 10px
 
 .-input
 	background-color: transparent
 	border-width: 0px
 	width: 100%
 	font-size: 20px
+	margin-top: 4px
 
 .input-overlay
 	position: absolute
@@ -65,3 +68,36 @@
 	display: flex
 	justify-content: center
 	rounded-corners()
+
+.embed-pill-container
+	& > span, a
+		margin-right: 8px
+
+.embed-pill
+	border-style: solid
+	border-width: 1px
+	rounded-corners()
+	display: inline-flex
+	align-items: center
+	font-size: 12px
+	padding-left: 4px
+	padding-right: 6px
+	padding-top: 2px
+	cursor: pointer
+	opacity: 0.8
+	transition: opacity 0.2s ease
+	theme-prop('color', 'fg', true)
+	text-shadow: none
+
+	&:hover
+		opacity: 1
+
+.embed-pill-icon
+	padding-right: 2px
+
+.embed-pill-more
+	theme-prop('border-color', 'light')
+	theme-prop('color', 'light', true)
+
+.embed-pill-icon-more
+	theme-prop('color', 'light')

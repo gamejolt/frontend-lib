@@ -6,9 +6,7 @@ import { Api } from '../api/api.service';
  */
 export type ContentHydrationType =
 	| 'media-item-id'
-	| 'game-id'
 	| 'username'
-	| 'community-path'
 	| 'soundcloud-track-url'
 	| 'soundcloud-track-id';
 
@@ -40,7 +38,11 @@ export class ContentHydrator {
 		}
 
 		const encodedId = encodeURIComponent(source);
-		const result = await Api.sendRequest(`/web/content/hydrate/${type}/${encodedId}`);
+		const result = await Api.sendRequest(
+			`/web/content/hydrate/${type}/${encodedId}`,
+			undefined,
+			{ noErrorRedirect: true }
+		);
 		const entry = {
 			type,
 			source,

@@ -1,21 +1,20 @@
+import { Growls } from 'game-jolt-frontend-lib/components/growls/growls.service';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
+import { arrayShuffle } from '../../../../utils/array';
 import AppLoading from '../../../../vue/components/loading/loading.vue';
 import AppVideoEmbed from '../../../video/embed/embed.vue';
 import { ContentEmbedService } from '../../content-editor/content-embed.service';
 import { ContentOwner } from '../../content-owner';
 import AppBaseContentComponent from '../base/base-content-component.vue';
-import AppContentEmbedSoundcloudEmbed from './soundcloud/soundcloud-embed.vue';
+import AppContentEmbedSoundcloud from './soundcloud/soundcloud.vue';
 
 @Component({
 	components: {
 		AppVideoEmbed,
-		AppContentEmbedSoundcloudEmbed,
+		AppContentEmbedSoundcloud,
 		AppBaseContentComponent,
-		// AppContentEmbedGameEmbed,
-		// AppContentEmbedUserEmbed,
-		// AppContentEmbedCommunityEmbed,
 		AppLoading,
 	},
 })
@@ -40,6 +39,7 @@ export default class AppContentEmbed extends Vue {
 
 	sourceUrl: string = '';
 	loading = false;
+	previewEmbeds: any[] = [];
 
 	$refs!: {
 		inputElement: HTMLInputElement;
@@ -65,13 +65,23 @@ export default class AppContentEmbed extends Vue {
 		return this.sourceUrl.length > 0;
 	}
 
+	get hasMoreEmbedPreviews() {
+		return this.previewEmbeds.length < ContentEmbedService.previewSources.length;
+	}
+
 	mounted() {
 		// If the placeholder input is available, focus it immediately
 		if (this.$refs.inputElement) {
 			this.$refs.inputElement.focus();
 		}
 
+		this.setRandomEmbedPills();
+
 		this.onTypeChange();
+	}
+
+	private setRandomEmbedPills() {
+		this.previewEmbeds = arrayShuffle(ContentEmbedService.previewSources).slice(0, 3);
 	}
 
 	onRemoved() {
@@ -85,8 +95,8 @@ export default class AppContentEmbed extends Vue {
 	}
 
 	async onKeydown(e: KeyboardEvent) {
-		switch (e.keyCode) {
-			case 8: // 8 => Backspace
+		switch (e.key) {
+			case 'Backspace':
 				// remove this node if backspace was pressed at the start of the input element.
 				if (
 					this.$refs.inputElement.selectionStart === 0 &&
@@ -95,7 +105,7 @@ export default class AppContentEmbed extends Vue {
 					this.$emit('removed');
 				}
 				break;
-			case 13: // 13 => Enter
+			case 'Enter':
 				this.loading = true;
 				const data = await ContentEmbedService.getEmbedData(
 					this.owner,
@@ -103,8 +113,20 @@ export default class AppContentEmbed extends Vue {
 				);
 				if (data !== undefined) {
 					this.$emit('updateAttrs', data);
+				} else {
+					Growls.error({
+						title: this.$gettext(`Uh oh`),
+						message: this.$gettext(
+							`Something went wrong embedded your content. Maybe try again with a different link?`
+						),
+					});
 				}
 				this.loading = false;
+				e.preventDefault();
+				break;
+			case 'Escape':
+				this.$emit('removed');
+				e.preventDefault();
 				break;
 		}
 	}

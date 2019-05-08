@@ -1,6 +1,5 @@
 <template>
 	<iframe
-		class="soundcloud-embed"
 		nwdisable
 		nwfaketop
 		width="100%"
@@ -11,9 +10,4 @@
 	></iframe>
 </template>
 
-<style lang="stylus" scoped>
-.soundcloud-embed
-	display: block
-</style>
-
-<script lang="ts" src="./soundcloud-embed"></script>
+<script lang="ts" src="./soundcloud"></script>
