@@ -1,8 +1,10 @@
+import VueRouter from 'vue-router';
 import { Environment } from '../environment/environment.service';
 
 export type DestructorFunc = (href?: string) => void;
 
 export class Navigate {
+	private static router: VueRouter | null = null;
 	private static redirecting = false;
 	private static destructors: DestructorFunc[] = [];
 
@@ -22,6 +24,10 @@ export class Navigate {
 		}
 
 		return null;
+	}
+
+	static init(router: VueRouter) {
+		this.router = router;
 	}
 
 	private static callDestructors(href?: string) {
@@ -49,7 +55,7 @@ export class Navigate {
 		}
 	}
 
-	static goto(href: string) {
+	private static goto(href: string) {
 		this.redirecting = true;
 
 		this.callDestructors(href);
