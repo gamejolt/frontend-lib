@@ -4,6 +4,7 @@
 // Override code styling to always have the default code block background color
 .content-viewer-code-block
 	theme-prop('background-color', 'darkest', true)
+	position: relative
 
 	& *::selection {
 		theme-prop('background', 'gray', true)
@@ -14,5 +15,5 @@
 		position: absolute
 		top: 8px
 		right: 10px
-		font-size: 14px
+		font-size: $font-size-small
 		font-style: italic
