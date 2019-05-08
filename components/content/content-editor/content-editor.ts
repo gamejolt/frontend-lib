@@ -158,7 +158,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		}
 	}
 
-	@Watch('source')
+	@Watch('value')
 	public onSourceUpdated() {
 		if (this._sourceControlVal !== this.value) {
 			this._sourceControlVal = this.value;

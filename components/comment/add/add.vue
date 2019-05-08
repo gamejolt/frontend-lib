@@ -11,12 +11,12 @@
 				:content-context="contentContext"
 				:autofocus="autofocus"
 				:rules="{
-					content_required: [],
+					content_required: true,
 				}"
 				:validate-on="['blur']"
 			/>
 
-			<app-form-control-errors label="comment_content" />
+			<app-form-control-errors label="comment" />
 		</app-form-group>
 
 		<div class="text-right">
