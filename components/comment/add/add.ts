@@ -1,6 +1,8 @@
+import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ContentContext } from '../../content/content-context';
 import AppFormControlContent from '../../form-vue/control/content/content.vue';
+import AppForm from '../../form-vue/form';
 import { BaseForm, FormOnInit } from '../../form-vue/form.service';
 import { Comment } from '../comment-model';
 import '../comment.styl';
@@ -29,6 +31,10 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 	@Prop(String)
 	maxHeight?: string;
 
+	$refs!: {
+		form: AppForm;
+	};
+
 	modelClass = Comment;
 	resetOnSubmit = true;
 
@@ -43,7 +49,7 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 		}
 	}
 
-	onInit() {
+	async onInit() {
 		if (!this.model) {
 			this.setField('comment_content', '');
 			this.setField('resource', this.resource);
@@ -52,6 +58,9 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 			if (this.parentId) {
 				this.setField('parent_id', this.parentId);
 			}
+
+			await Vue.nextTick();
+			this.$refs.form.clearErrors();
 		}
 	}
 

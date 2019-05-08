@@ -123,6 +123,12 @@ export default class AppForm extends Vue {
 		return await this.base._onSubmit();
 	}
 
+	clearErrors() {
+		for (const control of this.controls) {
+			control.$validator.errorBag.clear();
+		}
+	}
+
 	onChange() {
 		this.base.changed = true;
 		this.$emit('changed', this.base.formModel);

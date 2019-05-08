@@ -1,5 +1,5 @@
 <template>
-	<app-form name="commentAddForm">
+	<app-form name="commentAddForm" ref="form">
 		<app-form-group
 			:class="{ 'sans-margin-bottom': (!changed || !valid) && method !== 'edit' }"
 			name="comment_content"
