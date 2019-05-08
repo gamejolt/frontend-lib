@@ -154,26 +154,26 @@ export class ContentEditorService {
 		return this.getFragmentText(selectionContent);
 	}
 
-	public static getFragmentText(frag: Fragment): string {
-		const textNodes = [];
-		for (let i = 0; i < frag.childCount; i++) {
-			const child = frag.child(i);
-			textNodes.push(...this.getTextNodes(child));
-		}
+	public static getFragmentText(frag: Fragment | Node): string {
+		const textNodes = this.getTextNodes(frag);
 
 		let text = '';
 		for (const textNode of textNodes) {
-			text += textNode.text;
+			if (textNode.type.name === 'hardBreak') {
+				text += '\n';
+			} else {
+				text += textNode.text;
+			}
 		}
 		return text;
 	}
 
-	private static getTextNodes(node: Node): Node[] {
+	private static getTextNodes(node: Fragment | Node): Node[] {
 		const nodes = [];
 
 		for (let i = 0; i < node.childCount; i++) {
 			const child = node.child(i);
-			if (child.isText) {
+			if (child.isText || child.type.name === 'hardBreak') {
 				nodes.push(child);
 			} else {
 				nodes.push(...this.getTextNodes(child));

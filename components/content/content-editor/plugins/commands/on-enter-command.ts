@@ -13,7 +13,11 @@ import { PMDispatch } from './keymap';
 export function onEnter(capabilities: ContextCapabilities) {
 	return function(state: EditorState, dispatch: PMDispatch | undefined) {
 		const slice = state.doc.slice(0, state.selection.to);
-		const text = ContentEditorService.getFragmentText(slice.content);
+		const lastChild = slice.content.lastChild;
+		if (!lastChild) {
+			return false;
+		}
+		const text = ContentEditorService.getFragmentText(lastChild);
 
 		if (dispatch && state.selection.empty && !checkCurrentNodeIsCode(state)) {
 			const tr = state.tr;
