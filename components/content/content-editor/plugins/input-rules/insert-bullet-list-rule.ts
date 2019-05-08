@@ -1,6 +1,6 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeType } from 'prosemirror-model';
-import { EditorState } from 'prosemirror-state';
+import { EditorState, Selection } from 'prosemirror-state';
 import { checkCurrentNodeIsCode } from '../plugins';
 
 export function insertBulletListRule() {
@@ -21,6 +21,9 @@ export function insertBulletListRule() {
 			const listNode = (state.schema.nodes.bulletList as NodeType).create({}, [listItemNode]);
 
 			tr.replaceRangeWith(start, end, listNode);
+			const resolvedCursorPos = tr.doc.resolve(state.selection.from);
+			const selection = Selection.near(resolvedCursorPos);
+			tr.setSelection(selection);
 
 			return tr;
 		}

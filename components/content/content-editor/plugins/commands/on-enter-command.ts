@@ -31,10 +31,10 @@ export function onEnter(capabilities: ContextCapabilities) {
 
 			if (tr.docChanged) {
 				dispatch(tr);
+				return true;
 			}
 		}
 
-		// Always return false, we want the editor to still execute all other commands.
 		return false;
 	};
 }
