@@ -6,9 +6,9 @@ import AppFormTS from '../form';
 @Component({})
 export default class AppFormButton extends Vue {
 	@Prop(Boolean) showWhenValid!: boolean;
-	@Prop(Boolean) primary!: boolean;
+	@Prop({ type: Boolean, default: true }) primary!: boolean;
 	@Prop(Boolean) trans!: boolean;
-	@Prop(Boolean) solid!: boolean;
+	@Prop({ type: Boolean, default: true }) solid!: boolean;
 	@Prop(Boolean) block!: boolean;
 	@Prop(Boolean) lg!: boolean;
 
