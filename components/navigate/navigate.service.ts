@@ -55,7 +55,7 @@ export class Navigate {
 		}
 	}
 
-	private static goto(href: string) {
+	public static goto(href: string) {
 		this.redirecting = true;
 
 		this.callDestructors(href);

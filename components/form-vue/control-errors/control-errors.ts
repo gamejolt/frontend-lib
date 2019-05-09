@@ -28,6 +28,7 @@ const ErrorMessagesBase: { [k: string]: string } = {
 export default class AppFormControlErrors extends Vue {
 	@Prop(String) label?: string;
 	@Prop(String) position?: string;
+	@Prop(Boolean) hideCaret?: boolean;
 
 	form!: AppFormTS;
 	group!: AppFormGroupTS;

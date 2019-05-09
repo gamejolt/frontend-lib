@@ -1,8 +1,9 @@
 <template>
 	<app-button
 		v-if="shouldShow"
-		primary
-		solid
+		:primary="primary"
+		:trans="trans"
+		:solid="solid"
 		:block="block"
 		:disabled="form.base.state.isProcessing"
 	>
