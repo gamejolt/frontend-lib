@@ -1,5 +1,5 @@
 import { Analytics } from '../analytics/analytics.service';
-export type OnboardingStep = 'profile' | 'follow';
+export type OnboardingStep = 'profile' | 'follows';
 
 export default abstract class Onboarding {
 	private static _currentStep: OnboardingStep | null = null;
