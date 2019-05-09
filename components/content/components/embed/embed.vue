@@ -13,6 +13,7 @@
 				:video-id="source"
 			/>
 			<app-content-embed-soundcloud v-else-if="type === 'soundcloud-song'" :track-id="source" />
+			<app-content-embed-sketchfab v-else-if="type === 'sketchfab-model'" :model-id="source" />
 
 			<div v-if="shouldShowOverlay" class="embed-overlay">
 				<div class="embed-overlay-img" />

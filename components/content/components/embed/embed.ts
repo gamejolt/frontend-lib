@@ -8,6 +8,7 @@ import AppVideoEmbed from '../../../video/embed/embed.vue';
 import { ContentEmbedService } from '../../content-editor/content-embed.service';
 import { ContentOwner } from '../../content-owner';
 import AppBaseContentComponent from '../base/base-content-component.vue';
+import AppContentEmbedSketchfab from './sketchfab/sketchfab.vue';
 import AppContentEmbedSoundcloud from './soundcloud/soundcloud.vue';
 
 @Component({
@@ -15,6 +16,7 @@ import AppContentEmbedSoundcloud from './soundcloud/soundcloud.vue';
 		AppVideoEmbed,
 		AppContentEmbedSoundcloud,
 		AppBaseContentComponent,
+		AppContentEmbedSketchfab,
 		AppLoading,
 	},
 })
@@ -58,7 +60,7 @@ export default class AppContentEmbed extends Vue {
 	}
 
 	get shouldShowOverlay() {
-		return this.isEditing && ['youtube-video', 'soundcloud-song'].includes(this.type);
+		return this.isEditing;
 	}
 
 	get hasSourceUrl() {

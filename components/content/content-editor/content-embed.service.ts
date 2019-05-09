@@ -1,10 +1,11 @@
 import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
 import { EmbedSource } from './embeds/embed-source';
+import { SketchfabModelEmbed } from './embeds/sketchfab-model';
 import { SoundcloudSongEmbed } from './embeds/soundcloud-song';
 import { YouTubeVideoEmbed } from './embeds/youtube-video';
 
-export type EmbedType = 'youtube-video' | 'soundcloud-song';
+export type EmbedType = 'youtube-video' | 'soundcloud-song' | 'sketchfab-model';
 
 export type PreviewEmbed = {
 	name: string;
@@ -23,7 +24,11 @@ export class ContentEmbedService {
 
 	private static get sources() {
 		if (this._sources === undefined) {
-			this._sources = [new YouTubeVideoEmbed(), new SoundcloudSongEmbed()];
+			this._sources = [
+				new YouTubeVideoEmbed(),
+				new SoundcloudSongEmbed(),
+				new SketchfabModelEmbed(),
+			];
 		}
 		return this._sources;
 	}

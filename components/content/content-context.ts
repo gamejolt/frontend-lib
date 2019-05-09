@@ -57,7 +57,7 @@ export class ContextCapabilities {
 		);
 	}
 	get hasAnyEmbed() {
-		return this.embedMusic || this.embedVideo;
+		return this.embedMusic || this.embedVideo || this.embedModel;
 	}
 	get textBold() {
 		return this.hasCapability(ContextCapabilityType.TextBold);
@@ -152,6 +152,7 @@ export class ContextCapabilities {
 					ContextCapabilityType.Media,
 					ContextCapabilityType.EmbedVideo,
 					ContextCapabilityType.EmbedMusic,
+					ContextCapabilityType.EmbedModel,
 					ContextCapabilityType.CodeBlock,
 					ContextCapabilityType.Blockquote,
 					ContextCapabilityType.Emoji,
