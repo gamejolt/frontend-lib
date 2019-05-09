@@ -33,7 +33,7 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 		),
 		// open emoji panel
 		'Mod-e': () => {
-			if (editor.capabilities.gjEmoji) {
+			if (editor.capabilities.emoji) {
 				editor.showEmojiPanel();
 			}
 			return true;
@@ -53,7 +53,7 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 		enterCommands.push(insertHardBreakTable());
 	}
 
-	if (editor.capabilities.lists) {
+	if (editor.capabilities.list) {
 		enterCommands.push(splitListItem(schema.nodes.listItem));
 		keymap['Shift-Tab'] = ContentListService.liftListItem(schema.nodes.listItem);
 		keymap['Tab'] = sinkListItem(schema.nodes.listItem);

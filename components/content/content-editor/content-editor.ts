@@ -100,12 +100,12 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	get shouldShowEmojiPanel() {
-		return !this.disabled && this.capabilities.gjEmoji && this.isFocused;
+		return !this.disabled && this.capabilities.emoji && this.isFocused;
 	}
 
 	get couldShowEmojiPanel() {
 		if (this.capabilities) {
-			return this.capabilities.gjEmoji;
+			return this.capabilities.emoji;
 		}
 	}
 

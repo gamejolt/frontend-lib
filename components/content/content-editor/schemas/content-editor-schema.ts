@@ -44,14 +44,14 @@ function generateNodes(capabilities: ContextCapabilities) {
 
 	const allowedDocNodes = ['paragraph'] as ContentObjectType[];
 
-	if (capabilities.gjEmoji) {
+	if (capabilities.emoji) {
 		nodes.gjEmoji = gjEmoji;
 	}
 	if (capabilities.media) {
 		nodes.mediaItem = mediaItem;
 		nodes.mediaUpload = mediaUpload;
 	}
-	if (capabilities.embedMusic || capabilities.embedVideo) {
+	if (capabilities.hasAnyEmbed) {
 		nodes.embed = embed;
 	}
 	if (capabilities.codeBlock) {
@@ -60,7 +60,7 @@ function generateNodes(capabilities: ContextCapabilities) {
 	if (capabilities.blockquote) {
 		nodes.blockquote = blockquote;
 	}
-	if (capabilities.lists) {
+	if (capabilities.list) {
 		nodes.listItem = listItem;
 		nodes.bulletList = bulletList;
 		nodes.orderedList = orderedList;
@@ -105,7 +105,7 @@ function generateMarks(capabilities: ContextCapabilities) {
 	if (capabilities.textBold) {
 		marks.strong = basicSchema.marks.strong.spec;
 	}
-	if (capabilities.textItalics) {
+	if (capabilities.textItalic) {
 		marks.em = basicSchema.marks.em.spec;
 	}
 	if (capabilities.textCode) {

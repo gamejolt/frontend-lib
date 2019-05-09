@@ -10,25 +10,31 @@ export type ContentContext =
 	| 'user-bio'
 	| 'forum-post';
 
-type ContextCapabilityType =
-	| 'text-bold'
-	| 'text-italics'
-	| 'text-link'
-	| 'text-code'
-	| 'text-strike'
-	| 'media'
-	| 'embed-video'
-	| 'embed-music'
-	| 'code-block'
-	| 'blockquote'
-	| 'gj-emoji'
-	| 'lists'
-	| 'hr'
-	| 'spoiler'
-	| 'table'
-	| 'tag'
-	| 'heading'
-	| 'mention';
+enum ContextCapabilityType {
+	TextBold,
+	TextItalic,
+	TextLink,
+	TextCode,
+	TextStrike,
+
+	Emoji,
+	Tag,
+	Mention,
+
+	Media,
+
+	EmbedVideo,
+	EmbedMusic,
+	EmbedModel,
+
+	CodeBlock,
+	Blockquote,
+	List,
+	HorizontalRule,
+	Spoiler,
+	Table,
+	Heading,
+}
 
 export class ContextCapabilities {
 	public capabilities: ContextCapabilityType[];
@@ -39,7 +45,7 @@ export class ContextCapabilities {
 			this.media ||
 			this.codeBlock ||
 			this.blockquote ||
-			this.lists ||
+			this.list ||
 			this.hr ||
 			this.spoiler ||
 			this.table
@@ -47,73 +53,76 @@ export class ContextCapabilities {
 	}
 	get hasAnyText() {
 		return (
-			this.textBold || this.textItalics || this.textLink || this.textCode || this.textStrike
+			this.textBold || this.textItalic || this.textLink || this.textCode || this.textStrike
 		);
 	}
 	get hasAnyEmbed() {
 		return this.embedMusic || this.embedVideo;
 	}
 	get textBold() {
-		return this.hasCapability('text-bold');
+		return this.hasCapability(ContextCapabilityType.TextBold);
 	}
-	get textItalics() {
-		return this.hasCapability('text-italics');
+	get textItalic() {
+		return this.hasCapability(ContextCapabilityType.TextItalic);
 	}
 	get textLink() {
-		return this.hasCapability('text-link');
+		return this.hasCapability(ContextCapabilityType.TextLink);
 	}
 	get textCode() {
-		return this.hasCapability('text-code');
+		return this.hasCapability(ContextCapabilityType.TextCode);
 	}
 	get textStrike() {
-		return this.hasCapability('text-strike');
+		return this.hasCapability(ContextCapabilityType.TextStrike);
 	}
 	get media() {
 		// for media items, also allows uploading through the media upload component
-		return this.hasCapability('media');
+		return this.hasCapability(ContextCapabilityType.Media);
 	}
 	get embedVideo() {
-		return this.hasCapability('embed-video');
+		return this.hasCapability(ContextCapabilityType.EmbedVideo);
 	}
 	get embedMusic() {
-		return this.hasCapability('embed-music');
+		return this.hasCapability(ContextCapabilityType.EmbedMusic);
+	}
+	get embedModel() {
+		return this.hasCapability(ContextCapabilityType.EmbedModel);
 	}
 	get codeBlock() {
-		return this.hasCapability('code-block');
+		return this.hasCapability(ContextCapabilityType.CodeBlock);
 	}
 	get blockquote() {
-		return this.hasCapability('blockquote');
+		return this.hasCapability(ContextCapabilityType.Blockquote);
 	}
-	get gjEmoji() {
-		return this.hasCapability('gj-emoji');
+	get emoji() {
+		return this.hasCapability(ContextCapabilityType.Emoji);
 	}
-	get lists() {
-		return this.hasCapability('lists');
+	get list() {
+		return this.hasCapability(ContextCapabilityType.List);
 	}
 	get hr() {
-		return this.hasCapability('hr');
+		return this.hasCapability(ContextCapabilityType.HorizontalRule);
 	}
 	get spoiler() {
-		return this.hasCapability('spoiler');
+		return this.hasCapability(ContextCapabilityType.Spoiler);
 	}
 	get table() {
-		return this.hasCapability('table');
+		return this.hasCapability(ContextCapabilityType.Table);
 	}
 	get tag() {
-		return this.hasCapability('tag');
+		return this.hasCapability(ContextCapabilityType.Tag);
 	}
 	get heading() {
-		return this.hasCapability('heading');
+		return this.hasCapability(ContextCapabilityType.Heading);
 	}
 	get mention() {
-		return this.hasCapability('mention');
+		return this.hasCapability(ContextCapabilityType.Mention);
 	}
 
 	private constructor(capabilities: ContextCapabilityType[]) {
 		this.capabilities = capabilities;
 	}
 
-	public hasCapability(capability: ContextCapabilityType) {
+	private hasCapability(capability: ContextCapabilityType) {
 		return this.capabilities.includes(capability);
 	}
 
@@ -125,73 +134,73 @@ export class ContextCapabilities {
 		switch (context) {
 			case 'fireside-post-lead':
 				return new ContextCapabilities([
-					'text-bold',
-					'text-italics',
-					'text-link',
-					'gj-emoji',
-					'tag',
-					'mention',
+					ContextCapabilityType.TextBold,
+					ContextCapabilityType.TextItalic,
+					ContextCapabilityType.TextLink,
+					ContextCapabilityType.Emoji,
+					ContextCapabilityType.Tag,
+					ContextCapabilityType.Mention,
 				]);
 			case 'fireside-post-article':
 			case 'forum-post':
 				return new ContextCapabilities([
-					'text-bold',
-					'text-italics',
-					'text-link',
-					'text-code',
-					'text-strike',
-					'media',
-					'embed-video',
-					'embed-music',
-					'code-block',
-					'blockquote',
-					'gj-emoji',
-					'lists',
-					'hr',
-					'spoiler',
-					'table',
-					'tag',
-					'heading',
-					'mention',
+					ContextCapabilityType.TextBold,
+					ContextCapabilityType.TextItalic,
+					ContextCapabilityType.TextLink,
+					ContextCapabilityType.TextCode,
+					ContextCapabilityType.TextStrike,
+					ContextCapabilityType.Media,
+					ContextCapabilityType.EmbedVideo,
+					ContextCapabilityType.EmbedMusic,
+					ContextCapabilityType.CodeBlock,
+					ContextCapabilityType.Blockquote,
+					ContextCapabilityType.Emoji,
+					ContextCapabilityType.List,
+					ContextCapabilityType.HorizontalRule,
+					ContextCapabilityType.Spoiler,
+					ContextCapabilityType.Table,
+					ContextCapabilityType.Tag,
+					ContextCapabilityType.Heading,
+					ContextCapabilityType.Mention,
 				]);
 			case 'game-description':
 			case 'game-comment':
 			case 'user-comment':
 			case 'fireside-post-comment':
 				return new ContextCapabilities([
-					'text-bold',
-					'text-italics',
-					'text-link',
-					'text-code',
-					'text-strike',
-					'media',
-					'code-block',
-					'blockquote',
-					'gj-emoji',
-					'lists',
-					'hr',
-					'spoiler',
-					'table',
-					'tag',
-					'heading',
-					'mention',
+					ContextCapabilityType.TextBold,
+					ContextCapabilityType.TextItalic,
+					ContextCapabilityType.TextLink,
+					ContextCapabilityType.TextCode,
+					ContextCapabilityType.TextStrike,
+					ContextCapabilityType.Media,
+					ContextCapabilityType.CodeBlock,
+					ContextCapabilityType.Blockquote,
+					ContextCapabilityType.Emoji,
+					ContextCapabilityType.List,
+					ContextCapabilityType.HorizontalRule,
+					ContextCapabilityType.Spoiler,
+					ContextCapabilityType.Table,
+					ContextCapabilityType.Tag,
+					ContextCapabilityType.Heading,
+					ContextCapabilityType.Mention,
 				]);
 			case 'user-bio':
 				return new ContextCapabilities([
-					'text-bold',
-					'text-italics',
-					'text-link',
-					'text-code',
-					'text-strike',
-					'code-block',
-					'blockquote',
-					'gj-emoji',
-					'lists',
-					'hr',
-					'spoiler',
-					'table',
-					'tag',
-					'mention',
+					ContextCapabilityType.TextBold,
+					ContextCapabilityType.TextItalic,
+					ContextCapabilityType.TextLink,
+					ContextCapabilityType.TextCode,
+					ContextCapabilityType.TextStrike,
+					ContextCapabilityType.CodeBlock,
+					ContextCapabilityType.Blockquote,
+					ContextCapabilityType.Emoji,
+					ContextCapabilityType.List,
+					ContextCapabilityType.HorizontalRule,
+					ContextCapabilityType.Spoiler,
+					ContextCapabilityType.Table,
+					ContextCapabilityType.Tag,
+					ContextCapabilityType.Mention,
 				]);
 		}
 		throw new Error('Context capabilities undefined for context ' + context);

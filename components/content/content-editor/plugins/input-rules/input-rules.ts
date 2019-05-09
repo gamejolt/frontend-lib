@@ -14,7 +14,7 @@ export function createInputRules(capabilities: ContextCapabilities) {
 	if (capabilities.tag) {
 		rules.push(insertTagRule());
 	}
-	if (capabilities.gjEmoji) {
+	if (capabilities.emoji) {
 		rules.push(insertEmojiRule());
 	}
 	if (capabilities.mention) {
@@ -24,7 +24,7 @@ export function createInputRules(capabilities: ContextCapabilities) {
 		rules.push(autolinkCommunityRule());
 		rules.push(autolinkUrlRule());
 	}
-	if (capabilities.lists) {
+	if (capabilities.list) {
 		rules.push(insertOrderedListRule());
 		rules.push(insertBulletListRule());
 	}
