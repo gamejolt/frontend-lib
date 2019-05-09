@@ -6,7 +6,7 @@
 			</div>
 		</template>
 		<template v-else>
-			<video :poster="poster" loop>
+			<video :poster="poster" loop autoplay muted playsinline>
 				<source type="video/webm" :src="webm" />
 				<source type="video/mp4" :src="mp4" />
 			</video>
