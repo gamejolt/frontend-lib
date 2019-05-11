@@ -1,7 +1,7 @@
 import { Growls } from 'game-jolt-frontend-lib/components/growls/growls.service';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop, Watch } from 'vue-property-decorator';
+import { Prop } from 'vue-property-decorator';
 import { arrayShuffle } from '../../../../utils/array';
 import AppLoading from '../../../../vue/components/loading/loading.vue';
 import AppVideoEmbed from '../../../video/embed/embed.vue';
@@ -39,7 +39,6 @@ export default class AppContentEmbed extends Vue {
 	@Prop(String)
 	inputValue!: string;
 
-	sourceUrl = '';
 	loading = false;
 	previewEmbeds: any[] = [];
 
@@ -59,10 +58,6 @@ export default class AppContentEmbed extends Vue {
 		return this.type && this.source;
 	}
 
-	get hasSourceUrl() {
-		return this.sourceUrl.length > 0;
-	}
-
 	get hasMoreEmbedPreviews() {
 		return this.previewEmbeds.length < ContentEmbedService.previewSources.length;
 	}
@@ -74,8 +69,6 @@ export default class AppContentEmbed extends Vue {
 		}
 
 		this.setRandomEmbedPills();
-
-		this.onTypeChange();
 	}
 
 	private setRandomEmbedPills() {
@@ -104,44 +97,32 @@ export default class AppContentEmbed extends Vue {
 				}
 				break;
 			case 'Enter':
-				this.loading = true;
-				const data = await ContentEmbedService.getEmbedData(
-					this.owner,
-					this.$refs.inputElement.value
-				);
-				if (data !== undefined) {
-					this.$emit('updateAttrs', data);
+				if (this.$refs.inputElement.value.length === 0) {
+					this.$emit('removed');
 				} else {
-					Growls.error({
-						title: this.$gettext(`Uh oh`),
-						message: this.$gettext(
-							`Something went wrong embedded your content. Maybe try again with a different link?`
-						),
-					});
+					this.loading = true;
+					const data = await ContentEmbedService.getEmbedData(
+						this.owner,
+						this.$refs.inputElement.value
+					);
+					if (data !== undefined) {
+						this.$emit('updateAttrs', data);
+					} else {
+						Growls.error({
+							title: this.$gettext(`Uh oh`),
+							message: this.$gettext(
+								`Something went wrong embedding your content. Maybe try again with a different link?`
+							),
+						});
+					}
+					this.loading = false;
 				}
-				this.loading = false;
 				e.preventDefault();
 				break;
 			case 'Escape':
 				this.$emit('removed');
 				e.preventDefault();
 				break;
-		}
-	}
-
-	@Watch('type')
-	async onTypeChange() {
-		if (this.isEditing) {
-			const url = await ContentEmbedService.getSourceUrl(
-				this.type,
-				this.source,
-				this.owner.getHydrator()
-			);
-			if (url !== undefined) {
-				this.sourceUrl = url;
-			} else {
-				this.sourceUrl = '';
-			}
 		}
 	}
 }

@@ -17,10 +17,6 @@ export class SketchfabModelEmbed extends EmbedSource {
 		};
 	}
 
-	async getPlatformSourceUrl(source: string, _hydrator: ContentHydrator) {
-		return `https://sketchfab.com/models/${source}`;
-	}
-
 	// URL format:
 	// sketchfab.com/models/<id>
 	// sketchfab.com/3d-models/description-<id>

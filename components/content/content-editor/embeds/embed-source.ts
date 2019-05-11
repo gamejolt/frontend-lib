@@ -22,9 +22,4 @@ export abstract class EmbedSource {
 	 * The returned value should be truthy and can return things like a regex array, to not perform it twice.
 	 */
 	protected abstract isValidLink(link: string): false | any;
-
-	abstract async getPlatformSourceUrl(
-		source: string,
-		hydrator: ContentHydrator
-	): Promise<string | undefined>;
 }

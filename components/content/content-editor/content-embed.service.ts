@@ -1,4 +1,3 @@
-import { ContentHydrator } from '../content-hydrator';
 import { ContentOwner } from '../content-owner';
 import { EmbedSource } from './embeds/embed-source';
 import { SketchfabModelEmbed } from './embeds/sketchfab-model';
@@ -42,21 +41,6 @@ export class ContentEmbedService {
 			}
 		}
 		return previews;
-	}
-
-	/**
-	 * Returns the external url for a type + source that links to the origin of the embed content.
-	 */
-	public static async getSourceUrl(
-		type: string,
-		source: string,
-		hydrator: ContentHydrator
-	): Promise<string | undefined> {
-		const embedSource = this.sources.find(i => i.getEmbedType() === type);
-		if (embedSource) {
-			return embedSource.getPlatformSourceUrl(source, hydrator);
-		}
-		return undefined;
 	}
 
 	public static async getEmbedData(

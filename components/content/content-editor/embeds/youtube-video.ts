@@ -17,10 +17,6 @@ export class YouTubeVideoEmbed extends EmbedSource {
 		};
 	}
 
-	async getPlatformSourceUrl(source: string, _hydrator: ContentHydrator) {
-		return `https://www.youtube.com/watch?v=${source}`;
-	}
-
 	// Support:
 	// youtube.com/watch -> v=id
 	// m.youtube.com/watch -> v=id

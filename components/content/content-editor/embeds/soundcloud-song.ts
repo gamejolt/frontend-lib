@@ -17,16 +17,6 @@ export class SoundcloudSongEmbed extends EmbedSource {
 		};
 	}
 
-	async getPlatformSourceUrl(
-		source: string,
-		hydrator: ContentHydrator
-	): Promise<string | undefined> {
-		const data = await hydrator.getData('soundcloud-track-id', source);
-		if (data) {
-			return data;
-		}
-	}
-
 	async getLinkSource(
 		capabilities: ContextCapabilities,
 		hydrator: ContentHydrator,
