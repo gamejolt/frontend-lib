@@ -39,7 +39,7 @@ export default class AppContentEmbed extends Vue {
 	@Prop(String)
 	inputValue!: string;
 
-	sourceUrl: string = '';
+	sourceUrl = '';
 	loading = false;
 	previewEmbeds: any[] = [];
 
@@ -57,10 +57,6 @@ export default class AppContentEmbed extends Vue {
 
 	get hasContent() {
 		return this.type && this.source;
-	}
-
-	get shouldShowOverlay() {
-		return this.isEditing;
 	}
 
 	get hasSourceUrl() {

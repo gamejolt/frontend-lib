@@ -1,6 +1,6 @@
 <template>
 	<div class="base-content-component">
-		<div v-if="isEditing" class="-controls">
+		<div v-if="isEditing" class="-controls theme-dark">
 			<app-button
 				v-if="showEdit"
 				circle
@@ -8,16 +8,8 @@
 				icon="edit"
 				:disabled="isDisabled"
 				@click="onEditClicked"
-				v-app-tooltip="$gettext('Edit')"
 			/>
-			<app-button
-				circle
-				overlay
-				icon="remove"
-				:disabled="isDisabled"
-				@click="onRemovedClicked"
-				v-app-tooltip="$gettext('Remove')"
-			/>
+			<app-button circle overlay icon="remove" :disabled="isDisabled" @click="onRemovedClicked" />
 		</div>
 
 		<slot />

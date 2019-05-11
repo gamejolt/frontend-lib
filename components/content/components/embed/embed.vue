@@ -7,6 +7,7 @@
 		class="embed-main"
 	>
 		<div class="embed-container">
+			<div class="embed-overlay-img" />
 			<app-video-embed
 				v-if="type === 'youtube-video'"
 				video-provider="youtube"
@@ -14,16 +15,6 @@
 			/>
 			<app-content-embed-soundcloud v-else-if="type === 'soundcloud-song'" :track-id="source" />
 			<app-content-embed-sketchfab v-else-if="type === 'sketchfab-model'" :model-id="source" />
-
-			<div v-if="shouldShowOverlay" class="embed-overlay">
-				<div class="embed-overlay-img" />
-				<div class="embed-overlay-controls">
-					<translate v-if="!hasSourceUrl">Go to source</translate>
-					<external-link v-else :href="sourceUrl">
-						<translate>Go to source</translate>
-					</external-link>
-				</div>
-			</div>
 		</div>
 	</app-base-content-component>
 	<div v-else contenteditable="false" class="input-container">
