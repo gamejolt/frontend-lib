@@ -25,7 +25,7 @@
 					<app-jolticon icon="bold" />
 				</button>
 				<button
-					v-if="capabilities.textItalics"
+					v-if="capabilities.textItalic"
 					class="control-button"
 					@click.prevent="onClickItalic"
 					:class="{
