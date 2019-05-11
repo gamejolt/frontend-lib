@@ -11,35 +11,35 @@
 				<div v-if="isMenuShown" slot="popover" class="fill-darkest">
 					<div class="list-group list-group-dark">
 						<a class="list-group-item" @click.stop="onClickInsertRowAbove()">
-							<translate>Insert Row above</translate>
+							<translate>Insert row above</translate>
 						</a>
 
 						<a class="list-group-item" @click.stop="onClickInsertRowBelow()">
-							<translate>Insert Row below</translate>
+							<translate>Insert row below</translate>
 						</a>
 
 						<a class="list-group-item" @click.stop="onClickInsertColumnLeft()">
-							<translate>Insert Column left</translate>
+							<translate>Insert column left</translate>
 						</a>
 
 						<a class="list-group-item" @click.stop="onClickInsertColumnRight()">
-							<translate>Insert Column right</translate>
+							<translate>Insert column right</translate>
 						</a>
 
 						<hr />
 
 						<a class="list-group-item" @click.prevent="onClickRemoveRow()">
-							<translate>Remove selected Row</translate>
+							<translate>Remove selected row</translate>
 						</a>
 
 						<a class="list-group-item" @click.prevent="onClickRemoveColumn()">
-							<translate>Remove selected Column</translate>
+							<translate>Remove selected column</translate>
 						</a>
 
 						<hr />
 
 						<a class="list-group-item" @click.stop="onClickToggleHeader()">
-							<translate>Toggle Header Row</translate>
+							<translate>Toggle header Row</translate>
 						</a>
 					</div>
 				</div>
@@ -53,7 +53,7 @@
 				trans
 				icon="remove"
 				@click.prevent="onClickRemoveTable()"
-				v-app-tooltip="$gettext('Remove Table')"
+				v-app-tooltip="$gettext('Remove table')"
 			/>
 		</span>
 	</div>

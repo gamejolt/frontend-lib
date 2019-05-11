@@ -19,7 +19,7 @@
 						v-if="capabilities.media"
 						class="control-button"
 						@click.prevent="onClickMedia"
-						v-app-tooltip="$gettext('Upload Media')"
+						v-app-tooltip="$gettext('Add an image or GIF')"
 					>
 						<app-jolticon icon="screenshot" />
 					</button>
@@ -27,7 +27,7 @@
 						v-if="capabilities.hasAnyEmbed"
 						class="control-button"
 						@click.prevent="onClickEmbed"
-						v-app-tooltip="$gettext('Embed Content')"
+						v-app-tooltip="$gettext('Add an embed')"
 					>
 						<app-jolticon icon="embed" />
 					</button>
@@ -35,7 +35,7 @@
 						v-if="capabilities.codeBlock"
 						class="control-button"
 						@click.prevent="onClickCodeBlock"
-						v-app-tooltip="$gettext('Add Code Block')"
+						v-app-tooltip="$gettext('Add a code block')"
 					>
 						<app-jolticon icon="brackets" />
 					</button>
@@ -43,7 +43,7 @@
 						v-if="capabilities.blockquote"
 						class="control-button"
 						@click.prevent="onClickBlockquote"
-						v-app-tooltip="$gettext('Add Quote')"
+						v-app-tooltip="$gettext('Add a quote')"
 					>
 						<app-jolticon icon="blockquote" />
 					</button>
@@ -51,7 +51,7 @@
 						v-if="capabilities.spoiler"
 						class="control-button"
 						@click.prevent="onClickSpoiler"
-						v-app-tooltip="$gettext('Add Spoiler')"
+						v-app-tooltip="$gettext('Add a spoiler')"
 					>
 						<app-jolticon icon="inactive" />
 					</button>
@@ -59,7 +59,7 @@
 						v-if="capabilities.hr"
 						class="control-button"
 						@click.prevent="onClickHr"
-						v-app-tooltip="$gettext('Add Separator')"
+						v-app-tooltip="$gettext('Add a separator')"
 					>
 						<app-jolticon icon="hr" />
 					</button>
@@ -67,7 +67,7 @@
 						v-if="capabilities.table"
 						class="control-button"
 						@click.prevent="onClickTable"
-						v-app-tooltip="$gettext('Add Table')"
+						v-app-tooltip="$gettext('Add a table')"
 					>
 						<app-jolticon icon="insert-table" />
 					</button>
@@ -75,7 +75,7 @@
 						v-if="capabilities.list"
 						class="control-button"
 						@click.prevent="onClickBulletList"
-						v-app-tooltip="$gettext('Add Bullet List')"
+						v-app-tooltip="$gettext('Add a bulleted list')"
 					>
 						<app-jolticon icon="bullet-list" />
 					</button>
@@ -83,7 +83,7 @@
 						v-if="capabilities.list"
 						class="control-button"
 						@click.prevent="onClickOrderedList"
-						v-app-tooltip="$gettext('Add Numbered List')"
+						v-app-tooltip="$gettext('Add a numbered list')"
 					>
 						<app-jolticon icon="numbered-list" />
 					</button>
@@ -109,7 +109,7 @@
 								solid
 								icon="screenshot"
 								@click.prevent="onClickMedia"
-								v-app-tooltip="$gettext('Upload Media')"
+								v-app-tooltip="$gettext('Add an image or GIF')"
 							/>
 							<app-button
 								v-if="capabilities.hasAnyEmbed"
@@ -118,7 +118,7 @@
 								solid
 								icon="embed"
 								@click.prevent="onClickEmbed"
-								v-app-tooltip="$gettext('Embed Content')"
+								v-app-tooltip="$gettext('Add an embed')"
 							/>
 							<app-button
 								v-if="capabilities.codeBlock"
@@ -127,7 +127,7 @@
 								solid
 								icon="brackets"
 								@click.prevent="onClickCodeBlock"
-								v-app-tooltip="$gettext('Add Code Block')"
+								v-app-tooltip="$gettext('Add a code block')"
 							/>
 							<app-button
 								v-if="capabilities.blockquote"
@@ -136,7 +136,7 @@
 								solid
 								icon="blockquote"
 								@click.prevent="onClickBlockquote"
-								v-app-tooltip="$gettext('Add Quote')"
+								v-app-tooltip="$gettext('Add a quote')"
 							/>
 							<app-button
 								v-if="capabilities.spoiler"
@@ -145,7 +145,7 @@
 								solid
 								icon="inactive"
 								@click.prevent="onClickSpoiler"
-								v-app-tooltip="$gettext('Add Spoiler')"
+								v-app-tooltip="$gettext('Add a spoiler')"
 							/>
 							<app-button
 								v-if="capabilities.hr"
@@ -154,7 +154,7 @@
 								solid
 								icon="hr"
 								@click.prevent="onClickHr"
-								v-app-tooltip="$gettext('Add Separator')"
+								v-app-tooltip="$gettext('Add a separator')"
 							/>
 							<app-button
 								v-if="capabilities.table"
@@ -163,7 +163,7 @@
 								solid
 								icon="insert-table"
 								@click.prevent="onClickTable"
-								v-app-tooltip="$gettext('Add Table')"
+								v-app-tooltip="$gettext('Add a table')"
 							/>
 							<app-button
 								v-if="capabilities.list"
@@ -172,7 +172,7 @@
 								solid
 								icon="bullet-list"
 								@click.prevent="onClickBulletList"
-								v-app-tooltip="$gettext('Add Bullet List')"
+								v-app-tooltip="$gettext('Add a bulleted list')"
 							/>
 							<app-button
 								v-if="capabilities.list"
@@ -181,7 +181,7 @@
 								solid
 								icon="numbered-list"
 								@click.prevent="onClickOrderedList"
-								v-app-tooltip="$gettext('Add Numbered List')"
+								v-app-tooltip="$gettext('Add a numbered list')"
 							/>
 						</span>
 					</transition>
