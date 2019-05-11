@@ -7,6 +7,6 @@ export const heading = {
 	defining: true,
 	marks: '',
 
-	toDOM: (node: Node) => ['h' + node.attrs.level, { class: 'content-editor-heading' }, 0],
-	parseDOM: [{ tag: 'h1', attrs: { level: 1 } }, { tag: 'h2', attrs: { level: 2 } }],
+	toDOM: (node: Node) => ['h' + (node.attrs.level + 2), { class: 'content-editor-heading' }, 0],
+	parseDOM: [{ tag: 'h3', attrs: { level: 1 } }, { tag: 'h4', attrs: { level: 2 } }],
 } as NodeSpec;
