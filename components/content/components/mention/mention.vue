@@ -23,10 +23,12 @@
 
 .mention
 	white-space: normal
+	margin-right: 2px
 
 .mention-avatar-img
 	display: inline
 	height: 1.25em
+	width: 1.25em
 	img-circle()
 </style>
 

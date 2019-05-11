@@ -71,7 +71,10 @@
 >>> blockquote::after
 	white-space: normal
 
->>> .content-table > table
+>>> table
+	table-layout: fixed
+	width: 100%
+
 	& > tr:first-child
 		& > td, & > th
 			border-top-width: 0

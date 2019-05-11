@@ -5,7 +5,6 @@ import { EmbedNodeView } from './embed';
 import { MediaItemNodeView } from './media-item';
 import { MediaUploadNodeView } from './media-upload';
 import { MentionNodeView } from './mention';
-import { TableNodeView } from './table';
 import { TagNodeView } from './tag';
 
 type NodeViewList = {
@@ -45,11 +44,11 @@ export function buildNodeViews(owner: ContentOwner): NodeViewList {
 			return new MentionNodeView(node, view, getPos, owner);
 		};
 	}
-	if (capabilities.table) {
-		nodeViews.table = function(node, view, getPos) {
-			return new TableNodeView(node, view, getPos);
-		};
-	}
+	// if (capabilities.table) {
+	// 	nodeViews.table = function(node, view, getPos) {
+	// 		return new TableNodeView(node, view, getPos);
+	// 	};
+	// }
 
 	return nodeViews;
 }
