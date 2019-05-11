@@ -32,6 +32,9 @@ export class Shortkeys {
 	}
 
 	private static eventHandler(e: KeyboardEvent) {
+		if (e.ctrlKey || e.altKey || e.shiftKey) {
+			return;
+		}
 		const activeElement = document.activeElement;
 		const tagName = activeElement.tagName.toLowerCase();
 		// Don't fire for these elements ever.
