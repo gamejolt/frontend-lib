@@ -10,6 +10,15 @@
 		// the var so they all use the "bg" color instead.
 		--theme-bg-offset: var(--theme-bg)
 
+// Use this class to reset the fill to the same as the original background. You
+// can use this to reset a container to the background color if it's being
+// placed within a fill-offset, for example.
+.fill-bg
+	theme-prop('background-color', 'bg')
+
+	*
+		--theme-bg-offset: var(--theme-bg-offset-base)
+
 .fill-highlight
 	theme-prop('background-color', 'bi-bg')
 	theme-prop('color', 'bi-fg')

@@ -1,7 +1,11 @@
 <template>
 	<div class="content-control">
+		<!--
+			Use fill-bg so that this control can be placed within any other fill
+			and it'll reset back to the BG background color/theming.
+		-->
 		<app-content-editor
-			class="form-control content-editor-form-control"
+			class="fill-bg form-control content-editor-form-control"
 			:name="group.name"
 			:id="id"
 			:content-context="contentContext"
