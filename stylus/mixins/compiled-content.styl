@@ -1,6 +1,9 @@
 compiled-content($-font-size)
 	$-computed-line-height = $-font-size * $line-height-base
 
+	blockquote > p
+		font: inherit
+
 	&, p
 		font-size: $-font-size
 		line-height: $line-height-base
