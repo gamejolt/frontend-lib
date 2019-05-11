@@ -23,7 +23,7 @@
 
 // Do not show dotted selection outline
 >>> .ProseMirror
-	outline: 0px solid transparent !important
+	outline: 0 solid transparent !important
 
 // Override prosemirror selection border around selected nodes
 >>> .ProseMirror-selectednode
@@ -47,7 +47,7 @@
 		text-transform: uppercase
 
 >>> .content-editor-spoiler:after
-	content: none;
+	content: none
 
 >>> p
 	margin-top: 10px
@@ -65,9 +65,6 @@
 >>> th
 	padding: 4px
 
->>> .content-editor-heading
-	margin-top: 0px
-
 >>> blockquote::before
 	white-space: normal
 
@@ -75,7 +72,6 @@
 	white-space: normal
 
 >>> .content-table > table
-
 	& > tr:first-child
 		& > td, & > th
 			border-top-width: 0
