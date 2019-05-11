@@ -72,7 +72,7 @@
 						<app-jolticon icon="insert-table" />
 					</button>
 					<button
-						v-if="capabilities.lists"
+						v-if="capabilities.list"
 						class="control-button"
 						@click.prevent="onClickBulletList"
 						v-app-tooltip="$gettext('Add Bullet List')"
@@ -80,7 +80,7 @@
 						<app-jolticon icon="bullet-list" />
 					</button>
 					<button
-						v-if="capabilities.lists"
+						v-if="capabilities.list"
 						class="control-button"
 						@click.prevent="onClickOrderedList"
 						v-app-tooltip="$gettext('Add Numbered List')"
@@ -166,7 +166,7 @@
 								v-app-tooltip="$gettext('Add Table')"
 							/>
 							<app-button
-								v-if="capabilities.lists"
+								v-if="capabilities.list"
 								class="anim-fade-in-enlarge no-animate-leave btn-stagger"
 								circle
 								solid
@@ -175,7 +175,7 @@
 								v-app-tooltip="$gettext('Add Bullet List')"
 							/>
 							<app-button
-								v-if="capabilities.lists"
+								v-if="capabilities.list"
 								class="anim-fade-in-enlarge no-animate-leave btn-stagger"
 								circle
 								solid
