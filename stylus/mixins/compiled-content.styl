@@ -12,9 +12,20 @@ compiled-content($-font-size)
 		margin-top: $-computed-line-height
 		margin-bottom: $-computed-line-height
 
-	h1, h2, h3, h4, h5, h6
+	h3, h4
+		// Content compiler puts p tags inside the headings.
+		> p
+			font: inherit
+			color: inherit
+
 		&:first-child
 			margin-top: 0
+
+	h3
+		font-size: $font-size-h3
+
+	h4
+		font-size: $font-size-h4
 
 	// Widgets some times create empty P tags.
 	// This hides them so they don't add extra spacing to the page.
