@@ -39,7 +39,7 @@
 						<hr />
 
 						<a class="list-group-item" @click.stop="onClickToggleHeader()">
-							<translate>Toggle header Row</translate>
+							<translate>Toggle header row</translate>
 						</a>
 					</div>
 				</div>
