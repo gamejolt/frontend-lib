@@ -131,6 +131,7 @@ export class ContentObject extends ContentNode {
 			case 'gjEmoji':
 			case 'hardBreak':
 			case 'hr':
+			case 'paragraph':
 				length++;
 				break;
 			case 'embed':

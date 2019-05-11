@@ -85,4 +85,9 @@ export class ContentDocument extends ContentNode {
 		const doc = new ContentDocument(context, objs);
 		return doc;
 	}
+
+	public getLength() {
+		// Don't count the first paragraph.
+		return super.getLength() - 1;
+	}
 }
