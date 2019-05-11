@@ -43,13 +43,13 @@
 	position: absolute
 
 	& > div
+		elevate-2()
+		rounded-corners()
+		theme-prop('background-color', 'darkest')
 		display: flex
 		justify-content: flex-start
 		align-items: center
-		theme-prop('background-color', 'darkest')
 		padding: 10px 8px 8px 8px
-		rounded-corners()
-		box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
 
 		&:before
 			caret(color: var(--theme-darkest), direction: 'down', size: 8px)
