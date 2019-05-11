@@ -29,20 +29,14 @@
 	<div v-else contenteditable="false" class="input-container">
 		<div class="embed-pill-container">
 			<span class="help-inline"><translate>We support</translate></span>
-			<external-link
-				v-for="preview of previewEmbeds"
-				:key="preview.name"
-				:style="{ 'border-color': '#' + preview.color }"
-				class="embed-pill"
-				:href="preview.link"
-			>
+			<span v-for="preview of previewEmbeds" :key="preview.name" class="embed-pill">
 				<app-jolticon
 					:icon="preview.icon"
 					class="embed-pill-icon"
 					:style="{ color: '#' + preview.color }"
 				/>
 				{{ preview.name }}
-			</external-link>
+			</span>
 			<span
 				v-if="hasMoreEmbedPreviews"
 				class="embed-pill embed-pill-more"
