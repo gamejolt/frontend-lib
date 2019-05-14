@@ -18,6 +18,6 @@ export default class AppShortkey extends Vue {
 	}
 
 	callback(e: KeyboardEvent) {
-		this.$emit('pressed', e);
+		this.$emit('press', e);
 	}
 }
