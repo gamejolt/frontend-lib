@@ -2,6 +2,7 @@ import { Schema } from 'prosemirror-model';
 import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
 import { ContentObjectType } from '../../content-object';
+import { link } from './specs/marks/link-markspec';
 import { strike } from './specs/marks/strike-markspec';
 import { blockquote } from './specs/nodes/blockquote-nodespec';
 import { bulletList } from './specs/nodes/bullet-list-nodespec';
@@ -112,7 +113,7 @@ function generateMarks(capabilities: ContextCapabilities) {
 		marks.code = basicSchema.marks.code.spec;
 	}
 	if (capabilities.textLink) {
-		marks.link = basicSchema.marks.link.spec;
+		marks.link = link;
 	}
 	if (capabilities.textStrike) {
 		marks.strike = strike;
