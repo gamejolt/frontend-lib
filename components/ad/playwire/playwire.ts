@@ -91,7 +91,6 @@ export default class AppAdPlaywire extends Vue {
 	}
 
 	mounted() {
-		Playwire.init(this.$router);
 		Playwire.addAd(this);
 	}
 

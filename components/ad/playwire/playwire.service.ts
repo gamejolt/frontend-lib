@@ -1,4 +1,3 @@
-// Load in the CMP stuff.
 import VueRouter from 'vue-router';
 import { AdsDisabledDev } from '../../../components/ad/ads.service';
 import { EventBus } from '../../../components/event-bus/event-bus.service';
@@ -7,9 +6,11 @@ import AppAdPlaywire from './playwire';
 
 let _isInitialized = false;
 
+type AdComponent = AppAdPlaywire;
+
 export class Playwire {
 	private static routeResolved = false;
-	private static ads: Set<AppAdPlaywire> = new Set();
+	private static ads: Set<AdComponent> = new Set();
 
 	static init(router: VueRouter) {
 		if (GJ_IS_CLIENT || GJ_IS_SSR || AdsDisabledDev) {
@@ -45,7 +46,7 @@ export class Playwire {
 		});
 	}
 
-	static addAd(ad: AppAdPlaywire) {
+	static addAd(ad: AdComponent) {
 		this.ads.add(ad);
 
 		// If the route already resolved then this ad was mounted after the
@@ -55,11 +56,11 @@ export class Playwire {
 		}
 	}
 
-	static removeAd(ad: AppAdPlaywire) {
+	static removeAd(ad: AdComponent) {
 		this.ads.delete(ad);
 	}
 
-	private static async displayAds(ads: AppAdPlaywire[]) {
+	private static async displayAds(ads: AdComponent[]) {
 		if (!ads.length || !_isInitialized) {
 			return;
 		}
