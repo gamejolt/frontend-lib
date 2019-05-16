@@ -1,3 +1,4 @@
+import AppAdPlaywireVideo from 'game-jolt-frontend-lib/components/ad/playwire/video';
 import VueRouter from 'vue-router';
 import { AdsDisabledDev } from '../../../components/ad/ads.service';
 import { EventBus } from '../../../components/event-bus/event-bus.service';
@@ -6,7 +7,7 @@ import AppAdPlaywire from './playwire';
 
 let _isInitialized = false;
 
-type AdComponent = AppAdPlaywire;
+type AdComponent = AppAdPlaywire | AppAdPlaywireVideo;
 
 export class Playwire {
 	private static routeResolved = false;
