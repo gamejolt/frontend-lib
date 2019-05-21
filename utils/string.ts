@@ -59,6 +59,12 @@ export function titleCase(str: string, options?: TitleCaseOptions) {
 
 	// Uppercase words.
 	return str.replace(/\w\S*/g, txt => {
+		// Only bother titlecasing words that are fully lowercased.
+		// This helps preserve acronyms and the likes.
+		if (txt.toLowerCase() !== txt) {
+			return txt;
+		}
+
 		let word = txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 		if (!options!.keepLcWords && lcWords.indexOf(word) !== -1) {
 			word = word.toLowerCase();
