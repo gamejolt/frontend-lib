@@ -8,7 +8,6 @@ import { Growls } from '../../../../growls/growls.service';
 import { Screen } from '../../../../screen/screen-service';
 import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
-import { ContentTableService } from '../../content-table.service';
 
 @Component({
 	components: {},
@@ -161,11 +160,6 @@ export default class AppContentEditorBlockControls extends Vue {
 
 	onClickHr() {
 		const newNode = (this.view.state.schema.nodes.hr as NodeType).create();
-		this.insertNewNode(newNode);
-	}
-
-	onClickTable() {
-		const newNode = ContentTableService.createNew(this.view.state.schema, 3, 2);
 		this.insertNewNode(newNode);
 	}
 

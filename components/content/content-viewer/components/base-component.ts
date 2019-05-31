@@ -15,9 +15,6 @@ import { AppContentViewerMediaItem } from './media-item';
 import AppContentViewerMention from './mention/mention.vue';
 import { AppContentViewerParagraph } from './paragraph';
 import { AppContentViewerSpoiler } from './spoiler';
-import { AppContentViewerTable } from './table';
-import { AppContentViewerTableCell } from './tableCell';
-import { AppContentViewerTableRow } from './tableRow';
 import AppContentViewerTag from './tag/tag.vue';
 import { AppContentViewerText } from './text';
 
@@ -54,12 +51,6 @@ function getComponentType(data: ContentObject): any {
 			return AppContentViewerHeading;
 		case 'mention':
 			return AppContentViewerMention;
-		case 'table':
-			return AppContentViewerTable;
-		case 'tableRow':
-			return AppContentViewerTableRow;
-		case 'tableCell':
-			return AppContentViewerTableCell;
 	}
 }
 

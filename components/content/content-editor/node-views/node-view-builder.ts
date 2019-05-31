@@ -44,11 +44,6 @@ export function buildNodeViews(owner: ContentOwner): NodeViewList {
 			return new MentionNodeView(node, view, getPos, owner);
 		};
 	}
-	// if (capabilities.table) {
-	// 	nodeViews.table = function(node, view, getPos) {
-	// 		return new TableNodeView(node, view, getPos);
-	// 	};
-	// }
 
 	return nodeViews;
 }

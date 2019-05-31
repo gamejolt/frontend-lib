@@ -32,7 +32,6 @@ enum ContextCapabilityType {
 	List,
 	HorizontalRule,
 	Spoiler,
-	Table,
 	Heading,
 }
 
@@ -47,8 +46,7 @@ export class ContextCapabilities {
 			this.blockquote ||
 			this.list ||
 			this.hr ||
-			this.spoiler ||
-			this.table
+			this.spoiler
 		);
 	}
 	get hasAnyText() {
@@ -105,9 +103,6 @@ export class ContextCapabilities {
 	get spoiler() {
 		return this.hasCapability(ContextCapabilityType.Spoiler);
 	}
-	get table() {
-		return this.hasCapability(ContextCapabilityType.Table);
-	}
 	get tag() {
 		return this.hasCapability(ContextCapabilityType.Tag);
 	}
@@ -159,7 +154,6 @@ export class ContextCapabilities {
 					ContextCapabilityType.List,
 					ContextCapabilityType.HorizontalRule,
 					ContextCapabilityType.Spoiler,
-					ContextCapabilityType.Table,
 					ContextCapabilityType.Tag,
 					ContextCapabilityType.Heading,
 					ContextCapabilityType.Mention,
@@ -181,7 +175,6 @@ export class ContextCapabilities {
 					ContextCapabilityType.List,
 					ContextCapabilityType.HorizontalRule,
 					ContextCapabilityType.Spoiler,
-					ContextCapabilityType.Table,
 					ContextCapabilityType.Tag,
 					ContextCapabilityType.Heading,
 					ContextCapabilityType.Mention,
@@ -199,7 +192,6 @@ export class ContextCapabilities {
 					ContextCapabilityType.List,
 					ContextCapabilityType.HorizontalRule,
 					ContextCapabilityType.Spoiler,
-					ContextCapabilityType.Table,
 					ContextCapabilityType.Tag,
 					ContextCapabilityType.Mention,
 				]);

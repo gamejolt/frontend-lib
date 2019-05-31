@@ -19,9 +19,6 @@ import { mention } from './specs/nodes/mention-nodespec';
 import { orderedList } from './specs/nodes/ordered-list-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
 import { spoiler } from './specs/nodes/spoiler-nodespec';
-import { tableCell } from './specs/nodes/table-cell-nodespec';
-import { table } from './specs/nodes/table-nodespec';
-import { tableRow } from './specs/nodes/table-row-nodespec';
 import { tag } from './specs/nodes/tag-nodespec';
 
 export function generateSchema(capabilities: ContextCapabilities) {
@@ -75,11 +72,6 @@ function generateNodes(capabilities: ContextCapabilities) {
 		nodes.spoiler = spoiler;
 
 		allowedDocNodes.push('spoiler');
-	}
-	if (capabilities.table) {
-		nodes.table = table;
-		nodes.tableRow = tableRow;
-		nodes.tableCell = tableCell;
 	}
 	if (capabilities.heading) {
 		nodes.heading = heading;

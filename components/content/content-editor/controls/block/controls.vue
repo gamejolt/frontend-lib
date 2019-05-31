@@ -64,14 +64,6 @@
 						<app-jolticon icon="hr" />
 					</button>
 					<button
-						v-if="capabilities.table"
-						class="control-button"
-						@click.prevent="onClickTable"
-						v-app-tooltip="$gettext('Add a table')"
-					>
-						<app-jolticon icon="insert-table" />
-					</button>
-					<button
 						v-if="capabilities.list"
 						class="control-button"
 						@click.prevent="onClickBulletList"
