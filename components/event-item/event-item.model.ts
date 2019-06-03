@@ -46,15 +46,64 @@ export class EventItem extends Model {
 		}
 	}
 
-	set game(game: Game | undefined) {
-		if (game) {
-			if (this.type === EventItem.TYPE_GAME_PUBLISH) {
-				this.action = game;
-			} else if (this.type === EventItem.TYPE_POST_ADD && this.to instanceof Game) {
-				this.to = game;
-			} else if (this.type === EventItem.TYPE_COMMENT_VIDEO_ADD) {
-				(this.action as CommentVideo).game = game;
+	/**
+	 * Note: this works on the user that is shown for the event item,
+	 * not necessarily the real owner of the resource. e.g.
+	 * for collaborators posting as the owner, the owner will be used.
+	 */
+	set user(user: User | undefined) {
+		if (!user) {
+			return;
+		}
+
+		if (this.type === EventItem.TYPE_COMMENT_VIDEO_ADD) {
+			(this.action as CommentVideo).comment.user = user;
+		} else if (this.type === EventItem.TYPE_GAME_PUBLISH) {
+			(this.action as Game).developer = user;
+		} else if (this.type === EventItem.TYPE_POST_ADD) {
+			const post = this.action as FiresidePost;
+			if (post.game && post.as_game_owner) {
+				post.game.developer = user;
+				return;
 			}
+
+			post.user = user;
+		}
+	}
+
+	/**
+	 * Note: this works on the user that is shown for the event item,
+	 * not necessarily the real owner of the resource. e.g.
+	 * for collaborators posting as the owner, the owner will be used.
+	 */
+	get user() {
+		if (this.type === EventItem.TYPE_COMMENT_VIDEO_ADD) {
+			return (this.action as CommentVideo).comment.user;
+		} else if (this.type === EventItem.TYPE_GAME_PUBLISH) {
+			return (this.action as Game).developer;
+		} else if (this.type === EventItem.TYPE_POST_ADD) {
+			const post = this.action as FiresidePost;
+			if (post.game && post.as_game_owner) {
+				return post.game.developer;
+			}
+
+			return post.user;
+		}
+
+		return undefined;
+	}
+
+	set game(game: Game | undefined) {
+		if (!game) {
+			return;
+		}
+
+		if (this.type === EventItem.TYPE_GAME_PUBLISH) {
+			this.action = game;
+		} else if (this.type === EventItem.TYPE_POST_ADD && this.to instanceof Game) {
+			this.to = game;
+		} else if (this.type === EventItem.TYPE_COMMENT_VIDEO_ADD) {
+			(this.action as CommentVideo).game = game;
 		}
 	}
 

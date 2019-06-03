@@ -1,15 +1,23 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { State } from 'vuex-class/lib/bindings';
+import { Store } from '../../../../../../../auth/store/index';
 import { number } from '../../../../../vue/filters/number';
 import { AppAuthRequired } from '../../../../auth/auth-required-directive';
 import { Growls } from '../../../../growls/growls.service';
 import { LikersModal } from '../../../../likers/modal.service';
+import AppPopper from '../../../../popper/popper.vue';
 import { Screen } from '../../../../screen/screen-service';
 import { AppTooltip } from '../../../../tooltip/tooltip';
+import AppUserFollowWidget from '../../../../user/follow-widget/follow-widget.vue';
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
 
 @Component({
+	components: {
+		AppUserFollowWidget,
+		AppPopper,
+	},
 	directives: {
 		AppAuthRequired,
 		AppTooltip,
@@ -27,6 +35,22 @@ export default class AppFiresidePostLikeWidget extends Vue {
 
 	@Prop(Boolean)
 	block?: boolean;
+
+	@Prop(Boolean)
+	showUserFollow?: boolean;
+
+	@State
+	app!: Store['app'];
+
+	isShowingFollowPopover = false;
+
+	get shouldShowFollow() {
+		if (!this.showUserFollow || (this.app.user && this.app.user.id === this.post.user.id)) {
+			return false;
+		}
+
+		return true;
+	}
 
 	// We also show circle in xs size.
 	get isCircle() {
@@ -57,6 +81,13 @@ export default class AppFiresidePostLikeWidget extends Vue {
 	async toggleLike() {
 		const currentLike = this.post.user_like;
 		if (!currentLike) {
+			// Do this before attempting to follow.
+			// We don't want to wait till the follow is confirmed to show the dialog,
+			// and even if the follow fails it's not like we'll close it.
+			if (this.shouldShowFollow && !this.post.user.is_following) {
+				this.isShowingFollowPopover = true;
+			}
+
 			const newLike = new FiresidePostLike({
 				fireside_post_id: this.post.id,
 			});
