@@ -5,6 +5,7 @@
 			:show="isShowingFollowPopover"
 			:block="block"
 			@hide="isShowingFollowPopover = false"
+			@auto-hide="onFollowPopoverDismissed"
 		>
 			<app-button
 				:icon="isCircle ? 'heart' : undefined"

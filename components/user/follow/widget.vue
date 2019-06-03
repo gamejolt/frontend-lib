@@ -29,4 +29,4 @@
 	</app-button>
 </template>
 
-<script lang="ts" src="./follow-widget"></script>
+<script lang="ts" src="./widget"></script>

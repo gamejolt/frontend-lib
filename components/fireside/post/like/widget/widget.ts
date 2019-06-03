@@ -9,7 +9,8 @@ import { LikersModal } from '../../../../likers/modal.service';
 import AppPopper from '../../../../popper/popper.vue';
 import { Screen } from '../../../../screen/screen-service';
 import { AppTooltip } from '../../../../tooltip/tooltip';
-import AppUserFollowWidget from '../../../../user/follow-widget/follow-widget.vue';
+import UserFollowSuggestion from '../../../../user/follow/suggestion.service';
+import AppUserFollowWidget from '../../../../user/follow/widget.vue';
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
 
@@ -45,7 +46,14 @@ export default class AppFiresidePostLikeWidget extends Vue {
 	isShowingFollowPopover = false;
 
 	get shouldShowFollow() {
-		if (!this.showUserFollow || (this.app.user && this.app.user.id === this.post.user.id)) {
+		if (!this.showUserFollow) {
+			return false;
+		}
+
+		if (
+			(this.app.user && this.app.user.id === this.post.user.id) ||
+			this.post.user.is_following
+		) {
 			return false;
 		}
 
@@ -84,7 +92,7 @@ export default class AppFiresidePostLikeWidget extends Vue {
 			// Do this before attempting to follow.
 			// We don't want to wait till the follow is confirmed to show the dialog,
 			// and even if the follow fails it's not like we'll close it.
-			if (this.shouldShowFollow && !this.post.user.is_following) {
+			if (this.shouldShowFollow && UserFollowSuggestion.canSuggest(this.post.user.id)) {
 				this.isShowingFollowPopover = true;
 			}
 
@@ -118,5 +126,11 @@ export default class AppFiresidePostLikeWidget extends Vue {
 
 	showLikers() {
 		LikersModal.show({ count: this.post.like_count, resource: this.post });
+	}
+
+	onFollowPopoverDismissed() {
+		if (!this.post.user.is_following) {
+			UserFollowSuggestion.dontSuggest(this.post.user.id);
+		}
 	}
 }

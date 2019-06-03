@@ -19,6 +19,7 @@
 		:open-group="openGroup"
 		@apply-show="onShow"
 		@apply-hide="onHide"
+		@auto-hide="onAutoHide"
 	>
 		<slot />
 		<div
