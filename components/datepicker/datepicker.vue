@@ -6,7 +6,7 @@
 	</div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @require './datepicker-buttons'
 @require './datepicker-tables'
 </style>
