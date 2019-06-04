@@ -1,5 +1,5 @@
-import { asyncComponentLoader } from '../../../../../utils/utils';
 import { Modal } from '../../../../modal/modal.service';
+import AppContentEditorLinkModal from './link-modal.vue';
 
 export type LinkData = {
 	href: string;
@@ -10,10 +10,7 @@ export class ContentEditorLinkModal {
 	static async show(selectedText: string) {
 		return await Modal.show<LinkData>({
 			modalId: 'ContentEditorLink',
-			component: () =>
-				asyncComponentLoader(
-					import(/* webpackChunkName: "ContentEditorLinkModal" */ './link-modal.vue')
-				),
+			component: AppContentEditorLinkModal,
 			size: 'sm',
 			props: { selectedText },
 		});

@@ -32,11 +32,11 @@ export abstract class ContentNode {
 	public getChildrenByType(type: ContentObjectType): ContentObject[] {
 		const objs = [] as ContentObject[];
 		for (const contentObj of this.content) {
-			const subObjs = contentObj.getChildrenByType(type);
-			objs.push(...subObjs);
 			if (contentObj.type === type) {
 				objs.push(contentObj);
 			}
+			const subObjs = contentObj.getChildrenByType(type);
+			objs.push(...subObjs);
 		}
 		return objs;
 	}
@@ -45,6 +45,10 @@ export abstract class ContentNode {
 		this._content.push(child);
 	}
 
+	/**
+	 * Returns a uniform length computed by the children and their content.
+	 * Each node type can define its own way to compute its length.
+	 */
 	public getLength() {
 		let length = 0;
 

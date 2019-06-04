@@ -25,7 +25,7 @@ export default function buildEvents(editor: AppContentEditorTS): EventHandlers {
 }
 
 export function canPasteImages(state: EditorState, capabilities: ContextCapabilities) {
-	// Image uploads are not allowed in talbes and code blocks.
+	// Image uploads are not allowed in code blocks.
 	const selectedNode = ContentEditorService.getSelectedNode(state);
 	if (selectedNode instanceof Node) {
 		if (capabilities.codeBlock) {
@@ -36,18 +36,6 @@ export function canPasteImages(state: EditorState, capabilities: ContextCapabili
 					state.schema.nodes.codeBlock
 				) instanceof Node;
 			if (isInCodeBlock) {
-				return false;
-			}
-		}
-
-		if (capabilities.table) {
-			const isInTable =
-				ContentEditorService.isContainedInNode(
-					state,
-					selectedNode,
-					state.schema.nodes.table
-				) instanceof Node;
-			if (isInTable) {
 				return false;
 			}
 		}

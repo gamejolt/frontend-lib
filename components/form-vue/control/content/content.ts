@@ -1,11 +1,11 @@
 import { Component, Prop } from 'vue-property-decorator';
 import { ContentContext } from '../../../content/content-context';
-import AppContentEditor from '../../../content/content-editor/content-editor.vue';
+import { AppContentEditorLazy } from '../../../content/content-editor/content-editor-lazy';
 import BaseFormControlTS from '../../../form-vue/control/base';
 
 @Component({
 	components: {
-		AppContentEditor,
+		AppContentEditor: AppContentEditorLazy,
 	},
 })
 export default class AppFormControlContent extends BaseFormControlTS {

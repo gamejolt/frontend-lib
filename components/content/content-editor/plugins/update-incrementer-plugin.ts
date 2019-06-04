@@ -16,6 +16,7 @@ export class UpdateIncrementerPlugin {
 		if (lastState && lastState.doc.eq(state.doc) && lastState.selection.eq(state.selection)) {
 			return;
 		}
+		// If anything in the editor changes (content or selection), make sure we increment, so we can for example reposition controls.
 		this.appEditor.stateCounter++;
 		if (!lastState || !lastState.doc.eq(state.doc)) {
 			this.appEditor.onUpdate(state);

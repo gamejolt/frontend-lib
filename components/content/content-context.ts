@@ -17,6 +17,7 @@ enum ContextCapabilityType {
 	TextCode,
 	TextStrike,
 
+	CustomLink,
 	Emoji,
 	Tag,
 	Mention,
@@ -51,7 +52,11 @@ export class ContextCapabilities {
 	}
 	get hasAnyText() {
 		return (
-			this.textBold || this.textItalic || this.textLink || this.textCode || this.textStrike
+			this.textBold ||
+			this.textItalic ||
+			(this.textLink && this.customLink) ||
+			this.textCode ||
+			this.textStrike
 		);
 	}
 	get hasAnyEmbed() {
@@ -71,6 +76,9 @@ export class ContextCapabilities {
 	}
 	get textStrike() {
 		return this.hasCapability(ContextCapabilityType.TextStrike);
+	}
+	get customLink() {
+		return this.hasCapability(ContextCapabilityType.CustomLink);
 	}
 	get media() {
 		// for media items, also allows uploading through the media upload component
@@ -129,10 +137,7 @@ export class ContextCapabilities {
 		switch (context) {
 			case 'fireside-post-lead':
 				return new ContextCapabilities([
-					ContextCapabilityType.TextBold,
-					ContextCapabilityType.TextItalic,
 					ContextCapabilityType.TextLink,
-					ContextCapabilityType.Emoji,
 					ContextCapabilityType.Tag,
 					ContextCapabilityType.Mention,
 				]);
@@ -144,6 +149,7 @@ export class ContextCapabilities {
 					ContextCapabilityType.TextLink,
 					ContextCapabilityType.TextCode,
 					ContextCapabilityType.TextStrike,
+					ContextCapabilityType.CustomLink,
 					ContextCapabilityType.Media,
 					ContextCapabilityType.EmbedVideo,
 					ContextCapabilityType.EmbedMusic,
@@ -168,6 +174,7 @@ export class ContextCapabilities {
 					ContextCapabilityType.TextLink,
 					ContextCapabilityType.TextCode,
 					ContextCapabilityType.TextStrike,
+					ContextCapabilityType.CustomLink,
 					ContextCapabilityType.Media,
 					ContextCapabilityType.CodeBlock,
 					ContextCapabilityType.Blockquote,
@@ -186,6 +193,7 @@ export class ContextCapabilities {
 					ContextCapabilityType.TextLink,
 					ContextCapabilityType.TextCode,
 					ContextCapabilityType.TextStrike,
+					ContextCapabilityType.CustomLink,
 					ContextCapabilityType.CodeBlock,
 					ContextCapabilityType.Blockquote,
 					ContextCapabilityType.Emoji,

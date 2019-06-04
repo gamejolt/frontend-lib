@@ -34,7 +34,7 @@ export default class AppContentEditorTextControls extends Vue {
 	selectionMarks: Mark[] = [];
 	isInHeading = false;
 	headingLevel = -1;
-	isInTableHeader = false;
+	isAutolink = false;
 
 	readonly Screen = Screen;
 
@@ -81,9 +81,11 @@ export default class AppContentEditorTextControls extends Vue {
 						} else {
 							this.isInHeading = false;
 							this.headingLevel = -1;
-
-							this.isInTableHeader = this.testIsInTableHeader(node);
 						}
+
+						this.isAutolink =
+							node.isText &&
+							node.marks.some(m => m.type.name === 'link' && !!m.attrs.autolink);
 
 						// When the controls are already visible, just adjust their position
 						// This also applies for when we are waiting for the mouse button to be released
@@ -121,8 +123,8 @@ export default class AppContentEditorTextControls extends Vue {
 
 	private async show() {
 		this.visible = true;
-		// Wait here so the buttons don't jump into place weirdly.
-		await Vue.nextTick();
+		// Wait a tick for the controls to mount to the dom so the position gets calculated correctly.
+		await this.$nextTick();
 
 		this.setPosition();
 	}
@@ -245,20 +247,5 @@ export default class AppContentEditorTextControls extends Vue {
 		}
 
 		this.emitClicked();
-	}
-
-	testIsInTableHeader(node: Node) {
-		if (!this.capabilities.table) {
-			return false;
-		}
-		const cell = ContentEditorService.isContainedInNode(
-			this.view.state,
-			node,
-			this.view.state.schema.nodes.tableCell
-		);
-		if (cell instanceof Node) {
-			return cell.attrs.isHeader;
-		}
-		return false;
 	}
 }

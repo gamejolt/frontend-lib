@@ -1,3 +1,4 @@
+import { LINK_LENGTH } from './content-editor/schemas/specs/marks/link-markspec';
 import { ContentNode } from './content-node';
 import { MarkObject } from './mark-object';
 
@@ -123,7 +124,9 @@ export class ContentObject extends ContentNode {
 
 		switch (this.type) {
 			case 'text':
-				if (this.text) {
+				if (this.marks.some(m => m.type === 'link')) {
+					length += LINK_LENGTH;
+				} else if (this.text) {
 					length += this.text.length;
 				}
 				break;
@@ -139,12 +142,6 @@ export class ContentObject extends ContentNode {
 				break;
 			case 'mediaItem':
 				length += this.attrs.caption.length + 1;
-				break;
-			case 'mention':
-				length += this.attrs.value.length + 1;
-				break;
-			case 'tag':
-				length += this.attrs.text.length + 1;
 				break;
 		}
 

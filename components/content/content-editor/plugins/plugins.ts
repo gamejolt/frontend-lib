@@ -7,6 +7,7 @@ import AppContentEditor from '../content-editor';
 import { ContentEditorService } from '../content-editor.service';
 import { getContentEditorKeymap } from './commands/keymap';
 import { createInputRules } from './input-rules/input-rules';
+import UpdateAutolinkPlugin from './update-autolinks-plugin';
 import { UpdateIncrementerPlugin } from './update-incrementer-plugin';
 
 export function createPlugins(editor: AppContentEditor, schema: Schema): Plugin[] {
@@ -19,12 +20,6 @@ export function createPlugins(editor: AppContentEditor, schema: Schema): Plugin[
 		},
 	});
 
-	// const emojiPanelPlugin = new Plugin({
-	// 	view(editorView) {
-	// 		return new ShowEmojiPanelPlugin(editorView, that);
-	// 	},
-	// });
-
 	// Additional keyboard bindings
 	const ourKeymap = getContentEditorKeymap(editor, schema);
 
@@ -33,6 +28,7 @@ export function createPlugins(editor: AppContentEditor, schema: Schema): Plugin[
 		keymap(baseKeymap),
 		history(),
 		incrementerPlugin,
+		new UpdateAutolinkPlugin(editor.capabilities),
 		createInputRules(editor.capabilities),
 	];
 }

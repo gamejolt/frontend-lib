@@ -1,5 +1,5 @@
 <template>
-	<router-link class="tag" :to="url">#{{ text }}</router-link>
+	<router-link :to="url">#{{ tag }}</router-link>
 </template>
 
 <script lang="ts" src="./tag"></script>

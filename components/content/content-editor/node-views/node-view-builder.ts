@@ -4,8 +4,6 @@ import { ContentOwner } from '../../content-owner';
 import { EmbedNodeView } from './embed';
 import { MediaItemNodeView } from './media-item';
 import { MediaUploadNodeView } from './media-upload';
-import { MentionNodeView } from './mention';
-import { TagNodeView } from './tag';
 
 type NodeViewList = {
 	[name: string]: (
@@ -32,16 +30,6 @@ export function buildNodeViews(owner: ContentOwner): NodeViewList {
 		};
 		nodeViews.mediaUpload = function(node, view, getPos) {
 			return new MediaUploadNodeView(node, view, getPos, owner);
-		};
-	}
-	if (capabilities.tag) {
-		nodeViews.tag = function(node, view, getPos) {
-			return new TagNodeView(node, view, getPos);
-		};
-	}
-	if (capabilities.mention) {
-		nodeViews.mention = function(node, view, getPos) {
-			return new MentionNodeView(node, view, getPos, owner);
 		};
 	}
 

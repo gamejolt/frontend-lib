@@ -12,10 +12,8 @@ import { AppContentViewerHorizontalRule } from './hr';
 import { AppContentViewerList } from './list';
 import { AppContentViewerListItem } from './list-item';
 import { AppContentViewerMediaItem } from './media-item';
-import AppContentViewerMention from './mention/mention.vue';
 import { AppContentViewerParagraph } from './paragraph';
 import { AppContentViewerSpoiler } from './spoiler';
-import AppContentViewerTag from './tag/tag.vue';
 import { AppContentViewerText } from './text';
 
 function getComponentType(data: ContentObject): any {
@@ -45,12 +43,8 @@ function getComponentType(data: ContentObject): any {
 			return AppContentViewerHorizontalRule;
 		case 'spoiler':
 			return AppContentViewerSpoiler;
-		case 'tag':
-			return AppContentViewerTag;
 		case 'heading':
 			return AppContentViewerHeading;
-		case 'mention':
-			return AppContentViewerMention;
 	}
 }
 

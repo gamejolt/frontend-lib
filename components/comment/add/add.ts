@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ContentContext } from '../../content/content-context';
 import AppFormControlContent from '../../form-vue/control/content/content.vue';
@@ -59,7 +58,8 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 				this.setField('parent_id', this.parentId);
 			}
 
-			await Vue.nextTick();
+			// Wait for errors, then clear them.
+			await this.$nextTick();
 			this.$refs.form.clearErrors();
 		}
 	}

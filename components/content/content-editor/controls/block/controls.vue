@@ -149,15 +149,6 @@
 								v-app-tooltip="$gettext('Add a separator')"
 							/>
 							<app-button
-								v-if="capabilities.table"
-								class="anim-fade-in-enlarge no-animate-leave btn-stagger"
-								circle
-								solid
-								icon="insert-table"
-								@click.prevent="onClickTable"
-								v-app-tooltip="$gettext('Add a table')"
-							/>
-							<app-button
 								v-if="capabilities.list"
 								class="anim-fade-in-enlarge no-animate-leave btn-stagger"
 								circle

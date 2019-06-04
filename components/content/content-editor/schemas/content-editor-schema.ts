@@ -3,7 +3,9 @@ import { schema as basicSchema } from 'prosemirror-schema-basic';
 import { ContextCapabilities } from '../../content-context';
 import { ContentObjectType } from '../../content-object';
 import { link } from './specs/marks/link-markspec';
+import { mention } from './specs/marks/mention-markspec';
 import { strike } from './specs/marks/strike-markspec';
+import { tag } from './specs/marks/tag-markspec';
 import { blockquote } from './specs/nodes/blockquote-nodespec';
 import { bulletList } from './specs/nodes/bullet-list-nodespec';
 import { codeBlock } from './specs/nodes/code-block-nodespec';
@@ -15,11 +17,9 @@ import { hr } from './specs/nodes/hr-nodespec';
 import { listItem } from './specs/nodes/list-item-nodespec';
 import { mediaItem } from './specs/nodes/media-item-nodespec';
 import { mediaUpload } from './specs/nodes/media-upload-nodespec';
-import { mention } from './specs/nodes/mention-nodespec';
 import { orderedList } from './specs/nodes/ordered-list-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
 import { spoiler } from './specs/nodes/spoiler-nodespec';
-import { tag } from './specs/nodes/tag-nodespec';
 
 export function generateSchema(capabilities: ContextCapabilities) {
 	return new Schema({
@@ -78,12 +78,6 @@ function generateNodes(capabilities: ContextCapabilities) {
 
 		allowedDocNodes.push('heading');
 	}
-	if (capabilities.tag) {
-		nodes.tag = tag;
-	}
-	if (capabilities.mention) {
-		nodes.mention = mention;
-	}
 
 	if (allowedDocNodes.length > 0) {
 		nodes.doc.content += ' (' + allowedDocNodes.join(' | ') + ')';
@@ -109,6 +103,12 @@ function generateMarks(capabilities: ContextCapabilities) {
 	}
 	if (capabilities.textStrike) {
 		marks.strike = strike;
+	}
+	if (capabilities.mention) {
+		marks.mention = mention;
+	}
+	if (capabilities.tag) {
+		marks.tag = tag;
 	}
 
 	return marks;

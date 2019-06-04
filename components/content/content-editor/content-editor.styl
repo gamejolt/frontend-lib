@@ -102,3 +102,18 @@
 
 .fade-enter, .fade-leave-to
 	opacity: 0
+
+>>> a
+	cursor: inherit
+
+	&:hover
+		theme-prop('color', 'link')
+
+>>> .content-editor-mention
+	theme-prop('color', 'link')
+
+>>> .content-editor-tag
+	theme-prop('color', 'link')
+
+>>> .content-editor-link
+	theme-prop('color', 'link')

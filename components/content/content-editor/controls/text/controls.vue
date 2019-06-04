@@ -14,7 +14,7 @@
 		<transition name="fade">
 			<div v-if="visible">
 				<button
-					v-if="capabilities.textBold && !isInHeading && !isInTableHeader"
+					v-if="capabilities.textBold && !isInHeading"
 					class="control-button"
 					@click.prevent="onClickBold"
 					:class="{
@@ -58,13 +58,13 @@
 					<app-jolticon icon="brackets" />
 				</button>
 				<button
-					v-if="capabilities.textLink"
+					v-if="capabilities.textLink && capabilities.customLink"
 					class="control-button"
 					@click.prevent="onClickLink"
 					:class="{
 						'control-button-active': hasMark('link'),
 					}"
-					v-app-tooltip="$gettext('Link (Ctrl+K)')"
+					v-app-tooltip="$gettext(isAutolink ? 'Autolinked!' : 'Link (Ctrl+K)')"
 				>
 					<app-jolticon icon="link" />
 				</button>

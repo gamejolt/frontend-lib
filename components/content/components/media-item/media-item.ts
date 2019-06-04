@@ -50,7 +50,7 @@ export default class AppContentMediaItem extends Vue {
 	};
 
 	get title() {
-		if (this.hasCaption) {
+		if (this.isHydrated && this.hasCaption) {
 			return this.caption;
 		}
 		if (this.mediaItem instanceof MediaItem) {
@@ -60,7 +60,7 @@ export default class AppContentMediaItem extends Vue {
 	}
 
 	get hasCaption() {
-		return this.isHydrated && this.caption;
+		return !!this.caption;
 	}
 
 	get containerWidth() {

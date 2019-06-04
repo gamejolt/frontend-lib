@@ -20,7 +20,12 @@
 				}"
 			>
 				<template v-if="isHydrated">
-					<component :is="hasLink ? 'a' : 'span'" :href="hasLink ? href : undefined">
+					<component
+						:is="hasLink ? 'a' : 'span'"
+						:href="hasLink ? href : undefined"
+						rel="nofollow noopener"
+						target="_blank"
+					>
 						<img
 							class="img-responsive content-image"
 							:src="mediaItem.img_url"
@@ -36,7 +41,7 @@
 					<app-loading />
 				</template>
 			</div>
-			<span v-if="hasCaption" class="text-muted">
+			<span v-if="isHydrated && hasCaption" class="text-muted">
 				<em>{{ caption }}</em>
 			</span>
 		</div>

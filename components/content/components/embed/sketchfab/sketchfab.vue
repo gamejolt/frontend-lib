@@ -7,6 +7,7 @@
 		allow="autoplay; fullscreen; vr"
 		mozallowfullscreen="true"
 		webkitallowfullscreen="true"
+		sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
 		:src="embedSrc"
 	></iframe>
 </template>

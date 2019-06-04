@@ -107,7 +107,7 @@ export class AppContentViewerCodeBlock extends Vue {
 
 	private getLanguageAnnotation(text: string) {
 		if (text.length > 0) {
-			const match = text.match(/#(.+)\n/);
+			const match = text.match(/^#(.+)\n/g);
 			if (match !== null && match.length > 1) {
 				const matchedText = match[1];
 				return matchedText;

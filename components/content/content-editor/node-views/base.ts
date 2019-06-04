@@ -18,7 +18,7 @@ export abstract class BaseNodeView implements NodeView {
 
 		this.dom = this.createDOM();
 
-		// Mount component in the next tick, after it got mounted to the DOM.
+		// Mount component in the next tick, after it got mounted to the DOM, because Vue needs it mounted.
 		Vue.nextTick().then(() => {
 			this.mounted();
 		});
@@ -58,7 +58,7 @@ export abstract class BaseNodeView implements NodeView {
 
 	removeMe() {
 		const tr = this.view.state.tr;
-		const pos = this.view.posAtDOM(this.dom, 0);
+		const pos = this.getPos();
 		tr.replace(pos, pos + 1, undefined);
 		this.view.dispatch(tr);
 	}

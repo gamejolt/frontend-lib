@@ -4,6 +4,9 @@ import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
 import { PMDispatch } from './keymap';
 
+/**
+ * Moves the cursor in front of a code block if shift enter is pressed at the beginning of a code block.
+ */
 export function exitCodeStart(capabilities: ContextCapabilities) {
 	return function(state: EditorState, dispatch: PMDispatch | undefined) {
 		if (!dispatch || !state.selection.empty || !capabilities.codeBlock) {

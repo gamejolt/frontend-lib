@@ -13,12 +13,13 @@ export class ContentEditorService {
 			const newNode = nodeType.create();
 			return tr.insert(tr.doc.nodeSize - 2, newNode);
 		}
-		return undefined;
+		return null;
 	}
 
 	public static getSelectedNode(state: EditorState) {
 		let selFrom = state.selection.from;
 		let node = state.doc.nodeAt(selFrom);
+		// If the selection is between nodes, make sure we select the correct one.
 		if (node === null && selFrom > 0) {
 			selFrom--;
 			node = state.doc.nodeAt(selFrom);

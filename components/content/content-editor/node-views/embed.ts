@@ -7,6 +7,8 @@ import { HydratableNodeView } from './hydratable';
 export class EmbedNodeView extends HydratableNodeView {
 	private vueComponent: AppContentEmbed | undefined;
 
+	// Stops input events from prosemirror reaching the custom <input> element in our embed component.
+	// We capture the inputs ourselves.
 	stopEvent(e: Event) {
 		return e.target instanceof HTMLInputElement && isChildElement(this.dom, e.target);
 	}
@@ -18,14 +20,12 @@ export class EmbedNodeView extends HydratableNodeView {
 			this.vueComponent!.$props.source = this.node.attrs.source;
 			this.vueComponent!.$props.type = this.node.attrs.type;
 		}
-		// don't handle updates to this node, so it doesn't get redrawn.
+		// Don't handle updates to this node, so it doesn't get redrawn.
 		return !node.attrs.type;
 	}
 
 	mounted() {
 		this.vueComponent = new AppContentEmbed({
-			// store,
-			// router,
 			propsData: {
 				type: this.node.attrs.type,
 				source: this.node.attrs.source,

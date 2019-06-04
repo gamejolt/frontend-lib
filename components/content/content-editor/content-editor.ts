@@ -162,7 +162,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	public onSourceUpdated() {
 		if (this._sourceControlVal !== this.value) {
 			this._sourceControlVal = this.value;
-			// If we receive an empty string, we assume the form gets reset.
+			// When we receive an empty string as the document json, the caller probably wants to clear the document.
 			if (this.value === '') {
 				this.reset();
 			} else {
@@ -200,11 +200,10 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		} else {
 			const state = EditorState.create({
 				doc: DOMParser.fromSchema(this.schema).parse(this.$refs.doc),
-				schema: this.schema,
 				plugins: this.plugins,
 			});
 
-			this.updateView(state);
+			this.createView(state);
 		}
 
 		// Observe any resize events so the editor controls can be repositioned correctly
@@ -233,7 +232,10 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		}
 	}
 
-	private updateView(state: EditorState) {
+	/**
+	 * Creates a new prosemirror view instance based on an editor state.
+	 */
+	private createView(state: EditorState) {
 		if (this.view instanceof EditorView) {
 			this.view.destroy();
 		}
@@ -284,10 +286,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 			const jsonObj = ContentFormatAdapter.adaptIn(doc);
 			const state = EditorState.create({
 				doc: Node.fromJSON(this.schema, jsonObj),
-				schema: this.schema,
 				plugins: this.plugins,
 			});
-			this.updateView(state);
+			this.createView(state);
 		}
 	}
 
@@ -322,7 +323,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		this.view!.dispatch(tr);
 
 		// Wait a tick for the editor's doc to update, then force an update to reposition the controls.
-		await Vue.nextTick();
+		await this.$nextTick();
 		this.stateCounter++;
 	}
 

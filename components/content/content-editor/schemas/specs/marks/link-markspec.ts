@@ -1,5 +1,7 @@
 import { Mark, MarkSpec } from 'prosemirror-model';
 
+export const LINK_LENGTH = 23;
+
 export const link = {
 	attrs: {
 		href: {},
@@ -9,15 +11,24 @@ export const link = {
 	inclusive: false,
 	toDOM(mark: Mark, _inline: boolean) {
 		let { href, title, autolink } = mark.attrs;
-		return ['a', { href, title, 'data-autolink': autolink }, 0];
+		return [
+			'span',
+			{
+				class: 'content-editor-link',
+				'data-href': href,
+				'data-title': title,
+				'data-autolink': autolink,
+			},
+			0,
+		];
 	},
 	parseDOM: [
 		{
-			tag: 'a[href]',
+			tag: 'span[data-href]',
 			getAttrs(domNode: Element) {
 				return {
-					href: domNode.getAttribute('href'),
-					title: domNode.getAttribute('title'),
+					href: domNode.getAttribute('data-href'),
+					title: domNode.getAttribute('data-title'),
 					autolink: domNode.getAttribute('data-autolink'),
 				};
 			},

@@ -3,7 +3,7 @@
 		v-if="hasContent"
 		:is-editing="isEditing"
 		:is-disabled="isDisabled"
-		@removed="onRemoved"
+		@removed="remove"
 		class="embed-main"
 	>
 		<div class="embed-container">

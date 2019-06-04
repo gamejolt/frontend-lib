@@ -1,7 +1,7 @@
 import { Growls } from 'game-jolt-frontend-lib/components/growls/growls.service';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Emit, Prop } from 'vue-property-decorator';
 import { arrayShuffle } from '../../../../utils/array';
 import AppLoading from '../../../../vue/components/loading/loading.vue';
 import AppVideoEmbed from '../../../video/embed/embed.vue';
@@ -75,9 +75,8 @@ export default class AppContentEmbed extends Vue {
 		this.previewEmbeds = arrayShuffle(ContentEmbedService.previewSources).slice(0, 3);
 	}
 
-	onRemoved() {
-		this.$emit('removed');
-	}
+	@Emit('removed')
+	remove() {}
 
 	onInput(e: Event) {
 		if (e.target instanceof HTMLInputElement) {
@@ -93,12 +92,12 @@ export default class AppContentEmbed extends Vue {
 					this.$refs.inputElement.selectionStart === 0 &&
 					this.$refs.inputElement.selectionEnd === 0
 				) {
-					this.$emit('removed');
+					this.remove();
 				}
 				break;
 			case 'Enter':
 				if (this.$refs.inputElement.value.length === 0) {
-					this.$emit('removed');
+					this.remove();
 				} else {
 					this.loading = true;
 					const data = await ContentEmbedService.getEmbedData(
@@ -120,7 +119,7 @@ export default class AppContentEmbed extends Vue {
 				e.preventDefault();
 				break;
 			case 'Escape':
-				this.$emit('removed');
+				this.remove();
 				e.preventDefault();
 				break;
 		}

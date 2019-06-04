@@ -90,6 +90,9 @@ export default class AppContentEditorBlockControls extends Vue {
 		this.setCollapsed(!this.collapsed);
 	}
 
+	/**
+	 * Replaces the empty paragraph with the new node.
+	 */
 	private insertNewNode(newNode: Node) {
 		const tr = this.view.state.tr;
 		tr.replaceWith(

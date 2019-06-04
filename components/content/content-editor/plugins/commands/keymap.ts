@@ -38,7 +38,7 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 			return true;
 		},
 		// Add/remove link
-		'Mod-k': showLinkModal(schema),
+		'Mod-k': showLinkModal(editor.capabilities, schema),
 		Backspace: onBackspace(),
 	} as { [k: string]: any };
 
@@ -47,9 +47,6 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 
 	if (editor.capabilities.heading) {
 		enterCommands.push(splitHeading());
-	}
-	if (editor.capabilities.table) {
-		// enterCommands.push(insertHardBreakTable());
 	}
 
 	if (editor.capabilities.list) {

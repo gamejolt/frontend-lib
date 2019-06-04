@@ -63,7 +63,7 @@ export class ContentDocument extends ContentNode {
 
 	/**
 	 * Determines whether there is any "content" in this document.
-	 * This discards empty objects like paragraphs with only empty text nodes or list items with empty paragraphs.
+	 * This disregards empty objects like paragraphs with only empty text nodes or list items with empty paragraphs.
 	 */
 	public get hasContent() {
 		for (const child of this.content) {

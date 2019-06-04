@@ -4,13 +4,16 @@
 			<app-user-card-hover :user="user">
 				<router-link :to="user.url">
 					<span>
-						@{{ user.username }}
-						<img
-							key="user"
-							:src="user.img_avatar"
-							class="img-responsive mention-avatar-img"
-							alt=""
-						/>
+						<slot />
+						<span class="avatar-container">
+							<img
+								key="user"
+								:src="user.img_avatar"
+								class="img-responsive mention-avatar-img"
+								alt=""
+							/>
+							<app-jolticon class="mention-verified" v-if="user.is_verified" icon="verified" />
+						</span>
 					</span>
 				</router-link>
 			</app-user-card-hover>
@@ -18,7 +21,9 @@
 		<!-- Placeholder until the user data is hydrated: -->
 		<template v-else>
 			<router-link :to="'@' + username">
-				<span :title="'@' + username">@{{ username }}</span>
+				<span :title="'@' + username">
+					<slot />
+				</span>
 			</router-link>
 		</template>
 	</div>
@@ -31,10 +36,26 @@
 .user-mention
 	display: inline-block
 
+	&:hover
+		.mention-verified
+			opacity: 0.25
+
+.avatar-container
+	position: relative
+	display: inline-block
+
 .mention-avatar-img
 	display: inline
 	height: 1.5em
 	img-circle()
+
+.mention-verified
+	position: absolute
+	right: -4px
+	bottom: -4px
+	theme-prop('background-color', 'bg-offset')
+	border-radius: 100%
+
 </style>
 
 <script lang="ts" src="./mention"></script>
