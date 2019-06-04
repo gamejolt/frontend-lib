@@ -5,9 +5,12 @@ import { Game } from 'game-jolt-frontend-lib/components/game/game.model';
 import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import PlaywireBoltEmbed from './playwire-bolt-embed';
 
 @Component({})
 export default class AppAdPlaywireVideo extends Vue {
+	private boltEmbed: PlaywireBoltEmbed | null = null;
+
 	get resourceInfo() {
 		let resource: string = undefined as any;
 		let resourceId: number = undefined as any;
@@ -33,10 +36,17 @@ export default class AppAdPlaywireVideo extends Vue {
 
 	beforeDestroy() {
 		Playwire.removeAd(this);
+		if (this.boltEmbed !== null) {
+			this.boltEmbed.destroy();
+			this.boltEmbed = null;
+		}
 	}
 
 	display() {
-		this.renderScript();
+		if (this.boltEmbed === null) {
+			this.boltEmbed = PlaywireBoltEmbed.create(this.$el);
+			this.boltEmbed.render();
+		}
 
 		// Log that we viewed this ad immediately.
 		this.sendBeacon(Ads.EVENT_VIEW);
@@ -49,13 +59,5 @@ export default class AppAdPlaywireVideo extends Vue {
 			this.resourceInfo.resource,
 			this.resourceInfo.resourceId
 		);
-	}
-
-	private renderScript() {
-		const script = window.document.createElement('script');
-		script.dataset.config = 'https://config.playwire.com/1391/playlists/v2/4898/zeus.json';
-
-		this.$el.appendChild(script);
-		script.src = 'https://cdn.playwire.com/bolt/js/zeus/embed.js';
 	}
 }

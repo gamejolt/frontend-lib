@@ -3,8 +3,8 @@ import { Environment } from '../environment/environment.service';
 import { Model } from '../model/model.service';
 
 // To show ads on the page for dev, just change this to false.
-export const AdsDisabledDev = GJ_BUILD_TYPE === 'development';
-// export const AdsDisabledDev = false;
+// export const AdsDisabledDev = GJ_BUILD_TYPE === 'development';
+export const AdsDisabledDev = false;
 
 export type AdSlotPos = 'top' | 'bottom' | 'preroll' | 'footer';
 
