@@ -19,9 +19,7 @@ export type ContentObjectType =
 	| 'bulletList'
 	| 'listItem'
 	| 'spoiler'
-	| 'tag'
-	| 'heading'
-	| 'mention';
+	| 'heading';
 
 export class ContentObject extends ContentNode {
 	public type!: ContentObjectType;
@@ -45,8 +43,6 @@ export class ContentObject extends ContentNode {
 			case 'text':
 				return typeof this.text === 'string' && this.text.length > 0;
 			// The following types are automatically considered content:
-			case 'mention':
-			case 'tag':
 			case 'gjEmoji':
 			case 'embed':
 			case 'mediaItem':

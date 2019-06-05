@@ -1,4 +1,3 @@
-import { onBackspace } from 'game-jolt-frontend-lib/components/content/content-editor/plugins/commands/on-backspace-command';
 import { chainCommands, exitCode, toggleMark } from 'prosemirror-commands';
 import { redo, undo } from 'prosemirror-history';
 import { Schema } from 'prosemirror-model';
@@ -39,7 +38,6 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 		},
 		// Add/remove link
 		'Mod-k': showLinkModal(editor.capabilities, schema),
-		Backspace: onBackspace(),
 	} as { [k: string]: any };
 
 	const enterCommands = [] as PMKeymapCommand[];

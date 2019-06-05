@@ -165,6 +165,24 @@ export class ContextCapabilities {
 					ContextCapabilityType.Mention,
 				]);
 			case 'game-description':
+				return new ContextCapabilities([
+					ContextCapabilityType.TextBold,
+					ContextCapabilityType.TextItalic,
+					ContextCapabilityType.TextLink,
+					ContextCapabilityType.TextCode,
+					ContextCapabilityType.TextStrike,
+					ContextCapabilityType.CustomLink,
+					ContextCapabilityType.Media,
+					ContextCapabilityType.CodeBlock,
+					ContextCapabilityType.Blockquote,
+					ContextCapabilityType.Emoji,
+					ContextCapabilityType.List,
+					ContextCapabilityType.HorizontalRule,
+					ContextCapabilityType.Spoiler,
+					ContextCapabilityType.Tag,
+					ContextCapabilityType.Heading,
+					ContextCapabilityType.Mention,
+				]);
 			case 'game-comment':
 			case 'user-comment':
 			case 'fireside-post-comment':
@@ -183,7 +201,6 @@ export class ContextCapabilities {
 					ContextCapabilityType.HorizontalRule,
 					ContextCapabilityType.Spoiler,
 					ContextCapabilityType.Tag,
-					ContextCapabilityType.Heading,
 					ContextCapabilityType.Mention,
 				]);
 			case 'user-bio':

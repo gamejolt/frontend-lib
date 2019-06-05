@@ -47,8 +47,8 @@ export default class AppTagSuggestion extends Vue {
 				let hashtagCount = 0;
 				if (this.content instanceof ContentDocument) {
 					hashtagCount = this.content
-						.getChildrenByType('tag')
-						.map(i => i.attrs.text as string)
+						.getMarks('tag')
+						.map(i => i.attrs.tag as string)
 						.filter(i => i.toLowerCase() === t.toLowerCase()).length;
 				} else {
 					hashtagCount = this.lcText.split('#' + t.toLowerCase()).length - 1;
@@ -78,7 +78,7 @@ export default class AppTagSuggestion extends Vue {
 		const recommended = this.recommendedTags;
 
 		if (this.content instanceof ContentDocument) {
-			const contentTags = this.content.getChildrenByType('tag').map(i => i.attrs.text);
+			const contentTags = this.content.getMarks('tag').map(i => i.attrs.tag);
 			return this.tags.filter(
 				t => recommended!.indexOf(t) === -1 && contentTags!.indexOf(t) === -1
 			);

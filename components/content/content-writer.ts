@@ -1,5 +1,6 @@
 import { ContentDocument } from './content-document';
 import { ContentObject } from './content-object';
+import { MarkObject } from './mark-object';
 
 export class ContentWriter {
 	private _doc: ContentDocument;
@@ -26,8 +27,11 @@ export class ContentWriter {
 	}
 
 	public appendTag(tag: string) {
-		const tagObj = new ContentObject('tag');
-		tagObj.attrs.text = tag;
+		const tagObj = new ContentObject('text');
+		tagObj.text = '#' + tag;
+		const tagMark = new MarkObject('tag');
+		tagMark.attrs.tag = tag;
+		tagObj.marks.push(tagMark);
 
 		const parentParagraph = this.ensureParagraph();
 		if (parentParagraph.lastChild instanceof ContentObject) {

@@ -1,4 +1,5 @@
 import { ContentObject, ContentObjectType } from './content-object';
+import { MarkObject, MarkObjectType } from './mark-object';
 
 export abstract class ContentNode {
 	protected _content: ContentObject[];
@@ -39,6 +40,17 @@ export abstract class ContentNode {
 			objs.push(...subObjs);
 		}
 		return objs;
+	}
+
+	public getMarks(type: MarkObjectType): MarkObject[] {
+		const textObjs = this.getChildrenByType('text');
+		const marks = [] as MarkObject[];
+
+		for (const textObj of textObjs) {
+			marks.push(...textObj.marks.filter(m => m.type === type));
+		}
+
+		return marks;
 	}
 
 	public appendChild(child: ContentObject) {
