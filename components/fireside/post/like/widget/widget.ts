@@ -9,7 +9,7 @@ import { LikersModal } from '../../../../likers/modal.service';
 import AppPopper from '../../../../popper/popper.vue';
 import { Screen } from '../../../../screen/screen-service';
 import { AppTooltip } from '../../../../tooltip/tooltip';
-import UserFollowSuggestion from '../../../../user/follow/suggestion.service';
+import { UserFollowSuggestion } from '../../../../user/follow/suggestion.service';
 import AppUserFollowWidget from '../../../../user/follow/widget.vue';
 import { FiresidePost } from '../../post-model';
 import { FiresidePostLike } from '../like-model';
@@ -130,7 +130,7 @@ export default class AppFiresidePostLikeWidget extends Vue {
 
 	onFollowPopoverDismissed() {
 		if (!this.post.user.is_following) {
-			UserFollowSuggestion.dontSuggest(this.post.user.id);
+			UserFollowSuggestion.doNotSuggest(this.post.user.id);
 		}
 	}
 }

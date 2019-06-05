@@ -28,12 +28,12 @@
 			<div slot="popover" class="well fill-darkest">
 				<p class="small">
 					<translate>
-						Would you also like to follow this author?
+						Would you also like to follow this user?
 					</translate>
 					<br />
 					<translate>You will get notified when they post new stuff.</translate>
 				</p>
-				<app-user-follow-widget :user="post.user" block event-label="fireside-post-follow-widget" />
+				<app-user-follow-widget :user="post.user" block event-label="fireside-post-like-widget" />
 			</div>
 		</app-popper>
 

@@ -4,17 +4,17 @@ type SessionStorageSuggestions = {
 	dismissed: number[];
 	[userId: number]: number;
 };
-const SessionStorageSuggestionsKey = 'user-follow-suggestions';
+const Key = 'user-follow-suggestions';
 
 // How many suggestion dismissals we are allowing per interval.
-const MaxSuggestionDismissalsPerDay = 3;
+const MaxPerDay = 3;
 
 // Whats the interval used to rate limit dismissed suggestions.
-const SuggestionRateLimitInterval = 86400000;
+const RateLimitInterval = 86400000;
 
-export default abstract class UserFollowSuggestion {
+export abstract class UserFollowSuggestion {
 	private static get suggestions() {
-		const suggestionsStr = sessionStorage.getItem(SessionStorageSuggestionsKey);
+		const suggestionsStr = sessionStorage.getItem(Key);
 		if (suggestionsStr === null) {
 			return { dismissed: [] } as SessionStorageSuggestions;
 		}
@@ -23,7 +23,7 @@ export default abstract class UserFollowSuggestion {
 	}
 
 	private static set suggestions(value: SessionStorageSuggestions) {
-		sessionStorage.setItem(SessionStorageSuggestionsKey, JSON.stringify(value));
+		sessionStorage.setItem(Key, JSON.stringify(value));
 	}
 
 	static canSuggest(userId: number) {
@@ -33,7 +33,7 @@ export default abstract class UserFollowSuggestion {
 
 		// Check if this specific user was already suggested in the past interval.
 		const lastSuggested = s[userId] || 0;
-		if (now - lastSuggested > SuggestionRateLimitInterval) {
+		if (now - lastSuggested > RateLimitInterval) {
 			delete s[userId];
 		} else {
 			canSuggest = false;
@@ -41,12 +41,12 @@ export default abstract class UserFollowSuggestion {
 
 		// Remove old entries from the globally dismissed suggestion times.
 		const dismissed = s.dismissed;
-		while (dismissed.length > 0 && now - dismissed[0] > SuggestionRateLimitInterval) {
+		while (dismissed.length > 0 && now - dismissed[0] > RateLimitInterval) {
 			dismissed.splice(0);
 		}
 
 		// Check if after removing the old entries we are still capped.
-		if (dismissed.length >= MaxSuggestionDismissalsPerDay) {
+		if (dismissed.length >= MaxPerDay) {
 			canSuggest = false;
 		}
 
@@ -54,7 +54,7 @@ export default abstract class UserFollowSuggestion {
 		return canSuggest;
 	}
 
-	static dontSuggest(userId: number) {
+	static doNotSuggest(userId: number) {
 		const s = this.suggestions;
 
 		const now = Date.now();
