@@ -37,8 +37,12 @@ export class MicrodataContainer {
 	}
 
 	render() {
-		return this.microdata
-			? `<script type="application/ld+json">${JSON.stringify(this.microdata)}</script>` + '\n'
-			: '';
+		if (!this.microdata || typeof this.microdata !== 'object') {
+			return '';
+		}
+
+		return (
+			`<script type="application/ld+json">${JSON.stringify(this.microdata)}</script>` + '\n'
+		);
 	}
 }

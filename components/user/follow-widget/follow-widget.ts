@@ -70,6 +70,14 @@ export default class AppUserFollowWidget extends Vue {
 		return !this.user.is_following ? 'subscribe' : 'subscribed';
 	}
 
+	get followEventLabel() {
+		return [
+			'user-follow',
+			!this.user.is_following ? 'follow' : 'unfollow',
+			this.eventLabel || 'any',
+		].join(':');
+	}
+
 	async onClick() {
 		if (!this.app.user) {
 			return;
@@ -79,7 +87,9 @@ export default class AppUserFollowWidget extends Vue {
 			try {
 				await this.user.$follow();
 			} catch (e) {
-				Growls.error(this.$gettext(`Something has prevented you from following this user.`));
+				Growls.error(
+					this.$gettext(`Something has prevented you from following this user.`)
+				);
 			}
 		} else {
 			try {

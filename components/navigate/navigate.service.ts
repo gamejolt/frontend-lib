@@ -4,7 +4,6 @@ import { Environment } from '../environment/environment.service';
 export type DestructorFunc = (href?: string) => void;
 
 export class Navigate {
-	private static router: VueRouter | null = null;
 	private static redirecting = false;
 	private static destructors: DestructorFunc[] = [];
 
@@ -12,7 +11,10 @@ export class Navigate {
 		return this.redirecting;
 	}
 
-	static get currentSection() {
+	/**
+	 * Only usable in client.
+	 */
+	static get currentClientSection() {
 		if (window.location.href.startsWith(Environment.wttfBaseUrl)) {
 			return 'app';
 		} else if (window.location.href.startsWith(Environment.authBaseUrl)) {
@@ -55,7 +57,7 @@ export class Navigate {
 		}
 	}
 
-	private static goto(href: string) {
+	public static goto(href: string) {
 		this.redirecting = true;
 
 		this.callDestructors(href);

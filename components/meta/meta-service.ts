@@ -83,6 +83,11 @@ export class Meta extends MetaContainer {
 	}
 
 	static set microdata(microdata: Object) {
+		if (!microdata || typeof microdata !== 'object') {
+			this._microdata.clear();
+			return;
+		}
+
 		this._microdata.set(microdata);
 	}
 

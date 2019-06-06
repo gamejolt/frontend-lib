@@ -15,9 +15,7 @@
 			content: tooltip,
 			container: tooltipContainer,
 		}"
-		v-app-track-event="
-			`user-follow:${eventLabel || 'any'}:${!user.is_following ? 'follow' : 'unfollow'}`
-		"
+		v-app-track-event="followEventLabel"
 		@click="onClick"
 	>
 		<template v-if="!circle">

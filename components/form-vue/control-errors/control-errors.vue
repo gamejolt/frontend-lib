@@ -3,7 +3,10 @@
 		<p
 			v-if="!!error"
 			class="help-block error anim-fade-in"
-			:class="{ above: position === 'above' }"
+			:class="{
+				'hide-caret': hideCaret,
+				above: position === 'above',
+			}"
 		>
 			{{ error }}
 		</p>
