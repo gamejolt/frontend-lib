@@ -1,5 +1,5 @@
 <template>
-	<div class="user-mention">
+	<span class="user-mention">
 		<template v-if="user">
 			<app-user-card-hover :user="user">
 				<router-link :to="user.url">
@@ -26,7 +26,7 @@
 				</span>
 			</router-link>
 		</template>
-	</div>
+	</span>
 </template>
 
 <style lang="stylus" scoped>
