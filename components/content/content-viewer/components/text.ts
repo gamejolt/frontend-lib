@@ -59,7 +59,7 @@ export class AppContentViewerText extends Vue {
 	}
 
 	render(h: CreateElement) {
-		let vnode = h('span', { domProps: { innerText: this.text } });
+		let vnode = h('span', this.text);
 		if (this.isLink) {
 			const attrs = this.getMarkAttrs('link');
 			const children = [vnode];

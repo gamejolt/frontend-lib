@@ -33,7 +33,7 @@ export default class AppContentViewer extends Vue implements ContentOwner {
 		return this.getContext() + '-content';
 	}
 
-	mounted() {
+	created() {
 		this.updatedSource();
 	}
 
