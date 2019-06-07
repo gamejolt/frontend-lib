@@ -17,10 +17,12 @@ export default class AppContentViewerMention extends Vue {
 
 	user: User | null = null;
 
-	async mounted() {
-		const hydratedData = await this.owner.getHydrator().getData('username', this.username);
-		if (hydratedData) {
-			this.user = new User(hydratedData);
-		}
+	created() {
+		this.owner
+			.getHydrator()
+			.getData('username', this.username)
+			.then(hydratedData => {
+				this.user = new User(hydratedData);
+			});
 	}
 }
