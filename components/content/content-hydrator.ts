@@ -1,3 +1,4 @@
+import { isPromise } from 'game-jolt-frontend-lib/utils/utils';
 import { arrayRemove } from '../../utils/array';
 import { Api } from '../api/api.service';
 
@@ -28,7 +29,22 @@ export class ContentHydrator {
 		}
 	}
 
-	async getData(type: ContentHydrationType, source: string) {
+	/**
+	 * Resolves the data returned by `getData`.
+	 */
+	async useData<T>(type: ContentHydrationType, source: string, callback: (data: T) => void) {
+		const result = this.getData(type, source);
+		let data;
+		if (isPromise(result)) {
+			data = await result;
+		} else {
+			data = result;
+		}
+		callback(data);
+	}
+
+	// Need to return data sync because SSR has to never execute a promise during created.
+	getData(type: ContentHydrationType, source: string) {
 		// Try to find hydration in existing pool
 		// If it's dry, request hydration from the server
 
@@ -38,19 +54,17 @@ export class ContentHydrator {
 		}
 
 		const encodedId = encodeURIComponent(source);
-		const result = await Api.sendRequest(
-			`/web/content/hydrate/${type}/${encodedId}`,
-			undefined,
-			{ noErrorRedirect: true }
-		);
-		const entry = {
-			type,
-			source,
-			data: result.data,
-		} as ContentHydrationDataEntry;
-		this.hydration.push(entry);
-
-		return entry.data;
+		return Api.sendRequest(`/web/content/hydrate/${type}/${encodedId}`, undefined, {
+			noErrorRedirect: true,
+		}).then(result => {
+			const entry = {
+				type,
+				source,
+				data: result.data,
+			} as ContentHydrationDataEntry;
+			this.hydration.push(entry);
+			return entry.data;
+		});
 	}
 
 	dry(type: ContentHydrationType, id: string) {

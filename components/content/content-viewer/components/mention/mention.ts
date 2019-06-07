@@ -18,11 +18,11 @@ export default class AppContentViewerMention extends Vue {
 	user: User | null = null;
 
 	created() {
-		this.owner
-			.getHydrator()
-			.getData('username', this.username)
-			.then(hydratedData => {
-				this.user = new User(hydratedData);
-			});
+		// Make sure we never execute a promise if we don't have to, it would break SSR.
+		this.owner.getHydrator().useData<any>('username', this.username, data => {
+			if (data !== null) {
+				this.user = new User(data);
+			}
+		});
 	}
 }
