@@ -8,7 +8,6 @@ import { ContentListService } from '../../content-list.service';
 import { exitCodeStart } from './exit-code-start-command';
 import { insertHardBreak } from './insert-hard-break-command';
 import { showLinkModal } from './link-modal-command';
-import { onEnter } from './on-enter-command';
 import { splitHeading } from './split-heading-command';
 
 export type PMDispatch = (tr: Transaction) => void;
@@ -23,12 +22,7 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 		'Mod-b': toggleMark(schema.marks.strong),
 		'Mod-i': toggleMark(schema.marks.em),
 		'Mod-`': toggleMark(schema.marks.code),
-		'Shift-Enter': chainCommands(
-			exitCodeStart(editor.capabilities),
-			exitCode,
-			onEnter(editor.capabilities),
-			insertHardBreak
-		),
+		'Shift-Enter': chainCommands(exitCodeStart(editor.capabilities), exitCode, insertHardBreak),
 		// open emoji panel
 		'Mod-e': () => {
 			if (editor.capabilities.emoji) {
@@ -41,7 +35,6 @@ export function getContentEditorKeymap(editor: AppContentEditor, schema: Schema)
 	} as { [k: string]: any };
 
 	const enterCommands = [] as PMKeymapCommand[];
-	enterCommands.push(onEnter(editor.capabilities));
 
 	if (editor.capabilities.heading) {
 		enterCommands.push(splitHeading());
