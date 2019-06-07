@@ -89,6 +89,16 @@ export default class AppContentMediaItem extends Vue {
 		return typeof this.href === 'string' && this.href.length > 0;
 	}
 
+	created() {
+		this.owner.getHydrator().useData('media-item-id', this.mediaItemId.toString(), data => {
+			if (data) {
+				this.mediaItem = new MediaItem(data);
+			} else {
+				this.hasError = true;
+			}
+		});
+	}
+
 	async mounted() {
 		// Observe the change to the width property, the be able to instantly recompute the height.
 		// We compute the height property of the element based on the computed width to be able to set a proper placeholder.
@@ -96,15 +106,6 @@ export default class AppContentMediaItem extends Vue {
 			this.setHeight();
 		});
 		this.resizeObserver.observe(this.$refs.container);
-
-		const hydratedData = await this.owner
-			.getHydrator()
-			.getData('media-item-id', this.mediaItemId.toString());
-		if (hydratedData) {
-			this.mediaItem = new MediaItem(hydratedData);
-		} else {
-			this.hasError = true;
-		}
 	}
 
 	onRemoved() {
