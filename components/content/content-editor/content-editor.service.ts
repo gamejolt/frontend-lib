@@ -131,15 +131,22 @@ export class ContentEditorService {
 	}
 
 	public static findNodePosition(state: EditorState, node: Node) {
-		let i = 0;
-		while (i < state.doc.nodeSize) {
-			const child = state.doc.nodeAt(i);
-			if (child === node) {
-				return i;
+		let found = -1;
+		state.doc.descendants((child, pos) => {
+			if (found > -1) {
+				return false;
 			}
-			i++;
+			if (child === node) {
+				found = pos;
+				return false;
+			}
+		});
+
+		if (found === -1) {
+			throw new Error('Node not found in document');
 		}
-		throw new Error('Node not found in document');
+
+		return found;
 	}
 
 	public static isDisabled(view: EditorView) {

@@ -33,7 +33,7 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		return {};
 	}
 
-	appendTransaction(_transactions: Transaction[], _oldState: EditorState, newState: EditorState) {
+	appendTransaction(_transactions: Transaction[], oldState: EditorState, newState: EditorState) {
 		const tr = newState.tr;
 
 		const mentionMarkType = this.view.state.schema.marks.mention as MarkType;
@@ -49,6 +49,15 @@ export default class UpdateAutolinkPlugin extends Plugin {
 
 		for (const paragraph of paragraphs) {
 			const paragraphPos = ContentEditorService.findNodePosition(newState, paragraph);
+
+			// Check if the paragraph changed compared to the last state.
+			if (oldState.doc.nodeSize >= paragraphPos) {
+				const oldParagraph = oldState.doc.nodeAt(paragraphPos);
+				if (oldParagraph instanceof Node && oldParagraph.eq(paragraph)) {
+					continue;
+				}
+			}
+
 			if (this.capabilities.mention) {
 				tr.removeMark(paragraphPos, paragraphPos + paragraph.nodeSize, mentionMarkType);
 			}
