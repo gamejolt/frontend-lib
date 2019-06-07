@@ -7,7 +7,7 @@
 		class="embed-main"
 	>
 		<div class="embed-container">
-			<div class="embed-overlay-img" />
+			<div v-if="isEditing" class="embed-overlay-img" />
 			<app-video-embed
 				v-if="type === 'youtube-video'"
 				video-provider="youtube"
