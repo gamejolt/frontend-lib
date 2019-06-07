@@ -70,14 +70,14 @@ export class AppContentViewerText extends Vue {
 				href = 'https://' + href;
 			}
 
-			const domProps = {
+			const elementAttrs = {
 				href,
 			} as any;
 			if (attrs.title) {
-				domProps.title = attrs.title;
+				elementAttrs.title = attrs.title;
 			}
 
-			vnode = h(AppExternalLink, { domProps }, children);
+			vnode = h(AppExternalLink, { attrs: elementAttrs }, children);
 		} else if (this.isMention) {
 			const attrs = this.getMarkAttrs('mention');
 			const children = [vnode];

@@ -10,7 +10,7 @@ export class AppContentViewerGJEmoji extends Vue {
 	render(h: CreateElement) {
 		return h('span', {
 			class: 'emoji emoji-' + this.data.attrs.type,
-			domProps: { title: `:${this.data.attrs.type}:` },
+			attrs: { title: `:${this.data.attrs.type}:` },
 		});
 	}
 }
