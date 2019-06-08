@@ -40,8 +40,11 @@ module.exports = config => {
 
 	const gjpushVersion = 'v0.2.0';
 	const gjGameId = config.developmentEnv ? 2 : 362412;
-	const gjGamePackageId = config.developmentEnv ? 4 : 376715;
-	const gjGameInstallerPackageId = config.developmentEnv ? 5 : 376713;
+	// Hack: added support for pushing the client to a test package properly in a future commit.
+	// For now, just hardcoding the test package ids in gjGamePackageId and gjGameInstallerPackageId
+	// because I need to make a test package for this older version.
+	const gjGamePackageId = config.developmentEnv ? 4 : 428842; // 376715;
+	const gjGameInstallerPackageId = config.developmentEnv ? 5 : 428840; // 376713;
 	const nwjsVersion = '0.35.5';
 
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
