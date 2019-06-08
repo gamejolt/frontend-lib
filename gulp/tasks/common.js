@@ -26,7 +26,13 @@ module.exports = (config, projectBase) => {
 	config.analyze = argv.analyze || false;
 	config.ssr = argv.ssr || false; // 'client' | 'server' | false
 	config.client = argv.client || false;
+
+	// If true, will not push the client package using gjpush.
 	config.noGjPush = argv.noGjPush || false;
+
+	// If true, the client package will be pushed to the test package.
+	config.useTestPackage = argv.useTestPackage || false;
+
 	config.noClean = argv.noClean || false;
 
 	// Whether or not the environment of angular should be production or development.
@@ -34,7 +40,10 @@ module.exports = (config, projectBase) => {
 	// This way it's easy for anyone to build without the GJ dev environment.
 	// You can pass this flag in to include the dev environment config for angular instead.
 	config.developmentEnv = argv.development || false;
+
+	// If true, will enable the auto updater checks for the client package.
 	config.withUpdater = argv.withUpdater || false;
+
 	config.port = config.port || argv.port || 8080;
 
 	config.translationSections = config.translationSections || [];
