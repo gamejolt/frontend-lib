@@ -51,7 +51,8 @@ export default class UpdateAutolinkPlugin extends Plugin {
 			const paragraphPos = ContentEditorService.findNodePosition(newState, paragraph);
 
 			// Check if the paragraph changed compared to the last state.
-			if (oldState.doc.nodeSize >= paragraphPos) {
+			// -1 to not include the doc node.
+			if (oldState.doc.nodeSize - 1 >= paragraphPos) {
 				const oldParagraph = oldState.doc.nodeAt(paragraphPos);
 				if (oldParagraph instanceof Node && oldParagraph.eq(paragraph)) {
 					continue;
