@@ -28,13 +28,13 @@
 				tabindex="1"
 			>
 				<div
-					v-for="i of emojis"
-					:key="i"
+					v-for="emoji of emojis"
+					:key="emoji"
 					class="emoji-box"
-					@click="onClickEmoji(i)"
-					:title="':' + i + ':'"
+					@click="onClickEmoji(emoji)"
+					:title="':' + emoji + ':'"
 				>
-					<span :class="'emoji-selector emoji emoji-' + i" />
+					<span :class="'emoji-selector emoji emoji-' + emoji" />
 				</div>
 			</div>
 		</transition>

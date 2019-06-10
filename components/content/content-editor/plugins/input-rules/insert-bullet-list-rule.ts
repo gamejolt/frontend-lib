@@ -1,14 +1,14 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeType } from 'prosemirror-model';
 import { EditorState, Selection } from 'prosemirror-state';
-import { checkCurrentNodeIsCode } from '../plugins';
+import { ContentEditorService } from '../../content-editor.service';
 
 export function insertBulletListRule() {
 	return new InputRule(
 		/^(?:\*|-) $/,
 		(state: EditorState<any>, _match: string[], start: number, end: number) => {
 			// We don't want to insert lists inside code text.
-			if (checkCurrentNodeIsCode(state)) {
+			if (ContentEditorService.checkCurrentNodeIsCode(state)) {
 				return null;
 			}
 

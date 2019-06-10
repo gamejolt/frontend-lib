@@ -1,10 +1,9 @@
 import { baseKeymap } from 'prosemirror-commands';
 import { history } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
-import { Node, Schema } from 'prosemirror-model';
-import { EditorState, Plugin } from 'prosemirror-state';
+import { Schema } from 'prosemirror-model';
+import { Plugin } from 'prosemirror-state';
 import AppContentEditor from '../content-editor';
-import { ContentEditorService } from '../content-editor.service';
 import { getContentEditorKeymap } from './commands/keymap';
 import { createInputRules } from './input-rules/input-rules';
 import UpdateAutolinkPlugin from './update-autolinks-plugin';
@@ -31,19 +30,4 @@ export function createPlugins(editor: AppContentEditor, schema: Schema): Plugin[
 		new UpdateAutolinkPlugin(editor.capabilities),
 		createInputRules(editor.capabilities),
 	];
-}
-
-export function checkCurrentNodeIsCode(state: EditorState) {
-	const node = ContentEditorService.getSelectedNode(state);
-	if (node instanceof Node && node.type.name === 'text') {
-		if (node.marks.some(m => m.type.name === 'code')) {
-			return true;
-		} else {
-			const parent = ContentEditorService.getParentNode(state, node);
-			if (parent instanceof Node && parent.type.name === 'codeBlock') {
-				return true;
-			}
-		}
-	}
-	return false;
 }

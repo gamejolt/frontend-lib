@@ -1,7 +1,7 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
-import { checkCurrentNodeIsCode } from '../plugins';
+import { ContentEditorService } from '../../content-editor.service';
 
 export function autolinkCommunityRule() {
 	return new InputRule(
@@ -9,7 +9,7 @@ export function autolinkCommunityRule() {
 		(state: EditorState<any>, match: string[], start: number, end: number) => {
 			if (match.length === 2) {
 				// We don't want to autolink inside code text.
-				if (checkCurrentNodeIsCode(state)) {
+				if (ContentEditorService.checkCurrentNodeIsCode(state)) {
 					return null;
 				}
 

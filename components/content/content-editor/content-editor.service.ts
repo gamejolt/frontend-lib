@@ -190,4 +190,19 @@ export class ContentEditorService {
 
 		return nodes;
 	}
+
+	public static checkCurrentNodeIsCode(state: EditorState) {
+		const node = ContentEditorService.getSelectedNode(state);
+		if (node instanceof Node && node.type.name === 'text') {
+			if (node.marks.some(m => m.type.name === 'code')) {
+				return true;
+			} else {
+				const parent = ContentEditorService.getParentNode(state, node);
+				if (parent instanceof Node && parent.type.name === 'codeBlock') {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

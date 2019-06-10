@@ -4,7 +4,6 @@ import { EditorState } from 'prosemirror-state';
 import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
 import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
-import { checkCurrentNodeIsCode } from '../plugins';
 import { PMDispatch } from './keymap';
 
 export function showLinkModal(capabilities: ContextCapabilities, schema: Schema) {
@@ -12,7 +11,7 @@ export function showLinkModal(capabilities: ContextCapabilities, schema: Schema)
 		if (!capabilities.textLink || !capabilities.customLink) {
 			return false;
 		}
-		if (checkCurrentNodeIsCode(state)) {
+		if (ContentEditorService.checkCurrentNodeIsCode(state)) {
 			return false;
 		}
 
