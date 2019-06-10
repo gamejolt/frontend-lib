@@ -198,7 +198,7 @@ export default class UpdateAutolinkPlugin extends Plugin {
 
 		for (let i = 0; i < parent.childCount; i++) {
 			const child = parent.child(i);
-			if (child.isText) {
+			if (child.isText && child.marks.every(m => m.type.name !== 'code')) {
 				currentCell.text += child.text;
 			} else {
 				if (currentCell.text.length > 0) {
