@@ -1,12 +1,12 @@
 import { InputRule } from 'prosemirror-inputrules';
-import { NodeType } from 'prosemirror-model';
 import { EditorState, Selection } from 'prosemirror-state';
 import { ContentEditorService } from '../../content-editor.service';
+import { ContentEditorSchema } from '../../schemas/content-editor-schema';
 
 export function insertOrderedListRule() {
 	return new InputRule(
 		/^1. $/,
-		(state: EditorState<any>, _match: string[], start: number, end: number) => {
+		(state: EditorState<ContentEditorSchema>, _match: string[], start: number, end: number) => {
 			// We don't want to insert lists inside code text.
 			if (ContentEditorService.checkCurrentNodeIsCode(state)) {
 				return null;
@@ -14,13 +14,9 @@ export function insertOrderedListRule() {
 
 			const tr = state.tr;
 
-			const contentParagraph = (state.schema.nodes.paragraph as NodeType).create();
-			const listItemNode = (state.schema.nodes.listItem as NodeType).create({}, [
-				contentParagraph,
-			]);
-			const listNode = (state.schema.nodes.orderedList as NodeType).create({}, [
-				listItemNode,
-			]);
+			const contentParagraph = state.schema.nodes.paragraph.create();
+			const listItemNode = state.schema.nodes.listItem.create({}, [contentParagraph]);
+			const listNode = state.schema.nodes.orderedList.create({}, [listItemNode]);
 
 			tr.replaceRangeWith(start, end, listNode);
 			const resolvedCursorPos = tr.doc.resolve(state.selection.from);

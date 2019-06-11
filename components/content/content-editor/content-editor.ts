@@ -1,4 +1,4 @@
-import { DOMParser, Node, Schema } from 'prosemirror-model';
+import { DOMParser, Node } from 'prosemirror-model';
 import { EditorState, Plugin, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
@@ -21,7 +21,7 @@ import buildEvents from './events/build-events';
 import { FocusWatcher } from './focus-watcher';
 import { buildNodeViews } from './node-views/node-view-builder';
 import { createPlugins } from './plugins/plugins';
-import { generateSchema } from './schemas/content-editor-schema';
+import { ContentEditorSchema, generateSchema } from './schemas/content-editor-schema';
 
 /**
  * @emits input
@@ -63,9 +63,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		name: () => 'app-content-editor',
 	};
 
-	view: EditorView | null = null;
-	schema: Schema | null = null;
-	plugins: Plugin[] | null = null;
+	view: EditorView<ContentEditorSchema> | null = null;
+	schema: ContentEditorSchema | null = null;
+	plugins: Plugin<ContentEditorSchema>[] | null = null;
 	capabilities: ContextCapabilities = ContextCapabilities.getEmpty();
 	hydrator!: ContentHydrator;
 
@@ -172,7 +172,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		}
 	}
 
-	public onUpdate(state: EditorState) {
+	public onUpdate(state: EditorState<ContentEditorSchema>) {
 		const source = ContentFormatAdapter.adaptOut(
 			state.doc.toJSON() as ProsemirrorEditorFormat,
 			this.contentContext
@@ -235,14 +235,14 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	/**
 	 * Creates a new prosemirror view instance based on an editor state.
 	 */
-	private createView(state: EditorState) {
+	private createView(state: EditorState<ContentEditorSchema>) {
 		if (this.view instanceof EditorView) {
 			this.view.destroy();
 		}
 
 		const nodeViews = buildNodeViews(this);
 		const eventHandlers = buildEvents(this);
-		this.view = new EditorView(this.$refs.doc, {
+		this.view = new EditorView<ContentEditorSchema>(this.$refs.doc, {
 			state,
 			nodeViews,
 			handleDOMEvents: eventHandlers,
@@ -281,7 +281,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 				`The passed in content context is invalid. ${doc.context} != ${this.contentContext}`
 			);
 		}
-		if (this.schema instanceof Schema) {
+		if (this.schema instanceof ContentEditorSchema) {
 			this.hydrator = new ContentHydrator(doc.hydration);
 			const jsonObj = ContentFormatAdapter.adaptIn(doc);
 			const state = EditorState.create({

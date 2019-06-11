@@ -1,14 +1,15 @@
-import { Node, NodeType } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
 import { EditorState, Selection } from 'prosemirror-state';
 import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
+import { ContentEditorSchema } from '../../schemas/content-editor-schema';
 import { PMDispatch } from './keymap';
 
 /**
  * Moves the cursor in front of a code block if shift enter is pressed at the beginning of a code block.
  */
 export function exitCodeStart(capabilities: ContextCapabilities) {
-	return function(state: EditorState, dispatch: PMDispatch | undefined) {
+	return function(state: EditorState<ContentEditorSchema>, dispatch: PMDispatch | undefined) {
 		if (!dispatch || !state.selection.empty || !capabilities.codeBlock) {
 			return false;
 		}
@@ -32,7 +33,7 @@ export function exitCodeStart(capabilities: ContextCapabilities) {
 				const tr = state.tr;
 
 				// Create paragraph node and insert
-				const newNode = (state.schema.nodes.paragraph as NodeType).create();
+				const newNode = state.schema.nodes.paragraph.create();
 				tr.insert(codeBlockPos, newNode);
 
 				// Resolve its position and set the selection.

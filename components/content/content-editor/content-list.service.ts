@@ -1,8 +1,9 @@
 import { Fragment, NodeRange, NodeType, Slice } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { liftTarget, ReplaceAroundStep } from 'prosemirror-transform';
+import { ContentEditorSchema } from './schemas/content-editor-schema';
 
-type DispatchFunc = (tr: Transaction) => void;
+type DispatchFunc = (tr: Transaction<ContentEditorSchema>) => void;
 
 export class ContentListService {
 	/**
@@ -12,10 +13,10 @@ export class ContentListService {
 	 *
 	 * Also includes the liftToOuterList function defined below.
 	 */
-	public static liftListItem(itemType: NodeType) {
+	public static liftListItem(itemType: NodeType<ContentEditorSchema>) {
 		const that = this;
 
-		return function(state: EditorState, dispatch: DispatchFunc) {
+		return function(state: EditorState<ContentEditorSchema>, dispatch: DispatchFunc) {
 			let { $from, $to } = state.selection;
 			let range = $from.blockRange(
 				$to,
@@ -38,10 +39,10 @@ export class ContentListService {
 	}
 
 	private static liftToOuterList(
-		state: EditorState,
+		state: EditorState<ContentEditorSchema>,
 		dispatch: DispatchFunc,
-		itemType: NodeType,
-		range: NodeRange
+		itemType: NodeType<ContentEditorSchema>,
+		range: NodeRange<ContentEditorSchema>
 	) {
 		const tr = state.tr,
 			end = range.end,
@@ -60,7 +61,7 @@ export class ContentListService {
 					true
 				)
 			);
-			range = new NodeRange(
+			range = new NodeRange<ContentEditorSchema>(
 				tr.doc.resolve(range.$from.pos),
 				tr.doc.resolve(endOfList),
 				range.depth

@@ -1,17 +1,22 @@
 import { Node } from 'prosemirror-model';
 import { EditorView, NodeView } from 'prosemirror-view';
 import Vue from 'vue';
+import { ContentEditorSchema } from '../schemas/content-editor-schema';
 
 export type GetPosFunction = () => number;
 
 export abstract class BaseNodeView implements NodeView {
-	protected node: Node;
-	protected view: EditorView;
+	protected node: Node<ContentEditorSchema>;
+	protected view: EditorView<ContentEditorSchema>;
 	protected getPos: GetPosFunction;
 
 	public dom: HTMLElement;
 
-	constructor(node: Node, view: EditorView, getPos: GetPosFunction) {
+	constructor(
+		node: Node<ContentEditorSchema>,
+		view: EditorView<ContentEditorSchema>,
+		getPos: GetPosFunction
+	) {
 		this.node = node;
 		this.view = view;
 		this.getPos = getPos;

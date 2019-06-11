@@ -7,6 +7,7 @@ import { Growls } from '../../../growls/growls.service';
 import { MediaItem } from '../../../media-item/media-item-model';
 import AppProgressBar from '../../../progress/bar/bar.vue';
 import { getMediaItemTypeForContext } from '../../content-context';
+import { ContentEditorSchema } from '../../content-editor/schemas/content-editor-schema';
 import { ContentOwner } from '../../content-owner';
 
 @Component({
@@ -22,7 +23,7 @@ export default class AppContentMediaUpload extends Vue {
 	uploadId!: string;
 
 	@Prop(EditorView)
-	editorView!: EditorView;
+	editorView!: EditorView<ContentEditorSchema>;
 
 	@Prop(Object)
 	owner!: ContentOwner;

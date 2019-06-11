@@ -1,13 +1,14 @@
-import { Node, NodeType, Slice } from 'prosemirror-model';
+import { Node, Slice } from 'prosemirror-model';
 import { EditorState, Selection } from 'prosemirror-state';
 import { ContentEditorService } from '../../content-editor.service';
+import { ContentEditorSchema } from '../../schemas/content-editor-schema';
 import { PMDispatch } from './keymap';
 
 /**
  * This command creates a new paragraph instead of splitting the heading when pressing Enter at the end of a heading node.
  */
 export function splitHeading() {
-	return function(state: EditorState, dispatch: PMDispatch | undefined) {
+	return function(state: EditorState<ContentEditorSchema>, dispatch: PMDispatch | undefined) {
 		if (!dispatch) {
 			return false;
 		}
@@ -29,7 +30,7 @@ export function splitHeading() {
 					const tr = state.tr;
 
 					// Create paragraph node and insert
-					const newNode = (state.schema.nodes.paragraph as NodeType).create();
+					const newNode = state.schema.nodes.paragraph.create();
 					tr.insert(finalPosition, newNode);
 					tr.replaceSelection(Slice.empty);
 

@@ -1,8 +1,8 @@
-import { NodeType } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { AppTooltip } from '../../../../tooltip/tooltip';
+import { ContentEditorSchema } from '../../schemas/content-editor-schema';
 import { GJ_EMOJIS } from '../../schemas/specs/nodes/gj-emoji-nodespec';
 
 @Component({
@@ -12,7 +12,7 @@ import { GJ_EMOJIS } from '../../schemas/specs/nodes/gj-emoji-nodespec';
 })
 export default class AppContentEditorControlsEmojiPanel extends Vue {
 	@Prop(EditorView)
-	view!: EditorView;
+	view!: EditorView<ContentEditorSchema>;
 	@Prop(Number)
 	stateCounter!: number;
 
@@ -101,14 +101,14 @@ export default class AppContentEditorControlsEmojiPanel extends Vue {
 	}
 
 	private canInsertEmoji() {
-		const emojiNodeType = this.view.state.schema.nodes.gjEmoji as NodeType;
+		const emojiNodeType = this.view.state.schema.nodes.gjEmoji;
 		const { $from } = this.view.state.selection;
 		const index = $from.index();
 		return $from.parent.canReplaceWith(index, index, emojiNodeType);
 	}
 
 	onClickEmoji(emojiType: string) {
-		const emojiNodeType = this.view.state.schema.nodes.gjEmoji as NodeType;
+		const emojiNodeType = this.view.state.schema.nodes.gjEmoji;
 
 		if (this.canInsertEmoji()) {
 			const tr = this.view.state.tr;

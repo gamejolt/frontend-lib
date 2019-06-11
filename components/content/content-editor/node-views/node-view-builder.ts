@@ -1,17 +1,18 @@
 import { Node } from 'prosemirror-model';
 import { Decoration, EditorView, NodeView } from 'prosemirror-view';
 import { ContentOwner } from '../../content-owner';
+import { ContentEditorSchema } from '../schemas/content-editor-schema';
 import { EmbedNodeView } from './embed';
 import { MediaItemNodeView } from './media-item';
 import { MediaUploadNodeView } from './media-upload';
 
 type NodeViewList = {
 	[name: string]: (
-		node: Node,
-		view: EditorView<any>,
+		node: Node<ContentEditorSchema>,
+		view: EditorView<ContentEditorSchema>,
 		getPos: () => number,
 		decorations: Decoration[]
-	) => NodeView<any>;
+	) => NodeView<ContentEditorSchema>;
 };
 
 export function buildNodeViews(owner: ContentOwner): NodeViewList {

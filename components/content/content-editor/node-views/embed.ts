@@ -2,6 +2,7 @@ import { Node } from 'prosemirror-model';
 import { isChildElement } from '../../../../utils/dom';
 import AppContentEmbed from '../../components/embed/embed.vue';
 import { ContentEditorService } from '../content-editor.service';
+import { ContentEditorSchema } from '../schemas/content-editor-schema';
 import { HydratableNodeView } from './hydratable';
 
 export class EmbedNodeView extends HydratableNodeView {
@@ -13,7 +14,7 @@ export class EmbedNodeView extends HydratableNodeView {
 		return e.target instanceof HTMLInputElement && isChildElement(this.dom, e.target);
 	}
 
-	update(node: Node) {
+	update(node: Node<ContentEditorSchema>) {
 		this.node = node;
 		// Update the vue component's props from the new node
 		if (this.vueComponent instanceof AppContentEmbed) {

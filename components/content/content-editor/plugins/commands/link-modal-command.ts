@@ -1,13 +1,16 @@
 import { toggleMark } from 'prosemirror-commands';
-import { Schema } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
 import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
+import { ContentEditorSchema } from '../../schemas/content-editor-schema';
 import { PMDispatch } from './keymap';
 
-export function showLinkModal(capabilities: ContextCapabilities, schema: Schema) {
-	return async function(state: EditorState, dispatch: PMDispatch | undefined) {
+export function showLinkModal(capabilities: ContextCapabilities, schema: ContentEditorSchema) {
+	return async function(
+		state: EditorState<ContentEditorSchema>,
+		dispatch: PMDispatch | undefined
+	) {
 		if (!capabilities.textLink || !capabilities.customLink) {
 			return false;
 		}

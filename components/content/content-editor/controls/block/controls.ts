@@ -1,4 +1,4 @@
-import { Node, NodeType } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
 import { Selection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
@@ -8,6 +8,7 @@ import { Growls } from '../../../../growls/growls.service';
 import { Screen } from '../../../../screen/screen-service';
 import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
+import { ContentEditorSchema } from '../../schemas/content-editor-schema';
 
 @Component({
 	components: {},
@@ -17,7 +18,7 @@ import { ContentEditorService } from '../../content-editor.service';
 })
 export default class AppContentEditorBlockControls extends Vue {
 	@Prop(Object)
-	view!: EditorView;
+	view!: EditorView<ContentEditorSchema>;
 	@Prop(Number)
 	stateCounter!: number;
 	@Prop(Object)
@@ -71,7 +72,7 @@ export default class AppContentEditorBlockControls extends Vue {
 		this.setCollapsed(true);
 	}
 
-	testIsInHeading(node: Node) {
+	testIsInHeading(node: Node<ContentEditorSchema>) {
 		if (!this.capabilities.heading) {
 			return false;
 		}
@@ -93,7 +94,7 @@ export default class AppContentEditorBlockControls extends Vue {
 	/**
 	 * Replaces the empty paragraph with the new node.
 	 */
-	private insertNewNode(newNode: Node) {
+	private insertNewNode(newNode: Node<ContentEditorSchema>) {
 		const tr = this.view.state.tr;
 		tr.replaceWith(
 			this.view.state.selection.from - 1,
@@ -143,58 +144,43 @@ export default class AppContentEditorBlockControls extends Vue {
 	}
 
 	onClickEmbed() {
-		const newNode = (this.view.state.schema.nodes.embed as NodeType).create();
+		const newNode = this.view.state.schema.nodes.embed.create();
 		this.insertNewNode(newNode);
 	}
 
 	onClickCodeBlock() {
-		const newNode = (this.view.state.schema.nodes.codeBlock as NodeType).create();
+		const newNode = this.view.state.schema.nodes.codeBlock.create();
 		this.insertNewNode(newNode);
 	}
 
 	onClickBlockquote() {
-		const contentNode = (this.view.state.schema.nodes.paragraph as NodeType).create();
-		const newNode = (this.view.state.schema.nodes.blockquote as NodeType).create(
-			{},
-			contentNode
-		);
+		const contentNode = this.view.state.schema.nodes.paragraph.create();
+		const newNode = this.view.state.schema.nodes.blockquote.create({}, contentNode);
 		this.insertNewNode(newNode);
 	}
 
 	onClickHr() {
-		const newNode = (this.view.state.schema.nodes.hr as NodeType).create();
+		const newNode = this.view.state.schema.nodes.hr.create();
 		this.insertNewNode(newNode);
 	}
 
 	onClickSpoiler() {
-		const contentNode = (this.view.state.schema.nodes.paragraph as NodeType).create();
-		const newNode = (this.view.state.schema.nodes.spoiler as NodeType).create({}, contentNode);
+		const contentNode = this.view.state.schema.nodes.paragraph.create();
+		const newNode = this.view.state.schema.nodes.spoiler.create({}, contentNode);
 		this.insertNewNode(newNode);
 	}
 
 	onClickBulletList() {
-		const contentNode = (this.view.state.schema.nodes.paragraph as NodeType).create();
-		const listItemNode = (this.view.state.schema.nodes.listItem as NodeType).create(
-			{},
-			contentNode
-		);
-		const newNode = (this.view.state.schema.nodes.bulletList as NodeType).create(
-			{},
-			listItemNode
-		);
+		const contentNode = this.view.state.schema.nodes.paragraph.create();
+		const listItemNode = this.view.state.schema.nodes.listItem.create({}, contentNode);
+		const newNode = this.view.state.schema.nodes.bulletList.create({}, listItemNode);
 		this.insertNewNode(newNode);
 	}
 
 	onClickOrderedList() {
-		const contentNode = (this.view.state.schema.nodes.paragraph as NodeType).create();
-		const listItemNode = (this.view.state.schema.nodes.listItem as NodeType).create(
-			{},
-			contentNode
-		);
-		const newNode = (this.view.state.schema.nodes.orderedList as NodeType).create(
-			{},
-			listItemNode
-		);
+		const contentNode = this.view.state.schema.nodes.paragraph.create();
+		const listItemNode = this.view.state.schema.nodes.listItem.create({}, contentNode);
+		const newNode = this.view.state.schema.nodes.orderedList.create({}, listItemNode);
 		this.insertNewNode(newNode);
 	}
 }

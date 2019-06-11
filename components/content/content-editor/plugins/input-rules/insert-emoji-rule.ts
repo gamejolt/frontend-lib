@@ -1,7 +1,7 @@
 import { InputRule } from 'prosemirror-inputrules';
-import { NodeType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { ContentEditorService } from '../../content-editor.service';
+import { ContentEditorSchema } from '../../schemas/content-editor-schema';
 import { GJ_EMOJIS } from '../../schemas/specs/nodes/gj-emoji-nodespec';
 
 export function insertEmojiRule() {
@@ -10,7 +10,7 @@ export function insertEmojiRule() {
 
 	return new InputRule(
 		regex,
-		(state: EditorState<any>, match: string[], start: number, end: number) => {
+		(state: EditorState<ContentEditorSchema>, match: string[], start: number, end: number) => {
 			if (match.length === 2) {
 				// We don't want to insert emojis inside code text.
 				if (ContentEditorService.checkCurrentNodeIsCode(state)) {
@@ -27,7 +27,7 @@ export function insertEmojiRule() {
 				}
 				start += matchWalker;
 
-				const newNode = (state.schema.nodes.gjEmoji as NodeType).create({
+				const newNode = state.schema.nodes.gjEmoji.create({
 					type: emojiType.toLowerCase(),
 				});
 				tr.replaceRangeWith(start, end, newNode);

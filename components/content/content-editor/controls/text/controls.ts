@@ -9,6 +9,7 @@ import { AppTooltip } from '../../../../tooltip/tooltip';
 import { ContextCapabilities } from '../../../content-context';
 import { ContentEditorService } from '../../content-editor.service';
 import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
+import { ContentEditorSchema } from '../../schemas/content-editor-schema';
 
 @Component({
 	directives: {
@@ -17,7 +18,7 @@ import { ContentEditorLinkModal } from '../../modals/link/link-modal.service';
 })
 export default class AppContentEditorTextControls extends Vue {
 	@Prop(Object)
-	view!: EditorView;
+	view!: EditorView<ContentEditorSchema>;
 	@Prop(Number)
 	stateCounter!: number;
 	@Prop(Object)
@@ -31,7 +32,7 @@ export default class AppContentEditorTextControls extends Vue {
 	// State
 	isShowingOnMouseUp = false;
 	mouse: MouseState | null = null;
-	selectionMarks: Mark[] = [];
+	selectionMarks: Mark<ContentEditorSchema>[] = [];
 	isInHeading = false;
 	headingLevel = -1;
 	isAutolink = false;
@@ -147,7 +148,7 @@ export default class AppContentEditorTextControls extends Vue {
 		return this.selectionMarks.some(m => m.type.name === markType);
 	}
 
-	private dispatchMark(mark: MarkType, attrs?: { [key: string]: any }) {
+	private dispatchMark(mark: MarkType<ContentEditorSchema>, attrs?: { [key: string]: any }) {
 		toggleMark(mark, attrs)(this.view.state, tr => {
 			this.view.dispatch(tr);
 		});
@@ -194,7 +195,7 @@ export default class AppContentEditorTextControls extends Vue {
 		return wrapIn(this.view.state.schema.nodes.heading, { level: 1 })(this.view.state);
 	}
 
-	testIsInHeading(node: Node) {
+	testIsInHeading(node: Node<ContentEditorSchema>) {
 		if (!this.capabilities.heading) {
 			return false;
 		}

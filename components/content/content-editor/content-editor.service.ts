@@ -3,12 +3,16 @@ import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { imageMimeTypes, isImage } from '../../../utils/image';
 import { uuidv4 } from '../../../utils/uuid';
+import { ContentEditorSchema } from './schemas/content-editor-schema';
 
 export class ContentEditorService {
 	/**
 	 * Ensures that the last node in the editor doc is a specific node.
 	 */
-	public static ensureEndNode(tr: Transaction, nodeType: NodeType) {
+	public static ensureEndNode(
+		tr: Transaction<ContentEditorSchema>,
+		nodeType: NodeType<ContentEditorSchema>
+	) {
 		if (tr.doc.lastChild && tr.doc.lastChild.type.name !== nodeType.name) {
 			const newNode = nodeType.create();
 			return tr.insert(tr.doc.nodeSize - 2, newNode);
@@ -16,7 +20,7 @@ export class ContentEditorService {
 		return null;
 	}
 
-	public static getSelectedNode(state: EditorState) {
+	public static getSelectedNode(state: EditorState<ContentEditorSchema>) {
 		let selFrom = state.selection.from;
 		let node = state.doc.nodeAt(selFrom);
 		// If the selection is between nodes, make sure we select the correct one.
@@ -30,7 +34,10 @@ export class ContentEditorService {
 		return node;
 	}
 
-	private static findParentNode(proposedParent: Node, child: Node): Node | null {
+	private static findParentNode(
+		proposedParent: Node<ContentEditorSchema>,
+		child: Node<ContentEditorSchema>
+	): Node<ContentEditorSchema> | null {
 		for (let i = 0; i < proposedParent.childCount; i++) {
 			const parentChild = proposedParent.child(i);
 			if (parentChild === child) {
@@ -46,19 +53,22 @@ export class ContentEditorService {
 		return null;
 	}
 
-	public static getParentNode(state: EditorState, child: Node) {
+	public static getParentNode(
+		state: EditorState<ContentEditorSchema>,
+		child: Node<ContentEditorSchema>
+	) {
 		return this.findParentNode(state.doc, child);
 	}
 
 	/**
 	 * Returns a list of all applied to any node within the selection
 	 */
-	public static getSelectionMarks(state: EditorState) {
-		const markTypes: Mark[] = [];
+	public static getSelectionMarks(state: EditorState<ContentEditorSchema>) {
+		const markTypes: Mark<ContentEditorSchema>[] = [];
 		state.doc.nodesBetween(
 			state.selection.from,
 			state.selection.to,
-			(node: Node, _0: number, _1: Node, _2: number) => {
+			(node: Node<ContentEditorSchema>, _0: number, _1: Node, _2: number) => {
 				for (const mark of node.marks) {
 					if (!markTypes.some(m => m.type.name === mark.type.name)) {
 						markTypes.push(mark);
@@ -73,7 +83,11 @@ export class ContentEditorService {
 	 * Indicates whether the given node is contained in a node of the given type.
 	 * Returns the parent node that matched, or `false`.
 	 */
-	public static isContainedInNode(state: EditorState, node: Node, nodeType: NodeType) {
+	public static isContainedInNode(
+		state: EditorState<ContentEditorSchema>,
+		node: Node<ContentEditorSchema>,
+		nodeType: NodeType<ContentEditorSchema>
+	) {
 		if (node.type.name === nodeType.name) {
 			return node;
 		}
@@ -92,7 +106,10 @@ export class ContentEditorService {
 		return false;
 	}
 
-	public static handleImageUploads(view: EditorView, items: DataTransferItemList) {
+	public static handleImageUploads(
+		view: EditorView<ContentEditorSchema>,
+		items: DataTransferItemList
+	) {
 		let handled = false;
 
 		for (let i = 0; i < items.length; i++) {
@@ -111,11 +128,11 @@ export class ContentEditorService {
 		return handled;
 	}
 
-	public static handleImageFile(view: EditorView, file: File | null) {
+	public static handleImageFile(view: EditorView<ContentEditorSchema>, file: File | null) {
 		if (file !== null && isImage(file)) {
 			const reader = new FileReader();
 			reader.onloadend = () => {
-				const newNode = (view.state.schema.nodes.mediaUpload as NodeType).create({
+				const newNode = view.state.schema.nodes.mediaUpload.create({
 					src: reader.result,
 					uploadId: uuidv4(),
 				});
@@ -130,7 +147,10 @@ export class ContentEditorService {
 		return false;
 	}
 
-	public static findNodePosition(state: EditorState, node: Node) {
+	public static findNodePosition(
+		state: EditorState<ContentEditorSchema>,
+		node: Node<ContentEditorSchema>
+	) {
 		let found = -1;
 		state.doc.descendants((child, pos) => {
 			if (found > -1) {
@@ -149,11 +169,11 @@ export class ContentEditorService {
 		return found;
 	}
 
-	public static isDisabled(view: EditorView) {
+	public static isDisabled(view: EditorView<ContentEditorSchema>) {
 		return !!view.props.editable && !view.props.editable(view.state);
 	}
 
-	public static getSelectedText(state: EditorState): string {
+	public static getSelectedText(state: EditorState<ContentEditorSchema>): string {
 		if (state.selection.empty) {
 			return '';
 		}
@@ -162,7 +182,9 @@ export class ContentEditorService {
 		return this.getFragmentText(selectionContent);
 	}
 
-	public static getFragmentText(frag: Fragment | Node): string {
+	public static getFragmentText(
+		frag: Fragment<ContentEditorSchema> | Node<ContentEditorSchema>
+	): string {
 		const textNodes = this.getTextNodes(frag);
 
 		let text = '';
@@ -176,7 +198,9 @@ export class ContentEditorService {
 		return text;
 	}
 
-	private static getTextNodes(node: Fragment | Node): Node[] {
+	private static getTextNodes(
+		node: Fragment<ContentEditorSchema> | Node<ContentEditorSchema>
+	): Node<ContentEditorSchema>[] {
 		const nodes = [];
 
 		for (let i = 0; i < node.childCount; i++) {
@@ -191,13 +215,13 @@ export class ContentEditorService {
 		return nodes;
 	}
 
-	public static checkCurrentNodeIsCode(state: EditorState) {
-		const node = ContentEditorService.getSelectedNode(state);
+	public static checkCurrentNodeIsCode(state: EditorState<ContentEditorSchema>) {
+		const node = this.getSelectedNode(state);
 		if (node instanceof Node && node.type.name === 'text') {
 			if (node.marks.some(m => m.type.name === 'code')) {
 				return true;
 			} else {
-				const parent = ContentEditorService.getParentNode(state, node);
+				const parent = this.getParentNode(state, node);
 				if (parent instanceof Node && parent.type.name === 'codeBlock') {
 					return true;
 				}

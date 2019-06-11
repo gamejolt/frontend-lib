@@ -21,8 +21,27 @@ import { orderedList } from './specs/nodes/ordered-list-nodespec';
 import { paragraph } from './specs/nodes/paragraph-nodespec';
 import { spoiler } from './specs/nodes/spoiler-nodespec';
 
+export class ContentEditorSchema extends Schema<
+	| 'text'
+	| 'paragraph'
+	| 'hardBreak'
+	| 'gjEmoji'
+	| 'mediaItem'
+	| 'mediaUpload'
+	| 'embed'
+	| 'codeBlock'
+	| 'blockquote'
+	| 'listItem'
+	| 'bulletList'
+	| 'orderedList'
+	| 'hr'
+	| 'spoiler'
+	| 'heading',
+	'strong' | 'em' | 'code' | 'link' | 'strike' | 'mention' | 'tag'
+> {}
+
 export function generateSchema(capabilities: ContextCapabilities) {
-	return new Schema({
+	return new ContentEditorSchema({
 		nodes: generateNodes(capabilities),
 		marks: generateMarks(capabilities),
 	});

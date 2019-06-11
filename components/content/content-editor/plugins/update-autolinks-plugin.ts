@@ -3,6 +3,7 @@ import { EditorState, Plugin, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { ContextCapabilities } from '../../content-context';
 import { ContentEditorService } from '../content-editor.service';
+import { ContentEditorSchema } from '../schemas/content-editor-schema';
 import { UrlDetector } from './url-detector';
 
 type RegexResult = {
@@ -16,7 +17,7 @@ type TextCell = {
 };
 
 export default class UpdateAutolinkPlugin extends Plugin {
-	private view!: EditorView;
+	private view!: EditorView<ContentEditorSchema>;
 	private capabilities: ContextCapabilities;
 
 	constructor(capabilities: ContextCapabilities) {
@@ -28,17 +29,21 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		this.spec.appendTransaction = this.appendTransaction;
 	}
 
-	viewSetter(view: EditorView) {
+	viewSetter(view: EditorView<ContentEditorSchema>) {
 		this.view = view;
 		return {};
 	}
 
-	appendTransaction(_transactions: Transaction[], oldState: EditorState, newState: EditorState) {
+	appendTransaction(
+		_transactions: Transaction<ContentEditorSchema>[],
+		oldState: EditorState<ContentEditorSchema>,
+		newState: EditorState<ContentEditorSchema>
+	) {
 		const tr = newState.tr;
 
-		const mentionMarkType = this.view.state.schema.marks.mention as MarkType;
-		const tagMarkType = this.view.state.schema.marks.tag as MarkType;
-		const linkMarkType = this.view.state.schema.marks.link as MarkType;
+		const mentionMarkType = this.view.state.schema.marks.mention;
+		const tagMarkType = this.view.state.schema.marks.tag;
+		const linkMarkType = this.view.state.schema.marks.link;
 
 		const paragraphs = this.getParagraphs(tr.doc);
 
@@ -91,7 +96,12 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		return tr;
 	}
 
-	processTags(tr: Transaction, cell: TextCell, markType: MarkType, paragraphPos: number) {
+	processTags(
+		tr: Transaction<ContentEditorSchema>,
+		cell: TextCell,
+		markType: MarkType<ContentEditorSchema>,
+		paragraphPos: number
+	) {
 		const matches = [] as RegexResult[];
 		const regex = /(?:^|[^a-z0-9_])(#[a-z0-9_]{1,30})/gi;
 
@@ -120,7 +130,12 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		}
 	}
 
-	processMentions(tr: Transaction, cell: TextCell, markType: MarkType, paragraphPos: number) {
+	processMentions(
+		tr: Transaction<ContentEditorSchema>,
+		cell: TextCell,
+		markType: MarkType<ContentEditorSchema>,
+		paragraphPos: number
+	) {
 		const matches = [] as RegexResult[];
 		const regex = /(?:^|[^\w@_-])(@[\w_-]{3,30})/gi;
 
@@ -149,7 +164,12 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		}
 	}
 
-	processLinks(tr: Transaction, cell: TextCell, markType: MarkType, paragraphPos: number) {
+	processLinks(
+		tr: Transaction<ContentEditorSchema>,
+		cell: TextCell,
+		markType: MarkType<ContentEditorSchema>,
+		paragraphPos: number
+	) {
 		const matches = UrlDetector.detect(cell.text, cell.index + 1); // +1 to skip the paragraph node index
 
 		for (const match of matches) {
@@ -162,9 +182,13 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		}
 	}
 
-	removeAutolinkMarks(tr: Transaction, paragraphPos: number, paragraph: Node) {
+	removeAutolinkMarks(
+		tr: Transaction<ContentEditorSchema>,
+		paragraphPos: number,
+		paragraph: Node<ContentEditorSchema>
+	) {
 		const autolinkMarks = [] as Mark[];
-		paragraph.descendants((node: Node, _pos: number, _parent: Node) => {
+		paragraph.descendants((node: Node<ContentEditorSchema>, _pos: number, _parent: Node) => {
 			if (node.isText) {
 				autolinkMarks.push(
 					...node.marks.filter(m => m.type.name === 'link' && m.attrs.autolink)
@@ -177,8 +201,8 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		}
 	}
 
-	getParagraphs(parent: Node): Node[] {
-		const paragraphs = [] as Node[];
+	getParagraphs(parent: Node<ContentEditorSchema>): Node<ContentEditorSchema>[] {
+		const paragraphs = [] as Node<ContentEditorSchema>[];
 
 		for (let i = 0; i < parent.childCount; i++) {
 			const child = parent.child(i);
@@ -192,7 +216,7 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		return paragraphs;
 	}
 
-	getTextCells(parent: Node): TextCell[] {
+	getTextCells(parent: Node<ContentEditorSchema>): TextCell[] {
 		const cells = [] as TextCell[];
 		let currentCell = { index: 0, text: '' } as TextCell;
 
