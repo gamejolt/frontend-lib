@@ -74,18 +74,6 @@ export class ContentDocument extends ContentNode {
 		return false;
 	}
 
-	/**
-	 * Merges the content of multiple documents into a new one.
-	 */
-	public static merge(context: ContentContext, ...docs: ContentDocument[]) {
-		const objs = [];
-		for (const mergeDoc of docs) {
-			objs.push(...mergeDoc.content);
-		}
-		const doc = new ContentDocument(context, objs);
-		return doc;
-	}
-
 	public getLength() {
 		// Don't count the first paragraph.
 		return super.getLength() - 1;

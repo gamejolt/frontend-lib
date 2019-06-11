@@ -10,8 +10,8 @@ export default class AppTagSuggestion extends Vue {
 	@Prop(String)
 	text!: string;
 
-	@Prop(ContentDocument)
-	content!: ContentDocument;
+	@Prop(Array)
+	content!: ContentDocument[];
 
 	@Emit('tag')
 	emitTag(_tag: string) {}
@@ -25,12 +25,14 @@ export default class AppTagSuggestion extends Vue {
 		if (this.text) {
 			text += this.text.toLowerCase();
 		}
-		if (this.content instanceof ContentDocument) {
-			text += this.content
-				.getChildrenByType('text')
-				.map(i => i.text)
-				.join(' ')
-				.toLowerCase();
+		if (!!this.content && this.content.length > 0) {
+			for (const contentDocument of this.content) {
+				text += contentDocument
+					.getChildrenByType('text')
+					.map(i => i.text)
+					.join(' ')
+					.toLowerCase();
+			}
 		}
 
 		return text;
@@ -45,11 +47,13 @@ export default class AppTagSuggestion extends Vue {
 			.map(t => {
 				const count = this.lcText.split(t.toLowerCase()).length - 1;
 				let hashtagCount = 0;
-				if (this.content instanceof ContentDocument) {
-					hashtagCount = this.content
-						.getMarks('tag')
-						.map(i => i.attrs.tag as string)
-						.filter(i => i.toLowerCase() === t.toLowerCase()).length;
+				if (!!this.content && this.content.length > 0) {
+					for (const contentDocument of this.content) {
+						hashtagCount += contentDocument
+							.getMarks('tag')
+							.map(i => i.attrs.tag as string)
+							.filter(i => i.toLowerCase() === t.toLowerCase()).length;
+					}
 				} else {
 					hashtagCount = this.lcText.split('#' + t.toLowerCase()).length - 1;
 				}
@@ -77,8 +81,11 @@ export default class AppTagSuggestion extends Vue {
 
 		const recommended = this.recommendedTags;
 
-		if (this.content instanceof ContentDocument) {
-			const contentTags = this.content.getMarks('tag').map(i => i.attrs.tag);
+		if (!!this.content && this.content.length > 0) {
+			let contentTags = [] as string[];
+			for (const contentDocument of this.content) {
+				contentTags.push(...contentDocument.getMarks('tag').map(i => i.attrs.tag));
+			}
 			return this.tags.filter(
 				t => recommended!.indexOf(t) === -1 && contentTags!.indexOf(t) === -1
 			);
