@@ -64,7 +64,7 @@
 	display: flex
 	justify-content: center
 	align-items: center
-	theme-prop('background-color', 'bg-offset')
+	// theme-prop('background-color', 'bg-offset')
 	rounded-corners()
 	overflow: hidden
 	max-width: 100%
