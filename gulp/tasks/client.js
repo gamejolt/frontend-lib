@@ -40,8 +40,25 @@ module.exports = config => {
 
 	const gjpushVersion = 'v0.2.0';
 	const gjGameId = config.developmentEnv ? 1000 : 362412;
-	const gjGamePackageId = config.developmentEnv ? 1001 : 376715;
-	const gjGameInstallerPackageId = config.developmentEnv ? 1000 : 376713;
+	let gjGamePazckageId;
+	let gjGameInstallerPackageId;
+	if (config.developmentEnv) {
+		if (!config.useTestPackage) {
+			gjGamePackageId = 1001;
+			gjGameInstallerPackageId = 1000;
+		} else {
+			gjGamePackageId = 1004;
+			gjGameInstallerPackageId = 1003;
+		}
+	} else {
+		if (!config.useTestPackage) {
+			gjGamePackageId = 376715;
+			gjGameInstallerPackageId = 376713;
+		} else {
+			gjGamePackageId = 428842;
+			gjGameInstallerPackageId = 428840;
+		}
+	}
 	const nwjsVersion = '0.35.5';
 
 	const clientVoodooDir = path.join(config.buildDir, 'node_modules', 'client-voodoo');
