@@ -7,6 +7,10 @@ export const mediaUpload = {
 	attrs: {
 		src: {},
 		uploadId: {},
+		nameHint: {},
 	},
-	toDOM: (node: Node) => ['div', { src: node.attrs.src, uploadId: node.attrs.uploadId }],
+	toDOM: (node: Node) => [
+		'div',
+		{ src: node.attrs.src, uploadId: node.attrs.uploadId, nameHint: node.attrs.nameHint },
+	],
 } as NodeSpec;

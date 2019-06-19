@@ -7,6 +7,7 @@ export class MediaUploadNodeView extends HydratableNodeView {
 			propsData: {
 				src: this.node.attrs.src,
 				uploadId: this.node.attrs.uploadId,
+				nameHint: this.node.attrs.nameHint,
 				editorView: this.view,
 				owner: this.owner,
 			},

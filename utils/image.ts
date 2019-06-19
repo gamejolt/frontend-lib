@@ -21,7 +21,7 @@ export function getImgDimensions(file: File): Promise<[number, number]> {
  * A data url starts with `data:image/<mime>;`
  */
 export function makeFileFromDataUrl(dataUrl: string, fileName: string) {
-	var arr = dataUrl.split(','),
+	let arr = dataUrl.split(','),
 		mime = arr[0].match(/:(.*?);/)![1],
 		bstr = atob(arr[1]),
 		n = bstr.length,

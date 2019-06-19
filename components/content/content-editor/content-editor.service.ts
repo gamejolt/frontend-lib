@@ -135,6 +135,7 @@ export class ContentEditorService {
 				const newNode = view.state.schema.nodes.mediaUpload.create({
 					src: reader.result,
 					uploadId: uuidv4(),
+					nameHint: file.name,
 				});
 				const tr = view.state.tr.replaceSelectionWith(newNode);
 				view.focus();

@@ -22,6 +22,9 @@ export default class AppContentMediaUpload extends Vue {
 	@Prop(String)
 	uploadId!: string;
 
+	@Prop(String)
+	nameHint?: string;
+
 	@Prop(EditorView)
 	editorView!: EditorView<ContentEditorSchema>;
 
@@ -32,9 +35,18 @@ export default class AppContentMediaUpload extends Vue {
 	uploadProcessing = false;
 
 	async mounted() {
-		// Start uploading media item
-		const file = makeFileFromDataUrl(this.src, 'pasted_image.png');
+		// Create file from passed in data.
+		// We try to take the name hint into consideration. Non-alphanumeric chars get removed.
+		let name = (this.nameHint || 'pasted_image').replace(/ /g, '_').replace(/\.[^/.]+$/, '');
+		const chars = name.split('').filter(i => /[a-z0-9_-]/i.test(i));
+		if (chars.length === 0) {
+			name = 'image';
+		} else {
+			name = chars.join('');
+		}
+		const file = makeFileFromDataUrl(this.src, name);
 
+		// Start uploading media item
 		try {
 			const mediaItem = await this.uploadFile(file);
 			if (mediaItem instanceof MediaItem) {
