@@ -6,6 +6,8 @@ import { uuidv4 } from '../../../utils/uuid';
 import { ContentEditorSchema } from './schemas/content-editor-schema';
 
 export class ContentEditorService {
+	public static UploadFileCache: { [uploadId: string]: File | undefined } = {};
+
 	/**
 	 * Ensures that the last node in the editor doc is a specific node.
 	 */
@@ -130,18 +132,14 @@ export class ContentEditorService {
 
 	public static handleImageFile(view: EditorView<ContentEditorSchema>, file: File | null) {
 		if (file !== null && isImage(file)) {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				const newNode = view.state.schema.nodes.mediaUpload.create({
-					src: reader.result,
-					uploadId: uuidv4(),
-					nameHint: file.name,
-				});
-				const tr = view.state.tr.replaceSelectionWith(newNode);
-				view.focus();
-				view.dispatch(tr);
-			};
-			reader.readAsDataURL(file);
+			const uploadId = uuidv4();
+			this.UploadFileCache[uploadId] = file;
+			const newNode = view.state.schema.nodes.mediaUpload.create({
+				uploadId,
+			});
+			const tr = view.state.tr.replaceSelectionWith(newNode);
+			view.focus();
+			view.dispatch(tr);
 			return true;
 		}
 

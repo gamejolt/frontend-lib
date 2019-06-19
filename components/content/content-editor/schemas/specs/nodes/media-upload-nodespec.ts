@@ -5,12 +5,7 @@ import { Node, NodeSpec } from 'prosemirror-model';
 export const mediaUpload = {
 	group: 'block',
 	attrs: {
-		src: {},
 		uploadId: {},
-		nameHint: {},
 	},
-	toDOM: (node: Node) => [
-		'div',
-		{ src: node.attrs.src, uploadId: node.attrs.uploadId, nameHint: node.attrs.nameHint },
-	],
+	toDOM: (node: Node) => ['div', { uploadId: node.attrs.uploadId }],
 } as NodeSpec;

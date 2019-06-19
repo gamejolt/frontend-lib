@@ -1,7 +1,8 @@
 <template>
 	<div class="media-upload-container">
 		<div class="media-upload">
-			<img :src="src" class="-placeholder" />
+			<img v-if="src" :src="src" class="-placeholder" />
+			<app-loading v-else />
 			<div class="-progress-container">
 				<app-progress-bar
 					class="-progress"

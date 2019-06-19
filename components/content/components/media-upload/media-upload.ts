@@ -1,29 +1,25 @@
 import { EditorView } from 'prosemirror-view';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { makeFileFromDataUrl } from '../../../../utils/image';
+import AppLoading from '../../../../vue/components/loading/loading.vue';
 import { Api } from '../../../api/api.service';
 import { Growls } from '../../../growls/growls.service';
 import { MediaItem } from '../../../media-item/media-item-model';
 import AppProgressBar from '../../../progress/bar/bar.vue';
 import { getMediaItemTypeForContext } from '../../content-context';
+import { ContentEditorService } from '../../content-editor/content-editor.service';
 import { ContentEditorSchema } from '../../content-editor/schemas/content-editor-schema';
 import { ContentOwner } from '../../content-owner';
 
 @Component({
 	components: {
 		AppProgressBar,
+		AppLoading,
 	},
 })
 export default class AppContentMediaUpload extends Vue {
 	@Prop(String)
-	src!: string;
-
-	@Prop(String)
 	uploadId!: string;
-
-	@Prop(String)
-	nameHint?: string;
 
 	@Prop(EditorView)
 	editorView!: EditorView<ContentEditorSchema>;
@@ -31,20 +27,33 @@ export default class AppContentMediaUpload extends Vue {
 	@Prop(Object)
 	owner!: ContentOwner;
 
+	src = '';
 	uploadProgress = 0;
 	uploadProcessing = false;
 
 	async mounted() {
-		// Create file from passed in data.
-		// We try to take the name hint into consideration. Non-alphanumeric chars get removed.
-		let name = (this.nameHint || 'pasted_image').replace(/ /g, '_').replace(/\.[^/.]+$/, '');
+		let file = ContentEditorService.UploadFileCache[this.uploadId]!;
+
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			if (reader.result !== null) {
+				this.src = reader.result.toString();
+			}
+		};
+		reader.readAsDataURL(file);
+
+		// Non-alphanumeric chars get removed.
+		let name = (file.name || 'pasted_image').replace(/ /g, '_').replace(/\.[^/.]+$/, '');
 		const chars = name.split('').filter(i => /[a-z0-9_-]/i.test(i));
 		if (chars.length === 0) {
 			name = 'image';
 		} else {
 			name = chars.join('');
 		}
-		const file = makeFileFromDataUrl(this.src, name);
+
+		// Rename file by copying data into a new file object.
+		const blob = file.slice(0, file.size, file.type);
+		file = new File([blob], name, { type: file.type });
 
 		// Start uploading media item
 		try {
@@ -75,6 +84,8 @@ export default class AppContentMediaUpload extends Vue {
 				title: 'Oh no!',
 				message: 'Something went wrong while uploading your image.',
 			});
+		} finally {
+			ContentEditorService.UploadFileCache[this.uploadId] = undefined;
 		}
 	}
 
