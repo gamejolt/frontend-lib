@@ -77,6 +77,10 @@
 	display: block
 	margin-bottom: 0
 	max-width: 100%
+
+// Within lists align media items to the left
+li .media-item
+	align-items: flex-start !important
 </style>
 
 <script lang="ts" src="./media-item"></script>

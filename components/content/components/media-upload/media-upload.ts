@@ -34,13 +34,16 @@ export default class AppContentMediaUpload extends Vue {
 	async mounted() {
 		let file = ContentEditorService.UploadFileCache[this.uploadId]!;
 
-		const reader = new FileReader();
-		reader.onloadend = () => {
-			if (reader.result !== null) {
-				this.src = reader.result.toString();
-			}
-		};
-		reader.readAsDataURL(file);
+		// Only preview the image if it's smaller than 5 Mb.
+		if (file.size < 5000000) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				if (reader.result !== null) {
+					this.src = reader.result.toString();
+				}
+			};
+			reader.readAsDataURL(file);
+		}
 
 		// Non-alphanumeric chars get removed.
 		let name = (file.name || 'pasted_image').replace(/ /g, '_').replace(/\.[^/.]+$/, '');

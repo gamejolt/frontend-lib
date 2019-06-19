@@ -2,7 +2,7 @@
 	<div class="media-upload-container">
 		<div class="media-upload">
 			<img v-if="src" :src="src" class="-placeholder" />
-			<app-loading v-else />
+			<app-loading v-else centered />
 			<div class="-progress-container">
 				<app-progress-bar
 					class="-progress"

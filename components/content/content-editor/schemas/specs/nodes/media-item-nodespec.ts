@@ -41,9 +41,9 @@ export const mediaItem = {
 			tag: 'div[media-item-id]',
 			getAttrs: (domNode: Element) => {
 				return {
-					id: domNode.getAttribute('media-item-id'),
-					width: domNode.getAttribute('media-item-width'),
-					height: domNode.getAttribute('media-item-height'),
+					id: parseInt(domNode.getAttribute('media-item-id')!, 10),
+					width: parseInt(domNode.getAttribute('media-item-width')!, 10),
+					height: parseInt(domNode.getAttribute('media-item-height')!, 10),
 					caption: domNode.getAttribute('media-item-caption'),
 					align: domNode.getAttribute('media-item-align'),
 					href: domNode.getAttribute('media-item-href'),
