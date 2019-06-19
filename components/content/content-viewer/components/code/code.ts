@@ -23,6 +23,7 @@ const LANGUAGE_MAP = {
 	csharp: 'clike',
 	'c++': 'clike',
 	java: 'clike',
+	clike: 'clike',
 
 	nocode: 'nocode',
 } as any;
@@ -59,7 +60,7 @@ export class AppContentViewerCodeBlock extends Vue {
 
 	private renderPrism(h: CreateElement) {
 		let text = '';
-		let language = 'clike';
+		let language = 'nocode';
 
 		if (this.data.content.length > 0) {
 			text = this.data.content[0].text || '';
@@ -79,7 +80,7 @@ export class AppContentViewerCodeBlock extends Vue {
 		}
 
 		if (language === 'nocode') {
-			return h('pre', { class: 'content-viewer-code-block' }, text);
+			return h('pre', { class: 'content-viewer-code-block content-viewer-nocode' }, text);
 		}
 
 		return h(
@@ -100,7 +101,7 @@ export class AppContentViewerCodeBlock extends Vue {
 	private renderDefault(h: CreateElement) {
 		return h(
 			'pre',
-			{ class: 'content-viewer-code-block' },
+			{ class: 'content-viewer-code-block content-viewer-nocode' },
 			renderChildren(h, this.owner, this.data.content)
 		);
 	}

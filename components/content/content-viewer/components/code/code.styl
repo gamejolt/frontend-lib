@@ -14,7 +14,19 @@
 	&:before
 		content: attr(data-annotation)
 		position: absolute
-		top: 8px
+		top: 4px
 		right: 10px
 		font-size: $font-size-small
 		font-style: italic
+
+	& > code
+		display: inline-block
+		margin-top: 4px
+
+	& .tag // Reset due to .tag class interference
+		all: initial
+		font-family: inherit
+		font-size: inherit
+
+.content-viewer-nocode
+	white-space: pre-line
