@@ -1,5 +1,5 @@
 <template>
-	<section class="section" id="styleguide-button">
+	<section class="section" id="styleguide-buttons">
 		<h1 class="section-header">Buttons</h1>
 
 		<h3>Button Types</h3>

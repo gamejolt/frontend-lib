@@ -11,6 +11,12 @@ export class AppTheme extends Vue {
 	@Prop(Theme)
 	theme!: Theme | null;
 
+	@Prop(Boolean)
+	forceDark!: boolean;
+
+	@Prop(Boolean)
+	forceLight!: boolean;
+
 	@ThemeState
 	isDark!: ThemeStore['isDark'];
 
@@ -88,7 +94,7 @@ export class AppTheme extends Vue {
 			}
 		`;
 
-		if (this.isDark) {
+		if ((this.isDark && !this.forceLight) || this.forceDark) {
 			// Sync with the theme-dark() stylus mixin.
 			styles += `
 				${selector} {

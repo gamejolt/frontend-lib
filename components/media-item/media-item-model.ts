@@ -5,12 +5,17 @@ export class MediaItem extends Model {
 	static readonly TYPE_GAME_HEADER = 'game-header';
 	static readonly TYPE_GAME_SCREENSHOT = 'game-screenshot';
 	static readonly TYPE_GAME_TROPHY = 'game-trophy';
+	static readonly TYPE_GAME_DESCRIPTION = 'game-description';
 
 	static readonly TYPE_FIRESIDE_POST_HEADER = 'fireside-post-header';
 	static readonly TYPE_FIRESIDE_POST_IMAGE = 'fireside-post-image';
 	static readonly TYPE_FIRESIDE_POST_ARTICLE_IMAGE = 'fireside-post-article-image';
 
 	static readonly TYPE_FEATURED_HEADER = 'featured-header';
+
+	static readonly TYPE_COMMENT = 'comment';
+
+	static readonly TYPE_FORUM_POST = 'forum-post';
 
 	static readonly STATUS_ACTIVE = 'active';
 	static readonly STATUS_REMOVED = 'removed';

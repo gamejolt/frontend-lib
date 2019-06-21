@@ -1,17 +1,19 @@
 import { Component, Prop } from 'vue-property-decorator';
-import AppFormControlMarkdown from '../../form-vue/control/markdown/markdown.vue'
+import { ContentContext } from '../../content/content-context';
+import AppFormControlContent from '../../form-vue/control/content/content.vue';
+import AppForm from '../../form-vue/form';
 import { BaseForm, FormOnInit } from '../../form-vue/form.service';
 import { Comment } from '../comment-model';
 import '../comment.styl';
 
 @Component({
 	components: {
-		AppFormControlMarkdown,
+		AppFormControlContent,
 	},
 })
 export default class FormComment extends BaseForm<Comment> implements FormOnInit {
 	@Prop(String)
-	resource!: 'Game' | 'FiresidePost';
+	resource!: 'Game' | 'Fireside_Post' | 'User';
 
 	@Prop(Number)
 	resourceId!: number;
@@ -28,18 +30,37 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 	@Prop(String)
 	maxHeight?: string;
 
+	$refs!: {
+		form: AppForm;
+	};
+
 	modelClass = Comment;
 	resetOnSubmit = true;
 
-	onInit() {
+	get contentContext(): ContentContext {
+		switch (this.resource) {
+			case 'Fireside_Post':
+				return 'fireside-post-comment';
+			case 'Game':
+				return 'game-comment';
+			case 'User':
+				return 'user-comment';
+		}
+	}
+
+	async onInit() {
 		if (!this.model) {
-			this.setField('comment', '');
+			this.setField('comment_content', '');
 			this.setField('resource', this.resource);
 			this.setField('resource_id', this.resourceId);
 
 			if (this.parentId) {
 				this.setField('parent_id', this.parentId);
 			}
+
+			// Wait for errors, then clear them.
+			await this.$nextTick();
+			this.$refs.form.clearErrors();
 		}
 	}
 

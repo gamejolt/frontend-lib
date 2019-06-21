@@ -22,6 +22,8 @@ const ErrorMessagesBase: { [k: string]: string } = {
 	availability: `This {} is already in use.`,
 	min_date: `The time you selected is too early.`,
 	max_date: `The time you selected is too late.`,
+	max_content_length: `The {} is too long.`,
+	content_required: `You must enter a {}.`,
 };
 
 @Component({})

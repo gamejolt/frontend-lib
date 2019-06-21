@@ -47,10 +47,10 @@
 .modal-content
 	theme-prop('background-color', 'bg')
 	theme-prop('color', 'fg')
+	elevate-3()
 	position: relative
 	background-clip: padding-box
 	outline: 0 // Remove focus outline from opened modal
-	box-shadow: 0 5px 15px rgba($black, 0.5)
 
 	// Full screen on xs
 	@media $media-xs
@@ -75,10 +75,10 @@
 
 	.modal-content
 		-fullscreen()
+		elevate-0()
 		position: absolute
 		width: auto
 		margin: 0
-		box-shadow: none
 		border-radius: 0
 		background-color: transparent
 

@@ -10,9 +10,11 @@ import { FormValidatorAccept } from './validators/accept';
 import { FormValidatorAvailability } from './validators/availability';
 import { FormValidatorCcExp } from './validators/cc_exp';
 import { FormValidatorCcExpExpired } from './validators/cc_exp_expired';
+import { FormValidatorContentRequired } from './validators/content_required';
 import { FormValidatorFilesize } from './validators/filesize';
 import { FormValidatorImgDimensions } from './validators/img_dimensions';
 import { FormValidatorImgRatio } from './validators/img_ratio';
+import { FormValidatorMaxContentLength } from './validators/max_content_length';
 import { FormValidatorMaxDate } from './validators/max_date';
 import { FormValidatorMaxImgDimensions } from './validators/max_img_dimensions';
 import { FormValidatorMaxImgRatio } from './validators/max_img_ratio';
@@ -87,6 +89,8 @@ export default class AppForm extends Vue {
 			this.$validator.extend('cc_exp_expired', FormValidatorCcExpExpired);
 			this.$validator.extend('min_date', FormValidatorMinDate);
 			this.$validator.extend('max_date', FormValidatorMaxDate);
+			this.$validator.extend('max_content_length', FormValidatorMaxContentLength);
+			this.$validator.extend('content_required', FormValidatorContentRequired);
 			AppForm.hasAddedValidators = true;
 		}
 	}
@@ -117,6 +121,12 @@ export default class AppForm extends Vue {
 		}
 
 		return await this.base._onSubmit();
+	}
+
+	clearErrors() {
+		for (const control of this.controls) {
+			control.$validator.errorBag.clear();
+		}
 	}
 
 	onChange() {

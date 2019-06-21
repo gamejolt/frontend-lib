@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs/Subscription';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
-import { bootstrapShortkey } from '../../../vue/shortkey';
+import AppShortkey from '../../../vue/components/shortkey/shortkey.vue';
 import { Analytics } from '../../analytics/analytics.service';
 import { EscapeStack } from '../../escape-stack/escape-stack.service';
 import { Screen } from '../../screen/screen-service';
@@ -24,13 +24,12 @@ export const MediaBarLightboxConfig = {
 	buttonSize: 110,
 };
 
-bootstrapShortkey();
-
 @Component({
 	components: {
 		AppJolticon,
 		AppMediaBarLightboxSlider,
 		AppMediaBarLightboxItem,
+		AppShortkey,
 	},
 })
 export default class AppMediaBarLightbox extends Vue {
