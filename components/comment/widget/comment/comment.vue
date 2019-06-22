@@ -110,7 +110,12 @@
 			/>
 		</template>
 		<template v-else>
-			<form-comment :model="comment" @submit="onCommentEdit" @cancel="isEditing = false" />
+			<form-comment
+				:model="comment"
+				@submit="onCommentEdit"
+				@cancel="isEditing = false"
+				:resource="comment.resource"
+			/>
 		</template>
 
 		<!-- Child Comments -->
