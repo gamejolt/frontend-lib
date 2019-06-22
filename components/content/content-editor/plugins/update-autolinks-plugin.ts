@@ -81,19 +81,33 @@ export default class UpdateAutolinkPlugin extends Plugin {
 			const cells = this.getTextCells(paragraph);
 
 			for (const cell of cells) {
+				if (this.capabilities.textLink) {
+					this.processLinks(tr, cell, linkMarkType, paragraphPos);
+				}
 				if (this.capabilities.mention) {
 					this.processMentions(tr, cell, mentionMarkType, paragraphPos);
 				}
 				if (this.capabilities.tag) {
 					this.processTags(tr, cell, tagMarkType, paragraphPos);
 				}
-				if (this.capabilities.textLink) {
-					this.processLinks(tr, cell, linkMarkType, paragraphPos);
-				}
 			}
 		}
 
 		return tr;
+	}
+
+	rangeHasLinks(tr: Transaction<ContentEditorSchema>, from: number, to: number) {
+		const markTypes = [
+			this.view.state.schema.marks.mention,
+			this.view.state.schema.marks.tag,
+			this.view.state.schema.marks.link,
+		];
+		for (const markType of markTypes) {
+			if (tr.doc.rangeHasMark(from, to, markType)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	processTags(
@@ -121,12 +135,12 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		}
 
 		for (const match of matches) {
-			const mark = markType.create({ tag: match.match.substr(1) });
-			tr.addMark(
-				paragraphPos + match.index,
-				paragraphPos + match.index + match.match.length,
-				mark
-			);
+			const from = paragraphPos + match.index;
+			const to = from + match.match.length;
+			if (!this.rangeHasLinks(tr, from, to)) {
+				const mark = markType.create({ tag: match.match.substr(1) });
+				tr.addMark(from, to, mark);
+			}
 		}
 	}
 
@@ -155,12 +169,12 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		}
 
 		for (const match of matches) {
-			const mark = markType.create({ username: match.match.substr(1) });
-			tr.addMark(
-				paragraphPos + match.index,
-				paragraphPos + match.index + match.match.length,
-				mark
-			);
+			const from = paragraphPos + match.index;
+			const to = from + match.match.length;
+			if (!this.rangeHasLinks(tr, from, to)) {
+				const mark = markType.create({ username: match.match.substr(1) });
+				tr.addMark(from, to, mark);
+			}
 		}
 	}
 
@@ -173,12 +187,16 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		const matches = UrlDetector.detect(cell.text, cell.index + 1); // +1 to skip the paragraph node index
 
 		for (const match of matches) {
-			const mark = markType.create({ href: match.match, title: match.match, autolink: true });
-			tr.addMark(
-				paragraphPos + match.index,
-				paragraphPos + match.index + match.match.length,
-				mark
-			);
+			const from = paragraphPos + match.index;
+			const to = from + match.match.length;
+			if (!this.rangeHasLinks(tr, from, to)) {
+				const mark = markType.create({
+					href: match.match,
+					title: match.match,
+					autolink: true,
+				});
+				tr.addMark(from, to, mark);
+			}
 		}
 	}
 
