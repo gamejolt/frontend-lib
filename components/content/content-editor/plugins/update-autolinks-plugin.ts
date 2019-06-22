@@ -81,6 +81,9 @@ export default class UpdateAutolinkPlugin extends Plugin {
 			const cells = this.getTextCells(paragraph);
 
 			for (const cell of cells) {
+				// These have to be processed in this order, because links have to have preceedens over mentions:
+				// `gamejolt.com/@user` would become an autolink, and not a mention when processing links first.
+
 				if (this.capabilities.textLink) {
 					this.processLinks(tr, cell, linkMarkType, paragraphPos);
 				}
@@ -96,6 +99,12 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		return tr;
 	}
 
+	/**
+	 * Checks whether the given range (from - to) has one of the three mark types attached to it:
+	 *  - mention
+	 *  - tag
+	 *  - link
+	 */
 	rangeHasLinks(tr: Transaction<ContentEditorSchema>, from: number, to: number) {
 		const markTypes = [
 			this.view.state.schema.marks.mention,
@@ -137,6 +146,7 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		for (const match of matches) {
 			const from = paragraphPos + match.index;
 			const to = from + match.match.length;
+			// Make sure to only apply a tag mark if the given range does not already have a link/mention/tag mark on it.
 			if (!this.rangeHasLinks(tr, from, to)) {
 				const mark = markType.create({ tag: match.match.substr(1) });
 				tr.addMark(from, to, mark);
@@ -171,6 +181,7 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		for (const match of matches) {
 			const from = paragraphPos + match.index;
 			const to = from + match.match.length;
+			// Make sure to only apply a mention mark if the given range does not already have a link/mention/tag mark on it.
 			if (!this.rangeHasLinks(tr, from, to)) {
 				const mark = markType.create({ username: match.match.substr(1) });
 				tr.addMark(from, to, mark);
@@ -189,6 +200,7 @@ export default class UpdateAutolinkPlugin extends Plugin {
 		for (const match of matches) {
 			const from = paragraphPos + match.index;
 			const to = from + match.match.length;
+			// Make sure to only apply a link mark if the given range does not already have a link/mention/tag mark on it.
 			if (!this.rangeHasLinks(tr, from, to)) {
 				const mark = markType.create({
 					href: match.match,
