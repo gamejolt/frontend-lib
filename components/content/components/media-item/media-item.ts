@@ -59,6 +59,9 @@ export default class AppContentMediaItem extends Vue {
 		if (this.isHydrated && this.hasCaption) {
 			return this.caption;
 		}
+		if (this.isHydrated && this.hasLink) {
+			return this.displayHref;
+		}
 		if (this.mediaItem instanceof MediaItem) {
 			let filename = this.mediaItem.filename;
 			// If possible, remove the hash from the filename.
@@ -106,6 +109,9 @@ export default class AppContentMediaItem extends Vue {
 
 	get displayHref() {
 		let text = this.href;
+		if (text.startsWith('//')) {
+			text = text.substr(2);
+		}
 		if (text.length > 30) {
 			text = text.substr(0, 30) + '…';
 		}
