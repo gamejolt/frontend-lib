@@ -10,7 +10,7 @@ export function dropEventHandler(capabilities: ContextCapabilities) {
 	return function(view: EditorView, e: Event) {
 		if (
 			!ContentEditorService.isDisabled(view) &&
-			e.type === 'paste' &&
+			e.type === 'drop' &&
 			canPasteImages(view.state, capabilities)
 		) {
 			const dropEvent = e as DragEvent;
