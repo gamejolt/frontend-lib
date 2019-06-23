@@ -41,7 +41,7 @@ export default class AppContentEditorLinkModal extends BaseModal {
 
 		if (!this.isValidUrl(data.href)) {
 			// Insert protocol if none given
-			if (!/^.*?\/\/.+$/.test(data.href)) {
+			if (!/^[a-z][a-z0-9+\-\.]*:\/\//i.test(data.href)) {
 				data.href = '//' + data.href;
 			}
 		}
