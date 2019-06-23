@@ -10,6 +10,7 @@ import { FormValidatorAccept } from './validators/accept';
 import { FormValidatorAvailability } from './validators/availability';
 import { FormValidatorCcExp } from './validators/cc_exp';
 import { FormValidatorCcExpExpired } from './validators/cc_exp_expired';
+import { FormValidatorContentNoMediaUpload } from './validators/content_no_media_upload';
 import { FormValidatorContentRequired } from './validators/content_required';
 import { FormValidatorFilesize } from './validators/filesize';
 import { FormValidatorImgDimensions } from './validators/img_dimensions';
@@ -91,6 +92,7 @@ export default class AppForm extends Vue {
 			this.$validator.extend('max_date', FormValidatorMaxDate);
 			this.$validator.extend('max_content_length', FormValidatorMaxContentLength);
 			this.$validator.extend('content_required', FormValidatorContentRequired);
+			this.$validator.extend('content_no_media_uploads', FormValidatorContentNoMediaUpload);
 			AppForm.hasAddedValidators = true;
 		}
 	}

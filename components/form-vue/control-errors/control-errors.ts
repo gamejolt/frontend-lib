@@ -24,6 +24,7 @@ const ErrorMessagesBase: { [k: string]: string } = {
 	max_date: `The time you selected is too late.`,
 	max_content_length: `The {} is too long.`,
 	content_required: `You must enter a {}.`,
+	content_no_media_uploads: `We are uploading your images...`,
 };
 
 @Component({})
