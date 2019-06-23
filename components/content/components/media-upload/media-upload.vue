@@ -21,6 +21,7 @@
 	width: 100%
 	display: flex
 	justify-content: center
+	cursor: default
 
 .media-upload
 	padding: 10px

@@ -2,6 +2,7 @@
 	<app-base-content-component
 		:is-editing="isEditing"
 		:is-disabled="isDisabled"
+		show-edit
 		@removed="onRemoved"
 		@edit="onEdit"
 	>
@@ -13,6 +14,9 @@
 		>
 			<div
 				class="media-item-container"
+				:class="{
+					'media-item-container-placeholder': !imageLoaded,
+				}"
 				ref="container"
 				:style="{
 					width: containerWidth,
@@ -21,8 +25,8 @@
 			>
 				<template v-if="isHydrated">
 					<component
-						:is="hasLink ? 'a' : 'span'"
-						:href="hasLink ? href : undefined"
+						:is="hasLink && !isEditing ? 'a' : 'span'"
+						:href="hasLink && !isEditing ? href : undefined"
 						rel="nofollow noopener"
 						target="_blank"
 					>
@@ -31,6 +35,7 @@
 							:src="mediaItem.img_url"
 							:alt="title"
 							:title="title"
+							@load="onImageLoad"
 						/>
 					</component>
 				</template>
@@ -40,6 +45,18 @@
 				<template v-else>
 					<app-loading />
 				</template>
+			</div>
+			<div v-if="isHydrated && hasLink && isEditing" class="link-overlay">
+				<small>
+					<external-link
+						:href="href"
+						class="link-overlay-display"
+						v-app-tooltip="$gettext('This image is linked, click to open')"
+					>
+						<app-jolticon icon="link" />
+						<span>{{ displayHref }}</span>
+					</external-link>
+				</small>
 			</div>
 			<span v-if="isHydrated && hasCaption" class="text-muted">
 				<em>{{ caption }}</em>
@@ -64,10 +81,38 @@
 	display: flex
 	justify-content: center
 	align-items: center
-	// theme-prop('background-color', 'bg-offset')
 	rounded-corners()
 	overflow: hidden
 	max-width: 100%
+	position: relative
+	transition: background-color 0.1s ease
+
+// While the image is still loading, we show a dimmed background to better indicate the size of the placeholder
+.media-item-container-placeholder
+	theme-prop('background-color', 'bg-offset')
+
+.link-overlay
+	position: absolute
+	top: 8px
+	left: 8px
+	rounded-corners()
+	theme-prop('background-color', 'bg-offset')
+	padding-left: 6px
+	padding-right: 6px
+	padding-top: 2px
+	padding-bottom: 2px
+	cursor: pointer
+	opacity: 0.7
+	transition: opacity 0.1 ease
+
+	&:hover
+		opacity: 1
+
+	& a
+		theme-prop('color', 'fg-offset')
+
+.link-overlay-display
+	vertical-align: middle
 
 .caption-placeholder
 	cursor: pointer

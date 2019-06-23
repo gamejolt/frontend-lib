@@ -1,8 +1,10 @@
 import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { AppTooltip } from '../../../../components/tooltip/tooltip';
 import AppLoading from '../../../../vue/components/loading/loading.vue';
 import { MediaItem } from '../../../media-item/media-item-model';
+import { ContentEditorLinkModal } from '../../content-editor/modals/link/link-modal.service';
 import { ContentOwner } from '../../content-owner';
 import AppBaseContentComponent from '../base/base-content-component.vue';
 
@@ -10,6 +12,9 @@ import AppBaseContentComponent from '../base/base-content-component.vue';
 	components: {
 		AppBaseContentComponent,
 		AppLoading,
+	},
+	directives: {
+		AppTooltip,
 	},
 })
 export default class AppContentMediaItem extends Vue {
@@ -44,6 +49,7 @@ export default class AppContentMediaItem extends Vue {
 	hasError = false;
 	resizeObserver!: ResizeObserver;
 	computedHeight = this.mediaItemHeight;
+	imageLoaded = false;
 
 	$refs!: {
 		container: HTMLDivElement;
@@ -54,7 +60,16 @@ export default class AppContentMediaItem extends Vue {
 			return this.caption;
 		}
 		if (this.mediaItem instanceof MediaItem) {
-			return this.mediaItem.filename;
+			let filename = this.mediaItem.filename;
+			// If possible, remove the hash from the filename.
+			// The filename is matching the pattern 'filename-8chrhere.ext'
+			const hashRegex = /^.+?(-[a-z0-9]{8}(\.[a-z]{1,5}))$/i;
+			const results = hashRegex.exec(filename);
+			if (results !== null && results.length === 3) {
+				// Match for the hash, remove it, and append the file ext.
+				filename = filename.substr(0, filename.length - results[1].length) + results[2];
+			}
+			return filename;
 		}
 		return '';
 	}
@@ -89,6 +104,14 @@ export default class AppContentMediaItem extends Vue {
 		return typeof this.href === 'string' && this.href.length > 0;
 	}
 
+	get displayHref() {
+		let text = this.href;
+		if (text.length > 30) {
+			text = text.substr(0, 30) + '…';
+		}
+		return text;
+	}
+
 	created() {
 		this.owner.getHydrator().useData('media-item-id', this.mediaItemId.toString(), data => {
 			if (data) {
@@ -112,8 +135,19 @@ export default class AppContentMediaItem extends Vue {
 		this.$emit('removed');
 	}
 
-	onEdit() {
-		// Placeholder until we want the edit function
+	async onEdit() {
+		if (this.hasLink) {
+			this.removeLink();
+		} else {
+			const result = await ContentEditorLinkModal.show(this.href);
+			if (result !== undefined) {
+				this.$emit('updateAttrs', { href: result.href });
+			}
+		}
+	}
+
+	removeLink() {
+		this.$emit('updateAttrs', { href: '' });
 	}
 
 	beforeDestroy() {
@@ -124,5 +158,9 @@ export default class AppContentMediaItem extends Vue {
 		const width = this.$refs.container.clientWidth;
 		const relWidth = width / this.mediaItemWidth;
 		this.computedHeight = this.mediaItemHeight * relWidth;
+	}
+
+	onImageLoad() {
+		this.imageLoaded = true;
 	}
 }
