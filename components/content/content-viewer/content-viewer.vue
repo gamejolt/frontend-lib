@@ -8,4 +8,9 @@
 	</div>
 </template>
 
+<style lang="stylus" scoped>
+>>> p > code
+	white-space: normal
+</style>
+
 <script lang="ts" src="./content-viewer"></script>
