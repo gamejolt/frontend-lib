@@ -23,6 +23,7 @@ enum ContextCapabilityType {
 	Mention,
 
 	Media,
+	Gif,
 
 	EmbedVideo,
 	EmbedMusic,
@@ -120,6 +121,9 @@ export class ContextCapabilities {
 	get mention() {
 		return this.hasCapability(ContextCapabilityType.Mention);
 	}
+	get gif() {
+		return this.hasCapability(ContextCapabilityType.Gif);
+	}
 
 	private constructor(capabilities: ContextCapabilityType[]) {
 		this.capabilities = capabilities;
@@ -163,6 +167,7 @@ export class ContextCapabilities {
 					ContextCapabilityType.Tag,
 					ContextCapabilityType.Heading,
 					ContextCapabilityType.Mention,
+					ContextCapabilityType.Gif,
 				]);
 			case 'game-description':
 				return new ContextCapabilities([
@@ -182,6 +187,7 @@ export class ContextCapabilities {
 					ContextCapabilityType.Tag,
 					ContextCapabilityType.Heading,
 					ContextCapabilityType.Mention,
+					ContextCapabilityType.Gif,
 				]);
 			case 'game-comment':
 			case 'user-comment':
@@ -202,6 +208,7 @@ export class ContextCapabilities {
 					ContextCapabilityType.Spoiler,
 					ContextCapabilityType.Tag,
 					ContextCapabilityType.Mention,
+					ContextCapabilityType.Gif,
 				]);
 			case 'user-bio':
 				return new ContextCapabilities([

@@ -21,13 +21,17 @@
 				</span>
 			</transition>
 			<transition name="fade">
-				<app-content-editor-controls-emoji-panel
-					v-if="shouldShowEmojiPanel"
-					ref="emojiPanel"
-					:view="view"
-					:state-counter="stateCounter"
-					@visibilityChanged="onEmojiPanelVisibilityChanged"
-				/>
+				<div v-if="shouldShowEmojiPanel">
+					<app-content-editor-controls-emoji-panel
+						ref="emojiPanel"
+						:view="view"
+						:state-counter="stateCounter"
+						@visibilityChanged="onEmojiPanelVisibilityChanged"
+					/>
+					<app-button @click.prevent="openGifModal">
+						open
+					</app-button>
+				</div>
 			</transition>
 		</div>
 

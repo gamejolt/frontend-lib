@@ -1,5 +1,5 @@
 import { DOMParser, Node } from 'prosemirror-model';
-import { EditorState, Plugin, Transaction } from 'prosemirror-state';
+import { EditorState, Plugin, Selection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
@@ -19,6 +19,7 @@ import AppContentEditorControlsEmojiPanel from './controls/emoji/panel.vue';
 import AppContentEditorTextControls from './controls/text/controls.vue';
 import buildEvents from './events/build-events';
 import { FocusWatcher } from './focus-watcher';
+import { ContentEditorGifModal } from './modals/gif/gif-modal.service';
 import { buildNodeViews } from './node-views/node-view-builder';
 import { createPlugins } from './plugins/plugins';
 import { ContentEditorSchema, generateSchema } from './schemas/content-editor-schema';
@@ -346,5 +347,34 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	onControlsCollapsedChanged(collapsed: boolean) {
 		this.controlsCollapsed = collapsed;
+	}
+
+	async openGifModal() {
+		const gif = await ContentEditorGifModal.show();
+		if (gif !== undefined && this.view) {
+			console.log(JSON.stringify(gif));
+			const newNode = this.view.state.schema.nodes.gif.create({
+				id: gif.id,
+				width: 0,
+				height: 0,
+				service: 'tenor',
+				media: { webm: gif.webm, mp4: gif.mp4, preview: gif.preview },
+			});
+
+			const tr = this.view.state.tr;
+			tr.replaceWith(
+				this.view.state.selection.from - 1,
+				this.view.state.selection.to + 1,
+				newNode
+			);
+
+			const resolvedCursorPos = tr.doc.resolve(this.view.state.selection.from);
+			const selection = Selection.near(resolvedCursorPos);
+			tr.setSelection(selection);
+			ContentEditorService.ensureEndNode(tr, this.view.state.schema.nodes.paragraph);
+
+			this.view.focus();
+			this.view.dispatch(tr);
+		}
 	}
 }

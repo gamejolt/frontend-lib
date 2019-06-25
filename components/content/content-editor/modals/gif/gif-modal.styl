@@ -1,0 +1,174 @@
+@require '~styles/variables'
+@require '~styles-lib/mixins'
+
+$panel-width = 200px
+$panel-height = 120px
+$panel-margin = 8px
+$result-border-width = 4px
+
+.input-container
+	display: flex
+	align-items: center
+
+.search-bar
+	flex-grow: 1
+	margin-right: 8px
+	position: relative
+
+.search
+	display: inline-block
+	margin-left: 8px
+	// These vertical margins are to get as close to the button height as possible.
+	// Otherwise, due to the align-items on flex parent, the input would move slightly when the user starts typing.
+	margin-top: 2px
+	margin-bottom: 2px
+	padding-right: 40px
+
+.search-icon
+	display: block
+	position: absolute
+	top: 11px
+	right: 2px
+
+.loading-categories
+	display: flex
+	justify-content: center
+	margin-top: 80px
+	margin-bottom: 80px
+
+.gif-content
+	margin-top: 24px
+	position: relative
+
+.gif-content-scroll
+	height: 400px
+	overflow-y: scroll
+
+.gif-content-noscroll
+	overflow-y: hidden !important
+
+.categories-list
+	display: flex
+	flex-wrap: wrap
+	justify-content: center
+
+.category
+	display: flex
+	justify-content: center
+	position: relative
+
+	overflow: hidden
+
+	width: $panel-width
+	height: $panel-height
+	margin: $panel-margin
+
+	rounded-corners()
+	cursor: pointer
+
+	animation-duration: 0.4s
+	animation-name: search-result-incoming
+
+	& img
+		transition: filter 0.1s ease
+		filter: brightness(0.6)
+		display: block
+		width: 100%
+
+	&:hover img
+		filter: brightness(0.3)
+
+.category-text
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	display: flex
+	justify-content: center
+	align-items: center
+
+	& > span
+		text-shadow: 0 2px rgba(0, 0, 0, 0.5)
+		font-size: $font-size-h4
+		font-weight: bold
+
+.search-results
+	display: flex
+	flex-wrap: wrap
+	justify-content: center
+
+@keyframes search-result-loading-anim
+	0%
+		background-color: transparent
+	50%
+		theme-prop('background-color', 'light')
+	100%
+		background-color: transparent
+
+@keyframes search-result-incoming
+	0%
+		transform: translateY(32px)
+	100%
+		transform: none
+
+.search-result-container
+	// animation-duration: 0.4s
+	// animation-name: search-result-incoming
+
+.search-result
+	width: $panel-width
+	height: $panel-height
+	background-color: transparent
+	overflow: hidden
+	display: flex
+	align-items: center
+	margin: $panel-margin
+	rounded-corners()
+	cursor: pointer
+	border-color: transparent
+	transition: border-color 0.2s, background-color 0.2s ease
+	box-sizing: content-box
+	position: relative
+
+	&:hover
+		border-width: $result-border-width
+		border-style: solid
+		theme-prop('border-color', 'backlight')
+		theme-prop('background-color', 'backlight')
+		margin: $panel-margin - $result-border-width
+
+.gif-preview
+	display: block
+	width: 100%
+	rounded-corners()
+
+.search-result-placeholder
+	width: $panel-width
+	height: $panel-height
+	box-sizing: content-box
+	position: relative
+	margin: $panel-margin
+	rounded-corners()
+
+.search-result-loading
+	animation-duration: 0.8s
+	animation-name: search-result-loading-anim
+	animation-iteration-count: infinite
+
+.endOfScroll
+	display: flex
+	align-items: center
+	padding-top: 64px
+	padding-bottom: 40px
+	flex-direction: column
+
+	& img
+		height: 80px
+		margin-bottom: 32px
+
+.more-container
+	display: flex
+	justify-content: center
+	margin-top: 10px
+	margin-bottom: 10px
