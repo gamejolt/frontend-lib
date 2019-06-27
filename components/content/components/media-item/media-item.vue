@@ -15,7 +15,7 @@
 			<div
 				class="media-item-container"
 				:class="{
-					'media-item-container-placeholder': !imageLoaded,
+					'media-item-container-placeholder': shouldShowPlaceholder,
 				}"
 				ref="container"
 				:style="{
