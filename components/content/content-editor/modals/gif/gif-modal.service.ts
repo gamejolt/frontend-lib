@@ -20,6 +20,7 @@ export type SearchResult = {
 	};
 	preview: string;
 	previewGif: string;
+	url: string;
 };
 
 export class ContentEditorGifModal {

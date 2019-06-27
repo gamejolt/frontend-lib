@@ -1,5 +1,5 @@
 <template>
-	<div class="content-editor" @focus="onFocus" ref="editor" tabindex="0">
+	<div class="content-editor" @focus="onFocusOuter" ref="editor" tabindex="0">
 		<div
 			class="content-container"
 			:class="{
@@ -20,19 +20,25 @@
 					{{ placeholder }}
 				</span>
 			</transition>
-			<transition name="fade">
-				<div v-if="shouldShowEmojiPanel">
+
+			<app-content-editor-controls-inset-container :view="view" :state-counter="stateCounter">
+				<transition name="fade">
+					<app-content-editor-controls-gif-controls
+						v-if="shouldShowGifButton"
+						:view="view"
+						:state-counter="stateCounter"
+					/>
+				</transition>
+				<transition name="fade">
 					<app-content-editor-controls-emoji-panel
+						v-if="shouldShowEmojiPanel"
 						ref="emojiPanel"
 						:view="view"
 						:state-counter="stateCounter"
 						@visibilityChanged="onEmojiPanelVisibilityChanged"
 					/>
-					<app-button @click.prevent="openGifModal">
-						open
-					</app-button>
-				</div>
-			</transition>
+				</transition>
+			</app-content-editor-controls-inset-container>
 		</div>
 
 		<transition name="fade">

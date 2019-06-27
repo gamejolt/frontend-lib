@@ -187,7 +187,6 @@ export class ContextCapabilities {
 					ContextCapabilityType.Tag,
 					ContextCapabilityType.Heading,
 					ContextCapabilityType.Mention,
-					ContextCapabilityType.Gif,
 				]);
 			case 'game-comment':
 			case 'user-comment':

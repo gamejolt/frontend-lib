@@ -11,6 +11,7 @@ export class GifNodeView extends BaseNodeView {
 				height: this.node.attrs.height,
 				service: this.node.attrs.service,
 				media: this.node.attrs.media,
+				url: this.node.attrs.url,
 				isDisabled: ContentEditorService.isDisabled(this.view),
 			},
 		});

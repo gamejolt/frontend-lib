@@ -16,10 +16,13 @@ export const gif = {
 			default: 0,
 		},
 		service: {
-			default: '',
+			default: '', // The service this gif is sourced from
 		},
 		media: {
-			default: {},
+			default: {}, // Holds all mp4/webm etc media for this gif node.
+		},
+		url: {
+			default: '', // The url of this gif on the service's site.
 		},
 	},
 	toDOM: (node: Node) => [
