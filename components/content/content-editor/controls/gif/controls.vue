@@ -12,8 +12,7 @@
 <style lang="stylus" scoped>
 .emoji-button
 	font-size: 20px
-	transition: filter 0.15s ease
-	transition: transform 0.2s ease
+	transition: filter 0.15s, transform 0.2s ease
 	cursor: pointer
 
 	&:not(:hover)
