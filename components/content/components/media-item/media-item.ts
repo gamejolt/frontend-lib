@@ -82,10 +82,17 @@ export default class AppContentMediaItem extends Vue {
 	}
 
 	get containerWidth() {
+		// Always have SSR fullwidth the image. We never let SSR calculate the height of the container based on the width.
+		if (GJ_IS_SSR) {
+			return '100%';
+		}
 		return this.mediaItemWidth > 0 ? this.mediaItemWidth + 'px' : 'auto';
 	}
 
 	get containerHeight() {
+		if (GJ_IS_SSR) {
+			return 'auto';
+		}
 		return this.computedHeight > 0 ? this.computedHeight + 'px' : 'auto';
 	}
 
@@ -116,6 +123,11 @@ export default class AppContentMediaItem extends Vue {
 			text = text.substr(0, 30) + '…';
 		}
 		return text;
+	}
+
+	get shouldShowPlaceholder() {
+		// Never show the placeholder for SSR, because the events to clear it are not fired.
+		return !this.imageLoaded && !GJ_IS_SSR;
 	}
 
 	created() {
