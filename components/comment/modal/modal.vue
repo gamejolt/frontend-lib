@@ -39,10 +39,6 @@
 
 >>> .timeline-list-item-split
 	full-bleed()
-
-// The full-bleed would add a scrollbar if we didn't cut it off like this.
-.modal-body
-	overflow: hidden
 </style>
 
 <script lang="ts" src="./modal"></script>

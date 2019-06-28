@@ -8,11 +8,11 @@
 		:is-active="isActive"
 	>
 		<!--
-		When scrolling an active comment into view, we don't want to target the
-		top of the comment. We want to stop the scroll a bit higher in the
-		viewport, so we hack this scroll target into the DOM and place it higher
-		up than the comment itself.
-	-->
+			When scrolling an active comment into view, we don't want to target the
+			top of the comment. We want to stop the scroll a bit higher in the
+			viewport, so we hack this scroll target into the DOM and place it higher
+			up than the comment itself.
+		-->
 		<div class="-scroll-target" ref="scrollTarget" />
 
 		<template slot="tags" v-if="comment.is_pinned || isOwner || isCollaborator">
@@ -100,7 +100,7 @@
 		</template>
 
 		<template v-if="!isEditing">
-			<app-comment-content :comment="comment" :content="comment.comment_compiled" />
+			<app-comment-content :comment="comment" :content="comment.comment_content" />
 
 			<app-comment-controls
 				slot="controls"
@@ -110,7 +110,12 @@
 			/>
 		</template>
 		<template v-else>
-			<form-comment :model="comment" @submit="onCommentEdit" @cancel="isEditing = false" />
+			<form-comment
+				:model="comment"
+				@submit="onCommentEdit"
+				@cancel="isEditing = false"
+				:resource="comment.resource"
+			/>
 		</template>
 
 		<!-- Child Comments -->

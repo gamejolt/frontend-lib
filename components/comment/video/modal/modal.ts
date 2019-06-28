@@ -5,6 +5,7 @@ import AppJolticon from '../../../../vue/components/jolticon/jolticon.vue';
 import { number } from '../../../../vue/filters/number';
 import { AppStore } from '../../../../vue/services/app/app-store';
 import { AppTrackEvent } from '../../../analytics/track-event.directive';
+import AppContentViewer from '../../../content/content-viewer/content-viewer.vue';
 import AppFadeCollapse from '../../../fade-collapse/fade-collapse.vue';
 import { BaseModal } from '../../../modal/base';
 import { AppResponsiveDimensions } from '../../../responsive-dimensions/responsive-dimensions';
@@ -28,6 +29,7 @@ import { CommentVideo } from '../video-model';
 		AppUserCardHover,
 		AppUserFollowWidget,
 		AppCommentVideoLikeWidget,
+		AppContentViewer,
 	},
 	directives: {
 		AppTrackEvent,

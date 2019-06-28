@@ -6,7 +6,7 @@
 			@require-change="canToggleContent = $event"
 			@expand="showFullContent = true"
 		>
-			<div class="-content comment-content" v-html="content"></div>
+			<app-content-viewer :source="content" />
 
 			<p class="text-muted small" v-if="comment.modified_on">
 				<b><translate>Last modified on</translate></b>
