@@ -53,8 +53,12 @@ export class ContentHydrator {
 			return existingEntry.data;
 		}
 
-		const encodedId = encodeURIComponent(source);
-		return Api.sendRequest(`/web/content/hydrate/${type}/${encodedId}`, undefined, {
+		const postData = {
+			type,
+			source,
+		};
+
+		return Api.sendRequest(`/web/content/hydrate`, postData, {
 			noErrorRedirect: true,
 		}).then(result => {
 			const entry = {
