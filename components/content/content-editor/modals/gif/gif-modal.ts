@@ -23,6 +23,7 @@ export default class AppContentEditorGifModal extends BaseModal {
 	currentSearchTerm = '';
 	currentSearchPage = 0;
 	isLastPage = false;
+	hasError = false;
 
 	readonly Screen = Screen;
 
@@ -48,14 +49,19 @@ export default class AppContentEditorGifModal extends BaseModal {
 
 	private async populateCategories() {
 		if (ContentEditorGifModal.categories === undefined) {
-			const payload = await Api.sendRequest('/web/content/tenor/categories', undefined, {
-				detach: true,
-			});
-			if (payload.categories) {
-				ContentEditorGifModal.categories = payload.categories;
-				for (let i = 0; i < ContentEditorGifModal.categories!.length; i++) {
-					ContentEditorGifModal.categories![i].index = i;
+			try {
+				const payload = await Api.sendRequest('/web/content/tenor/categories', undefined, {
+					detach: true,
+				});
+				if (payload.categories) {
+					ContentEditorGifModal.categories = payload.categories;
+					for (let i = 0; i < ContentEditorGifModal.categories!.length; i++) {
+						ContentEditorGifModal.categories![i].index = i;
+					}
 				}
+			} catch (error) {
+				console.error(error);
+				this.hasError = true;
 			}
 		}
 		this.categories = ContentEditorGifModal.categories!;
@@ -64,28 +70,33 @@ export default class AppContentEditorGifModal extends BaseModal {
 
 	private async startSearch() {
 		const term = this.searchValue;
-		console.log('start search for term', term, '(page ' + this.currentSearchPage + ')');
 		this.currentSearchTerm = term;
 		const url =
 			'/web/content/tenor/search?q=' +
 			encodeURIComponent(term) +
 			'&page=' +
 			this.currentSearchPage;
-		const payload = await Api.sendRequest(url, undefined, { detach: true });
-		if (this.currentSearchTerm === term) {
-			if (payload.results) {
-				this.isLastPage = payload.results.length === 0;
 
-				for (const result of payload.results) {
-					if (this.searchResults.every(i => i.id !== result.id)) {
-						this.searchResults.push(result);
+		try {
+			const payload = await Api.sendRequest(url, undefined, { detach: true });
+			if (this.currentSearchTerm === term) {
+				if (payload.results) {
+					this.isLastPage = payload.results.length === 0;
+
+					for (const result of payload.results) {
+						if (this.searchResults.every(i => i.id !== result.id)) {
+							this.searchResults.push(result);
+						}
+					}
+					for (let i = 0; i < this.searchResults.length; i++) {
+						this.searchResults[i].index = i;
 					}
 				}
-				for (let i = 0; i < this.searchResults.length; i++) {
-					this.searchResults[i].index = i;
-				}
+				this.isLoading = false;
 			}
-			this.isLoading = false;
+		} catch (error) {
+			console.error(error);
+			this.hasError = true;
 		}
 	}
 
@@ -177,10 +188,34 @@ export default class AppContentEditorGifModal extends BaseModal {
 
 	onClickSearchResult(searchResult: SearchResult) {
 		// Run this async
+		// Also don't care about whether this succeeds or not.
 		Api.sendRequest('/web/content/tenor/register-share/' + searchResult.id, undefined, {
 			detach: true,
 		}).then();
 
 		this.modal.resolve(searchResult);
+	}
+
+	onRetry() {
+		this.hasError = false;
+
+		// Reset entire state
+		this.currentSearchPage = 0;
+		this.currentSearchTerm = '';
+		this.isLastPage = false;
+		this.categories = [];
+		ContentEditorGifModal.categories = undefined;
+		this.searchValue = '';
+		this.isLoading = false;
+		this.searchResults = [];
+		this.loadedGifs = [];
+
+		if (this.searchTimeout) {
+			clearTimeout(this.searchTimeout);
+			this.searchTimeout = null;
+		}
+
+		this.loadingCategories = true;
+		this.populateCategories();
 	}
 }

@@ -34,7 +34,6 @@ export default class AppContentEditorControlsGifControls extends Vue {
 	async openGifModal() {
 		const gif = await ContentEditorGifModal.show();
 		if (gif !== undefined) {
-			console.log(JSON.stringify(gif));
 			const newNode = this.view.state.schema.nodes.gif.create({
 				id: gif.id,
 				width: 0,
