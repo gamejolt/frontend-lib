@@ -9,8 +9,8 @@ const Key = 'user-follow-suggestions';
 // How many suggestion dismissals we are allowing per interval.
 const MaxPerDay = 3;
 
-// Whats the interval used to rate limit dismissed suggestions.
-const RateLimitInterval = 86400000;
+// The interval used to rate limit dismissed suggestions in ms.
+const RateLimitInterval = 86400000; // 1 day
 
 export abstract class UserFollowSuggestion {
 	private static get suggestions() {
