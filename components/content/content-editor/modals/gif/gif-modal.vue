@@ -9,7 +9,7 @@
 		<div class="modal-body">
 			<div v-if="hasError" class="error-container">
 				<p><translate>Something went wrong.</translate></p>
-				<app-button @click.prevent="onRetry">Retry</app-button>
+				<app-button @click.prevent="onRetry"><translate>Retry</translate></app-button>
 			</div>
 
 			<template v-else>
