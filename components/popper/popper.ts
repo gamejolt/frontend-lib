@@ -171,4 +171,7 @@ export default class AppPopper extends Vue {
 			this.hideTimeout = undefined;
 		}
 	}
+
+	@Emit('auto-hide')
+	private onAutoHide() {}
 }
