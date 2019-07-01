@@ -8,7 +8,7 @@ import { number } from '../../../vue/filters/number';
 import { AppTheme } from '../../theme/theme';
 import { AppTooltipContainer } from '../../tooltip/container/container';
 import { AppTooltip } from '../../tooltip/tooltip';
-import AppUserFollowWidget from '../follow-widget/follow-widget.vue';
+import AppUserFollowWidget from '../follow/widget.vue';
 import AppUserAvatarImg from '../user-avatar/img/img.vue';
 import { User } from '../user.model';
 import './card-global.styl';

@@ -11,7 +11,7 @@ import { BaseModal } from '../../../modal/base';
 import { AppResponsiveDimensions } from '../../../responsive-dimensions/responsive-dimensions';
 import { Screen } from '../../../screen/screen-service';
 import AppUserCardHover from '../../../user/card/hover/hover.vue';
-import AppUserFollowWidget from '../../../user/follow-widget/follow-widget.vue';
+import AppUserFollowWidget from '../../../user/follow/widget.vue';
 import AppUserAvatar from '../../../user/user-avatar/user-avatar.vue';
 import AppVideoEmbed from '../../../video/embed/embed.vue';
 import { CommentVote } from '../../vote/vote-model';
