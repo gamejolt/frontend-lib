@@ -56,16 +56,12 @@ $result-border-width = 4px
 	display: flex
 	justify-content: center
 	position: relative
-
 	overflow: hidden
-
 	width: $panel-width
 	height: $panel-height
 	margin: $panel-margin
-
 	rounded-corners()
 	cursor: pointer
-
 	animation-duration: 0.4s
 	animation-name: search-result-incoming
 
@@ -100,15 +96,18 @@ $result-border-width = 4px
 
 @keyframes search-result-loading-anim
 	0%
-		background-color: transparent
+		theme-prop('background-color', 'gray')
+
 	50%
-		theme-prop('background-color', 'light')
+		theme-prop('background-color', 'gray-subtle')
+
 	100%
-		background-color: transparent
+		theme-prop('background-color', 'gray')
 
 @keyframes search-result-incoming
 	0%
 		transform: translateY(32px)
+
 	100%
 		transform: none
 
