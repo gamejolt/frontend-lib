@@ -5,10 +5,12 @@
 		@removed="onRemoved"
 	>
 		<div class="gif-container">
-			<video class="gif" loop autoplay muted playsinline :poster="media.preview">
-				<source :src="media.webm.url" type="video/webm" />
-				<source :src="media.mp4.url" type="video/mp4" />
-			</video>
+			<div class="gif-inner">
+				<video class="gif" loop autoplay muted playsinline :poster="media.preview">
+					<source :src="media.webm.url" type="video/webm" />
+					<source :src="media.mp4.url" type="video/mp4" />
+				</video>
+			</div>
 		</div>
 	</app-base-content-component>
 </template>
@@ -26,6 +28,14 @@
 
 	rounded-corners()
 	cursor: default
+	display: flex
+	justify-content: center
+	position: relative
+
+.gif-inner
+	width: 100%
+	position: relative
+	height: auto
 	display: flex
 	justify-content: center
 

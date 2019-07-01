@@ -74,18 +74,6 @@
 								@click="onClickSearchResult(searchResult)"
 							>
 								<div class="search-result">
-									<!-- <video
-									class="gif-preview"
-									loop
-									autoplay
-									muted
-									playsinline
-									@loadeddata="onGifLoaded(searchResult.id)"
-									:poster="searchResult.preview"
-								>
-									<source :src="searchResult.webm.tiny" type="video/webm" />
-									<source :src="searchResult.mp4.tiny" type="video/mp4" />
-								</video> -->
 									<img :src="searchResult.previewGif" class="gif-preview" />
 								</div>
 							</div>
