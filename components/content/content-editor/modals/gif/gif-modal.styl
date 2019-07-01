@@ -83,6 +83,7 @@ $result-border-width = 4px
 	display: flex
 	justify-content: center
 	align-items: center
+	color: $gray-lightest
 
 	& > span
 		text-shadow: 0 2px rgba(0, 0, 0, 0.5)
@@ -96,13 +97,13 @@ $result-border-width = 4px
 
 @keyframes search-result-loading-anim
 	0%
-		theme-prop('background-color', 'gray')
+		theme-prop('background-color', 'bg-offset')
 
 	50%
-		theme-prop('background-color', 'gray-subtle')
+		theme-prop('background-color', 'bg-subtle')
 
 	100%
-		theme-prop('background-color', 'gray')
+		theme-prop('background-color', 'bg-offset')
 
 @keyframes search-result-incoming
 	0%
