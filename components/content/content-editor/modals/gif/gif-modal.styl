@@ -4,7 +4,13 @@
 $panel-width = 200px
 $panel-height = 120px
 $panel-margin = 8px
+
 $result-border-width = 4px
+
+$panel-width-sm = 120px
+$panel-height-sm = 72px
+$panel-margin-sm = 5px
+$result-border-width-sm = 2px
 
 .input-container
 	display: flex
@@ -74,6 +80,11 @@ $result-border-width = 4px
 	&:hover img
 		filter: brightness(0.3)
 
+.category-sm
+	width: $panel-width-sm !important
+	height: $panel-height-sm !important
+	margin: $panel-margin-sm !important
+
 .category-text
 	position: absolute
 	top: 0
@@ -138,6 +149,15 @@ $result-border-width = 4px
 		theme-prop('background-color', 'backlight')
 		margin: $panel-margin - $result-border-width
 
+.search-result-sm
+	width: $panel-width-sm !important
+	height: $panel-height-sm !important
+	margin: $panel-margin-sm !important
+
+	&:hover
+		border-width: $result-border-width-sm !important
+		margin: $panel-margin-sm - $result-border-width-sm !important
+
 .gif-preview
 	display: block
 	width: 100%
@@ -150,6 +170,11 @@ $result-border-width = 4px
 	position: relative
 	margin: $panel-margin
 	rounded-corners()
+
+.search-result-placeholder-sm
+	width: $panel-width-sm !important
+	height: $panel-height-sm !important
+	margin: $panel-margin-sm !important
 
 .search-result-loading
 	animation-duration: 0.8s

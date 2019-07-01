@@ -51,6 +51,9 @@
 							v-for="category of categories"
 							:key="category.searchterm"
 							class="category"
+							:class="{
+								'category-sm': Screen.isXs,
+							}"
 							:style="{
 								'animation-delay': category.index * 0.02 + 's',
 							}"
@@ -73,7 +76,12 @@
 								}"
 								@click="onClickSearchResult(searchResult)"
 							>
-								<div class="search-result">
+								<div
+									class="search-result"
+									:class="{
+										'search-result-sm': Screen.isXs,
+									}"
+								>
 									<img :src="searchResult.previewGif" class="gif-preview" />
 								</div>
 							</div>
@@ -82,6 +90,9 @@
 									v-for="i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]"
 									:key="i"
 									class="search-result-placeholder search-result-loading"
+									:class="{
+										'search-result-placeholder-sm': Screen.isXs,
+									}"
 									:style="{
 										'animation-delay': i * 0.02 + 's',
 									}"
