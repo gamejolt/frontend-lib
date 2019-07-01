@@ -19,7 +19,8 @@ export type ContentObjectType =
 	| 'bulletList'
 	| 'listItem'
 	| 'spoiler'
-	| 'heading';
+	| 'heading'
+	| 'gif';
 
 export class ContentObject extends ContentNode {
 	public type!: ContentObjectType;
@@ -46,6 +47,7 @@ export class ContentObject extends ContentNode {
 			case 'gjEmoji':
 			case 'embed':
 			case 'mediaItem':
+			case 'gif':
 				return true;
 		}
 
@@ -131,6 +133,7 @@ export class ContentObject extends ContentNode {
 			case 'hardBreak':
 			case 'hr':
 			case 'paragraph':
+			case 'gif':
 				length++;
 				break;
 			case 'embed':

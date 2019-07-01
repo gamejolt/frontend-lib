@@ -16,17 +16,23 @@ export default class AppContentEditorControlsEmojiPanel extends Vue {
 	@Prop(Number)
 	stateCounter!: number;
 
-	top = '0px';
-	emoji = 'huh'; // gets set to a random one at mounted
 	visible = false;
+	emoji = 'huh'; // gets set to a random one at mounted
 	panelVisible = false;
-
 	clickedWithPanelVisible = false;
 
 	$refs!: {
 		panel: HTMLElement;
-		container: HTMLElement;
 	};
+
+	created() {
+		this.update();
+	}
+
+	@Watch('stateCounter')
+	update() {
+		this.visible = this.canInsertEmoji();
+	}
 
 	get spanClass() {
 		let className = 'emoji emoji-' + this.emoji;
@@ -47,20 +53,6 @@ export default class AppContentEditorControlsEmojiPanel extends Vue {
 		}
 	}
 
-	@Watch('stateCounter')
-	private update() {
-		if (this.view instanceof EditorView && this.canInsertEmoji()) {
-			this.visible = true;
-
-			const start = this.view.coordsAtPos(this.view.state.selection.from);
-			const box = this.$refs.container.offsetParent.getBoundingClientRect();
-			this.top = start.top - box.top + 'px';
-			return;
-		} else {
-			this.visible = false;
-		}
-	}
-
 	private setRandomEmoji() {
 		const prev = this.emoji;
 		do {
@@ -71,7 +63,6 @@ export default class AppContentEditorControlsEmojiPanel extends Vue {
 
 	mounted() {
 		this.setRandomEmoji();
-		this.update();
 	}
 
 	onMouseEnter() {

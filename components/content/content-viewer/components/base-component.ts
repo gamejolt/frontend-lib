@@ -6,6 +6,7 @@ import { AppContentViewerBlockquote } from './blockquote';
 import { AppContentViewerHardBreak } from './br';
 import { AppContentViewerCodeBlock } from './code/code';
 import { AppContentViewerEmbed } from './embed';
+import { AppContentViewerGif } from './gif';
 import { AppContentViewerGJEmoji } from './gjEmoji';
 import { AppContentViewerHeading } from './heading';
 import { AppContentViewerHorizontalRule } from './hr';
@@ -45,6 +46,8 @@ function getComponentType(data: ContentObject): any {
 			return AppContentViewerSpoiler;
 		case 'heading':
 			return AppContentViewerHeading;
+		case 'gif':
+			return AppContentViewerGif;
 	}
 }
 

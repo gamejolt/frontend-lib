@@ -1,11 +1,5 @@
 <template>
-	<div
-		class="emoji-button-container"
-		ref="container"
-		:style="{
-			top: this.top,
-		}"
-	>
+	<div class="inset-container-controls">
 		<transition name="fade">
 			<span
 				v-if="visible"

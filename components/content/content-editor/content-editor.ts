@@ -16,6 +16,8 @@ import { ContentTempResource } from './content-temp-resource.service';
 import AppContentEditorBlockControls from './controls/block/controls.vue';
 import AppContentEditorControlsEmojiPanelTS from './controls/emoji/panel';
 import AppContentEditorControlsEmojiPanel from './controls/emoji/panel.vue';
+import AppContentEditorControlsGifControls from './controls/gif/controls.vue';
+import AppContentEditorControlsInsetContainer from './controls/inset/container.vue';
 import AppContentEditorTextControls from './controls/text/controls.vue';
 import buildEvents from './events/build-events';
 import { FocusWatcher } from './focus-watcher';
@@ -31,6 +33,8 @@ import { ContentEditorSchema, generateSchema } from './schemas/content-editor-sc
 		AppContentEditorBlockControls,
 		AppContentEditorTextControls,
 		AppContentEditorControlsEmojiPanel,
+		AppContentEditorControlsGifControls,
+		AppContentEditorControlsInsetContainer,
 	},
 })
 export default class AppContentEditor extends Vue implements ContentOwner {
@@ -133,6 +137,10 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 			return 'auto';
 		}
 		return this.minHeight + 'px';
+	}
+
+	get shouldShowGifButton() {
+		return !this.disabled && this.capabilities.gif && this.isFocused;
 	}
 
 	getContext() {
@@ -292,7 +300,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		}
 	}
 
-	public onFocus() {
+	public onFocusOuter() {
 		// Focus the content editable when the outer doc gets focused.
 		const child = this.$refs.doc.firstChild;
 		if (child instanceof HTMLElement) {

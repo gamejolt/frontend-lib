@@ -3,6 +3,7 @@ import { Decoration, EditorView, NodeView } from 'prosemirror-view';
 import { ContentOwner } from '../../content-owner';
 import { ContentEditorSchema } from '../schemas/content-editor-schema';
 import { EmbedNodeView } from './embed';
+import { GifNodeView } from './gif';
 import { MediaItemNodeView } from './media-item';
 import { MediaUploadNodeView } from './media-upload';
 
@@ -31,6 +32,11 @@ export function buildNodeViews(owner: ContentOwner): NodeViewList {
 		};
 		nodeViews.mediaUpload = function(node, view, getPos) {
 			return new MediaUploadNodeView(node, view, getPos, owner);
+		};
+	}
+	if (capabilities.gif) {
+		nodeViews.gif = function(node, view, getPos) {
+			return new GifNodeView(node, view, getPos);
 		};
 	}
 

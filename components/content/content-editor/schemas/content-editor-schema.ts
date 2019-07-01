@@ -10,6 +10,7 @@ import { blockquote } from './specs/nodes/blockquote-nodespec';
 import { bulletList } from './specs/nodes/bullet-list-nodespec';
 import { codeBlock } from './specs/nodes/code-block-nodespec';
 import { embed } from './specs/nodes/embed-nodespec';
+import { gif } from './specs/nodes/gif-nodespec';
 import { gjEmoji } from './specs/nodes/gj-emoji-nodespec';
 import { hardBreak } from './specs/nodes/hard-break-nodespec';
 import { heading } from './specs/nodes/heading-nodespec';
@@ -36,7 +37,8 @@ export class ContentEditorSchema extends Schema<
 	| 'orderedList'
 	| 'hr'
 	| 'spoiler'
-	| 'heading',
+	| 'heading'
+	| 'gif',
 	'strong' | 'em' | 'code' | 'link' | 'strike' | 'mention' | 'tag'
 > {}
 
@@ -96,6 +98,9 @@ function generateNodes(capabilities: ContextCapabilities) {
 		nodes.heading = heading;
 
 		allowedDocNodes.push('heading');
+	}
+	if (capabilities.gif) {
+		nodes.gif = gif;
 	}
 
 	if (allowedDocNodes.length > 0) {
