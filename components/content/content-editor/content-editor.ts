@@ -5,7 +5,6 @@ import 'prosemirror-view/style/prosemirror.css';
 import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { Screen } from '../../screen/screen-service';
 import { ContentContext, ContextCapabilities } from '../content-context';
 import { ContentDocument } from '../content-document';
 import { ContentFormatAdapter, ProsemirrorEditorFormat } from '../content-format-adapter';
@@ -225,7 +224,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		this.focusWatcher = new FocusWatcher(this.$refs.editor, this.onFocusIn, this.onFocusOut);
 		this.focusWatcher.start();
 
-		if (this.view instanceof EditorView && this.autofocus && !Screen.isMobile) {
+		if (this.view instanceof EditorView && this.autofocus) {
 			this.$refs.editor.focus();
 			this.view.focus();
 		}
