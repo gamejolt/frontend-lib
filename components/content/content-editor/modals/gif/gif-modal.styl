@@ -1,111 +1,9 @@
 @require '~styles/variables'
 @require '~styles-lib/mixins'
 
-$panel-width = 200px
-$panel-height = 120px
+$panel-height = 160px
 $panel-margin = 8px
-
 $result-border-width = 4px
-
-$panel-width-sm = 120px
-$panel-height-sm = 72px
-$panel-margin-sm = 5px
-$result-border-width-sm = 2px
-
-.input-container
-	display: flex
-	align-items: center
-
-.search-bar
-	flex-grow: 1
-	margin-right: 8px
-	position: relative
-
-.search
-	display: inline-block
-	margin-left: 8px
-	// These vertical margins are to get as close to the button height as possible.
-	// Otherwise, due to the align-items on flex parent, the input would move slightly when the user starts typing.
-	margin-top: 2px
-	margin-bottom: 2px
-	padding-right: 40px
-
-.search-icon
-	display: block
-	position: absolute
-	top: 11px
-	right: 2px
-
-.loading-categories
-	display: flex
-	justify-content: center
-	margin-top: 80px
-	margin-bottom: 80px
-
-.gif-content
-	margin-top: 24px
-	position: relative
-
-.gif-content-scroll
-	height: 400px
-	overflow-y: scroll
-
-.gif-content-noscroll
-	overflow-y: hidden !important
-
-.categories-list
-	display: flex
-	flex-wrap: wrap
-	justify-content: center
-
-.category
-	display: flex
-	justify-content: center
-	position: relative
-	overflow: hidden
-	width: $panel-width
-	height: $panel-height
-	margin: $panel-margin
-	rounded-corners()
-	cursor: pointer
-	animation-duration: 0.4s
-	animation-name: search-result-incoming
-
-	& img
-		transition: filter 0.1s ease
-		filter: brightness(0.6)
-		display: block
-		width: 100%
-
-	&:hover img
-		filter: brightness(0.3)
-
-.category-sm
-	width: $panel-width-sm !important
-	height: $panel-height-sm !important
-	margin: $panel-margin-sm !important
-
-.category-text
-	position: absolute
-	top: 0
-	left: 0
-	right: 0
-	bottom: 0
-	display: flex
-	justify-content: center
-	align-items: center
-	color: $gray-lightest
-	text-align:  center
-
-	& > span
-		text-shadow: 0 2px rgba(0, 0, 0, 0.5)
-		font-size: $font-size-h4
-		font-weight: bold
-
-.search-results
-	display: flex
-	flex-wrap: wrap
-	justify-content: center
 
 @keyframes search-result-loading-anim
 	0%
@@ -120,69 +18,156 @@ $result-border-width-sm = 2px
 @keyframes search-result-incoming
 	0%
 		transform: translateY(32px)
+		opacity: 0
 
 	100%
 		transform: none
+		opacity: 100%
 
-.search-result-container
-	// animation-duration: 0.4s
-	// animation-name: search-result-incoming
-
-.search-result
-	width: $panel-width
-	height: $panel-height
-	background-color: transparent
-	overflow: hidden
+.input-container
 	display: flex
 	align-items: center
-	margin: $panel-margin
+
+.search-bar
+	flex-grow: 1
+	margin-left: 8px
+	position: relative
+
+.search
+	display: inline-block
+	height: $button-md-line-height
+	padding-left: 40px
+	padding-right: 40px
+
+.search-icon
+	position: absolute
+	top: 10px
+	left: 14px
+
+.search-clear
+	position: absolute
+	display: flex
+	align-items: center
+	justify-content: center
+	top: 0
+	right: 0
+	width: $button-md-line-height
+	height: $button-md-line-height
+	cursor: pointer
+
+	.-icon
+		color: var(--theme-fg-muted)
+
+	&:hover .-icon
+		color: var(--theme-fg)
+
+.loading-categories
+	display: flex
+	justify-content: center
+	margin-top: 80px
+	margin-bottom: 80px
+
+.gif-content
+	margin-top: 24px
+	position: relative
+
+	// On mobile we allow the normal scrollbar to scroll the content, otherwise
+	// we want to put the scrollbar in the modal.
+	@media $media-md-up
+		height: 60vh
+		overflow-y: scroll
+		margin-left: -($panel-margin)
+		margin-right: -($panel-margin)
+
+.gif-content-noscroll
+	overflow-y: hidden !important
+
+.-grid
+	display: flex
+	flex-wrap: wrap
+	justify-content: center
+
+	&-item
+		display: flex
+		justify-content: center
+		position: relative
+		width: 100%
+		height: $panel-height
+		padding: $panel-margin
+		animation-duration: 0.4s
+
+		@media $media-sm-up
+			width: (100% / 3)
+
+		@media $media-lg-up
+			width: (100% / 3)
+
+		img
+			rounded-corners()
+			display: block
+			width: 100%
+			height: $panel-height - $panel-margin * 2
+			// This will center it within the container and make sure it covers
+			// the full space.
+			object-fit: cover
+			object-position: center
+
+.category
 	rounded-corners()
+	overflow: hidden
+	width: 100%
+	cursor: pointer
+
+	img
+		transition: filter 0.1s ease
+		filter: brightness(0.6)
+
+	&:hover img
+		filter: brightness(0.3)
+
+.category-text
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	display: flex
+	justify-content: center
+	align-items: center
+	color: $gray-lightest
+	text-align: center
+
+	& > span
+		text-shadow: 0 2px rgba(0, 0, 0, 0.5)
+		font-size: $font-size-h4
+		font-weight: bold
+
+.search-result
+	rounded-corners()
+	width: 100%
+	overflow: hidden
+	background-color: transparent
 	cursor: pointer
 	border-color: transparent
 	transition: border-color 0.2s, background-color 0.2s ease
 	box-sizing: content-box
 	position: relative
+	border: $result-border-width solid transparent
+	margin: -($result-border-width)
 
 	&:hover
-		border-width: $result-border-width
-		border-style: solid
-		theme-prop('border-color', 'backlight')
-		theme-prop('background-color', 'backlight')
-		margin: $panel-margin - $result-border-width
-
-.search-result-sm
-	width: $panel-width-sm !important
-	height: $panel-height-sm !important
-	margin: $panel-margin-sm !important
-
-	&:hover
-		border-width: $result-border-width-sm !important
-		margin: $panel-margin-sm - $result-border-width-sm !important
-
-.gif-preview
-	display: block
-	width: 100%
-	rounded-corners()
+		border-color: var(--theme-backlight)
+		background-color: var(--theme-backlight)
 
 .search-result-placeholder
-	width: $panel-width
-	height: $panel-height
-	box-sizing: content-box
-	position: relative
-	margin: $panel-margin
 	rounded-corners()
-
-.search-result-placeholder-sm
-	width: $panel-width-sm !important
-	height: $panel-height-sm !important
-	margin: $panel-margin-sm !important
-
-.search-result-loading
+	width: 100%
+	height: $panel-height - ($panel-margin * 2)
 	animation-duration: 0.8s
 	animation-name: search-result-loading-anim
 	animation-iteration-count: infinite
 
-.endOfScroll
+.end-of-scroll
 	display: flex
 	align-items: center
 	padding-top: 64px

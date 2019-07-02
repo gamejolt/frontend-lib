@@ -17,11 +17,15 @@
 					<app-button
 						sparse
 						trans
-						icon="remove"
+						icon="chevron-left"
 						v-if="shouldShowResetButton"
 						@click.prevent="onClickReset"
 					/>
 					<div class="search-bar">
+						<app-jolticon icon="search" class="search-icon text-muted" />
+						<div v-if="shouldShowResetButton" class="search-clear" @click.prevent="onClickReset">
+							<app-jolticon class="-icon" icon="remove" />
+						</div>
 						<input
 							class="search form-control"
 							:placeholder="$gettext('Search Tenor...')"
@@ -30,7 +34,6 @@
 							@input="onSearchInput"
 							@keydown="onSearchKeyDown"
 						/>
-						<app-jolticon icon="search" class="search-icon text-muted" />
 					</div>
 				</div>
 				<div v-if="loadingCategories" class="loading-categories">
@@ -38,68 +41,56 @@
 				</div>
 				<div
 					v-else
-					class="gif-content"
 					id="gif-content-scroller"
+					class="gif-content"
 					:class="{
-						'gif-content-scroll': !Screen.isXs,
 						'gif-content-noscroll': isLoading && searchResults.length === 0,
 					}"
 					@scroll="onContainerScroll"
 				>
-					<div v-if="shouldShowCategories" class="categories-list">
+					<div v-if="shouldShowCategories" class="-grid">
 						<div
 							v-for="category of categories"
 							:key="category.searchterm"
-							class="category"
-							:class="{
-								'category-sm': Screen.isXs,
-							}"
-							:style="{
-								'animation-delay': category.index * 0.02 + 's',
-							}"
+							class="-grid-item anim-fade-in-up stagger-fast"
 							@click.prevent="onClickCategory(category.searchterm)"
 						>
-							<img :src="category.previewGif" />
-							<div class="category-text">
-								<span>{{ category.searchterm }}</span>
+							<div class="category">
+								<img :src="category.previewGif" />
+								<div class="category-text">
+									<span>{{ category.searchterm }}</span>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div v-else>
-						<div class="search-results">
+						<div class="-grid">
 							<div
 								v-for="searchResult of searchResults"
 								:key="searchResult.id"
-								class="search-result-container"
-								:style="{
-									'animation-delay': searchResult.index * 0.02 + 's',
-								}"
+								class="-grid-item anim-fade-in-up stagger-fast"
 								@click="onClickSearchResult(searchResult)"
 							>
-								<div
-									class="search-result"
-									:class="{
-										'search-result-sm': Screen.isXs,
-									}"
-								>
-									<img :src="searchResult.previewGif" class="gif-preview" />
+								<div class="search-result">
+									<img :src="searchResult.previewGif" />
 								</div>
 							</div>
 							<template v-if="isLoading">
 								<div
 									v-for="i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]"
 									:key="i"
-									class="search-result-placeholder search-result-loading"
-									:class="{
-										'search-result-placeholder-sm': Screen.isXs,
-									}"
-									:style="{
-										'animation-delay': i * 0.02 + 's',
-									}"
-								></div>
+									class="-grid-item"
+								>
+									<div
+										class="search-result-placeholder search-result-loading"
+										:style="{
+											'animation-delay': i * 0.02 + 's',
+										}"
+									/>
+								</div>
 							</template>
 						</div>
-						<div v-if="reachedLastPage" class="endOfScroll">
+						<div v-if="reachedLastPage" class="end-of-scroll">
 							<img src="./mascot-complete.png" title="♥" />
 							<span class="text-muted">
 								These are not the GIFs you are looking for!
