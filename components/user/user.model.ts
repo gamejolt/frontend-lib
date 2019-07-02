@@ -138,6 +138,10 @@ export class User extends Model implements ContentContainerModel {
 			this.theme = new Theme(data.theme);
 		}
 
+		if (this.id < 100000) {
+			this.is_verified = true;
+		}
+
 		Registry.store('User', this);
 	}
 
