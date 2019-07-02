@@ -34,4 +34,11 @@
 	</app-modal>
 </template>
 
+<style lang="stylus" scoped>
+	// On mobile, we need to make space for the content editor controls. They
+	// would overlap the Reply form field otherwise.
+	>>> .message-thread-add
+		padding-bottom: 42px
+</style>
+
 <script lang="ts" src="./modal"></script>
