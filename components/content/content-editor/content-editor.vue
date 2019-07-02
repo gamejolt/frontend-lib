@@ -4,7 +4,7 @@
 			class="content-container"
 			:class="{
 				disabled: disabled,
-				'content-container-emoji': couldShowEmojiPanel,
+				'content-container-with-gutter': couldShowEmojiPanel,
 			}"
 			:style="{
 				minHeight: containerMinHeight,
