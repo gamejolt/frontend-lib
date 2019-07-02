@@ -15,7 +15,6 @@
 			content: tooltip,
 			container: tooltipContainer,
 		}"
-		v-app-track-event="followEventLabel"
 		@click.stop="onClick"
 	>
 		<template v-if="!circle">

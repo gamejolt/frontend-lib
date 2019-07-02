@@ -3,6 +3,7 @@ import { Component, Emit, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { number } from '../../../vue/filters/number';
 import { AppStore } from '../../../vue/services/app/app-store';
+import { Analytics } from '../../analytics/analytics.service';
 import { AppTrackEvent } from '../../analytics/track-event.directive';
 import { AppAuthRequired } from '../../auth/auth-required-directive';
 import { Growls } from '../../growls/growls.service';
@@ -76,18 +77,15 @@ export default class AppUserFollowWidget extends Vue {
 		return !this.user.is_following ? 'subscribe' : 'subscribed';
 	}
 
-	get followEventLabel() {
-		const category = 'user-follow';
-		const action = !this.user.is_following ? 'follow' : 'unfollow';
-		const label = this.eventLabel || 'any';
-
-		return `${category}:${action}:${label}`;
-	}
-
 	async onClick() {
 		if (!this.app.user) {
 			return;
 		}
+
+		const category = 'user-follow';
+		const action = this.user.is_following ? 'unfollow' : 'follow';
+		const label = this.eventLabel || 'any';
+		Analytics.trackEvent(category, action, label);
 
 		if (!this.user.is_following) {
 			try {
