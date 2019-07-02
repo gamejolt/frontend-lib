@@ -52,7 +52,10 @@
 						<div
 							v-for="category of categories"
 							:key="category.searchterm"
-							class="-grid-item anim-fade-in-up stagger-fast"
+							class="-grid-item anim-fade-in-up"
+							:style="{
+								'animation-delay': category.index * 0.02 + 's',
+							}"
 							@click.prevent="onClickCategory(category.searchterm)"
 						>
 							<div class="category">
@@ -68,7 +71,10 @@
 							<div
 								v-for="searchResult of searchResults"
 								:key="searchResult.id"
-								class="-grid-item anim-fade-in-up stagger-fast"
+								class="-grid-item anim-fade-in-up"
+								:style="{
+									'animation-delay': searchResult.index * 0.02 + 's',
+								}"
 								@click="onClickSearchResult(searchResult)"
 							>
 								<div class="search-result">
