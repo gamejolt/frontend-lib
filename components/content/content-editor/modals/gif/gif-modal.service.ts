@@ -21,6 +21,8 @@ export type SearchResult = {
 	preview: string;
 	previewGif: string;
 	url: string;
+	width: number;
+	height: number;
 };
 
 export class ContentEditorGifModal {

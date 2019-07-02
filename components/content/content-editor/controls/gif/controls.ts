@@ -36,8 +36,8 @@ export default class AppContentEditorControlsGifControls extends Vue {
 		if (gif !== undefined) {
 			const newNode = this.view.state.schema.nodes.gif.create({
 				id: gif.id,
-				width: 0,
-				height: 0,
+				width: gif.width,
+				height: gif.height,
 				service: 'tenor',
 				media: { webm: gif.webm, mp4: gif.mp4, preview: gif.preview },
 				url: gif.url,
