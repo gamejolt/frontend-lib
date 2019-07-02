@@ -12,14 +12,32 @@ export function asyncComponentLoader(loader: Promise<any>) {
 	return loader.then(mod => mod.default);
 }
 
-export function loadScript(src: string) {
+type LoadScriptOptions = Partial<{
+	element: Element;
+	dataset: DOMStringMap;
+	sync: boolean;
+}>;
+
+export function loadScript(src: string, options?: LoadScriptOptions) {
 	return new Promise((resolve, reject) => {
+		if (options === undefined) {
+			options = {};
+		}
+
 		const script = window.document.createElement('script');
 		script.type = 'text/javascript';
-		script.async = true;
+		script.async = !options.sync;
 
-		const docHead = window.document.head || window.document.getElementsByTagName('head')[0];
-		docHead.appendChild(script);
+		const el =
+			options.element ||
+			window.document.head ||
+			window.document.getElementsByTagName('head')[0];
+		el.appendChild(script);
+
+		const dataset = options.dataset;
+		if (dataset !== undefined) {
+			Object.assign(script.dataset, options.dataset || {});
+		}
 
 		script.onload = resolve;
 		script.onerror = reject;

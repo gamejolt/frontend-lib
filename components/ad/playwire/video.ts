@@ -3,12 +3,12 @@ import { Playwire } from 'game-jolt-frontend-lib/components/ad/playwire/playwire
 import { FiresidePost } from 'game-jolt-frontend-lib/components/fireside/post/post-model';
 import { Game } from 'game-jolt-frontend-lib/components/game/game.model';
 import { User } from 'game-jolt-frontend-lib/components/user/user.model';
-import Vue from 'vue';
+import Vue, { CreateElement } from 'vue';
 import { Component } from 'vue-property-decorator';
 import PlaywireBoltEmbed from './playwire-bolt-embed';
 
 @Component({})
-export default class AppAdPlaywireVideo extends Vue {
+export class AppAdPlaywireVideo extends Vue {
 	private boltEmbed: PlaywireBoltEmbed | null = null;
 
 	get resourceInfo() {
@@ -59,5 +59,9 @@ export default class AppAdPlaywireVideo extends Vue {
 			this.resourceInfo.resource,
 			this.resourceInfo.resourceId
 		);
+	}
+
+	render(h: CreateElement) {
+		return h('div');
 	}
 }

@@ -1,4 +1,4 @@
-import AppAdPlaywireVideo from 'game-jolt-frontend-lib/components/ad/playwire/video';
+import { AppAdPlaywireVideo } from 'game-jolt-frontend-lib/components/ad/playwire/video';
 import VueRouter from 'vue-router';
 import { AdsDisabledDev } from '../../../components/ad/ads.service';
 import { EventBus } from '../../../components/event-bus/event-bus.service';
