@@ -33,6 +33,7 @@ export const gif = {
 			'gif-height': node.attrs.height,
 			'gif-service': node.attrs.service,
 			'gif-media': JSON.stringify(node.attrs.media),
+			'gif-url': node.attrs.url,
 		},
 	],
 	parseDOM: [
@@ -45,6 +46,7 @@ export const gif = {
 					height: parseInt(domNode.getAttribute('gif-height')!, 10),
 					service: domNode.getAttribute('gif-service'),
 					media: JSON.parse(domNode.getAttribute('gif-media') || '{}'),
+					url: domNode.getAttribute('gif-url'),
 				};
 			},
 		},
