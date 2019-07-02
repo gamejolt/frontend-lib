@@ -101,7 +101,7 @@ export class Payload {
 			}
 
 			let response: any = undefined;
-			if (error.response) {
+			if (error && error.response) {
 				response = error.response;
 			}
 

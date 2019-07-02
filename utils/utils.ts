@@ -44,3 +44,11 @@ export type Properties<T, U> = { [K in keyof T]: T[K] extends U ? K : never }[ke
 export function isErrnoException(err: any): err is NodeJS.ErrnoException {
 	return isError(err) && typeof (err as any).code === 'string' && !!(err as any).code;
 }
+
+export function isPromise(obj: any) {
+	return (
+		!!obj &&
+		(typeof obj === 'object' || typeof obj === 'function') &&
+		typeof obj.then === 'function'
+	);
+}

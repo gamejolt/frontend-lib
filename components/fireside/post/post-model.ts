@@ -2,6 +2,9 @@ import { RawLocation } from 'vue-router';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
 import { Community, Perm as CommunityPerm } from '../../community/community.model';
+import { ContentContainerModel } from '../../content/content-container-model';
+import { ContentContext } from '../../content/content-context';
+import { ContentSetCache } from '../../content/content-set-cache';
 import { EventItem } from '../../event-item/event-item.model';
 import { Game } from '../../game/game.model';
 import { HistoryTick } from '../../history-tick/history-tick-service';
@@ -25,7 +28,7 @@ interface FiresidePostPublishedPlatform {
 	url: string;
 }
 
-export class FiresidePost extends Model {
+export class FiresidePost extends Model implements ContentContainerModel {
 	static TYPE_TEXT = 'text';
 	static TYPE_MEDIA = 'media';
 	static TYPE_VIDEO = 'video';
@@ -35,12 +38,11 @@ export class FiresidePost extends Model {
 	static STATUS_ACTIVE = 'active';
 	static STATUS_REMOVED = 'removed';
 
+	private _articleSetCache: ContentSetCache | undefined;
+	private _leadSetCache: ContentSetCache | undefined;
+
 	type!: 'text' | 'media' | 'video' | 'sketchfab' | 'comment-video';
 	hash!: string;
-	lead!: string;
-	lead_compiled!: string;
-	lead_snippet!: string;
-	header?: MediaItem;
 	status!: string;
 	added_on!: number;
 	updated_on!: number;
@@ -55,10 +57,13 @@ export class FiresidePost extends Model {
 	slug!: string;
 	subline!: string;
 	url!: string;
-	content_compiled!: string;
-	content_markdown?: string;
 	view_count?: number;
 	expand_count?: number;
+
+	lead_snippet!: string;
+	lead_content!: string;
+	leadStr!: string;
+	article_content!: string;
 
 	tags: FiresidePostTag[] = [];
 	communities: FiresidePostCommunity[] = [];
@@ -79,10 +84,6 @@ export class FiresidePost extends Model {
 
 	constructor(data: any = {}) {
 		super(data);
-
-		if (data.header) {
-			this.header = new MediaItem(data.header);
-		}
 
 		if (data.user) {
 			this.user = new User(data.user);
@@ -161,7 +162,24 @@ export class FiresidePost extends Model {
 	}
 
 	get hasArticle() {
-		return !!this.content_compiled;
+		if (this._articleSetCache === undefined) {
+			this._articleSetCache = new ContentSetCache(this, 'fireside-post-article');
+		}
+		return this._articleSetCache.hasContent;
+	}
+
+	get hasLead() {
+		if (this._leadSetCache === undefined) {
+			this._leadSetCache = new ContentSetCache(this, 'fireside-post-lead');
+		}
+		return this._leadSetCache.hasContent;
+	}
+
+	get leadLength() {
+		if (this._leadSetCache === undefined) {
+			this._leadSetCache = new ContentSetCache(this, 'fireside-post-lead');
+		}
+		return this._leadSetCache.length;
 	}
 
 	get hasPoll() {
@@ -200,6 +218,15 @@ export class FiresidePost extends Model {
 
 	get manageableCommunities() {
 		return this.getManageableCommunities();
+	}
+
+	getContent(context: ContentContext) {
+		if (context === 'fireside-post-lead') {
+			return this.lead_content;
+		} else if (context === 'fireside-post-article') {
+			return this.article_content;
+		}
+		throw new Error(`Context ${context} is not defined for Fireside Post.`);
 	}
 
 	getManageableCommunities(perms?: CommunityPerm | CommunityPerm[], either?: boolean) {

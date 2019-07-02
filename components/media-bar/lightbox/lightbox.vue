@@ -7,8 +7,8 @@
 			@panend="panEnd"
 			:pan-options="{ direction: 'horizontal' }"
 		>
-			<span v-shortkey="['arrowleft']" @shortkey="goPrev"></span>
-			<span v-shortkey="['arrowright']" @shortkey="goNext"></span>
+			<app-shortkey shortkey="arrowleft" @press="goPrev" />
+			<app-shortkey shortkey="arrowright" @press="goNext" />
 
 			<div class="-inner">
 				<a class="-prev" v-if="mediaBar.activeIndex > 0" @mousedown="goPrev">

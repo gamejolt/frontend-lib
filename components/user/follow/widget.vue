@@ -16,7 +16,7 @@
 			container: tooltipContainer,
 		}"
 		v-app-track-event="followEventLabel"
-		@click="onClick"
+		@click.stop="onClick"
 	>
 		<template v-if="!circle">
 			<template v-if="!user.is_following">
@@ -29,4 +29,4 @@
 	</app-button>
 </template>
 
-<script lang="ts" src="./follow-widget"></script>
+<script lang="ts" src="./widget"></script>

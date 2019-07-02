@@ -32,7 +32,7 @@ export default class AppScrollScroller extends Vue {
 	// No watching.
 	_simplebar?: SimpleBar;
 	_scrollWatcher!: ScrollWatcher;
-	_inviewContainer!: ScrollInviewContainer;
+	_inviewContainer!: ScrollInviewContainer = null as any;
 	private _isDestroyed?: boolean;
 
 	$el!: HTMLDivElement;

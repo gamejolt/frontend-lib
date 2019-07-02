@@ -1,5 +1,5 @@
 <template>
-	<section class="section" id="styleguide-progress-bar">
+	<section class="section" id="styleguide-progress-bars">
 		<h1 class="section-header">Progress Bars</h1>
 
 		<app-progress-bar :percent="30" />

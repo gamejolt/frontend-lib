@@ -6,7 +6,8 @@ import AppFormGroupTS from '../group/group';
 
 @Component({})
 export default class BaseFormControl extends Vue {
-	@Prop() rules!: any;
+	@Prop()
+	rules!: any;
 
 	controlVal: any;
 	changed = false;

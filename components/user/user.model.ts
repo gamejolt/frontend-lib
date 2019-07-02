@@ -1,12 +1,17 @@
 import { Api } from '../api/api.service';
+import { ContentContainerModel } from '../content/content-container-model';
+import { ContentContext } from '../content/content-context';
+import { ContentSetCache } from '../content/content-set-cache';
 import { MediaItem } from '../media-item/media-item-model';
 import { Model } from '../model/model.service';
 import { Registry } from '../registry/registry.service';
 import { Theme } from '../theme/theme.model';
 
-export class User extends Model {
+export class User extends Model implements ContentContainerModel {
 	static readonly TYPE_GAMER = 'User';
 	static readonly TYPE_DEVELOPER = 'Developer';
+
+	private _contentSetCache: ContentSetCache | undefined;
 
 	type!: 'User' | 'Developer';
 	username!: string;
@@ -27,25 +32,12 @@ export class User extends Model {
 	created_on!: number;
 	last_logged_on!: number;
 
-	twitter_id?: string;
-	twitter_screenname?: string;
-
-	twitch_id?: string;
-	twitch_name?: string;
-
-	google_id?: string;
-	google_nickname?: string;
-
 	theme!: Theme | null;
 	follower_count!: number;
 	following_count!: number;
 	comment_count!: number;
 	is_following?: boolean;
 	follows_you?: boolean;
-
-	// Manage linked accounts settings - fb is only returned in the profile pages
-	facebook_id?: string;
-	facebook_name?: string;
 
 	// exp settings.
 	level?: number;
@@ -58,8 +50,7 @@ export class User extends Model {
 	header_media_item?: MediaItem;
 	disable_gravatar?: boolean;
 
-	description_compiled?: string;
-	description_markdown?: string;
+	bio_content!: string;
 
 	// Notifications settings.
 	newsletter?: boolean;
@@ -110,6 +101,20 @@ export class User extends Model {
 
 	get isMod() {
 		return this.permission_level >= 3;
+	}
+
+	get hasBio() {
+		if (this._contentSetCache === undefined) {
+			this._contentSetCache = new ContentSetCache(this, 'user-bio');
+		}
+		return this._contentSetCache.hasContent;
+	}
+
+	getContent(context: ContentContext) {
+		if (context === 'user-bio') {
+			return this.bio_content;
+		}
+		throw new Error(`Context ${context} is not defined for User.`);
 	}
 
 	constructor(data: any = {}) {

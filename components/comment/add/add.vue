@@ -1,18 +1,20 @@
 <template>
-	<app-form name="commentAddForm">
+	<app-form name="commentAddForm" ref="form">
 		<app-form-group
 			:class="{ 'sans-margin-bottom': (!changed || !valid) && method !== 'edit' }"
-			name="comment"
+			name="comment_content"
 			:label="$gettext('Leave a Comment')"
 			hide-label
 		>
-			<app-form-control-markdown
-				preview-class="comment-content"
-				preview-url="/comments/preview"
-				markdown-mode="comments"
+			<app-form-control-content
 				:placeholder="placeholder || $gettext(`Leave a comment...`)"
+				:content-context="contentContext"
 				:autofocus="autofocus"
-				:max-height="maxHeight"
+				:rules="{
+					content_required: true,
+					content_no_media_uploads: true,
+				}"
+				:validate-on="['blur']"
 			/>
 
 			<app-form-control-errors label="comment" />
