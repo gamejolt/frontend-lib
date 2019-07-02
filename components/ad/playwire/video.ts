@@ -5,6 +5,7 @@ import { Game } from 'game-jolt-frontend-lib/components/game/game.model';
 import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import Vue, { CreateElement } from 'vue';
 import { Component } from 'vue-property-decorator';
+import Console from '../../../utils/console';
 import PlaywireBoltEmbed from './playwire-bolt-embed';
 
 @Component({})
@@ -44,6 +45,7 @@ export class AppAdPlaywireVideo extends Vue {
 
 	display() {
 		if (this.boltEmbed === null) {
+			Console.debug('Initializing embed');
 			this.boltEmbed = PlaywireBoltEmbed.create(this.$el);
 			this.boltEmbed.render();
 		}

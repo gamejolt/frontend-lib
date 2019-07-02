@@ -18,11 +18,11 @@ export default class PlaywireBoltEmbed {
 		this.loadPromise = new Promise((resolve, reject) => {
 			const dataset = {} as DOMStringMap;
 			dataset.config = 'https://config.playwire.com/1391/playlists/v2/4898/zeus.json';
-			dataset.autoload = 'false';
+			dataset.autoload = 'true';
 			dataset.id = this.datasetId;
 
 			const readyFuncName = `_playwireBoltReady_${this.id}`;
-			(window as any).BoltDebugMode = true;
+			// (window as any).BoltDebugMode = true;
 			(window as any)[readyFuncName] = () => {
 				Console.debug('Resolving script');
 				delete (window as any)[readyFuncName];
@@ -34,10 +34,15 @@ export default class PlaywireBoltEmbed {
 			loadScript('https://cdn.playwire.com/bolt/js/zeus/embed.js', {
 				element: this.el,
 				dataset,
-			}).catch(e => {
-				delete (window as any)[readyFuncName];
-				reject(e);
-			});
+			})
+				.then(() => {
+					Console.debug('Bolt script finished loading');
+				})
+				.catch(e => {
+					Console.debug('Bolt script failed to load: ' + e.message);
+					delete (window as any)[readyFuncName];
+					reject(e);
+				});
 		});
 	}
 
@@ -46,14 +51,14 @@ export default class PlaywireBoltEmbed {
 	}
 
 	async render() {
-		Console.debug('Waiting for Bolt');
+		Console.debug(`Waiting for Bolt before render ${this.id}`);
 		await this.loadPromise;
 		Console.debug('Rendering player');
 		window.Bolt.renderPlayer(this.datasetId);
 	}
 
 	async destroy() {
-		Console.debug('Waiting for Bolt');
+		Console.debug(`Waiting for Bolt before destroy ${this.id}`);
 		await this.loadPromise;
 		Console.debug('Destroying player');
 		window.Bolt.removeVideo(this.datasetId);
