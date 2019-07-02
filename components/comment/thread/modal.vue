@@ -35,6 +35,8 @@
 </template>
 
 <style lang="stylus" scoped>
+	@require '~styles/variables'
+
 	// On mobile, we need to make space for the content editor controls. They
 	// would overlap the Reply form field otherwise.
 	@media $media-xs
