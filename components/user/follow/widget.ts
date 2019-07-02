@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { number } from '../../../vue/filters/number';
 import { AppStore } from '../../../vue/services/app/app-store';
@@ -42,6 +42,12 @@ export default class AppUserFollowWidget extends Vue {
 	@State
 	app!: AppStore;
 
+	@Emit('follow')
+	emitFollow() {}
+
+	@Emit('unfollow')
+	emitUnfollow() {}
+
 	get shouldShow() {
 		return !this.app.user || this.app.user.id !== this.user.id;
 	}
@@ -71,11 +77,11 @@ export default class AppUserFollowWidget extends Vue {
 	}
 
 	get followEventLabel() {
-		return [
-			'user-follow',
-			!this.user.is_following ? 'follow' : 'unfollow',
-			this.eventLabel || 'any',
-		].join(':');
+		const category = 'user-follow';
+		const action = !this.user.is_following ? 'follow' : 'unfollow';
+		const label = this.eventLabel || 'any';
+
+		return `${category}:${action}:${label}`;
 	}
 
 	async onClick() {
@@ -86,6 +92,7 @@ export default class AppUserFollowWidget extends Vue {
 		if (!this.user.is_following) {
 			try {
 				await this.user.$follow();
+				this.emitFollow();
 			} catch (e) {
 				Growls.error(
 					this.$gettext(`Something has prevented you from following this user.`)
@@ -94,6 +101,7 @@ export default class AppUserFollowWidget extends Vue {
 		} else {
 			try {
 				await this.user.$unfollow();
+				this.emitUnfollow();
 			} catch (e) {
 				Growls.error(this.$gettext(`For some reason we couldn't unfollow this user.`));
 			}
