@@ -1,9 +1,5 @@
 <template>
-	<div
-		:class="{
-			'message-thread-add': Screen.isXs,
-		}"
-	>
+	<div class="message-thread-add">
 		<app-timeline-list-item>
 			<app-user-avatar-img slot="bubble" :user="app.user" />
 
