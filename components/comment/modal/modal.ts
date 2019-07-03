@@ -3,6 +3,7 @@ import { CommentState, CommentStore } from '../../../components/comment/comment-
 import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
 import { number } from '../../../vue/filters/number';
 import { BaseModal } from '../../modal/base';
+import { Screen } from '../../screen/screen-service';
 import AppCommentWidget from '../widget/widget.vue';
 import { DisplayMode } from './modal.service';
 
@@ -26,10 +27,15 @@ export default class AppCommentModal extends BaseModal {
 	getCommentStore!: CommentStore['getCommentStore'];
 
 	readonly number = number;
+	readonly Screen = Screen;
 
 	get commentsCount() {
 		const store = this.getCommentStore(this.resource, this.resourceId);
 		return store ? store.count : 0;
+	}
+
+	get autofocusAdd() {
+		return !Screen.isXs;
 	}
 
 	onReplyAdd() {
