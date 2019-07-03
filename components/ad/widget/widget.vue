@@ -8,7 +8,7 @@
 		}"
 	>
 		<div class="-inner">
-			<app-ad-playwire :size="size" :pos="pos" />
+			<app-ad-playwire :size="size" :static-size="staticSize" />
 		</div>
 	</div>
 </template>
