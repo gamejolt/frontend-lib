@@ -8,7 +8,7 @@
 
 .button-placeholder
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	theme-prop('background-color', 'bg-subtle')
 	display: inline-block
 	height: $button-md-line-height
 	vertical-align: middle

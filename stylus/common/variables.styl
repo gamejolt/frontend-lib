@@ -18,8 +18,9 @@ $gray = #363636
 $gray-subtle = #444444
 $gray-light = #7e7e7e
 $gray-lighter = #d1d1d1
-$gray-lightest = #f3f3f3
+$gray-lightest = #f0f0f0
 $white = #ffffff
+$bg-backdrop = #242424
 //
 // Theme vars
 // Copy out the shades of gray that we use throughout the site
@@ -55,6 +56,7 @@ $theme-bg-trans = rgba($theme-bg, 0)
 // Slightly darker background (used for info boxes and such)
 $theme-bg-offset = $theme-lightest
 $theme-bg-offset-trans = $theme-lightest-trans
+$theme-bg-backdrop = $theme-lightest
 // A bit darker than the offset color (used for separator lines)
 $theme-bg-subtle = $theme-lighter
 // Text color
@@ -68,8 +70,9 @@ $theme-link-hover = $black
 // Dark theme vars
 $dark-theme-bg = $theme-dark
 $dark-theme-bg-trans = $theme-dark-trans
-$dark-theme-bg-offset = $theme-gray
+$dark-theme-bg-offset = $theme-darker
 $dark-theme-bg-offset-trans = $theme-gray-trans
+$dark-theme-bg-backdrop = $bg-backdrop
 $dark-theme-bg-subtle = $theme-gray-subtle
 $dark-theme-fg = $theme-lightest
 $dark-theme-fg-muted = $theme-light

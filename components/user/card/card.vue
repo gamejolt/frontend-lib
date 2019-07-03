@@ -1,5 +1,5 @@
 <template>
-	<app-theme class="user-card" :theme="user.theme">
+	<app-theme class="user-card sheet" :theme="user.theme">
 		<app-tooltip-container>
 			<div class="-user-info">
 				<div
@@ -13,7 +13,7 @@
 					<app-user-avatar-img :user="user" />
 				</router-link>
 
-				<div class="-well fill-darker">
+				<div class="-well fill-bg">
 					<div v-if="user.follows_you" class="-follows-you">
 						<span class="tag">
 							<translate>Follows You</translate>
