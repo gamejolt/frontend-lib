@@ -168,7 +168,10 @@ export default class AppContentEditorGifModal extends BaseModal {
 	}
 
 	scrollToTop() {
-		this.$refs.contentScroller.scrollTop = 0;
+		// This has a v-if around it when loading, so it may not be in the DOM.
+		if (this.$refs.contentScroller) {
+			this.$refs.contentScroller.scrollTop = 0;
+		}
 		this.$refs.modal.scrollTo(0);
 	}
 
