@@ -2,6 +2,7 @@ import { Component } from 'vue-property-decorator';
 import AppLoading from '../../../../../vue/components/loading/loading.vue';
 import { Api } from '../../../../api/api.service';
 import { BaseModal } from '../../../../modal/base';
+import AppModalTS from '../../../../modal/modal';
 import { Ruler } from '../../../../ruler/ruler-service';
 import { Screen } from '../../../../screen/screen-service';
 import { Category, ContentEditorGifModal, SearchResult } from './gif-modal.service';
@@ -26,6 +27,11 @@ export default class AppContentEditorGifModal extends BaseModal {
 	hasError = false;
 
 	readonly Screen = Screen;
+
+	$refs!: {
+		contentScroller: HTMLElement;
+		modal: AppModalTS;
+	};
 
 	get shouldShowResetButton() {
 		return this.searchValue.length > 0;
@@ -162,15 +168,13 @@ export default class AppContentEditorGifModal extends BaseModal {
 	}
 
 	scrollToTop() {
-		const container = document.getElementById('gif-content-scroller');
-		if (container) {
-			container.scrollTop = 0;
-		}
+		this.$refs.contentScroller.scrollTop = 0;
+		this.$refs.modal.scrollTo(0);
 	}
 
 	onContainerScroll() {
 		if (!this.isLoading && this.searchValue.length > 0 && !this.reachedLastPage) {
-			const container = document.getElementById('gif-content-scroller');
+			const container = this.$refs.contentScroller;
 			if (container) {
 				const height = Ruler.height(container);
 				if (container.scrollHeight < container.scrollTop + height + 100) {

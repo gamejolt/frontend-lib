@@ -28,6 +28,7 @@ export default class AppScrollScroller extends Vue {
 	inviewVelocity?: number;
 
 	isMounted = GJ_IS_SSR;
+	private scrollElement!: HTMLElement;
 
 	// No watching.
 	_simplebar?: SimpleBar;
@@ -48,9 +49,9 @@ export default class AppScrollScroller extends Vue {
 		}
 
 		// The scrollable element will change if we are using simplebar.
-		let el = this.$el;
+		this.scrollElement = this.$el;
 		if (this.shouldOverlay) {
-			this._simplebar = new SimpleBar(el, {
+			this._simplebar = new SimpleBar(this.scrollElement, {
 				wrapContent: false,
 				scrollbarMinSize: 30,
 				// Only autohide vertical scrollbars since they're easy to scroll with a
@@ -58,13 +59,13 @@ export default class AppScrollScroller extends Vue {
 				autoHide: !this.horizontal,
 			});
 
-			el = this._simplebar.getScrollElement() as HTMLDivElement;
+			this.scrollElement = this._simplebar.getScrollElement() as HTMLDivElement;
 		}
 
 		// We need to create the inview container before we can put the content
 		// into the DOM. This way we can pass the container to the inview parent
 		// component so that it has the correct scroller.
-		this._scrollWatcher = new ScrollWatcher(el);
+		this._scrollWatcher = new ScrollWatcher(this.scrollElement);
 		this._inviewContainer = new ScrollInviewContainer(
 			this._scrollWatcher,
 			this.inviewThrottle,
@@ -72,6 +73,10 @@ export default class AppScrollScroller extends Vue {
 		);
 
 		this.isMounted = true;
+	}
+
+	scrollTo(offsetY: number) {
+		this.scrollElement.scrollTo({ top: offsetY });
 	}
 
 	/**

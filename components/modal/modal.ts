@@ -6,6 +6,7 @@ import { Backdrop } from '../backdrop/backdrop.service';
 import { EscapeStack } from '../escape-stack/escape-stack.service';
 import { Screen } from '../screen/screen-service';
 import AppScrollAffix from '../scroll/affix/affix.vue';
+import AppScrollScrollerTS from '../scroll/scroller/scroller';
 import AppScrollScroller from '../scroll/scroller/scroller.vue';
 import { AppTheme } from '../theme/theme';
 import { BaseModal } from './base';
@@ -34,6 +35,10 @@ export default class AppModal extends Vue {
 	private escapeCallback?: Function;
 
 	$el!: HTMLDivElement;
+
+	$refs!: {
+		scroller: AppScrollScrollerTS;
+	};
 
 	get zIndex() {
 		return 1050 + this.modal.index;
@@ -103,5 +108,9 @@ export default class AppModal extends Vue {
 
 	dismiss() {
 		this.modal.dismiss();
+	}
+
+	scrollTo(offsetY: number) {
+		this.$refs.scroller.scrollTo(offsetY);
 	}
 }
