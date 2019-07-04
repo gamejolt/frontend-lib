@@ -1,8 +1,9 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { number } from '../../../vue/filters/number';
 import { AppStore } from '../../../vue/services/app/app-store';
+import { Analytics } from '../../analytics/analytics.service';
 import { AppTrackEvent } from '../../analytics/track-event.directive';
 import { AppAuthRequired } from '../../auth/auth-required-directive';
 import { Growls } from '../../growls/growls.service';
@@ -42,6 +43,12 @@ export default class AppUserFollowWidget extends Vue {
 	@State
 	app!: AppStore;
 
+	@Emit('follow')
+	emitFollow() {}
+
+	@Emit('unfollow')
+	emitUnfollow() {}
+
 	get shouldShow() {
 		return !this.app.user || this.app.user.id !== this.user.id;
 	}
@@ -70,22 +77,20 @@ export default class AppUserFollowWidget extends Vue {
 		return !this.user.is_following ? 'subscribe' : 'subscribed';
 	}
 
-	get followEventLabel() {
-		return [
-			'user-follow',
-			!this.user.is_following ? 'follow' : 'unfollow',
-			this.eventLabel || 'any',
-		].join(':');
-	}
-
 	async onClick() {
 		if (!this.app.user) {
 			return;
 		}
 
+		const category = 'user-follow';
+		const action = this.user.is_following ? 'unfollow' : 'follow';
+		const label = this.eventLabel || 'any';
+		Analytics.trackEvent(category, action, label);
+
 		if (!this.user.is_following) {
 			try {
 				await this.user.$follow();
+				this.emitFollow();
 			} catch (e) {
 				Growls.error(
 					this.$gettext(`Something has prevented you from following this user.`)
@@ -94,6 +99,7 @@ export default class AppUserFollowWidget extends Vue {
 		} else {
 			try {
 				await this.user.$unfollow();
+				this.emitUnfollow();
 			} catch (e) {
 				Growls.error(this.$gettext(`For some reason we couldn't unfollow this user.`));
 			}
