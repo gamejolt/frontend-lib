@@ -159,6 +159,10 @@ $mdc-elevation-umbra-opacity = 0.15
 $mdc-elevation-penumbra-opacity = 0.1
 $mdc-elevation-ambient-opacity = 0.09
 
+elevate-transition()
+	// If elevations change, we want to transition the shadow.
+	transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1)
+
 elevate(level = '0', color = $mdc-elevation-baseline-color)
 	$umbra-z-value = $mdc-elevation-umbra-map[level]
 	$penumbra-z-value = $mdc-elevation-penumbra-map[level]
@@ -167,11 +171,13 @@ elevate(level = '0', color = $mdc-elevation-baseline-color)
 	$penumbra-color = rgba(color, $mdc-elevation-penumbra-opacity)
 	$ambient-color = rgba(color, $mdc-elevation-ambient-opacity)
 	box-shadow: unquote($umbra-z-value) $umbra-color, unquote($penumbra-z-value) $penumbra-color, unquote($ambient-z-value) $ambient-color
+	elevate-transition()
 
 /**
  * Elevation
  */
 elevate-0()
+	elevate-transition()
 	box-shadow: none
 
 elevate-1()
