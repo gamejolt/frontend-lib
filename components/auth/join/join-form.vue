@@ -88,7 +88,7 @@
 				block
 				solid
 				:disabled="Connection.isClientOffline || blocked"
-				@click.prevent="linkedChoose('facebook')"
+				@click="linkedChoose('facebook')"
 			>
 				<translate>Continue with Facebook</translate>
 			</app-button>
@@ -98,7 +98,7 @@
 				block
 				solid
 				:disabled="Connection.isClientOffline || blocked"
-				@click.prevent="linkedChoose('twitter')"
+				@click="linkedChoose('twitter')"
 			>
 				<translate>Continue with Twitter</translate>
 			</app-button>
@@ -108,7 +108,7 @@
 				block
 				solid
 				:disabled="Connection.isClientOffline || blocked"
-				@click.prevent="linkedChoose('google')"
+				@click="linkedChoose('google')"
 			>
 				<translate>Continue with Google</translate>
 			</app-button>
@@ -118,7 +118,7 @@
 				block
 				solid
 				:disabled="Connection.isClientOffline || blocked"
-				@click.prevent="linkedChoose('twitch')"
+				@click="linkedChoose('twitch')"
 			>
 				<translate>Continue with Twitch</translate>
 			</app-button>

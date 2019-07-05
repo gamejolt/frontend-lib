@@ -9,7 +9,7 @@
 		<div class="modal-body">
 			<div v-if="hasError" class="error-container">
 				<p><translate>Something went wrong.</translate></p>
-				<app-button @click.prevent="onRetry"><translate>Retry</translate></app-button>
+				<app-button @click="onRetry"><translate>Retry</translate></app-button>
 			</div>
 
 			<template v-else>
@@ -19,11 +19,11 @@
 						trans
 						icon="chevron-left"
 						v-if="shouldShowResetButton"
-						@click.prevent="onClickReset"
+						@click="onClickReset"
 					/>
 					<div class="search-bar">
 						<app-jolticon icon="search" class="search-icon text-muted" />
-						<div v-if="shouldShowResetButton" class="search-clear" @click.prevent="onClickReset">
+						<div v-if="shouldShowResetButton" class="search-clear" @click="onClickReset">
 							<app-jolticon class="-icon" icon="remove" />
 						</div>
 						<input
@@ -56,7 +56,7 @@
 							:style="{
 								'animation-delay': category.index * 0.02 + 's',
 							}"
-							@click.prevent="onClickCategory(category.searchterm)"
+							@click="onClickCategory(category.searchterm)"
 						>
 							<div class="category">
 								<img :src="category.previewGif" />
@@ -103,7 +103,7 @@
 							</span>
 						</div>
 						<div v-else-if="shouldShowMoreButton" class="more-container">
-							<app-button @click.prevent="loadNextPage">More</app-button>
+							<app-button @click="loadNextPage">More</app-button>
 						</div>
 					</div>
 				</div>

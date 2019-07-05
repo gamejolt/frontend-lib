@@ -11,8 +11,7 @@
 			<div class="-label"><slot /></div>
 			<div class="-compactbar" v-if="compact" />
 			<div class="-delete" v-if="deletable">
-				<!-- Make sure it doesn't bubble up the click since it's in a form -->
-				<app-button sparse circle icon="remove" @click.prevent="emitDelete()" />
+				<app-button sparse circle icon="remove" @click="emitDelete()" />
 			</div>
 		</div>
 	</legend>
