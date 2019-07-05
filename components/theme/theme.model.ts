@@ -23,7 +23,8 @@ const GraySubtle = '#444444';
 const GrayLight = '#7e7e7e';
 const GrayLighter = '#d1d1d1';
 const GrayLightest = '#f0f0f0';
-const BgBackdrop = '#242424';
+const BgBackdropLight = '#fafafa';
+const BgBackdropDark = '#252525';
 
 // For clamping custom colors.
 //   ("MinLitBase" is summed with a variable portion of BlueBoost for MinLitFinal.)
@@ -263,8 +264,12 @@ export class Theme extends Model {
 		return this.highlightFg_;
 	}
 
+	get bgBackdrop_() {
+		return this.tintColor(BgBackdropLight, 0.02);
+	}
+
 	get darkBgBackdrop_() {
-		return this.tintColor(BgBackdrop, 0.04);
+		return this.tintColor(BgBackdropDark, 0.04);
 	}
 
 	get darkest_() {

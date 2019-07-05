@@ -44,6 +44,8 @@ export class AppTheme extends Vue {
 				--theme-lighter: #${theme.lighter_};
 				--theme-lightest: #${theme.lightest_};
 				--theme-black: #000;
+				--theme-bg-backdrop-light: #${theme.bgBackdrop_};
+				--theme-bg-backdrop-dark: #${theme.darkBgBackdrop_};
 
 				--theme-black-trans: ${transparentize(1, '#000')};
 				--theme-darkest-trans: ${transparentize(1, '#' + theme.darkest_)};
@@ -69,7 +71,7 @@ export class AppTheme extends Vue {
 				--theme-bg-offset-trans-base: var(--theme-lightest-trans);
 				--theme-bg-offset: var(--theme-bg-offset-base);
 				--theme-bg-offset-trans: var(--theme-bg-offset-trans-base);
-				--theme-bg-backdrop: var(--theme-bg-backdrop);
+				--theme-bg-backdrop: var(--theme-bg-backdrop-light);
 				--theme-bg-subtle: var(--theme-lighter);
 				--theme-fg: var(--theme-dark);
 				--theme-fg-muted: var(--theme-light);
@@ -87,7 +89,7 @@ export class AppTheme extends Vue {
 				--dark-theme-bg-offset-trans-base: var(--theme-gray-trans);
 				--dark-theme-bg-offset: var(--dark-theme-bg-offset-base);
 				--dark-theme-bg-offset-trans: var(--dark-theme-bg-offset-trans-base);
-				--dark-theme-bg-backdrop: #${theme.darkBgBackdrop_};
+				--dark-theme-bg-backdrop: var(--theme-bg-backdrop-dark);
 				--dark-theme-bg-subtle: var(--theme-gray-subtle);
 				--dark-theme-fg: var(--theme-lightest);
 				--dark-theme-fg-muted: var(--theme-light);
