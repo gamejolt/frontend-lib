@@ -6,6 +6,7 @@
 		:solid="solid"
 		:block="block"
 		:disabled="form.base.state.isProcessing"
+		@click.native="onClick"
 	>
 		<slot />
 		<transition>
