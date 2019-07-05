@@ -11,6 +11,7 @@ export default class AppFormButton extends Vue {
 	@Prop({ type: Boolean, default: true }) solid!: boolean;
 	@Prop(Boolean) block!: boolean;
 	@Prop(Boolean) lg!: boolean;
+	@Prop(String) icon?: string;
 
 	form!: AppFormTS;
 
