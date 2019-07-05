@@ -261,23 +261,31 @@ full-bleed()
 	margin-left: -($grid-gutter-width-xs / 2)
 	margin-right: @margin-left
 	border-radius: 0 !important
+	border-left: 0 !important
+	border-right: 0 !important
 
 	@media $media-sm-up
 		margin-left: -($grid-gutter-width / 2)
 		margin-right: @margin-left
 		border-radius: 0 !important
+		border-left: 0 !important
+		border-right: 0 !important
 
 full-bleed-xs()
 	@media $media-xs
 		margin-left: -($grid-gutter-width-xs / 2)
 		margin-right: @margin-left
 		border-radius: 0 !important
+		border-left: 0 !important
+		border-right: 0 !important
 
 full-bleed-sm()
 	@media $media-sm
 		margin-left: -($grid-gutter-width / 2)
 		margin-right: @margin-left
 		border-radius: 0 !important
+		border-left: 0 !important
+		border-right: 0 !important
 
 /**
  * Scrollable
@@ -308,7 +316,7 @@ link-unstyled()
  */
 lazy-placeholder-inline()
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	theme-prop('background-color', 'bg-subtle')
 	display: inline-block
 	vertical-align: middle
 	width: 100%
@@ -316,7 +324,7 @@ lazy-placeholder-inline()
 
 lazy-placeholder-block()
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	theme-prop('background-color', 'bg-subtle')
 	display: block
 	height: $font-size-base
 
