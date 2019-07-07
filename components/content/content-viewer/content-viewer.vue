@@ -11,6 +11,9 @@
 <style lang="stylus" scoped>
 >>> p > code
 	white-space: normal
+
+>>> .emoji
+	image-rendering: pixelated
 </style>
 
 <script lang="ts" src="./content-viewer"></script>
