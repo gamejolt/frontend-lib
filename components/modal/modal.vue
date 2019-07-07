@@ -16,6 +16,7 @@
 					'modal-lg': modal.size === 'lg',
 					'modal-full': modal.size === 'full',
 				}"
+				ref="scroller"
 			>
 				<app-theme
 					class="modal-content"

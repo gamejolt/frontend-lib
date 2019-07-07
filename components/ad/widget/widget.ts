@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Ads, AdSlotPos, AdSlotPosValidator } from '../../../components/ad/ads.service';
+import { Ads } from '../../../components/ad/ads.service';
 import AppAdPlaywire from '../playwire/playwire.vue';
 import './widget-content.styl';
 
@@ -13,11 +13,8 @@ export default class AppAdWidget extends Vue {
 	@Prop({ type: String, default: 'rectangle' })
 	size!: 'rectangle' | 'leaderboard';
 
-	@Prop({
-		type: String,
-		validator: AdSlotPosValidator,
-	})
-	pos!: AdSlotPos;
+	@Prop({ type: Boolean, default: false })
+	staticSize!: boolean;
 
 	get shouldShow() {
 		return Ads.shouldShow;

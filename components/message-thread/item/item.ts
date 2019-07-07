@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-
-import { User } from '../../user/user.model';
+import AppJolticon from '../../../vue/components/jolticon/jolticon.vue';
 import { date } from '../../../vue/filters/date';
 import { AppTimeAgo } from '../../time/ago/ago';
-import AppUserAvatar from '../../user/user-avatar/user-avatar.vue'
-import AppJolticon from '../../../vue/components/jolticon/jolticon.vue'
-import AppTimelineListItem from '../../timeline-list/item/item.vue'
-import AppUserCardHover from '../../user/card/hover/hover.vue'
+import AppTimelineListItem from '../../timeline-list/item/item.vue';
+import AppUserCardHover from '../../user/card/hover/hover.vue';
+import AppUserAvatar from '../../user/user-avatar/user-avatar.vue';
+import { User } from '../../user/user.model';
+import AppUserVerifiedTick from '../../user/verified-tick/verified-tick.vue';
 
 @Component({
 	components: {
@@ -16,6 +16,7 @@ import AppUserCardHover from '../../user/card/hover/hover.vue'
 		AppUserAvatar,
 		AppTimeAgo,
 		AppJolticon,
+		AppUserVerifiedTick,
 	},
 })
 export default class AppMessageThreadItem extends Vue {

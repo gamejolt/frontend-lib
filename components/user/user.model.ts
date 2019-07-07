@@ -28,6 +28,7 @@ export class User extends Model implements ContentContainerModel {
 	permission_level!: number;
 	is_verified!: boolean;
 	is_partner!: boolean | null;
+	friend_requests_enabled!: boolean;
 
 	created_on!: number;
 	last_logged_on!: number;

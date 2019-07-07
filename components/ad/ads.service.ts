@@ -6,12 +6,6 @@ import { Model } from '../model/model.service';
 export const AdsDisabledDev = GJ_BUILD_TYPE === 'development';
 // export const AdsDisabledDev = false;
 
-export type AdSlotPos = 'top' | 'bottom' | 'preroll' | 'footer';
-
-export function AdSlotPosValidator(val: string) {
-	return ['top', 'bottom', 'preroll', 'footer'].indexOf(val) !== -1;
-}
-
 export class AdSettingsContainer {
 	isPageDisabled = false;
 	resource: Model | null = null;

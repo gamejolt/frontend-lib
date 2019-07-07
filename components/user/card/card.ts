@@ -11,6 +11,7 @@ import { AppTooltip } from '../../tooltip/tooltip';
 import AppUserFollowWidget from '../follow/widget.vue';
 import AppUserAvatarImg from '../user-avatar/img/img.vue';
 import { User } from '../user.model';
+import AppUserVerifiedTick from '../verified-tick/verified-tick.vue';
 import './card-global.styl';
 
 @Component({
@@ -21,6 +22,7 @@ import './card-global.styl';
 		AppTheme,
 		AppTooltipContainer,
 		AppLoading,
+		AppUserVerifiedTick,
 	},
 	directives: {
 		AppTooltip,

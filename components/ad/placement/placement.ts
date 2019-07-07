@@ -1,8 +1,8 @@
-import AppAdWidget from '../widget/widget.vue'
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Screen } from '../../screen/screen-service';
-import { Ads, AdSlotPos, AdSlotPosValidator } from '../ads.service';
+import { Ads } from '../ads.service';
+import AppAdWidget from '../widget/widget.vue';
 
 @Component({
 	components: {
@@ -10,11 +10,8 @@ import { Ads, AdSlotPos, AdSlotPosValidator } from '../ads.service';
 	},
 })
 export default class AppAdPlacement extends Vue {
-	@Prop({
-		type: String,
-		validator: AdSlotPosValidator,
-	})
-	pos?: AdSlotPos;
+	@Prop({ type: Boolean, default: false })
+	staticSize!: boolean;
 
 	@Prop(Boolean)
 	hiddenXs?: boolean;

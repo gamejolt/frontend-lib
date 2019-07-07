@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Ads, AdSlotPos, AdSlotPosValidator } from '../../../components/ad/ads.service';
+import { Ads } from '../../../components/ad/ads.service';
 import { Playwire } from '../../../components/ad/playwire/playwire.service';
 import { FiresidePost } from '../../../components/fireside/post/post-model';
 import { Game } from '../../../components/game/game.model';
@@ -50,11 +50,8 @@ export default class AppAdPlaywire extends Vue {
 	@Prop({ type: String, default: 'rectangle' })
 	size!: 'rectangle' | 'leaderboard';
 
-	@Prop({
-		type: String,
-		validator: AdSlotPosValidator,
-	})
-	pos!: AdSlotPos;
+	@Prop({ type: Boolean, default: false })
+	staticSize!: boolean;
 
 	/**
 	 * We populate this when we first decide to show the ad, and then we change
@@ -67,7 +64,10 @@ export default class AppAdPlaywire extends Vue {
 	 */
 	get placement() {
 		const size = this.size === 'rectangle' ? 'med_rect' : 'leaderboard';
-		const position = this.pos === 'top' ? 'atf' : 'btf';
+		// We got Playwire to make it so that "btf" ads will never change size.
+		// We can use this when their is content below it that we never want
+		// being pushed around, such as feeds.
+		const position = this.staticSize ? 'btf' : 'atf';
 		return `${size}_${position}`;
 	}
 

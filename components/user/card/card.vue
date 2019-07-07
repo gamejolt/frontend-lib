@@ -21,15 +21,9 @@
 					</div>
 
 					<div class="-display-name">
-						<app-jolticon
-							v-if="user.is_verified"
-							icon="verified"
-							class="-verified"
-							v-app-tooltip="$gettext('profile.verified_tooltip')"
-						/>
-
 						<router-link :to="user.url" class="link-unstyled">
 							{{ user.display_name }}
+							<app-user-verified-tick :user="user" highlight />
 						</router-link>
 					</div>
 

@@ -1,5 +1,5 @@
 <template>
-	<app-modal>
+	<app-modal ref="modal">
 		<div class="modal-controls">
 			<app-button @click="modal.dismiss()">
 				<translate>Close</translate>
@@ -41,7 +41,7 @@
 				</div>
 				<div
 					v-else
-					id="gif-content-scroller"
+					ref="contentScroller"
 					class="gif-content"
 					:class="{
 						'gif-content-noscroll': isLoading && searchResults.length === 0,

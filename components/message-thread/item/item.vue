@@ -29,6 +29,7 @@
 								class="link-unstyled"
 							>
 								{{ user.display_name }}
+								<app-user-verified-tick :user="user" />
 							</router-link>
 
 							<small class="text-muted">@{{ user.username }}</small>
