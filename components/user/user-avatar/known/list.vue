@@ -7,6 +7,7 @@
 					:user="user"
 					v-app-tooltip="user.display_name + ' (@' + user.username + ')'"
 				/>
+				<app-user-verified-tick class="-tick" :user="user" />
 			</div>
 		</div>
 	</div>
@@ -32,6 +33,10 @@ $-spacing = 3px
 	width: $-size
 	height: $-size
 	margin: 0 $-spacing $-spacing
+	position: relative
+
+	&:hover .-tick
+		opacity: 0.5
 
 .-avatar
 	img-circle()
@@ -44,6 +49,14 @@ $-spacing = 3px
 
 	@media $media-sm-up
 		margin-right: $grid-gutter-width * 0.5
+
+.-tick
+	theme-prop('background-color', 'bg')
+	border-radius: 50%
+	position: absolute
+	right: 0
+	bottom: 0
+	pointer-events: none
 </style>
 
 <script lang="ts" src="./list"></script>
