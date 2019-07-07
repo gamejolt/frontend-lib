@@ -23,7 +23,7 @@
 					<div class="-display-name">
 						<router-link :to="user.url" class="link-unstyled">
 							{{ user.display_name }}
-							<app-user-verified-tick :user="user" highlight />
+							<app-user-verified-tick :user="user" />
 						</router-link>
 					</div>
 
