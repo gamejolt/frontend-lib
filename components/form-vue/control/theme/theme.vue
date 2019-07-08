@@ -50,7 +50,7 @@
 						<br />
 					</div>
 
-					<app-button v-if="!!controlVal" block trans @click.stop.prevent="clear()">
+					<app-button v-if="!!controlVal" block trans @click="clear()">
 						<translate>Clear Theme</translate>
 					</app-button>
 				</div>

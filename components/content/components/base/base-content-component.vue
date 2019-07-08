@@ -7,14 +7,14 @@
 				overlay
 				icon="edit"
 				:disabled="isDisabled"
-				@click.prevent="onEditClicked"
+				@click="onEditClicked"
 			/>
 			<app-button
 				circle
 				overlay
 				icon="remove"
 				:disabled="isDisabled"
-				@click.prevent="onRemovedClicked"
+				@click="onRemovedClicked"
 			/>
 		</div>
 

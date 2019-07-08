@@ -18,7 +18,7 @@
 									overlay
 									sparse
 									v-app-tooltip="$gettext(`Copy Markdown Embed`)"
-									@click.prevent="copyLink(item)"
+									@click="copyLink(item)"
 								/>
 							</div>
 
