@@ -41,7 +41,7 @@ export const gif = {
 			tag: 'div[gif-id]',
 			getAttrs: (domNode: Element) => {
 				return {
-					id: parseInt(domNode.getAttribute('gif-id')!, 10),
+					id: domNode.getAttribute('gif-id'),
 					width: parseInt(domNode.getAttribute('gif-width')!, 10),
 					height: parseInt(domNode.getAttribute('gif-height')!, 10),
 					service: domNode.getAttribute('gif-service'),
