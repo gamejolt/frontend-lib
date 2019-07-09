@@ -12,11 +12,17 @@ export default class AppContentEditorControlsGifControls extends Vue {
 	view!: EditorView;
 	@Prop(Number)
 	stateCounter!: number;
+	@Prop(Boolean)
+	openStartup!: boolean;
 
 	visible = false;
 
 	created() {
 		this.update();
+
+		if (this.openStartup) {
+			this.openGifModal();
+		}
 	}
 
 	@Watch('stateCounter')
@@ -32,6 +38,7 @@ export default class AppContentEditorControlsGifControls extends Vue {
 	}
 
 	async openGifModal() {
+		this.$emit('open');
 		const gif = await ContentEditorGifModal.show();
 		if (gif !== undefined) {
 			const newNode = this.view.state.schema.nodes.gif.create({

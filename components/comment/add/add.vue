@@ -10,6 +10,7 @@
 				:placeholder="placeholder || $gettext(`Leave a comment...`)"
 				:content-context="contentContext"
 				:autofocus="autofocus"
+				:open-gif-startup="openGifStartup"
 				:rules="{
 					content_required: true,
 					content_no_media_uploads: true,

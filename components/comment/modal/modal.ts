@@ -23,6 +23,9 @@ export default class AppCommentModal extends BaseModal {
 	@Prop(String)
 	displayMode!: DisplayMode;
 
+	@Prop(Boolean)
+	autofocus?: boolean;
+
 	@CommentState
 	getCommentStore!: CommentStore['getCommentStore'];
 
@@ -35,7 +38,7 @@ export default class AppCommentModal extends BaseModal {
 	}
 
 	get autofocusAdd() {
-		return !Screen.isXs;
+		return this.autofocus || !Screen.isXs;
 	}
 
 	onReplyAdd() {

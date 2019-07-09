@@ -7,11 +7,12 @@ interface CommentModalOptions {
 	resource?: string;
 	resourceId?: number;
 	displayMode?: DisplayMode;
+	autofocus?: boolean;
 }
 
 export class CommentModal {
 	static async show(options: CommentModalOptions) {
-		const { resource, resourceId, displayMode } = options;
+		const { resource, resourceId, displayMode, autofocus } = options;
 
 		return await Modal.show<void>({
 			modalId: 'Comment-' + [resource, resourceId].join('-'),
@@ -21,6 +22,7 @@ export class CommentModal {
 				resource,
 				resourceId,
 				displayMode,
+				autofocus,
 			},
 			size: 'sm',
 		});

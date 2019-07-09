@@ -15,6 +15,7 @@
 			:model-id="modelId"
 			:value="controlVal"
 			:min-height="minHeight"
+			:open-gif-startup="openGifStartup"
 			v-validate="{ rules: validationRules }"
 			@input="onChange"
 		/>

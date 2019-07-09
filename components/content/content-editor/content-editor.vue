@@ -27,6 +27,8 @@
 						v-if="shouldShowGifButton"
 						:view="view"
 						:state-counter="stateCounter"
+						:open-startup="openGifStartup && !openedGifStartup"
+						@open="openedGifModalStartup"
 					/>
 				</transition>
 				<transition name="fade">

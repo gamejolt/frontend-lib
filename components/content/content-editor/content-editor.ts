@@ -61,6 +61,10 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(String)
 	name!: string;
 
+	// Will open the gif modal on startup when passed in
+	@Prop(Boolean)
+	openGifStartup?: boolean;
+
 	$_veeValidate = {
 		value: () => this.value,
 		name: () => 'app-content-editor',
@@ -79,6 +83,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	isFocused = false;
 	emojiPanelVisible = false;
 	controlsCollapsed = true;
+	openedGifStartup = false;
 
 	_tempModelId: number | null = null; // If no model id if gets passed in, we store a temp model's id here
 	_sourceControlVal: string | null = null; // Keep a copy of the json version of the doc, to only set the content if the external source changed.
@@ -353,5 +358,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	onControlsCollapsedChanged(collapsed: boolean) {
 		this.controlsCollapsed = collapsed;
+	}
+
+	openedGifModalStartup() {
+		this.openedGifStartup = true;
 	}
 }
