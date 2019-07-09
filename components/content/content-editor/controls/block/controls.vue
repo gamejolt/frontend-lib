@@ -10,7 +10,9 @@
 			'controls-desktop': !Screen.isXs,
 			'controls-mobile': Screen.isXs,
 		}"
+		tabindex="0"
 	>
+		<!-- ^ Tab index is 0 so that the main content editor does not focus when clicking the buttons -->
 		<!-- When adding new buttons here, make sure they are added in both mobile and desktop views -->
 		<transition name="fade">
 			<div v-if="visible">

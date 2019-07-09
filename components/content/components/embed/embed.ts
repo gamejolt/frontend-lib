@@ -93,6 +93,7 @@ export default class AppContentEmbed extends Vue {
 					this.$refs.inputElement.selectionEnd === 0
 				) {
 					this.remove();
+					e.preventDefault();
 				}
 				break;
 			case 'Enter':
