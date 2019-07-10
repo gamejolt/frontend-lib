@@ -1,6 +1,7 @@
 <template>
 	<component
 		:is="ourTag"
+		type="button"
 		class="button"
 		:class="{
 			'-primary': this.primary,

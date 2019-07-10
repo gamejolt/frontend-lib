@@ -32,7 +32,7 @@ export class Shortkeys {
 	}
 
 	private static eventHandler(e: KeyboardEvent) {
-		if (e.ctrlKey || e.altKey || e.shiftKey) {
+		if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
 			return;
 		}
 		const activeElement = document.activeElement;

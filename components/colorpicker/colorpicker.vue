@@ -17,12 +17,12 @@
 
 				<div class="colorpicker-well">
 					<div class="col">
-						<app-button primary solid block @click.prevent="accept">
+						<app-button primary solid block @click="accept">
 							<translate>Accept</translate>
 						</app-button>
 					</div>
 					<div class="col">
-						<app-button trans block @click.prevent="cancel">
+						<app-button trans block @click="cancel">
 							<translate>Cancel</translate>
 						</app-button>
 					</div>

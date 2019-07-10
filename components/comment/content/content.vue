@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<app-fade-collapse
-			:collapse-height="300"
+			:collapse-height="375"
 			:is-open="showFullContent"
 			@require-change="canToggleContent = $event"
 			@expand="showFullContent = true"

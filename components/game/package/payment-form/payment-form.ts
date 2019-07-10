@@ -251,12 +251,10 @@ export default class FormGamePackagePayment extends BaseForm<any>
 
 	checkoutCard() {
 		this.checkoutType = 'cc-stripe';
-		this.$refs.form.submit();
 	}
 
 	checkoutPaypal() {
 		this.checkoutType = 'paypal';
-		this.$refs.form.submit();
 	}
 
 	startOver() {

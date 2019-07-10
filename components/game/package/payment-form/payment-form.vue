@@ -100,16 +100,16 @@
 							</p>
 
 							<p>
-								<app-button primary sparse @click.prevent="addMoney(1)">
+								<app-button primary sparse @click="addMoney(1)">
 									+$1
 								</app-button>
-								<app-button primary sparse @click.prevent="addMoney(2)">
+								<app-button primary sparse @click="addMoney(2)">
 									+$2
 								</app-button>
-								<app-button primary sparse @click.prevent="addMoney(5)">
+								<app-button primary sparse @click="addMoney(5)">
 									+$5
 								</app-button>
-								<app-button primary sparse @click.prevent="addMoney(10)">
+								<app-button primary sparse @click="addMoney(10)">
 									+$10
 								</app-button>
 							</p>
@@ -243,16 +243,16 @@
 								</template>
 							</app-expand>
 
-							<app-button icon="credit-card" :disabled="!valid" @click.prevent="checkoutCard()">
+							<app-form-button icon="credit-card" :solid="false" :primary="false" :disabled="!valid" @before-submit="checkoutCard()">
 								<template v-if="cards.length">
 									<translate>New Card</translate>
 								</template>
 								<template v-else>
 									<translate>Card</translate>
 								</template>
-							</app-button>
+							</app-form-button>
 
-							<app-button :disabled="!valid" @click.prevent="collectAddress('paypal')">
+							<app-button :disabled="!valid" @click="collectAddress('paypal')">
 								<translate>PayPal</translate>
 							</app-button>
 						</div>
@@ -318,9 +318,9 @@
 						</div>
 
 						<div v-if="checkoutType === 'paypal'">
-							<app-button primary :disabled="!valid" @click.prevent="checkoutPaypal">
+							<app-form-button :solid="false" :disabled="!valid" @before-submit="checkoutPaypal()">
 								<translate>Proceed to PayPal</translate>
-							</app-button>
+							</app-form-button>
 						</div>
 						<div v-else-if="checkoutType === 'wallet'">
 							<app-loading
@@ -348,7 +348,7 @@
 							<app-button
 								primary
 								:disabled="!valid || !calculatedAddressTax || !hasSufficientWalletFunds"
-								@click.prevent="checkoutWallet"
+								@click="checkoutWallet"
 							>
 								<translate>Buy Using Wallet</translate>
 								<small v-if="calculatedAddressTax">
