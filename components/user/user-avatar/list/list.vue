@@ -57,6 +57,7 @@ $-spacing = 3px
 	right: 0
 	bottom: 0
 	pointer-events: none
+
 </style>
 
 <script lang="ts" src="./list"></script>
