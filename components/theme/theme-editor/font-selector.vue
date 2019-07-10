@@ -72,7 +72,7 @@
 		cursor: pointer
 
 		&:hover
-			theme-prop('background-color', 'bg-subtle')
+			change-bg('bg-subtle')
 			border-bottom-left-radius: $border-radius-base
 			border-bottom-right-radius: $border-radius-base
 
@@ -91,7 +91,7 @@
 			theme-prop('color', 'link-hover', true)
 
 	&-filter
-		theme-prop('background-color', 'bg-subtle')
+		change-bg('bg-subtle')
 		padding: 10px 15px
 </style>
 

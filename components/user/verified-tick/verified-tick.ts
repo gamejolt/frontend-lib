@@ -24,4 +24,20 @@ export default class AppUserVerifiedTick extends Vue {
 
 	@Prop(Boolean)
 	verticalAlign!: boolean;
+
+	get shouldShow() {
+		return this.user.is_verified;
+	}
+
+	get icon() {
+		if (this.user.is_verified) {
+			return 'verified';
+		}
+	}
+
+	get tooltip() {
+		if (this.user.is_verified) {
+			return this.$gettext('Verified Account');
+		}
+	}
 }

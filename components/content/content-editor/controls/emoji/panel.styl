@@ -28,7 +28,7 @@
 .emoji-panel
 	elevate-2()
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	position: absolute
 	bottom: 32px
 	right: -8px
@@ -37,6 +37,7 @@
 	width: 320px
 	padding: 10px 8px 8px 8px
 	z-index: $zindex-content-editor
+	cursor: default
 
 	&:focus
 		outline: none
@@ -47,7 +48,7 @@
 	cursor: pointer
 
 	&:hover
-		theme-prop('background-color', 'bg')
+		change-bg('bg')
 
 	& > span
 		cursor: pointer

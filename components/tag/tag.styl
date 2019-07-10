@@ -2,7 +2,7 @@
 @require '~styles-lib/mixins'
 
 .tag
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	theme-prop('color', 'fg')
 	display: inline-block
 	padding: 1px 4px 2px
@@ -36,10 +36,10 @@
 
 .tag-highlight
 	&, &:hover
-		theme-prop('background-color', 'highlight')
+		change-bg('highlight')
 		theme-prop('color', 'highlight-fg')
 
 .tag-notice
 	&, &:hover
-		theme-prop('background-color', 'notice')
+		change-bg('notice')
 		theme-prop('color', 'notice-fg')

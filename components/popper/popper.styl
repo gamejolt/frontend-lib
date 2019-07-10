@@ -96,11 +96,12 @@ $-transition-time = 200ms
 .popper-content
 	elevate-2()
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	theme-prop('border-color', 'bg-subtle')
+	overflow: hidden
 	max-width: $popover-size
 	min-width: 200px
-	border-width: 2px
+	border-width: $border-width-base
 	border-style: solid
 
 	&.-track-trigger-width

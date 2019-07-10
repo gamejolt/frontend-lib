@@ -1,12 +1,12 @@
 <template>
-	<div class="user-card">
+	<div class="user-card sheet sheet-full">
 		<div class="-user-info">
 			<div class="-header" />
 
 			<!-- Need to do the fill-darker here for the offset color to be for dark offset -->
 			<div class="-avatar fill-darker" />
 
-			<div class="-well fill-darker">
+			<div class="-well fill-bg">
 				<div class="-display-name">
 					<span class="-placeholder-large" style="width: 100px" />
 				</div>
@@ -35,7 +35,7 @@
 @require '~styles-lib/mixins'
 
 .-avatar
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-subtle')
 
 .-placeholder-large
 	lazy-placeholder-inline()

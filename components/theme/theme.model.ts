@@ -16,13 +16,17 @@ import { ThemePreset } from './preset/preset.model';
 
 // Sync with variables in stylus.
 const GrayDarkest = '#111111';
-const GrayDarker = '#212121';
+const GrayDarker = '#1f1f1f';
 const GrayDark = '#292929';
 const Gray = '#363636';
 const GraySubtle = '#444444';
 const GrayLight = '#7e7e7e';
 const GrayLighter = '#d1d1d1';
-const GrayLightest = '#f3f3f3';
+const GrayLightest = '#f0f0f0';
+const BgBackdropLight = '#fafafa';
+const BgBackdropLightXs = '#f8f8f8';
+const BgBackdropDark = '#252525';
+const BgBackdropDarkXs = '#222222';
 
 // For clamping custom colors.
 //   ("MinLitBase" is summed with a variable portion of BlueBoost for MinLitFinal.)
@@ -260,6 +264,22 @@ export class Theme extends Model {
 
 	get darkBiFg_() {
 		return this.highlightFg_;
+	}
+
+	get bgBackdrop_() {
+		return this.tintColor(BgBackdropLight, 0.02);
+	}
+
+	get bgBackdropXs_() {
+		return this.tintColor(BgBackdropLightXs, 0.02);
+	}
+
+	get darkBgBackdrop_() {
+		return this.tintColor(BgBackdropDark, 0.04);
+	}
+
+	get darkBgBackdropXs_() {
+		return this.tintColor(BgBackdropDarkXs, 0.04);
 	}
 
 	get darkest_() {

@@ -62,7 +62,7 @@ export default class AppContentEditorBlockControls extends Vue {
 				}
 
 				const box = this.$refs.container.offsetParent.getBoundingClientRect();
-				this.top = start.top - box.top - 10 + 'px';
+				this.top = start.top - box.top - 8 + 'px';
 				this.left = '-32px';
 
 				return;

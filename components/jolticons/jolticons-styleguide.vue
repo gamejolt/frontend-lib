@@ -12,14 +12,14 @@
 
 		<input
 			type="text"
-			class="input"
+			class="form-control"
 			style="width: 100%; margin-bottom: 1em; padding: 5px;"
 			placeholder="Search for a Jolticon..."
 			v-model="filter"
 		/>
 
 		<div class="row">
-			<div class="col-xs-2 text-center" v-for="jolticon of filteredIcons">
+			<div class="col-xs-2 text-center" v-for="jolticon of filteredIcons" :key="jolticon">
 				<p v-app-tooltip="jolticon">
 					<app-jolticon :icon="jolticon" big />
 				</p>

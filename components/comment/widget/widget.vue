@@ -1,6 +1,6 @@
 <template>
 	<div class="comment-widget">
-		<app-loading v-if="!hasBootstrapped && !hasError" />
+		<app-loading v-if="!hasBootstrapped && !hasError" centered />
 		<div v-else-if="hasError" class="alert alert-notice">
 			<translate>Couldn't fetch comments.</translate>
 		</div>

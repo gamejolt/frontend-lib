@@ -11,9 +11,8 @@
 		color: inherit
 
 		&-bubble
-			theme-prop('background-color', 'bg-offset')
+			change-bg('bg-offset')
 			theme-prop('color', 'fg-muted')
-			theme-prop('border-color', 'bg')
 			img-circle()
 			position: absolute
 			left: 0
@@ -21,6 +20,7 @@
 			width: $timeline-list-icon-size
 			height: $timeline-list-icon-size
 			line-height: $timeline-list-icon-size
+			border: 2px solid var(--theme-bg-actual)
 			border-width: 2px
 			border-style: solid
 			z-index: 1
@@ -32,7 +32,7 @@
 				theme-prop('border-color', 'notice')
 
 				.timeline-list-item-bubble-inner
-					theme-prop('background-color', 'bg')
+					change-bg('bg')
 					padding: 2px
 					img-circle()
 
@@ -90,7 +90,7 @@
 
 		&-thumb
 			rounded-corners()
-			theme-prop('background-color', 'bg-offset')
+			change-bg('bg-offset')
 			background-repeat: no-repeat
 			background-position: center center
 			background-size: cover

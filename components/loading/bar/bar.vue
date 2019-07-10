@@ -20,7 +20,7 @@
 	z-index: $zindex-loading-bar
 
 	&-bar
-		theme-prop('background-color', 'highlight')
+		change-bg('highlight')
 		height: 3px
 		transition: width 300ms $strong-ease-out
 		will-change: width

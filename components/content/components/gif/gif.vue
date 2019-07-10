@@ -4,8 +4,15 @@
 		:is-disabled="isDisabled"
 		@removed="onRemoved"
 	>
-		<div class="gif-container">
-			<div class="gif-inner">
+		<div class="gif-outer">
+			<div
+				class="gif-container"
+				ref="container"
+				:style="{
+					width: containerWidth,
+					height: containerHeight,
+				}"
+			>
 				<video class="gif" loop autoplay muted playsinline :poster="media.preview">
 					<source :src="media.webm.url" type="video/webm" />
 					<source :src="media.mp4.url" type="video/mp4" />
@@ -19,17 +26,21 @@
 @require '~styles/variables'
 @require '~styles-lib/mixins'
 
-.gif-container
-	margin-bottom: $line-height-computed
-
-	min-height: 44px // make sure the X button fits properly, usually not a problem unless the gif is super wide/untall
-	max-height: 400px
+.gif-outer
 	width: 100%
+	display: flex
+	flex-direction: column
+	margin-bottom: $line-height-computed
+	min-height: 44px // make sure the X button fits properly, usually not a problem unless the image is super wide
+	align-items: center
 
-	rounded-corners()
-	cursor: default
+.gif-container
 	display: flex
 	justify-content: center
+	align-items: center
+	rounded-corners()
+	overflow: hidden
+	max-width: 100%
 	position: relative
 
 .gif-inner
@@ -38,10 +49,9 @@
 	height: auto
 	display: flex
 	justify-content: center
+	rounded-corners()
 
 .gif
-	width: 100%
-	height: 100%
 	rounded-corners()
 
 </style>

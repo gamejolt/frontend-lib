@@ -10,6 +10,8 @@
 
 .content-editor
 	position: relative
+	padding-top: 0
+	padding-bottom: 0
 
 .content-placeholder
 	top: 0
@@ -30,7 +32,7 @@
 	theme-prop('outline-color', 'bi-bg') !important
 
 >>> .content-editor-spoiler
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	font-size: $font-size-base
 	padding-top: 1px
 	border-width: 0
@@ -98,7 +100,7 @@
 		border-right-width: 0
 
 .fade-enter-active, .fade-leave-active
-	transition: opacity 0.05s
+	transition: opacity 200ms $strong-ease-out
 
 .fade-enter, .fade-leave-to
 	opacity: 0

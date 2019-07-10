@@ -3,13 +3,13 @@
 
 // Override code styling to always have the default code block background color
 .content-viewer-code-block
-	theme-prop('background-color', 'darkest', true)
+	change-bg('darkest', true)
 	position: relative
 	font-size: $font-size-small !important
+	border-radius: $border-radius-base !important
 
-	& *::selection {
+	& *::selection
 		theme-prop('background', 'gray', true)
-	}
 
 	&:before
 		content: attr(data-annotation)

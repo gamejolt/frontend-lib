@@ -1,14 +1,14 @@
 <template>
 	<app-jolticon
-		v-if="user.is_verified"
+		v-if="shouldShow"
 		:class="{
 			'-highlight': this.highlight,
 			'-vertical-align': this.verticalAlign,
 			'-small': this.small,
 		}"
-		icon="verified"
+		:icon="icon"
 		:big="big"
-		v-app-tooltip="$gettext(`Verified Account`)"
+		v-app-tooltip="tooltip"
 	/>
 </template>
 

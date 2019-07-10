@@ -29,7 +29,7 @@ html
 	-webkit-font-smoothing: subpixel-antialiased
 
 body
-	theme-prop('background-color', 'bg')
+	change-bg('bg')
 	theme-prop('color', 'fg')
 	font-family: $font-family-base
 	font-size: $font-size-base
@@ -382,7 +382,7 @@ code, kbd, pre, samp
 // Inline code
 code
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	theme-prop('color', 'fg')
 	padding: 2px 4px
 	font-size: 90%
@@ -391,7 +391,7 @@ code
 // User input typically entered via keyboard
 kbd
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	theme-prop('color', 'fg')
 	padding: 2px 4px
 	font-size: 90%
@@ -399,7 +399,7 @@ kbd
 // Blocks of code
 pre
 	rounded-corners()
-	theme-prop('background-color', 'darkest')
+	change-bg('darkest')
 	display: block
 	padding: (($line-height-computed - 1) / 2)
 	margin: 0 0 ($line-height-computed / 2)

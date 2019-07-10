@@ -9,13 +9,13 @@
 	padding-right: $grid-gutter-width * 0.5
 
 	&::after
-		theme-prop('background-color', 'bg-subtle')
+		change-bg('bg-subtle')
 		content: ''
 		position: absolute
 		left: 0
 		right: 0
 		bottom: 0
-		height: 2px
+		height: $border-width-base
 		z-index: 1
 
 	@media $media-xs
@@ -38,6 +38,9 @@
 			float: none !important
 
 		& > li
+			// We save the actual BG color outside the <a> so that we can use
+			// it to override the hover styling when the <a> is active.
+			--bg-save: var(--theme-bg-actual)
 			display: inline-block
 			margin: 0
 
@@ -55,7 +58,7 @@
 				padding: $tab-list-padding-v $tab-list-padding-h
 				margin: 0 3px
 				cursor: pointer
-				border-width: 2px
+				border-width: $border-width-base
 				border-style: solid
 				border-top-left-radius: $border-radius-base
 				border-top-right-radius: $border-radius-base
@@ -65,11 +68,11 @@
 				user-select: none
 
 				&:hover
-					theme-prop('background-color', 'bg-offset')
+					change-bg('bg-offset')
 
 				&.active
-					theme-prop('background-color', 'bg')
 					theme-prop('color', 'link')
+					background-color: var(--bg-save) !important
 					position: relative
 					z-index: 2
 

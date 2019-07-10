@@ -46,7 +46,7 @@
 	display: inline-block
 	width: $line-height-computed
 	height: $line-height-computed
-	border-width: 1px
+	border-width: $border-width-base
 	border-style: solid
 	cursor: pointer
 

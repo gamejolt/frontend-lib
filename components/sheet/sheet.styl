@@ -1,0 +1,18 @@
+.sheet
+	rounded-corners()
+	full-bleed-xs()
+	change-bg('bg')
+	padding: ($grid-gutter-width-xs / 2)
+	margin-bottom: $line-height-computed
+
+	@media $media-sm-up
+		padding: ($grid-gutter-width / 2)
+		border: 1px solid var(--theme-bg-subtle)
+
+.sheet-full
+	padding: 0
+
+.sheet-elevate
+	elevate-xs()
+	@media $media-sm-up
+		elevate-1()

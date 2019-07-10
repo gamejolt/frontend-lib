@@ -39,7 +39,7 @@
 		margin-right: $minbar-offset-right + 20px
 
 	&-item
-		theme-prop('background-color', 'darker')
+		change-bg('darker')
 		display: inline-block
 		position: relative
 		padding: $minbar-padding
@@ -52,7 +52,7 @@
 		animation-delay: 300ms
 
 		&.active
-			theme-prop('background-color', 'highlight')
+			change-bg('highlight')
 
 		> .notification-tag
 			position: absolute
