@@ -181,4 +181,8 @@ export default class AppContentMediaItem extends Vue {
 	onImageLoad() {
 		this.imageLoaded = true;
 	}
+
+	destroyed() {
+		this.resizeObserver.disconnect();
+	}
 }
