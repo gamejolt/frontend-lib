@@ -11,7 +11,11 @@
 		--theme-bg-offset: var(--theme-bg)
 
 .fill-backdrop
-	change-bg('bg-backdrop')
+	@media $media-xs
+		change-bg('bg-backdrop-xs')
+
+	@media $media-sm-up
+		change-bg('bg-backdrop')
 
 // Use this class to reset the fill to the same as the original background. You
 // can use this to reset a container to the background color if it's being

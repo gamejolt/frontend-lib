@@ -84,6 +84,7 @@ export class AppTheme extends Vue {
 				${copyVar('bg', 'white')}
 				${copyVar('bg-offset', 'lightest')}
 				${genVar('bg-backdrop', theme.bgBackdrop_)}
+				${genVar('bg-backdrop-xs', theme.bgBackdropXs_)}
 				${copyVar('bg-subtle', 'lighter')}
 				${copyVar('fg', 'dark')}
 				${copyVar('fg-muted', 'light')}
@@ -98,6 +99,7 @@ export class AppTheme extends Vue {
 				${copyDarkVar('bg', 'dark')}
 				${copyDarkVar('bg-offset', 'darker')}
 				${genDarkVar('bg-backdrop', theme.darkBgBackdrop_)}
+				${genDarkVar('bg-backdrop-xs', theme.darkBgBackdropXs_)}
 				${copyDarkVar('bg-subtle', 'gray-subtle')}
 				${copyDarkVar('fg', 'lightest')}
 				${copyDarkVar('fg-muted', 'light')}
@@ -125,6 +127,7 @@ export class AppTheme extends Vue {
 					${darkVar('bg')}
 					${darkVar('bg-offset')}
 					${darkVar('bg-backdrop')}
+					${darkVar('bg-backdrop-xs')}
 					${darkVar('bg-subtle')}
 					${darkVar('fg')}
 					${darkVar('fg-muted')}
