@@ -73,10 +73,10 @@ export class AppContentViewerText extends Vue {
 			const elementAttrs = {
 				href,
 			} as any;
-			if (attrs.title) {
+			if (attrs.title && attrs.title !== attrs.href) {
 				elementAttrs.title = attrs.title + ' (' + href + ')';
 			} else {
-				elementAttrs.title = href;
+				elementAttrs.title = attrs.href;
 			}
 
 			vnode = h(AppExternalLink, { attrs: elementAttrs }, children);
