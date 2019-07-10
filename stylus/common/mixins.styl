@@ -186,7 +186,8 @@ elevate-0()
 	elevate-transition()
 	box-shadow: none
 
-elevate-mobile()
+// On mobile, sometimes shadows with elevate-1 between elements can be very busy, so we use a smaller shadow
+elevate-xs()
 	elevate('1')
 
 elevate-1()
