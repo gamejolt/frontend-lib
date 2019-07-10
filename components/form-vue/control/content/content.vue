@@ -27,6 +27,11 @@
 
 .content-control
 	cursor: text
+	// Add a min height because app-content-editor is a lazy control.
+	// Otherwise surrounding areas would move around the first time content editor is loaded in.
+	// This is only an approximation of the most common default size,
+	// might not always be correct, but at least it's something.
+	min-height: ($line-height-computed + 22)
 
 .content-editor-form-control
 	height: auto
