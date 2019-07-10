@@ -1,5 +1,5 @@
 <template>
-	<div class="user-card sheet">
+	<div class="user-card sheet sheet-full">
 		<div class="-user-info">
 			<div class="-header" />
 

@@ -1,17 +1,17 @@
 .sheet
-	border-width: 1px
 	rounded-corners()
-	theme-prop('border-color', 'bg-subtle')
-	border-style: solid
+	full-bleed-xs()
 	theme-prop('background-color', 'bg')
+	padding: ($grid-gutter-width-xs / 2)
+	margin-bottom: $line-height-computed
 
-.sheet-padded
-	padding: ($grid-gutter-width / 2)
+	@media $media-sm-up
+		padding: ($grid-gutter-width / 2)
+		border: 1px solid var(--theme-bg-subtle)
+
+.sheet-full
+	padding: 0
 
 .sheet-elevate
-	elevate-1()
-
-.sheet-split
-	border-top-width: 1px
-	theme-prop('border-color', 'bg-subtle')
-	border-style: solid
+	@media $media-sm-up
+		elevate-1()

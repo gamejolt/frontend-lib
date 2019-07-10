@@ -1,5 +1,5 @@
 <template>
-	<app-theme class="user-card sheet" :theme="user.theme">
+	<app-theme class="user-card sheet sheet-full" :theme="user.theme">
 		<app-tooltip-container>
 			<div class="-user-info">
 				<div
