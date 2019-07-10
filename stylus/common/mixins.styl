@@ -167,7 +167,7 @@ $mdc-elevation-ambient-opacity = 0.09
 
 elevate-transition()
 	// If elevations change, we want to transition the shadow.
-	transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1)
+	transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1)
 
 elevate(level = '0', color = $mdc-elevation-baseline-color)
 	$umbra-z-value = $mdc-elevation-umbra-map[level]
@@ -185,6 +185,9 @@ elevate(level = '0', color = $mdc-elevation-baseline-color)
 elevate-0()
 	elevate-transition()
 	box-shadow: none
+
+elevate-mobile()
+	elevate('1')
 
 elevate-1()
 	elevate('3')
@@ -367,7 +370,7 @@ input-placeholder-button()
 	line-height: $input-height-base * 1.5
 	padding-left: $padding-base-horizontal
 	padding-right: $padding-base-horizontal
-	border-width: 2px
+	border-width: $border-width-base
 	border-style: solid
 	border-radius: $input-border-radius
 	font-style: italic
