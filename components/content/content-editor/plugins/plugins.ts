@@ -8,6 +8,7 @@ import { getContentEditorKeymap } from './commands/keymap';
 import { createInputRules } from './input-rules/input-rules';
 import UpdateAutolinkPlugin from './update-autolinks-plugin';
 import { UpdateIncrementerPlugin } from './update-incrementer-plugin';
+import { UpdateIsEmptyPlugin } from './update-is-empty-plugin';
 
 export function createPlugins(editor: AppContentEditor, schema: ContentEditorSchema): Plugin[] {
 	// This is used to update any children with the new view.
@@ -16,6 +17,11 @@ export function createPlugins(editor: AppContentEditor, schema: ContentEditorSch
 	const incrementerPlugin = new Plugin<ContentEditorSchema>({
 		view(editorView) {
 			return new UpdateIncrementerPlugin(editorView, editor);
+		},
+	});
+	const isEmptyPlugin = new Plugin<ContentEditorSchema>({
+		view(_editorView) {
+			return new UpdateIsEmptyPlugin(editor);
 		},
 	});
 
@@ -27,6 +33,7 @@ export function createPlugins(editor: AppContentEditor, schema: ContentEditorSch
 		keymap(baseKeymap),
 		history(),
 		incrementerPlugin,
+		isEmptyPlugin,
 		new UpdateAutolinkPlugin(editor.capabilities),
 		createInputRules(editor.capabilities),
 	];

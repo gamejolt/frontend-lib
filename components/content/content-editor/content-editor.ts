@@ -79,6 +79,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	isFocused = false;
 	emojiPanelVisible = false;
 	controlsCollapsed = true;
+	isEmpty = true; // Gets updated through the update-is-empty-plugin
 
 	_tempModelId: number | null = null; // If no model id if gets passed in, we store a temp model's id here
 	_sourceControlVal: string | null = null; // Keep a copy of the json version of the doc, to only set the content if the external source changed.
@@ -110,13 +111,6 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		if (this.capabilities) {
 			return this.capabilities.emoji;
 		}
-	}
-
-	get isEmpty() {
-		if (this.view instanceof EditorView) {
-			return this.view.state.doc.toString().trim() === 'doc(paragraph)';
-		}
-		return false;
 	}
 
 	get shouldShowPlaceholder() {
