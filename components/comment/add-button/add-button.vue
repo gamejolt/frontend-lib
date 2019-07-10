@@ -12,6 +12,7 @@
 
 .comment-add-button
 	input-placeholder-button()
+	change-bg('bg')
 	margin-bottom: $line-height-computed
 </style>
 
