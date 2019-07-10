@@ -67,7 +67,7 @@ make-button-size(size)
 
 	// Hover state is always the same.
 	&:hover
-		theme-prop('background-color', 'bi-bg', true)
+		change-bg('bi-bg', true)
 		theme-prop('border-color', 'bi-bg', true)
 		theme-prop('color', 'bi-fg', true)
 		text-decoration: none
@@ -122,11 +122,11 @@ make-button-size(size)
  * Button types
  */
 .button
-	theme-prop('background-color', 'fg')
+	change-bg('fg')
 	theme-prop('color', 'bg')
 
 .-primary
-	theme-prop('background-color', 'bi-bg')
+	change-bg('bi-bg')
 	theme-prop('color', 'bi-fg')
 
 .-outline

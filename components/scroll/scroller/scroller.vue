@@ -53,7 +53,7 @@ $-thumb-border-radius = $-track-width
 
 	>>>
 		.simplebar-scrollbar:before
-			theme-prop('background-color', 'light')
+			change-bg('light')
 
 		// SUPER HACK!
 		// This is because simplebar sets the track to "visibility: hidden" in the

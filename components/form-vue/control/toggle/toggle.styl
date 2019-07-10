@@ -5,7 +5,7 @@ $-toggle-width = $input-height-base * 2 // + $toggle-padding * 2
 $-knob-border-width = 2px
 
 .toggle
-	theme-prop('background-color', 'bg-subtle')
+	change-bg('bg-subtle')
 	display: block
 	width: $-toggle-width
 	height: $input-height-base
@@ -26,10 +26,10 @@ $-knob-border-width = 2px
 		margin-top: ($padding-base-vertical + 1px)
 
 .-checked
-	theme-prop('background-color', 'link')
+	change-bg('link')
 
 .-knob
-	theme-prop('background-color', 'bg')
+	change-bg('bg')
 	theme-prop('border-color', 'bg-subtle')
 	display: block
 	width: $input-height-base

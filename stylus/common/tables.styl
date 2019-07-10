@@ -74,7 +74,7 @@ th
 .table-striped
 	> tbody > tr:nth-child(odd)
 		> td, > th
-			theme-prop('background-color', 'bg-offset')
+			change-bg('bg-offset')
 
 // Hover effect
 //
@@ -82,7 +82,7 @@ th
 .table-hover
 	> tbody > tr:hover
 		> td, > th
-			theme-prop('background-color', 'bg-offset')
+			change-bg('bg-offset')
 
 // Table cell sizing
 //
@@ -115,7 +115,7 @@ table
 // Draggable table handles.
 td, th
 	&.drag-handle
-		theme-prop('background-color', 'gray')
+		change-bg('gray')
 		vertical-align: middle !important
 		cursor: move
 		user-select: none

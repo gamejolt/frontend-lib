@@ -9,7 +9,7 @@
 	padding-right: $grid-gutter-width * 0.5
 
 	&::after
-		theme-prop('background-color', 'bg-subtle')
+		change-bg('bg-subtle')
 		content: ''
 		position: absolute
 		left: 0
@@ -38,6 +38,9 @@
 			float: none !important
 
 		& > li
+			// We save the actual BG color outside the <a> so that we can use
+			// it to override the hover styling when the <a> is active.
+			--bg-save: var(--theme-bg-actual)
 			display: inline-block
 			margin: 0
 
@@ -65,11 +68,11 @@
 				user-select: none
 
 				&:hover
-					theme-prop('background-color', 'bg-offset')
+					change-bg('bg-offset')
 
 				&.active
-					theme-prop('background-color', 'bg')
 					theme-prop('color', 'link')
+					background-color: var(--bg-save) !important
 					position: relative
 					z-index: 2
 

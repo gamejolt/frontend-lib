@@ -28,7 +28,7 @@
 .emoji-panel
 	elevate-2()
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	position: absolute
 	bottom: 32px
 	right: -8px
@@ -47,7 +47,7 @@
 	cursor: pointer
 
 	&:hover
-		theme-prop('background-color', 'bg')
+		change-bg('bg')
 
 	& > span
 		cursor: pointer

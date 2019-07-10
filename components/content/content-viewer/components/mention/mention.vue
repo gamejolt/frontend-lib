@@ -53,7 +53,7 @@
 	position: absolute
 	right: -4px
 	bottom: -4px
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	border-radius: 100%
 
 </style>

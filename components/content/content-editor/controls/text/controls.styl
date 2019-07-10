@@ -21,7 +21,7 @@
 		display: flex
 		justify-content: center
 		align-items: center
-		theme-prop('background-color', 'bg-offset')
+		change-bg('bg-offset')
 		theme-prop('border-color', 'bg-subtle')
 		border-top-width: 1px
 		border-top-style: solid
@@ -45,7 +45,7 @@
 	& > div
 		elevate-2()
 		rounded-corners()
-		theme-prop('background-color', 'darkest')
+		change-bg('darkest')
 		display: flex
 		justify-content: flex-start
 		align-items: center
@@ -76,7 +76,7 @@
 
 .control-separator
 	display: inline-block
-	theme-prop('background-color', 'bg-subtle')
+	change-bg('bg-subtle')
 	width: 2px
 	height: 20px
 	line-height: 20px

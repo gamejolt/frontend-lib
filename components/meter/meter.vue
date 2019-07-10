@@ -30,7 +30,7 @@
 $meter-blip-count = 10
 
 .meter-blip
-	theme-prop('background-color', 'bg-subtle')
+	change-bg('bg-subtle')
 	float: left
 	display: inline-block
 	vertical-align: bottom
@@ -43,7 +43,7 @@ $meter-blip-count = 10
 		margin-right: 2px
 
 .meter-blip-filled
-	theme-prop('background-color', 'fg')
+	change-bg('fg')
 
 for i in 1 .. $meter-blip-count
 	.meter-blip:nth-child({i})

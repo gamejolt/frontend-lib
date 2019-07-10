@@ -21,74 +21,93 @@ $gray-lighter = #d1d1d1
 $gray-lightest = #f0f0f0
 $white = #ffffff
 $bg-backdrop-light = #fafafa
-$bg-backdrop-light-trans = rgba($bg-backdrop-light, 0)
 $bg-backdrop-dark = #252525
-$bg-backdrop-dark-trans = rgba($bg-backdrop-dark, 0)
 //
 // Theme vars
 // Copy out the shades of gray that we use throughout the site
+$theme-white = $white
+$theme-white-trans = rgba($theme-white, 0)
+$theme-black = $black
+$theme-black-trans = rgba($theme-black, 0)
 $theme-darkest = $gray-darkest
+$theme-darkest-trans = rgba($theme-darkest, 0)
 $theme-darker = $gray-darker
+$theme-darker-trans = rgba($theme-darker, 0)
 $theme-dark = $gray-dark
+$theme-dark-trans = rgba($theme-dark, 0)
 $theme-gray = $gray
+$theme-gray-trans = rgba($theme-gray, 0)
 $theme-gray-subtle = $gray-subtle
+$theme-gray-subtle-trans = rgba($theme-gray-subtle, 0)
 $theme-light = $gray-light
+$theme-light-trans = rgba($theme-light, 0)
 $theme-lighter = $gray-lighter
+$theme-lighter-trans = rgba($theme-lighter, 0)
 $theme-lightest = $gray-lightest
-// Transparent grays
-$theme-darkest-trans = rgba($gray-darkest, 0)
-$theme-darker-trans = rgba($gray-darker, 0)
-$theme-dark-trans = rgba($gray-dark, 0)
-$theme-gray-trans = rgba($gray, 0)
-$theme-gray-subtle-trans = rgba($gray-subtle, 0)
-$theme-light-trans = rgba($gray-light, 0)
-$theme-lighter-trans = rgba($gray-lighter, 0)
-$theme-lightest-trans = rgba($gray-lightest, 0)
+$theme-lightest-trans = rgba($theme-lightest, 0)
 // The main theme color -- should be bright (show well on dark, not on light)
 $theme-highlight = $gj-green
+$theme-highlight-trans = rgba($theme-highlight, 0)
+$theme-highlight-fg = light($theme-highlight) ? $black : $white
+$theme-highlight-fg-trans = rgba($theme-highlight-fg, 0)
 // The darker theme color (highlight should be able to overlay on top of this)
 $theme-backlight = $gj-dark-green
+$theme-backlight-trans = rgba($theme-backlight, 0)
 // Used for notices like notifications or errors
 $theme-notice = $gj-pink
+$theme-notice-trans = rgba($theme-notice, 0)
+$theme-notice-fg = light($theme-notice) ? $black : $white
+$theme-notice-fg-trans = rgba($theme-notice-fg, 0)
 // Bi-color themes
 $theme-bi-bg = $theme-backlight
+$theme-bi-bg-trans = rgba($theme-bi-bg, 0)
 $theme-bi-fg = $theme-highlight
+$theme-bi-fg-trans = rgba($theme-bi-fg, 0)
 // Base background color
 $theme-bg = $white
 $theme-bg-trans = rgba($theme-bg, 0)
 // Slightly darker background (used for info boxes and such)
 $theme-bg-offset = $theme-lightest
-$theme-bg-offset-trans = $theme-lightest-trans
+$theme-bg-offset-trans = rgba($theme-bg-offset, 0)
+// Slightly lighter than the offset to be used to drop sheets on to
 $theme-bg-backdrop = $bg-backdrop-light
-$theme-bg-backdrop-trans = $bg-backdrop-light-trans
+$theme-bg-backdrop-trans = rgba($theme-bg-backdrop, 0)
 // A bit darker than the offset color (used for separator lines)
 $theme-bg-subtle = $theme-lighter
+$theme-bg-subtle-trans = rgba($theme-bg-subtle, 0)
 // Text color
 $theme-fg = $theme-dark
+$theme-fg-trans = rgba($theme-fg, 0)
 // Muted text color (used for less important content)
 $theme-fg-muted = $theme-light
+$theme-fg-muted-trans = rgba($theme-fg-muted, 0)
 // The default link color
 $theme-link = $theme-backlight
+$theme-link-trans = rgba($theme-link, 0)
 $theme-link-hover = $black
+$theme-link-hover-trans = rgba($theme-link-hover, 0)
 //
 // Dark theme vars
 $dark-theme-bg = $theme-dark
 $dark-theme-bg-trans = $theme-dark-trans
 $dark-theme-bg-offset = $theme-darker
-$dark-theme-bg-offset-trans = $theme-gray-trans
+$dark-theme-bg-offset-trans = $theme-darker-trans
 $dark-theme-bg-backdrop = $bg-backdrop-dark
-$dark-theme-bg-backdrop-trans = $bg-backdrop-dark-trans
+$dark-theme-bg-backdrop-trans = rgba($dark-theme-bg-backdrop, 0)
 $dark-theme-bg-subtle = $theme-gray-subtle
+$dark-theme-bg-subtle-trans = $theme-gray-subtle-trans
 $dark-theme-fg = $theme-lightest
+$dark-theme-fg-trans = $theme-lightest-trans
 $dark-theme-fg-muted = $theme-light
+$dark-theme-fg-muted-trans = $theme-light-trans
 $dark-theme-link = $theme-highlight
+$dark-theme-link-trans = $theme-highlight-trans
 $dark-theme-link-hover = $white
+$dark-theme-link-hover-trans = rgba($dark-theme-link-hover, 0)
 $dark-theme-bi-bg = $theme-highlight
+$dark-theme-bi-bg-trans = $theme-highlight-trans
 $dark-theme-bi-fg = light($dark-theme-bi-bg) ? $black : $white
-//
-// Computed theme vars
-$theme-highlight-fg = light($theme-highlight) ? $black : $white
-$theme-notice-fg = light($theme-notice) ? $black : $white
+$dark-theme-bi-fg-trans = rgba($dark-theme-bi-fg, 0)
 //
 // Base
 $border-radius-base = 4px

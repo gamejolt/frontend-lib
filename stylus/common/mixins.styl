@@ -1,33 +1,39 @@
 @require './bootstrap-mixins'
 
+// Sync with the Theme component.
+theme-dark()
+	// Private mixin to make it easier to specify all variables that get set in
+	// dark mode.
+	-var($var)
+		--theme-{$var}: var(unquote('--dark-theme-' + $var))
+		--theme-{$var}-trans: var(unquote('--dark-theme-' + $var + '-trans'))
+
+	-var('highlight')
+	-var('backlight')
+	-var('notice')
+	-var('bi-bg')
+	-var('bi-fg')
+	-var('bg')
+	-var('bg-offset')
+	-var('bg-backdrop')
+	-var('bg-subtle')
+	-var('fg')
+	-var('fg-muted')
+	-var('link')
+	-var('link-hover')
+
 theme-prop($prop, $val, $important = false)
 	$important = $important ? '!important' : ''
 	{$prop}: lookup('$theme-' + $val) unquote($important)
 	{$prop}: unquote('var(--theme-' + $val + ')') unquote($important)
 
+change-bg($var, $important = false)
+	--theme-bg-actual: var(unquote('--theme-' + $var))
+	--theme-bg-actual-trans: var(unquote('--theme-' + $var + '-trans'))
+	theme-prop('background-color', $var, $important)
+
 rounded-corners()
 	border-radius: $border-radius-base
-
-// Sync with the Theme component.
-theme-dark()
-	--theme-highlight: var(--dark-theme-highlight)
-	--theme-backlight: var(--dark-theme-backlight)
-	--theme-notice: var(--dark-theme-notice)
-	--theme-bi-bg: var(--dark-theme-bi-bg)
-	--theme-bi-fg: var(--dark-theme-bi-fg)
-	--theme-bg: var(--dark-theme-bg)
-	--theme-bg-trans: var(--dark-theme-bg-trans)
-	--theme-bg-offset-base: var(--dark-theme-bg-offset-base)
-	--theme-bg-offset-trans-base: var(--dark-theme-bg-offset-trans-base)
-	--theme-bg-offset: var(--dark-theme-bg-offset)
-	--theme-bg-offset-trans: var(--dark-theme-bg-offset-trans)
-	--theme-bg-backdrop: var(--dark-theme-bg-backdrop)
-	--theme-bg-backdrop-trans: var(--dark-theme-bg-backdrop-trans)
-	--theme-bg-subtle: var(--dark-theme-bg-subtle)
-	--theme-fg: var(--dark-theme-fg)
-	--theme-fg-muted: var(--dark-theme-fg-muted)
-	--theme-link: var(--dark-theme-link)
-	--theme-link-hover: var(--dark-theme-link-hover)
 
 /**
  * Make a caret! Not for rabbits.
@@ -316,7 +322,7 @@ link-unstyled()
  */
 lazy-placeholder-inline()
 	rounded-corners()
-	theme-prop('background-color', 'bg-subtle')
+	change-bg('bg-subtle')
 	display: inline-block
 	vertical-align: middle
 	width: 100%
@@ -324,7 +330,7 @@ lazy-placeholder-inline()
 
 lazy-placeholder-block()
 	rounded-corners()
-	theme-prop('background-color', 'bg-subtle')
+	change-bg('bg-subtle')
 	display: block
 	height: $font-size-base
 
@@ -332,7 +338,7 @@ lazy-placeholder-block()
  * Dot Separator
  */
 dot-separator()
-	theme-prop('background-color', 'lighter')
+	change-bg('lighter')
 	display: inline-block
 	margin: 0 10px
 	height: 4px
@@ -351,34 +357,12 @@ pull-left()
 	float: left !important
 
 /**
- * Spacer
- */
-spacer-xs()
-	@media $media-xs
-		full-bleed()
-		theme-prop('background-color', 'bg-offset')
-		theme-prop('border-top-color', 'bg-subtle')
-		theme-prop('border-bottom-color', 'bg-subtle')
-		display: block
-		height: ($line-height-computed / 2)
-		border-top-width: 1px
-		border-top-style: solid
-		border-bottom-width: 1px
-		border-bottom-style: solid
-		margin-bottom: $line-height-computed
-
-spacer()
-	display: block
-	height: $line-height-computed
-	spacer-xs()
-
-/**
  * Input Placeholder Button
  */
 input-placeholder-button()
 	theme-prop('border-color', 'bg-subtle')
 	theme-prop('color', 'fg-muted')
-	theme-prop('background-color', 'bg-backdrop')
+	change-bg('bg-backdrop')
 	height: $input-height-base * 1.5
 	line-height: $input-height-base * 1.5
 	padding-left: $padding-base-horizontal

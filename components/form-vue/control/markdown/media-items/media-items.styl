@@ -2,7 +2,7 @@
 @require '~styles-lib/mixins'
 
 .form-markdown-editor-media-items
-	theme-prop('background-color', 'bg')
+	change-bg('bg')
 	theme-prop('border-color', 'bg-subtle')
 	border-width: 2px
 	border-style: solid
@@ -26,7 +26,7 @@
 
 		&-item
 			rounded-corners()
-			theme-prop('background-color', 'fg')
+			change-bg('fg')
 			display: block
 			position: relative
 			padding-top: 80%

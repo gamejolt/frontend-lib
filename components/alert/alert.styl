@@ -3,7 +3,7 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 
 .alert
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	position: relative
 	padding: $alert-padding-xs
 	margin-bottom: $line-height-computed
@@ -35,7 +35,7 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 
 // Invert when it's in a fill of the same background color.
 .fill-offset .alert
-	theme-prop('background-color', 'bg')
+	change-bg('bg')
 
 .alert.alert-highlight
 	&, .fill-offset &
@@ -64,7 +64,7 @@ $alert-padding-xs = ($grid-gutter-width-xs / 2)
 
 .alert-actions
 	theme-dark()
-	theme-prop('background-color', 'darkest')
+	change-bg('darkest')
 	position: relative
 	margin: -($alert-padding)
 	margin-top: $alert-padding

@@ -40,7 +40,7 @@ $-spacing = 3px
 
 .-avatar
 	img-circle()
-	theme-prop('background-color', 'bg-subtle')
+	change-bg('bg-subtle')
 	pressy()
 	flex: none
 	width: $-size
@@ -51,7 +51,7 @@ $-spacing = 3px
 		margin-right: $grid-gutter-width * 0.5
 
 .-tick
-	theme-prop('background-color', 'bg')
+	change-bg('bg')
 	border-radius: 50%
 	position: absolute
 	right: 0

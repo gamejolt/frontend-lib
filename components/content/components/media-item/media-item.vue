@@ -89,14 +89,14 @@
 
 // While the image is still loading, we show a dimmed background to better indicate the size of the placeholder
 .media-item-container-placeholder
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 
 .link-overlay
 	position: absolute
 	top: 8px
 	left: 8px
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	padding-left: 6px
 	padding-right: 6px
 	padding-top: 2px

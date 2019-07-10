@@ -35,7 +35,7 @@
 @require '~styles-lib/mixins'
 
 .-avatar
-	theme-prop('background-color', 'bg-subtle')
+	change-bg('bg-subtle')
 
 .-placeholder-large
 	lazy-placeholder-inline()

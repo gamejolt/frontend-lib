@@ -7,7 +7,7 @@ $list-group-drag-handle-width = 20px
 .list-group
 	rounded-corners()
 	theme-prop('border-color', 'bg-subtle')
-	theme-prop('background-color', 'bg')
+	change-bg('bg')
 	margin-bottom: $font-size-base
 	border-width: 1px
 	border-style: solid
@@ -33,7 +33,7 @@ $list-group-drag-handle-width = 20px
 		user-select: none
 
 	a&:hover, &.active
-		theme-prop('background-color', 'bg-offset')
+		change-bg('bg-offset')
 
 	// Disabled styling.
 	&.disabled
@@ -44,7 +44,7 @@ $list-group-drag-handle-width = 20px
 			cursor: not-allowed
 
 		&:hover
-			theme-prop('background-color', 'bg')
+			change-bg('bg')
 
 	// Badges should float right and be correctly aligned vertically.
 	.badge
@@ -106,7 +106,7 @@ $list-group-drag-handle-width = 20px
 		margin-bottom: 0
 
 .list-group-item-addon
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	position: absolute
 	top: 0
 	left: 0
@@ -145,7 +145,7 @@ $list-group-drag-handle-width = 20px
  */
 .list-group-dark
 	@extend .fill-darkest
-	theme-prop('background-color', 'darkest')
+	change-bg('darkest')
 	border: 0
 
 	.list-group-item
@@ -155,7 +155,7 @@ $list-group-drag-handle-width = 20px
 			theme-prop('color', 'gray', true)
 
 			&:hover
-				theme-prop('background-color', 'darkest')
+				change-bg('darkest')
 				theme-prop('color', 'gray', true)
 
 		> .jolticon, > .list-group-item-heading > .jolticon
@@ -176,7 +176,7 @@ $list-group-drag-handle-width = 20px
 		background-color: transparent
 
 		&:before
-			theme-prop('background-color', 'dark')
+			change-bg('dark')
 			content: ''
 			position: absolute
 			right: 0
@@ -188,7 +188,7 @@ $list-group-drag-handle-width = 20px
 			overflow: hidden
 
 	a.list-group-item:hover, .list-group-item.active
-		theme-prop('background-color', 'darker')
+		change-bg('darker')
 		color: $white !important
 
 		> .jolticon, > .list-group-item-heading > .jolticon

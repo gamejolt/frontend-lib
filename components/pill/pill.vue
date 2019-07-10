@@ -15,7 +15,7 @@
 
 .pill
 	rounded-corners()
-	theme-prop('background-color', 'bg-offset')
+	change-bg('bg-offset')
 	theme-prop('color', 'fg')
 	display: inline-flex
 	align-items: center
@@ -26,7 +26,7 @@
 	margin-bottom: 5px
 
 	&.active
-		theme-prop('background-color', 'bi-bg')
+		change-bg('bi-bg')
 		theme-prop('color', 'bi-fg')
 
 	a&
@@ -34,7 +34,7 @@
 		cursor: pointer
 
 		&:hover
-			theme-prop('background-color', 'bi-bg')
+			change-bg('bi-bg')
 			theme-prop('color', 'bi-fg')
 
 .-img

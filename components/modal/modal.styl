@@ -45,7 +45,7 @@
 		transform: none
 
 .modal-content
-	theme-prop('background-color', 'bg')
+	change-bg('bg')
 	theme-prop('color', 'fg')
 	elevate-3()
 	position: relative
@@ -71,7 +71,7 @@
 		width: $container-md
 
 .modal-full
-	theme-prop('background-color', 'bg')
+	change-bg('bg')
 
 	.modal-content
 		-fullscreen()

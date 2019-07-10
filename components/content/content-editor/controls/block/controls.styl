@@ -11,7 +11,7 @@
 	transition: transform 0.2s ease
 
 .-add-button-rotated
-	transform: rotate(-45deg);
+	transform: rotate(-45deg)
 
 .fade-enter-active, .fade-leave-active
 	transition: opacity 0.2s
@@ -30,7 +30,7 @@
 		display: flex
 		justify-content: center
 		align-items: center
-		theme-prop('background-color', 'bg-offset')
+		change-bg('bg-offset')
 		theme-prop('border-color', 'bg-subtle')
 		border-top-width: 1px
 		border-top-style: solid
@@ -53,6 +53,6 @@
 	border-style: none
 
 .btn-stagger
-	for i in 2..40
+	for i in 2 .. 40
 		&:nth-child({i})
-			animation-delay: (20ms * i)
+			animation-delay: 20ms * i

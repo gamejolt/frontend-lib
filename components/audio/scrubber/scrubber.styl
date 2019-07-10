@@ -8,7 +8,7 @@
 		position: relative
 
 	&-timebar-unfilled
-		theme-prop('background-color', 'bg-subtle')
+		change-bg('bg-subtle')
 		position: absolute
 		width: 100%
 		top: 50%
@@ -16,7 +16,7 @@
 		height: 5px
 
 	&-timebar-filled
-		theme-prop('background-color', 'highlight')
+		change-bg('highlight')
 		position: absolute
 		top: 0
 		left: 0
@@ -37,7 +37,7 @@
 		z-index: 11
 
 		.audio-scrubber.dragging &
-			theme-prop('background-color', 'highlight')
+			change-bg('highlight')
 			width: 17px
 			height: @width
 			margin-top: -(@width / 2)
