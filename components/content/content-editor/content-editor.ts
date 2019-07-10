@@ -186,6 +186,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		this._tempModelId = null;
 		const doc = new ContentDocument(this.contentContext, []);
 		this.setContent(doc);
+		this.isEmpty = true;
 	}
 
 	mounted() {
