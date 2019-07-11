@@ -5,7 +5,7 @@ $list-group-addon-width = 40px
 $list-group-drag-handle-width = 20px
 
 .list-group
-	rounded-corners()
+	rounded-corners-lg()
 	theme-prop('border-color', 'bg-subtle')
 	change-bg('bg')
 	margin-bottom: $font-size-base
@@ -162,12 +162,12 @@ $list-group-drag-handle-width = 20px
 			theme-prop('color', 'light')
 
 		&:first-child
-			border-top-left-radius: $border-radius-base
-			border-top-right-radius: $border-radius-base
+			border-top-left-radius: $border-radius-large
+			border-top-right-radius: $border-radius-large
 
 		&:last-child
-			border-bottom-left-radius: $border-radius-base
-			border-bottom-right-radius: $border-radius-base
+			border-bottom-left-radius: $border-radius-large
+			border-bottom-right-radius: $border-radius-large
 
 	.list-group-item-heading
 		theme-prop('color', 'lighter')

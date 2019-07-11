@@ -38,7 +38,7 @@
 	display: flex
 	justify-content: center
 	align-items: center
-	rounded-corners()
+	rounded-corners-lg()
 	overflow: hidden
 	max-width: 100%
 	position: relative
@@ -49,12 +49,12 @@
 	height: auto
 	display: flex
 	justify-content: center
-	rounded-corners()
+	rounded-corners-lg()
 
 .gif
 	width: 100%
 	height: 100%
-	rounded-corners()
+	rounded-corners-lg()
 
 </style>
 

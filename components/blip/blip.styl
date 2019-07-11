@@ -2,18 +2,19 @@
 @require '~styles-lib/mixins'
 
 .blip
-	rounded-corners()
 	change-bg('bg-offset')
 	position: relative
 	top: 1px // Needed to play nicely with buttons for some reason
 	display: inline-block
-	margin: 0 0 0 5px
+	margin: 0 3px
 	padding: 0 5px
+	text-align: center
 	font-family: $font-family-tiny
 	font-weight: bold
 	font-size: $font-size-tiny
 	line-height: 20px
-	min-width: 10px
+	border-radius: 20px
+	min-width: 20px
 	text-align: center
 	vertical-align: baseline
 

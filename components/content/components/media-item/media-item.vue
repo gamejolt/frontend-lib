@@ -81,7 +81,7 @@
 	display: flex
 	justify-content: center
 	align-items: center
-	rounded-corners()
+	rounded-corners-lg()
 	overflow: hidden
 	max-width: 100%
 	position: relative

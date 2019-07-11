@@ -32,8 +32,14 @@ change-bg($var, $important = false)
 	--theme-bg-actual-trans: var(unquote('--theme-' + $var + '-trans'))
 	theme-prop('background-color', $var, $important)
 
+rounded-corners-sm()
+	border-radius: $border-radius-small
+
 rounded-corners()
 	border-radius: $border-radius-base
+
+rounded-corners-lg()
+	border-radius: $border-radius-large
 
 /**
  * Make a caret! Not for rabbits.
@@ -367,8 +373,8 @@ input-placeholder-button()
 	theme-prop('border-color', 'bg-subtle')
 	theme-prop('color', 'fg-muted')
 	change-bg('bg-backdrop')
-	height: $input-height-base * 1.5
-	line-height: $input-height-base * 1.5
+	height: $input-height-base * 1.25
+	line-height: $input-height-base * 1.25
 	padding-left: $padding-base-horizontal
 	padding-right: $padding-base-horizontal
 	border-width: $border-width-base

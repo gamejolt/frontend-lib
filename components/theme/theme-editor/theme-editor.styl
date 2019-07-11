@@ -9,7 +9,7 @@
 		theme-prop('border-color', 'bg-subtle')
 
 .theme-editor-definitions
-	rounded-corners()
+	rounded-corners-lg()
 
 	.form-group
 		clearfix()
@@ -20,15 +20,15 @@
 		border-bottom-style: solid
 
 		&:first-child
-			border-top-left-radius: $border-radius-base
-			border-top-right-radius: $border-radius-base
+			border-top-left-radius: $border-radius-large
+			border-top-right-radius: $border-radius-large
 
 		&:last-child
 			border-bottom: 0
 
 			&, >>> .fill-offset
-				border-bottom-left-radius: $border-radius-base
-				border-bottom-right-radius: $border-radius-base
+				border-bottom-left-radius: $border-radius-large
+				border-bottom-right-radius: $border-radius-large
 
 	.control-label
 		float: left

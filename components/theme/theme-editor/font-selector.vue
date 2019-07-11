@@ -73,8 +73,8 @@
 
 		&:hover
 			change-bg('bg-subtle')
-			border-bottom-left-radius: $border-radius-base
-			border-bottom-right-radius: $border-radius-base
+			border-bottom-left-radius: $border-radius-large
+			border-bottom-right-radius: $border-radius-large
 
 			.font-selector-cancel
 				theme-prop('color', 'link-hover')

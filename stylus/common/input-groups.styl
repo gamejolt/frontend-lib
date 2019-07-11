@@ -51,6 +51,7 @@
 // Text input groups
 // -------------------------
 .input-group-addon
+	rounded-corners()
 	change-bg('bg-offset')
 	theme-prop('border-color', 'bg-subtle')
 	padding: $padding-base-vertical $padding-base-horizontal
@@ -60,13 +61,12 @@
 	text-align: center
 	border-width: $border-width-base
 	border-style: solid
-	border-radius: $border-radius-base
 
 	// Sizing
 	&.input-sm
+		rounded-corners-sm()
 		padding: $padding-small-vertical $padding-small-horizontal
 		font-size: $font-size-small
-		border-radius: $border-radius-small
 
 	// Nuke default margins from checkboxes and radios to vertically center within.
 	input[type='radio'], input[type='checkbox']

@@ -76,7 +76,7 @@
 @require '~styles-lib/mixins'
 
 .form-control-upload
-	rounded-corners()
+	rounded-corners-lg()
 	theme-prop('border-color', 'bg-subtle')
 	border-width: 2px
 	border-style: dashed
