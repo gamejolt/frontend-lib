@@ -50,6 +50,7 @@ export default class AppContentEditorGifModal extends BaseModal {
 	}
 
 	async mounted() {
+		this.$refs.modal.$el.focus();
 		this.populateCategories();
 	}
 
