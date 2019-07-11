@@ -44,6 +44,7 @@ export default class AppFiresidePostLikeWidget extends Vue {
 	app!: Store['app'];
 
 	isShowingFollowPopover = false;
+	showLikeAnim = false;
 
 	get shouldShowFollow() {
 		if (!this.showUserFollow) {
@@ -102,6 +103,7 @@ export default class AppFiresidePostLikeWidget extends Vue {
 
 			this.post.user_like = newLike;
 			++this.post.like_count;
+			this.showLikeAnim = true;
 
 			try {
 				await newLike.$save();
@@ -113,6 +115,7 @@ export default class AppFiresidePostLikeWidget extends Vue {
 		} else {
 			this.post.user_like = null;
 			--this.post.like_count;
+			this.showLikeAnim = false;
 
 			try {
 				await currentLike.$remove();

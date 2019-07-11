@@ -24,10 +24,8 @@
 	&.v-enter, &.v-leave-to
 		.modal-content
 			opacity: 0
-			// On xs we do plop down animation.
-			// On sm-up we do a expand open animation.
-			transform: scale3d(1.2, 1.2, 1.2)
 
+			// On sm-up we do a expand open animation.
 			@media $media-sm-up
 				transform: scale3d(0.8, 0.8, 0.8)
 
