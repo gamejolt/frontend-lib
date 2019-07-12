@@ -17,18 +17,26 @@
 	min-width: 20px
 	text-align: center
 	vertical-align: baseline
+	// Make sure to override any link colors around the blip.
+	color: var(--theme-fg)
+
+	a &:hover
+		color: var(--theme-link)
 
 	/**
 	 * Carets
 	 */
 	.blip-caret
 		// Set to white since we'll have to override with content prop anyway.
-		caret(direction: left, color: $white, size: 3px)
-		theme-prop('border-right-color', 'bg-offset')
+		caret(direction: left, color: $white, size: 5px)
+		border-right-color: var(--theme-bg-offset)
+		// Since the blip is a circle, we need to pull it away less from the edge, otherwise it shows a gap.
+		left: -3px
 
 	&.filled
 		change-bg('bi-bg')
-		theme-prop('color', 'bi-fg')
+		// important to override the link hover from above
+		color: var(--theme-bi-fg) !important
 
 		.blip-caret
-			theme-prop('border-right-color', 'bi-bg')
+			border-right-color: var(--theme-bi-bg)
