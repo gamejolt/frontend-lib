@@ -6,7 +6,6 @@ import { number } from '../../../../vue/filters/number';
 import { AppStore } from '../../../../vue/services/app/app-store';
 import { AppTrackEvent } from '../../../analytics/track-event.directive';
 import AppContentViewer from '../../../content/content-viewer/content-viewer.vue';
-import AppFadeCollapse from '../../../fade-collapse/fade-collapse.vue';
 import { BaseModal } from '../../../modal/base';
 import { AppResponsiveDimensions } from '../../../responsive-dimensions/responsive-dimensions';
 import { Screen } from '../../../screen/screen-service';
@@ -23,7 +22,6 @@ import { CommentVideo } from '../video-model';
 		AppJolticon,
 		AppResponsiveDimensions,
 		AppVideoEmbed,
-		AppFadeCollapse,
 		AppGameThumbnail,
 		AppUserAvatar,
 		AppUserCardHover,
@@ -46,9 +44,6 @@ export default class AppCommentVideoModal extends BaseModal {
 	app!: AppStore;
 
 	readonly Screen = Screen;
-
-	canToggleDescription = false;
-	showFullDescription = true;
 
 	created() {
 		this.video.$viewed();

@@ -25,11 +25,12 @@
 					<h2 class="section-header">
 						{{ video.title }}
 					</h2>
-					<hr class="underbar" />
+
+					<app-comment-video-like-widget :video="video" />
+
+					<hr />
 
 					<div class="clearfix">
-						<app-comment-video-like-widget class="-like-button" :video="video" />
-
 						<div class="-user-info">
 							<div class="-avatar">
 								<app-user-card-hover :user="user">
@@ -56,23 +57,9 @@
 						</div>
 					</div>
 
-					<hr />
+					<br />
 
-					<app-fade-collapse
-						:collapse-height="300"
-						:is-open="showFullDescription"
-						@require-change="canToggleDescription = $event"
-						@expand="showFullDescription = true"
-					>
-						<app-content-viewer :source="comment.comment_content" />
-					</app-fade-collapse>
-
-					<a
-						class="hidden-text-expander"
-						v-if="canToggleDescription"
-						@click="showFullDescription = !showFullDescription"
-						v-app-track-event="`comment-video:toggle-full-description`"
-					></a>
+					<app-content-viewer :source="comment.comment_content" />
 				</div>
 				<div class="col-sm-4">
 					<div class="visible-xs">
@@ -92,12 +79,6 @@
 <style lang="stylus" scoped>
 @require '~styles/variables'
 @require '~styles-lib/mixins'
-
-.-like-button
-	margin-bottom: $line-height-computed
-
-	@media $media-sm-up
-		float: right
 
 .-user-info
 	clearfix()
