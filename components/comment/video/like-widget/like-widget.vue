@@ -1,23 +1,18 @@
 <template>
 	<span v-app-auth-required>
 		<app-button
-			:icon="isCircle ? 'heart' : undefined"
-			:circle="isCircle"
+			icon="heart"
+			circle
+			:trans="trans"
 			:overlay="overlay"
 			:block="block"
-			:primary="!!comment.user_vote || !isCircle"
+			:primary="!!comment.user_vote"
 			:solid="!!comment.user_vote"
-			:badge="badge"
 			:disabled="isProcessing"
 			@click="toggle"
-		>
-			<span v-if="!isCircle">
-				<translate v-if="!comment.user_vote">Like</translate>
-				<translate v-else>Liked</translate>
-			</span>
-		</app-button>
+		/>
 		<a @click="showLikers()" v-app-tooltip="$gettext(`View all people that liked this video`)">
-			<span class="blip filled" v-if="blip">
+			<span v-if="blip" class="blip" :class="{ filled: !!comment.user_vote }">
 				<span class="blip-caret"></span>
 				<span class="blip-count">{{ blip }}</span>
 			</span>

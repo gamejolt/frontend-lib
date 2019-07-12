@@ -4,7 +4,6 @@ import { AppTooltip } from '../../../../components/tooltip/tooltip';
 import { number } from '../../../../vue/filters/number';
 import { AppAuthRequired } from '../../../auth/auth-required-directive';
 import { LikersModal } from '../../../likers/modal.service';
-import { Screen } from '../../../screen/screen-service';
 import { CommentVote } from '../../vote/vote-model';
 import { CommentVideo } from '../video-model';
 
@@ -17,10 +16,13 @@ import { CommentVideo } from '../video-model';
 export default class AppCommentVideoLikeWidget extends Vue {
 	@Prop(CommentVideo)
 	video!: CommentVideo;
+
 	@Prop(Boolean)
 	overlay?: boolean;
+
 	@Prop(Boolean)
-	circle?: boolean;
+	trans?: boolean;
+
 	@Prop(Boolean)
 	block?: boolean;
 
@@ -30,17 +32,8 @@ export default class AppCommentVideoLikeWidget extends Vue {
 		return this.video.comment;
 	}
 
-	// We also show circle in xs size.
-	get isCircle() {
-		return this.circle || Screen.isXs;
-	}
-
 	get blip() {
-		return this.isCircle && this.comment.votes ? number(this.comment.votes) : '';
-	}
-
-	get badge() {
-		return !this.isCircle && this.comment.votes ? number(this.comment.votes) : '';
+		return this.comment.votes ? number(this.comment.votes) : '';
 	}
 
 	async toggle() {

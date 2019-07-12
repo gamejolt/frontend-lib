@@ -7,7 +7,6 @@ import { AppAuthRequired } from '../../../../auth/auth-required-directive';
 import { Growls } from '../../../../growls/growls.service';
 import { LikersModal } from '../../../../likers/modal.service';
 import AppPopper from '../../../../popper/popper.vue';
-import { Screen } from '../../../../screen/screen-service';
 import { AppTooltip } from '../../../../tooltip/tooltip';
 import { UserFollowSuggestion } from '../../../../user/follow/suggestion.service';
 import AppUserFollowWidget from '../../../../user/follow/widget.vue';
@@ -32,7 +31,7 @@ export default class AppFiresidePostLikeWidget extends Vue {
 	overlay?: boolean;
 
 	@Prop(Boolean)
-	circle?: boolean;
+	trans?: boolean;
 
 	@Prop(Boolean)
 	block?: boolean;
@@ -61,25 +60,11 @@ export default class AppFiresidePostLikeWidget extends Vue {
 		return true;
 	}
 
-	// We also show circle in xs size.
-	get isCircle() {
-		return this.circle || Screen.isXs;
-	}
-
 	get blip() {
-		return this.isCircle && this.post.like_count ? number(this.post.like_count) : '';
-	}
-
-	get badge() {
-		return !this.isCircle && this.post.like_count ? number(this.post.like_count) : '';
+		return this.post.like_count ? number(this.post.like_count) : '';
 	}
 
 	get tooltip() {
-		// No tooltip if showing label.
-		if (!this.isCircle) {
-			return undefined;
-		}
-
 		if (!this.post.user_like) {
 			return this.$gettext('Like This Post');
 		} else {

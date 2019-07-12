@@ -9,22 +9,17 @@
 				@auto-hide="onFollowPopoverDismissed"
 			>
 				<app-button
-					:icon="isCircle ? 'heart' : undefined"
-					:circle="isCircle"
+					icon="heart"
+					circle
+					:trans="trans"
 					:overlay="overlay"
 					:block="block"
-					:primary="!!post.user_like || !isCircle"
+					:primary="!!post.user_like"
 					:solid="!!post.user_like"
-					:badge="badge"
 					v-app-tooltip="tooltip"
 					v-app-auth-required
 					@click="toggleLike"
-				>
-					<span v-if="!isCircle">
-						<translate v-if="!post.user_like">Like This Post</translate>
-						<translate v-else>Liked</translate>
-					</span>
-				</app-button>
+				/>
 
 				<div slot="popover" class="well fill-darkest">
 					<p class="small">
@@ -38,13 +33,13 @@
 				</div>
 			</app-popper>
 
-			<div v-if="isCircle && showLikeAnim" class="-like-anim-container">
+			<div v-if="showLikeAnim" class="-like-anim-container">
 				<app-jolticon class="-like-anim" icon="heart" notice />
 			</div>
 		</span>
 
 		<a @click="showLikers()" v-app-tooltip="$gettext(`View all people that liked this post`)">
-			<span class="blip filled" v-if="blip">
+			<span class="blip" :class="{ filled: !!post.user_like }" v-if="blip">
 				<span class="blip-caret"></span>
 				<span class="blip-count">{{ blip }}</span>
 			</span>
