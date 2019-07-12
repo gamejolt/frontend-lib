@@ -1,5 +1,7 @@
 import { RawLocation } from 'vue-router';
 import { Api } from '../api/api.service';
+import { Collaboratable } from '../collaborator/collaboratable';
+import { Community } from '../community/community.model';
 import { ContentContainerModel } from '../content/content-container-model';
 import { ContentContext } from '../content/content-context';
 import { ContentSetCache } from '../content/content-set-cache';
@@ -49,7 +51,7 @@ function pluckBuilds(packages: GamePackage[], func: (build: GameBuild) => boolea
 	return pluckedBuilds;
 }
 
-export class Game extends Model implements ContentContainerModel {
+export class Game extends Collaboratable(Model) implements ContentContainerModel {
 	static readonly CREATION_TOOL_OTHER = 'Other';
 
 	static readonly STATUS_HIDDEN = 0;
@@ -66,6 +68,7 @@ export class Game extends Model implements ContentContainerModel {
 	developer!: User;
 	thumbnail_media_item?: MediaItem;
 	header_media_item?: MediaItem;
+	community?: Community;
 
 	title!: string;
 	slug!: string;
@@ -92,9 +95,6 @@ export class Game extends Model implements ContentContainerModel {
 	should_show_ads!: boolean;
 	like_count!: number;
 	sites_enabled!: boolean;
-
-	// collaborator perms
-	perms?: Perm[];
 
 	// Meta settings
 	creation_tool?: string;
@@ -167,6 +167,10 @@ export class Game extends Model implements ContentContainerModel {
 
 		if (data.theme) {
 			this.theme = new Theme(data.theme);
+		}
+
+		if (data.community) {
+			this.community = new Community(data.community);
 		}
 
 		Registry.store('Game', this);
@@ -295,24 +299,6 @@ export class Game extends Model implements ContentContainerModel {
 			compat.type_applet ||
 			compat.type_silverlight
 		);
-	}
-
-	hasPerms(required?: Perm | Perm[], either?: boolean) {
-		if (!this.perms) {
-			return false;
-		}
-
-		if (!required || this.perms.indexOf('all') !== -1) {
-			return true;
-		}
-
-		required = Array.isArray(required) ? required : [required];
-		const missingPerms = required.filter(perm => this.perms!.indexOf(perm) === -1);
-		if (either) {
-			return missingPerms.length !== required.length;
-		} else {
-			return missingPerms.length === 0;
-		}
 	}
 
 	/**
