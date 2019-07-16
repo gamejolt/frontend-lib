@@ -21,18 +21,6 @@ export interface CustomMessage {
 	class: string;
 }
 
-export type Perm =
-	| 'all'
-	| 'analytics'
-	| 'sales'
-	| 'details'
-	| 'media'
-	| 'devlogs'
-	| 'comments'
-	| 'ratings'
-	| 'builds'
-	| 'game-api';
-
 function pluckBuilds(packages: GamePackage[], func: (build: GameBuild) => boolean) {
 	let pluckedBuilds: GameBuild[] = [];
 

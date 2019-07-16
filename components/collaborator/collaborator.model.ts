@@ -5,7 +5,13 @@ import { Model } from '../model/model.service';
 import { User } from '../user/user.model';
 import { Perm } from './collaboratable';
 
-export type Roles = 'owner' | 'collaborator' | 'community-manager' | 'developer' | 'moderator';
+export type Roles =
+	| 'owner'
+	| 'collaborator'
+	| 'community-manager'
+	| 'developer'
+	| 'dj'
+	| 'moderator';
 
 export class Collaborator extends Model {
 	static readonly STATUS_ACTIVE = 'active';

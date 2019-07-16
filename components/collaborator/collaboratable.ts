@@ -11,7 +11,11 @@ export type Perm =
 	| 'ratings'
 	| 'builds'
 	| 'game-api'
-	| 'feature';
+	| 'feature'
+	| 'community-feature'
+	| 'community-posts'
+	| 'community-media'
+	| 'community-tags';
 
 export const Collaboratable = <T extends new (...args: any[]) => Model>(Base: T) =>
 	class extends Base {

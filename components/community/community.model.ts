@@ -3,10 +3,8 @@ import { Api } from '../../components/api/api.service';
 import { MediaItem } from '../../components/media-item/media-item-model';
 import { Model } from '../../components/model/model.service';
 import { Theme } from '../../components/theme/theme.model';
-import { Collaboratable } from '../collaborator/collaboratable';
+import { Collaboratable, Perm } from '../collaborator/collaboratable';
 import { Game } from '../game/game.model';
-
-export type Perm = 'feature' | 'all';
 
 export async function $joinCommunity(community: Community) {
 	community.is_member = true;
