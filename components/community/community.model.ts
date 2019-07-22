@@ -1,4 +1,5 @@
 import { CommunityTag } from 'game-jolt-frontend-lib/components/community/tag/tag.model';
+import { RawLocation } from 'vue-router';
 import { Api } from '../../components/api/api.service';
 import { MediaItem } from '../../components/media-item/media-item-model';
 import { Model } from '../../components/model/model.service';
@@ -90,6 +91,15 @@ export class Community extends Collaboratable(Model) {
 			return this.thumbnail.mediaserver_url;
 		}
 		return require('./no-thumb.png');
+	}
+
+	get routeLocation(): RawLocation {
+		return {
+			name: 'communities.view.overview',
+			params: {
+				path: this.path,
+			},
+		};
 	}
 
 	$save() {
