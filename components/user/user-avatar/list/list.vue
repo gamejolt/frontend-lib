@@ -35,9 +35,6 @@ $-spacing = 3px
 	margin: 0 $-spacing $-spacing
 	position: relative
 
-	&:hover .-tick
-		opacity: 0.5
-
 .-avatar
 	img-circle()
 	change-bg('bg-subtle')
