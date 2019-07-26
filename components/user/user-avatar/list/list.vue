@@ -1,14 +1,22 @@
 <template>
-	<div>
-		<div class="-list">
-			<div class="-user" v-for="user of users" :key="user.id">
-				<app-user-avatar
-					class="-avatar"
-					:user="user"
-					v-app-tooltip="user.display_name + ' (@' + user.username + ')'"
-				/>
-				<app-user-verified-tick class="-tick" :user="user" />
-			</div>
+	<div class="-list" :class="{ '-inline-list': inline }">
+		<div
+			class="-user"
+			:class="{
+				'-user-sm': sm,
+			}"
+			v-for="user of users"
+			:key="user.id"
+		>
+			<app-user-avatar
+				class="-avatar"
+				:class="{
+					'-avatar-sm': sm,
+				}"
+				:user="user"
+				v-app-tooltip="user.display_name + ' (@' + user.username + ')'"
+			/>
+			<app-user-verified-tick class="-tick" :user="user" />
 		</div>
 	</div>
 </template>
@@ -20,6 +28,8 @@
 $-size = 40px
 $-spacing = 3px
 
+$-size-sm = 20px
+
 .-list
 	position: relative
 	flex: 1
@@ -27,6 +37,9 @@ $-spacing = 3px
 	flex-wrap: wrap
 	padding-top: 4px
 	padding-bottom: 4px
+
+.-inline-list
+	display: inline-flex
 
 .-user
 	flex: none
@@ -37,6 +50,10 @@ $-spacing = 3px
 
 	&:hover .-tick
 		opacity: 0.5
+
+.-user-sm
+	width: $-size-sm * 0.25
+	height: $-size-sm
 
 .-avatar
 	img-circle()
@@ -49,6 +66,10 @@ $-spacing = 3px
 
 	@media $media-sm-up
 		margin-right: $grid-gutter-width * 0.5
+
+.-avatar-sm
+	width: $-size-sm
+	height: $-size-sm
 
 .-tick
 	change-bg('bg')
