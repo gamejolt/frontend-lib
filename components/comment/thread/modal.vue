@@ -19,7 +19,11 @@
 		</div>
 
 		<div slot="footer" v-if="user && !hasError">
-			<app-message-thread-add v-if="parent" hide-message-split>
+			<app-message-thread-add
+				v-if="parent"
+				hide-message-split
+				:class="{ '-thread-editor-focus': isEditorFocused }"
+			>
 				<form-comment
 					:resource="resource"
 					:resource-id="resourceId"
@@ -28,6 +32,8 @@
 					:autofocus="autofocus"
 					:max-height="Screen.isXs ? '110px' : '250px'"
 					@submit="_onCommentAdd"
+					@editor-focus="onEditorFocus"
+					@editor-blur="onEditorBlur"
 				/>
 			</app-message-thread-add>
 		</div>
@@ -35,13 +41,13 @@
 </template>
 
 <style lang="stylus" scoped>
-	@require '~styles/variables'
+@require '~styles/variables'
 
-	// On mobile, we need to make space for the content editor controls. They
-	// would overlap the Reply form field otherwise.
-	@media $media-xs
-		>>> .message-thread-add
-			padding-bottom: 42px
+// On mobile, we need to make space for the content editor controls. They
+// would overlap the Reply form field otherwise.
+@media $media-xs
+	>>> .message-thread-add.-thread-editor-focus
+		padding-bottom: 42px
 </style>
 
 <script lang="ts" src="./modal"></script>
