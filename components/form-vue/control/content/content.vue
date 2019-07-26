@@ -17,6 +17,8 @@
 			:min-height="minHeight"
 			v-validate="{ rules: validationRules }"
 			@input="onChange"
+			@focus="onFocus"
+			@blur="onBlur"
 		/>
 	</div>
 </template>
