@@ -1,6 +1,13 @@
 <template>
 	<span class="user-avatar-img">
-		<img key="user" v-if="user" :src="user.img_avatar" class="img-responsive" alt="" />
+		<img
+			key="user"
+			v-if="user && !hasError"
+			:src="user.img_avatar"
+			class="img-responsive"
+			alt=""
+			@error="hasError = true"
+		/>
 		<img key="guest" v-else src="../guest.png" class="img-responsive" alt="" />
 	</span>
 </template>
