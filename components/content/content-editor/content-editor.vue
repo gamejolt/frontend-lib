@@ -60,6 +60,12 @@
 				@click="onTextControlClicked"
 			/>
 		</transition>
+		<transition name="fade">
+			<app-content-editor-controls-mention-autocomplete-controls
+				:view="view"
+				:state-counter="stateCounter"
+			/>
+		</transition>
 	</div>
 </template>
 

@@ -17,6 +17,7 @@ import AppContentEditorControlsEmojiPanelTS from './controls/emoji/panel';
 import AppContentEditorControlsEmojiPanel from './controls/emoji/panel.vue';
 import AppContentEditorControlsGifControls from './controls/gif/controls.vue';
 import AppContentEditorControlsInsetContainer from './controls/inset/container.vue';
+import AppContentEditorControlsMentionAutocompleteControls from './controls/mention/autocomplete/controls.vue';
 import AppContentEditorTextControls from './controls/text/controls.vue';
 import buildEvents from './events/build-events';
 import { FocusWatcher } from './focus-watcher';
@@ -34,6 +35,7 @@ import { ContentEditorSchema, generateSchema } from './schemas/content-editor-sc
 		AppContentEditorControlsEmojiPanel,
 		AppContentEditorControlsGifControls,
 		AppContentEditorControlsInsetContainer,
+		AppContentEditorControlsMentionAutocompleteControls,
 	},
 })
 export default class AppContentEditor extends Vue implements ContentOwner {

@@ -1,16 +1,16 @@
 import { InputRule, inputRules } from 'prosemirror-inputrules';
-import { ContextCapabilities } from '../../../content-context';
+import AppContentEditor from '../../content-editor';
 import { insertBulletListRule } from './insert-bullet-list-rule';
 import { insertEmojiRule } from './insert-emoji-rule';
 import { insertOrderedListRule } from './insert-ordered-list-rule';
 
-export function createInputRules(capabilities: ContextCapabilities) {
+export function createInputRules(editor: AppContentEditor) {
 	const rules = [] as InputRule[];
 
-	if (capabilities.emoji) {
+	if (editor.capabilities.emoji) {
 		rules.push(insertEmojiRule());
 	}
-	if (capabilities.list) {
+	if (editor.capabilities.list) {
 		rules.push(insertOrderedListRule());
 		rules.push(insertBulletListRule());
 	}
