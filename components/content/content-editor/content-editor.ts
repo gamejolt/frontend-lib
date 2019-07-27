@@ -303,10 +303,16 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	private onFocusIn() {
+		if (!this.isFocused) {
+			this.$emit('focus');
+		}
 		this.isFocused = true;
 	}
 
 	private onFocusOut() {
+		if (this.isFocused) {
+			this.$emit('blur');
+		}
 		this.isFocused = false;
 	}
 
