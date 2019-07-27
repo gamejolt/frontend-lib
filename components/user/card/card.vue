@@ -54,7 +54,8 @@
 							v-translate="{ count: number(followerCount) }"
 							translate-plural="<b>%{count}</b> followers"
 						>
-							1 follower
+							<b>1</b>
+							follower
 						</router-link>
 					</div>
 
