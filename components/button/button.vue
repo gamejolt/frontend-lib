@@ -19,6 +19,7 @@
 		:to="to"
 		:disabled="this.disabled"
 		@click="onClick"
+		ref="button"
 	>
 		<span v-if="badge" class="-badge">{{ badge }}</span>
 		<app-jolticon class="-icon" v-if="icon" :icon="icon" :big="lg" />
