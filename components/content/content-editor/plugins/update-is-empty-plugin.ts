@@ -17,7 +17,6 @@ export class UpdateIsEmptyPlugin {
 		const state = view.state;
 
 		// Set the content editor is empty state here.
-		// The "empty" prosemirror document takes up a length of 4.
-		this.appEditor.isEmpty = state.doc.nodeSize <= 4;
+		this.appEditor.updateIsEmpty(state);
 	}
 }
