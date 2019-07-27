@@ -25,10 +25,6 @@ export default class AppButton extends Vue {
 	@Prop(String) badge?: string;
 	@Prop() to?: any;
 
-	$refs!: {
-		button: HTMLElement;
-	};
-
 	get ourTag() {
 		if (this.$attrs.href) {
 			return 'a';
@@ -40,6 +36,5 @@ export default class AppButton extends Vue {
 
 	onClick(e: Event) {
 		this.$emit('click', e);
-		this.$refs.button.blur();
 	}
 }
