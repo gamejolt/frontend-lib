@@ -1,10 +1,11 @@
-import { Model } from '../../model/model.service';
-import { UserGameTrophy } from '../../user/game-trophy/game-trophy.model';
 import { Api } from '../../api/api.service';
+import { Model } from '../../model/model.service';
+import { BaseTrophy } from '../../trophy/base-trophy';
+import { UserGameTrophy } from '../../user/game-trophy/game-trophy.model';
 
 export type GameTrophyDifficulty = 1 | 2 | 3 | 4;
 
-export class GameTrophy extends Model {
+export class GameTrophy extends Model implements BaseTrophy {
 	static readonly DIFFICULTY_BRONZE = 1;
 	static readonly DIFFICULTY_SILVER = 2;
 	static readonly DIFFICULTY_GOLD = 3;
