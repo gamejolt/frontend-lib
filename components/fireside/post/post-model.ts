@@ -59,6 +59,7 @@ export class FiresidePost extends Model implements ContentContainerModel {
 	url!: string;
 	view_count?: number;
 	expand_count?: number;
+	is_pinned?: boolean;
 
 	lead_snippet!: string;
 	lead_content!: string;
@@ -354,6 +355,14 @@ export class FiresidePost extends Model implements ContentContainerModel {
 
 	$remove() {
 		return this.$_remove(`/web/posts/manage/remove/${this.id}`);
+	}
+
+	$pin() {
+		return this.$_save(`/web/posts/manage/pin/${this.id}`, 'post');
+	}
+
+	$unpin() {
+		return this.$_save(`/web/posts/manage/unpin/${this.id}`, 'post');
 	}
 }
 
