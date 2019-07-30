@@ -1,4 +1,4 @@
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import { ContentContext } from '../../../content/content-context';
 import { AppContentEditorLazy } from '../../../content/content-editor/content-editor-lazy';
 import BaseFormControlTS from '../../../form-vue/control/base';
@@ -32,4 +32,10 @@ export default class AppFormControlContent extends BaseFormControlTS {
 	onChange(source: string) {
 		this.applyValue(source);
 	}
+
+	@Emit('focus')
+	onFocus() {}
+
+	@Emit('blur')
+	onBlur() {}
 }

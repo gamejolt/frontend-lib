@@ -48,9 +48,6 @@ $-size-sm = 20px
 	margin: 0 $-spacing $-spacing
 	position: relative
 
-	&:hover .-tick
-		opacity: 0.5
-
 .-user-sm
 	width: $-size-sm * 0.25
 	height: $-size-sm

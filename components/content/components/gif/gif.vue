@@ -13,10 +13,25 @@
 					height: containerHeight,
 				}"
 			>
-				<video class="gif" loop autoplay muted playsinline :poster="media.preview">
-					<source :src="media.webm.url" type="video/webm" />
-					<source :src="media.mp4.url" type="video/mp4" />
-				</video>
+				<app-scroll-inview
+					:extra-padding="inviewPadding"
+					@inview="onInviewChange(true)"
+					@outview="onInviewChange(false)"
+				>
+					<img class="gif-poster" :src="media.preview" />
+					<video
+						v-if="isInview"
+						class="gif"
+						loop
+						autoplay
+						muted
+						playsinline
+						:poster="media.preview"
+					>
+						<source :src="media.webm.url" type="video/webm" />
+						<source :src="media.mp4.url" type="video/mp4" />
+					</video>
+				</app-scroll-inview>
 			</div>
 		</div>
 	</app-base-content-component>
@@ -43,15 +58,18 @@
 	max-width: 100%
 	position: relative
 
-.gif-inner
+.gif
+	position: absolute
+	top: 0
+	left: 0
 	width: 100%
-	position: relative
-	height: auto
-	display: flex
-	justify-content: center
+	height: 100%
 	rounded-corners-lg()
 
-.gif
+.gif-poster
+	position: absolute
+	top: 0
+	left: 0
 	width: 100%
 	height: 100%
 	rounded-corners-lg()
