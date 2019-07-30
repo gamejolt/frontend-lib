@@ -28,7 +28,7 @@
 $-size = 40px
 $-spacing = 3px
 
-$-size-sm = 20px
+$-size-sm = 24px
 
 .-list
 	position: relative
@@ -49,7 +49,7 @@ $-size-sm = 20px
 	position: relative
 
 .-user-sm
-	width: $-size-sm * 0.25
+	width: $-size-sm * 0.4
 	height: $-size-sm
 
 .-avatar
