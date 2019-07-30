@@ -1,5 +1,5 @@
 <template>
-	<app-theme class="user-card sheet sheet-full" :theme="user.theme">
+	<app-theme class="user-card sheet sheet-full sheet-no-full-bleed" :theme="user.theme">
 		<app-tooltip-container>
 			<div class="-user-info">
 				<div
@@ -54,7 +54,8 @@
 							v-translate="{ count: number(followerCount) }"
 							translate-plural="<b>%{count}</b> followers"
 						>
-							1 follower
+							<b>1</b>
+							follower
 						</router-link>
 					</div>
 

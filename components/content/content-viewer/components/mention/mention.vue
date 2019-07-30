@@ -36,10 +36,6 @@
 .user-mention
 	display: inline-block
 
-	&:hover
-		.mention-verified
-			opacity: 0.25
-
 .avatar-container
 	position: relative
 	display: inline-block
