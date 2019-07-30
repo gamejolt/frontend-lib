@@ -1,0 +1,36 @@
+import { Model } from '../../model/model.service';
+import { SiteTrophy } from '../../site/trophy/trophy.model';
+import { User } from '../user.model';
+import { UserBaseTrophy } from './user-base-trophy.model';
+
+export class UserSiteTrophy extends UserBaseTrophy {
+	site_trophy_id!: number;
+
+	site_trophy?: SiteTrophy;
+	user?: User;
+
+	constructor(data: any = {}) {
+		super(data);
+
+		if (data.site_trophy) {
+			this.site_trophy = new SiteTrophy(data.site_trophy);
+		}
+		if (data.user) {
+			this.user = new User(data.user);
+		}
+	}
+
+	get trophy() {
+		return this.site_trophy;
+	}
+
+	get key() {
+		return 'site-trophy-' + this.id;
+	}
+
+	async $view() {
+		this.$_save(`/web/profile/trophies/view-site/${this.id}`, 'userSiteTrophy');
+	}
+}
+
+Model.create(UserSiteTrophy);

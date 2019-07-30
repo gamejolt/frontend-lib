@@ -10,6 +10,7 @@ export abstract class UserBaseTrophy extends Model {
 	user?: User;
 
 	abstract get trophy(): BaseTrophy | undefined;
+	abstract get key(): string;
 
 	abstract $view(): void;
 }
