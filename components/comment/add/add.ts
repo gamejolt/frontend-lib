@@ -30,6 +30,9 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 	@Prop(String)
 	maxHeight?: string;
 
+	@Prop(String)
+	editorStartupArg?: string;
+
 	$refs!: {
 		form: AppForm;
 	};

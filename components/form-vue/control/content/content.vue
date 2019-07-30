@@ -15,6 +15,7 @@
 			:model-id="modelId"
 			:value="controlVal"
 			:min-height="minHeight"
+			:startup-arg="startupArg"
 			v-validate="{ rules: validationRules }"
 			@input="onChange"
 			@editor-focus="onFocus"

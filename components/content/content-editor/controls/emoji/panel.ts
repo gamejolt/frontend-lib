@@ -15,6 +15,8 @@ export default class AppContentEditorControlsEmojiPanel extends Vue {
 	view!: EditorView<ContentEditorSchema>;
 	@Prop(Number)
 	stateCounter!: number;
+	@Prop(String)
+	startupArg?: string;
 
 	visible = false;
 	emoji = 'huh'; // gets set to a random one at mounted
@@ -63,6 +65,10 @@ export default class AppContentEditorControlsEmojiPanel extends Vue {
 
 	mounted() {
 		this.setRandomEmoji();
+		if (this.startupArg === 'emoji') {
+			this.$emit('opened-startup');
+			this.show();
+		}
 	}
 
 	onMouseEnter() {
