@@ -15,6 +15,8 @@
 					content_no_media_uploads: true,
 				}"
 				:validate-on="['blur']"
+				@focus="onFocusEditor"
+				@blur="onBlurEditor"
 			/>
 
 			<app-form-control-errors label="comment" />

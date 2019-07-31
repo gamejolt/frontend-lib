@@ -44,6 +44,7 @@ export default class AppCommentThreadModal extends BaseModal {
 	onCommentAdd!: CommentStore['onCommentAdd'];
 
 	hasError = false;
+	isEditorFocused = false;
 
 	readonly Screen = Screen;
 
@@ -94,5 +95,13 @@ export default class AppCommentThreadModal extends BaseModal {
 
 	onError(_e: Error) {
 		this.hasError = true;
+	}
+
+	onEditorFocus() {
+		this.isEditorFocused = true;
+	}
+
+	onEditorBlur() {
+		this.isEditorFocused = false;
 	}
 }

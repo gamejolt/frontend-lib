@@ -2,11 +2,14 @@ import { ResizeObserver } from 'resize-observer';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import { Screen } from '../../../screen/screen-service';
+import { AppScrollInview } from '../../../scroll/inview/inview';
 import AppBaseContentComponent from '../base/base-content-component.vue';
 
 @Component({
 	components: {
 		AppBaseContentComponent,
+		AppScrollInview,
 	},
 	directives: {},
 })
@@ -38,6 +41,8 @@ export default class AppContentGif extends Vue {
 
 	resizeObserver!: ResizeObserver;
 	computedHeight = this.height;
+	isInview = false;
+	inviewPadding = Screen.windowHeight * 0.25;
 
 	get containerWidth() {
 		// Always have SSR fullwidth the image. We never let SSR calculate the height of the container based on the width.
@@ -75,5 +80,9 @@ export default class AppContentGif extends Vue {
 
 	destroyed() {
 		this.resizeObserver.disconnect();
+	}
+
+	onInviewChange(inview: boolean) {
+		this.isInview = inview;
 	}
 }

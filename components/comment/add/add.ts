@@ -1,4 +1,4 @@
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import { ContentContext } from '../../content/content-context';
 import AppFormControlContent from '../../form-vue/control/content/content.vue';
 import AppForm from '../../form-vue/form';
@@ -63,6 +63,12 @@ export default class FormComment extends BaseForm<Comment> implements FormOnInit
 			this.$refs.form.clearErrors();
 		}
 	}
+
+	@Emit('editor-focus')
+	onFocusEditor() {}
+
+	@Emit('editor-blur')
+	onBlurEditor() {}
 
 	onCancel() {
 		this.$emit('cancel');

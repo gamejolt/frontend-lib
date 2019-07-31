@@ -253,6 +253,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 				'data-prevent-shortkey': '',
 			},
 		});
+		this.updateIsEmpty(state);
 
 		// Make sure we have a paragraph when loading in a new state
 		if (!this.disabled || this.view.state.doc.childCount === 0) {
@@ -303,10 +304,16 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	}
 
 	private onFocusIn() {
+		if (!this.isFocused) {
+			this.$emit('editor-focus');
+		}
 		this.isFocused = true;
 	}
 
 	private onFocusOut() {
+		if (this.isFocused) {
+			this.$emit('editor-blur');
+		}
 		this.isFocused = false;
 	}
 
@@ -337,6 +344,11 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 		if (this.$refs.emojiPanel instanceof AppContentEditorControlsEmojiPanel) {
 			this.$refs.emojiPanel.show();
 		}
+	}
+
+	public updateIsEmpty(state: EditorState) {
+		// The "empty" prosemirror document takes up a length of 4.
+		this.isEmpty = state.doc.nodeSize <= 4;
 	}
 
 	onEmojiPanelVisibilityChanged(visible: boolean) {
