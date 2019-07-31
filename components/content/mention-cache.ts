@@ -1,4 +1,5 @@
 import { User } from 'game-jolt-frontend-lib/components/user/user.model';
+import { fuzzysearch } from 'game-jolt-frontend-lib/utils/string';
 import { Route } from 'vue-router/types/router';
 import { arrayRemove } from '../../utils/array';
 import { ContentDocument } from './content-document';
@@ -7,6 +8,7 @@ export type MentionCacheUser = {
 	user: User;
 	source: string;
 	rank: number;
+	match: number;
 };
 
 export class MentionCache {
@@ -35,7 +37,7 @@ export class MentionCache {
 			currentUser.rank++;
 		} else {
 			console.log('add user', user.username, 'with rank 1');
-			this._users.push({ user, rank: 1, source });
+			this._users.push({ user, rank: 1, source, match: 0 });
 		}
 	}
 
@@ -68,6 +70,51 @@ export class MentionCache {
 	}
 
 	public static getUsers(suggestion: string) {
-		return this._users;
+		for (const user of this._users) {
+			user.match = this.calculateUserMatch(suggestion, user);
+		}
+
+		return this._users.filter(i => i.match >= 1);
+	}
+
+	public static calculateUserMatch(suggestion: string, user: MentionCacheUser): number {
+		const query = suggestion.toLowerCase();
+		let match = 0;
+
+		const fuzzyUsername = fuzzysearch(query, user.user.username.toLowerCase());
+		const fuzzyDisplayName = fuzzysearch(query, user.user.display_name.toLowerCase());
+
+		if (!fuzzyUsername && !fuzzyDisplayName) {
+			return 0;
+		}
+
+		// For short usernames we don't want this
+		if (user.user.display_name.length > 3) {
+			if (user.user.display_name.toLowerCase() === suggestion) {
+				match += 2;
+			} else if (fuzzyDisplayName) {
+				match++;
+			}
+		}
+		if (user.user.username.length > 3) {
+			if (user.user.username.toLowerCase() === suggestion) {
+				match += 2;
+			} else if (fuzzyUsername) {
+				match++;
+			}
+		}
+
+		if (user.user.is_verified) {
+			match++;
+		}
+
+		if (user.user.is_following) {
+			match++;
+		}
+
+		match += user.rank;
+		match += user.user.follower_count / 500;
+
+		return match;
 	}
 }

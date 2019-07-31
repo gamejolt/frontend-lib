@@ -82,6 +82,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	emojiPanelVisible = false;
 	controlsCollapsed = true;
 	isEmpty = true; // Gets updated through the update-is-empty-plugin
+	canShowMentionSuggestions = 0;
 
 	_tempModelId: number | null = null; // If no model id if gets passed in, we store a temp model's id here
 	_sourceControlVal: string | null = null; // Keep a copy of the json version of the doc, to only set the content if the external source changed.
@@ -314,6 +315,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	private onFocusOut() {
 		if (this.isFocused) {
+			this.canShowMentionSuggestions = 0;
 			this.$emit('editor-blur');
 		}
 		this.isFocused = false;
@@ -362,5 +364,10 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	onControlsCollapsedChanged(collapsed: boolean) {
 		this.controlsCollapsed = collapsed;
+	}
+
+	onInsertMention() {
+		this.highlightCurrentSelection();
+		this.canShowMentionSuggestions = 0;
 	}
 }

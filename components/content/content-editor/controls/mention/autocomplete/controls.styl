@@ -18,7 +18,11 @@
 	change-bg('bg')
 	overflow-y: auto
 	width: 300px
-	max-height: 500px
+	max-height: 500px // We don't want this to get out of control
+
+	// On mobile, take up the full width
+	@media $media-xs
+		width: 100vw
 
 .-suggestion
 	padding-bottom: 10px
@@ -27,6 +31,14 @@
 	padding-right: 8px
 	cursor: pointer
 	transition: background-color 200ms $strong-ease-out
+
+	// Override button styling
+	display: block
+	width: 100%
+	outline: 0
+	border: 0
+	change-bg('bg')
+	text-align: left
 
 	&:hover
 		change-bg('bg-offset')
@@ -56,3 +68,9 @@
 
 .-name-row *
 	vertical-align: middle
+
+.-loading-top
+	margin-top: 16px
+
+.-loading-bottom
+	margin-top: 16px
