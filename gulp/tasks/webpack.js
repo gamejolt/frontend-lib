@@ -469,7 +469,7 @@ module.exports = function(config) {
 		};
 
 		gulp.task('compile:' + section, function(cb) {
-			let compiler = webpack(sectionConfig);
+			let compiler = webpack(webpackSectionConfigs[section]);
 			compiler.run(function(err, stats) {
 				if (err) {
 					throw new gutil.PluginError('webpack:build', err);
