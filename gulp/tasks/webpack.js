@@ -118,6 +118,44 @@ module.exports = function(config) {
 		return loaders;
 	}
 
+	// Check for ngrok tunnels.
+	const getTunnels = config.production
+		? Promise.resolve({})
+		: new Promise(resolve => {
+				const http = require('http');
+				const req = http.get('http://localhost:4040/api/tunnels', res => {
+					if (res.statusCode !== 200) {
+						return resolve({});
+					}
+
+					res.setEncoding('utf8');
+					let response = '';
+					res.on('data', data => (response += data));
+					res.on('end', () => {
+						try {
+							const parsed = JSON.parse(response);
+
+							const GJ_TUNNELS = {};
+							for (let tunnel of parsed.tunnels) {
+								switch (tunnel.name) {
+									case 'gj-backend (http)':
+										GJ_TUNNELS.backend = tunnel.public_url;
+										break;
+
+									case 'gj-frontend (http)':
+										GJ_TUNNELS.frontend = tunnel.public_url;
+										break;
+								}
+							}
+							resolve(GJ_TUNNELS);
+						} catch (_) {
+							resolve({});
+						}
+					});
+				});
+				req.on('error', () => resolve({}));
+		  });
+
 	let webpackSectionConfigs = {};
 	let webpackSectionTasks = [];
 	Object.keys(config.sections).forEach(function(section) {
@@ -236,6 +274,7 @@ module.exports = function(config) {
 								loader: 'ts-loader',
 								options: {
 									transpileOnly: true,
+									experimentalWatchApi: true,
 									appendTsSuffixTo: [/\.vue$/],
 								},
 							},
@@ -430,7 +469,7 @@ module.exports = function(config) {
 		};
 
 		gulp.task('compile:' + section, function(cb) {
-			let compiler = webpack(webpackSectionConfigs[section]);
+			let compiler = webpack(sectionConfig);
 			compiler.run(function(err, stats) {
 				if (err) {
 					throw new gutil.PluginError('webpack:build', err);
@@ -457,33 +496,53 @@ module.exports = function(config) {
 			const buildSections = config.buildSection.split(',');
 			let port = parseInt(config.port),
 				portOffset = 0;
-			for (let buildSection of buildSections) {
-				console.log('watching ' + buildSection + ' on port ' + (port + portOffset));
 
-				let compiler = webpack(webpackSectionConfigs[buildSection]);
+			getTunnels
+				.then(GJ_TUNNELS => {
+					console.log(GJ_TUNNELS);
+					for (let buildSection of buildSections) {
+						// Insert another define plugin with the GJ_TUNNELS const.
+						const sectionConfig = webpackSectionConfigs[buildSection];
+						sectionConfig.plugins.splice(
+							2, // insert before the first define plugin.
+							0,
+							new webpack.DefinePlugin({
+								GJ_TUNNELS: JSON.stringify(GJ_TUNNELS),
+							})
+						);
 
-				let server = new WebpackDevServer(compiler, {
-					historyApiFallback: {
-						rewrites: [
-							{
-								from: /./,
-								to:
-									buildSection === 'app'
-										? '/index.html'
-										: '/' + buildSection + '.html',
+						const hasTunnels = Object.keys(GJ_TUNNELS).length > 0;
+
+						console.log('watching ' + buildSection + ' on port ' + (port + portOffset));
+
+						let compiler = webpack(sectionConfig);
+
+						let server = new WebpackDevServer(compiler, {
+							historyApiFallback: {
+								rewrites: [
+									{
+										from: /./,
+										to:
+											buildSection === 'app'
+												? '/index.html'
+												: '/' + buildSection + '.html',
+									},
+								],
 							},
-						],
-					},
-					public: 'development.gamejolt.com',
-					quiet: true,
-					hot: shouldUseHMR,
-				});
+							public: 'development.gamejolt.com',
+							quiet: true,
+							disableHostCheck: hasTunnels,
+							compress: hasTunnels,
+							hot: shouldUseHMR,
+						});
 
-				if (config.ssr !== 'server') {
-					server.listen(port + portOffset, 'localhost');
-				}
-				portOffset += 1;
-			}
+						if (config.ssr !== 'server') {
+							server.listen(port + portOffset, 'localhost');
+						}
+						portOffset += 1;
+					}
+				})
+				.catch(cb);
 		})
 	);
 
