@@ -1,5 +1,5 @@
-import { isPromise } from 'game-jolt-frontend-lib/utils/utils';
 import { arrayRemove } from '../../utils/array';
+import { isPromise } from '../../utils/utils';
 import { Api } from '../api/api.service';
 
 /**
