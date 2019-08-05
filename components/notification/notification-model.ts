@@ -1,5 +1,5 @@
-import { Community } from 'game-jolt-frontend-lib/components/community/community.model';
 import VueRouter, { RawLocation } from 'vue-router';
+import { Community } from '../../components/community/community.model';
 import { EventItem } from '../../components/event-item/event-item.model';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';

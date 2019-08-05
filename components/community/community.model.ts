@@ -1,6 +1,6 @@
-import { CommunityTag } from 'game-jolt-frontend-lib/components/community/tag/tag.model';
 import { RawLocation } from 'vue-router';
 import { Api } from '../../components/api/api.service';
+import { CommunityTag } from '../../components/community/tag/tag.model';
 import { MediaItem } from '../../components/media-item/media-item-model';
 import { Model } from '../../components/model/model.service';
 import { Theme } from '../../components/theme/theme.model';
@@ -47,7 +47,7 @@ export class Community extends Collaboratable(Model) {
 	name!: string;
 	path!: string;
 	added_on!: number;
-	share_message!: string | null;
+	post_placeholder_text!: string | null;
 
 	thumbnail?: MediaItem;
 	header?: MediaItem;

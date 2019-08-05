@@ -11,7 +11,4 @@ import { AppImgResponsive } from '../../../img/responsive/responsive';
 export default class AppCommunityThumbnailImg extends Vue {
 	@Prop(Community)
 	community!: Community;
-
-	@Prop(Boolean)
-	isEditing!: boolean;
 }
