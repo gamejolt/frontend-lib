@@ -42,10 +42,6 @@ $-spacing = 3px
 	flex: none
 	width: $-size
 	height: $-size
-	margin-right: $grid-gutter-width-xs * 0.5
-
-	@media $media-sm-up
-		margin-right: $grid-gutter-width * 0.5
 
 .-tick
 	change-bg('bg')

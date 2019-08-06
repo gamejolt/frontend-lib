@@ -11,12 +11,4 @@ import { AppImgResponsive } from '../../../img/responsive/responsive';
 export default class AppCommunityThumbnailImg extends Vue {
 	@Prop(Community)
 	community!: Community;
-
-	get src() {
-		if (!this.community.thumbnail) {
-			return '';
-		}
-
-		return this.community.thumbnail.mediaserver_url;
-	}
 }

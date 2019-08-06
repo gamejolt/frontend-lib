@@ -15,6 +15,7 @@ export const link = {
 			'span',
 			{
 				class: 'content-editor-link',
+				title: href,
 				'data-href': href,
 				'data-title': title,
 				'data-autolink': autolink,
