@@ -13,7 +13,7 @@ export default class AppContentEditorControlsGifControls extends Vue {
 	@Prop(Number)
 	stateCounter!: number;
 	@Prop(String)
-	startupArg?: string;
+	startupActivity?: string;
 
 	visible = false;
 	openedStartup = false;
@@ -23,7 +23,7 @@ export default class AppContentEditorControlsGifControls extends Vue {
 	}
 
 	mounted() {
-		if (this.startupArg === 'gif') {
+		if (this.startupActivity === 'gif') {
 			this.$emit('opened-startup');
 			this.openGifModal();
 		}

@@ -27,7 +27,7 @@
 						v-if="shouldShowGifButton"
 						:view="view"
 						:state-counter="stateCounter"
-						:startup-arg="openedStartup ? '' : startupArg"
+						:startup-activity="openedStartup ? '' : startupActivity"
 						@opened-startup="onOpenedStartup"
 					/>
 				</transition>
@@ -37,7 +37,7 @@
 						ref="emojiPanel"
 						:view="view"
 						:state-counter="stateCounter"
-						:startup-arg="openedStartup ? '' : startupArg"
+						:startup-activity="openedStartup ? '' : startupActivity"
 						@visibilityChanged="onEmojiPanelVisibilityChanged"
 						@opened-startup="onOpenedStartup"
 					/>

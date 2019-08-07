@@ -15,7 +15,7 @@
 					content_no_media_uploads: true,
 				}"
 				:validate-on="['blur']"
-				:startup-arg="editorStartupArg"
+				:startup-activity="editorStartupActivity"
 				@focus="onFocusEditor"
 				@blur="onBlurEditor"
 			/>
