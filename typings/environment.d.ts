@@ -7,3 +7,7 @@ declare var GJ_VERSION: string;
 declare var GJ_MANIFEST_URL: string;
 declare var GJ_WITH_UPDATER: boolean;
 declare var GJ_IS_WATCHING: boolean;
+declare var GJ_TUNNELS: {
+	backend?: string;
+	frontend?: string;
+};

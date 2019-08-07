@@ -32,6 +32,12 @@ export default class AppLikesModal extends BaseModal {
 	currentPage = 0;
 	users: User[] = [];
 
+	// Just for display purposes, if we have more users than the count passed in, display that instead.
+	// This can happen when the count was fetched before new users were added to the list.
+	get realCount() {
+		return Math.max(this.count, this.users.length);
+	}
+
 	get requestUrl() {
 		if (this.resource) {
 			if (this.resource instanceof Comment) {

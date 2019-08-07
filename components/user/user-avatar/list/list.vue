@@ -59,10 +59,6 @@ $-size-sm = 24px
 	flex: none
 	width: $-size
 	height: $-size
-	margin-right: $grid-gutter-width-xs * 0.5
-
-	@media $media-sm-up
-		margin-right: $grid-gutter-width * 0.5
 
 .-avatar-sm
 	width: $-size-sm

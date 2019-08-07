@@ -1,7 +1,7 @@
-import { Growls } from 'game-jolt-frontend-lib/components/growls/growls.service';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Emit, Prop } from 'vue-property-decorator';
+import { Growls } from '../../../../components/growls/growls.service';
 import { arrayShuffle } from '../../../../utils/array';
 import AppLoading from '../../../../vue/components/loading/loading.vue';
 import AppVideoEmbed from '../../../video/embed/embed.vue';
