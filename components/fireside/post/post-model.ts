@@ -218,7 +218,7 @@ export class FiresidePost extends Model implements ContentContainerModel {
 	}
 
 	get manageableCommunities() {
-		return this.getManageableCommunities(['community-feature', 'community-posts'], true);
+		return this.getManageableCommunities(['community-features', 'community-posts'], true);
 	}
 
 	getContent(context: ContentContext) {

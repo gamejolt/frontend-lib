@@ -12,7 +12,7 @@ export type Perm =
 	| 'builds'
 	| 'game-api'
 	| 'feature'
-	| 'community-feature'
+	| 'community-features'
 	| 'community-posts'
 	| 'community-media'
 	| 'community-tags';
