@@ -16,7 +16,7 @@
 				:user="user"
 				v-app-tooltip="user.display_name + ' (@' + user.username + ')'"
 			/>
-			<app-user-verified-tick class="-tick" :user="user" />
+			<app-user-verified-tick v-if="!sm" class="-tick" :user="user" />
 		</div>
 	</div>
 </template>
