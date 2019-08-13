@@ -255,11 +255,21 @@ export default class AppCommentWidget extends Vue {
 				? Collaborator.populate(payload.collaborators)
 				: [];
 
-			MentionCache.add(
-				this.$route,
-				this.resource + '-' + this.resourceId + '-comments-owners',
-				...this.comments.map(i => i.user)
-			);
+			const mentionCacheKey = this.resource + '-' + this.resourceId + '-comments-owners';
+			if (this.isThreadView) {
+				const comments = [];
+				for (const comment of this.comments) {
+					const children = (this.childComments as { [key: string]: Comment[] })[
+						comment.id
+					];
+					comments.push(comment);
+					comments.push(...children);
+				}
+
+				MentionCache.add(this.$route, mentionCacheKey, ...comments.map(i => i.user));
+			} else {
+				MentionCache.add(this.$route, mentionCacheKey, ...this.comments.map(i => i.user));
+			}
 		} catch (e) {
 			console.error(e);
 			this.hasError = true;
