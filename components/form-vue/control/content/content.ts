@@ -27,6 +27,9 @@ export default class AppFormControlContent extends BaseFormControlTS {
 	@Prop(Number)
 	minHeight!: number;
 
+	@Prop(String)
+	startupActivity?: string;
+
 	controlVal = '';
 
 	onChange(source: string) {

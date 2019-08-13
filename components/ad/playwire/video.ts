@@ -1,10 +1,10 @@
-import { Ads } from 'game-jolt-frontend-lib/components/ad/ads.service';
-import { Playwire } from 'game-jolt-frontend-lib/components/ad/playwire/playwire.service';
-import { FiresidePost } from 'game-jolt-frontend-lib/components/fireside/post/post-model';
-import { Game } from 'game-jolt-frontend-lib/components/game/game.model';
-import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import { Ads } from '../../../components/ad/ads.service';
+import { Playwire } from '../../../components/ad/playwire/playwire.service';
+import { FiresidePost } from '../../../components/fireside/post/post-model';
+import { Game } from '../../../components/game/game.model';
+import { User } from '../../../components/user/user.model';
 
 @Component({})
 export default class AppAdPlaywireVideo extends Vue {

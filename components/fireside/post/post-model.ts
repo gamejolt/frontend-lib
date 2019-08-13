@@ -1,7 +1,8 @@
 import { RawLocation } from 'vue-router';
+import { Perm } from '../../../components/collaborator/collaboratable';
 import { appStore } from '../../../vue/services/app/app-store';
 import { Api } from '../../api/api.service';
-import { Community, Perm as CommunityPerm } from '../../community/community.model';
+import { Community } from '../../community/community.model';
 import { ContentContainerModel } from '../../content/content-container-model';
 import { ContentContext } from '../../content/content-context';
 import { ContentSetCache } from '../../content/content-set-cache';
@@ -217,7 +218,7 @@ export class FiresidePost extends Model implements ContentContainerModel {
 	}
 
 	get manageableCommunities() {
-		return this.getManageableCommunities();
+		return this.getManageableCommunities(['community-features', 'community-posts'], true);
 	}
 
 	getContent(context: ContentContext) {
@@ -229,7 +230,7 @@ export class FiresidePost extends Model implements ContentContainerModel {
 		throw new Error(`Context ${context} is not defined for Fireside Post.`);
 	}
 
-	getManageableCommunities(perms?: CommunityPerm | CommunityPerm[], either?: boolean) {
+	getManageableCommunities(perms?: Perm | Perm[], either?: boolean) {
 		return this.communities.filter(tc => tc.community.hasPerms(perms, either));
 	}
 

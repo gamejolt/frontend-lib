@@ -1,4 +1,5 @@
 import VueRouter, { RawLocation } from 'vue-router';
+import { Community } from '../../components/community/community.model';
 import { EventItem } from '../../components/event-item/event-item.model';
 import { assertNever } from '../../utils/utils';
 import { currency } from '../../vue/filters/currency';
@@ -25,12 +26,14 @@ import { Translate } from '../translate/translate.service';
 import { UserFriendship } from '../user/friendship/friendship.model';
 import { User } from '../user/user.model';
 
-function getRouteLocationForModel(model: Game | User | FiresidePost): RawLocation {
+function getRouteLocationForModel(model: Game | User | FiresidePost | Community): RawLocation {
 	if (model instanceof User) {
 		return model.url;
 	} else if (model instanceof Game) {
 		return model.routeLocation;
 	} else if (model instanceof FiresidePost && !!model.game) {
+		return model.routeLocation;
+	} else if (model instanceof Community) {
 		return model.routeLocation;
 	}
 	return '';
@@ -97,7 +100,7 @@ export class Notification extends Model {
 
 	to_resource!: string | null;
 	to_resource_id!: number | null;
-	to_model?: Game | User | FiresidePost | ForumTopic | Sellable;
+	to_model?: Game | User | FiresidePost | ForumTopic | Sellable | Community;
 
 	// Generated in constructor.
 	is_user_based = false;
@@ -127,6 +130,8 @@ export class Notification extends Model {
 			this.to_model = new ForumTopic(data.to_resource_model);
 		} else if (data.to_resource === 'Sellable') {
 			this.to_model = new Sellable(data.to_resource_model);
+		} else if (data.to_resource === 'Community') {
+			this.to_model = new Community(data.to_resource_model);
 		}
 
 		if (this.type === Notification.TYPE_COMMENT_ADD) {
@@ -197,7 +202,13 @@ export class Notification extends Model {
 				return getRouteLocationForModel(this.from_model!);
 
 			case Notification.TYPE_COLLABORATOR_INVITE:
-				return getRouteLocationForModel(this.to_model as Game);
+				switch (this.to_resource) {
+					case 'Game':
+						return getRouteLocationForModel(this.to_model as Game);
+					case 'Community':
+						return getRouteLocationForModel(this.to_model as Community);
+				}
+				break;
 
 			case Notification.TYPE_POST_ADD:
 				return getRouteLocationForModel(this.action_model as FiresidePost);
@@ -345,6 +356,11 @@ function getTranslationValues(notification: Notification) {
 		return {
 			subject: subject,
 			object: notification.to_model.title,
+		};
+	} else if (notification.to_model instanceof Community) {
+		return {
+			subject: subject,
+			object: notification.to_model.name,
 		};
 	} else if (notification.to_model instanceof FiresidePost) {
 		return {
@@ -524,12 +540,23 @@ export function getNotificationText(notification: Notification, plaintext = fals
 		}
 
 		case Notification.TYPE_COLLABORATOR_INVITE: {
-			return _process(
-				Translate.$gettextInterpolate(
-					`<em>%{ subject }</em> invited you to collaborate on <b>%{ object }</b>.`,
-					getTranslationValues(notification)
-				)
-			);
+			switch (notification.to_resource) {
+				case 'Game':
+					return _process(
+						Translate.$gettextInterpolate(
+							`<em>%{ subject }</em> invited you to collaborate on the game <b>%{ object }</b>.`,
+							getTranslationValues(notification)
+						)
+					);
+				case 'Community':
+					return _process(
+						Translate.$gettextInterpolate(
+							`<em>%{ subject }</em> invited you to collaborate on the <b>%{ object }</b> community.`,
+							getTranslationValues(notification)
+						)
+					);
+			}
+			break;
 		}
 
 		case Notification.TYPE_MENTION: {

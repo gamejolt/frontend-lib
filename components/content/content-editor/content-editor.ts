@@ -63,6 +63,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	@Prop(String)
 	name!: string;
 
+	@Prop(String)
+	startupActivity?: string;
+
 	$_veeValidate = {
 		value: () => this.value,
 		name: () => 'app-content-editor',
@@ -83,6 +86,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	controlsCollapsed = true;
 	isEmpty = true; // Gets updated through the update-is-empty-plugin
 	canShowMentionSuggestions = 0;
+	openedStartup = false; // When the gif or emoji panel opened on startup. Prevents them from opening again.
 
 	_tempModelId: number | null = null; // If no model id if gets passed in, we store a temp model's id here
 	_sourceControlVal: string | null = null; // Keep a copy of the json version of the doc, to only set the content if the external source changed.
@@ -369,5 +373,9 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	onInsertMention() {
 		this.highlightCurrentSelection();
 		this.canShowMentionSuggestions = 0;
+	}
+
+	onOpenedStartup() {
+		this.openedStartup = true;
 	}
 }
