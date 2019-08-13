@@ -111,6 +111,11 @@ export class User extends Model implements ContentContainerModel {
 		return this._contentSetCache.hasContent;
 	}
 
+	get canBeVerified() {
+		// Checks that the user not already verified and that the account is at least 7 days old.
+		return !this.is_verified && this.created_on + 7 * 24 * 60 * 60 * 1000 < Date.now();
+	}
+
 	getContent(context: ContentContext) {
 		if (context === 'user-bio') {
 			return this.bio_content;
