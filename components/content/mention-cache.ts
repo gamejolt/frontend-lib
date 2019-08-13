@@ -1,7 +1,6 @@
 import { User } from 'game-jolt-frontend-lib/components/user/user.model';
 import { fuzzysearch } from 'game-jolt-frontend-lib/utils/string';
 import { Route } from 'vue-router/types/router';
-import { arrayRemove } from '../../utils/array';
 import { ContentDocument } from './content-document';
 
 export type MentionCacheUser = {
@@ -15,6 +14,10 @@ export class MentionCache {
 	private static _currentRoute: Route | null = null;
 	private static _users: MentionCacheUser[] = [];
 
+	private static _isDifferentRoute(route: Route) {
+		return this._currentRoute === null || this._currentRoute.fullPath !== route.fullPath;
+	}
+
 	private static _bustCache(fromRoute: Route) {
 		console.log('bust cache for', fromRoute.fullPath);
 		this._currentRoute = fromRoute;
@@ -22,7 +25,8 @@ export class MentionCache {
 	}
 
 	private static _removeBySource(source: string) {
-		arrayRemove(this._users, i => i.source === source);
+		console.log('remove by source', source);
+		this._users = this._users.filter(i => i.source !== source);
 	}
 
 	private static _addUser(user: User, source: string) {
@@ -42,7 +46,7 @@ export class MentionCache {
 	}
 
 	public static add(fromRoute: Route, source: string, ...users: User[]) {
-		if (this._currentRoute === null || this._currentRoute.fullPath !== fromRoute.fullPath) {
+		if (this._isDifferentRoute(fromRoute)) {
 			this._bustCache(fromRoute);
 		} else {
 			this._removeBySource(source);
@@ -69,7 +73,11 @@ export class MentionCache {
 		this.add(fromRoute, source, ...users);
 	}
 
-	public static getUsers(suggestion: string) {
+	public static getUsers(fromRoute: Route, suggestion: string) {
+		if (this._isDifferentRoute(fromRoute)) {
+			this._bustCache(fromRoute);
+		}
+
 		for (const user of this._users) {
 			user.match = this.calculateUserMatch(suggestion, user);
 		}

@@ -125,7 +125,9 @@ export default class AppContentEditorControlsMentionAutocompleteControls extends
 	}
 
 	private async updateSuggestions(suggestion: string) {
-		this.users = MentionCache.getUsers(suggestion).sort((a, b) => numberSort(b.match, a.match));
+		this.users = MentionCache.getUsers(this.$route, suggestion).sort((a, b) =>
+			numberSort(b.match, a.match)
+		);
 
 		this.remoteSuggestions(suggestion);
 
