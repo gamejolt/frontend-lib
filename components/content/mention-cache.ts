@@ -19,28 +19,19 @@ export class MentionCache {
 	}
 
 	private static _bustCache(fromRoute: Route) {
-		console.log('bust cache for', fromRoute.fullPath);
 		this._currentRoute = fromRoute;
 		this._users = [];
 	}
 
 	private static _removeBySource(source: string) {
-		console.log('remove by source', source);
 		this._users = this._users.filter(i => i.source !== source);
 	}
 
 	private static _addUser(user: User, source: string) {
 		const currentUser = this._users.find(i => i.user.id === user.id);
 		if (currentUser) {
-			console.log(
-				'increase user',
-				currentUser.user.username,
-				'to rank',
-				currentUser.rank + 1
-			);
 			currentUser.rank++;
 		} else {
-			console.log('add user', user.username, 'with rank 1');
 			this._users.push({ user, rank: 1, source, match: 0 });
 		}
 	}
