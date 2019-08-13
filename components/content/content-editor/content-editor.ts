@@ -17,6 +17,7 @@ import AppContentEditorControlsEmojiPanelTS from './controls/emoji/panel';
 import AppContentEditorControlsEmojiPanel from './controls/emoji/panel.vue';
 import AppContentEditorControlsGifControls from './controls/gif/controls.vue';
 import AppContentEditorControlsInsetContainer from './controls/inset/container.vue';
+import AppContentEditorControlsMentionAutocompleteControls from './controls/mention/autocomplete/controls.vue';
 import AppContentEditorTextControls from './controls/text/controls.vue';
 import buildEvents from './events/build-events';
 import { FocusWatcher } from './focus-watcher';
@@ -34,6 +35,7 @@ import { ContentEditorSchema, generateSchema } from './schemas/content-editor-sc
 		AppContentEditorControlsEmojiPanel,
 		AppContentEditorControlsGifControls,
 		AppContentEditorControlsInsetContainer,
+		AppContentEditorControlsMentionAutocompleteControls,
 	},
 })
 export default class AppContentEditor extends Vue implements ContentOwner {
@@ -83,6 +85,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 	emojiPanelVisible = false;
 	controlsCollapsed = true;
 	isEmpty = true; // Gets updated through the update-is-empty-plugin
+	canShowMentionSuggestions = 0;
 	openedStartup = false; // When the gif or emoji panel opened on startup. Prevents them from opening again.
 
 	_tempModelId: number | null = null; // If no model id if gets passed in, we store a temp model's id here
@@ -316,6 +319,7 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	private onFocusOut() {
 		if (this.isFocused) {
+			this.canShowMentionSuggestions = 0;
 			this.$emit('editor-blur');
 		}
 		this.isFocused = false;
@@ -364,6 +368,11 @@ export default class AppContentEditor extends Vue implements ContentOwner {
 
 	onControlsCollapsedChanged(collapsed: boolean) {
 		this.controlsCollapsed = collapsed;
+	}
+
+	onInsertMention() {
+		this.highlightCurrentSelection();
+		this.canShowMentionSuggestions = 0;
 	}
 
 	onOpenedStartup() {

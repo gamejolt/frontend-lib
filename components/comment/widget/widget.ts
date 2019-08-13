@@ -6,6 +6,7 @@ import { Analytics } from '../../analytics/analytics.service';
 import { AppTrackEvent } from '../../analytics/track-event.directive';
 import { AppAuthRequired } from '../../auth/auth-required-directive';
 import { Collaborator } from '../../collaborator/collaborator.model';
+import { MentionCache } from '../../content/mention-cache';
 import { Environment } from '../../environment/environment.service';
 import AppMessageThreadAdd from '../../message-thread/add/add.vue';
 import AppMessageThreadContent from '../../message-thread/content/content.vue';
@@ -253,6 +254,22 @@ export default class AppCommentWidget extends Vue {
 			this.collaborators = payload.collaborators
 				? Collaborator.populate(payload.collaborators)
 				: [];
+
+			const mentionCacheKey = this.resource + '-' + this.resourceId + '-comments-owners';
+			if (this.isThreadView) {
+				const comments = [];
+				for (const comment of this.comments) {
+					const children = (this.childComments as { [key: string]: Comment[] })[
+						comment.id
+					];
+					comments.push(comment);
+					comments.push(...children);
+				}
+
+				MentionCache.add(this.$route, mentionCacheKey, ...comments.map(i => i.user));
+			} else {
+				MentionCache.add(this.$route, mentionCacheKey, ...this.comments.map(i => i.user));
+			}
 		} catch (e) {
 			console.error(e);
 			this.hasError = true;
