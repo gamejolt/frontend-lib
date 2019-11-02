@@ -42,7 +42,7 @@
 		"vue-style-loader": "4.1.2",
 		"vue-template-loader": "1.0.0",
 		"write-file-webpack-plugin": "4.5.0",
-		"webpack-bundle-analyzer": "3.0.3",
+		"webpack-bundle-analyzer": "3.6.0",
 		"webpack-pwa-manifest": "3.7.1",
 		"offline-plugin": "5.0.6",
 		"mv": "2.1.1",
